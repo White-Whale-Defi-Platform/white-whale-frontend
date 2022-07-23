@@ -1,10 +1,10 @@
-import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Divider } from '@chakra-ui/react';
+import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Divider, Box} from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import AssetSelectModal from './AssetSelectModal';
 import { FC } from 'react'
 // import { Asset } from 'types/blockchain'
-import {Asset} from 'hooks/useAsset';
 import { useTokenInfo } from 'hooks/useTokenInfo'
+import FallbackImage from 'components/FallbackImage'
 
 interface AssetInputProps {
     token: any;
@@ -15,6 +15,7 @@ interface AssetInputProps {
     balance?: number;
     disabled: boolean;
 }
+
 
 
 const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, value, showList = true, disabled}, ref) => {
@@ -49,7 +50,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
             {
                 showList ? (
                     <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol} disabled={disabled}>
-                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" />
+                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />}/>
                         <Text fontSize="20" fontWeight="400">{tokenInfo?.symbol}</Text>
                         <IconButton
                             disabled={disabled}
@@ -67,7 +68,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
                         width="fit-content"
                         paddingRight={2}
                     >
-                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" />
+                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />}/>
                         <Text fontSize="20" fontWeight="400">{tokenInfo?.symbol}</Text>
                     </HStack>
                 )

@@ -1,12 +1,13 @@
 import { Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
-import { useEffect, FC } from 'react';
+import { useEffect, FC, useMemo } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { TokenItemState } from './swapAtoms';
+import { useTokenToTokenPrice } from './hooks'
 
 
 
@@ -21,9 +22,26 @@ type Props = {
     minReceive: number
     onReverseDirection: () => void
     setReverse: (valuse: boolean) => void
+    resetForm: boolean
+    setResetForm: (value: boolean) => void
 }
 
-const SwapForm: FC<Props> = ({ tokenA, tokenB, onInputChange, onReverseDirection, simulated, tx, minReceive, isReverse, setReverse }) => {
+const SwapForm: FC<Props> = ({
+    tokenA,
+    tokenB,
+    onInputChange,
+    onReverseDirection,
+    simulated,
+    tx,
+    minReceive,
+    isReverse,
+    setReverse,
+    resetForm,
+    setResetForm
+}) => {
+
+
+
 
     const { control, handleSubmit, setValue } = useForm({
         mode: "onChange",
@@ -33,7 +51,16 @@ const SwapForm: FC<Props> = ({ tokenA, tokenB, onInputChange, onReverseDirection
         },
     });
 
+    useEffect(() => {
+        if (resetForm) {
+            setValue('tokenA', tokenA)
+            setValue('tokenB', tokenB)
+            setResetForm(false)
+        }
+
+    }, [resetForm])
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+
 
     const onReverse = () => {
         setValue("tokenA", tokenB, { shouldValidate: true })
@@ -91,6 +118,7 @@ const SwapForm: FC<Props> = ({ tokenA, tokenB, onInputChange, onReverseDirection
                     <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
                 </HStack>
                 <Controller
+
                     name="tokenA"
                     control={control}
                     rules={{ required: true }}
@@ -164,7 +192,9 @@ const SwapForm: FC<Props> = ({ tokenA, tokenB, onInputChange, onReverseDirection
                 Swap {tokenA?.tokenSymbol} to {tokenB.tokenSymbol}
             </Button>
 
-
+            {
+                tx?.error && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
+            }
 
 
 

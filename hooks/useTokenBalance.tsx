@@ -22,7 +22,7 @@ async function fetchTokenBalance({
   address: string
 }) {
 
-  const{ denom, native, token_address, decimals }  = token
+  const{ denom="uluna", native, token_address="uluna", decimals }  = token
 
   if (!denom && !token_address) {
     throw new Error(
@@ -33,8 +33,8 @@ async function fetchTokenBalance({
   /*
    * if this is a native asset or an ibc asset that has juno_denom
    *  */
-  if (native) {
-    const coin = await client.getBalance(address, denom)
+  if (native && !!client) {
+    const coin = await client?.getBalance(address, denom)
     const amount = coin ? Number(coin.amount) : 0
     return convertMicroDenomToDenom(amount, decimals)
     // return {
@@ -99,7 +99,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
 
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
-  const { address, status, client } = useRecoilValue(walletState)
+  const { address, status, client , chainId} = useRecoilValue(walletState)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
 
@@ -109,12 +109,11 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   )
 
   const { data, isLoading } = useQuery(
-    [queryKey, address],
+    [queryKey, address, chainId],
     async () => {
       const balances = await Promise.all(
         tokenSymbols.map((tokenSymbol) =>
           {
-            const token = getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens)
 
             return fetchTokenBalance({
               client,
@@ -132,10 +131,6 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
 
       return balances
 
-      // return tokenSymbols.map((tokenSymbol, index) => ({
-      //   tokenSymbol,
-      //   balance: balances[index],
-      // }))
     },
     {
       enabled: Boolean(

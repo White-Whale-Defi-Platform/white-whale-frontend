@@ -27,18 +27,7 @@ export const useTokenToTokenPriceQuery = ({
   const tokenA = useTokenInfo(tokenASymbol)
   const tokenB = useTokenInfo(tokenBSymbol)
 
-  
-
   const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
-
-  console.log({
-    tokenA, 
-    tokenB,
-    matchingPools,
-    tokenAmount,
-    tokenASymbol,
-    tokenBSymbol
-  })
 
   return useQuery({
     queryKey: [

@@ -5,8 +5,34 @@ import { useTokenList } from 'hooks/useTokenList';
 import { TxStep } from 'hooks/useTransaction';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { tokenSwapAtom , TokenItemState} from './swapAtoms';
+import { tokenSwapAtom, TokenItemState } from './swapAtoms';
 import SwapForm from './SwapForm';
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import { useRouter } from 'next/router'
+
+const defaultTokens = {
+    "uni-3": [
+        {
+            tokenSymbol: 'JUNOX',
+            amount: 0,
+        },
+        {
+            tokenSymbol: 'JUNOONE',
+            amount: 0,
+        }
+    ],
+    "pisco-1": [
+        {
+            tokenSymbol: 'LUNA',
+            amount: 0,
+        },
+        {
+            tokenSymbol: 'LUNAONE',
+            amount: 0,
+        }
+    ]
+}
 
 
 
@@ -19,45 +45,45 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
     /* connect to recoil */
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState(false)
+    const { chainId } = useRecoilValue(walletState)
+    const [resetForm, setResetForm] = useState(false)
+    const router = useRouter()
+
+    useEffect(() => {
+        const [from, to] = defaultTokens[chainId]
+        const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
+        setTokenSwapState([from,to])
+        setResetForm(true)
+        router.replace(params)
+    }, [chainId])
 
     /* fetch token list and set initial state */
-    const [tokenList] = useTokenList()
-    useEffect(() => {
-        const shouldSetDefaultTokenAState =
-            !tokenA.tokenSymbol && !tokenB.tokenSymbol && tokenList
-        if (shouldSetDefaultTokenAState) {
-            setTokenSwapState([
-                {
-                    tokenSymbol: 'JUNOX',
-                    amount: 0,
-                },
-                {
-                    tokenSymbol: 'JUNOONE',
-                    amount: 0,
-                }
-            ])
-        }
-    }, [tokenList, tokenA, tokenB, setTokenSwapState])
+    // const [tokenList] = useTokenList()
 
-    const initialTokenPairValue = useRef(initialTokenPair).current
-    useEffect(
-        function setInitialTokenPairIfProvided() {
-            if (initialTokenPairValue) {
-                const [tokenASymbol, tokenBSymbol] = initialTokenPairValue
-                setTokenSwapState([
-                    {
-                        tokenSymbol: tokenASymbol,
-                        amount: 0,
-                    },
-                    {
-                        tokenSymbol: tokenBSymbol,
-                        amount: 0,
-                    },
-                ])
-            }
-        },
-        [initialTokenPairValue, setTokenSwapState]
-    )
+    // useEffect(() => {
+    //     if (!tokenA.tokenSymbol && !tokenB.tokenSymbol)
+    //         setTokenSwapState(defaultTokens[chainId])
+    // }, [tokenA, tokenB, setTokenSwapState])
+
+    // const initialTokenPairValue = useRef(initialTokenPair).current
+    // useEffect(
+    //     function setInitialTokenPairIfProvided() {
+    //         if (initialTokenPairValue) {
+    //             const [tokenASymbol, tokenBSymbol] = initialTokenPairValue
+    //             setTokenSwapState([
+    //                 {
+    //                     tokenSymbol: tokenASymbol,
+    //                     amount: 0,
+    //                 },
+    //                 {
+    //                     tokenSymbol: tokenBSymbol,
+    //                     amount: 0,
+    //                 },
+    //             ])
+    //         }
+    //     },
+    //     [initialTokenPairValue, setTokenSwapState]
+    // )
 
     const { tx, simulated, minReceive }: any = useSwap({
         reverse
@@ -67,11 +93,12 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
         if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
             tx.reset()
 
-        const newState: any = [tokenA, tokenB]
+        const newState: TokenItemState[] = [tokenA, tokenB]
         newState[index] = {
             tokenSymbol: tokenSymbol,
             amount: Number(amount)
         }
+
         setTokenSwapState(newState)
 
     }
@@ -79,6 +106,13 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
     const onReverseDirection = () => {
         setTokenSwapState([tokenB, tokenA])
     }
+
+    useEffect(() => {
+        const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+        router.replace(params, undefined, { shallow: true })
+    }, [tokenA, tokenB])
+
+
 
     return (
         <>
@@ -97,8 +131,11 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
                     onInputChange={onInputChange}
                     simulated={simulated}
                     minReceive={minReceive}
+                    isReverse={false}
                     tx={tx}
                     setReverse={setReverse}
+                    resetForm={resetForm}
+                    setResetForm={setResetForm}
                 />
 
             </VStack>

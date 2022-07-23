@@ -1,26 +1,39 @@
 import React from 'react'
 import {
+    useDisclosure,
     List,
     ListItem,
     ListIcon,
     Image,
-    Popover, Text, PopoverContent, PopoverArrow, PopoverBody, Button, PopoverTrigger, PopoverCloseButton, VStack, HStack
+    Popover, Text, PopoverContent, PopoverArrow, PopoverBody, Button, PopoverTrigger, VStack, HStack
 } from '@chakra-ui/react'
 import { BsCircleFill } from 'react-icons/bs'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
 const walletSelect = ({ denom, chainList = [], onChange }) => {
+    const { onOpen, onClose, isOpen } = useDisclosure()
+    const firstFieldRef = React.useRef(null)
+
     return (
-        <Popover placement='top-end'>
+        <Popover placement='top-end' 
+        isOpen={isOpen}
+        initialFocusRef={firstFieldRef}
+        onOpen={onOpen}
+        onClose={onClose}
+        >
             <PopoverTrigger>
-                <Button variant="unstyled" color="white" textTransform="capitalize" >{denom}</Button>
+                <HStack as={Button} variant="unstyled">
+                    <Text>{denom}</Text>
+
+                    <ChevronDownIcon />
+                </HStack>
             </PopoverTrigger>
             <PopoverContent
                 borderColor="#1C1C1C"
                 borderRadius="30px"
                 backgroundColor="#1C1C1C"
                 width="253px"
-
-            // overflow="hidden"
+                marginTop={3}
             >
                 <PopoverArrow bg='#1C1C1C' boxShadow="unset" style={{ boxShadow: "unset" }} />
                 <PopoverBody padding={6}  >
@@ -29,7 +42,7 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
 
                         <List spacing={1} color="white" width="full" >
 
-                            {chainList.map((chain,index) => (
+                            {chainList.map((chain, index) => (
                                 <ListItem
                                     key={chain.chainId + chain?.chainName}
                                     justifyContent="space-between"
@@ -42,7 +55,7 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
                                     _hover={{
                                         opacity: 1
                                     }}
-                                    onClick={() => onChange(chain)}
+                                    onClick={() => { onChange(chain); onClose() }}
                                 >
                                     <HStack>
                                         <Image src="/juno.svg" boxSize={50} />
@@ -51,44 +64,6 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
                                     <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
                                 </ListItem>
                             ))}
-
-
-                            {/* <ListItem
-                                justifyContent="space-between"
-                                display="flex"
-                                alignItems="center"
-                                borderBottom="1px solid rgba(255, 255, 255, 0.1)"
-                                paddingY={1}
-                                // paddingRight={5}
-                                opacity="0.3"
-                                cursor="pointer"
-                                _hover={{
-                                    opacity: 1
-                                }}
-                            >
-                                <HStack>
-                                    <Image src="/juno.svg" boxSize={50} />
-                                    <Text paddingLeft={3} >Juno</Text>
-                                </HStack>
-                                <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
-                            </ListItem>
-
-                            <ListItem
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="space-between"
-                                cursor="pointer"
-                                _hover={{
-                                    opacity: 1
-                                }}
-                            >
-                                <HStack>
-                                    <Image src="/junoone.svg" boxSize={50} />
-                                    <Text paddingLeft={3}>Terra</Text>
-                                </HStack>
-                                <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
-                            </ListItem> */}
-
 
                         </List>
 

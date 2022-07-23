@@ -29,14 +29,14 @@ const simulate = ({
     swapAddress
 }: QuerySimulate): Promise<SimulationResponse | ReverseSimulationResponse> => {
     if (reverse) {
-        return client.queryContractSmart(swapAddress, {
+        return client?.queryContractSmart(swapAddress, {
             reverse_simulation: {
                 ask_asset: toAsset({ token, amount }),
             },
         });
     }
 
-    return client.queryContractSmart(swapAddress, {
+    return client?.queryContractSmart(swapAddress, {
         simulation: {
             offer_asset: toAsset({ token, amount }),
         }

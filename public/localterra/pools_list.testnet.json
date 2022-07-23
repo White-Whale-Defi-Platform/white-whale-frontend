@@ -10,79 +10,81 @@
   },
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
-    "id": "juno-network",
-    "chain_id": "lucina",
+    "id": "localterra",
+    "chain_id": "localterra",
     "token_address": "",
-    "symbol": "JUNOX",
-    "name": "Junox",
+    "symbol": "lunax",
+    "name": "Luna",
     "decimals": 6,
     "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
     "tags": ["native"],
     "native": true,
-    "denom": "ujunox"
+    "denom": "uluna"
   },
   "pools": [
     {
-      "pool_id": "JUNO-POOD",
+      "pool_id": "LUNA-LUNAONE",
       "pool_assets": [
         {
-          "id": "juno-network",
-          "chain_id": "lucina",
-          "token_address": "",
-          "symbol": "JUNOX",
-          "name": "Junox",
+          "id": "localterra",
+          "chain_id": "localterra",
+          "token_address": "ulunax",
+          "symbol": "LUNA",
+          "name": "Luna",
           "decimals": 6,
-          "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
+          "logoURI":  "/luna.svg",
           "tags": ["native"],
           "native": true,
-          "denom": "ujunox"
+          "denom": "uluna"
         },
         {
-          "id": "juno-network",
-          "chain_id": "lucina",
-          "token_address": "juno1hset4pny4h8xm4s4lek57msq7j4zwfqwjf7zxqjt4npxyv0lrgnsp8qy9j",
-          "symbol": "POOD",
-          "name": "Poodle",
+          "id": "localterra",
+          "chain_id": "localterra",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
           "decimals": 6,
-          "logoURI": "https://cryptologos.cc/logos/polygon-matic-logo.svg?v=022",
+          "logoURI": "/lunaone.svg",
           "tags": ["memecoin"],
           "native": false,
-          "denom": "upood"
+          "denom": "lunaonex"
         }
       ],
-      "swap_address": "juno18edfd7nquv9zfgprt5lpzcykczw0llwqcc40f5lkxq2vdw7nnp7qr7a22a",
-      "staking_address": "juno1zdl3fc327ss955s42d0x8yfs7eu3fmsp3rpga5ua8mvptpf3xn9qtr9jcx",
+      "lp_token" : "terra15ha8qt5hypqatl7gfv9yf8s5m9f4qft5yezc5m533yxuftqkt26swhh5lt",
+      "swap_address": "terra1hmuf5ce46snmp93avhzrvmgpn2mtsv6jgx7vy3932ram7htdduesw70wpu",
+      "staking_address": "",
       "rewards_tokens": []
     },
     {
-      "pool_id": "JUNO-CRAB",
+      "pool_id": "LUNAX-JUNOTWO",
       "pool_assets": [
         {
-          "id": "juno-network",
-          "chain_id": "lucina",
+          "id": "localterra",
+          "chain_id": "localterra",
           "token_address": "",
-          "symbol": "JUNOX",
-          "name": "Junox",
+          "symbol": "LUNA",
+          "name": "Luna",
           "decimals": 6,
-          "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
+          "logoURI": "/luna.svg",
           "tags": ["native"],
           "native": true,
-          "denom": "ujunox"
+          "denom": "uluna"
         },
         {
-          "id": "juno-network",
-          "chain_id": "lucina",
-          "token_address": "juno1tjmxqppmerlt4xyusqrmd6k77fn3x4t3kw70jnuge0pswjevm2cs2jgl2v",
-          "symbol": "CRAB",
-          "name": "Crab",
+          "id": "localterra",
+          "chain_id": "localterra",
+          "token_address": " terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "symbol": "LUNATWO",
+          "name": "Lunatwo",
           "decimals": 6,
-          "logoURI": "https://cryptologos.cc/logos/irisnet-iris-logo.svg?v=022",
+          "logoURI": "/lunatwo.svg",
           "tags": ["memecoin"],
           "native": false,
-          "denom": "ucrab"
+          "denom": "lunatwox"
         }
       ],
-      "swap_address": "juno1a7dm5x7e4mdysd4wrnyx9lr6udltuuv5mtz6rkc7c5gy3pv7z3tsd3fwdf",
+      "lp_token" : "terra1sydk40ej0ytgvel68zvv6z3elz8eu6efw0mmjrdqf5h6zvszr9xq6yd79v",
+      "swap_address": "terra1ue5yv5lav9d5ztfcmds3r8tayasepkntjl5lzqjlzx6zyy2qcwvswxss36",
       "staking_address": "juno19wmsdhmn9wgckn64xfp0sl55ntgnzj3lly20e7wjk8z597meh3xsw2zeus",
       "rewards_tokens": [
         {
@@ -110,34 +112,35 @@
       ]
     },
     {
-      "pool_id": "JUNO-DAO",
+      "pool_id": "LUNAONE-LUNATWO",
       "pool_assets": [
         {
-          "id": "juno-network",
-          "chain_id": "lucina",
-          "token_address": "",
-          "symbol": "JUNOX",
-          "name": "Junox",
+          "id": "localterra",
+          "chain_id": "localterra",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
           "decimals": 6,
-          "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ujunox"
-        },
-        {
-          "id": "juno-network",
-          "chain_id": "lucina",
-          "token_address": "juno1n2ywvw078d5jdnn7yfcd0cl7qm4uhsnqy9amh2zwvw2pcgh2ce8sd8jap2",
-          "symbol": "DAO",
-          "name": "DAO",
-          "decimals": 6,
-          "logoURI": "https://cryptologos.cc/logos/torn-torn-logo.svg?v=022",
+          "logoURI": "/lunaone.svg",
           "tags": ["memecoin"],
           "native": false,
-          "denom": "udao"
+          "denom": "lunaonex"
+        },
+        {
+          "id": "localterra",
+          "chain_id": "localterra",
+          "token_address": " terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "symbol": "LUNATWO",
+          "name": "Lunatwo",
+          "decimals": 6,
+          "logoURI": "/lunatwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "lunatwo"
         }
       ],
-      "swap_address": "juno1je796cdrvprd93dfa2m8ru433e0zfc9ygzle349hm5x6a3xatrkqy649e2",
+      "lp_token" : "terra18c2c73j2sm28k7rjg5hgunjcxk0tuzajqklnzq8vs222mxt2zedqqy7vam",
+      "swap_address": "terra1lmrlqq4v3qtqsgk0r9jjx3et5y2jlwxhcur6sn3r80wf2p0mwk7q8j3fuh",
       "staking_address": "juno189wqvuj8amqsag8ehn3vmz6cq26c44ffeltvljkcxx9lsfsew8mq9y7z4h",
       "rewards_tokens": []
     }

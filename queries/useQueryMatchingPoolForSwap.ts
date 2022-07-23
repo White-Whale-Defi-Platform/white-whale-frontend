@@ -1,4 +1,6 @@
 import { useCallback, useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 import { useBaseTokenInfo } from '../hooks/useTokenInfo'
 import {
@@ -102,7 +104,8 @@ type GetMatchingPoolArgs = {
 
 export const useGetQueryMatchingPoolForSwap = () => {
   const baseToken = useBaseTokenInfo()
-  const { data: poolsListResponse, isLoading } = usePoolsListQuery()
+  const { chainId } = useRecoilValue(walletState)
+  const { data: poolsListResponse, isLoading } = usePoolsListQuery(chainId)
 
   const getMatchingPool = useCallback(
     ({ tokenA, tokenB }: GetMatchingPoolArgs) => {

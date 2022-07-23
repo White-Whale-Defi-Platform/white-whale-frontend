@@ -4,9 +4,10 @@ import useFilter from 'hooks/useFilter'
 import { Asset } from 'types/blockchain'
 import { useTokenList } from 'hooks/useTokenList'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
+import FallbackImage from 'components/FallbackImage'
 
 type AssetListProps = {
-    assetList?: Asset[];
+    // assetList?: Asset[];
     onChange: (token: any) => void;
     search: string;
     currentToken: string;
@@ -67,10 +68,10 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken }) => {
                         })}
                     >
                         <HStack>
-                            <Image src={item?.logoURI} alt="logo-small" boxSize="2rem" />
+                            <Image src={item?.logoURI} alt="logo-small" boxSize="2rem" fallback={<FallbackImage />}/>
                             <Text fontSize="18" fontWeight="400" >{item?.symbol}</Text>
                         </HStack>
-                        <Text fontSize="16" fontWeight="400">{Number(item?.balance).toFixed(2)}</Text>
+                        <Text fontSize="16" fontWeight="400">{Number(item?.balance || 0).toFixed(2)}</Text>
                     </HStack>
 
                 ))

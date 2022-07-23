@@ -1,4 +1,7 @@
+import { useMemo } from 'react'
 import { useQuery } from 'react-query'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 export type TokenInfo = {
   id: string
@@ -36,10 +39,13 @@ type PoolsListQueryResponse = {
 }
 
 export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
+  const { chainId } = useRecoilValue(walletState)
+
+
   return useQuery<PoolsListQueryResponse>(
-    '@pools-list',
+    ['@pools-list', chainId],
     async () => {
-      const response = await fetch(process.env.NEXT_PUBLIC_POOLS_LIST_URL)
+      const response = await fetch(`${chainId}/${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`)
       const tokenList = await response.json()
 
       return {
@@ -52,6 +58,7 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
     },
     Object.assign(
       {
+        enabled: !!chainId,
         refetchOnMount: false,
       },
       options || {}

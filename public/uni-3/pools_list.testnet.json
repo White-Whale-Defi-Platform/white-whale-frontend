@@ -80,7 +80,7 @@
           "logoURI": "/junotwo.svg",
           "tags": ["memecoin"],
           "native": false,
-          "denom": "junotwo"
+          "denom": "junotwox"
         }
       ],
       "lp_token" : "juno1qg0z0eaj5mjlrxg8wunjg6wqrcgu69xfjwdsusmaxcheyr856t7qlq7p60",
@@ -136,7 +136,7 @@
           "logoURI": "/junotwo.svg",
           "tags": ["memecoin"],
           "native": false,
-          "denom": "junotwo"
+          "denom": "junotwox"
         }
       ],
       "lp_token" : "juno1sn62twavppppwsu5af2w3qthe20r9vw2mjujdc3vld254glzqdesm8ecz6",

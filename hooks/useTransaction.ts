@@ -40,22 +40,24 @@ export enum TxStep {
 }
 
 type Params = {
-  swapAddress:string,
-  swapAssets: any[],
-  price: number,
-  client: any
-  senderAddress: string
-  msgs: any | null
-  encodedMsgs: any | null
-  amount: string
-  gasAdjustment?: number
-  estimateEnabled?: boolean
-  onBroadcasting?: (txHash: string) => void
-  onSuccess?: (txHash: string, txInfo?: any) => void
-  onError?: (txHash?: string, txInfo?: any) => void
+  enabled: boolean;
+  swapAddress:string;
+  swapAssets: any[];
+  price: number;
+  client: any;
+  senderAddress: string;
+  msgs: any | null;
+  encodedMsgs: any | null;
+  amount: string;
+  gasAdjustment?: number;
+  estimateEnabled?: boolean;
+  onBroadcasting?: (txHash: string) => void;
+  onSuccess?: (txHash: string, txInfo?: any) => void;
+  onError?: (txHash?: string, txInfo?: any) => void;
 }
 
 export const useTransaction = ({
+  enabled,
   swapAddress,
   swapAssets,
   client,
@@ -99,7 +101,7 @@ export const useTransaction = ({
       }
     },
     {
-      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null,
+      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,

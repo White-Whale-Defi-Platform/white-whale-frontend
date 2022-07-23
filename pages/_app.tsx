@@ -12,7 +12,6 @@ import AppLayout from 'components/Layout/AppLayout'
 import AppLoading from 'components/AppLoading'
 
 
-
 const MyApp:FC<AppProps> = ({ Component, pageProps }) => {
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -26,7 +25,7 @@ const MyApp:FC<AppProps> = ({ Component, pageProps }) => {
             <CSSReset />
             {
               !mounted ? <AppLoading /> : (
-                <AppLayout>
+                <AppLayout >
                   <Component {...pageProps} />
                 </AppLayout>
               )

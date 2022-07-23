@@ -1,9 +1,9 @@
 [
   {
-    "chainId": "localterra",
-    "chainName": "Local Terra",
-    "rpc": "http://localhost:26657",
-    "rest": "http://localhost:1317",
+    "chainId": "pisco-1",
+    "chainName": "Terra testnet",
+    "rpc": "https://terra-testnet-rpc.polkachu.com",
+    "rest": "https://pisco-lcd.terra.dev",
     "stakeCurrency": {
       "coinDenom": "LUNA",
       "coinMinimalDenom": "uluna",

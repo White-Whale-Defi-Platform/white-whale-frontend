@@ -1,13 +1,14 @@
 import { Button, Flex, Text, VStack, Box, HStack, Image } from '@chakra-ui/react'
-import {FC} from 'react'
+import { FC } from 'react'
 import { useRouter } from "next/router";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import FallbackImage from 'components/FallbackImage'
 
 type Props = {
 
 }
 
-const Pools:FC<Props> = () => {
+const Pools: FC<Props> = () => {
     const router = useRouter()
     const { data: poolList } = usePoolsListQuery()
 
@@ -54,7 +55,10 @@ const Pools:FC<Props> = () => {
                                             position="relative"
                                             zIndex="2"
                                         >
-                                            <Image src={pool.pool_assets?.[0].logoURI} alt="logo-small" boxSize="3rem" />
+                                            <Image
+                                                src={pool.pool_assets?.[0].logoURI}
+                                                alt="logo-small" boxSize="3rem"
+                                                fallback={<FallbackImage width="8" height='8' color={["#5DB7DE", "#343434"]} />} />
                                         </Box>
                                         <Box
                                             border="2px solid rgba(255, 255, 255, 0.1);"
@@ -64,7 +68,12 @@ const Pools:FC<Props> = () => {
                                                 marginLeft: "-15px"
                                             }}
                                         >
-                                            <Image src={pool.pool_assets?.[1].logoURI} alt="ust" boxSize="3rem" />
+                                            <Image
+                                                src={pool.pool_assets?.[1].logoURI}
+                                                alt="ust" boxSize="3rem"
+                                                fallback={<FallbackImage width="8" height='8' color={["#FFE66D", "#343434"]} />}
+                                            />
+
                                         </Box>
                                     </HStack>
 

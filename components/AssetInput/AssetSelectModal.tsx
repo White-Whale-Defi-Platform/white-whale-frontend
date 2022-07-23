@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalHeader, ModalOverlay, ModalContent, useDisclosur
 import SearchInput from './SearchInput'
 import AssetList from './AssetList'
 import { FC, ReactNode } from 'react'
-import useAsset , {Asset} from '../../hooks/useAsset';
+
 
 
 interface AssetSelectModalProps {
@@ -14,11 +14,10 @@ interface AssetSelectModalProps {
 }
 
 const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, currentToken = "" , disabled}) => {
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [search, setSearch] = useState<string>('')
-    const assets =  useAsset({
-        skip : currentToken
-    })
+
 
     const onAssetChange = (asset) => {
         setSearch(asset?.asset)
@@ -51,7 +50,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                     >
                         <SearchInput onChange={setSearch} />
                         <AssetList 
-                            assetList={assets} 
+                            // assetList={assets} 
                             onChange={onAssetChange} 
                             search={search} 
                             currentToken={currentToken} />
