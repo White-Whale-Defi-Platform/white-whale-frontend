@@ -23,6 +23,7 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
 
 
     return (
+        <div>
         <VStack padding={10}
                     width="full"
                     background="#1C1C1C"
@@ -44,14 +45,14 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                         </HStack>
                         {/* TODO: Type error: Type instantiation is excessively deep and possibly infinite. */}
 
-                        {/* <Controller
+                        <Controller
                             name="token1"
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => (
-                                // <AssetInput {...field} token={tokens?.[0]} onChange={(value) => { onInputChange(value, 0); field.onChange(value) }} />
+                                <AssetInput {...field} token={tokens?.[0]} onChange={(value) => { onInputChange(value, 0); field.onChange(value) }} />
                             )}
-                        /> */}
+                        />
                     </VStack>
 
                     <VStack width="full" alignItems="flex-start" paddingBottom={8}>
@@ -60,14 +61,14 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
                         {/* TODO: Type error: Type instantiation is excessively deep and possibly infinite. */}
-                        {/* <Controller
+                        <Controller
                             name="token2"
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => (
                                 <AssetInput {...field} token={tokens?.[1]} onChange={(value) => { onInputChange(value, 1); field.onChange(value) }} />
                             )}
-                        /> */}
+                        />
                     </VStack>
 
                     <Button
@@ -80,6 +81,7 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                     </Button>
 
                 </VStack>
+                </div>
     )
 }
 

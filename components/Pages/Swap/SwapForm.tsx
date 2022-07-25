@@ -137,7 +137,7 @@ const SwapForm: FC<Props> = ({
                         </Hide>
                     </HStack>
                 </HStack>
-                {/* <Controller
+                <Controller
 
                     name="tokenA"
                     control={control}
@@ -153,7 +153,7 @@ const SwapForm: FC<Props> = ({
 
                         />
                     )}
-                /> */}
+                />
             </VStack>
 
             <HStack width="full" justifyContent="center">
@@ -193,7 +193,7 @@ const SwapForm: FC<Props> = ({
                         </Hide>
                     </HStack>
                 </HStack>
-                {/* <Controller
+                <Controller
                     name="tokenB"
                     control={control}
                     rules={{ required: true }}
@@ -207,7 +207,7 @@ const SwapForm: FC<Props> = ({
                             onChange={(value) => { setReverse(true); onInputChange(value, 1); field.onChange(value); }}
                         />
                     )}
-                /> */}
+                />
             </VStack>
 
 

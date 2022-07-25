@@ -56,7 +56,7 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                         51 |                             rules={{ required: true }}
                         error Command failed with exit code 1. */}
                         
-                        {/* <Controller
+                        <Controller
                             name="token1"
                             control={control}
                             rules={{ required: true }}
@@ -68,7 +68,7 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                                     disabled={false}
                                     />
                             )}
-                        /> */}
+                        />
                     </VStack>
 
                     <VStack width="full" alignItems="flex-start" paddingBottom={8}>
@@ -87,7 +87,7 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                         81 |                             control={control}
                         82 |                             rules={{ required: true }}
                         error Command failed with exit code 1. */}
-                        {/* <Controller
+                        <Controller
                             name="token2"
                             control={control}
                             rules={{ required: true }}
@@ -99,7 +99,7 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                                     field.onChange(value) }}
                                     disabled={false} />
                             )}
-                        /> */}
+                        />
                     </VStack>
 
                     <Button
