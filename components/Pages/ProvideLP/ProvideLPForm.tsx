@@ -42,14 +42,16 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                             <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
-                        <Controller
+                        {/* TODO: Type error: Type instantiation is excessively deep and possibly infinite. */}
+
+                        {/* <Controller
                             name="token1"
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => (
-                                <AssetInput {...field} token={tokens?.[0]} onChange={(value) => { onInputChange(value, 0); field.onChange(value) }} />
+                                // <AssetInput {...field} token={tokens?.[0]} onChange={(value) => { onInputChange(value, 0); field.onChange(value) }} />
                             )}
-                        />
+                        /> */}
                     </VStack>
 
                     <VStack width="full" alignItems="flex-start" paddingBottom={8}>
@@ -57,14 +59,15 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                             <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
-                        <Controller
+                        {/* TODO: Type error: Type instantiation is excessively deep and possibly infinite. */}
+                        {/* <Controller
                             name="token2"
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => (
                                 <AssetInput {...field} token={tokens?.[1]} onChange={(value) => { onInputChange(value, 1); field.onChange(value) }} />
                             )}
-                        />
+                        /> */}
                     </VStack>
 
                     <Button

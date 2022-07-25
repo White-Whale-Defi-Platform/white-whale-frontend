@@ -137,7 +137,7 @@ const SwapForm: FC<Props> = ({
                         </Hide>
                     </HStack>
                 </HStack>
-                <Controller
+                {/* <Controller
 
                     name="tokenA"
                     control={control}
@@ -153,7 +153,7 @@ const SwapForm: FC<Props> = ({
 
                         />
                     )}
-                />
+                /> */}
             </VStack>
 
             <HStack width="full" justifyContent="center">
@@ -193,7 +193,7 @@ const SwapForm: FC<Props> = ({
                         </Hide>
                     </HStack>
                 </HStack>
-                <Controller
+                {/* <Controller
                     name="tokenB"
                     control={control}
                     rules={{ required: true }}
@@ -207,12 +207,12 @@ const SwapForm: FC<Props> = ({
                             onChange={(value) => { setReverse(true); onInputChange(value, 1); field.onChange(value); }}
                         />
                     )}
-                />
+                /> */}
             </VStack>
 
 
             <VStack alignItems="flex-start" width="full">
-                <Text color="brand.500" fontSize={12}>1 {tokenA.tokenSymbol} = {(fromChainAmount(simulated?.amount) / Number(tokenA.amount)).toFixed(6) || 0} {tokenB.tokenSymbol}
+                <Text color="brand.500" fontSize={12}>1 {tokenA.tokenSymbol} = {(Number(fromChainAmount(simulated?.amount)) / Number(tokenA.amount)).toFixed(6) || 0} {tokenB.tokenSymbol}
                 </Text>
                 <HStack justifyContent="space-between" width="full">
                     <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>

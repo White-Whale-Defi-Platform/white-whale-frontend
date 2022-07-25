@@ -1,9 +1,9 @@
 import { HStack, Text, VStack } from '@chakra-ui/react';
 import SwapSettings from './SwapSettings';
 import useSwap from 'hooks/useSwap';
-import { useTokenList } from 'hooks/useTokenList';
+// import { useTokenList } from 'hooks/useTokenList';
 import { TxStep } from 'hooks/useTransaction';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { tokenSwapAtom, TokenItemState } from './swapAtoms';
 import SwapForm from './SwapForm';
@@ -41,7 +41,7 @@ type SwapProps = {
     initialTokenPair?: readonly [string, string]
 }
 
-const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
+const Swap: FC<SwapProps> = ({  }) => {
     /* connect to recoil */
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState(false)

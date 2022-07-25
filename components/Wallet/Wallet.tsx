@@ -132,7 +132,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
         </Box>
 
         <HStack spacing="3">
-          <KeplrWalletIcon size="20px" />
+          <KeplrWalletIcon />
           <Text color="brand.200" size="16px">
             {truncate(address, [4, 6])}
           </Text>
