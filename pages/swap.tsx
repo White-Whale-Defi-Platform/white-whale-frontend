@@ -12,9 +12,9 @@ function getInitialTokenPairFromSearchParams() {
 const SwapPage = () => {
    
   return (
-    <Page>
+    // <Page>
       <Swap initialTokenPair={getInitialTokenPairFromSearchParams()} />
-    </Page>
+    // </Page>
 
   )
 }

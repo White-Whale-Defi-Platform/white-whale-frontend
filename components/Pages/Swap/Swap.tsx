@@ -50,11 +50,15 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
     const router = useRouter()
 
     useEffect(() => {
-        const [from, to] = defaultTokens[chainId]
-        const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
-        setTokenSwapState([from,to])
-        setResetForm(true)
-        router.replace(params)
+        console.log({chainId})
+        if (chainId) {
+            const [from, to] = defaultTokens[chainId]
+            const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
+            setTokenSwapState([from, to])
+            setResetForm(true)
+            router.replace(params)
+        }
+        // else setTokenSwapState(defaultTokens["uni-3"])
     }, [chainId])
 
     /* fetch token list and set initial state */
@@ -115,9 +119,8 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
 
 
     return (
-        <>
-            <VStack width={700} justifyContent="center" className='testing'>
-                <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
+            <VStack width={{base: '100%', md: '700px'}} alignItems="center" padding={5}>
+                <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{base: 4, md: 14}} >
                     <Text as="h2" fontSize="24" fontWeight="900">
                         Swap
                     </Text>
@@ -139,9 +142,6 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
                 />
 
             </VStack>
-
-
-        </>
     )
 }
 

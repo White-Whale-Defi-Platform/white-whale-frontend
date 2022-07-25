@@ -58,8 +58,8 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
                                     onClick={() => { onChange(chain); onClose() }}
                                 >
                                     <HStack>
-                                        <Image src="/juno.svg" boxSize={50} />
-                                        <Text paddingLeft={3} >{chain.chainName}</Text>
+                                        <Image src={chain?.icon} boxSize={50} maxH={10} />
+                                        <Text paddingLeft={3} >{chain.label}</Text>
                                     </HStack>
                                     <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
                                 </ListItem>

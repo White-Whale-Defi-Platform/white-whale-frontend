@@ -29,12 +29,12 @@ const options = [
   {
     label: "Juno",
     value: "uni-3",
-    icon: "/juno.svg"
+    icon: "/logos/juno.svg"
   },
   {
     label: "Terra",
-    value: "localterra",
-    icon: "https://assets.terra.money/icon/svg/LUNA.png"
+    value: "pisco-1",
+    icon: "/logos/luna.svg"
   }
 ]
 
@@ -44,7 +44,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   // const { address, chainId } = useRecoilValue(walletState)
   const [{ address, chainId }, setWalletState] = useRecoilState(walletState)
   // const [activeChain, setActiveChain] = useRecoilState(activeChainAtom)
-  const defaultChain = options.find(({ value }) => value === chainId)
+  const currentChain = options.find(({ value }) => value === chainId)
   const [chainInfo] = useChainInfo(chainId || 'uni-3')
   const { balance } = useTokenBalance(baseToken?.symbol)
 
@@ -59,8 +59,8 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const chains = useChains()
 
   const chainList = useMemo(() => {
-
     return chains.map(({ chainId, chainName }) => ({
+      ...options.find(({ value }) => value === chainId),
       chainName,
       value: chainId,
       active: chainId === chainInfo?.chainId
@@ -69,6 +69,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   }, [chains, chainInfo]) 
 
   const onChainChange = (chain) => {
+    console.log("chain", chain.value)
     setWalletState((value) => ({
       ...value,
       chainId: chain?.value
@@ -92,7 +93,10 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
     return (
       <>
         {/* <Select options={options} width="fit-content" onChange={onChainChange} defaultSelcted={options?.[0]} /> */}
-        <WalletSelect denom={denom?.coinDenom} chainList={chainList} onChange={onChainChange} />
+        <WalletSelect 
+          denom={denom?.coinDenom} 
+          chainList={chainList} 
+          onChange={onChainChange} />
         <Button
           variant="primary"
           // type="button"
@@ -102,7 +106,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
           borderRadius="full"
           // py="3"
           // px="4"
-          onClick={() => onConnect("uni-3")}>
+          onClick={() => onConnect(chainId)}>
           Connect wallet
         </Button>
         {/* <WalletModal isOpen={isOpen} onClose={onClose} /> */}
@@ -118,7 +122,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
       <Card paddingY={2} paddingX={6} gap={4}>
 
         <HStack spacing="4" display={{ base: "none", md: "flex" }}>
-          <Text fontSize="16px">{balance}</Text>
+          <Text fontSize="16px">{balance?.toFixed(1)}</Text>
           <WalletSelect denom={denom?.coinDenom} chainList={chainList} onChange={onChainChanage} />
           {/* <Text fontSize="16px">{denom?.coinDenom}</Text> */}
         </HStack>

@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Button, HStack, IconButton, Text, VStack, Hide } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
 import { useEffect, FC, useMemo } from 'react';
@@ -95,14 +95,16 @@ const SwapForm: FC<Props> = ({
 
 
     return (
-        <VStack padding={10}
+        <VStack
+            paddingX={{ base: 4, md: 10 }}
+            paddingY={{ base: 10, md: 10 }}
             width="full"
             background="#1C1C1C"
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
             borderRadius="30px"
             alignItems="flex-start"
             minH={400}
-            maxWidth={600}
+            maxWidth={{ base: 'full', md: 600 }}
             gap={4}
             as="form"
             onSubmit={handleSubmit(tx?.submit)}
@@ -113,9 +115,27 @@ const SwapForm: FC<Props> = ({
 
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
-                <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
-                    <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                <HStack justifyContent="space-between" width="full" >
+
+                    <HStack>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
+                        <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(2)}</Text>
+                    </HStack>
+
+                    <HStack >
+                        <Hide above='md'>
+                            <Button variant="outline" size="xs" maxW="fit-content" onClick={() => {
+                                setReverse(false);
+                                onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
+                                setValue("tokenA", { ...tokenA, amount: tokenABalance / 2 }, { shouldValidate: true })
+                            }}>half</Button>
+                            <Button variant="outline" size="xs" onClick={() => {
+                                setReverse(false);
+                                onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
+                                setValue("tokenA", { ...tokenA, amount: tokenABalance }, { shouldValidate: true })
+                            }}>max</Button>
+                        </Hide>
+                    </HStack>
                 </HStack>
                 <Controller
 
@@ -150,10 +170,28 @@ const SwapForm: FC<Props> = ({
                 />
             </HStack>
 
+
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
-                <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
-                    <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
+                <HStack justifyContent="space-between" width="full" >
+                    <HStack>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
+                        <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(2)}</Text>
+                    </HStack>
+                    <HStack>
+                        <Hide above='md'>
+
+                            <Button variant="outline" size="xs" onClick={() => {
+                                setReverse(false);
+                                onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 0);
+                                setValue("tokenB", { ...tokenB, amount: tokenBBalance / 2 }, { shouldValidate: true })
+                            }}>half</Button>
+                            <Button variant="outline" size="xs" onClick={() => {
+                                setReverse(false);
+                                onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 0);
+                                setValue("tokenB", { ...tokenB, amount: tokenBBalance }, { shouldValidate: true })
+                            }}>max</Button>
+                        </Hide>
+                    </HStack>
                 </HStack>
                 <Controller
                     name="tokenB"

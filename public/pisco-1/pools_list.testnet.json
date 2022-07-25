@@ -16,7 +16,7 @@
     "symbol": "LUNA",
     "name": "Luna",
     "decimals": 6,
-    "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
+    "logoURI": "/logos/luna.svg",
     "tags": ["native"],
     "native": true,
     "denom": "uluna"
@@ -32,7 +32,7 @@
           "symbol": "LUNA",
           "name": "Luna",
           "decimals": 6,
-          "logoURI":  "/luna.svg",
+          "logoURI":  "/logos/luna.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uluna"
@@ -44,7 +44,7 @@
           "symbol": "LUNAONE",
           "name": "Lunaone",
           "decimals": 6,
-          "logoURI": "/lunaone.svg",
+          "logoURI": "/logos/lunaone.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "lunaone"
@@ -65,7 +65,7 @@
           "symbol": "LUNA",
           "name": "Luna",
           "decimals": 6,
-          "logoURI": "/luna.svg",
+          "logoURI": "/logos/luna.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uluna"
@@ -77,7 +77,7 @@
           "symbol": "LUNATWO",
           "name": "Lunatwo",
           "decimals": 6,
-          "logoURI": "/lunatwo.svg",
+          "logoURI": "/logos/lunatwo.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "lunatwo"
@@ -98,7 +98,7 @@
           "symbol": "LUNAONE",
           "name": "Lunaone",
           "decimals": 6,
-          "logoURI": "/lunaone.svg",
+          "logoURI": "/logos/lunaone.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "lunaone"
@@ -110,7 +110,7 @@
           "symbol": "LUNATWO",
           "name": "Lunatwo",
           "decimals": 6,
-          "logoURI": "/lunatwo.svg",
+          "logoURI": "/logos/lunatwo.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "lunatwo"

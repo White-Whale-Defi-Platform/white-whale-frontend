@@ -1,4 +1,4 @@
-import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Divider, Box} from '@chakra-ui/react';
+import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Divider, Show } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import AssetSelectModal from './AssetSelectModal';
 import { FC } from 'react'
@@ -18,7 +18,7 @@ interface AssetInputProps {
 
 
 
-const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, value, showList = true, disabled}, ref) => {
+const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, value, showList = true, disabled }, ref) => {
 
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -43,15 +43,17 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
                     // onFocus={onInputFocus}
                     onChange={({ target }) => onChange({ ...token, amount: target.value })}
                 />
-                <Button disabled={disabled} variant="outline" size="xs" onClick={() => onChange({ ...token, amount: balance / 2 })}>half</Button>
-                <Button disabled={disabled} variant="primary" size="xs" onClick={() => onChange({ ...token, amount: balance })}>max</Button>
+                <Show above='sm'>
+                    <Button disabled={disabled} variant="outline" size="xs" onClick={() => onChange({ ...token, amount: balance / 2 })}>half</Button>
+                    <Button disabled={disabled} variant="primary" size="xs" onClick={() => onChange({ ...token, amount: balance })}>max</Button>
+                </Show>
             </HStack>
             <Divider orientation='vertical' h="50px" />
             {
                 showList ? (
                     <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol} disabled={disabled}>
-                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />}/>
-                        <Text fontSize="20" fontWeight="400">{tokenInfo?.symbol}</Text>
+                        <Image maxH={{ base: 6, md: 8 }} src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />} />
+                        <Text size="lg" fontWeight="400">{tokenInfo?.symbol}</Text>
                         <IconButton
                             disabled={disabled}
                             margin="unset"
@@ -68,7 +70,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
                         width="fit-content"
                         paddingRight={2}
                     >
-                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />}/>
+                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />} />
                         <Text fontSize="20" fontWeight="400">{tokenInfo?.symbol}</Text>
                     </HStack>
                 )

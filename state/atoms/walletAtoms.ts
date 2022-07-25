@@ -19,12 +19,12 @@ export enum WalletStatusType {
 type GeneratedWalletState<
   TClient extends any,
   TStateExtension extends {}
-> = TStateExtension & {
-  client: TClient | null
-  status: WalletStatusType
-  address: string,
-  chainId: string
-}
+  > = TStateExtension & {
+    client: TClient | null
+    status: WalletStatusType
+    address: string,
+    chainId: string
+  }
 
 type CreateWalletStateArgs<TState = {}> = {
   key: string
@@ -40,6 +40,7 @@ function createWalletState<TClient = any, TState = {}>({
     default: {
       status: WalletStatusType.idle,
       client: null,
+      chainId: 'uni-3',
       address: '',
       ...defaultState,
     },
@@ -60,7 +61,7 @@ function createWalletState<TClient = any, TState = {}>({
                 status: WalletStatusType.restored,
               })
             }
-          } catch (e) {}
+          } catch (e) { }
         }
 
         onSet((newValue, oldValue) => {
@@ -87,7 +88,7 @@ export const walletState = createWalletState<
 >({
   key: 'internal-wallet',
   default: {
-    key: null,
+    key: null
   },
 })
 

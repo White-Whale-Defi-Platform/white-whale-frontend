@@ -32,7 +32,7 @@
           "symbol": "JUNOX",
           "name": "Junox",
           "decimals": 6,
-          "logoURI":  "/juno.svg",
+          "logoURI":  "/logos/juno.svg",
           "tags": ["native"],
           "native": true,
           "denom": "ujunox"
@@ -44,7 +44,7 @@
           "symbol": "JUNOONE",
           "name": "Junoone",
           "decimals": 6,
-          "logoURI": "/junoone.svg",
+          "logoURI": "/logos/junoone.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "junoonex"
@@ -65,7 +65,7 @@
           "symbol": "JUNOX",
           "name": "Junox",
           "decimals": 6,
-          "logoURI": "/juno.svg",
+          "logoURI": "/logos/juno.svg",
           "tags": ["native"],
           "native": true,
           "denom": "ujunox"
@@ -77,7 +77,7 @@
           "symbol": "JUNOTWO",
           "name": "Junotwo",
           "decimals": 6,
-          "logoURI": "/junotwo.svg",
+          "logoURI": "/logos/junotwo.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "junotwox"
@@ -121,7 +121,7 @@
           "symbol": "JUNOONE",
           "name": "Junoone",
           "decimals": 6,
-          "logoURI": "/junoone.svg",
+          "logoURI": "/logos/junoone.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "junoonex"
@@ -133,7 +133,7 @@
           "symbol": "JUNOTWO",
           "name": "Junotwo",
           "decimals": 6,
-          "logoURI": "/junotwo.svg",
+          "logoURI": "/logos/junotwo.svg",
           "tags": ["memecoin"],
           "native": false,
           "denom": "junotwox"

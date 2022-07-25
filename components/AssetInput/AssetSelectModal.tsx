@@ -38,9 +38,9 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                 {children}
             </HStack>
 
-            <Modal onClose={onClose} isOpen={isOpen} isCentered >
+            <Modal onClose={onClose} isOpen={isOpen} isCentered size={{base:'full', md: '2xl'}} >
                 <ModalOverlay />
-                <ModalContent minWidth="600px" backgroundColor="#212121">
+                <ModalContent  backgroundColor="#212121">
                     <ModalHeader>Select token</ModalHeader>
                     <ModalBody
                         as={VStack}
