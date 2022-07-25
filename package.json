@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:w-blocks": "BUNDLE_JUNOBLOCKS=true next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "prettier:write": "prettier --write .",
