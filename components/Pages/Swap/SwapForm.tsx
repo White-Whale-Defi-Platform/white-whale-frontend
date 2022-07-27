@@ -7,8 +7,6 @@ import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { TokenItemState } from './swapAtoms';
-import { useTokenToTokenPrice } from './hooks'
-
 
 
 type Props = {

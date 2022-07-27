@@ -23,6 +23,7 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
 
 
     return (
+        <div>
         <VStack padding={10}
                     width="full"
                     background="#1C1C1C"
@@ -42,6 +43,8 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                             <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
+                        {/* TODO: Type error: Type instantiation is excessively deep and possibly infinite. */}
+
                         <Controller
                             name="token1"
                             control={control}
@@ -57,6 +60,7 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                             <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
+                        {/* TODO: Type error: Type instantiation is excessively deep and possibly infinite. */}
                         <Controller
                             name="token2"
                             control={control}
@@ -77,6 +81,7 @@ const ProvideLPForm: FC<Props> = ({tokens, onSubmit, onInputChange}) => {
                     </Button>
 
                 </VStack>
+                </div>
     )
 }
 

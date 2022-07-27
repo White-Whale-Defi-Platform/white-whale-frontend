@@ -1,7 +1,6 @@
 import { Box, Button, HStack, Image, Text } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 import useFilter from 'hooks/useFilter'
-import { Asset } from 'types/blockchain'
 import { useTokenList } from 'hooks/useTokenList'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import FallbackImage from 'components/FallbackImage'

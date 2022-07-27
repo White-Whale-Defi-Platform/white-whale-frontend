@@ -39,7 +39,7 @@ type SwapProps = {
     initialTokenPair?: readonly [string, string]
 }
 
-const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
+const Swap: FC<SwapProps> = ({  }) => {
     /* connect to recoil */
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState(false)
@@ -58,34 +58,6 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
         }
         // else setTokenSwapState(defaultTokens["uni-3"])
     }, [chainId])
-
-    /* fetch token list and set initial state */
-    // const [tokenList] = useTokenList()
-
-    // useEffect(() => {
-    //     if (!tokenA.tokenSymbol && !tokenB.tokenSymbol)
-    //         setTokenSwapState(defaultTokens[chainId])
-    // }, [tokenA, tokenB, setTokenSwapState])
-
-    // const initialTokenPairValue = useRef(initialTokenPair).current
-    // useEffect(
-    //     function setInitialTokenPairIfProvided() {
-    //         if (initialTokenPairValue) {
-    //             const [tokenASymbol, tokenBSymbol] = initialTokenPairValue
-    //             setTokenSwapState([
-    //                 {
-    //                     tokenSymbol: tokenASymbol,
-    //                     amount: 0,
-    //                 },
-    //                 {
-    //                     tokenSymbol: tokenBSymbol,
-    //                     amount: 0,
-    //                 },
-    //             ])
-    //         }
-    //     },
-    //     [initialTokenPairValue, setTokenSwapState]
-    // )
 
     const { tx, simulated, minReceive }: any = useSwap({
         reverse

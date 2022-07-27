@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Text, chakra } from "@chakra-ui/react";
+import { chakra } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 

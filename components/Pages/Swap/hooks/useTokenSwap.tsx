@@ -75,17 +75,15 @@ export const useTokenSwap = ({
           : 'tokenBtoTokenA'
         const swapAddress =
           streamlinePoolAB?.swap_address ?? streamlinePoolBA?.swap_address
-
-        return await directTokenSwap({
-          tokenAmount,
-          price,
-          slippage,
-          senderAddress: address,
-          swapAddress,
-          swapDirection,
-          tokenA,
-          client,
-        })
+        // TODO: Direct token swap
+        // return await directTokenSwap({
+        //   tokenA,
+        //   senderAddress: address,
+        //   swapAddress,
+        //   tokenAmount,
+        //   client,
+        //   msgs
+        // })
       }
 
       return await passThroughTokenSwap({

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
-  Flex, Box, HStack, Image,
+  Flex, Box, HStack,
   Drawer,
   DrawerBody,
   DrawerOverlay,
@@ -22,9 +22,9 @@ import DrawerLink from './DrawerLink';
 import BurgerIcon from 'components/icons/BurgerIcon';
 
 
-const Navbar = ({ hideNav = false }) => {
+const Navbar = ({ }) => {
 
-  // const [slectedChain, setSelectedChain] = useState("uni-1")
+  // const [selectedChain, setSelectedChain] = useState("uni-1")
 
   const { mutate: connectWallet } = useConnectWallet()
   const [{ key, chainId }, setWalletState] = useRecoilState(walletState)

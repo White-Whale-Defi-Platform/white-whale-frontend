@@ -3,6 +3,7 @@ import { Modal, ModalBody, ModalHeader, ModalOverlay, ModalContent, useDisclosur
 import SearchInput from './SearchInput'
 import AssetList from './AssetList'
 import { FC, ReactNode } from 'react'
+import { Asset } from 'types/blockchain'
 
 
 

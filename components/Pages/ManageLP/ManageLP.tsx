@@ -1,15 +1,12 @@
 import { HStack, Text, VStack, IconButton } from '@chakra-ui/react';
 import Page from 'components/Page';
-import { useState, FC, useEffect, useMemo } from 'react';
-import { Asset } from 'types/blockchain';
+import { FC, useEffect, useMemo } from 'react';
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter, NextRouter } from "next/router";
 import ManageLPForm from './ManageLPForm';
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery';
+// import { usePoolFromListQueryById } from 'queries/usePoolsListQuery';
 import { tokenLpAtom } from './lpAtoms';
 import { useRecoilState } from 'recoil';
-import { useRef } from 'react';
-
 // export const tokens = [
 //     {
 //         asset: "JUNOX",
@@ -37,7 +34,7 @@ const ManageLP: FC = () => {
 
     // const [lpTokens, setLpTokens] = useState(null)
     const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
-    const [pool] = usePoolFromListQueryById({ poolId })
+    // const [pool] = usePoolFromListQueryById({ poolId })
 
     useEffect(() => {
         if (poolId) {

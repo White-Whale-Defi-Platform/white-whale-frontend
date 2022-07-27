@@ -1,7 +1,7 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react';
-import AssetInput from 'components/AssetInput';
+// import AssetInput from 'components/AssetInput';
 import { FC } from 'react';
-import { Controller, useForm } from "react-hook-form";
+import { /**Controller,**/ useForm } from "react-hook-form";
 import { Asset } from 'types/blockchain';
 
 
@@ -45,6 +45,17 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                             <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
+                        {/* Type error: Type instantiation is excessively deep and possibly infinite.
+
+                        46 |                             <Text fontSize="14" fontWeight="700">5.54</Text>
+                        47 |                         </HStack>
+                        > 48 |                         <Controller
+                            |                         ^
+                        49 |                             name="token1"
+                        50 |                             control={control}
+                        51 |                             rules={{ required: true }}
+                        error Command failed with exit code 1. */}
+                        
                         <Controller
                             name="token1"
                             control={control}
@@ -54,6 +65,7 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                                     token={tokenA} 
                                     showList={false}
                                     onChange={(value) => { onInputChange(value, 0);  field.onChange(value) }} 
+                                    disabled={false}
                                     />
                             )}
                         />
@@ -64,6 +76,17 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                             <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
                             <Text fontSize="14" fontWeight="700">5.54</Text>
                         </HStack>
+
+                        {/* Type error: Type instantiation is excessively deep and possibly infinite.
+
+                        77 |                             <Text fontSize="14" fontWeight="700">5.54</Text>
+                        78 |                         </HStack>
+                        > 79 |                         <Controller
+                            |                         ^
+                        80 |                             name="token2"
+                        81 |                             control={control}
+                        82 |                             rules={{ required: true }}
+                        error Command failed with exit code 1. */}
                         <Controller
                             name="token2"
                             control={control}
@@ -73,7 +96,8 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
                                     token={tokenB} 
                                     showList={false}
                                     onChange={(value) => { onInputChange(value, 1); 
-                                    field.onChange(value) }} />
+                                    field.onChange(value) }}
+                                    disabled={false} />
                             )}
                         />
                     </VStack>

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export default function KeplrWalletIcon(props) {
+export default function KeplrWalletIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
       <rect width="20" height="20" rx="10" fill="url(#pattern0)" />
