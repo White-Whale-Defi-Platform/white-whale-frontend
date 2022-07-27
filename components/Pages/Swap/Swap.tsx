@@ -1,15 +1,13 @@
 import { HStack, Text, VStack } from '@chakra-ui/react';
-import SwapSettings from './SwapSettings';
 import useSwap from 'hooks/useSwap';
-import { useTokenList } from 'hooks/useTokenList';
+import SwapSettings from './SwapSettings';
 import { TxStep } from 'hooks/useTransaction';
-import { FC, useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { tokenSwapAtom, TokenItemState } from './swapAtoms';
+import { useRouter } from 'next/router';
+import { FC, useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { walletState } from 'state/atoms/walletAtoms';
+import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import { useRouter } from 'next/router'
 
 const defaultTokens = {
     "uni-3": [
@@ -18,7 +16,7 @@ const defaultTokens = {
             amount: 0,
         },
         {
-            tokenSymbol: 'JUNOONE',
+            tokenSymbol: null,
             amount: 0,
         }
     ],
@@ -28,7 +26,7 @@ const defaultTokens = {
             amount: 0,
         },
         {
-            tokenSymbol: 'LUNAONE',
+            tokenSymbol: null,
             amount: 0,
         }
     ]
@@ -45,12 +43,12 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
     /* connect to recoil */
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState(false)
-    const { chainId } = useRecoilValue(walletState)
+    const { chainId, key } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
-        console.log({chainId})
+        console.log({ chainId })
         if (chainId) {
             const [from, to] = defaultTokens[chainId]
             const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
@@ -119,29 +117,31 @@ const Swap: FC<SwapProps> = ({ initialTokenPair }) => {
 
 
     return (
-            <VStack width={{base: '100%', md: '700px'}} alignItems="center" padding={5}>
-                <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{base: 4, md: 14}} >
-                    <Text as="h2" fontSize="24" fontWeight="900">
-                        Swap
-                    </Text>
-                    <SwapSettings />
-                </HStack>
+        <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5}>
+            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4, md: 14 }} >
+                <Text as="h2" fontSize="24" fontWeight="900">
+                    Swap
+                </Text>
+                <SwapSettings />
+            </HStack>
 
-                <SwapForm
-                    tokenA={tokenA}
-                    tokenB={tokenB}
-                    onReverseDirection={onReverseDirection}
-                    onInputChange={onInputChange}
-                    simulated={simulated}
-                    minReceive={minReceive}
-                    isReverse={false}
-                    tx={tx}
-                    setReverse={setReverse}
-                    resetForm={resetForm}
-                    setResetForm={setResetForm}
-                />
 
-            </VStack>
+            <SwapForm
+                connected={Boolean(key?.name)}
+                tokenA={tokenA}
+                tokenB={tokenB}
+                onReverseDirection={onReverseDirection}
+                onInputChange={onInputChange}
+                simulated={simulated}
+                minReceive={minReceive}
+                isReverse={false}
+                tx={tx}
+                setReverse={setReverse}
+                resetForm={resetForm}
+                setResetForm={setResetForm}
+            />
+
+        </VStack>
     )
 }
 

@@ -45,15 +45,32 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
                 />
                 <Show above='sm'>
                     <Button disabled={disabled} variant="outline" size="xs" onClick={() => onChange({ ...token, amount: balance / 2 })}>half</Button>
-                    <Button disabled={disabled} variant="primary" size="xs" onClick={() => onChange({ ...token, amount: balance })}>max</Button>
+                    <Button disabled={disabled} variant="outline" size="xs" onClick={() => onChange({ ...token, amount: balance })}>max</Button>
                 </Show>
             </HStack>
             <Divider orientation='vertical' h="50px" />
             {
                 showList ? (
                     <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol} disabled={disabled}>
-                        <Image maxH={{ base: 6, md: 8 }} src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />} />
-                        <Text size="lg" fontWeight="400">{tokenInfo?.symbol}</Text>
+                        {tokenInfo?.symbol ? (
+                            <>
+                                <Image
+                                    style={{ margin: 'unset' }}
+                                    maxH={{ base: 6, md: 8 }}
+                                    src={tokenInfo?.logoURI} alt="logo-small"
+                                    boxSize="2.5rem"
+                                    fallback={<FallbackImage />} />)
+                                <Text size="lg" fontWeight="400">{tokenInfo?.symbol || 'Select Token'}</Text>
+                            </>) :
+                            <Text 
+                                paddingLeft="10px"
+                                size="lg" 
+                                fontWeight="400" 
+                                color="brand.200">
+                                    {tokenInfo?.symbol || 'Select Token'}
+                                </Text>
+                        }
+
                         <IconButton
                             disabled={disabled}
                             margin="unset"
@@ -61,6 +78,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
                             color="white"
                             aria-label='go back'
                             icon={<ChevronDownIcon />}
+                            style={{ margin: 'unset' }}
                         />
                     </AssetSelectModal>
 

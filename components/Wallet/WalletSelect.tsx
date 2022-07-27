@@ -24,7 +24,6 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
             <PopoverTrigger>
                 <HStack as={Button} variant="unstyled">
                     <Text>{denom}</Text>
-
                     <ChevronDownIcon />
                 </HStack>
             </PopoverTrigger>
@@ -64,9 +63,7 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
                                     <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
                                 </ListItem>
                             ))}
-
                         </List>
-
 
                     </VStack>
                 </PopoverBody>

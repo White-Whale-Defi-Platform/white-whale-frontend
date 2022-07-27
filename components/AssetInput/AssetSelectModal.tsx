@@ -32,8 +32,10 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                 tabIndex={0}
                 role='button'
                 onClick={() => !disabled && onOpen()}
-                justifyContent="end"
-                width="fit-content"
+                justifyContent="space-between"
+                width="150px"
+                sx={{ 'button': {margin : 'unset'} }}
+                style={{margin : "unset"}}
             >
                 {children}
             </HStack>

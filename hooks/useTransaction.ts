@@ -77,6 +77,7 @@ export const useTransaction = ({
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
+  const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
@@ -91,6 +92,7 @@ export const useTransaction = ({
           console.error(error)
           setTxStep(TxStep.Idle)
           setError("Insufficent funds")
+          setButtonLabel('Insufficent funds')
           throw new Error('Insufficent funds')
         } else {
           console.error(error)
@@ -230,6 +232,7 @@ useEffect(() => {
 return useMemo(() => {
   return {
     fee,
+    buttonLabel,
     submit,
     txStep,
     txInfo,

@@ -1225,6 +1225,17 @@
     long "^4.0.0"
     secretjs "^0.17.0"
 
+"@keplr-wallet/wc-qrcode-modal@^0.10.13":
+  version "0.10.13"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/wc-qrcode-modal/-/wc-qrcode-modal-0.10.13.tgz#495d0464a01a51464625b74b56dc1e363a546d1e"
+  integrity sha512-rOlUCwuDnGC+pBEBgdbiNuRYjjxMxvk6YbGMHRTLzjPV0eojpPcT/iHBHj+3vf9VQ/tabldrfT6vefJdu9x7UQ==
+  dependencies:
+    "@walletconnect/browser-utils" "^1.6.5"
+    "@walletconnect/types" "^1.6.5"
+    qrcode.react "^1.0.1"
+    react "^16.14.0"
+    react-dom "^16.14.0"
+
 "@motionone/animation@^10.12.0":
   version "10.12.0"
   resolved "https://registry.yarnpkg.com/@motionone/animation/-/animation-10.12.0.tgz#bca8968d3d9c779f8a548678f24206bd36cc60b6"
@@ -1769,7 +1780,7 @@
     "@typescript-eslint/types" "4.33.0"
     eslint-visitor-keys "^2.0.0"
 
-"@walletconnect/browser-utils@^1.7.8":
+"@walletconnect/browser-utils@^1.6.5", "@walletconnect/browser-utils@^1.7.8":
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/@walletconnect/browser-utils/-/browser-utils-1.7.8.tgz#c9e27f69d838442d69ccf53cb38ffc3c554baee2"
   integrity sha512-iCL0XCWOZaABIc0lqA79Vyaybr3z26nt8mxiwvfrG8oaKUf5Y21Of4dj+wIXQ4Hhblre6SgDlU0Ffb39+1THOw==
@@ -1780,7 +1791,17 @@
     "@walletconnect/window-metadata" "1.0.0"
     detect-browser "5.2.0"
 
-"@walletconnect/core@^1.6.6":
+"@walletconnect/client@^1.7.8":
+  version "1.7.8"
+  resolved "https://registry.yarnpkg.com/@walletconnect/client/-/client-1.7.8.tgz#62c2d7114e59495d90772ea8033831ceb29c6a78"
+  integrity sha512-pBroM6jZAaUM0SoXJZg5U7aPTiU3ljQAw3Xh/i2pxFDeN/oPKao7husZ5rdxS5xuGSV6YpqqRb0RxW1IeoR2Pg==
+  dependencies:
+    "@walletconnect/core" "^1.7.8"
+    "@walletconnect/iso-crypto" "^1.7.8"
+    "@walletconnect/types" "^1.7.8"
+    "@walletconnect/utils" "^1.7.8"
+
+"@walletconnect/core@^1.6.6", "@walletconnect/core@^1.7.8":
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/@walletconnect/core/-/core-1.7.8.tgz#97c52ea7d00126863cd37bf19bd3e87d4f30de1e"
   integrity sha512-9xcQ0YNf9JUFb0YOX1Mpy4Yojt+6w2yQz/0aIEyj2X/s9D71NW0fTYsMcdhkLOI7mn2cqVbx2t1lRvdgqsbrSQ==
@@ -1813,7 +1834,7 @@
   resolved "https://registry.yarnpkg.com/@walletconnect/environment/-/environment-1.0.0.tgz#c4545869fa9c389ec88c364e1a5f8178e8ab5034"
   integrity sha512-4BwqyWy6KpSvkocSaV7WR3BlZfrxLbJSLkg+j7Gl6pTDE+U55lLhJvQaMuDVazXYxcjBsG09k7UlH7cGiUI5vQ==
 
-"@walletconnect/iso-crypto@^1.6.6":
+"@walletconnect/iso-crypto@^1.6.6", "@walletconnect/iso-crypto@^1.7.8":
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/@walletconnect/iso-crypto/-/iso-crypto-1.7.8.tgz#41f09326d129faa09beae213e78614c19d90bbd6"
   integrity sha512-Qo6qDcMG0Ac+9fpWE0h/oE55NHLk6eM2vlXpWlQDN/me7RZGrkvk+LXsAkQ3UiYPEiPfq4eswcyRWC9AcrAscg==
@@ -1860,7 +1881,7 @@
     "@walletconnect/utils" "^1.7.8"
     ws "7.5.3"
 
-"@walletconnect/types@^1.6.6", "@walletconnect/types@^1.7.8":
+"@walletconnect/types@^1.6.5", "@walletconnect/types@^1.6.6", "@walletconnect/types@^1.7.8":
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/@walletconnect/types/-/types-1.7.8.tgz#ec397e6fbdc8147bccc17029edfeb41c50a5ca09"
   integrity sha512-0oSZhKIrtXRJVP1jQ0EDTRtotQY6kggGjDcmm/LLQBKnOZXdPeo0sPkV/7DjT5plT3O7Cjc6JvuXt9WOY0hlCA==
@@ -4253,7 +4274,7 @@ progress@^2.0.0:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -4305,6 +4326,20 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+qr.js@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/qr.js/-/qr.js-0.0.0.tgz#cace86386f59a0db8050fa90d9b6b0e88a1e364f"
+  integrity sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==
+
+qrcode.react@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-1.0.1.tgz#2834bb50e5e275ffe5af6906eff15391fe9e38a5"
+  integrity sha512-8d3Tackk8IRLXTo67Y+c1rpaiXjoz/Dd2HpcMdW//62/x8J1Nbho14Kh8x974t9prsLHN6XqVgcnRiBGFptQmg==
+  dependencies:
+    loose-envify "^1.4.0"
+    prop-types "^15.6.0"
+    qr.js "0.0.0"
+
 qrcode@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.5.0.tgz#95abb8a91fdafd86f8190f2836abbfc500c72d1b"
@@ -4355,6 +4390,16 @@ react-dom@18.1.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.22.0"
+
+react-dom@^16.14.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
+  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
 
 "react-dom@^16.8.0 || ^17.x || ^18.x":
   version "18.2.0"
@@ -4456,6 +4501,15 @@ react@18.1.0:
   integrity sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ==
   dependencies:
     loose-envify "^1.1.0"
+
+react@^16.14.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
 
 "react@^16.8.0 || ^17.x || ^18.x":
   version "18.2.0"
@@ -4606,6 +4660,14 @@ sass@^1.45.0:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
     source-map-js ">=0.6.2 <2.0.0"
+
+scheduler@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
+  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 scheduler@^0.22.0:
   version "0.22.0"

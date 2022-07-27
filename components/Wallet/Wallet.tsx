@@ -121,7 +121,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
       <Card paddingY={2} paddingX={6} gap={4}>
 
-        <HStack spacing="4" display={{ base: "none", md: "flex" }}>
+        <HStack spacing="4" display={{ base: "flex", md: "flex" }}>
           <Text fontSize="16px">{balance?.toFixed(1)}</Text>
           <WalletSelect denom={denom?.coinDenom} chainList={chainList} onChange={onChainChanage} />
           {/* <Text fontSize="16px">{denom?.coinDenom}</Text> */}

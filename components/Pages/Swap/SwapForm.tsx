@@ -12,6 +12,7 @@ import { useTokenToTokenPrice } from './hooks'
 
 
 type Props = {
+    connected: boolean;
     tokenA: TokenItemState;
     tokenB: TokenItemState;
     onInputChange: (asset: TokenItemState, index: number) => void;
@@ -27,6 +28,7 @@ type Props = {
 }
 
 const SwapForm: FC<Props> = ({
+    connected,
     tokenA,
     tokenB,
     onInputChange,
@@ -61,6 +63,20 @@ const SwapForm: FC<Props> = ({
     }, [resetForm])
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
+    const buttonLabel = useMemo(() => {
+
+        if (!connected)
+            return 'Connect wallet'
+        else if (!tokenB?.tokenSymbol)
+            return 'Select token'
+        else if (!!!tokenA?.amount)
+            return 'Enter amount'
+        else if (tx?.buttonLabel)
+            return tx?.buttonLabel
+        else
+            return 'Swap'
+
+    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
 
     const onReverse = () => {
         setValue("tokenA", tokenB, { shouldValidate: true })
@@ -114,7 +130,7 @@ const SwapForm: FC<Props> = ({
         >
 
 
-            <VStack width="full" alignItems="flex-start" paddingBottom={8}>
+            <VStack width="full" alignItems="flex-start" paddingBottom={2}>
                 <HStack justifyContent="space-between" width="full" >
 
                     <HStack>
@@ -171,7 +187,7 @@ const SwapForm: FC<Props> = ({
             </HStack>
 
 
-            <VStack width="full" alignItems="flex-start" paddingBottom={8}>
+            <VStack width="full" alignItems="flex-start" paddingBottom={8} style={{ margin: 'unset' }}>
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
                         <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
@@ -211,14 +227,19 @@ const SwapForm: FC<Props> = ({
             </VStack>
 
 
-            <VStack alignItems="flex-start" width="full">
-                <Text color="brand.500" fontSize={12}>1 {tokenA.tokenSymbol} = {(fromChainAmount(simulated?.amount) / Number(tokenA.amount)).toFixed(6) || 0} {tokenB.tokenSymbol}
-                </Text>
-                <HStack justifyContent="space-between" width="full">
-                    <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                    <Text color="brand.500" fontSize={12}> Min Receive: {fromChainAmount(minReceive)} </Text>
-                </HStack>
-            </VStack>
+            {(tokenB?.tokenSymbol && minReceive) && (
+                <VStack alignItems="flex-start" width="full">
+                    <Text
+                        color="brand.500"
+                        fontSize={12}>
+                        1 {tokenA.tokenSymbol} = {(fromChainAmount(simulated?.amount) / Number(tokenA.amount)).toFixed(6) || 0} {tokenB.tokenSymbol}
+                    </Text>
+                    <HStack justifyContent="space-between" width="full">
+                        <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
+                        <Text color="brand.500" fontSize={12}> Min Receive: {fromChainAmount(minReceive)} </Text>
+                    </HStack>
+                </VStack>
+            )}
 
             <Button
                 type='submit'
@@ -227,11 +248,11 @@ const SwapForm: FC<Props> = ({
                 isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
                 disabled={tx.txStep != TxStep.Ready}
             >
-                Swap {tokenA?.tokenSymbol} to {tokenB.tokenSymbol}
+                {buttonLabel}
             </Button>
 
             {
-                tx?.error && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
+                (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
             }
 
 
