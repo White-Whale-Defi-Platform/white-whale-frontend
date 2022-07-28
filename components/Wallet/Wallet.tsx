@@ -66,7 +66,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
       active: chainId === chainInfo?.chainId
     }))
 
-  }, [chains, chainInfo]) 
+  }, [chains, chainInfo])
 
   const onChainChange = (chain) => {
     console.log("chain", chain.value)
@@ -84,7 +84,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   }
 
   useEffect(() => {
-    if (connected){
+    if (connected) {
       onConnect(chainId)
     }
   }, [])
@@ -93,22 +93,23 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
     return (
       <>
         {/* <Select options={options} width="fit-content" onChange={onChainChange} defaultSelcted={options?.[0]} /> */}
-        <WalletSelect 
-          denom={denom?.coinDenom} 
-          chainList={chainList} 
-          onChange={onChainChange} />
-        <Button
-          variant="primary"
-          // type="button"
-          color="white"
-          // borderWidth="1px"
-          borderColor="whiteAlpha.400"
-          borderRadius="full"
-          // py="3"
-          // px="4"
-          onClick={() => onConnect(chainId)}>
-          Connect wallet
-        </Button>
+          <WalletSelect
+            connected={connected}
+            denom={denom?.coinDenom}
+            chainList={chainList}
+            onChange={onChainChange} />
+          <Button
+            variant="outline"
+            display="flex"
+            gap="3"
+            color="white"
+            borderColor="whiteAlpha.400"
+            borderRadius="full"
+            onClick={() => onConnect(chainId)}>
+            <WalletIcon />
+            Connect wallet
+          </Button>
+
         {/* <WalletModal isOpen={isOpen} onClose={onClose} /> */}
       </>
     )
@@ -119,15 +120,19 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
       {/* <Select options={options} width="fit-content" onChange={onChainChanage} defaultSelcted={defaultChain} /> */}
 
 
-      <Card paddingY={2} paddingX={6} gap={4}>
+      <Card paddingY={1} paddingX={6} gap={4}>
 
         <HStack spacing="4" display={{ base: "flex", md: "flex" }}>
           <Text fontSize="16px">{balance?.toFixed(1)}</Text>
-          <WalletSelect denom={denom?.coinDenom} chainList={chainList} onChange={onChainChanage} />
+          <WalletSelect 
+            connected={connected} 
+            denom={denom?.coinDenom} 
+            chainList={chainList} 
+            onChange={onChainChanage} />
           {/* <Text fontSize="16px">{denom?.coinDenom}</Text> */}
         </HStack>
 
-        <Box h="6" display={{ base: "none", md: "block" }}>
+        <Box  display={{ base: "none", md: "block" }}>
           <Divider orientation="vertical" borderColor="rgba(255, 255, 255, 0.1);" />
         </Box>
 

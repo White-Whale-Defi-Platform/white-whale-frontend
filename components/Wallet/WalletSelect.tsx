@@ -10,22 +10,45 @@ import {
 import { BsCircleFill } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
-const walletSelect = ({ denom, chainList = [], onChange }) => {
+const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
 
     return (
-        <Popover placement='top-end' 
-        isOpen={isOpen}
-        initialFocusRef={firstFieldRef}
-        onOpen={onOpen}
-        onClose={onClose}
+        <Popover placement='top-end'
+            isOpen={isOpen}
+            initialFocusRef={firstFieldRef}
+            onOpen={onOpen}
+            onClose={onClose}
         >
             <PopoverTrigger>
-                <HStack as={Button} variant="unstyled">
-                    <Text>{denom}</Text>
-                    <ChevronDownIcon />
-                </HStack>
+                {connected ? (
+                    <HStack
+                        as={Button}
+                        variant="unstyled"
+                    >
+                        <Text>{denom}</Text>
+                        <ChevronDownIcon />
+                    </HStack>
+
+                ) : (
+                    <HStack
+                        as={Button}
+                        variant="unstyled"
+                        backgroundColor="rgba(0, 0, 0, 0.5)"
+                        color="white"
+                        borderRadius="full"
+                        justifyContent="center"
+                        alignItems="center"
+                        paddingX={6}
+                        paddingY={1}
+                    >
+                        <Text>{denom}</Text>
+                        <ChevronDownIcon />
+                    </HStack>
+
+                )}
+
             </PopoverTrigger>
             <PopoverContent
                 borderColor="#1C1C1C"
@@ -57,7 +80,7 @@ const walletSelect = ({ denom, chainList = [], onChange }) => {
                                     onClick={() => { onChange(chain); onClose() }}
                                 >
                                     <HStack>
-                                        <Image src={chain?.icon} boxSize={50} maxH={10} />
+                                        <Image src={chain?.icon} boxSize={30} objectFit='cover'  />
                                         <Text paddingLeft={3} >{chain.label}</Text>
                                     </HStack>
                                     <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
