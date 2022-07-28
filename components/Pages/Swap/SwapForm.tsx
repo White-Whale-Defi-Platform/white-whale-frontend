@@ -223,6 +223,16 @@ const SwapForm: FC<Props> = ({
                     )}
                 />
             </VStack>
+            
+            <Button
+                type='submit'
+                width="full"
+                variant="primary"
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
+                disabled={tx.txStep != TxStep.Ready}
+            >
+                {buttonLabel}
+            </Button>
 
 
             {(tokenB?.tokenSymbol && minReceive) && (
@@ -239,15 +249,7 @@ const SwapForm: FC<Props> = ({
                 </VStack>
             )}
 
-            <Button
-                type='submit'
-                width="full"
-                variant="primary"
-                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
-                disabled={tx.txStep != TxStep.Ready}
-            >
-                {buttonLabel}
-            </Button>
+           
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)

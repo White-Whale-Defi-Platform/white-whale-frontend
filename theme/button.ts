@@ -11,12 +11,18 @@ const button = {
       paddingX: 6,
       bg: "brand.500",
       color: "white",
+      _disabled: {
+        bg: "brand.200",
+        color: "white",
+        opacity: 0.8
+      },
       _hover: {
         bg: "white",
         color: "brand.900",
         _disabled: {
-          bg: "brand.500",
+          bg: "brand.200",
           color: "white",
+          opacity: 0.8
         },
       },
       _focus: {
