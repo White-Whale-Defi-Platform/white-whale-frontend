@@ -4,9 +4,11 @@ import { FC, useEffect, useMemo } from 'react';
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter, NextRouter } from "next/router";
 import ManageLPForm from './ManageLPForm';
-// import { usePoolFromListQueryById } from 'queries/usePoolsListQuery';
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery';
 import { tokenLpAtom } from './lpAtoms';
 import { useRecoilState } from 'recoil';
+import { useBondTokens } from '../../../hooks/useBondTokens';
+import { executeAddLiquidity } from '../../../services/liquidity';
 // export const tokens = [
 //     {
 //         asset: "JUNOX",
@@ -34,7 +36,9 @@ const ManageLP: FC = () => {
 
     // const [lpTokens, setLpTokens] = useState(null)
     const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
-    // const [pool] = usePoolFromListQueryById({ poolId })
+    // usePoolFromListQueryById returns PoolEntityType which includes the swap addr and lp staking addr
+    const [pool] = usePoolFromListQueryById({ poolId })
+ 
 
     useEffect(() => {
         if (poolId) {
@@ -87,8 +91,9 @@ const ManageLP: FC = () => {
         setTokenLPState(newState)
     }
 
-    const onSubmit = (data) => console.log(data)
+    
 
+    
     return (
         <Page>
             <VStack width={700} justifyContent="center" className='testing'>
@@ -107,7 +112,7 @@ const ManageLP: FC = () => {
 
                 <ManageLPForm
                     tokens={[tokenA, tokenB]}
-                    onSubmit={onSubmit}
+                    pool={pool}
                     onInputChange={onInputChange}
 
                 />

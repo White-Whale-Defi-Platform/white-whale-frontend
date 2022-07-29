@@ -1,21 +1,27 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react';
-// import AssetInput from 'components/AssetInput';
+import AssetInput from 'components/AssetInput';
 import { FC } from 'react';
-import { /**Controller,**/ useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Asset } from 'types/blockchain';
+import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
+import { executeAddLiquidity } from '../../../services/liquidity';
+import { convertDenomToMicroDenom } from 'junoblocks';
+import { walletState } from 'state/atoms/walletAtoms';
+import { useRecoilValue } from 'recoil';
 
 
 type Props = {
     tokens : any[];
-    onSubmit: (data:any) => void;
+    pool : any;
     onInputChange: (asset:Asset, index: number) => void;
 }
 
-const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
+const ManageLPForm: FC<Props> = ({tokens = [], pool, onInputChange}) => {
 
     const [tokenA, tokenB] = tokens
-    
-    const { control, handleSubmit, formState } = useForm({
+    const { address, client } = useRecoilValue(walletState)
+
+    const { control, handleSubmit, watch, formState } = useForm({
         mode: "onChange",
         defaultValues: {
             token1: tokenA,
@@ -24,7 +30,20 @@ const ManageLPForm: FC<Props> = ({tokens = [], onSubmit, onInputChange}) => {
         },
     });
 
-
+    const onSubmit = (data) => executeAddLiquidity({
+        tokenA,
+        tokenB,
+        tokenAAmount: Math.floor(
+          convertDenomToMicroDenom(tokenA.amount, tokenA.decimals)
+        ),
+        maxTokenBAmount: Math.ceil(
+          convertDenomToMicroDenom(tokenB.amount, tokenB.decimals)
+        ),
+        swapAddress: pool.swap_address,
+        senderAddress: address,
+        client,
+      })
+    
     return (
         <VStack padding={10}
                     width="full"
