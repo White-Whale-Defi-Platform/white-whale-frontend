@@ -8,6 +8,7 @@ import { executeAddLiquidity } from '../../../services/liquidity';
 import { convertDenomToMicroDenom } from 'junoblocks';
 import { walletState } from 'state/atoms/walletAtoms';
 import { useRecoilValue } from 'recoil';
+import { useQueryMatchingPoolForSwap } from '../../../queries/useQueryMatchingPoolForSwap';
 
 
 type Props = {
@@ -30,6 +31,8 @@ const ManageLPForm: FC<Props> = ({tokens = [], pool, onInputChange}) => {
         },
     });
 
+    const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
+    
     const onSubmit = (data) => executeAddLiquidity({
         tokenA,
         tokenB,
@@ -39,7 +42,7 @@ const ManageLPForm: FC<Props> = ({tokens = [], pool, onInputChange}) => {
         maxTokenBAmount: Math.ceil(
           convertDenomToMicroDenom(tokenB.amount, tokenB.decimals)
         ),
-        swapAddress: pool.swap_address,
+        swapAddress: pool?.swap_address || matchingPools?.baseTokenAPool?.swap_address,
         senderAddress: address,
         client,
       })
