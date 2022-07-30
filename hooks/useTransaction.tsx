@@ -7,6 +7,7 @@ import { useMutation, useQuery } from 'react-query'
 import { directTokenSwap } from '../services/swap'
 import useDebounceValue from './useDebounceValue'
 import { useToast } from '@chakra-ui/react'
+import Finder from '../components/Finder'
 
 export enum TxStep {
   /**
@@ -161,8 +162,8 @@ export const useTransaction = ({
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
         toast({
-          title: 'Swap Success.',
-          description: `${tokenA.symbol} to ${tokenB.symbol} ${data.transactionHash}`,
+          title: 'Swap Success.', 
+          description:  <Finder from={tokenA.symbol}  to={tokenB.symbol} txHash={data.transactionHash} chainId={client.chainId} /> ,
           status: 'success',
           duration: 9000,
           position: "top-right",
