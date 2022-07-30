@@ -28,6 +28,7 @@ const simulate = ({
     reverse = false,
     swapAddress
 }: QuerySimulate): Promise<SimulationResponse | ReverseSimulationResponse> => {
+
     if (reverse) {
         return client?.queryContractSmart(swapAddress, {
             reverse_simulation: {
@@ -76,6 +77,7 @@ const useSimulate = ({
 
         const spread = data.spread_amount;
         const commission = data.commission_amount;
+
 
         if (reverse) {
             return {

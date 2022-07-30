@@ -64,8 +64,6 @@ export const createMsg = ({ token, amount, slippage, price, swapAddress }) => {
   const offerAsset = createAsset(amount, token);
   const isNative = isNativeAsset(offerAsset.info);
 
-  console.log({token, amount, slippage, price, swapAddress})
-
   if (isNative) {
     return {
       swap: {
@@ -99,8 +97,6 @@ export const createSwapMsgs = (
   // const [{ contract_addr }] = swapRoute;
   const offerAsset = createAsset(amount, token);
   const isNative = isNativeAsset(offerAsset.info);
-
-  console.log({isNative, token, amount, slippage, price, swapAddress,})
 
   return createExecuteMessage({
     senderAddress: sender,

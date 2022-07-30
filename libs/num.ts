@@ -17,12 +17,16 @@ BigNumber.config({
  * @param format - string: numeral format
  * @returns string
  */
-export const fromChainAmount = (
-  value: BigNumber.Value = '0',
-  format = '0,0.00a',
-): string => {
-  const amount = new BigNumber(value).div(ONE_TOKEN)
-  return numeral(amount).format(format).toUpperCase()
+// export const fromChainAmount = (
+//   value: BigNumber.Value = '0',
+//   format = '0,0.00a',
+// ): string => {
+//   const amount = new BigNumber(value).div(ONE_TOKEN).toNumber()
+//   return numeral(amount).format(format).toString()
+// }
+
+export const fromChainAmount = (value: BigNumber.Value = '0'): string => {
+  return new BigNumber(value).dp(6).div(ONE_TOKEN).toString()
 }
 
 export const toChainAmount = (value: BigNumber.Value = '0'): string => {

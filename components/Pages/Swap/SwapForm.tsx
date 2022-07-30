@@ -40,10 +40,7 @@ const SwapForm: FC<Props> = ({
     setResetForm
 }) => {
 
-
-
-
-    const { control, handleSubmit, setValue } = useForm({
+    const { control, handleSubmit, setValue , getValues} = useForm({
         mode: "onChange",
         defaultValues: {
             tokenA,
@@ -60,6 +57,9 @@ const SwapForm: FC<Props> = ({
 
     }, [resetForm])
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+
+    const amountA = getValues('tokenA')
+    const amountB = getValues('tokenB')
 
     const buttonLabel = useMemo(() => {
 
@@ -84,22 +84,30 @@ const SwapForm: FC<Props> = ({
 
     useEffect(() => {
         if (simulated) {
-            // const [asset1, asset2] = tokens
             if (isReverse) {
                 const asset = { ...tokenA }
-                asset.amount = Number(fromChainAmount(simulated?.amount))
-                setValue("tokenA", asset, { shouldValidate: true })
+                asset.amount = parseFloat(fromChainAmount(simulated?.amount))
+                setValue("tokenA", asset)
             } else {
                 const asset = { ...tokenB }
-                asset.amount = Number(fromChainAmount(simulated?.amount))
-                setValue("tokenB", asset, { shouldValidate: true })
+                asset.amount = parseFloat(fromChainAmount(simulated?.amount))
+                setValue("tokenB", asset)
             }
         }
         else {
-            const asset = { ...tokenA }
-            if (!!!asset?.amount) {
-                asset.amount = 0
-                setValue("tokenB", asset, { shouldValidate: true })
+            if (isReverse) {
+                const asset = { ...tokenB }
+                if (!!!asset?.amount) {
+                    asset.amount = 0
+                    setValue("tokenA", asset, { shouldValidate: true })
+                }
+            }
+            else {
+                const asset = { ...tokenA }
+                if (!!!asset?.amount) {
+                    asset.amount = 0
+                    setValue("tokenB", asset, { shouldValidate: true })
+                }
             }
         }
 
@@ -152,7 +160,6 @@ const SwapForm: FC<Props> = ({
                     </HStack>
                 </HStack>
                 <Controller
-
                     name="tokenA"
                     control={control}
                     rules={{ required: true }}
@@ -195,13 +202,13 @@ const SwapForm: FC<Props> = ({
                         <Hide above='md'>
 
                             <Button variant="outline" size="xs" onClick={() => {
-                                setReverse(false);
-                                onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 0);
+                                setReverse(true);
+                                onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 1);
                                 setValue("tokenB", { ...tokenB, amount: tokenBBalance / 2 }, { shouldValidate: true })
                             }}>half</Button>
                             <Button variant="outline" size="xs" onClick={() => {
-                                setReverse(false);
-                                onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 0);
+                                setReverse(true);
+                                onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 1);
                                 setValue("tokenB", { ...tokenB, amount: tokenBBalance }, { shouldValidate: true })
                             }}>max</Button>
                         </Hide>
@@ -223,7 +230,7 @@ const SwapForm: FC<Props> = ({
                     )}
                 />
             </VStack>
-            
+
             <Button
                 type='submit'
                 width="full"
@@ -240,16 +247,16 @@ const SwapForm: FC<Props> = ({
                     <Text
                         color="brand.500"
                         fontSize={12}>
-                        1 {tokenA.tokenSymbol} = {(fromChainAmount(simulated?.amount) / Number(tokenA.amount)).toFixed(6) || 0} {tokenB.tokenSymbol}
+                        1 {tokenA.tokenSymbol} = {Number(amountB.amount/ amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
                     </Text>
                     <HStack justifyContent="space-between" width="full">
                         <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                        <Text color="brand.500" fontSize={12}> Min Receive: {fromChainAmount(minReceive)} </Text>
+                        <Text color="brand.500" fontSize={12}> Min Receive: {Number(minReceive)?.toFixed(1)} </Text>
                     </HStack>
                 </VStack>
             )}
 
-           
+
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
