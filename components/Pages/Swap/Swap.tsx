@@ -48,7 +48,6 @@ const Swap: FC<SwapProps> = ({  }) => {
     const router = useRouter()
 
     useEffect(() => {
-        console.log({ chainId })
         if (chainId) {
             const [from, to] = defaultTokens[chainId]
             const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
@@ -106,7 +105,7 @@ const Swap: FC<SwapProps> = ({  }) => {
                 onInputChange={onInputChange}
                 simulated={simulated}
                 minReceive={minReceive}
-                isReverse={false}
+                isReverse={reverse}
                 tx={tx}
                 setReverse={setReverse}
                 resetForm={resetForm}

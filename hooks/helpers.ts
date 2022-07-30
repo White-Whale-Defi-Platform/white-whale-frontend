@@ -12,8 +12,6 @@ export const minAmountReceive = ({
 }: minAmountReceiveParams): string => {
   const rate1 = num("1").minus(maxSpread);
 
-  console.log({maxSpread, rate1 : rate1.toString()})
-
   return num(amount).times(rate1).toString();
 };
 
