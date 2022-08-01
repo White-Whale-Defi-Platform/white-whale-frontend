@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
-const useFilter = <T>(list:T[], filterKey:string, filterValue:string):T[] => {
+const useFilter = <T>(list:T[] = [], filterKey:string, filterValue:string):T[] => {
 
     return useMemo(() => {
-        return list.filter((item) => item[filterKey]?.toLowerCase()?.includes(filterValue))
+        return list?.filter((item) => item[filterKey]?.toLowerCase()?.includes(filterValue))
     }, [list, filterKey, filterValue])
 }
 

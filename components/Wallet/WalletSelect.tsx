@@ -9,10 +9,14 @@ import {
 } from '@chakra-ui/react'
 import { BsCircleFill } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { Switch, FormControl, FormLabel } from '@chakra-ui/react'
+import { networkAtom } from 'state/atoms/walletAtoms'
+import { useRecoilState } from 'recoil'
 
 const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
+    const [network, setNetwork] = useRecoilState(networkAtom)
 
     return (
         <Popover placement='top-end'
@@ -62,6 +66,15 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                     <VStack alignItems="flex-start" width="full" gap={2}>
                         <Text color="brand.200" fontSize="22px" fontWeight="400">Select network</Text>
 
+                        <FormControl display='flex' alignItems='center' justifyContent="space-between">
+                            <FormLabel htmlFor='network' mb='0'>
+                                Testnet
+                            </FormLabel>
+                            <Switch 
+                                id='network' 
+                                isChecked={network === 'testnet'} 
+                                onChange={({ target }) => setNetwork(target.checked ? 'testnet' : 'mainnet')} />
+                        </FormControl>
                         <List spacing={1} color="white" width="full" >
 
                             {chainList.map((chain, index) => (
@@ -80,7 +93,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                     onClick={() => { onChange(chain); onClose() }}
                                 >
                                     <HStack>
-                                        <Image src={chain?.icon} boxSize={30} objectFit='cover'  />
+                                        <Image src={chain?.icon} boxSize={30} objectFit='cover' />
                                         <Text paddingLeft={3} >{chain.label}</Text>
                                     </HStack>
                                     <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />

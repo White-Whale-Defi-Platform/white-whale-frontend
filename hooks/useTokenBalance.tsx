@@ -11,6 +11,7 @@ import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
+import { networkAtom } from 'state/atoms/walletAtoms'
 
 async function fetchTokenBalance({
   client,
@@ -74,9 +75,11 @@ export const useTokenBalance = (tokenSymbol: string) => {
 
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
+  const network = useRecoilValue(networkAtom)
+
 
   const { data: balance = 0, isLoading } = useQuery(
-    ['tokenBalance', tokenSymbol, address],
+    ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
       if (symbol && client && (tokenInfo || ibcAssetInfo)) {
         return await fetchTokenBalance({
@@ -102,6 +105,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const { address, status, client , chainId} = useRecoilValue(walletState)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
+  const network = useRecoilValue(networkAtom)
 
   const queryKey = useMemo(
     () => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
@@ -109,7 +113,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   )
 
   const { data, isLoading } = useQuery(
-    [queryKey, address, chainId],
+    [queryKey, address, chainId, network],
     async () => {
       const balances = await Promise.all(
         tokenSymbols.map((tokenSymbol) =>

@@ -104,3 +104,11 @@ export const ibcWalletState = createWalletState<
     tokenSymbol: null,
   },
 })
+
+type Network = 'testnet' | 'mainnet'
+
+export const networkAtom = atom<Network>({
+  key: 'network',
+  default: 'testnet',
+})
+
