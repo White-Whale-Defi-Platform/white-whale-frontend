@@ -19,7 +19,7 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken }) => {
     const [tokenBalance = []] = useMultipleTokenBalance(tokenList?.tokens?.map(({ symbol }) => symbol))
 
     const tokensWithBalance = useMemo(() => {
-        if (tokenBalance.length == 0) return tokenList.tokens
+        if (tokenBalance.length == 0) return tokenList?.tokens
 
         return tokenList?.tokens?.map((token, index) => (
             {

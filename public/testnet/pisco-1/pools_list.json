@@ -1,0 +1,130 @@
+{
+  "name": "Pools list on testnet",
+  "logoURI": "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/29231450/Poodle-Standard-Gray-On-White-Standing.jpg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "Project",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "pisco-1",
+    "chain_id": "pisco-1",
+    "token_address": "",
+    "symbol": "LUNA",
+    "name": "Luna",
+    "decimals": 6,
+    "logoURI": "/logos/luna.svg",
+    "tags": ["native"],
+    "native": true,
+    "denom": "uluna"
+  },
+  "pools": [
+    {
+      "pool_id": "LUNA-LUNAONE",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI":  "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
+          "decimals": 6,
+          "logoURI": "/logos/lunaone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "lunaone"
+        }
+      ],
+      "lp_token" : "terra15ha8qt5hypqatl7gfv9yf8s5m9f4qft5yezc5m533yxuftqkt26swhh5lt",
+      "swap_address": "terra1hmuf5ce46snmp93avhzrvmgpn2mtsv6jgx7vy3932ram7htdduesw70wpu",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-LUNATWO",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": " terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "symbol": "LUNATWO",
+          "name": "Lunatwo",
+          "decimals": 6,
+          "logoURI": "/logos/lunatwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "lunatwo"
+        }
+      ],
+      "lp_token" : "terra1sydk40ej0ytgvel68zvv6z3elz8eu6efw0mmjrdqf5h6zvszr9xq6yd79v",
+      "swap_address": "terra1ue5yv5lav9d5ztfcmds3r8tayasepkntjl5lzqjlzx6zyy2qcwvswxss36",
+      "staking_address": "juno19wmsdhmn9wgckn64xfp0sl55ntgnzj3lly20e7wjk8z597meh3xsw2zeus",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNAONE-LUNATWO",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
+          "decimals": 6,
+          "logoURI": "/logos/lunaone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "lunaone"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": " terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "symbol": "LUNATWO",
+          "name": "Lunatwo",
+          "decimals": 6,
+          "logoURI": "/logos/lunatwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "lunatwo"
+        }
+      ],
+      "lp_token" : "terra18c2c73j2sm28k7rjg5hgunjcxk0tuzajqklnzq8vs222mxt2zedqqy7vam",
+      "swap_address": "terra1lmrlqq4v3qtqsgk0r9jjx3et5y2jlwxhcur6sn3r80wf2p0mwk7q8j3fuh",
+      "staking_address": "juno189wqvuj8amqsag8ehn3vmz6cq26c44ffeltvljkcxx9lsfsew8mq9y7z4h",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

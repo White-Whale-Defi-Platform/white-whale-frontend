@@ -57,6 +57,9 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   }, [chainInfo,])
 
   const chains = useChains()
+  console.log({
+    useChain : chains
+  })
 
   const chainList = useMemo(() => {
     return chains.map(({ chainId, chainName }) => ({
