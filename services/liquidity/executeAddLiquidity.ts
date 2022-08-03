@@ -24,6 +24,7 @@ type ExecuteAddLiquidityArgs = {
   senderAddress: string
   swapAddress: string
   client: SigningCosmWasmClient
+  msgs:any
 }
 
 export const executeAddLiquidity = async ({
@@ -34,14 +35,15 @@ export const executeAddLiquidity = async ({
   client,
   swapAddress,
   senderAddress,
+  msgs 
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  const addLiquidityMessage = {
-    add_liquidity: {
-      token1_amount: `${tokenAAmount}`,
-      max_token2: `${maxTokenBAmount}`,
-      min_liquidity: `${0}`,
-    },
-  }
+  // const addLiquidityMessage = {
+  //   add_liquidity: {
+  //     token1_amount: `${tokenAAmount}`,
+  //     max_token2: `${maxTokenBAmount}`,
+  //     min_liquidity: `${0}`,
+  //   },
+  // }
 
   if (!tokenA.native || !tokenB.native) {
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
@@ -69,7 +71,7 @@ export const executeAddLiquidity = async ({
     }
 
     const executeAddLiquidityMessage = createExecuteMessage({
-      message: addLiquidityMessage,
+      message: msgs,
       senderAddress,
       contractAddress: swapAddress,
       /* each native token needs to be added to the funds */
@@ -78,6 +80,19 @@ export const executeAddLiquidity = async ({
         tokenB.native && coin(maxTokenBAmount, tokenB.denom),
       ].filter(Boolean),
     })
+
+    console.log({
+      message: msgs,
+      senderAddress,
+      contractAddress: swapAddress,
+      /* each native token needs to be added to the funds */
+      funds: [
+        tokenA.native && coin(tokenAAmount, tokenA.denom),
+        tokenB.native && coin(maxTokenBAmount, tokenB.denom),
+      ].filter(Boolean),
+    })
+
+
 
     return validateTransactionSuccess(
       await client.signAndBroadcast(
@@ -96,7 +111,7 @@ export const executeAddLiquidity = async ({
   return await client.execute(
     senderAddress,
     swapAddress,
-    addLiquidityMessage,
+    msgs,
     'auto',
     undefined,
     funds

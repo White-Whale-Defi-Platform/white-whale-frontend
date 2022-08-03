@@ -13,7 +13,7 @@ interface AssetInputProps {
     showList?: boolean;
     onInputFocus?: () => void;
     balance?: number;
-    disabled: boolean;
+    disabled?: boolean;
 }
 
 

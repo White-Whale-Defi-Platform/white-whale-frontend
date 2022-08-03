@@ -38,7 +38,6 @@ export const useChains = () => {
 export const useChainInfo = (id = "uni-3") => {
 
   const chainInfo = useChains()
-  console.log({chainInfo})
 
   const chain = chainInfo.find(({ chainId }) => chainId === id)
 

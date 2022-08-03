@@ -7,6 +7,7 @@ export function isNativeAssetInfo(
 }
 
 export const isNativeToken = (token: string = ""): boolean => {
+  console.log({token})
   return token.startsWith("u");
 };
 
@@ -52,6 +53,7 @@ export const findAsset = (infos: AssetInfo[], token: string) => {
 
 export const createAsset = (amount: string, token: string) => {
   const info = toAssetInfo(token);
+
 
   return {
     info,

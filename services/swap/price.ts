@@ -1,4 +1,5 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { Pool } from '../../types/common'
 
 export interface GetToken1ForToken2PriceInput {
   nativeAmount: number
@@ -80,8 +81,9 @@ export const getTokenForTokenPrice = async (
     console.error('error(getTokenForTokenPrice)', e)
   }
 }
+
 export type InfoResponse = {
-  lp_token_supply: string
+  total_share: string
   lp_token_address: string
   token1_denom: string
   token1_reserve: string
@@ -92,7 +94,7 @@ export type InfoResponse = {
 export const getSwapInfo = async (
   swapAddress: string,
   client: CosmWasmClient
-): Promise<InfoResponse> => {
+): Promise<Pool> => {
   try {
     if (!swapAddress || !client) {
       throw new Error(
@@ -104,7 +106,7 @@ export const getSwapInfo = async (
     }
 
     return await client.queryContractSmart(swapAddress, {
-      info: {},
+      pool: {},
     })
   } catch (e) {
     console.error('Cannot get swap info:', e)

@@ -87,12 +87,14 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
+    
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
         context,
         swap,
         address,
       })
+
 
     const {
       providedStakedAmountInMicroDenom,
@@ -106,6 +108,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalReserve,
       swap,
     })
+
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenInfo: tokenA,
@@ -123,7 +126,7 @@ export const useQueryMultiplePoolsLiquidity = ({
         }),
       }
     }
-
+    
     const [totalLiquidity, providedLiquidity, totalStaked, providedStaked] = [
       /* calc total liquidity dollar value */
       getPoolTokensValue({
@@ -216,20 +219,21 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
     usePoolsListQuery()
 
-  const poolToFetch = useMemo(() => {
-    const pool = poolsListResponse?.poolsById[poolId]
-    return pool ? [pool] : undefined
-  }, [poolId, poolsListResponse])
+    
+    const poolToFetch = useMemo(() => {
+      const pool = poolsListResponse?.poolsById[poolId]
+      return pool ? [pool] : undefined
+    }, [poolId, poolsListResponse])
+    
+    const [poolResponse] = useQueryMultiplePoolsLiquidity({
+      pools: poolToFetch,
+      refetchInBackground: true,
+    })
 
-  const [poolResponse] = useQueryMultiplePoolsLiquidity({
-    pools: poolToFetch,
-    refetchInBackground: true,
-  })
-
-  const persistedData = usePersistance(poolResponse?.data)
+  // const persistedData = usePersistance(poolResponse?.data)
 
   return [
-    persistedData,
+    poolResponse?.data,
     poolResponse?.isLoading || loadingPoolsList,
     poolResponse?.isError,
   ] as const

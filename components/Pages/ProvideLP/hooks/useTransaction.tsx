@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useToast } from '@chakra-ui/react'
 import {
   CreateTxFailed, Timeout, TxFailed,
   TxUnspecifiedError, UserDenied
 } from '@terra-money/wallet-provider'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
-import { directTokenSwap } from '../services/swap'
-import useDebounceValue from './useDebounceValue'
-import { useToast } from '@chakra-ui/react'
-import Finder from '../components/Finder'
-import { executeAddLiquidity, executeRemoveLiquidity } from 'services/liquidity'
+import { executeAddLiquidity } from 'services/liquidity'
+import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**
@@ -138,15 +137,6 @@ export const useTransaction = ({
         senderAddress,
         msgs
       })
-
-      // return directTokenSwap({
-      //   tokenA,
-      //   swapAddress,
-      //   senderAddress,
-      //   msgs,
-      //   tokenAmount: Number(amount),
-      //   client,
-      // })
     },
     {
       onMutate: () => {
