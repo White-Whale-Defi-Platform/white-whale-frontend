@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
 import { tokenLpAtom } from '../../ManageLP/lpAtoms';
-import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg';
+import createLpMsg, { createLPExecuteMsgs } from '../createLpMsg';
 
 type Props = {
   lpTokens: any[];

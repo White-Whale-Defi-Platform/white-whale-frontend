@@ -7,7 +7,7 @@ import { toChainAmount } from "libs/num";
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
 import { createMsg, createSwapMsgs } from './monoSwap';
 import useSimulate from "./useSimulate";
-import useTransaction from "./useTransaction";
+import useTransaction from "hooks/useTransaction";
 import { tokenSwapAtom } from "components/Pages/Swap/swapAtoms";
 import { slippageAtom } from 'components/Pages/Swap/swapAtoms'
 import { fromChainAmount } from "libs/num";
@@ -43,7 +43,7 @@ const useSwap = ({reverse}) => {
         if (simulated?.amount == null) return null
 
         return minAmountReceive({
-            amount: reverse ? String(swapTokenB?.amount) : fromChainAmount(simulated.amount, "0"),
+            amount: reverse ? String(swapTokenB?.amount) : fromChainAmount(simulated.amount),
             maxSpread: String(slippage),
         });
     }, [simulated?.amount, slippage, reverse, swapTokenB?.amount]);
