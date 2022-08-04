@@ -97,35 +97,17 @@ export const useTransaction = ({
   // const { post } = useWallet()
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
-  // const tokenA = useTokenInfo(asset1?.symbol)
   const toast = useToast()
 
-  // const [currentTokenPrice] = useTokenToTokenPrice({
-  //   tokenASymbol: asset1?.asset,
-  //   tokenBSymbol: asset2.asset,
-  //   tokenAmount: Number(asset1.amount) * 1000000
-  // })
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
-  // const fee = "auto"
-  // console.log({
-  //   client,
-  //   sender,
-  //   msgs,
-  //   // gasAdjustment,
-  //   // estimateEnabled,
-  //   // onBroadcasting,
-  //   // onSuccess,
-  //   // onError,
-  // })
+
 
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
-
-      console.log("herere")
 
       setError(null)
       setTxStep(TxStep.Estimating)
@@ -148,10 +130,6 @@ export const useTransaction = ({
       }
     },
     {
-      // debouncedMsgs != null &&
-      //   txStep == TxStep.Idle &&
-      //   error == null &&
-      //   estimateEnabled,
       enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null,
       refetchOnWindowFocus: false,
       retry: false,
@@ -165,106 +143,12 @@ export const useTransaction = ({
     }
   )
 
-  // console.log({error})
-
-
-  // const { data: fee } = useQuery<unknown, unknown, any | null>(
-  //   ['fee', debouncedMsgs, error],
-  //   async () => {
-  //     if (debouncedMsgs == null || txStep != TxStep.Idle || error != null) {
-  //       throw new Error('Error in estimaging fee')
-  //     }
-
-
-  //     setError(null)
-  //     setTxStep(TxStep.Estimating)
-
-  //     const txOptions = {
-  //       msgs: debouncedMsgs,
-  //       gasPrices: coin("3500", 'ujunox'),
-  //       gasAdjustment,
-  //       feeDenoms: ['ujunox'],
-  //     }
-  //     const accountInfo = await client.queryClient.auth.account(sender)
-  //     const sequenceNumber = await client.getSequence(sender)
-
-  //     // console.log({accountInfo, pubKey, sequenceNumber, client })
-
-  //     try {
-
-  //       // client.queryClient
-
-
-  //       client.queryClient.tx.simulate(
-  //         [
-  //           {
-  //             sequenceNumber,
-  //             publicKey: pubKey,
-  //           },
-  //         ],
-  //         txOptions,
-  //       )
-  //       // client.getTx.estimateFee(
-  //       //   [
-  //       //     {
-  //       //       sequenceNumber: client.getSequence(),
-  //       //       publicKey: accountInfo.getPublicKey(),
-  //       //     },
-  //       //   ],
-  //       //   txOptions,
-  //       // )
-  //     }
-  //     catch (err) {
-  //       console.log(err)
-  //       console.log(client)
-  //     }
-
-  //     return {}
-  //   },
-  //   {
-  //     enabled:
-  //       !!client && 
-  //       debouncedMsgs != null &&
-  //       txStep == TxStep.Idle &&
-  //       error == null &&
-  //       estimateEnabled,
-  //     refetchOnWindowFocus: false,
-  //     retry: false,
-  //     onSuccess: () => {
-  //       setTxStep(TxStep.Ready)
-  //     },
-  //     onError: e => {
-  //       // @ts-expect-error - don't know anything about error
-  //       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  //       if (e?.response?.data?.message) {
-  //         // @ts-expect-error - don't know anything about error
-  //         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  //         setError(e.response.data.message)
-  //       } else {
-  //         setError('Something went wrong')
-  //       }
-
-  //       setTxStep(TxStep.Idle)
-  //     },
-  //   }
-  // )
-
   const { mutate } = useMutation(
     (data: any) => {
-
-      //   const reverse = false
-      // const amount = '100'
-      // const slippage = '0.1'
-      // const token = 'ujunox'
-      // const contract_addr = "juno1xrf2shh0lx93nzd4ug37zd6elj0gvzf6x2ct0xzf0jp3u28yvgssu4anms"
-
-      // console.log({tx_here : "execiting"})
 
       return directTokenSwap({
         ...data,
         tokenA,
-        // msgs,
-        // swapDirection: 'tokenBtoTokenA',
         swapAddress,
         senderAddress: sender,
         slippage: 1,
@@ -273,7 +157,6 @@ export const useTransaction = ({
         client,
       })
 
-      // return post(data)
     },
     {
       onMutate: () => {
@@ -343,9 +226,6 @@ const submit = useCallback(async () => {
   if (msgs == null || msgs.length < 1) {
     return
   }
-  // if (fee == null || msgs == null || msgs.length < 1) {
-  //   return
-  // }
 
   mutate({
     msgs,
@@ -388,7 +268,6 @@ return useMemo(() => {
     reset,
   }
 }, [txStep, txInfo, txHash, error, reset, fee])
-  // }, [fee, txStep, txInfo, txHash, error, reset])
 }
 
 export default useTransaction

@@ -69,15 +69,6 @@ const ManageLP: FC = () => {
     }, [poolId, setTokenLPState]
     )
 
-    // useEffect(() => {
-    //     console.log({pool})
-    //     const poolAssets = pool?.pool_assets?.map(({ symbol }) => ({
-    //         tokenSymbol: symbol,
-    //         amount: 0
-    //     }))
-    //     setLpTokens(poolAssets)
-    // }, [pool])
-
 
 
 
@@ -87,7 +78,6 @@ const ManageLP: FC = () => {
             tokenSymbol: tokenSymbol,
             amount: Number(amount)
         }
-        console.log(newState)
         setTokenLPState(newState)
     }
 

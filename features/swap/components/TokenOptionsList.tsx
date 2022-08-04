@@ -7,7 +7,6 @@ export const TokenOptionsList = ({
   ...props
 }) => {
   const [tokenList] = useTokenList()
-  console.log({tokenList})
   return  null
 }
 

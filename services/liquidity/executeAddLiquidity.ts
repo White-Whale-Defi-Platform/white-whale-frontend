@@ -81,17 +81,6 @@ export const executeAddLiquidity = async ({
       ].filter(Boolean),
     })
 
-    console.log({
-      message: msgs,
-      senderAddress,
-      contractAddress: swapAddress,
-      /* each native token needs to be added to the funds */
-      funds: [
-        tokenA.native && coin(tokenAAmount, tokenA.denom),
-        tokenB.native && coin(maxTokenBAmount, tokenB.denom),
-      ].filter(Boolean),
-    })
-
 
 
     return validateTransactionSuccess(

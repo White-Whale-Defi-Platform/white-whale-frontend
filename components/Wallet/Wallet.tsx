@@ -76,8 +76,6 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   }
 
   const onChainChanage = (chain) => {
-    // console.log({chain})
-    // setActiveChain(chain?.value)
     if (connected)
       onConnect(chain?.value)
   }

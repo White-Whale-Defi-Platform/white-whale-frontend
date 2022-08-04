@@ -85,31 +85,8 @@
       ],
       "lp_token" : "juno1qg0z0eaj5mjlrxg8wunjg6wqrcgu69xfjwdsusmaxcheyr856t7qlq7p60",
       "swap_address": "juno1kkwtx57qq8dg2nfm6ctw94gp93p3ee92srygrsr058kadn6cpums30wvkk",
-      "staking_address": "juno19wmsdhmn9wgckn64xfp0sl55ntgnzj3lly20e7wjk8z597meh3xsw2zeus",
-      "rewards_tokens": [
-        {
-          "rewards_address": "juno1h5wenexac38vguahkcpaejmznqa3k9apx2uvwfzqtvlms7q77atsnd4xcw",
-          "token_address": "",
-          "swap_address": "",
-          "symbol": "JUNOX",
-          "name": "Junox",
-          "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
-          "native": true,
-          "denom": "ujuno",
-          "decimals": 6
-        },
-        {
-          "rewards_address": "juno1q3ep8crvavzqmhghn3ujp29zmqsrvs4muzs97h7a867fr0pjns9snyqn7u",
-          "token_address": "juno1tjmxqppmerlt4xyusqrmd6k77fn3x4t3kw70jnuge0pswjevm2cs2jgl2v",
-          "swap_address": "juno1tjmxqppmerlt4xyusqrmd6k77fn3x4t3kw70jnuge0pswjevm2cs2jgl2v",
-          "symbol": "CRAB",
-          "name": "Crab",
-          "logoURI": "https://cryptologos.cc/logos/irisnet-iris-logo.svg?v=022",
-          "native": false,
-          "denom": "ucrab",
-          "decimals": 6
-        }
-      ]
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
       "pool_id": "JUNOONE-JUNOTWO",
@@ -141,7 +118,7 @@
       ],
       "lp_token" : "juno1sn62twavppppwsu5af2w3qthe20r9vw2mjujdc3vld254glzqdesm8ecz6",
       "swap_address": "juno1phget2lq2nmmnfk0qcjrnuahau4cxe3z6jw9zekxuda3zxezxeqq2mzx0s",
-      "staking_address": "juno189wqvuj8amqsag8ehn3vmz6cq26c44ffeltvljkcxx9lsfsew8mq9y7z4h",
+      "staking_address": "",
       "rewards_tokens": []
     }
   ],

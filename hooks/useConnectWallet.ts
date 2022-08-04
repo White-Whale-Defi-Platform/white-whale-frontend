@@ -40,7 +40,6 @@ export const useConnectWallet = (
     }))
 
     try {
-      // console.log({chainInfo, selctedChain})
       await window.keplr.experimentalSuggestChain(chainInfo)
       await window.keplr.enable(chainInfo.chainId)
 

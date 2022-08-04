@@ -4,11 +4,12 @@ import { protectAgainstNaN } from '../util/conversion'
 export async function queryMyLiquidity({ swap, address, context: { client } }) {
   const providedLiquidityInMicroDenom = address
     ? await queryLiquidityBalance({
-        tokenAddress: swap.lp_token_address,
+        tokenAddress: swap.lp_token,
         client,
         address,
       })
     : 0
+
 
   /* provide dollar value for reserves as well */
   const totalReserve: [number, number] = [

@@ -122,13 +122,6 @@ const ProvideLP: FC = () => {
 
     const {simulated, tx} = useProvideLP()
 
-    // const onSubmit = (data) => console.log(lpTokens)
-
-
-    // console.log({
-    //     tokenA,
-    //     tokenB
-    // })
 
     return (
         <Page>

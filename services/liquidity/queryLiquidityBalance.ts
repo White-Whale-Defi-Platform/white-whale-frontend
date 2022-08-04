@@ -19,6 +19,6 @@ export const queryLiquidityBalance = async ({
 
     return protectAgainstNaN(Number(query.balance))
   } catch (e) {
-    // console.error('Cannot get liquidity balance:', e)
+    console.error('Cannot get liquidity balance:', e)
   }
 }

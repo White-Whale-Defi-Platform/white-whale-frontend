@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
 import { tokenLpAtom } from '../../ManageLP/lpAtoms';
 import createLpMsg, { createLPExecuteMsgs } from '../createLpMsg';
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
 
 type Props = {
   lpTokens: any[];
@@ -19,11 +20,13 @@ const useProvideLP = () => {
     const { address, client } = useRecoilValue(walletState)
     const tokenA = useTokenInfo(lpTokenA?.tokenSymbol)
     const tokenB = useTokenInfo(lpTokenB?.tokenSymbol)
+    const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
+    const poolId = matchingPools?.streamlinePoolAB?.pool_id || matchingPools?.streamlinePoolBA?.pool_id
     const [{
-        swap_address : swapAddress = null,
-        liquidity  = {}
-    } = {}] = useQueryPoolLiquidity({ poolId: "JUNOX-JUNOONE" })
-
+      swap_address : swapAddress = null,
+      liquidity  = {}
+    } = {}] = useQueryPoolLiquidity({ poolId})
+    
     const slippage = "0.1"
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
@@ -39,7 +42,7 @@ const useProvideLP = () => {
     const ratio = num(tokenBReserve).div(tokenAReserve);
     return num(normalizedValue).times(ratio).toFixed(6);
 
-  }, [lpTokenA])
+  }, [lpTokenA, swapAddress, tokenAReserve, tokenBReserve])
 
 
   const { msgs, encodedMsgs } = useMemo(() => {
@@ -60,7 +63,7 @@ const useProvideLP = () => {
         swapAddress
       }, address)
     }
-  }, [simulated, lpTokenA?.amount]);
+  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount]);
 
   const tx = useTransaction({
     enabled: !!encodedMsgs,
@@ -76,20 +79,22 @@ const useProvideLP = () => {
     onError: () => { }
   });
 
-  // console.log({
-  //   lpTokenA,
-  //   lpTokenB,
-  //   tx,
-  //   liquidity,
-  //   tokenA,
-  //   tokenB,
-  //   tokenAAmount: Number(tokenAAmount),
-  //   maxTokenBAmount: Number(toChainAmount(simulated)),
-  //   client,
-  //   swapAddress,
-  //   senderAddress: address,
-  //   simulated
-  // })
+  console.log({
+    poolId,
+    msgs,
+    lpTokenA,
+    lpTokenB,
+    tx,
+    liquidity,
+    tokenA,
+    tokenB,
+    tokenAAmount: Number(tokenAAmount),
+    maxTokenBAmount: Number(toChainAmount(simulated)),
+    client,
+    swapAddress,
+    senderAddress: address,
+    simulated
+  })
 
 
   return { simulated , tx}

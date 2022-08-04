@@ -1,8 +1,12 @@
 import { Button, Flex, Text, VStack, Box, HStack, Image } from '@chakra-ui/react'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useRouter } from "next/router";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import FallbackImage from 'components/FallbackImage'
+import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
+import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+
+
 
 type Props = {
 
@@ -11,6 +15,20 @@ type Props = {
 const Pools: FC<Props> = () => {
     const router = useRouter()
     const { data: poolList } = usePoolsListQuery()
+
+    const [pools = [], isLoading, isError] = useQueriesDataSelector(
+        useQueryMultiplePoolsLiquidity({
+          refetchInBackground: false,
+          pools: poolList?.pools,
+        })
+      )
+
+    const myPools = useMemo(() => {
+
+        return pools.filter(({liquidity}) => liquidity?.providedTotal?.tokenAmount > 0)
+
+    },[pools])
+
 
 
     return (
@@ -35,7 +53,7 @@ const Pools: FC<Props> = () => {
                     </Flex>
 
                     {
-                        poolList?.pools.map(pool => (
+                        myPools.map(pool => (
                             <Flex
                                 key={pool?.pool_id}
                                 width="full"

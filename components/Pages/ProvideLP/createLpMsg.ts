@@ -33,11 +33,6 @@ export const createLPExecuteMsgs = (
   const asset2 = createAsset(amountB, tokenB.token_address);
   const isNativeB = isNativeAsset(asset2.info);
 
-  console.log({
-    swapAddress, tokenA, tokenB, amountA, amountB ,sender
-  })
-
-
 
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 

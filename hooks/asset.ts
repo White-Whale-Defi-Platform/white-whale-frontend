@@ -7,7 +7,6 @@ export function isNativeAssetInfo(
 }
 
 export const isNativeToken = (token: string = ""): boolean => {
-  console.log({token})
   return token.startsWith("u");
 };
 

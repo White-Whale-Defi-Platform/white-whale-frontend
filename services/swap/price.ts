@@ -29,7 +29,6 @@ export const getToken1ForToken2Price = async ({
 
       },
     })
-    console.log({response})
     return response.return_amount
   } catch (e) {
     console.error('err(getToken1ForToken2Price):', e)
