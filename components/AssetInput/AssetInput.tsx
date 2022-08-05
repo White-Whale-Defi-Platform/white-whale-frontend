@@ -7,6 +7,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import FallbackImage from 'components/FallbackImage'
 
 interface AssetInputProps {
+    image: boolean;
     token: any;
     value: any;
     onChange: (value: any) => void;
@@ -18,7 +19,7 @@ interface AssetInputProps {
 
 
 
-const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, value, showList = true, disabled }, ref) => {
+const AssetInput: FC<AssetInputProps> = forwardRef(({ image = true, token, balance, onChange, value, showList = true, disabled }, ref) => {
 
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -54,21 +55,27 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
                     <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol} disabled={disabled}>
                         {tokenInfo?.symbol ? (
                             <>
-                                <Image
-                                    style={{ margin: 'unset' }}
-                                    maxH={{ base: 6, md: 8 }}
-                                    src={tokenInfo?.logoURI} alt="logo-small"
-                                    boxSize="2.5rem"
-                                    fallback={<FallbackImage />} />)
-                                <Text size="lg" fontWeight="400">{tokenInfo?.symbol || 'Select Token'}</Text>
+                                {
+                                    image && (
+                                        <Image
+                                            style={{ margin: 'unset' }}
+                                            maxH={{ base: 5, md: 7 }}
+                                            src={tokenInfo?.logoURI} alt="logo-small"
+                                            boxSize="2.5rem"
+                                            fallback={<FallbackImage />}
+                                        />
+                                    )
+                                }
+                                <Text fontSize="16px" fontWeight="400">{tokenInfo?.symbol || 'Select Token'}</Text>
+
                             </>) :
-                            <Text 
+                            <Text
                                 paddingLeft="10px"
-                                size="lg" 
-                                fontWeight="400" 
+                                fontSize="18px"
+                                fontWeight="400"
                                 color="brand.200">
-                                    {tokenInfo?.symbol || 'Select Token'}
-                                </Text>
+                                {tokenInfo?.symbol || 'Select Token'}
+                            </Text>
                         }
 
                         <IconButton
@@ -84,12 +91,25 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({ token, balance, onChange, 
 
                 ) : (
                     <HStack
-                        justifyContent="end"
+                        justifyContent="flex-start"
                         width="fit-content"
-                        paddingRight={2}
+                        sx={{ 'button': { margin: 'unset' } }}
+                        paddingX={3}
+                    // style={{ margin: "unset" }}
                     >
-                        <Image src={tokenInfo?.logoURI} alt="logo-small" boxSize="2.5rem" fallback={<FallbackImage />} />
-                        <Text fontSize="20" fontWeight="400">{tokenInfo?.symbol}</Text>
+                        {image && <Image
+                            style={{ margin: 'unset' }}
+                            maxH={{ base: 5, md: 7 }}
+                            src={tokenInfo?.logoURI}
+                            alt="logo-small"
+                            boxSize="2.5rem"
+                            fallback={<FallbackImage />} />
+                        }
+
+                        <Text
+                            paddingLeft="10px"
+                            fontSize="18px"
+                            fontWeight="400">{tokenInfo?.symbol || token?.tokenSymbol}</Text>
                     </HStack>
                 )
             }

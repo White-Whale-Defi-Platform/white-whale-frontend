@@ -5,6 +5,7 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import FallbackImage from 'components/FallbackImage'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import Loader from '../../Loader';
 
 
 
@@ -18,21 +19,20 @@ const Pools: FC<Props> = () => {
 
     const [pools = [], isLoading, isError] = useQueriesDataSelector(
         useQueryMultiplePoolsLiquidity({
-          refetchInBackground: false,
-          pools: poolList?.pools,
+            refetchInBackground: false,
+            pools: poolList?.pools,
         })
-      )
+    )
 
-    const myPools = useMemo(() => {
-
-        return pools.filter(({liquidity}) => liquidity?.providedTotal?.tokenAmount > 0)
-
-    },[pools])
+    const myPools = useMemo(() =>
+        pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0),
+        [pools]
+    )
 
 
 
     return (
-        <VStack>
+        <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
                 <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
                 <Button variant="primary" size="sm" onClick={() => router.push(`/pools/providelp`)}>Provide Liquidity</Button>
@@ -51,6 +51,10 @@ const Pools: FC<Props> = () => {
                         <Text width="15%" textAlign="right" variant="light"> Total Liquidity </Text>
                         <Text width="20%" textAlign="right" variant="light"> 24h Volume </Text>
                     </Flex>
+
+                    {
+                        isLoading && <Loader />
+                    }
 
                     {
                         myPools.map(pool => (

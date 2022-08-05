@@ -13,6 +13,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { tokenLpAtom } from '../ManageLP/lpAtoms';
 import { walletState } from 'state/atoms/walletAtoms';
 
+
 // export const tokens = [
 //     {
 //         asset: "JUNOX",
@@ -120,14 +121,14 @@ const ProvideLP: FC = () => {
     //     percentage:  0
     //   })
 
-    const {simulated, tx} = useProvideLP()
+    const { simulated, tx } = useProvideLP()
 
 
     return (
         <Page>
 
-            <VStack width={700} justifyContent="center" className='testing'>
-                <HStack justifyContent="space-between" width="full" paddingY={4} >
+            <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5} margin="auto">
+                <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4, md: 14 }} >
                     <IconButton
                         variant="unstyled"
                         color="#7A7A7A"

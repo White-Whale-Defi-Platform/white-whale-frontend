@@ -37,7 +37,6 @@ export const usePoolDialogController = ({
     liquidity,
     pool_assets: [tokenA, tokenB],
   } = pool || { pool_assets: [] }
-  console.log({tokenA, tokenB, pool})
 
   const { balance: tokenABalance } = useTokenBalance(tokenA?.symbol)
   const { balance: tokenBBalance } = useTokenBalance(tokenB?.symbol)

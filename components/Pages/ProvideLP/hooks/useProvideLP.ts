@@ -79,23 +79,6 @@ const useProvideLP = () => {
     onError: () => { }
   });
 
-  console.log({
-    poolId,
-    msgs,
-    lpTokenA,
-    lpTokenB,
-    tx,
-    liquidity,
-    tokenA,
-    tokenB,
-    tokenAAmount: Number(tokenAAmount),
-    maxTokenBAmount: Number(toChainAmount(simulated)),
-    client,
-    swapAddress,
-    senderAddress: address,
-    simulated
-  })
-
 
   return { simulated , tx}
 

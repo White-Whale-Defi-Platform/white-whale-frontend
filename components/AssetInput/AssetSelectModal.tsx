@@ -34,7 +34,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                 role='button'
                 onClick={() => !disabled && onOpen()}
                 justifyContent="space-between"
-                width="150px"
+                width="160px"
                 sx={{ 'button': {margin : 'unset'} }}
                 style={{margin : "unset"}}
             >
