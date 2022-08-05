@@ -36,7 +36,6 @@ export const useTokenToTokenPriceQuery = ({
     ],
     async queryFn() {
       if (tokenA && tokenB && matchingPools) {
-        console.log("+++++++++++")
         return await tokenToTokenPriceQueryWithPools({
           matchingPools,
           tokenA,

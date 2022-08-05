@@ -38,30 +38,8 @@ export const useChains = () => {
 export const useChainInfo = (id = "uni-3") => {
 
   const chainInfo = useChains()
-  console.log({chainInfo})
 
   const chain = chainInfo.find(({ chainId }) => chainId === id)
 
   return [chain]
-
-  // const network = useRecoilValue(networkAtom)
-
-  // const { data, isLoading } = useQuery<ChainInfo>(
-  //   id,
-  //   async () => {
-
-  //     const url = `/${network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
-  //     // console.log({url})
-  //     const response = await fetch(url)
-  //     const chainInof = await response.json()
-  //     return chainInfo.find(({ chainId }) => chainId === id)
-  //   },
-  //   {
-  //     onError(e) {
-  //       console.error('Error loading chain info:', e)
-  //     },
-  //   }
-  // )
-
-  // return [data, isLoading] as const
 }

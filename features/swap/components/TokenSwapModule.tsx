@@ -29,7 +29,6 @@ export const TokenSwapModule = ({ initialTokenPair }: TokenSwapModuleProps) => {
     const shouldSetDefaultTokenAState =
       !tokenA.tokenSymbol && !tokenB.tokenSymbol && tokenList
     if (shouldSetDefaultTokenAState) {
-      console.log({symbol :  tokenList.base_token.symbol})
       setTokenSwapState([
         {
           tokenSymbol: tokenList.base_token.symbol,
@@ -40,12 +39,7 @@ export const TokenSwapModule = ({ initialTokenPair }: TokenSwapModuleProps) => {
     }
   }, [tokenList, tokenA, tokenB, setTokenSwapState])
 
-  console.log({tokenList})
-
-  // const initialTokenPairValue = useRef(initialTokenPair).current
   useEffect(() => {
-    // function setInitialTokenPairIfProvided() {
-      // console.log({initialTokenPairValue})
 
       // if (initialTokenPairValue) {
         const [tokenASymbol, tokenBSymbol] = initialTokenPair || []
@@ -59,7 +53,6 @@ export const TokenSwapModule = ({ initialTokenPair }: TokenSwapModuleProps) => {
             amount: 0,
           },
         ])
-      // }
     },
     [initialTokenPair]
   )
@@ -74,7 +67,6 @@ export const TokenSwapModule = ({ initialTokenPair }: TokenSwapModuleProps) => {
     tokenBSymbol: tokenB?.tokenSymbol,
     tokenAmount: tokenA?.amount,
   })
-  console.log({tokenA, tokenB, currentTokenPrice})
 
   /* persist token price when querying a new one */
   const persistTokenPrice = usePersistance(

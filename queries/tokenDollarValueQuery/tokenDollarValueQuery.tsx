@@ -10,6 +10,7 @@ export async function tokenDollarValueQuery(tokenIds: Array<TokenInfo['id']>) {
 
   try {
     const prices = await fetchDollarPriceByTokenIds(tokenIds)
+    
     return tokenIds.map((id): number => prices[id]?.usd || 0)
   } catch (e) {
     pricingServiceIsDownAlert()

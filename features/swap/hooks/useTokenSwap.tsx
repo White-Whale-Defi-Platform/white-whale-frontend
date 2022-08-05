@@ -69,7 +69,6 @@ export const useTokenSwap = ({
         baseTokenBPool,
       } = matchingPools
 
-      console.log({matchingPools})
 
       if (streamlinePoolAB || streamlinePoolBA) {
         const swapDirection = streamlinePoolAB?.swap_address
@@ -78,16 +77,16 @@ export const useTokenSwap = ({
         const swapAddress =
           streamlinePoolAB?.swap_address ?? streamlinePoolBA?.swap_address
 
-        return await directTokenSwap({
-          tokenAmount,
-          price,
-          slippage,
-          senderAddress: address,
-          swapAddress,
-          swapDirection,
-          tokenA,
-          client,
-        })
+        // return await directTokenSwap({
+        //   tokenAmount,
+        //   // price,
+        //   slippage,
+        //   senderAddress: address,
+        //   swapAddress,
+        //   swapDirection,
+        //   tokenA,
+        //   client,
+        // })
       }
 
       return await passThroughTokenSwap({

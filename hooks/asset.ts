@@ -53,6 +53,7 @@ export const findAsset = (infos: AssetInfo[], token: string) => {
 export const createAsset = (amount: string, token: string) => {
   const info = toAssetInfo(token);
 
+
   return {
     info,
     amount,

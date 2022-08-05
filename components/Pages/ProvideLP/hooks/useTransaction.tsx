@@ -1,34 +1,13 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
-// import {
-//   Coins,
-//   Coin,
-//   MsgExecuteContract,
-//   CreateTxOptions,
-//   Fee,
-//   TxInfo,
-// } from '@terra-money/terra.js'
-
-import {
-  useWallet,
-  UserDenied,
-  CreateTxFailed,
-  TxFailed,
-  TxUnspecifiedError,
-  Timeout,
-} from '@terra-money/wallet-provider'
-import { useMutation, useQuery } from 'react-query'
-import { coin } from '@cosmjs/stargate'
-// import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-
-// import { useTerraWebapp } from '../context'
-import useDebounceValue from './useDebounceValue'
-import { directTokenSwap } from '../services/swap'
-// import useAddress from './useAddress'
-import { useTokenInfo } from './useTokenInfo'
-import { useTokenToTokenPrice } from '../features/swap'
-import { createSwapMsgs } from './monoSwap'
-import { Asset } from '../types/blockchain'
 import { useToast } from '@chakra-ui/react'
+import {
+  CreateTxFailed, Timeout, TxFailed,
+  TxUnspecifiedError, UserDenied
+} from '@terra-money/wallet-provider'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMutation, useQuery } from 'react-query'
+import { executeAddLiquidity } from 'services/liquidity'
+import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**
@@ -62,57 +41,56 @@ export enum TxStep {
 }
 
 type Params = {
-  swapAddress:string,
-  swapAssets: any[],
-  price: number,
-  client: any
-  sender: string
-  msgs: any | null
-  encodedMsgs: any | null
-  amount: string
-  gasAdjustment?: number
-  estimateEnabled?: boolean
-  onBroadcasting?: (txHash: string) => void
-  onSuccess?: (txHash: string, txInfo?: any) => void
-  onError?: (txHash?: string, txInfo?: any) => void
+  enabled: boolean;
+  swapAddress:string;
+  swapAssets: any[];
+  price?: number;
+  client: any;
+  senderAddress: string;
+  msgs: any | null;
+  encodedMsgs: any | null;
+  amount?: string;
+  gasAdjustment?: number;
+  estimateEnabled?: boolean;
+  tokenAAmount? :number,
+  tokenBAmount? : number,
+  onBroadcasting?: (txHash: string) => void;
+  onSuccess?: (txHash: string, txInfo?: any) => void;
+  onError?: (txHash?: string, txInfo?: any) => void;
 }
 
 export const useTransaction = ({
+  enabled,
   swapAddress,
   swapAssets,
   client,
-  sender,
+  senderAddress,
   msgs,
   encodedMsgs,
   amount,
   price,
-  // gasAdjustment = 1.2,
-  // estimateEnabled = true,
+  tokenAAmount,
+  tokenBAmount,
   onBroadcasting,
   onSuccess,
   onError,
 }: Params) => {
-  // const { client } = useTerraWebapp()
-  // const address = useAddress()
-  // const { post } = useWallet()
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
 
-
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
-
-
+  const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
-
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(sender, debouncedMsgs, '')
+        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        if(!!buttonLabel)  setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
@@ -120,9 +98,10 @@ export const useTransaction = ({
           console.error(error)
           setTxStep(TxStep.Idle)
           setError("Insufficent funds")
+          setButtonLabel('Insufficent funds')
           throw new Error('Insufficent funds')
         } else {
-          console.error(error)
+          console.error({error})
           setTxStep(TxStep.Idle)
           setError("Something went wrong")
           throw Error("Something went wrong")
@@ -130,7 +109,7 @@ export const useTransaction = ({
       }
     },
     {
-      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null,
+      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled && !!swapAddress,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -143,20 +122,21 @@ export const useTransaction = ({
     }
   )
 
+  
+
   const { mutate } = useMutation(
     (data: any) => {
 
-      return directTokenSwap({
-        ...data,
+      return executeAddLiquidity({
         tokenA,
-        swapAddress,
-        senderAddress: sender,
-        slippage: 1,
-        price,
-        tokenAmount: Number(amount),
+        tokenB,
+        tokenAAmount: Number((tokenAAmount)),
+        maxTokenBAmount: Number(tokenBAmount),
         client,
+        swapAddress,
+        senderAddress,
+        msgs
       })
-
     },
     {
       onMutate: () => {
@@ -189,8 +169,8 @@ export const useTransaction = ({
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
         toast({
-          title: 'Swap Success.',
-          description: `${tokenA.symbol} to ${tokenA.symbol} ${data.transactionHash}`,
+          title: 'Swap Success.', 
+          description:  <Finder from={tokenA.symbol}  to={tokenB.symbol} txHash={data.transactionHash} chainId={client.chainId} /> ,
           status: 'success',
           duration: 9000,
           position: "top-right",
@@ -216,6 +196,7 @@ const { data: txInfo } = useQuery(
   },
 )
 
+
 const reset = () => {
   setError(null)
   setTxHash(undefined)
@@ -223,7 +204,7 @@ const reset = () => {
 }
 
 const submit = useCallback(async () => {
-  if (msgs == null || msgs.length < 1) {
+  if (fee == null || msgs == null || msgs.length < 1) {
     return
   }
 
@@ -235,7 +216,7 @@ const submit = useCallback(async () => {
 
 useEffect(() => {
   if (txInfo != null && txHash != null) {
-    if (txInfo.code) {
+    if (txInfo?.txResponse?.code) {
       setTxStep(TxStep.Failed)
       onError?.(txHash, txInfo)
     } else {
@@ -250,6 +231,7 @@ useEffect(() => {
     setError(null)
   }
 
+
   if (txStep != TxStep.Idle) {
     setTxStep(TxStep.Idle)
   }
@@ -259,8 +241,8 @@ useEffect(() => {
 return useMemo(() => {
   return {
     fee,
+    buttonLabel,
     submit,
-    // fee: "auto",
     txStep,
     txInfo,
     txHash,

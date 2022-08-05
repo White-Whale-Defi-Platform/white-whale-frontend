@@ -14,6 +14,7 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
   const { symbol: baseTokenSymbol } = useBaseTokenInfo() || {}
   const tokenInfo = useTokenInfo(tokenSymbol)
 
+
   const tokenSymbolToLookupDollarValueFor = tokenInfo?.id
     ? tokenSymbol
     : baseTokenSymbol
@@ -60,6 +61,7 @@ export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
             getMultipleIBCAssetInfo([tokenSymbol])?.[0]
           )?.id
       )
+
 
       if (tokenIds) {
         return tokenDollarValueQuery(tokenIds)

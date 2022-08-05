@@ -77,6 +77,7 @@ export const useQueryMultiplePoolsLiquidity = ({
     getTokenDollarValue,
   }
 
+
   async function queryPoolLiquidity(
     pool: PoolEntityType
   ): Promise<PoolEntityTypeWithLiquidity> {
@@ -87,12 +88,15 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
+
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
         context,
-        swap,
+        swap : {...swap, ...pool},
         address,
       })
+
+
 
     const {
       providedStakedAmountInMicroDenom,
@@ -106,6 +110,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalReserve,
       swap,
     })
+
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenInfo: tokenA,
@@ -221,15 +226,16 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     return pool ? [pool] : undefined
   }, [poolId, poolsListResponse])
 
+  
   const [poolResponse] = useQueryMultiplePoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,
   })
 
-  const persistedData = usePersistance(poolResponse?.data)
+  // const persistedData = usePersistance(poolResponse?.data)
 
   return [
-    persistedData,
+    poolResponse?.data,
     poolResponse?.isLoading || loadingPoolsList,
     poolResponse?.isError,
   ] as const

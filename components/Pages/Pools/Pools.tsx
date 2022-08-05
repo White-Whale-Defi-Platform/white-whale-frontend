@@ -1,8 +1,13 @@
 import { Button, Flex, Text, VStack, Box, HStack, Image } from '@chakra-ui/react'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useRouter } from "next/router";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import FallbackImage from 'components/FallbackImage'
+import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
+import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import Loader from '../../Loader';
+
+
 
 type Props = {
 
@@ -12,9 +17,22 @@ const Pools: FC<Props> = () => {
     const router = useRouter()
     const { data: poolList } = usePoolsListQuery()
 
+    const [pools = [], isLoading, isError] = useQueriesDataSelector(
+        useQueryMultiplePoolsLiquidity({
+            refetchInBackground: false,
+            pools: poolList?.pools,
+        })
+    )
+
+    const myPools = useMemo(() =>
+        pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0),
+        [pools]
+    )
+
+
 
     return (
-        <VStack>
+        <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
                 <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
                 <Button variant="primary" size="sm" onClick={() => router.push(`/pools/providelp`)}>Provide Liquidity</Button>
@@ -35,7 +53,11 @@ const Pools: FC<Props> = () => {
                     </Flex>
 
                     {
-                        poolList?.pools.map(pool => (
+                        isLoading && <Loader />
+                    }
+
+                    {
+                        myPools.map(pool => (
                             <Flex
                                 key={pool?.pool_id}
                                 width="full"

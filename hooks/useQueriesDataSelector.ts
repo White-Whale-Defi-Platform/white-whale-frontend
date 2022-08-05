@@ -24,7 +24,7 @@ export function useQueriesDataSelector<
     ] as const
   }, [queriesResult])
 
-  const persistData = usePersistance(data?.[0] ? data : undefined)
+  // const persistData = usePersistance(data?.[0] ? data : undefined)
 
-  return [persistData, isLoading, isError] as const
+  return [data, isLoading, isError] as const
 }

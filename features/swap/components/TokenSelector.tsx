@@ -39,7 +39,6 @@ export const TokenSelector = ({
 
   const { balance: availableAmount } = useTokenBalance(tokenSymbol)
 
-  console.log({tokenSymbol})
   const [tokenSearchQuery, setTokenSearchQuery] = useState('')
   const [isInputForSearchFocused, setInputForSearchFocused] = useState(false)
   const [isInputForAmountFocused, setInputForAmountFocused] = useState(false)

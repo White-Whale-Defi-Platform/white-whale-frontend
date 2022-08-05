@@ -8,7 +8,6 @@ export const TokenOptionsList = ({
   ...props
 }) => {
   const [tokenList] = useIBCAssetList()
-  console.log({tokenList})
   return null
   // return (
   //   <TokenSelectList
