@@ -85,7 +85,7 @@
       ],
       "lp_token" : "terra1sydk40ej0ytgvel68zvv6z3elz8eu6efw0mmjrdqf5h6zvszr9xq6yd79v",
       "swap_address": "terra1ue5yv5lav9d5ztfcmds3r8tayasepkntjl5lzqjlzx6zyy2qcwvswxss36",
-      "staking_address": "juno19wmsdhmn9wgckn64xfp0sl55ntgnzj3lly20e7wjk8z597meh3xsw2zeus",
+      "staking_address": "",
       "rewards_tokens": []
     },
     {
@@ -118,7 +118,7 @@
       ],
       "lp_token" : "terra18c2c73j2sm28k7rjg5hgunjcxk0tuzajqklnzq8vs222mxt2zedqqy7vam",
       "swap_address": "terra1lmrlqq4v3qtqsgk0r9jjx3et5y2jlwxhcur6sn3r80wf2p0mwk7q8j3fuh",
-      "staking_address": "juno189wqvuj8amqsag8ehn3vmz6cq26c44ffeltvljkcxx9lsfsew8mq9y7z4h",
+      "staking_address": "",
       "rewards_tokens": []
     }
   ],

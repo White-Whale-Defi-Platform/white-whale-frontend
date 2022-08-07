@@ -1,37 +1,53 @@
-import { MsgExecuteContract } from "@terra-money/terra.js";
+import { isNativeAsset, toAsset, createAsset } from "hooks/asset";
+import { createExecuteMessage } from 'util/messages';
+import { coin } from "@cosmjs/proto-signing";
+import {
+  MsgExecuteContractEncodeObject,
+  SigningCosmWasmClient,
+} from '@cosmjs/cosmwasm-stargate'
+
+import {
+  createIncreaseAllowanceMessage,
+  validateTransactionSuccess,
+} from 'util/messages'
 
 export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
 }
 
 
-type CreateWithdrawMsgsOptions = {
-  pairContract: string;
-  lpTokenContract: string;
-  amount: string;
-};
-
-export const createWithdrawMsgs = (
-  options: CreateWithdrawMsgsOptions,
-  sender: string
-) => {
-  const { pairContract, lpTokenContract, amount } = options;
-
-  const executeMsg = {
+export const createWithdrawMsg = ({ contract, amount, swapAddress }) => {
+  return {
     send: {
-      contract: pairContract,
       amount,
+      contract : swapAddress,
       msg: toBase64({
-        withdraw_liquidity: {},
+        "withdraw_liquidity": {}
       }),
     },
-  };
+  }
+}
 
-  const withdrawMsg = new MsgExecuteContract(
-    sender,
-    lpTokenContract,
-    executeMsg
-  );
+export const createWithdrawExecuteMsgs = ({ contract, amount, swapAddress }, senderAddress) => {
 
-  return [withdrawMsg];
-};
+  const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
+
+    increaseAllowanceMessages.push(
+      createIncreaseAllowanceMessage({
+        tokenAmount: amount,
+        tokenAddress: contract,
+        senderAddress,
+        swapAddress,
+      })
+    )
+
+    return [
+      // ...increaseAllowanceMessages,
+      createExecuteMessage({
+        senderAddress,
+        contractAddress: contract,
+        message: createWithdrawMsg({contract, amount, swapAddress})
+      })
+
+    ]
+}

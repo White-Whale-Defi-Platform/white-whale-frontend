@@ -18,23 +18,57 @@ import useWithdraw from './hooks/useWithdraw'
 type Props = {
     poolId: string;
     tokenA: TokenItemState;
+    connected: boolean;
 }
 
-const WithdrawForm = ({ poolId, tokenA }: Props) => {
+const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     const [{
         swap_address: swapAddress = null,
+        lp_token: contract = null,
         pool_assets = [],
         liquidity = {}
     } = {}] = useQueryPoolLiquidity({ poolId })
 
     const [token, setToken] = useState<TokenItemState>(tokenA)
+    const tx = useWithdraw({ token, contract, swapAddress })
 
-    const returnData = useWithdraw({ token })
+    useEffect(() => {
+
+        if (tx.txStep === TxStep.Success)
+            setToken({
+                ...token,
+                amount: 0
+            })
+
+    }, [tx?.txStep])
+
+    const isInputDisabled = tx?.txStep == TxStep.Posting
+
 
     const tokenBalance = useMemo(() => {
         const { tokenAmount = 0 } = (liquidity as any)?.providedTotal || {}
         return fromChainAmount(tokenAmount)
     }, [liquidity])
+
+    const buttonLabel = useMemo(() => {
+
+        if (!connected)
+            return 'Connect wallet'
+        else if (!!!token?.amount)
+            return 'Enter amount'
+        else if (tx?.buttonLabel)
+            return tx?.buttonLabel
+        else
+            return 'Withdraw Liquidity'
+
+    }, [tx?.buttonLabel, connected, token?.amount])
+
+    const onInputChange= (value) => {
+        if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+        tx.reset()
+        
+        setToken(value)
+    }
 
     return (
         <VStack
@@ -42,7 +76,10 @@ const WithdrawForm = ({ poolId, tokenA }: Props) => {
             paddingX={2}
             width="full"
             as="form"
-        // onSubmit={handleSubmit(tx?.submit)}
+            onSubmit={(event) => {
+                event.preventDefault();
+                tx?.submit()
+            }}
 
         >
 
@@ -52,42 +89,38 @@ const WithdrawForm = ({ poolId, tokenA }: Props) => {
                     <Text fontSize="14" fontWeight="700">{tokenBalance}</Text>
                 </HStack>
 
-                <AssetInput 
+                <AssetInput
+                    disabled={isInputDisabled}
                     value={token}
+                    balance={Number(tokenBalance)}
                     image={false}
                     token={tokenA}
                     showList={false}
-                    onChange={(value) => setToken(value) }
+                    onChange={onInputChange}
                 />
             </VStack>
 
-            {/* {(tokenB?.tokenSymbol && Number(amountA.amount) > 0) && (
-            <VStack alignItems="flex-start" width="full">
-                <Text
-                    color="brand.500"
-                    fontSize={12}>
-                    1 {tokenA.tokenSymbol} = {Number(amountB.amount / amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
-                </Text>
-                <HStack justifyContent="space-between" width="full">
-                    <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                </HStack>
-            </VStack>
-        )} */}
+            {(Number(token.amount) > 0) && (
+                <VStack alignItems="flex-start" width="full">
+                    <HStack justifyContent="space-between" width="full">
+                        <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
+                    </HStack>
+                </VStack>
+            )}
 
             <Button
                 type='submit'
                 width="full"
                 variant="primary"
-            // isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
-            // disabled={tx.txStep != TxStep.Ready}
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
+                disabled={tx.txStep != TxStep.Ready}
             >
-                Withdraw
-                {/* {buttonLabel} */}
+                {buttonLabel}
             </Button>
 
-            {/* {
-            (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
-        } */}
+            {
+                (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
+            }
         </VStack>
     )
 }

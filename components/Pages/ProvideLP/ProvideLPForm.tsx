@@ -49,13 +49,19 @@ const ProvideLPForm: FC<Props> = ({
     const amountB = getValues('token2')
 
     useEffect(() => {
-        if (resetForm) {
-            setValue('token1', tokenA)
-            setValue('token2', tokenB)
+        if (resetForm || tx?.txStep === TxStep.Success) {
+            setValue('token1', {
+                ...tokenA,
+                amount: 0
+            })
+            setValue('token2', {
+                ...tokenB,
+                amount: 0
+            })
             setResetForm(false)
         }
 
-    }, [resetForm])
+    }, [resetForm, tx?.txStep])
 
     useEffect(() => {
 
@@ -112,6 +118,7 @@ const ProvideLPForm: FC<Props> = ({
                         render={({ field }) => (
                             <AssetInput
                                 disabled={isInputDisabled}
+                                balance={tokenBBalance}
                                 {...field} token={tokenA}
                                 onChange={(value) => { onInputChange(value, 0); field.onChange(value) }}
                             />
@@ -130,8 +137,9 @@ const ProvideLPForm: FC<Props> = ({
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
-                            <AssetInput
+                            <AssetInput 
                                 disabled={isInputDisabled}
+                                balance={tokenBBalance}
                                 {...field} token={tokenB}
                                 onChange={(value) => { onInputChange(value, 1); field.onChange(value) }}
                             />

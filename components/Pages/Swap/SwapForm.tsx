@@ -40,7 +40,7 @@ const SwapForm: FC<Props> = ({
     setResetForm
 }) => {
 
-    const { control, handleSubmit, setValue , getValues} = useForm({
+    const { control, handleSubmit, setValue, getValues } = useForm({
         mode: "onChange",
         defaultValues: {
             tokenA,
@@ -49,13 +49,19 @@ const SwapForm: FC<Props> = ({
     });
 
     useEffect(() => {
-        if (resetForm) {
-            setValue('tokenA', tokenA)
-            setValue('tokenB', tokenB)
+        if (resetForm || tx.txStep === TxStep.Success) {
+            setValue('tokenA', {
+                ...tokenA,
+                amount: 0
+            })
+            setValue('tokenB', {
+                ...tokenB,
+                amount: 0
+            })
             setResetForm(false)
         }
 
-    }, [resetForm])
+    }, [resetForm, tx?.txStep])
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
     const amountA = getValues('tokenA')
@@ -247,7 +253,7 @@ const SwapForm: FC<Props> = ({
                     <Text
                         color="brand.500"
                         fontSize={12}>
-                        1 {tokenA.tokenSymbol} = {Number(amountB.amount/ amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
+                        1 {tokenA.tokenSymbol} = {Number(amountB.amount / amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
                     </Text>
                     <HStack justifyContent="space-between" width="full">
                         <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>

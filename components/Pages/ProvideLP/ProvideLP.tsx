@@ -12,24 +12,7 @@ import { TokenItemState } from '../ManageLP/lpAtoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { tokenLpAtom } from '../ManageLP/lpAtoms';
 import { walletState } from 'state/atoms/walletAtoms';
-
-
-// export const tokens = [
-//     {
-//         asset: "JUNOX",
-//         icon: "/juno.svg",
-//         contract: "3fdss1234",
-//         amount: '',
-//         balance: 50
-//     },
-//     {
-//         asset: "JUNOONE",
-//         icon: "/junoone.svg",
-//         contract: "adfa12342242",
-//         amount: '',
-//         balance: 40
-//     }
-// ]
+import { TxStep } from 'hooks/useTransaction';
 
 const defaultTokens = {
     "uni-3": [
@@ -82,8 +65,8 @@ const ProvideLP: FC = () => {
 
 
     const onInputChange = ({ tokenSymbol, amount }: TokenItemState, index: number) => {
-        // if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
-        //     tx.reset()
+        if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+            tx.reset()
 
         const newState: TokenItemState[] = [tokenA, tokenB]
         newState[index] = {
@@ -93,33 +76,6 @@ const ProvideLP: FC = () => {
 
         setTokenSwapState(newState)
     }
-    // const [{
-    //     swap_address : swapAddress = null,
-    //     pool_assets =  [],
-    //     liquidity = {}
-    // } = {}] = useQueryPoolLiquidity({ poolId: "JUNOX-JUNOONE" })
-
-    // useEffect(() => {
-    //     if (!!pool_assets)
-    //         setLpTokens(pool_assets)
-    // }, [pool_assets])
-
-    // const {
-    //     state: {
-    //       tokenAReserve,
-    //       tokenBReserve,
-    //       tokenABalance,
-    //       tokenBBalance,
-    //       maxApplicableBalanceForTokenA,
-    //       maxApplicableBalanceForTokenB,
-    //       isLoading,
-    //     },
-    //     actions: { mutateAddLiquidity },
-    //   } = usePoolDialogController({
-    //     pool,
-    //     actionState: 'add',
-    //     percentage:  0
-    //   })
 
     const { simulated, tx } = useProvideLP()
 
@@ -137,7 +93,7 @@ const ProvideLP: FC = () => {
                         icon={<ArrowBackIcon />}
                         onClick={() => router.back()}
                     />
-                    <Text as="h2" fontSize="24" fontWeight="900">Provide Liquidity</Text>
+                    <Text as="h2" fontSize="24" fontWeight="900">Provide Liquidity </Text>
                 </HStack>
 
                 <ProvideLPForm

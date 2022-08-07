@@ -39,6 +39,8 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
     const { chainId, key } = useRecoilValue(walletState)
     // const [resetForm, setResetForm] = useState(false)
 
+    const isInputDisabled = tx?.txStep == TxStep.Posting
+
     useEffect(() => {
 
         if (simulated)
@@ -65,7 +67,6 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
 
     }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
 
-    const isInputDisabled = tx?.txStep == TxStep.Posting
 
 
 
@@ -92,6 +93,8 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                     render={({ field }) => (
                         <AssetInput {...field}
                             token={tokenA}
+                            disabled={isInputDisabled}
+                            balance={tokenABalance}
                             showList={false}
                             onChange={(value) => { onInputChange(value, 0); field.onChange(value) }}
                         />
@@ -110,7 +113,9 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput {...field}
+                            disabled={isInputDisabled}
                             token={tokenB}
+                            balance={tokenBBalance}
                             showList={false}
                             onChange={(value) => { onInputChange(value, 1); field.onChange(value) }}
                         />

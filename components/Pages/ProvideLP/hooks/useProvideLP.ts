@@ -35,7 +35,6 @@ const useProvideLP = () => {
   const tokenBAmount = toChainAmount(lpTokenB?.amount)
 
   const simulated = useMemo(() => {
-
     if (!lpTokenA?.amount) return null
 
     const normalizedValue = lpTokenA.amount || 0;
@@ -79,9 +78,22 @@ const useProvideLP = () => {
     onError: () => { }
   });
 
+  console.log({
+    liquidity,
+    lpTokenA,
+    lpTokenB,
+    tokenAAmount,
+    tokenBAmount,
+    address,
+    poolId
+  })
+
 
   return { simulated , tx}
 
 }
+
+
+
 
 export default useProvideLP

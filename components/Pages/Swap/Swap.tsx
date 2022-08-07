@@ -8,29 +8,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
 import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
+import defaultTokens from './defaultTokens.json'
 
-const defaultTokens = {
-    "uni-3": [
-        {
-            tokenSymbol: 'JUNOX',
-            amount: 0,
-        },
-        {
-            tokenSymbol: null,
-            amount: 0,
-        }
-    ],
-    "pisco-1": [
-        {
-            tokenSymbol: 'LUNA',
-            amount: 0,
-        },
-        {
-            tokenSymbol: null,
-            amount: 0,
-        }
-    ]
-}
 
 
 
@@ -40,11 +19,10 @@ type SwapProps = {
 }
 
 const Swap: FC<SwapProps> = ({  }) => {
-    /* connect to recoil */
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
-    const [reverse, setReverse] = useState(false)
+    const [reverse, setReverse] = useState<boolean>(false)
     const { chainId, key } = useRecoilValue(walletState)
-    const [resetForm, setResetForm] = useState(false)
+    const [resetForm, setResetForm] = useState<boolean>(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -55,10 +33,9 @@ const Swap: FC<SwapProps> = ({  }) => {
             setResetForm(true)
             router.replace(params)
         }
-        // else setTokenSwapState(defaultTokens["uni-3"])
     }, [chainId])
 
-    const { tx, simulated, minReceive }: any = useSwap({
+    const { tx, simulated, minReceive } = useSwap({
         reverse
     })
 

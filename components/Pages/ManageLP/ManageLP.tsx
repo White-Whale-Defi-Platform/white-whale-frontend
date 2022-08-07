@@ -13,6 +13,7 @@ import WithdrawForm from './WithdrawForm';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
 import useProvideLP from "components/Pages/ProvideLP/hooks/useProvideLP"
+import { TxStep } from 'hooks/useTransaction';
 
 
 const ManageLP: FC = () => {
@@ -65,8 +66,10 @@ const ManageLP: FC = () => {
 
 
 
-
     const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
+        if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+            tx.reset()
+
         const newState: any = [tokenA, tokenB]
         newState[index] = {
             tokenSymbol: tokenSymbol,
@@ -123,19 +126,16 @@ const ManageLP: FC = () => {
                                         onInputChange={onInputChange}
                                         simulated={simulated}
                                         tx={tx}
-                                    // resetForm={resetForm}
-                                    // setResetForm={setResetForm}
                                     />
                                 </TabPanel>
                                 <TabPanel>
                                     <WithdrawForm
+                                        connected={Boolean(key?.name)}
                                         tokenA={{
-                                            tokenSymbol: "JUNOX/JUNOONE",
+                                            tokenSymbol: poolId,
                                             amount: 0,
                                         }}
-                                        poolId="JUNOX-JUNOONE"
-                                    // tokenA={[tokenA]}
-                                    // onInputChange={onInputChange}
+                                        poolId={poolId}
                                     />
                                 </TabPanel>
                             </TabPanels>
@@ -143,12 +143,6 @@ const ManageLP: FC = () => {
                     </Box>
 
                 </Box>
-                {/* <ManageLPForm
-                    tokens={[tokenA, tokenB]}
-                    pool={pool}
-                    onInputChange={onInputChange}
-
-                /> */}
 
             </VStack>
         </Page>

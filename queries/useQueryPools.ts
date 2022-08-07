@@ -69,10 +69,10 @@ export const useQueryMultiplePoolsLiquidity = ({
     useGetTokenDollarValueQuery()
 
   const { address, client: signingClient } = useRecoilValue(walletState)
-  const client = useCosmWasmClient()
+  // const client = useCosmWasmClient()
 
   const context = {
-    client,
+    client : signingClient,
     signingClient,
     getTokenDollarValue,
   }
@@ -87,6 +87,8 @@ export const useQueryMultiplePoolsLiquidity = ({
       context,
       swap_address: pool.swap_address,
     })
+
+    console.log("hererereree")
 
 
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
@@ -148,6 +150,10 @@ export const useQueryMultiplePoolsLiquidity = ({
       }),
     ]
 
+    console.log({
+      totalLiquidity, providedLiquidity, totalStaked, providedStaked
+    })
+
     let annualYieldPercentageReturn = 0
     let rewardsContracts: Array<SerializedRewardsContract> | undefined
 
@@ -199,6 +205,7 @@ export const useQueryMultiplePoolsLiquidity = ({
     }
   }
 
+
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
@@ -226,11 +233,17 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     return pool ? [pool] : undefined
   }, [poolId, poolsListResponse])
 
+
   
   const [poolResponse] = useQueryMultiplePoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,
   })
+
+  console.log({
+    poolResponse
+  })
+
 
   // const persistedData = usePersistance(poolResponse?.data)
 

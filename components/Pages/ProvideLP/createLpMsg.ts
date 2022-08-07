@@ -27,10 +27,10 @@ export const createLPExecuteMsgs = (
   { swapAddress, tokenA, tokenB, amountA, amountB },
   sender: string,
 ) => {
-  const asset1 = createAsset(amountA, tokenA.token_address);
+  const asset1 = createAsset(amountA, tokenA?.token_address);
   const isNativeA = isNativeAsset(asset1.info);
 
-  const asset2 = createAsset(amountB, tokenB.token_address);
+  const asset2 = createAsset(amountB, tokenB?.token_address);
   const isNativeB = isNativeAsset(asset2.info);
 
 
