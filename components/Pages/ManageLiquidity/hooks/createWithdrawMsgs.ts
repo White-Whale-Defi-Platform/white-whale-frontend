@@ -1,4 +1,4 @@
-import { isNativeAsset, toAsset, createAsset } from "hooks/asset";
+import { isNativeAsset, toAsset, createAsset } from "../../../../services/asset";
 import { createExecuteMessage } from 'util/messages';
 import { coin } from "@cosmjs/proto-signing";
 import {

@@ -7,6 +7,7 @@ import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { TokenItemState } from './swapAtoms';
+import {Simulated} from './hooks/useSimulate'
 
 
 type Props = {
@@ -14,11 +15,10 @@ type Props = {
     tokenA: TokenItemState;
     tokenB: TokenItemState;
     onInputChange: (asset: TokenItemState, index: number) => void;
-    simulated: any;
-    // setIsReverse: (state: boolean) => void;
+    simulated: Simulated;
     isReverse: boolean;
     tx: any
-    minReceive: number
+    minReceive: string
     onReverseDirection: () => void
     setReverse: (valuse: boolean) => void
     resetForm: boolean

@@ -3,10 +3,10 @@ import AssetInput from 'components/AssetInput';
 import { FC, useEffect, useState, useMemo } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import { Asset } from 'types/blockchain';
-import { TokenItemState } from '../ManageLP/lpAtoms';
+import { TokenItemState } from './lpAtoms';
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { tokenLpAtom } from '../ManageLP/lpAtoms';
+import { tokenLpAtom } from './lpAtoms';
 import { walletState } from 'state/atoms/walletAtoms';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
@@ -63,7 +63,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
-            return 'Add Liquidity'
+            return 'Deposit'
 
     }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
 

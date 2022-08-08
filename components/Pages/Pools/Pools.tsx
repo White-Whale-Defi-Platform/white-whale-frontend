@@ -30,15 +30,11 @@ const Pools: FC<Props> = () => {
         [pools]
     )
 
-    console.log({ myPools })
-
-
-
     return (
         <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
                 <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
-                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/providelp`)}>Provide Liquidity</Button>
+                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New position</Button>
             </HStack>
 
             <Flex padding={10} width="1058px"
@@ -122,9 +118,9 @@ const Pools: FC<Props> = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => router.push(`/pools/managelp?poolId=${pool?.pool_id}`)}
+                                        onClick={() => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`)}
                                     >
-                                        Add Liquidity
+                                        Manage liquidity
                                     </Button>
                                 </Box>
                             </Flex>

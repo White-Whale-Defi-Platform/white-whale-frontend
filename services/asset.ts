@@ -1,4 +1,4 @@
-import { AssetInfo, CW20AssetInfo, NativeAssetInfo, Route } from "./types";
+import { AssetInfo, CW20AssetInfo, NativeAssetInfo, Route } from "types";
 
 export function isNativeAssetInfo(
   value: NativeAssetInfo | CW20AssetInfo,

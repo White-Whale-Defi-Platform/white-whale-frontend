@@ -5,15 +5,9 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPools';
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
-import { tokenLpAtom } from '../../ManageLP/lpAtoms';
-import createLpMsg, { createLPExecuteMsgs } from '../createLpMsg';
+import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms';
+import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg';
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
-
-type Props = {
-  lpTokens: any[];
-  liquidity: any;
-  swapAddress: string;
-}
 
 const useProvideLP = () => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
@@ -78,22 +72,10 @@ const useProvideLP = () => {
     onError: () => { }
   });
 
-  console.log({
-    liquidity,
-    lpTokenA,
-    lpTokenB,
-    tokenAAmount,
-    tokenBAmount,
-    address,
-    poolId
-  })
 
-
-  return { simulated , tx}
+  return useMemo(() => ({ simulated , tx}), [simulated, tx])
 
 }
-
-
 
 
 export default useProvideLP

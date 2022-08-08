@@ -1,22 +1,24 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { Text, Link } from '@chakra-ui/react'
 import { truncate } from '../libs/text'
+import { networkAtom } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+
 
 type Props = {
     chainId: string;
-    from: string;
-    to: string;
-    txHash: string
+    txHash: string;
+    children?: ReactNode
 }
 
-const getUrl = (chainId, txHash) => {
+const getUrl = (chainId, txHash, network) => {
 
     switch (chainId) {
         case 'uni-3':
-            return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
+            return `https://${network === 'testnet' && "testnet."}mintscan.io/juno-testnet/txs/${txHash}`
             break;
         case 'pisco-1':
-            return `https://finder.terra.money/testnet/tx/${txHash}`
+            return `https://finder.terra.money/${network === 'testnet' && "testnet/"}tx/${txHash}`
             break;
         default:
             return null
@@ -25,9 +27,12 @@ const getUrl = (chainId, txHash) => {
 
 }
 
-const Finder = ({ from, to, txHash, chainId }: Props) => {
+const Finder = ({ children, txHash, chainId }: Props) => {
+    const network = useRecoilValue(networkAtom)
     return (
-        <Link isExternal href={getUrl(chainId, txHash)} > {from} to {to} {truncate(txHash, [4, 4])} </Link>
+        <Link isExternal href={getUrl(chainId, txHash, network)} >
+            {children} {truncate(txHash, [4, 4])}
+        </Link>
     )
 }
 

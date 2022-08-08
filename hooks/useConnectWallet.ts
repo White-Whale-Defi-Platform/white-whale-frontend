@@ -92,17 +92,17 @@ export const useConnectWallet = (
     function restoreWalletConnectionIfHadBeenConnectedBefore() {
       /* restore wallet connection if the state has been set with the */
       if (chainInfo?.rpc && status === WalletStatusType.restored) {
-        mutation.mutate(null)
+        mutation.mutate(chainId)
       }
     }, // eslint-disable-next-line
     [status]
   )
 
-  useEffect(
+  useEffect( 
     function listenToWalletAddressChangeInKeplr() {
       function reconnectWallet() {
         if (status === WalletStatusType.connected) {
-          mutation.mutate(null)
+          mutation.mutate(chainId)
         }
       }
 

@@ -70,9 +70,9 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                             <FormLabel htmlFor='network' mb='0'>
                                 Testnet
                             </FormLabel>
-                            <Switch 
-                                id='network' 
-                                isChecked={network === 'testnet'} 
+                            <Switch
+                                id='network'
+                                isChecked={network === 'testnet'}
                                 onChange={({ target }) => setNetwork(target.checked ? 'testnet' : 'mainnet')} />
                         </FormControl>
                         <List spacing={1} color="white" width="full" >

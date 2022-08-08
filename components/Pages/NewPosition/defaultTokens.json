@@ -1,0 +1,22 @@
+{
+    "uni-3": [
+        {
+            "tokenSymbol": "JUNOX",
+            "amount": 0
+        },
+        {
+            "tokenSymbol": null,
+            "amount": 0
+        }
+    ],
+    "pisco-1": [
+        {
+            "tokenSymbol": "LUNA",
+            "amount": 0
+        },
+        {
+            "tokenSymbol": null,
+            "amount": 0
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 import { HStack, Text, VStack } from '@chakra-ui/react';
-import useSwap from 'hooks/useSwap';
+import useSwap from './hooks/useSwap';
 import SwapSettings from './SwapSettings';
 import { TxStep } from 'hooks/useTransaction';
 import { useRouter } from 'next/router';
@@ -35,7 +35,13 @@ const Swap: FC<SwapProps> = ({  }) => {
         }
     }, [chainId])
 
-    const { tx, simulated, minReceive } = useSwap({
+    const { tx, simulated, minReceive } 
+    // : {
+    //     tx: any,
+    //     simulated : Simulated,
+    //     minReceive:  string
+    // } 
+    = useSwap({
         reverse
     })
 

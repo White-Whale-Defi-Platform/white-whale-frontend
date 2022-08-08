@@ -68,7 +68,7 @@ export const useQueryMultiplePoolsLiquidity = ({
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
 
-  const { address, client: signingClient } = useRecoilValue(walletState)
+  const { address, client: signingClient, chainId } = useRecoilValue(walletState)
   // const client = useCosmWasmClient()
 
   const context = {
@@ -87,8 +87,6 @@ export const useQueryMultiplePoolsLiquidity = ({
       context,
       swap_address: pool.swap_address,
     })
-
-    console.log("hererereree")
 
 
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
@@ -150,10 +148,6 @@ export const useQueryMultiplePoolsLiquidity = ({
       }),
     ]
 
-    console.log({
-      totalLiquidity, providedLiquidity, totalStaked, providedStaked
-    })
-
     let annualYieldPercentageReturn = 0
     let rewardsContracts: Array<SerializedRewardsContract> | undefined
 
@@ -209,7 +203,7 @@ export const useQueryMultiplePoolsLiquidity = ({
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled: Boolean(enabledGetTokenDollarValue && pool.pool_id),
+      enabled: Boolean(!!signingClient && pool.pool_id),
 
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
@@ -225,6 +219,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 }
 
 export const useQueryPoolLiquidity = ({ poolId }) => {
+
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
     usePoolsListQuery()
 
@@ -238,10 +233,6 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   const [poolResponse] = useQueryMultiplePoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,
-  })
-
-  console.log({
-    poolResponse
   })
 
 

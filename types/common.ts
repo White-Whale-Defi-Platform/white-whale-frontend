@@ -1,4 +1,6 @@
 import { Msg } from "@terra-money/terra.js";
+import { PairResponse , Asset, Pair} from "./terraswap";
+import {Network} from './network'
 
 export type ContractVariables = {
   contract: string;
@@ -35,14 +37,6 @@ export enum NetworkType {
   classic = "classic",
   Testnet = "testnet",
 }
-export interface Network {
-  name: NetworkType;
-  chainID: string;
-  lcd: string;
-  mantle: string;
-  factory: string;
-  routeContract: string;
-}
 
 export type Networks = Record<NetworkType, Network>;
 
@@ -61,37 +55,10 @@ export type WASMContractResult<T extends {} = {}> = {
   Result: string;
 } & T;
 
-export type CW20AssetInfo = {
-  native_token: never;
-  token: { contract_addr: CW20Addr };
-};
-export type NativeAssetInfo = {
-  token: never;
-  native_token: { denom: StableDenom };
-};
-
-export type AssetInfo = CW20AssetInfo | NativeAssetInfo;
-
-export type Asset = {
-  info: AssetInfo;
-  amount: string;
-};
-
-export type Pool = {
-  assets: [Asset, Asset];
-  total_share: string;
-};
-
 export type VaultPool = {
   assets: [Asset, Asset];
   total_share: string;
   total_value_in_ust: string;
-};
-
-export type Pair = {
-  asset_infos: [AssetInfo, AssetInfo];
-  contract: CW20Addr;
-  lpToken: CW20Addr;
 };
 
 export type Token = {
@@ -110,3 +77,20 @@ export type Routes = {
     [to: string]: Pair;
   };
 };
+
+export type Route = {
+  contract_addr: string;
+  from: string;
+  to: string;
+  children: Route[];
+};
+
+export type DataNetwork = {
+  tokens: Tokens;
+  pairs: PairResponse[];
+};
+
+export type Data = {
+  mainnet: DataNetwork;
+  testnet: DataNetwork;
+} & { [key: string]: DataNetwork };

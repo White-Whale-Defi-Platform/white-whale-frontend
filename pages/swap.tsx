@@ -1,6 +1,4 @@
-import React from 'react'
 import Swap from 'components/Pages/Swap'
-import Page from 'components/Page';
 
 function getInitialTokenPairFromSearchParams() {
   const params = new URLSearchParams(location.search)
@@ -9,14 +7,6 @@ function getInitialTokenPairFromSearchParams() {
   return from || to ? ([from, to] as const) : undefined
 }
 
-const SwapPage = () => {
-   
-  return (
-    <Page>
-      <Swap initialTokenPair={getInitialTokenPairFromSearchParams()} />
-    </Page>
-
-  )
-}
+const SwapPage = () => (<Swap initialTokenPair={getInitialTokenPairFromSearchParams()} />)
 
 export default SwapPage

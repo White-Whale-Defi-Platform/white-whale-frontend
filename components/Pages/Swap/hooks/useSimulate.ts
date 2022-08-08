@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useQuery } from 'react-query';
-import { toAsset } from "./asset";
+import { toAsset } from "services/asset";
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { SimulationResponse, ReverseSimulationResponse } from "hooks/types";
+import { SimulationResponse, ReverseSimulationResponse } from "types";
 
 type QuerySimulate = {
     client: SigningCosmWasmClient;
@@ -20,6 +20,14 @@ type SwapSimulate = {
     swapAddress: string;
     enabled: boolean;
 }
+
+export type Simulated = {
+    amount: string;
+    spread: string;
+    commission: string;
+    price: number;
+}
+
 
 const simulate = ({
     client,

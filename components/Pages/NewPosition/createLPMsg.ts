@@ -1,15 +1,13 @@
-import { isNativeAsset, toAsset, createAsset } from "hooks/asset";
-import { createExecuteMessage } from 'util/messages';
-import { coin } from "@cosmjs/proto-signing";
 import {
-  MsgExecuteContractEncodeObject,
-  SigningCosmWasmClient,
-} from '@cosmjs/cosmwasm-stargate'
+  MsgExecuteContractEncodeObject
+} from '@cosmjs/cosmwasm-stargate';
+import { coin } from "@cosmjs/proto-signing";
+import { createExecuteMessage } from 'util/messages';
+import { createAsset, isNativeAsset } from "../../../services/asset";
 
 import {
-  createIncreaseAllowanceMessage,
-  validateTransactionSuccess,
-} from 'util/messages'
+  createIncreaseAllowanceMessage
+} from 'util/messages';
 
 
 const createLpMsg = ({ tokenA, tokenB, amountA, amountB }) => {
@@ -41,7 +39,7 @@ export const createLPExecuteMsgs = (
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
           tokenAmount: amountA,
-          tokenAddress: tokenA.token_address,
+          tokenAddress: tokenA?.token_address,
           senderAddress : sender,
           swapAddress,
         })
@@ -51,7 +49,7 @@ export const createLPExecuteMsgs = (
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
           tokenAmount: amountB,
-          tokenAddress: tokenB.token_address,
+          tokenAddress: tokenB?.token_address,
           senderAddress : sender,
           swapAddress,
         })
@@ -63,10 +61,10 @@ export const createLPExecuteMsgs = (
     createExecuteMessage({
     senderAddress: sender,
     contractAddress: swapAddress,
-    message: createLpMsg({ tokenA: tokenA.token_address, tokenB : tokenB.token_address, amountA, amountB }),
+    message: createLpMsg({ tokenA: tokenA?.token_address, tokenB : tokenB?.token_address, amountA, amountB }),
     funds: [
-      isNativeA && coin(amountA, tokenA.denom),
-      isNativeB && coin(amountB, tokenB.denom),
+      isNativeA && coin(amountA, tokenA?.denom),
+      isNativeB && coin(amountB, tokenB?.denom),
     ].filter(Boolean),
   })]
 }

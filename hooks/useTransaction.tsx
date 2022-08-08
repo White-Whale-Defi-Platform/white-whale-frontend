@@ -163,7 +163,7 @@ export const useTransaction = ({
         onBroadcasting?.(data.transactionHash)
         toast({
           title: 'Swap Success.', 
-          description:  <Finder from={tokenA.symbol}  to={tokenB.symbol} txHash={data.transactionHash} chainId={client.chainId} /> ,
+          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > from: {tokenA.symbol}  to: {tokenB.symbol}  </Finder>,
           status: 'success',
           duration: 9000,
           position: "top-right",
