@@ -112,6 +112,11 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
     )
   }
 
+  const truncatWalletAddress = (addr:string) =>  {
+    const chainName =  addr.substring(0, addr.indexOf("1") | 4)
+    return `${chainName}${truncate(address, [0, 6])}`
+  }
+
   return (
     <>
       {/* <Select options={options} width="fit-content" onChange={onChainChanage} defaultSelcted={defaultChain} /> */}
@@ -136,7 +141,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
         <HStack spacing="3">
           <KeplrWalletIcon />
           <Text color="brand.200" size="16px">
-            {truncate(address, [4, 6])}
+            {truncatWalletAddress(address)}
           </Text>
         </HStack>
 

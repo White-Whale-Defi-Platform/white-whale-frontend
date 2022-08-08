@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useToast } from '@chakra-ui/react'
 import {
   CreateTxFailed, Timeout, TxFailed,
   TxUnspecifiedError, UserDenied
 } from '@terra-money/wallet-provider'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
-import { directTokenSwap } from '../services/swap'
-import useDebounceValue from './useDebounceValue'
-import { useToast } from '@chakra-ui/react'
-import Finder from '../components/Finder'
+import { executeAddLiquidity } from 'services/liquidity'
+import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**
@@ -44,14 +44,16 @@ type Params = {
   enabled: boolean;
   swapAddress:string;
   swapAssets: any[];
-  price: number;
+  price?: number;
   client: any;
   senderAddress: string;
   msgs: any | null;
   encodedMsgs: any | null;
-  amount: string;
+  amount?: string;
   gasAdjustment?: number;
   estimateEnabled?: boolean;
+  tokenAAmount? :number,
+  tokenBAmount? : number,
   onBroadcasting?: (txHash: string) => void;
   onSuccess?: (txHash: string, txInfo?: any) => void;
   onError?: (txHash?: string, txInfo?: any) => void;
@@ -67,6 +69,8 @@ export const useTransaction = ({
   encodedMsgs,
   amount,
   price,
+  tokenAAmount,
+  tokenBAmount,
   onBroadcasting,
   onSuccess,
   onError,
@@ -97,7 +101,7 @@ export const useTransaction = ({
           setButtonLabel('Insufficent funds')
           throw new Error('Insufficent funds')
         } else {
-          console.error(error)
+          console.error({error})
           setTxStep(TxStep.Idle)
           setError("Something went wrong")
           throw Error("Something went wrong")
@@ -105,7 +109,7 @@ export const useTransaction = ({
       }
     },
     {
-      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled,
+      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled && !!swapAddress,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -122,13 +126,16 @@ export const useTransaction = ({
 
   const { mutate } = useMutation(
     (data: any) => {
-      return directTokenSwap({
+
+      return executeAddLiquidity({
         tokenA,
+        tokenB,
+        tokenAAmount: Number((tokenAAmount)),
+        maxTokenBAmount: Number(tokenBAmount),
+        client,
         swapAddress,
         senderAddress,
-        msgs,
-        tokenAmount: Number(amount),
-        client,
+        msgs
       })
     },
     {
@@ -162,8 +169,8 @@ export const useTransaction = ({
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
         toast({
-          title: 'Swap Success.', 
-          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > from: {tokenA.symbol}  to: {tokenB.symbol}  </Finder>,
+          title: 'Add Liquidity Success.', 
+          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > TxHash:  </Finder> ,
           status: 'success',
           duration: 9000,
           position: "top-right",

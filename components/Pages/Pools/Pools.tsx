@@ -6,6 +6,7 @@ import FallbackImage from 'components/FallbackImage'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import Loader from '../../Loader';
+import { fromChainAmount } from "libs/num";
 
 
 
@@ -29,13 +30,11 @@ const Pools: FC<Props> = () => {
         [pools]
     )
 
-
-
     return (
         <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
                 <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
-                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/providelp`)}>Provide Liquidity</Button>
+                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New position</Button>
             </HStack>
 
             <Flex padding={10} width="1058px"
@@ -54,6 +53,12 @@ const Pools: FC<Props> = () => {
 
                     {
                         isLoading && <Loader />
+                    }
+
+                    {
+                        (!isLoading && !myPools.length) && (
+                            <Text py={10} color="white"> Your active liquidity positions will appear here. </Text>
+                        )
                     }
 
                     {
@@ -98,8 +103,13 @@ const Pools: FC<Props> = () => {
 
                                         </Box>
                                     </HStack>
+                                    <VStack>
+                                        <Text textAlign="center" > {pool.pool_id} </Text>
+                                        <Text fontSize="12" color="brand.200" textAlign="center" >
+                                            Balance : {fromChainAmount(pool.liquidity.providedTotal.tokenAmount)}
+                                        </Text>
+                                    </VStack>
 
-                                    <Text textAlign="center" > {pool.pool_id} </Text>
                                 </HStack>
                                 <Text width="15%" textAlign="right" > 33.24% </Text>
                                 <Text width="15%" textAlign="right" > $3.3M </Text>
@@ -108,9 +118,9 @@ const Pools: FC<Props> = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => router.push(`/pools/managelp?poolId=${pool?.pool_id}`)}
+                                        onClick={() => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`)}
                                     >
-                                        Add Liquidity
+                                        Manage liquidity
                                     </Button>
                                 </Box>
                             </Flex>

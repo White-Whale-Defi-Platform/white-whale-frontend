@@ -10,7 +10,8 @@ type ExecuteRemoveLiquidityArgs = {
   senderAddress: string
   swapAddress: string
   lpTokenAddress: string
-  client: SigningCosmWasmClient
+  client: SigningCosmWasmClient,
+  msgs:any
 }
 
 export const executeRemoveLiquidity = async ({
@@ -19,7 +20,9 @@ export const executeRemoveLiquidity = async ({
   senderAddress,
   lpTokenAddress,
   client,
+  msgs
 }: ExecuteRemoveLiquidityArgs) => {
+
   const increaseAllowanceMessage = createIncreaseAllowanceMessage({
     tokenAmount,
     senderAddress,
@@ -29,14 +32,8 @@ export const executeRemoveLiquidity = async ({
 
   const executeMessage = createExecuteMessage({
     senderAddress,
-    contractAddress: swapAddress,
-    message: {
-      remove_liquidity: {
-        amount: `${tokenAmount}`,
-        min_token1: `${0}`,
-        min_token2: `${0}`,
-      },
-    },
+    contractAddress: lpTokenAddress,
+    message: msgs,
   })
 
   return validateTransactionSuccess(

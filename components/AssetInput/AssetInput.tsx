@@ -7,7 +7,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import FallbackImage from 'components/FallbackImage'
 
 interface AssetInputProps {
-    image: boolean;
+    image?: boolean;
     token: any;
     value: any;
     onChange: (value: any) => void;

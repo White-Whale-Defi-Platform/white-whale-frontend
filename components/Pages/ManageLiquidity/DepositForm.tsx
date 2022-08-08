@@ -3,10 +3,10 @@ import AssetInput from 'components/AssetInput';
 import { FC, useEffect, useState, useMemo } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import { Asset } from 'types/blockchain';
-import { TokenItemState } from '../ManageLP/lpAtoms';
+import { TokenItemState } from './lpAtoms';
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { tokenLpAtom } from '../ManageLP/lpAtoms';
+import { tokenLpAtom } from './lpAtoms';
 import { walletState } from 'state/atoms/walletAtoms';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
@@ -39,6 +39,8 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
     const { chainId, key } = useRecoilValue(walletState)
     // const [resetForm, setResetForm] = useState(false)
 
+    const isInputDisabled = tx?.txStep == TxStep.Posting
+
     useEffect(() => {
 
         if (simulated)
@@ -61,11 +63,10 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
-            return 'Add Liquidity'
+            return 'Deposit'
 
     }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
 
-    const isInputDisabled = tx?.txStep == TxStep.Posting
 
 
 
@@ -92,6 +93,8 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                     render={({ field }) => (
                         <AssetInput {...field}
                             token={tokenA}
+                            disabled={isInputDisabled}
+                            balance={tokenABalance}
                             showList={false}
                             onChange={(value) => { onInputChange(value, 0); field.onChange(value) }}
                         />
@@ -110,7 +113,9 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput {...field}
+                            disabled={isInputDisabled}
                             token={tokenB}
+                            balance={tokenBBalance}
                             showList={false}
                             onChange={(value) => { onInputChange(value, 1); field.onChange(value) }}
                         />

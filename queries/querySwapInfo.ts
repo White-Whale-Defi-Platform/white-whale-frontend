@@ -1,8 +1,9 @@
 import { getSwapInfo } from '../services/swap'
 
 export async function querySwapInfo({ context: { client }, swap_address }) {
+
   const swap = await getSwapInfo(swap_address, client)
-  const [asset1, asset2] = swap.assets
+  const [asset1, asset2] = swap?.assets || []
   return {
     ...swap,
     swap_address,

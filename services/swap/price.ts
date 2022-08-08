@@ -101,7 +101,7 @@ export const getSwapInfo = async (
           swapAddress,
           client,
         })}`
-      )
+      ) 
     }
 
     return await client.queryContractSmart(swapAddress, {
