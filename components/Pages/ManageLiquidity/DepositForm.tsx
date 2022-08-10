@@ -9,7 +9,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { tokenLpAtom } from './lpAtoms';
 import { walletState } from 'state/atoms/walletAtoms';
 import { TxStep } from 'hooks/useTransaction';
-import { fromChainAmount } from "libs/num";
+import { fromChainAmount, num } from "libs/num";
 
 
 type Props = {
@@ -21,9 +21,11 @@ type Props = {
     // setResetForm: (value: boolean) => void
     simulated: string | null;
     onInputChange: (asset: TokenItemState, index: number) => void;
+    setReverse: (value: boolean) => void;
+    reverse: boolean;
 }
 
-const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }: Props) => {
+const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, setReverse, reverse }: Props) => {
 
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
@@ -43,10 +45,20 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
 
     useEffect(() => {
 
-        if (simulated)
-            setValue('token2', { ...tokenA, amount: Number(simulated) })
+        if (simulated) {
+            if (reverse)
+                setValue('token1', { ...tokenB, amount: num(simulated).toNumber() })
+            else
+                setValue('token2', { ...tokenA, amount: num(simulated).toNumber() })
+        }
+        else {
+            setValue('token1', { ...tokenA, amount: 0 })
+            setValue('token2', { ...tokenB, amount: 0 })
+        }
 
-    }, [simulated])
+        return () => tx?.reset()
+
+    }, [simulated, reverse])
 
     const amountA = getValues('token1')
     const amountB = getValues('token2')
@@ -58,14 +70,14 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
             return 'Connect wallet'
         else if (!tokenB?.tokenSymbol)
             return 'Select token'
-        else if (!!!tokenA?.amount)
+        else if (!!!amountA?.amount)
             return 'Enter amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
             return 'Deposit'
 
-    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
+    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
 
 
@@ -92,11 +104,12 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput {...field}
+                            minMax={false}
                             token={tokenA}
                             disabled={isInputDisabled}
                             balance={tokenABalance}
                             showList={false}
-                            onChange={(value) => { onInputChange(value, 0); field.onChange(value) }}
+                            onChange={(value) => { setReverse(false); onInputChange(value, 0); field.onChange(value) }}
                         />
                     )}
                 />
@@ -113,11 +126,12 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput {...field}
-                            disabled={isInputDisabled}
+                            minMax={false}
+                            disabled={isInputDisabled || !tokenB?.tokenSymbol}
                             token={tokenB}
                             balance={tokenBBalance}
                             showList={false}
-                            onChange={(value) => { onInputChange(value, 1); field.onChange(value) }}
+                            onChange={(value) => { setReverse(true); onInputChange(value, 1); field.onChange(value) }}
                         />
                     )}
                 />
@@ -141,7 +155,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated }
                 width="full"
                 variant="primary"
                 isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
-                disabled={tx.txStep != TxStep.Ready}
+                disabled={tx.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}
             </Button>

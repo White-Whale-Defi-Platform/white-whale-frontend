@@ -20,6 +20,7 @@ const ManageLiquidity: FC = () => {
     const params = new URLSearchParams(location.search)
     const { chainId, key } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState(false)
+    const [reverse, setReverse] = useState<boolean>(false)
 
 
     const poolId = useMemo(() => {
@@ -31,7 +32,7 @@ const ManageLiquidity: FC = () => {
     // usePoolFromListQueryById returns PoolEntityType which includes the swap addr and lp staking addr
     const [pool] = usePoolFromListQueryById({ poolId })
 
-    const { simulated, tx } = useProvideLP()
+    const { simulated, tx } = useProvideLP({reverse})
 
 
     useEffect(() => {
@@ -93,7 +94,7 @@ const ManageLiquidity: FC = () => {
             </HStack>
 
             <Box
-                bg="#212121"
+                background="#1C1C1C"
                 padding={12}
                 borderRadius="30px"
             >
@@ -106,17 +107,19 @@ const ManageLiquidity: FC = () => {
                     px="4"
                     py="8"
                     // boxSize="md"
-                    maxW="500px"
+                    maxW="600px"
                     maxH="fit-content"
                 >
                     <Tabs variant="brand">
-                        <TabList justifyContent="center" bg="#212121">
+                        <TabList justifyContent="center" background="#1C1C1C">
                             <Tab>Deposit</Tab>
                             <Tab>Withdraw</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
                                 <DepositForm
+                                    setReverse={setReverse}
+                                    reverse={reverse}
                                     connected={Boolean(key?.name)}
                                     tokenA={tokenA}
                                     tokenB={tokenB}

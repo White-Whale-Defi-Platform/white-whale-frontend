@@ -1,5 +1,6 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { Pool } from '../../types/common'
+import { Pool } from 'types'
+import { num } from 'libs/num'
 
 export interface GetToken1ForToken2PriceInput {
   nativeAmount: number
@@ -13,23 +14,11 @@ export const getToken1ForToken2Price = async ({
   client,
 }: GetToken1ForToken2PriceInput) => {
   try {
-    const response = await client.queryContractSmart(swapAddress, {
-      'simulation': {
-
-        // token1_amount: `${nativeAmount}`,
-        "offer_asset": {
-          "info" : {
-            "native_token": {
-                "denom": "ujunox"
-            }
-        },
-          "amount": "50"
-      }
-
-
-      },
+    const {assets} = await client.queryContractSmart(swapAddress, {
+      pool: {}
     })
-    return response.return_amount
+    const [asset1, asset2] = assets
+    return num(asset1.amount).dividedBy(asset2.amount).toString()
   } catch (e) {
     console.error('err(getToken1ForToken2Price):', e)
   }

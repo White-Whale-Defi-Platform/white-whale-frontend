@@ -42,7 +42,7 @@ export enum TxStep {
 
 type Params = {
   enabled: boolean;
-  swapAddress:string;
+  swapAddress: string;
   swapAssets: any[];
   price: number;
   client: any;
@@ -86,7 +86,7 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if(!!buttonLabel)  setButtonLabel(null)
+        if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
@@ -96,7 +96,14 @@ export const useTransaction = ({
           setError("Insufficent funds")
           setButtonLabel('Insufficent funds')
           throw new Error('Insufficent funds')
-        } else {
+        }
+        else if (/Max spread assertion/i.test(error.toString())) {
+          console.error(error)
+          setTxStep(TxStep.Idle)
+          setError("Try increasing slippage")
+          throw new Error('Try increasing slippage')
+        }
+        else {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError("Something went wrong")
@@ -118,7 +125,7 @@ export const useTransaction = ({
     }
   )
 
-  
+
 
   const { mutate } = useMutation(
     (data: any) => {
@@ -162,8 +169,8 @@ export const useTransaction = ({
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
         toast({
-          title: 'Swap Success.', 
-          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > from: {tokenA.symbol}  to: {tokenB.symbol}  </Finder>,
+          title: 'Swap Success.',
+          description: <Finder txHash={data.transactionHash} chainId={client.chainId} > from: {tokenA.symbol}  to: {tokenB.symbol}  </Finder>,
           status: 'success',
           duration: 9000,
           position: "top-right",
@@ -174,75 +181,75 @@ export const useTransaction = ({
     },
   )
 
-const { data: txInfo } = useQuery(
-  ['txInfo', txHash],
-  () => {
-    if (txHash == null) {
+  const { data: txInfo } = useQuery(
+    ['txInfo', txHash],
+    () => {
+      if (txHash == null) {
+        return
+      }
+
+      return client.queryClient.tx.getTx(txHash)
+    },
+    {
+      enabled: txHash != null,
+      retry: true,
+    },
+  )
+
+
+  const reset = () => {
+    setError(null)
+    setTxHash(undefined)
+    setTxStep(TxStep.Idle)
+  }
+
+  const submit = useCallback(async () => {
+    if (fee == null || msgs == null || msgs.length < 1) {
       return
     }
 
-    return client.queryClient.tx.getTx(txHash)
-  },
-  {
-    enabled: txHash != null,
-    retry: true,
-  },
-)
+    mutate({
+      msgs,
+      fee
+    })
+  }, [msgs, fee, mutate, price])
 
-
-const reset = () => {
-  setError(null)
-  setTxHash(undefined)
-  setTxStep(TxStep.Idle)
-}
-
-const submit = useCallback(async () => {
-  if (fee == null || msgs == null || msgs.length < 1) {
-    return
-  }
-
-  mutate({
-    msgs,
-    fee
-  })
-}, [msgs, fee, mutate, price])
-
-useEffect(() => {
-  if (txInfo != null && txHash != null) {
-    if (txInfo?.txResponse?.code) {
-      setTxStep(TxStep.Failed)
-      onError?.(txHash, txInfo)
-    } else {
-      setTxStep(TxStep.Success)
-      onSuccess?.(txHash, txInfo)
+  useEffect(() => {
+    if (txInfo != null && txHash != null) {
+      if (txInfo?.txResponse?.code) {
+        setTxStep(TxStep.Failed)
+        onError?.(txHash, txInfo)
+      } else {
+        setTxStep(TxStep.Success)
+        onSuccess?.(txHash, txInfo)
+      }
     }
-  }
-}, [txInfo, onError, onSuccess, txHash])
+  }, [txInfo, onError, onSuccess, txHash])
 
-useEffect(() => {
-  if (error) {
-    setError(null)
-  }
+  useEffect(() => {
+    if (error) {
+      setError(null)
+    }
 
 
-  if (txStep != TxStep.Idle) {
-    setTxStep(TxStep.Idle)
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [debouncedMsgs])
+    if (txStep != TxStep.Idle) {
+      setTxStep(TxStep.Idle)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedMsgs])
 
-return useMemo(() => {
-  return {
-    fee,
-    buttonLabel,
-    submit,
-    txStep,
-    txInfo,
-    txHash,
-    error,
-    reset,
-  }
-}, [txStep, txInfo, txHash, error, reset, fee])
+  return useMemo(() => {
+    return {
+      fee,
+      buttonLabel,
+      submit,
+      txStep,
+      txInfo,
+      txHash,
+      error,
+      reset,
+    }
+  }, [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

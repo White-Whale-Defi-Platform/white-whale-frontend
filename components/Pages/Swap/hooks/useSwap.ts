@@ -10,7 +10,7 @@ import useSimulate, {Simulated} from "./useSimulate";
 import useTransaction from "hooks/useTransaction";
 import { tokenSwapAtom } from "components/Pages/Swap/swapAtoms";
 import { slippageAtom } from 'components/Pages/Swap/swapAtoms'
-import { fromChainAmount } from "libs/num";
+import { fromChainAmount, num } from "libs/num";
 
 
 const useSwap = ({ reverse }) => {
@@ -39,7 +39,7 @@ const useSwap = ({ reverse }) => {
         if (simulated?.amount == null) return null
 
         return minAmountReceive({
-            amount: reverse ? String(swapTokenB?.amount) : fromChainAmount(simulated.amount),
+            amount: reverse ? num(swapTokenB?.amount).toString() : fromChainAmount(simulated.amount),
             maxSpread: String(slippage),
         });
     }, [simulated?.amount, slippage, reverse, swapTokenB?.amount]);
@@ -62,8 +62,8 @@ const useSwap = ({ reverse }) => {
                     token,
                     amount: reverse ? simulated?.amount : amount,
                     denom,
-                    slippage: String(slippage),
-                    price: simulated.price.toString(),
+                    slippage: num(slippage).dp(3).toString(),
+                    price: num(simulated.price).dp(6).toString(),
                     swapAddress
                 },
                 address,

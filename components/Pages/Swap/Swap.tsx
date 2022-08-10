@@ -9,6 +9,7 @@ import { walletState } from 'state/atoms/walletAtoms';
 import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
 import defaultTokens from './defaultTokens.json'
+import {usePriceForOneToken} from "./hooks/usePriceForOneToken"
 
 
 
@@ -35,15 +36,7 @@ const Swap: FC<SwapProps> = ({  }) => {
         }
     }, [chainId])
 
-    const { tx, simulated, minReceive } 
-    // : {
-    //     tx: any,
-    //     simulated : Simulated,
-    //     minReceive:  string
-    // } 
-    = useSwap({
-        reverse
-    })
+    const { tx, simulated, minReceive } = useSwap({ reverse})
 
     const onInputChange = ({ tokenSymbol, amount }, index: number) => {
         if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)

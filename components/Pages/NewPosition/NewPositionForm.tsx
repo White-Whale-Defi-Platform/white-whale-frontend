@@ -18,6 +18,8 @@ type Props = {
     setResetForm: (value: boolean) => void
     simulated: string | null;
     onInputChange: (asset: TokenItemState, index: number) => void;
+    setReverse: (value: boolean) => void;
+    reverse: boolean;
 }
 
 const NewPositionForm: FC<Props> = ({
@@ -28,7 +30,9 @@ const NewPositionForm: FC<Props> = ({
     simulated,
     tx,
     resetForm,
-    setResetForm
+    setResetForm,
+    setReverse,
+    reverse
 }) => {
     const { control, handleSubmit, formState, setValue, getValues } = useForm({
         mode: "onChange",
@@ -54,10 +58,19 @@ const NewPositionForm: FC<Props> = ({
 
     useEffect(() => {
 
-        if (simulated)
-            setValue('token2', { ...tokenA, amount: Number(simulated) })
+        if (simulated) {
+            console.log({ simulated, reverse })
+            if (reverse)
+                setValue('token1', { ...tokenA, amount: Number(simulated) })
+            else
+                setValue('token2', { ...tokenA, amount: Number(simulated) })
+        }
+        else {
+            setValue('token1', { ...tokenA, amount: 0 })
+            setValue('token2', { ...tokenB, amount: 0 })
+        }
 
-    }, [simulated])
+    }, [simulated, reverse])
 
     const buttonLabel = useMemo(() => {
 
@@ -104,10 +117,11 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            minMax={false}
                             disabled={isInputDisabled}
                             balance={tokenABalance}
                             {...field} token={tokenA}
-                            onChange={(value) => { onInputChange(value, 0); field.onChange(value) }}
+                            onChange={(value) => { setReverse(false); onInputChange(value, 0); field.onChange(value) }}
                         />
                     )}
                 />
@@ -124,10 +138,11 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            minMax={false}
                             disabled={isInputDisabled}
                             balance={tokenBBalance}
                             {...field} token={tokenB}
-                            onChange={(value) => { onInputChange(value, 1); field.onChange(value) }}
+                            onChange={(value) => { setReverse(true); onInputChange(value, 1); field.onChange(value) }}
                         />
                     )}
                 />
@@ -151,7 +166,7 @@ const NewPositionForm: FC<Props> = ({
                 width="full"
                 variant="primary"
                 isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
-                disabled={tx.txStep != TxStep.Ready}
+                disabled={tx.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}
             </Button>

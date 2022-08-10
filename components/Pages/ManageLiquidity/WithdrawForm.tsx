@@ -63,10 +63,10 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
 
     }, [tx?.buttonLabel, connected, token?.amount])
 
-    const onInputChange= (value) => {
+    const onInputChange = (value) => {
         if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
-        tx.reset()
-        
+            tx.reset()
+
         setToken(value)
     }
 
@@ -90,6 +90,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                 </HStack>
 
                 <AssetInput
+                    isSingleInput={true}
                     disabled={isInputDisabled}
                     value={token}
                     balance={Number(tokenBalance)}
