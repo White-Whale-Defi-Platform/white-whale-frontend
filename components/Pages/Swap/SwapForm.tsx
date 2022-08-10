@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton, Text, VStack, Hide } from '@chakra-ui/react';
+import { Button, HStack, IconButton, Text, VStack, Hide, Show } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
 import { useEffect, FC, useMemo } from 'react';
@@ -7,7 +7,8 @@ import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { TokenItemState } from './swapAtoms';
-import {Simulated} from './hooks/useSimulate'
+import { Simulated } from './hooks/useSimulate'
+import {num} from 'libs/num'
 
 
 type Props = {
@@ -132,7 +133,7 @@ const SwapForm: FC<Props> = ({
             borderRadius="30px"
             alignItems="flex-start"
             minH={400}
-            maxWidth={{ base: 'full', md: 600 }}
+            maxWidth={{ base: 'full', md: 650 }}
             gap={4}
             as="form"
             onSubmit={handleSubmit(tx?.submit)}
@@ -150,19 +151,17 @@ const SwapForm: FC<Props> = ({
                         <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(2)}</Text>
                     </HStack>
 
-                    <HStack >
-                        <Hide above='md'>
-                            <Button variant="outline" size="xs" maxW="fit-content" onClick={() => {
-                                setReverse(false);
-                                onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
-                                setValue("tokenA", { ...tokenA, amount: tokenABalance / 2 }, { shouldValidate: true })
-                            }}>half</Button>
-                            <Button variant="outline" size="xs" onClick={() => {
-                                setReverse(false);
-                                onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
-                                setValue("tokenA", { ...tokenA, amount: tokenABalance }, { shouldValidate: true })
-                            }}>max</Button>
-                        </Hide>
+                    <HStack visibility={{ base: 'visible', md: 'hidden' }}>
+                        <Button variant="outline" size="xs" maxW="fit-content" onClick={() => {
+                            setReverse(false);
+                            onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
+                            setValue("tokenA", { ...tokenA, amount: tokenABalance / 2 }, { shouldValidate: true })
+                        }}>half</Button>
+                        <Button variant="outline" size="xs" onClick={() => {
+                            setReverse(false);
+                            onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
+                            setValue("tokenA", { ...tokenA, amount: tokenABalance }, { shouldValidate: true })
+                        }}>max</Button>
                     </HStack>
                 </HStack>
                 <Controller
@@ -242,7 +241,7 @@ const SwapForm: FC<Props> = ({
                 width="full"
                 variant="primary"
                 isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
-                disabled={tx.txStep != TxStep.Ready}
+                disabled={tx.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}
             </Button>
@@ -253,11 +252,11 @@ const SwapForm: FC<Props> = ({
                     <Text
                         color="brand.500"
                         fontSize={12}>
-                        1 {tokenA.tokenSymbol} = {Number(amountB.amount / amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
+                        1 {tokenA.tokenSymbol} = {num(amountB.amount).div(amountA.amount).toFixed(6)} {tokenB.tokenSymbol}
                     </Text>
                     <HStack justifyContent="space-between" width="full">
                         <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                        <Text color="brand.500" fontSize={12}> Min Receive: {Number(minReceive)?.toFixed(1)} </Text>
+                        <Text color="brand.500" fontSize={12}> Min Receive: {minReceive} </Text>
                     </HStack>
                 </VStack>
             )}

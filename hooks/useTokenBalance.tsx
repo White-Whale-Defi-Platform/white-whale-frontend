@@ -116,7 +116,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
     [queryKey, address, chainId, network],
     async () => {
       const balances = await Promise.all(
-        tokenSymbols.map((tokenSymbol) =>
+        tokenSymbols.filter(Boolean).map((tokenSymbol) =>
           {
 
             return fetchTokenBalance({

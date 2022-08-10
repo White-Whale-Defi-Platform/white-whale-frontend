@@ -7,10 +7,13 @@ import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
 import { useBaseTokenInfo } from '../hooks/useTokenInfo'
 import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
+import { useRecoilValue } from 'recoil'
+import { walletState } from '../state/atoms/walletAtoms'
 
 export const useGetTokenDollarValueQuery = () => {
   const tokenA = useBaseTokenInfo()
-  const client = useCosmWasmClient()
+  // const client = useCosmWasmClient()
+  const {client} = useRecoilValue(walletState)
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     tokenA?.symbol
   )

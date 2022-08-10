@@ -100,6 +100,12 @@ export const useTransaction = ({
           setError("Insufficent funds")
           setButtonLabel('Insufficent funds')
           throw new Error('Insufficent funds')
+        } 
+       else if (/Max spread assertion/i.test(error.toString())) {
+          console.error(error)
+          setTxStep(TxStep.Idle)
+          setError("Try increasing slippage")
+          throw new Error('Try increasing slippage')
         } else {
           console.error({error})
           setTxStep(TxStep.Idle)

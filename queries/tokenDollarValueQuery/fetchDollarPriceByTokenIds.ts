@@ -5,7 +5,8 @@ export const fetchDollarPriceByTokenIds = debounce(
     const apiIds = tokenIds.flat().join(',')
 
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${apiIds}&vs_currencies=usd`,
+      // `https://api.coingecko.com/api/v3/simple/price?ids=${apiIds}&vs_currencies=usd`,
+      `https://api.coingecko.com/api/v3/simple/price?ids=juno-network&vs_currencies=usd`,
       {
         method: 'GET',
       }

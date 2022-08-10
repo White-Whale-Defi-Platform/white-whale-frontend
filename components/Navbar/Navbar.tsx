@@ -104,11 +104,7 @@ const Navbar = ({ }) => {
         <VStack width="full">
           <HStack justifyContent="space-between" width="full">
 
-            <Link href="/" passHref>
-              <a>
-                <Logo />
-              </a>
-            </Link>
+            <Logo />
             <IconButton
               aria-label="Open drawer"
               variant="ghost"
@@ -143,9 +139,9 @@ const Navbar = ({ }) => {
         <DrawerContent>
           <DrawerCloseButton />
 
-          <DrawerBody>
+          <DrawerBody as={VStack} alignItems="flex-start">
             {links.map(({ lable, link }) => (
-              <DrawerLink text={lable} href={link} onClick={onClose} />
+              <DrawerLink key={lable} text={lable} href={link} onClick={onClose} />
             ))}
           </DrawerBody>
         </DrawerContent>

@@ -9,7 +9,7 @@ import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms';
 import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg';
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
 
-const useProvideLP = () => {
+const useProvideLP = ({reverse = false}) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
     const { address, client } = useRecoilValue(walletState)
     const tokenA = useTokenInfo(lpTokenA?.tokenSymbol)
@@ -29,30 +29,30 @@ const useProvideLP = () => {
   const tokenBAmount = toChainAmount(lpTokenB?.amount)
 
   const simulated = useMemo(() => {
-    if (!lpTokenA?.amount) return null
+    if((!reverse && !lpTokenA?.amount) || (reverse && !lpTokenB?.amount) )  return null
 
-    const normalizedValue = lpTokenA.amount || 0;
-    const ratio = num(tokenBReserve).div(tokenAReserve);
+    const normalizedValue = reverse? lpTokenB.amount : lpTokenA.amount || 0;
+    const ratio = reverse? num(tokenAReserve).div(tokenBReserve) : num(tokenBReserve).div(tokenAReserve);
     return num(normalizedValue).times(ratio).toFixed(6);
 
-  }, [lpTokenA, swapAddress, tokenAReserve, tokenBReserve])
+  }, [lpTokenA, lpTokenB, swapAddress, tokenAReserve, tokenBReserve, reverse])
 
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (simulated == null) return {};
+    if (simulated == null ) return {};
 
     return {
       msgs: createLpMsg({
-        tokenA: tokenA?.token_address,
-        amountA: tokenAAmount,
+        tokenA:  tokenA?.token_address,
+        amountA: reverse? toChainAmount(simulated) : tokenAAmount,
         tokenB: tokenB?.token_address,
-        amountB: toChainAmount(simulated),
+        amountB:  reverse ?  tokenBAmount: toChainAmount(simulated),
       }),
       encodedMsgs: createLPExecuteMsgs({
         tokenA,
-        amountA: tokenAAmount,
+        amountA: reverse ? toChainAmount(simulated) : tokenAAmount,
         tokenB,
-        amountB: toChainAmount(simulated),
+        amountB: reverse? tokenBAmount :  toChainAmount(simulated),
         swapAddress
       }, address)
     }
@@ -66,8 +66,8 @@ const useProvideLP = () => {
     client,
     msgs,
     encodedMsgs,
-    tokenAAmount: Number(tokenAAmount),
-    tokenBAmount: Number(toChainAmount(simulated)),
+    tokenAAmount: reverse ? num(toChainAmount(simulated)).toNumber() : num(tokenAAmount).toNumber(),
+    tokenBAmount: reverse ? num(tokenBAmount).toNumber() : num(toChainAmount(simulated)).toNumber(),
     onSuccess: () => { },
     onError: () => { }
   });

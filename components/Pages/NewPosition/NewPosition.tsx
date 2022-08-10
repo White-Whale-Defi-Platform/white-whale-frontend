@@ -17,6 +17,7 @@ const NewPosition: FC = () => {
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenLpAtom)
     const { chainId, key } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState(false)
+    const [reverse, setReverse] = useState<boolean>(false)
 
     useEffect(() => {
         if (chainId) {
@@ -46,12 +47,12 @@ const NewPosition: FC = () => {
         setTokenSwapState(newState)
     }
 
-    const { simulated, tx } = useProvideLP()
+    const { simulated, tx } = useProvideLP({reverse})
 
 
     return (
-        <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5} margin="auto">
-            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4, md: 14 }} >
+        <VStack width={{ base: '100%', md: '600px' }} alignItems="center" padding={5} margin="auto">
+            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4, md: 4 }} >
                 <IconButton
                     variant="unstyled"
                     color="#7A7A7A"
@@ -64,6 +65,8 @@ const NewPosition: FC = () => {
             </HStack>
 
             <NewPositionForm
+                setReverse={setReverse}
+                reverse={reverse}
                 connected={Boolean(key?.name)}
                 tokenA={tokenA}
                 tokenB={tokenB}
