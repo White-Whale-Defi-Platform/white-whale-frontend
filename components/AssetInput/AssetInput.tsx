@@ -1,4 +1,4 @@
-import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Divider, Show, Box } from '@chakra-ui/react';
+import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Stack } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import AssetSelectModal from './AssetSelectModal';
 import { FC } from 'react'
@@ -17,6 +17,7 @@ interface AssetInputProps {
     disabled?: boolean;
     minMax?: boolean
     isSingleInput?: boolean;
+    hideToken?: string;
 }
 
 
@@ -30,7 +31,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
     showList = true,
     disabled,
     minMax = true,
-    isSingleInput = false
+    isSingleInput = false,
+    hideToken
 
 },
     ref) => {
@@ -38,12 +40,17 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
     return (
-        <HStack width="full" spacing={0}>
+        <Stack
+            direction={['column-reverse', "row"]}
+            width="full"
+            spacing={0}
+            gap={[3, 0]}
+        >
             <HStack
                 width="full"
                 border="1px solid rgba(255, 255, 255, 0.1)"
                 borderLeftRadius="30px"
-                borderRight="unset"
+                borderRightRadius={["30px", "unset"]}
                 height={12}
                 paddingLeft={6}
                 paddingRight={3}
@@ -77,19 +84,22 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
 
 
             <HStack
-                minWidth="180px"
+                // minWidth="180px"
+                width={["full", "180px"]}
                 border="1px solid rgba(255, 255, 255, 0.1)"
                 borderRightRadius="30px"
+                borderLeftRadius={["30px", "unset"]}
                 height={12}
                 paddingX={2}
+                justifyContent={'flex-end'}
 
             >
                 <HStack flex={1}>
                     {
                         showList ? (
-                            <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol} disabled={disabled}>
+                            <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol || hideToken} disabled={disabled}>
                                 {tokenInfo?.symbol ? (
-                                    <>
+                                    <HStack>
                                         {
                                             image && (
                                                 <Image
@@ -103,7 +113,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                         }
                                         <Text fontSize="16px" fontWeight="400">{tokenInfo?.symbol || 'Select Token'}</Text>
 
-                                    </>) :
+                                    </HStack>) :
                                     <Text
                                         paddingLeft="10px"
                                         fontSize="18px"
@@ -127,9 +137,9 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                         ) : (
                             <HStack
                                 justifyContent="flex-start"
-                                width="200px"
+                                width={["full", "160px"]}
                                 sx={{ 'button': { margin: 'unset' } }}
-                                // paddingX={3}
+                            // paddingX={3}
                             // style={{ margin: "unset" }}
                             >
                                 {image && <Image
@@ -142,7 +152,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                 }
 
                                 <Text
-                                    paddingLeft="10px"
+                                    paddingLeft={ !image && "10px"}
                                     fontSize="16px"
                                     fontWeight="400">{tokenInfo?.symbol || token?.tokenSymbol}</Text>
                             </HStack>
@@ -150,7 +160,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                     }
                 </HStack>
             </HStack>
-        </HStack>
+        </Stack>
 
     )
 

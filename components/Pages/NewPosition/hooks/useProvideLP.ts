@@ -59,6 +59,7 @@ const useProvideLP = ({reverse = false}) => {
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount]);
 
   const tx = useTransaction({
+    poolId,
     enabled: !!encodedMsgs,
     swapAddress,
     swapAssets: [tokenA, tokenB],

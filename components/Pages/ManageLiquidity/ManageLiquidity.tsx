@@ -32,7 +32,7 @@ const ManageLiquidity: FC = () => {
     // usePoolFromListQueryById returns PoolEntityType which includes the swap addr and lp staking addr
     const [pool] = usePoolFromListQueryById({ poolId })
 
-    const { simulated, tx } = useProvideLP({reverse})
+    const { simulated, tx } = useProvideLP({ reverse })
 
 
     useEffect(() => {
@@ -95,8 +95,10 @@ const ManageLiquidity: FC = () => {
 
             <Box
                 background="#1C1C1C"
-                padding={12}
+                padding={[6, 12]}
+                paddingTop={[10]}
                 borderRadius="30px"
+                width={["full"]}
             >
 
 
@@ -104,8 +106,9 @@ const ManageLiquidity: FC = () => {
                     border="2px"
                     borderColor="whiteAlpha.200"
                     borderRadius="3xl"
-                    px="4"
-                    py="8"
+                    // px="4"
+                    // py="8"
+                    pt="8"
                     // boxSize="md"
                     maxW="600px"
                     maxH="fit-content"
@@ -116,7 +119,7 @@ const ManageLiquidity: FC = () => {
                             <Tab>Withdraw</Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
+                            <TabPanel padding={4}>
                                 <DepositForm
                                     setReverse={setReverse}
                                     reverse={reverse}
@@ -128,7 +131,7 @@ const ManageLiquidity: FC = () => {
                                     tx={tx}
                                 />
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel padding={4}>
                                 <WithdrawForm
                                     connected={Boolean(key?.name)}
                                     tokenA={{

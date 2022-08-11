@@ -37,7 +37,7 @@ const Pools: FC<Props> = () => {
                 <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New position</Button>
             </HStack>
 
-            <Flex padding={10} width="1058px"
+            <Flex padding={10} width={["full","1058px"]}
                 background="#1C1C1C"
                 boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
                 borderRadius="30px">
@@ -52,6 +52,7 @@ const Pools: FC<Props> = () => {
                     </Flex>
 
                     {
+                        
                         isLoading && <Loader />
                     }
 
@@ -62,12 +63,12 @@ const Pools: FC<Props> = () => {
                     }
 
                     {
-                        myPools.map(pool => (
+                        myPools.map((pool, index) => (
                             <Flex
                                 key={pool?.pool_id}
                                 width="full"
                                 alignItems="center"
-                                borderBottom="1px solid"
+                                borderBottom={index === myPools.length -1 ? "unset" : "1px solid"}
                                 borderBottomColor="whiteAlpha.300"
                                 paddingY={5}
                             >
@@ -78,9 +79,9 @@ const Pools: FC<Props> = () => {
                                             boxShadow="xl"
                                             borderRadius="full"
                                             // p="1"
-                                            border="2px solid rgba(255, 255, 255, 0.1);"
+                                            // border="2px solid rgba(255, 255, 255, 0.1);"
                                             position="relative"
-                                            zIndex="2"
+                                            // zIndex=""
                                         >
                                             <Image
                                                 src={pool.pool_assets?.[0].logoURI}
@@ -88,12 +89,12 @@ const Pools: FC<Props> = () => {
                                                 fallback={<FallbackImage width="8" height='8' color={["#5DB7DE", "#343434"]} />} />
                                         </Box>
                                         <Box
-                                            border="2px solid rgba(255, 255, 255, 0.1);"
+                                            // border="2px solid rgba(255, 255, 255, 0.1);"
                                             borderRadius="full"
                                             // p="1"
-                                            style={{
-                                                marginLeft: "-15px"
-                                            }}
+                                            // style={{
+                                            //     marginLeft: "-15px"
+                                            // }}
                                         >
                                             <Image
                                                 src={pool.pool_assets?.[1].logoURI}
@@ -103,7 +104,7 @@ const Pools: FC<Props> = () => {
 
                                         </Box>
                                     </HStack>
-                                    <VStack>
+                                    <VStack width="full">
                                         <Text textAlign="center" > {pool.pool_id} </Text>
                                         <Text fontSize="12" color="brand.200" textAlign="center" >
                                             Balance : {fromChainAmount(pool.liquidity.providedTotal.tokenAmount)}

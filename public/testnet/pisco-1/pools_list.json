@@ -50,8 +50,8 @@
           "denom": "lunaone"
         }
       ],
-      "lp_token" : "terra15ha8qt5hypqatl7gfv9yf8s5m9f4qft5yezc5m533yxuftqkt26swhh5lt",
-      "swap_address": "terra1hmuf5ce46snmp93avhzrvmgpn2mtsv6jgx7vy3932ram7htdduesw70wpu",
+      "lp_token" : "terra1gg95kafta4rqpqh8z4q2p9yt76fkvu6dyc3mv6uqn75e242xtsxqkm0atp",
+      "swap_address": "terra1v75km8nwwtjp0ttkptrqfc6gd7h2e628nz905mfggj3720gvyn0s4uz999",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -83,8 +83,8 @@
           "denom": "lunatwo"
         }
       ],
-      "lp_token" : "terra1sydk40ej0ytgvel68zvv6z3elz8eu6efw0mmjrdqf5h6zvszr9xq6yd79v",
-      "swap_address": "terra1ue5yv5lav9d5ztfcmds3r8tayasepkntjl5lzqjlzx6zyy2qcwvswxss36",
+      "lp_token" : "terra10fwrwphp6ylxmq99yu37w8e93lw39n7ptqw0hdxy73jfheptxq6q2h0c5z",
+      "swap_address": "terra1u8qnt3avwvzhgh9k0ltv2zusnlq2d4avufkwpzpr3yt9lpv2dptqpge22q",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -116,8 +116,8 @@
           "denom": "lunatwo"
         }
       ],
-      "lp_token" : "terra18c2c73j2sm28k7rjg5hgunjcxk0tuzajqklnzq8vs222mxt2zedqqy7vam",
-      "swap_address": "terra1lmrlqq4v3qtqsgk0r9jjx3et5y2jlwxhcur6sn3r80wf2p0mwk7q8j3fuh",
+      "lp_token" : "terra1nj9d93f2xkr583pvxnmtvtg09w45rxfm2kxj7u2wqwu7sx3kqunqvtwmx8",
+      "swap_address": "terra1xh7gzf4yh2dqek52v7fsvfh6qzh0tchcrfdau6q0qhx58ed8su9q3j7sse",
       "staking_address": "",
       "rewards_tokens": []
     }

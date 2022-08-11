@@ -10,9 +10,10 @@ type Props = {
     token: TokenItemState;
     contract: string;
     swapAddress: string
+    poolId: string
 }
 
-const useWithdraw = ({ token, contract, swapAddress }: Props) => {
+const useWithdraw = ({ token, contract, swapAddress, poolId }: Props) => {
     const { address, client } = useRecoilValue(walletState)
 
     const amount = toChainAmount(token?.amount)
@@ -35,6 +36,7 @@ const useWithdraw = ({ token, contract, swapAddress }: Props) => {
     }, [amount, contract]);
 
     return useTransaction({
+        poolId,
         enabled: !!encodedMsgs,
         msgs,
         encodedMsgs,

@@ -54,7 +54,7 @@ const useSwap = ({ reverse }) => {
                 token,
                 amount: reverse ? simulated?.amount : amount,
                 slippage: String(slippage),
-                price: simulated.price.toString(),
+                price: num(simulated.price).dp(6).toString(),
                 swapAddress
             }),
             encodedMsgs: [createSwapMsgs(
@@ -80,7 +80,7 @@ const useSwap = ({ reverse }) => {
         msgs,
         encodedMsgs,
         amount: reverse ? simulated?.amount : amount,
-        price: simulated?.price,
+        price: num(simulated?.price).dp(6).toNumber(),
         onSuccess: () => { },
         onError: () => { }
     });

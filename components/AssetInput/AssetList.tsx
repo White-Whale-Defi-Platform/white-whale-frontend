@@ -58,7 +58,7 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken }) => {
                         variant="unstyled"
                         width="full"
                         justifyContent="space-between"
-                        paddingY={2}
+                        paddingY={4}
                         paddingX={4}
                         borderBottom={(index == filterAssets?.length - 1) ? 'unset' : "1px solid rgba(0, 0, 0, 0.5)"}
                         onClick={() => onChange({
