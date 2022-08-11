@@ -78,14 +78,14 @@ const NewPositionForm: FC<Props> = ({
             return 'Connect wallet'
         else if (!tokenB?.tokenSymbol)
             return 'Select token'
-        else if (!!!tokenA?.amount)
+        else if (!!!amountA?.amount)
             return 'Enter amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
             return 'New Position'
 
-    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
+    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
 
@@ -117,6 +117,7 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            hideToken={tokenB?.tokenSymbol}
                             minMax={false}
                             disabled={isInputDisabled}
                             balance={tokenABalance}
@@ -138,6 +139,7 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            hideToken={tokenA?.tokenSymbol}
                             minMax={false}
                             disabled={isInputDisabled}
                             balance={tokenBBalance}

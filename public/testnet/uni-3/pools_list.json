@@ -50,8 +50,8 @@
           "denom": "junoonex"
         }
       ],
-      "lp_token" : "juno1nrw7gxaq4ag698dumm9zvmur8azj58gsls7ngn8pqwaxtlmz8shsecu6lt",
-      "swap_address": "juno1xrf2shh0lx93nzd4ug37zd6elj0gvzf6x2ct0xzf0jp3u28yvgssu4anms",
+      "lp_token" : "juno1vrqgzd8kwqk7s6jgs5tk73m9npl5f3xdr0ytkezkdlca46xpgrqql6f7j2",
+      "swap_address": "juno18mgne4yxutsuw2mr4zha38tz9l9gqse7lnhtcdfhdap70wyz99jsm8m7ga",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -83,8 +83,8 @@
           "denom": "junotwox"
         }
       ],
-      "lp_token" : "juno1qg0z0eaj5mjlrxg8wunjg6wqrcgu69xfjwdsusmaxcheyr856t7qlq7p60",
-      "swap_address": "juno1kkwtx57qq8dg2nfm6ctw94gp93p3ee92srygrsr058kadn6cpums30wvkk",
+      "lp_token" : "juno1xefdvqhreycghdyas2tqsdw9u6jah62sywkx7xg7cwrum2vrd7kqtkflka",
+      "swap_address": "juno152pp0ayrwjqym7x982t0ngqca3a40qdpd06lvxvapu2cu52s5grq9q5fwe",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -116,8 +116,8 @@
           "denom": "junotwox"
         }
       ],
-      "lp_token" : "juno1sn62twavppppwsu5af2w3qthe20r9vw2mjujdc3vld254glzqdesm8ecz6",
-      "swap_address": "juno1phget2lq2nmmnfk0qcjrnuahau4cxe3z6jw9zekxuda3zxezxeqq2mzx0s",
+      "lp_token" : "juno1nd5ypaj56mqcwp7m2lwlvara6rjvlpy5u86vdjqc9dh3wu74ve4s4n43m7",
+      "swap_address": "juno1n2j8gwtl5kkwxvxh98xtd4hkc0e0yhh2gyrmw9ry6vqjqc96g4eq72y6mm",
       "staking_address": "",
       "rewards_tokens": []
     }

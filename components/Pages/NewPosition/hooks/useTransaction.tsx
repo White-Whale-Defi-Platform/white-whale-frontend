@@ -4,7 +4,7 @@ import {
   TxUnspecifiedError, UserDenied
 } from '@terra-money/wallet-provider'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { executeAddLiquidity } from 'services/liquidity'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
@@ -47,6 +47,7 @@ type Params = {
   price?: number;
   client: any;
   senderAddress: string;
+  poolId: string;
   msgs: any | null;
   encodedMsgs: any | null;
   amount?: string;
@@ -60,6 +61,7 @@ type Params = {
 }
 
 export const useTransaction = ({
+  poolId,
   enabled,
   swapAddress,
   swapAssets,
@@ -83,6 +85,7 @@ export const useTransaction = ({
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
+  const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
@@ -174,6 +177,8 @@ export const useTransaction = ({
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
+        const queryPath = `@pool-liquidity/${poolId}/${senderAddress}`
+        queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Add Liquidity Success.', 
           description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > TxHash:  </Finder> ,

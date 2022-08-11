@@ -3,7 +3,7 @@ import {
   CreateTxFailed, Timeout, TxFailed,
   TxUnspecifiedError, UserDenied
 } from '@terra-money/wallet-provider'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { directTokenSwap } from '../services/swap'
 import useDebounceValue from './useDebounceValue'
 import { useToast } from '@chakra-ui/react'
@@ -74,11 +74,24 @@ export const useTransaction = ({
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
+  const queryClient = useQueryClient()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
+
+  console.log({
+    enabled,
+    swapAddress,
+    swapAssets,
+    client,
+    senderAddress,
+    msgs,
+    encodedMsgs,
+    amount,
+    price,
+  })
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
@@ -168,6 +181,8 @@ export const useTransaction = ({
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
+        const queryPath = `multipleTokenBalances/${swapAssets.map(({symbol}) => symbol)?.join('+')}`
+        queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',
           description: <Finder txHash={data.transactionHash} chainId={client.chainId} > from: {tokenA.symbol}  to: {tokenB.symbol}  </Finder>,

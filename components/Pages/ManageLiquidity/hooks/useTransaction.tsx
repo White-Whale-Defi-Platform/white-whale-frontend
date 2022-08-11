@@ -3,7 +3,7 @@ import {
   CreateTxFailed, Timeout, TxFailed,
   TxUnspecifiedError, UserDenied
 } from '@terra-money/wallet-provider'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery , useQueryClient} from 'react-query'
 import { directTokenSwap } from 'services/swap'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { useToast } from '@chakra-ui/react'
@@ -45,6 +45,7 @@ type Params = {
   lpTokenAddress : string
   enabled: boolean;
   swapAddress:string;
+  poolId:string;
   swapAssets?: any[];
   price?: number;
   client: any;
@@ -60,6 +61,7 @@ type Params = {
 }
 
 export const useTransaction = ({
+  poolId,
   lpTokenAddress,
   enabled,
   swapAddress,
@@ -82,6 +84,7 @@ export const useTransaction = ({
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
+  const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
@@ -163,6 +166,8 @@ export const useTransaction = ({
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
+        const queryPath = `@pool-liquidity/${poolId}/${senderAddress}`
+        queryClient.invalidateQueries([queryPath])
         onBroadcasting?.(data.transactionHash)
         toast({
           title: 'Withdraw Liquidity Success.', 

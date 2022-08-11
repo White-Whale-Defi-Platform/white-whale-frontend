@@ -74,14 +74,14 @@ const SwapForm: FC<Props> = ({
             return 'Connect wallet'
         else if (!tokenB?.tokenSymbol)
             return 'Select token'
-        else if (!!!tokenA?.amount)
+        else if (!!!amountA?.amount)
             return 'Enter amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
             return 'Swap'
 
-    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, tokenA?.amount])
+    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
     const onReverse = () => {
         setValue("tokenA", tokenB, { shouldValidate: true })
@@ -122,11 +122,10 @@ const SwapForm: FC<Props> = ({
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
 
-
     return (
         <VStack
-            paddingX={{ base: 4, md: 10 }}
-            paddingY={{ base: 10, md: 10 }}
+            paddingX={{ base: 6, md: 10 }}
+            paddingY={{ base: 14, md: 10 }}
             width="full"
             background="#1C1C1C"
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
@@ -170,6 +169,7 @@ const SwapForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            hideToken={tokenA?.tokenSymbol}
                             {...field}
                             token={tokenA}
                             balance={tokenABalance}
@@ -191,7 +191,7 @@ const SwapForm: FC<Props> = ({
                     _active={{ background: "transparent" }}
                     _hover={{ background: "transparent", color: "white" }}
                     icon={<DoubleArrowsIcon width="2rem" height="2rem" />}
-                    disabled={isInputDisabled}
+                    disabled={isInputDisabled || !tokenB?.tokenSymbol}
                     onClick={onReverse}
                 />
             </HStack>
@@ -225,6 +225,7 @@ const SwapForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            hideToken={tokenA?.tokenSymbol}
                             {...field}
                             token={tokenB}
                             balance={tokenBBalance}

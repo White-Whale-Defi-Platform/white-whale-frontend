@@ -33,8 +33,8 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                 tabIndex={0}
                 role='button'
                 onClick={() => !disabled && onOpen()}
-                // justifyContent="space-between"
-                // width="160px"
+                justifyContent="space-between"
+                width={["full","160px"]}
                 // sx={{ 'button': {margin : 'unset'} }}
                 // style={{margin : "unset"}}
             >

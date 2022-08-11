@@ -30,7 +30,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     } = {}] = useQueryPoolLiquidity({ poolId })
 
     const [token, setToken] = useState<TokenItemState>(tokenA)
-    const tx = useWithdraw({ token, contract, swapAddress })
+    const tx = useWithdraw({ token, contract, swapAddress , poolId})
 
     useEffect(() => {
 
