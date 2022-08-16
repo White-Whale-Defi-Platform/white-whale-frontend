@@ -23,7 +23,8 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
     useTokenDollarValueQuery(
       tokenSymbolToLookupDollarValueFor
         ? [tokenSymbolToLookupDollarValueFor]
-        : null
+        : null,
+        tokenInfo?.chain_id
     )
 
   const [oneTokenToTokenPrice, fetchingTokenToTokenPrice] = usePriceForOneToken(
@@ -47,7 +48,7 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
   ] as const
 }
 
-export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
+export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>, chainId? : string) => {
   const getMultipleTokenInfo = useGetMultipleTokenInfo()
   const getMultipleIBCAssetInfo = useGetMultipleIBCAssetInfo()
 
@@ -62,9 +63,8 @@ export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
           )?.id
       )
 
-
       if (tokenIds) {
-        return tokenDollarValueQuery(tokenIds)
+        return tokenDollarValueQuery(tokenIds, chainId)
       }
     },
     {

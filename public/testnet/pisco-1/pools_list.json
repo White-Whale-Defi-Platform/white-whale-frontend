@@ -73,7 +73,7 @@
         {
           "id": "pisco-1",
           "chain_id": "pisco-1",
-          "token_address": " terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "token_address": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
           "symbol": "LUNATWO",
           "name": "Lunatwo",
           "decimals": 6,
@@ -106,7 +106,7 @@
         {
           "id": "pisco-1",
           "chain_id": "pisco-1",
-          "token_address": " terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "token_address": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
           "symbol": "LUNATWO",
           "name": "Lunatwo",
           "decimals": 6,

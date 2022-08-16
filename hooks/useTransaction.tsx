@@ -81,18 +81,6 @@ export const useTransaction = ({
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
 
-  console.log({
-    enabled,
-    swapAddress,
-    swapAssets,
-    client,
-    senderAddress,
-    msgs,
-    encodedMsgs,
-    amount,
-    price,
-  })
-
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error], async () => {
       setError(null)

@@ -3,7 +3,7 @@ import { Pool } from 'types'
 import { num } from 'libs/num'
 
 export interface GetToken1ForToken2PriceInput {
-  nativeAmount: number
+  nativeAmount: number | string
   swapAddress: string
   client: CosmWasmClient
 }
@@ -18,7 +18,7 @@ export const getToken1ForToken2Price = async ({
       pool: {}
     })
     const [asset1, asset2] = assets
-    return num(asset1.amount).dividedBy(asset2.amount).toString()
+    return num(asset1.amount).div(asset2.amount).toNumber()
   } catch (e) {
     console.error('err(getToken1ForToken2Price):', e)
   }
@@ -36,14 +36,13 @@ export const getToken2ForToken1Price = async ({
   client,
 }: GetToken2ForToken1PriceInput) => {
   try {
-    const query = await client.queryContractSmart(swapAddress, {
-      token2_for_token1_price: {
-        token2_amount: `${tokenAmount}`,
-      },
+    const {assets} = await client.queryContractSmart(swapAddress, {
+      pool: {}
     })
-    return query.token1_amount
+    const [asset1, asset2] = assets
+    return num(asset2.amount).div(asset1.amount).toString()
   } catch (e) {
-    console.error('error(getToken2ForToken1Price):', e)
+    console.error('err(getToken2ForToken1Price):', e)
   }
 }
 
@@ -61,7 +60,7 @@ export const getTokenForTokenPrice = async (
     const nativePrice = await getToken2ForToken1Price(input)
 
     return getToken1ForToken2Price({
-      nativeAmount: nativePrice,
+      nativeAmount: num(nativePrice).toNumber(),
       swapAddress: input.outputSwapAddress,
       client: input.client,
     })

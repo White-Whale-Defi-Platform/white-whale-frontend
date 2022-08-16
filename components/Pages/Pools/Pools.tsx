@@ -6,7 +6,7 @@ import FallbackImage from 'components/FallbackImage'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import Loader from '../../Loader';
-import { fromChainAmount } from "libs/num";
+import { fromChainAmount, formatPrice } from "libs/num";
 
 
 
@@ -18,17 +18,18 @@ const Pools: FC<Props> = () => {
     const router = useRouter()
     const { data: poolList } = usePoolsListQuery()
 
-    const [pools = [], isLoading, isError] = useQueriesDataSelector(
+    const [pools, isLoading, isError] = useQueriesDataSelector(
         useQueryMultiplePoolsLiquidity({
             refetchInBackground: false,
             pools: poolList?.pools,
         })
     )
 
-    const myPools = useMemo(() =>
-        pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0),
-        [pools]
-    )
+    const myPools = useMemo(() => {
+        if (!pools) return []
+        
+        return pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+    },[pools])
 
     return (
         <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
@@ -37,7 +38,7 @@ const Pools: FC<Props> = () => {
                 <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New position</Button>
             </HStack>
 
-            <Flex padding={10} width={["full","1058px"]}
+            <Flex padding={10} width={["full", "1058px"]}
                 background="#1C1C1C"
                 boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
                 borderRadius="30px">
@@ -46,13 +47,13 @@ const Pools: FC<Props> = () => {
                 <VStack width="full" color="white">
                     <Flex width="full">
                         <Text width="30%" textAlign="center" variant="light"> Pool </Text>
-                        <Text width="15%" textAlign="right" variant="light"> Combined APR </Text>
-                        <Text width="15%" textAlign="right" variant="light"> Total Liquidity </Text>
-                        <Text width="20%" textAlign="right" variant="light"> 24h Volume </Text>
+                        <Text width="15%" textAlign="right" variant="light"> My Position </Text>
+                        <Text width="20%" textAlign="right" variant="light"> Total Liquidity </Text>
+                        {/* <Text width="20%" textAlign="right" variant="light"> 24h Volume </Text> */}
                     </Flex>
 
                     {
-                        
+
                         isLoading && <Loader />
                     }
 
@@ -68,7 +69,7 @@ const Pools: FC<Props> = () => {
                                 key={pool?.pool_id}
                                 width="full"
                                 alignItems="center"
-                                borderBottom={index === myPools.length -1 ? "unset" : "1px solid"}
+                                borderBottom={index === myPools.length - 1 ? "unset" : "1px solid"}
                                 borderBottomColor="whiteAlpha.300"
                                 paddingY={5}
                             >
@@ -81,7 +82,7 @@ const Pools: FC<Props> = () => {
                                             // p="1"
                                             // border="2px solid rgba(255, 255, 255, 0.1);"
                                             position="relative"
-                                            // zIndex=""
+                                        // zIndex=""
                                         >
                                             <Image
                                                 src={pool.pool_assets?.[0].logoURI}
@@ -91,10 +92,10 @@ const Pools: FC<Props> = () => {
                                         <Box
                                             // border="2px solid rgba(255, 255, 255, 0.1);"
                                             borderRadius="full"
-                                            // p="1"
-                                            // style={{
-                                            //     marginLeft: "-15px"
-                                            // }}
+                                        // p="1"
+                                        // style={{
+                                        //     marginLeft: "-15px"
+                                        // }}
                                         >
                                             <Image
                                                 src={pool.pool_assets?.[1].logoURI}
@@ -106,16 +107,13 @@ const Pools: FC<Props> = () => {
                                     </HStack>
                                     <VStack width="full">
                                         <Text textAlign="center" > {pool.pool_id} </Text>
-                                        <Text fontSize="12" color="brand.200" textAlign="center" >
-                                            Balance : {fromChainAmount(pool.liquidity.providedTotal.tokenAmount)}
-                                        </Text>
                                     </VStack>
 
                                 </HStack>
-                                <Text width="15%" textAlign="right" > 33.24% </Text>
-                                <Text width="15%" textAlign="right" > $3.3M </Text>
-                                <Text width="20%" textAlign="right" > $2,400 </Text>
-                                <Box width="20%" textAlign="right">
+                                <Text width="15%" textAlign="right" > ${formatPrice(pool.liquidity.providedTotal.dollarValue)} </Text>
+                                <Text width="20%" textAlign="right" > ${formatPrice(pool.liquidity.available.total.dollarValue)} </Text>
+                                {/* <Text width="20%" textAlign="right" > $2,400 </Text> */}
+                                <Box width="35%" textAlign="right">
                                     <Button
                                         variant="outline"
                                         size="sm"

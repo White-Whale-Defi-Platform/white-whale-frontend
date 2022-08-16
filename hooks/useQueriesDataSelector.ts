@@ -15,6 +15,7 @@ export function useQueriesDataSelector<
       ({ data }) => data
     )
 
+    // const didFetchEveryQuery = !queriesData.includes(undefined)
     const didFetchEveryQuery = !queriesData.includes(undefined)
 
     return [

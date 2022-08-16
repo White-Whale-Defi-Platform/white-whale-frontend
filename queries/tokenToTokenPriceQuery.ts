@@ -40,14 +40,13 @@ export async function tokenToTokenPriceQueryWithPools({
     matchingPools
 
   if (streamlinePoolAB) {
-    return formatPrice(
-      await getToken1ForToken2Price({
+    return await getToken1ForToken2Price({
         nativeAmount: convertedTokenAmount,
         swapAddress: streamlinePoolAB.swap_address,
-        client,
+        client
       })
-    )
   }
+
   if (streamlinePoolBA) {
     return formatPrice(
       await getToken2ForToken1Price({

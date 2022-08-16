@@ -23,7 +23,7 @@ async function fetchTokenBalance({
   address: string
 }) {
 
-  const{ denom="uluna", native, token_address="uluna", decimals }  = token
+  const{ denom, native, token_address, decimals }  = token
 
   if (!denom && !token_address) {
     throw new Error(
@@ -48,8 +48,12 @@ async function fetchTokenBalance({
    * everything else
    *  */
   if (token_address) {
-    const balance = await CW20(client).use(token_address).balance(address)
-    return convertMicroDenomToDenom(Number(balance), decimals)
+    try{
+      const balance = await CW20(client).use(token_address).balance(address)
+      return convertMicroDenomToDenom(Number(balance), decimals)
+    }catch(err){
+      return 0
+    }
     // return {
     //   balance : convertMicroDenomToDenom(Number(balance), decimals),
     //   ...token
@@ -107,10 +111,12 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const [ibcAssetsList] = useIBCAssetList()
   const network = useRecoilValue(networkAtom)
 
+
   const queryKey = useMemo(
     () => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
     [tokenSymbols]
   )
+
 
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
