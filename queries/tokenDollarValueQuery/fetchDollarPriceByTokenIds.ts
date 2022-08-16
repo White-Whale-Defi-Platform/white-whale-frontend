@@ -1,18 +1,13 @@
 type ApiResponse = Record<string, { usd: number }>
 
-const network = {
-  "uni-3": "juno-network",
-  "juno-1": "juno-network",
-  "phoenix-1": "terra-luna-2",
-  "pisco-1": "terra-luna-2"
-}
+
 
 export const fetchDollarPriceByTokenIds = debounce(
   async (tokenIds: Array<string>, chainId): Promise<ApiResponse> => {
     const apiIds = tokenIds.flat().join(',')
 
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${network[chainId]}&vs_currencies=usd`,
+      `https://api.coingecko.com/api/v3/simple/price?ids=${chainId}&vs_currencies=usd`,
       // `https://api.coingecko.com/api/v3/simple/price?ids=juno-network&vs_currencies=usd`,
       {
         method: 'GET',

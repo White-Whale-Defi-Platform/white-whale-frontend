@@ -8,6 +8,7 @@ import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import Loader from '../../Loader';
 import { fromChainAmount, formatPrice } from "libs/num";
 
+import PoolsTable from './PoolsTable'
 
 
 type Props = {
@@ -25,11 +26,21 @@ const Pools: FC<Props> = () => {
         })
     )
 
+
     const myPools = useMemo(() => {
         if (!pools) return []
-        
-        return pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-    },[pools])
+
+        return pools
+            .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+            .map(pool => ({
+                pool: pool?.pool_id,
+                token1Img: pool.pool_assets?.[0].logoURI,
+                token2Img: pool.pool_assets?.[1].logoURI,
+                myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
+                totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
+                cta: () => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`)
+            }))
+    }, [pools])
 
     return (
         <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
@@ -45,89 +56,18 @@ const Pools: FC<Props> = () => {
 
 
                 <VStack width="full" color="white">
-                    <Flex width="full">
-                        <Text width="30%" textAlign="center" variant="light"> Pool </Text>
-                        <Text width="15%" textAlign="right" variant="light"> My Position </Text>
-                        <Text width="20%" textAlign="right" variant="light"> Total Liquidity </Text>
-                        {/* <Text width="20%" textAlign="right" variant="light"> 24h Volume </Text> */}
-                    </Flex>
 
                     {
 
-                        isLoading && <Loader />
+                        (isLoading || pools === undefined)
+                            ?
+                            <Loader />
+                            : (!myPools.length) && (
+                                <Text py={10} color="white"> Your active liquidity positions will appear here. </Text>
+                            )
                     }
 
-                    {
-                        (!isLoading && !myPools.length) && (
-                            <Text py={10} color="white"> Your active liquidity positions will appear here. </Text>
-                        )
-                    }
-
-                    {
-                        myPools.map((pool, index) => (
-                            <Flex
-                                key={pool?.pool_id}
-                                width="full"
-                                alignItems="center"
-                                borderBottom={index === myPools.length - 1 ? "unset" : "1px solid"}
-                                borderBottomColor="whiteAlpha.300"
-                                paddingY={5}
-                            >
-                                <HStack width="30%" alignItems="center">
-                                    <HStack spacing="-1" >
-                                        <Box
-                                            bg="#252525"
-                                            boxShadow="xl"
-                                            borderRadius="full"
-                                            // p="1"
-                                            // border="2px solid rgba(255, 255, 255, 0.1);"
-                                            position="relative"
-                                        // zIndex=""
-                                        >
-                                            <Image
-                                                src={pool.pool_assets?.[0].logoURI}
-                                                alt="logo-small" boxSize="3rem"
-                                                fallback={<FallbackImage width="8" height='8' color={["#5DB7DE", "#343434"]} />} />
-                                        </Box>
-                                        <Box
-                                            // border="2px solid rgba(255, 255, 255, 0.1);"
-                                            borderRadius="full"
-                                        // p="1"
-                                        // style={{
-                                        //     marginLeft: "-15px"
-                                        // }}
-                                        >
-                                            <Image
-                                                src={pool.pool_assets?.[1].logoURI}
-                                                alt="ust" boxSize="3rem"
-                                                fallback={<FallbackImage width="8" height='8' color={["#FFE66D", "#343434"]} />}
-                                            />
-
-                                        </Box>
-                                    </HStack>
-                                    <VStack width="full">
-                                        <Text textAlign="center" > {pool.pool_id} </Text>
-                                    </VStack>
-
-                                </HStack>
-                                <Text width="15%" textAlign="right" > ${formatPrice(pool.liquidity.providedTotal.dollarValue)} </Text>
-                                <Text width="20%" textAlign="right" > ${formatPrice(pool.liquidity.available.total.dollarValue)} </Text>
-                                {/* <Text width="20%" textAlign="right" > $2,400 </Text> */}
-                                <Box width="35%" textAlign="right">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`)}
-                                    >
-                                        Manage liquidity
-                                    </Button>
-                                </Box>
-                            </Flex>
-                        ))
-                    }
-
-
-
+                    <PoolsTable pools={myPools} />}
 
                 </VStack>
             </Flex>
