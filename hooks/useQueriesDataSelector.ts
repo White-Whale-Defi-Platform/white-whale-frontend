@@ -11,7 +11,7 @@ export function useQueriesDataSelector<
     )
     const error = queriesResult.some(({ isError }) => isError)
 
-    const queriesData: Array<TQueries[number]['data']> = queriesResult.map(
+    const queriesData: Array<TQueries[number]['data']> = queriesResult?.map(
       ({ data }) => data
     )
 
