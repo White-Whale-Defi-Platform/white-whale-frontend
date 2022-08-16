@@ -25,6 +25,11 @@ BigNumber.config({
 //   return numeral(amount).format(format).toString()
 // }
 
+
+export const formatPrice = (amount, format = '0,0.00a') => {
+  return numeral(amount).format(format).toUpperCase()
+}
+
 export const fromChainAmount = (value: BigNumber.Value = '0'): string => {
   return new BigNumber(value).dp(6).div(ONE_TOKEN).toString()
 }
