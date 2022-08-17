@@ -6,7 +6,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo';
 import { toChainAmount } from "libs/num";
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
 import { createMsg, createSwapMsgs } from './createSwapMsg';
-import useSimulate, {Simulated} from "./useSimulate";
+import useSimulate, { Simulated } from "./useSimulate";
 import useTransaction from "hooks/useTransaction";
 import { tokenSwapAtom } from "components/Pages/Swap/swapAtoms";
 import { slippageAtom } from 'components/Pages/Swap/swapAtoms'
@@ -25,7 +25,9 @@ const useSwap = ({ reverse }) => {
     const amount = swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
     const swapAddress = matchingPools?.streamlinePoolAB?.swap_address || matchingPools?.streamlinePoolBA?.swap_address
 
-    const simulated : Simulated = useSimulate({
+    const slippageToDecimal = slippage / 100
+
+    const simulated: Simulated = useSimulate({
         client,
         token: reverse ? tokenB?.token_address : tokenA?.token_address,
         amount: reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : '',
@@ -37,12 +39,18 @@ const useSwap = ({ reverse }) => {
 
     const minReceive = useMemo(() => {
         if (simulated?.amount == null) return null
+        
+        const amount = reverse ? num(swapTokenB?.amount).toString() : fromChainAmount(simulated.amount)
+        
+        if (slippageToDecimal === 0) {
+               return  num(amount).minus(fromChainAmount(simulated.spread)).toString()
+        }
 
         return minAmountReceive({
-            amount: reverse ? num(swapTokenB?.amount).toString() : fromChainAmount(simulated.amount),
-            maxSpread: String(slippage),
+            amount,
+            maxSpread: String(slippageToDecimal),
         });
-    }, [simulated?.amount, slippage, reverse, swapTokenB?.amount]);
+    }, [simulated?.amount, slippageToDecimal, reverse, swapTokenB?.amount]);
 
 
 
@@ -53,7 +61,7 @@ const useSwap = ({ reverse }) => {
             msgs: createMsg({
                 token,
                 amount: reverse ? simulated?.amount : amount,
-                slippage: String(slippage),
+                slippage: String(slippageToDecimal),
                 price: num(simulated.price).dp(6).toString(),
                 swapAddress
             }),
@@ -62,14 +70,14 @@ const useSwap = ({ reverse }) => {
                     token,
                     amount: reverse ? simulated?.amount : amount,
                     denom,
-                    slippage: num(slippage).dp(3).toString(),
+                    slippage: num(slippageToDecimal).dp(3).toString(),
                     price: num(simulated.price).dp(6).toString(),
                     swapAddress
                 },
                 address,
             )]
         }
-    }, [address, token, amount, simulated, slippage]);
+    }, [address, token, amount, simulated, slippageToDecimal]);
 
     const tx = useTransaction({
         enabled: !!encodedMsgs,

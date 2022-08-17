@@ -1,5 +1,5 @@
 // import { toBase64 } from "@arthuryeti/terra";
-import { LCDClient} from "@terra-money/terra.js";
+import { LCDClient } from "@terra-money/terra.js";
 // import { Coin } from 'hooks/useCosmWasmClient'
 import { Coin } from '@cosmjs/launchpad'
 import { coin, EncodeObject } from "@cosmjs/proto-signing";
@@ -64,13 +64,20 @@ export const createMsg = ({ token, amount, slippage, price, swapAddress }) => {
   const offerAsset = createAsset(amount, token);
   const isNative = isNativeAsset(offerAsset.info);
 
+  const addSlippage = (obj) => {
+    if (slippage === '0') return obj
+    else return {
+      ...obj,
+      max_spread: slippage
+    }
+  }
+
   if (isNative) {
     return {
-      swap: {
+      swap: addSlippage({
         offer_asset: offerAsset,
-        max_spread: slippage,
         belief_price: price,
-      },
+      })
     }
   }
 
@@ -79,10 +86,9 @@ export const createMsg = ({ token, amount, slippage, price, swapAddress }) => {
       amount,
       contract: swapAddress,
       msg: toBase64({
-        swap: {
-          max_spread: slippage,
+        swap: addSlippage({
           belief_price: price,
-        },
+        }),
       }),
     },
   }
@@ -91,7 +97,7 @@ export const createMsg = ({ token, amount, slippage, price, swapAddress }) => {
 
 
 export const createSwapMsgs = (
-  { token, amount, slippage, price, swapAddress , denom}: CreateSwapMsgsOpts,
+  { token, amount, slippage, price, swapAddress, denom }: CreateSwapMsgsOpts,
   sender: string,
 ) => {
   // const [{ contract_addr }] = swapRoute;
@@ -100,47 +106,8 @@ export const createSwapMsgs = (
 
   return createExecuteMessage({
     senderAddress: sender,
-    contractAddress: isNative ? swapAddress :token,
+    contractAddress: isNative ? swapAddress : token,
     message: createMsg({ token, amount, slippage, price, swapAddress }),
-    funds : isNative ? [coin(amount, denom)] : []
+    funds: isNative ? [coin(amount, denom)] : []
   })
-
-
-  // if (isNative) {
-  //   return createExecuteMessage({
-  //     senderAddress: sender,
-  //     contractAddress: swapAddress,
-  //     message: swapMessage,
-  //     funds
-  //   })
-  //   // return [
-  //   //   new MsgExecuteContract(
-  //   //     sender,
-  //   //     contract_addr,
-  //   //     {
-  //   //       swap: {
-  //   //         offer_asset: offerAsset,
-  //   //         max_spread: slippage,
-  //   //         belief_price: price,
-  //   //       },
-  //   //     },
-  //   //     [new Coin(token, amount)],
-  //   //   ),
-  //   // ];
-  // }
-
-  // return [
-  //   // new MsgExecuteContract(sender, token, {
-  //   //   send: {
-  //   //     amount,
-  //   //     contract: contract_addr,
-  //   //     msg: toBase64({
-  //   //       swap: {
-  //   //         max_spread: slippage,
-  //   //         belief_price: price,
-  //   //       },
-  //   //     }),
-  //   //   },
-  //   // }),
-  // ];
 };
