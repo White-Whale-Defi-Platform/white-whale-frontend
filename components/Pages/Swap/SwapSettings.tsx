@@ -82,7 +82,7 @@ const SwapSettings = () => {
                                 />
                             </InputGroup>
                         </HStack>
-                        <HStack paddingTop={2} width="full">
+                        {/* <HStack paddingTop={2} width="full">
                             <Button width="full" onClick={() => setSlippage(0.1)} variant="solid" size="xs">
                                 0.1%
                             </Button>
@@ -92,7 +92,7 @@ const SwapSettings = () => {
                             <Button width="full" onClick={() => setSlippage(1)} variant="solid" size="xs">
                                 1%
                             </Button>
-                        </HStack>
+                        </HStack> */}
                     </VStack>
                 </PopoverBody>
             </PopoverContent>
