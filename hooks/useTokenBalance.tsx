@@ -23,12 +23,13 @@ async function fetchTokenBalance({
   address: string
 }) {
 
-  const{ denom, native, token_address, decimals }  = token
+  const{ denom, native, token_address, decimals }  = token || {}
 
   if (!denom && !token_address) {
-    throw new Error(
-      `No denom or token_address were provided to fetch the balance.`
-    )
+    return 0
+    // throw new Error(
+    //   `No denom or token_address were provided to fetch the balance.`
+    // )
   }
 
   /*
@@ -122,7 +123,9 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
     [queryKey, address, chainId, network],
     async () => {
       const balances = await Promise.all(
-        tokenSymbols.filter(Boolean).map((tokenSymbol) =>
+        tokenSymbols
+        // .filter(Boolean)
+        .map((tokenSymbol) =>
           {
 
             return fetchTokenBalance({

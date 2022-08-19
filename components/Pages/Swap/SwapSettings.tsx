@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useBoolean, Text, Popover, PopoverTrigger, IconButton, PopoverContent, PopoverArrow, PopoverBody, Button, VStack, HStack, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { SettingsIcon } from '@chakra-ui/icons'
 import { slippageAtom } from './swapAtoms'
@@ -8,6 +8,7 @@ const SwapSettings = () => {
 
     const [slippage, setSlippage] = useRecoilState(slippageAtom)
     const [auto, setAuto] = useBoolean(slippage === 0)
+    const [error, setError] = useState(false)
 
     const onAuto = () => {
         setAuto.toggle()
@@ -21,9 +22,12 @@ const SwapSettings = () => {
     const onSlippageChange = ({ target }) => {
         if (auto === true) setAuto.off()
 
-        if ((!!target?.value) && Number(target?.value) < 100)
+        if ((!!target?.value) && Number(target?.value) < 100) {
+            if (error) setError(false)
             setSlippage(target?.value)
+        }
         else {
+            if(!!target?.value) setError(true)
             setSlippage(0)
             setAuto.on()
         }
@@ -34,7 +38,7 @@ const SwapSettings = () => {
             <PopoverTrigger>
                 <IconButton
                     variant="unstyled"
-                    color="#7A7A7A"
+                    color="white"
                     fontSize="18px"
                     aria-label='go back'
                     icon={<SettingsIcon />}
@@ -61,18 +65,24 @@ const SwapSettings = () => {
                                 Auto
                             </Button>
                             <InputGroup
-                                color="brand.200"
-
+                                color="brand.500"
+                                borderRadius="100px"
+                                border="1px solid rgba(255, 255, 255, 0.1)"
+                                borderColor="white"
+                                paddingY={1}
                             >
                                 <Input
                                     type="number"
+                                    variant="unstyled"
                                     borderRadius="30px"
                                     placeholder='Custom'
-                                    borderColor="rgba(255, 255, 255, 0.1)"
+                                    color="brand.500"
+                                    // borderColor="rgba(255, 255, 255, 0.1)"
                                     size="sm"
                                     textAlign="right"
                                     value={slippage === 0 ? '' : slippage}
                                     onChange={onSlippageChange}
+
                                 />
                                 <InputRightElement
                                     paddingBottom="5px"
@@ -81,6 +91,9 @@ const SwapSettings = () => {
 
                                 />
                             </InputGroup>
+                        </HStack>
+                        <HStack width="full" justifyContent="end">
+                            {error && (<Text fontSize="12px" color="red">Slippage must be under 100</Text>)}
                         </HStack>
                         {/* <HStack paddingTop={2} width="full">
                             <Button width="full" onClick={() => setSlippage(0.1)} variant="solid" size="xs">

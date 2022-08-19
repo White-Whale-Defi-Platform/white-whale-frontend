@@ -37,6 +37,8 @@ const Pools: FC<Props> = () => {
                 token1Img: pool.pool_assets?.[0].logoURI,
                 token2Img: pool.pool_assets?.[1].logoURI,
                 myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
+                apr: "coming soon",
+                volume24hr: "coming soon",
                 totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
                 cta: () => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`)
             }))
@@ -46,10 +48,10 @@ const Pools: FC<Props> = () => {
         <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
                 <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
-                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New position</Button>
+                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New Position</Button>
             </HStack>
 
-            <Flex padding={10} width={["full", "1058px"]}
+            <Flex padding={10} width={["full", "1135px"]}
                 background="#1C1C1C"
                 boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
                 borderRadius="30px">
@@ -67,7 +69,7 @@ const Pools: FC<Props> = () => {
                             )
                     }
 
-                    <PoolsTable pools={myPools} />}
+                    <PoolsTable pools={myPools} />
 
                 </VStack>
             </Flex>

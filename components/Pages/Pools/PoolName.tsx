@@ -10,7 +10,7 @@ type Props = {
 
 const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
     <HStack alignItems="center">
-        <HStack spacing="-2" >
+        <HStack spacing="-2" width="60px">
             <Box
                 bg="#252525"
                 boxShadow="lg"
