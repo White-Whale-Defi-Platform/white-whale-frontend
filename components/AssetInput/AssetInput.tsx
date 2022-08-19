@@ -5,6 +5,8 @@ import { FC } from 'react'
 // import { Asset } from 'types/blockchain'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import FallbackImage from 'components/FallbackImage'
+import { useTokenList } from 'hooks/useTokenList'
+import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 
 interface AssetInputProps {
     image?: boolean;
@@ -38,6 +40,9 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
     ref) => {
 
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
+
+    const [tokenList] = useTokenList()
+    useMultipleTokenBalance(tokenList?.tokens?.map(({ symbol }) => symbol))
 
     return (
         <Stack
@@ -73,8 +78,20 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                     {
                         minMax && (
                             <HStack visibility={{ base: 'hidden', md: 'visible' }}>
-                                <Button disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)} variant="outline" size="xs" onClick={() => onChange({ ...token, amount: balance / 2 })}>half</Button>
-                                <Button disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)} variant="outline" size="xs" onClick={() => onChange({ ...token, amount: balance })}>max</Button>
+                                <Button
+                                    disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
+                                    variant="outline"
+                                    size="xs"
+                                    onClick={() => onChange({ ...token, amount: balance / 2 })}>
+                                    half
+                                </Button>
+                                <Button
+                                    disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
+                                    variant="outline"
+                                    size="xs"
+                                    onClick={() => onChange({ ...token, amount: tokenInfo.native ? Number(balance - 0.10) : balance })}>
+                                    max
+                                </Button>
                             </HStack>
                         )
 
@@ -152,7 +169,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                 }
 
                                 <Text
-                                    paddingLeft={ !image && "10px"}
+                                    paddingLeft={!image && "10px"}
                                     fontSize="16px"
                                     fontWeight="400">{tokenInfo?.symbol || token?.tokenSymbol}</Text>
                             </HStack>

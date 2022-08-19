@@ -15,6 +15,8 @@ type Pool = {
     token1Img: string
     token2Img: string
     myPosition: number | string
+    apr: number | string
+    volume24hr: number | string
     totalLiq: number | string
     cta?: () => void
 }
@@ -36,6 +38,14 @@ const columns = [
         header: () => <Text align="right" color="brand.200">My Position</Text>,
         cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
+    columnHelper.accessor('apr', {
+        header: () => <Text align="right" color="brand.200">Combined APR</Text>,
+        cell: info => <Text align="right">{info.getValue()}</Text>,
+    }),
+    columnHelper.accessor('volume24hr', {
+        header: () => <Text align="right" color="brand.200">24hr Volume</Text>,
+        cell: info => <Text align="right">{info.getValue()}</Text>,
+    }),
     columnHelper.accessor('totalLiq', {
         header: () => <Text align="right" color="brand.200">Total Liquidity</Text>,
         cell: info => <Text align="right">${info.getValue()}</Text>,
@@ -49,7 +59,7 @@ const columns = [
                     size="sm"
                     onClick={() => info.getValue()()}
                 >
-                    Manage liquidity
+                    Manage Liquidity
                 </Button>
             </HStack>
         )

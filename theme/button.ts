@@ -51,6 +51,9 @@ const button = {
       borderRadius: "78px",
       paddingX: 6,
       color: 'white',
+      _disabled: {
+        pointerEvents: "none"
+      },
       _focus: {
         boxShadow: "none",
         backgroundColor: "transparent",

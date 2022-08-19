@@ -73,7 +73,7 @@ const useSimulate = ({
         });
     },
         {
-            enabled: !!client && amount?.length > 0 && enabled,
+            enabled: !!client && amount?.length > 0 && enabled && !!swapAddress,
             onError: (err) => console.log(err)
         },
     );

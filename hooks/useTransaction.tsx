@@ -107,8 +107,8 @@ export const useTransaction = ({
         else {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Something went wrong")
-          throw Error("Something went wrong")
+          setError("Failed to execute transaction.")
+          throw Error("Failed to execute transaction.")
         }
       }
     },
@@ -156,9 +156,14 @@ export const useTransaction = ({
         } else if (e instanceof TxUnspecifiedError) {
           setError(`Unspecified Error: ${e.message}`)
         } else {
-          setError(
-            `${e instanceof Error ? e.message : String(e)}`,
-          )
+          console.error(error)
+          if (/insufficient funds/i.test(e.toString()) || /Overflow: Cannot Sub with/i.test(e.toString())) 
+            setError("Insufficent funds")
+          else if (/Max spread assertion/i.test(e.toString())) 
+            setError("Try increasing slippage")
+          else 
+            setError("Failed to execute transaction.")
+          
         }
 
         setTxStep(TxStep.Failed)

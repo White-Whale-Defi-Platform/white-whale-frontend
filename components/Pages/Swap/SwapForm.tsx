@@ -158,7 +158,7 @@ const SwapForm: FC<Props> = ({
                         }}>half</Button>
                         <Button variant="outline" size="xs" onClick={() => {
                             setReverse(false);
-                            onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0);
+                            onInputChange({ ...tokenA, amount: tokenABalance }, 0);
                             setValue("tokenA", { ...tokenA, amount: tokenABalance }, { shouldValidate: true })
                         }}>max</Button>
                     </HStack>
@@ -191,7 +191,7 @@ const SwapForm: FC<Props> = ({
                     _active={{ background: "transparent" }}
                     _hover={{ background: "transparent", color: "white" }}
                     icon={<DoubleArrowsIcon width="2rem" height="2rem" />}
-                    disabled={isInputDisabled || !tokenB?.tokenSymbol}
+                    disabled={isInputDisabled }
                     onClick={onReverse}
                 />
             </HStack>
@@ -205,7 +205,6 @@ const SwapForm: FC<Props> = ({
                     </HStack>
                     <HStack>
                         <Hide above='md'>
-
                             <Button variant="outline" size="xs" onClick={() => {
                                 setReverse(true);
                                 onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 1);
@@ -231,7 +230,11 @@ const SwapForm: FC<Props> = ({
                             balance={tokenBBalance}
                             disabled={isInputDisabled}
                             // onInputFocus={() => setIsReverse(true)}
-                            onChange={(value) => { setReverse(true); onInputChange(value, 1); field.onChange(value); }}
+                            onChange={(value) => { 
+                                if(tokenB?.tokenSymbol) setReverse(true); 
+                                onInputChange(value, 1); 
+                                field.onChange(value); 
+                            }}
                         />
                     )}
                 />
@@ -248,7 +251,7 @@ const SwapForm: FC<Props> = ({
             </Button>
 
 
-            {(tokenB?.tokenSymbol && minReceive) && (
+            {(amountB.amount && minReceive) && (
                 <VStack alignItems="flex-start" width="full">
                     <Text
                         color="brand.500"
