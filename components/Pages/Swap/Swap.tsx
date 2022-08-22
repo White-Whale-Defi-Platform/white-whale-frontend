@@ -10,6 +10,7 @@ import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
 import defaultTokens from './defaultTokens.json'
 import {usePriceForOneToken} from "./hooks/usePriceForOneToken"
+import { fromChainAmount } from "libs/num";
 
 
 
@@ -53,7 +54,11 @@ const Swap: FC<SwapProps> = ({  }) => {
     }
 
     const onReverseDirection = () => {
-        setTokenSwapState([tokenB, tokenA])
+
+        const A = {...tokenB, amount : tokenA.amount || parseFloat(fromChainAmount(simulated?.amount))}
+        const B = {...tokenA, amount : tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))}
+
+        setTokenSwapState([A, B])
     }
 
     useEffect(() => {

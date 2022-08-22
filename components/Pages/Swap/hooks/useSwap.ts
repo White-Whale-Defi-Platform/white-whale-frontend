@@ -22,7 +22,7 @@ const useSwap = ({ reverse }) => {
     const slippage = useRecoilValue(slippageAtom)
     const token = tokenA?.token_address
     const denom = tokenA?.denom
-    const amount = swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
+    const amount = reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' :  swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
     const swapAddress = matchingPools?.streamlinePoolAB?.swap_address || matchingPools?.streamlinePoolBA?.swap_address
 
     const slippageToDecimal = slippage / 100
@@ -35,7 +35,6 @@ const useSwap = ({ reverse }) => {
         enabled: !(swapTokenA?.tokenSymbol === swapTokenB?.tokenSymbol),
         reverse
     })
-
 
     const minReceive = useMemo(() => {
         if (simulated?.amount == null) return null

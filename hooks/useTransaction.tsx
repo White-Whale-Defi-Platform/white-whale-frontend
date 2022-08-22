@@ -8,6 +8,7 @@ import { directTokenSwap } from '../services/swap'
 import useDebounceValue from './useDebounceValue'
 import { useToast } from '@chakra-ui/react'
 import Finder from '../components/Finder'
+import { HStack } from '@chakra-ui/react'
 
 export enum TxStep {
   /**
@@ -104,6 +105,13 @@ export const useTransaction = ({
           setError("Try increasing slippage")
           throw new Error('Try increasing slippage')
         }
+        // else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
+        //   console.error(error)
+        //   setTxStep(TxStep.Idle)
+        //   setButtonLabel('Insuifficient liquidity')
+        //   setError("Insuifficient liquidity")
+        //   throw new Error('Insuifficient liquidity')
+        // }
         else {
           console.error(error)
           setTxStep(TxStep.Idle)
@@ -144,30 +152,37 @@ export const useTransaction = ({
         setTxStep(TxStep.Posting)
       },
       onError: (e: unknown) => {
-        console.log({ tx_error: e })
-        if (e instanceof UserDenied) {
-          setError('User Denied')
-        } else if (e instanceof CreateTxFailed) {
-          setError(`Create Tx Failed: ${e.message}`)
-        } else if (e instanceof TxFailed) {
-          setError(`Tx Failed: ${e.message}`)
-        } else if (e instanceof Timeout) {
-          setError('Timeout')
-        } else if (e instanceof TxUnspecifiedError) {
-          setError(`Unspecified Error: ${e.message}`)
-        } else {
-          console.error(error)
-          if (/insufficient funds/i.test(e.toString()) || /Overflow: Cannot Sub with/i.test(e.toString())) 
-            setError("Insufficent funds")
-          else if (/Max spread assertion/i.test(e.toString())) 
-            setError("Try increasing slippage")
-          else 
-            setError("Failed to execute transaction.")
-          
+        let message = ''
+        console.error(e?.toString())
+        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())){
+          setError("Insufficent funds")
+          message = "Insufficent funds"
+        }
+        else if (/Max spread assertion/i.test(e?.toString())){
+          setError("Try increasing slippage")
+          message = "Try increasing slippage"
+        }
+        else if (/Request rejected/i.test(e?.toString())) {
+          setError("User Denied")
+          message = "User Denied"
+        }
+        else{
+          setError("Failed to execute transaction.")
+          message = "Failed to execute transaction."
         }
 
+        
+        toast({
+          title: 'Swap Failed.',
+          description: message,
+          status: 'error',
+          duration: 9000,
+          position: "top-right",
+          isClosable: true,
+        })
+        
         setTxStep(TxStep.Failed)
-
+        
         onError?.()
       },
       onSuccess: (data: any) => {
@@ -178,7 +193,7 @@ export const useTransaction = ({
         queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',
-          description: <Finder txHash={data.transactionHash} chainId={client.chainId} > from: {tokenA.symbol}  to: {tokenB.symbol}  </Finder>,
+          description: <Finder txHash={data.transactionHash} chainId={client.chainId} > From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
           status: 'success',
           duration: 9000,
           position: "top-right",

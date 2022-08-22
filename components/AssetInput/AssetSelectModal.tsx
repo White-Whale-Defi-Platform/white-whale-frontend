@@ -10,19 +10,21 @@ import { Asset } from 'types/blockchain'
 interface AssetSelectModalProps {
     children: ReactNode,
     currentToken: string,
-    onChange: (asset: Asset) => void,
+    onChange: (asset: Asset, isTokenChange?: boolean) => void,
     disabled: boolean
+    amount? : number
 }
 
-const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, currentToken = "" , disabled}) => {
+const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, currentToken = "" , disabled, amount}) => {
     
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [search, setSearch] = useState<string>('')
 
 
-    const onAssetChange = (asset) => {
+    const onAssetChange = (asset, isTokenChange) => {
         setSearch(asset?.asset)
-        onChange(asset)
+        const newAsset = {...asset, amount}
+        onChange(newAsset, isTokenChange)
         onClose()
     }
 
@@ -53,6 +55,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                     >
                         <SearchInput onChange={setSearch} />
                         <AssetList 
+                            amount={amount}
                             // assetList={assets} 
                             onChange={onAssetChange} 
                             search={search} 

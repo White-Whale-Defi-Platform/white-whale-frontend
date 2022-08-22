@@ -61,7 +61,7 @@ const useSimulate = ({
     enabled
 }: SwapSimulate) => {
 
-    const { data, isLoading } = useQuery<any>(["simulation", token, amount, reverse], () => {
+    const { data, isLoading, error } = useQuery<any>(["simulation", token, amount, reverse, swapAddress], () => {
         if (token == null || amount == '') return
 
         return simulate({
@@ -77,6 +77,7 @@ const useSimulate = ({
             onError: (err) => console.log(err)
         },
     );
+
 
     return useMemo(() => {
         if (data == null || amount == '') {

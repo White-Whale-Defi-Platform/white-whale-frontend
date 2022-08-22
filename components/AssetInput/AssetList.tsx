@@ -7,12 +7,14 @@ import FallbackImage from 'components/FallbackImage'
 
 type AssetListProps = {
     // assetList?: Asset[];
-    onChange: (token: any) => void;
+    onChange: (token: any, isTokenChange?: boolean) => void;
     search: string;
     currentToken: string;
+    amount? : number
+
 }
 
-const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken }) => {
+const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken, amount }) => {
 
     const [tokenList] = useTokenList()
 
@@ -63,8 +65,8 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken }) => {
                         borderBottom={(index == filterAssets?.length - 1) ? 'unset' : "1px solid rgba(0, 0, 0, 0.5)"}
                         onClick={() => onChange({
                             tokenSymbol: item?.symbol,
-                            amount: 0
-                        })}
+                            amount: amount 
+                        }, true)}
                     >
                         <HStack>
                             <Image src={item?.logoURI} alt="logo-small" boxSize="2rem" fallback={<FallbackImage />}/>

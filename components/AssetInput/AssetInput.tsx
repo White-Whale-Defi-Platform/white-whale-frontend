@@ -12,7 +12,7 @@ interface AssetInputProps {
     image?: boolean;
     token: any;
     value: any;
-    onChange: (value: any) => void;
+    onChange: (value: any, isTokenChange?:boolean) => void;
     showList?: boolean;
     onInputFocus?: () => void;
     balance?: number;
@@ -89,7 +89,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                     disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
                                     variant="outline"
                                     size="xs"
-                                    onClick={() => onChange({ ...token, amount: tokenInfo.native ? Number(balance - 0.10) : balance })}>
+                                    onClick={() => onChange({ ...token, amount: tokenInfo?.native ? Number(balance - 0.10) : balance })}>
                                     max
                                 </Button>
                             </HStack>
@@ -111,10 +111,17 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                 justifyContent={'flex-end'}
 
             >
+
                 <HStack flex={1}>
                     {
                         showList ? (
-                            <AssetSelectModal onChange={onChange} currentToken={tokenInfo?.symbol || hideToken} disabled={disabled}>
+                            <AssetSelectModal 
+                                onChange={onChange} 
+                                currentToken={tokenInfo?.symbol || hideToken} 
+                                disabled={disabled}
+                                amount={token.amount}
+                                >
+                                
                                 {tokenInfo?.symbol ? (
                                     <HStack>
                                         {
