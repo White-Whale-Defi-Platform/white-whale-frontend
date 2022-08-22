@@ -22,6 +22,7 @@ import { activeChain as activeChainAtom } from 'state/atoms/activeChain';
 import { useChainInfo, useChains } from 'hooks/useChainInfo';
 import KeplrWalletIcon from '../icons/KeplrWalletIcon';
 import WalletSelect from './WalletSelect';
+import { useToast } from '@chakra-ui/react'
 
 
 
@@ -47,6 +48,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const currentChain = options.find(({ value }) => value === chainId)
   const [chainInfo] = useChainInfo(chainId || 'uni-3')
   const { balance } = useTokenBalance(baseToken?.symbol)
+  const toast = useToast()
 
   const denom = useMemo(() => {
 
@@ -90,33 +92,47 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
     return (
       <>
         {/* <Select options={options} width="fit-content" onChange={onChainChange} defaultSelcted={options?.[0]} /> */}
-          <WalletSelect
-            connected={connected}
-            denom={denom?.coinDenom}
-            chainList={chainList}
-            onChange={onChainChange} />
-          <Button
-            variant="outline"
-            display="flex"
-            gap="3"
-            color="white"
-            borderColor="whiteAlpha.400"
-            borderRadius="full"
-            onClick={() => onConnect(chainId)}>
-            <WalletIcon />
-            Connect wallet
-          </Button>
+        <WalletSelect
+          connected={connected}
+          denom={denom?.coinDenom}
+          chainList={chainList}
+          onChange={onChainChange} />
+        <Button
+          variant="outline"
+          display="flex"
+          gap="3"
+          color="white"
+          borderColor="whiteAlpha.400"
+          borderRadius="full"
+          onClick={() => onConnect(chainId)}>
+          <WalletIcon />
+          Connect wallet
+        </Button>
 
         {/* <WalletModal isOpen={isOpen} onClose={onClose} /> */}
       </>
     )
   }
 
-  const truncatWalletAddress = (addr:string) =>  {
-    const chainName =  addr.substring(0, addr.indexOf("1") | 4)
+  const truncatWalletAddress = (addr: string) => {
+    const chainName = addr.substring(0, addr.indexOf("1") | 4)
     return `${chainName}${truncate(address, [0, 6])}`
   }
 
+  const copyToClipboard = () => {
+    try {
+      navigator.clipboard.writeText(address)
+      toast({
+        title: 'Address copied to clipboard',
+        status: 'success',
+        duration: 1000,
+        position:"top-right",
+        isClosable: true
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
       {/* <Select options={options} width="fit-content" onChange={onChainChanage} defaultSelcted={defaultChain} /> */}
@@ -126,19 +142,19 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
         <HStack spacing="4" display={{ base: "flex", md: "flex" }}>
           <Text fontSize="16px">{balance?.toFixed(1)}</Text>
-          <WalletSelect 
-            connected={connected} 
-            denom={denom?.coinDenom} 
-            chainList={chainList} 
+          <WalletSelect
+            connected={connected}
+            denom={denom?.coinDenom}
+            chainList={chainList}
             onChange={onChainChanage} />
           {/* <Text fontSize="16px">{denom?.coinDenom}</Text> */}
         </HStack>
 
-        <Box  display={{ base: "none", md: "block" }}>
+        <Box display={{ base: "none", md: "block" }}>
           <Divider orientation="vertical" borderColor="rgba(255, 255, 255, 0.1);" />
         </Box>
 
-        <HStack spacing="3">
+        <HStack spacing="3" as={Button} variant="unstyled" onClick={copyToClipboard}>
           <KeplrWalletIcon />
           <Text color="brand.200" size="16px">
             {truncatWalletAddress(address)}
