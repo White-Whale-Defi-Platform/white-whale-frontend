@@ -57,17 +57,25 @@ const NewPositionForm: FC<Props> = ({
     }, [resetForm, tx?.txStep])
 
     useEffect(() => {
-
         if (simulated) {
-            console.log({ simulated, reverse })
-            if (reverse)
+            if (reverse) {
+                onInputChange({ ...tokenA, amount: Number(simulated) }, 0);
                 setValue('token1', { ...tokenA, amount: Number(simulated) })
-            else
+            }
+            else {
+                onInputChange({ ...tokenB, amount: Number(simulated) }, 1);
                 setValue('token2', { ...tokenA, amount: Number(simulated) })
+
+            }
         }
         else {
-            setValue('token1', { ...tokenA, amount: 0 })
-            setValue('token2', { ...tokenB, amount: 0 })
+            if (reverse) {
+                if (!!!tokenB.amount)
+                    setValue('token1', { ...tokenA, amount: undefined })
+            } else {
+                if (!!!tokenA.amount)
+                    setValue('token2', { ...tokenB, amount: undefined })
+            }
         }
 
     }, [simulated, reverse])
@@ -89,7 +97,6 @@ const NewPositionForm: FC<Props> = ({
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
 
-
     return (
         <VStack padding={10}
             width="full"
@@ -107,7 +114,7 @@ const NewPositionForm: FC<Props> = ({
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
+                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
                     <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
                 </HStack>
 
@@ -130,8 +137,9 @@ const NewPositionForm: FC<Props> = ({
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
-                    <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
+                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                    {!!tokenBBalance && (<Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>)}
+
                 </HStack>
                 <Controller
                     name="token2"
@@ -144,7 +152,12 @@ const NewPositionForm: FC<Props> = ({
                             disabled={isInputDisabled}
                             balance={tokenBBalance}
                             {...field} token={tokenB}
-                            onChange={(value) => { setReverse(true); onInputChange(value, 1); field.onChange(value) }}
+                            onChange={(value, isTokenChange) => {
+                                if(tokenB?.tokenSymbol && !isTokenChange) setReverse(true); 
+                                if(isTokenChange && reverse) setReverse(false)
+                                onInputChange(value, 1);
+                                field.onChange(value)
+                            }}
                         />
                     )}
                 />

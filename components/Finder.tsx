@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Text, Link } from '@chakra-ui/react'
+import { Text, Link, VStack} from '@chakra-ui/react'
 import { truncate } from '../libs/text'
 import { networkAtom } from 'state/atoms/walletAtoms'
 import { useRecoilValue } from 'recoil'
@@ -31,7 +31,7 @@ const Finder = ({ children, txHash, chainId }: Props) => {
     const network = useRecoilValue(networkAtom)
     return (
         <Link isExternal href={getUrl(chainId, txHash, network)} >
-            {children} {truncate(txHash, [4, 4])}
+            {children} TxHash: {truncate(txHash, [4, 4])}
         </Link>
     )
 }

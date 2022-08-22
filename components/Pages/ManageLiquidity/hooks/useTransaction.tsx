@@ -105,8 +105,8 @@ export const useTransaction = ({
         } else {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Something went wrong")
-          throw Error("Something went wrong")
+          setError("Failed to execute transaction.")
+          throw Error("Failed to execute transaction.")
         }
       }
     },
@@ -142,26 +142,33 @@ export const useTransaction = ({
         setTxStep(TxStep.Posting)
       },
       onError: (e: unknown) => {
-        console.log({ tx_error: e })
-        if (e instanceof UserDenied) {
-          setError('User Denied')
-        } else if (e instanceof CreateTxFailed) {
-          setError(`Create Tx Failed: ${e.message}`)
-        } else if (e instanceof TxFailed) {
-          setError(`Tx Failed: ${e.message}`)
-        } else if (e instanceof Timeout) {
-          setError('Timeout')
-        } else if (e instanceof TxUnspecifiedError) {
-          setError(`Unspecified Error: ${e.message}`)
-        } else {
-          console.error(error)
-          if (/insufficient funds/i.test(e.toString()) || /Overflow: Cannot Sub with/i.test(e.toString())) 
-            setError("Insufficent funds")
-          else if (/Max spread assertion/i.test(e.toString())) 
-            setError("Try increasing slippage")
-          else 
-            setError("Failed to execute transaction.")
+        let message = ''
+        console.error(e?.toString())
+        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())){
+          setError("Insufficent funds")
+          message = "Insufficent funds"
         }
+        else if (/Max spread assertion/i.test(e?.toString())){
+          setError("Try increasing slippage")
+          message = "Try increasing slippage"
+        }
+        else if (/Request rejected/i.test(e?.toString())) {
+          setError("User Denied")
+          message = "User Denied"
+        }
+        else{
+          setError("Failed to execute transaction.")
+          message = "Failed to execute transaction."
+        }
+
+        toast({
+          title: 'Swap Failed.',
+          description: message,
+          status: 'error',
+          duration: 9000,
+          position: "top-right",
+          isClosable: true,
+        })
 
         setTxStep(TxStep.Failed)
 
@@ -175,7 +182,7 @@ export const useTransaction = ({
         onBroadcasting?.(data.transactionHash)
         toast({
           title: 'Withdraw Liquidity Success.', 
-          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > TxHash:  </Finder> ,
+          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} >  </Finder> ,
           status: 'success',
           duration: 9000,
           position: "top-right",

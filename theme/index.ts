@@ -18,10 +18,10 @@ export default extendTheme({
       body: {
         background: "#191919"
       },
-      "#chakra-toast-manager-bottom-right": {
-        right: "32px!important",
-        bottom: "32px!important",
-      },
+      // "#chakra-toast-manager-bottom-right": {
+      //   right: "32px!important",
+      //   bottom: "32px!important",
+      // },
     }
   },
   fonts: {
@@ -44,9 +44,9 @@ export default extendTheme({
     Menu,
   },
   colors: {
-    green: { 500: "#5ECFD1" },
-    red: { 500: "#ED7470" },
-    white: { 500: "white" },
+    // green: { 500: "#5ECFD1" },
+    // red: { 500: "#ED7470" },
+    // white: { 500: "white" },
     brand: {
       100: "rgba(255,255,255,0.15)",
       200: "rgba(255,255,255,0.5)",

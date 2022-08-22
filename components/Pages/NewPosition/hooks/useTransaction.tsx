@@ -42,7 +42,7 @@ export enum TxStep {
 
 type Params = {
   enabled: boolean;
-  swapAddress:string;
+  swapAddress: string;
   swapAssets: any[];
   price?: number;
   client: any;
@@ -53,8 +53,8 @@ type Params = {
   amount?: string;
   gasAdjustment?: number;
   estimateEnabled?: boolean;
-  tokenAAmount? :number,
-  tokenBAmount? : number,
+  tokenAAmount?: number,
+  tokenBAmount?: number,
   onBroadcasting?: (txHash: string) => void;
   onSuccess?: (txHash: string, txInfo?: any) => void;
   onError?: (txHash?: string, txInfo?: any) => void;
@@ -93,7 +93,7 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if(!!buttonLabel)  setButtonLabel(null)
+        if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
@@ -103,17 +103,17 @@ export const useTransaction = ({
           setError("Insufficent funds")
           setButtonLabel('Insufficent funds')
           throw new Error('Insufficent funds')
-        } 
-       else if (/Max spread assertion/i.test(error.toString())) {
+        }
+        else if (/Max spread assertion/i.test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError("Try increasing slippage")
           throw new Error('Try increasing slippage')
         } else {
-          console.error({error})
+          console.error({ error })
           setTxStep(TxStep.Idle)
-          setError("Something went wrong")
-          throw Error("Something went wrong")
+          setError("Failed to execute transaction.")
+          throw Error("Failed to execute transaction.")
         }
       }
     },
@@ -131,7 +131,7 @@ export const useTransaction = ({
     }
   )
 
-  
+
 
   const { mutate } = useMutation(
     (data: any) => {
@@ -152,26 +152,33 @@ export const useTransaction = ({
         setTxStep(TxStep.Posting)
       },
       onError: (e: unknown) => {
-        console.log({ tx_error: e })
-        if (e instanceof UserDenied) {
-          setError('User Denied')
-        } else if (e instanceof CreateTxFailed) {
-          setError(`Create Tx Failed: ${e.message}`)
-        } else if (e instanceof TxFailed) {
-          setError(`Tx Failed: ${e.message}`)
-        } else if (e instanceof Timeout) {
-          setError('Timeout')
-        } else if (e instanceof TxUnspecifiedError) {
-          setError(`Unspecified Error: ${e.message}`)
-        } else {
-          console.error(error)
-          if (/insufficient funds/i.test(e.toString()) || /Overflow: Cannot Sub with/i.test(e.toString())) 
-            setError("Insufficent funds")
-          else if (/Max spread assertion/i.test(e.toString())) 
-            setError("Try increasing slippage")
-          else 
-            setError("Failed to execute transaction.")
+        let message = ''
+        console.error(e?.toString())
+        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())){
+          setError("Insufficent funds")
+          message = "Insufficent funds"
         }
+        else if (/Max spread assertion/i.test(e?.toString())){
+          setError("Try increasing slippage")
+          message = "Try increasing slippage"
+        }
+        else if (/Request rejected/i.test(e?.toString())) {
+          setError("User Denied")
+          message = "User Denied"
+        }
+        else{
+          setError("Failed to execute transaction.")
+          message = "Failed to execute transaction."
+        }
+
+        toast({
+          title: 'Swap Failed.',
+          description: message,
+          status: 'error',
+          duration: 9000,
+          position: "top-right",
+          isClosable: true,
+        })
 
         setTxStep(TxStep.Failed)
 
@@ -184,8 +191,8 @@ export const useTransaction = ({
         const queryPath = `@pool-liquidity/${poolId}/${senderAddress}`
         queryClient.invalidateQueries([queryPath])
         toast({
-          title: 'Add Liquidity Success.', 
-          description:  <Finder txHash={data.transactionHash} chainId={client.chainId} > TxHash:  </Finder> ,
+          title: 'Add Liquidity Success.',
+          description: <Finder txHash={data.transactionHash} chainId={client.chainId} > </Finder>,
           status: 'success',
           duration: 9000,
           position: "top-right",
@@ -196,75 +203,75 @@ export const useTransaction = ({
     },
   )
 
-const { data: txInfo } = useQuery(
-  ['txInfo', txHash],
-  () => {
-    if (txHash == null) {
+  const { data: txInfo } = useQuery(
+    ['txInfo', txHash],
+    () => {
+      if (txHash == null) {
+        return
+      }
+
+      return client.queryClient.tx.getTx(txHash)
+    },
+    {
+      enabled: txHash != null,
+      retry: true,
+    },
+  )
+
+
+  const reset = () => {
+    setError(null)
+    setTxHash(undefined)
+    setTxStep(TxStep.Idle)
+  }
+
+  const submit = useCallback(async () => {
+    if (fee == null || msgs == null || msgs.length < 1) {
       return
     }
 
-    return client.queryClient.tx.getTx(txHash)
-  },
-  {
-    enabled: txHash != null,
-    retry: true,
-  },
-)
+    mutate({
+      msgs,
+      fee
+    })
+  }, [msgs, fee, mutate, price])
 
-
-const reset = () => {
-  setError(null)
-  setTxHash(undefined)
-  setTxStep(TxStep.Idle)
-}
-
-const submit = useCallback(async () => {
-  if (fee == null || msgs == null || msgs.length < 1) {
-    return
-  }
-
-  mutate({
-    msgs,
-    fee
-  })
-}, [msgs, fee, mutate, price])
-
-useEffect(() => {
-  if (txInfo != null && txHash != null) {
-    if (txInfo?.txResponse?.code) {
-      setTxStep(TxStep.Failed)
-      onError?.(txHash, txInfo)
-    } else {
-      setTxStep(TxStep.Success)
-      onSuccess?.(txHash, txInfo)
+  useEffect(() => {
+    if (txInfo != null && txHash != null) {
+      if (txInfo?.txResponse?.code) {
+        setTxStep(TxStep.Failed)
+        onError?.(txHash, txInfo)
+      } else {
+        setTxStep(TxStep.Success)
+        onSuccess?.(txHash, txInfo)
+      }
     }
-  }
-}, [txInfo, onError, onSuccess, txHash])
+  }, [txInfo, onError, onSuccess, txHash])
 
-useEffect(() => {
-  if (error) {
-    setError(null)
-  }
+  useEffect(() => {
+    if (error) {
+      setError(null)
+    }
 
 
-  if (txStep != TxStep.Idle) {
-    setTxStep(TxStep.Idle)
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [debouncedMsgs])
+    if (txStep != TxStep.Idle) {
+      setTxStep(TxStep.Idle)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedMsgs])
 
-return useMemo(() => {
-  return {
-    fee,
-    buttonLabel,
-    submit,
-    txStep,
-    txInfo,
-    txHash,
-    error,
-    reset,
-  }
-}, [txStep, txInfo, txHash, error, reset, fee])
+  return useMemo(() => {
+    return {
+      fee,
+      buttonLabel,
+      submit,
+      txStep,
+      txInfo,
+      txHash,
+      error,
+      reset,
+    }
+  }, [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

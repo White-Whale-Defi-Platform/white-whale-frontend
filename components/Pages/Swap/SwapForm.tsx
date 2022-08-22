@@ -84,21 +84,30 @@ const SwapForm: FC<Props> = ({
     }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
     const onReverse = () => {
-        setValue("tokenA", tokenB, { shouldValidate: true })
-        setValue("tokenB", tokenA, { shouldValidate: true })
+        // setValue("tokenA", tokenB?.amount === 0 ? {...tokenB, amount : parseFloat(fromChainAmount(simulated?.amount))} : tokenB, { shouldValidate: true })
+        // setValue("tokenB", tokenA, { shouldValidate: true })
+
+        const A = {...tokenB, amount : tokenA.amount || parseFloat(fromChainAmount(simulated?.amount))}
+        const B = {...tokenA, amount : tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))}
+        setValue("tokenA", A, { shouldValidate: true })
+        setValue("tokenB", B, { shouldValidate: true })
+
         onReverseDirection()
     }
 
     useEffect(() => {
+
         if (simulated) {
             if (isReverse) {
                 const asset = { ...tokenA }
                 asset.amount = parseFloat(fromChainAmount(simulated?.amount))
                 setValue("tokenA", asset)
+                onInputChange({ ...tokenA, amount: parseFloat(fromChainAmount(simulated?.amount)) }, 0);
             } else {
                 const asset = { ...tokenB }
                 asset.amount = parseFloat(fromChainAmount(simulated?.amount))
                 setValue("tokenB", asset)
+                onInputChange({ ...tokenB, amount: parseFloat(fromChainAmount(simulated?.amount)) }, 1);
             }
         }
         else {
@@ -121,6 +130,7 @@ const SwapForm: FC<Props> = ({
     }, [simulated])
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
+    
 
     return (
         <VStack
@@ -146,7 +156,7 @@ const SwapForm: FC<Props> = ({
                 <HStack justifyContent="space-between" width="full" >
 
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
                         <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(2)}</Text>
                     </HStack>
 
@@ -175,7 +185,11 @@ const SwapForm: FC<Props> = ({
                             balance={tokenABalance}
                             // onInputFocus={() => setIsReverse(true)}
                             disabled={isInputDisabled}
-                            onChange={(value) => { setReverse(false); onInputChange(value, 0); field.onChange(value); }}
+                            onChange={(value, isTokenChange) => { 
+                                setReverse(false); 
+                                onInputChange(value, 0); 
+                                field.onChange(value); 
+                            }}
 
                         />
                     )}
@@ -200,7 +214,7 @@ const SwapForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8} style={{ margin: 'unset' }}>
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Asset Input</Text>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
                         <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(2)}</Text>
                     </HStack>
                     <HStack>
@@ -230,8 +244,9 @@ const SwapForm: FC<Props> = ({
                             balance={tokenBBalance}
                             disabled={isInputDisabled}
                             // onInputFocus={() => setIsReverse(true)}
-                            onChange={(value) => { 
-                                if(tokenB?.tokenSymbol) setReverse(true); 
+                            onChange={(value, isTokenChange) => { 
+                                if(tokenB?.tokenSymbol && !isTokenChange) setReverse(true); 
+                                if(isTokenChange && isReverse) setReverse(false)
                                 onInputChange(value, 1); 
                                 field.onChange(value); 
                             }}
@@ -267,9 +282,9 @@ const SwapForm: FC<Props> = ({
 
 
 
-            {
+            {/* {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
-            }
+            } */}
 
 
 

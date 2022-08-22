@@ -20,6 +20,7 @@ const useProvideLP = ({reverse = false}) => {
       swap_address : swapAddress = null,
       liquidity  = {}
     } = {}] = useQueryPoolLiquidity({ poolId})
+
     
     const slippage = "0.1"
   //@ts-ignore
@@ -31,15 +32,14 @@ const useProvideLP = ({reverse = false}) => {
   const simulated = useMemo(() => {
     if((!reverse && !lpTokenA?.amount) || (reverse && !lpTokenB?.amount) )  return null
 
-    const normalizedValue = reverse? lpTokenB.amount : lpTokenA.amount || 0;
-    const ratio = reverse? num(tokenAReserve).div(tokenBReserve) : num(tokenBReserve).div(tokenAReserve);
+    const normalizedValue = reverse  ? lpTokenB.amount : lpTokenA.amount || 0;
+    const ratio = (reverse || matchingPools?.streamlinePoolBA) ? num(tokenAReserve).div(tokenBReserve) : num(tokenBReserve).div(tokenAReserve);
     return num(normalizedValue).times(ratio).toFixed(6);
 
-  }, [lpTokenA, lpTokenB, swapAddress, tokenAReserve, tokenBReserve, reverse])
-
+  }, [lpTokenA, lpTokenB, swapAddress, tokenAReserve, tokenBReserve, reverse, matchingPools])
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (simulated == null ) return {};
+    if (simulated == null || swapAddress == null ) return {};
 
     return {
       msgs: createLpMsg({
@@ -72,7 +72,6 @@ const useProvideLP = ({reverse = false}) => {
     onSuccess: () => { },
     onError: () => { }
   });
-
 
   return useMemo(() => ({ simulated , tx}), [simulated, tx])
 
