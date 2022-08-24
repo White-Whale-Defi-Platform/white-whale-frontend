@@ -46,7 +46,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
             <Modal onClose={onClose} isOpen={isOpen} isCentered size={{base:'full', md: '2xl'}} >
                 <ModalOverlay />
                 <ModalContent  backgroundColor="#212121">
-                    <ModalHeader>Select token</ModalHeader>
+                    <ModalHeader>Select Token</ModalHeader>
                     <ModalBody
                         as={VStack}
                         gap={3}

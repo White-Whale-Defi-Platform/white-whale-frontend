@@ -63,6 +63,7 @@ const SwapForm: FC<Props> = ({
         }
 
     }, [resetForm, tx?.txStep])
+    
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
     const amountA = getValues('tokenA')
@@ -71,11 +72,11 @@ const SwapForm: FC<Props> = ({
     const buttonLabel = useMemo(() => {
 
         if (!connected)
-            return 'Connect wallet'
-        else if (!tokenB?.tokenSymbol)
-            return 'Select token'
+            return 'Connect Wallet'
+        else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol)
+            return 'Select Token'
         else if (!!!amountA?.amount)
-            return 'Enter amount'
+            return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
@@ -156,7 +157,7 @@ const SwapForm: FC<Props> = ({
                 <HStack justifyContent="space-between" width="full" >
 
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                         <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(2)}</Text>
                     </HStack>
 
@@ -214,7 +215,7 @@ const SwapForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8} style={{ margin: 'unset' }}>
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                         <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(2)}</Text>
                     </HStack>
                     <HStack>
