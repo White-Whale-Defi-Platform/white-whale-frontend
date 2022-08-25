@@ -9,25 +9,26 @@ import { TokenItemState, tokenLpAtom } from '../ManageLiquidity/lpAtoms';
 import useProvideLP from "./hooks/useProvideLP";
 import NewPositionForm from './NewPositionForm';
 import defaultTokens from './defaultTokens.json'
+import getChainName from 'libs/getChainName'
 
 
 const NewPosition: FC = () => {
     const router: NextRouter = useRouter()
 
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenLpAtom)
-    const { chainId, key } = useRecoilValue(walletState)
+    const { chainId, key, address } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState(false)
     const [reverse, setReverse] = useState<boolean>(false)
 
     useEffect(() => {
-        if (chainId) {
-            const [from, to] = defaultTokens[chainId]
+        if (address) {
+            const [from, to] = defaultTokens[getChainName(address)]
             const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
             setTokenSwapState([from, to])
             setResetForm(true)
             router.replace(params)
         }
-    }, [chainId])
+    }, [address])
 
     useEffect(() => {
         const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`

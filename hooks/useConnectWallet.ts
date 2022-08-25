@@ -8,9 +8,9 @@ import { useRecoilState } from 'recoil'
 
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { GAS_PRICE } from '../util/constants'
-import { useChainInfo } from './useChainInfo'
+import { useChainInfo, useChains } from './useChainInfo'
 import { useToast } from '@chakra-ui/react'
-import chains from "components/Wallet/chainInfo.json"
+// import chains from "components/Wallet/chainInfo.json"
 
 
 export const useConnectWallet = (
@@ -21,6 +21,7 @@ export const useConnectWallet = (
   const toast = useToast()
 
   let [chainInfo] = useChainInfo(chainId)
+  const chains = useChains()
 
 
   const mutation = useMutation(async (id = chainId) => {
@@ -29,15 +30,15 @@ export const useConnectWallet = (
       return
     }
     // if (id)
-    chainInfo = chains.find(({ chainId }) => chainId === (id || chainId))
+    chainInfo = chains.find(({ chainId }) => chainId === (id || chainId)) || chains?.[0]
 
     /* set the fetching state */
-    setWalletState((value) => ({
-      ...value,
-      chainId: chainInfo?.chainId,
-      client: null,
-      state: WalletStatusType.connecting,
-    }))
+    // setWalletState((value) => ({
+    //   ...value,
+    //   chainId: chainInfo?.chainId,
+    //   client: null,
+    //   state: WalletStatusType.connecting,
+    // }))
 
     try {
       await window.keplr.experimentalSuggestChain(chainInfo)

@@ -1,0 +1,30 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "phoenix-1",
+    "chain_id": "phoenix-1",
+    "token_address": "",
+    "symbol": "LUNA",
+    "name": "Luna",
+    "decimals": 6,
+    "logoURI": "/logos/luna.svg",
+    "tags": ["native"],
+    "native": true,
+    "denom": "uluna"
+  },
+  "pools": [],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

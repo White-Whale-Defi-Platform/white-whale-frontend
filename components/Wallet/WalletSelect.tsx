@@ -13,7 +13,7 @@ import { Switch, FormControl, FormLabel } from '@chakra-ui/react'
 import { networkAtom } from 'state/atoms/walletAtoms'
 import { useRecoilState } from 'recoil'
 
-const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
+const walletSelect = ({ denom, chainList = [], onChange, connected , onNetworkChange}) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
     const [network, setNetwork] = useRecoilState(networkAtom)
@@ -66,15 +66,22 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                     <VStack alignItems="flex-start" width="full" gap={2}>
                         <Text color="brand.200" fontSize="22px" fontWeight="400">Select network</Text>
 
-                        <FormControl display='flex' alignItems='center' justifyContent="space-between">
-                            <FormLabel htmlFor='network' mb='0'>
-                                Testnet
-                            </FormLabel>
-                            <Switch
-                                id='network'
-                                isChecked={network === 'testnet'}
-                                onChange={({ target }) => setNetwork(target.checked ? 'testnet' : 'mainnet')} />
-                        </FormControl>
+                        {!process?.env?.production && (
+                            <FormControl display='flex' alignItems='center' justifyContent="space-between">
+                                <FormLabel htmlFor='network' mb='0'>
+                                    Testnet
+                                </FormLabel>
+                                <Switch
+                                    id='network'
+                                    isChecked={network === 'testnet'}
+                                    onChange={({ target }) => {
+                                            onNetworkChange?.(target.checked)
+                                            setNetwork(target.checked ? 'testnet' : 'mainnet')
+
+                                    }} />
+                            </FormControl>
+                        )}
+
                         <List spacing={1} color="white" width="full" >
 
                             {chainList.map((chain, index) => (
