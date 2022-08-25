@@ -1,11 +1,11 @@
 [
     {
-        "chainId": "uni-3",
-        "chainName": "Juno Uni Testnet",
+        "chainId": "juno-1",
+        "chainName": "Juno Mainnet",
         "label": "Juno",
         "icon": "/logos/juno.svg",
-        "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
-        "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
+        "rpc": "https://rpc-juno.itastakers.com",
+        "rest": "https://lcd-juno.itastakers.com",
         "stakeCurrency": {
             "coinDenom": "JUNOX",
             "coinMinimalDenom": "ujunox",
@@ -49,12 +49,12 @@
         ]
     },
     {
-        "chainId": "pisco-1",
-        "chainName": "Terra testnet",
+        "chainId": "phoenix-1",
+        "chainName": "Terra Mainnet",
         "label": "Terra",
         "icon": "/logos/luna.svg",
-        "rpc": "https://terra-testnet-rpc.polkachu.com",
-        "rest": "https://pisco-lcd.terra.dev",
+        "rpc": "https://terra-rpc.polkachu.com",
+        "rest": "https://terra-api.polkachu.com",
         "stakeCurrency": {
             "coinDenom": "LUNA",
             "coinMinimalDenom": "uluna",

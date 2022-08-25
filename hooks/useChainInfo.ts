@@ -7,6 +7,7 @@ const chainInfoQueryKey = '@chain-info'
 // import chainInfo from "components/Wallet/chainInfo.json"
 import { networkAtom } from 'state/atoms/walletAtoms'
 import { useRecoilValue } from 'recoil'
+import { useMemo } from 'react'
 
 
 export const unsafelyReadChainInfoCache = () =>
@@ -35,11 +36,10 @@ export const useChains = () => {
   return data || []
 }
 
-export const useChainInfo = (id = "uni-3") => {
+export const useChainInfo = (id) => {
 
   const chainInfo = useChains()
+  const chain = !id ? chainInfo?.[0] : chainInfo.find(({ chainId }) => chainId === id)
 
-  const chain = chainInfo.find(({ chainId }) => chainId === id)
-
-  return [chain]
+  return useMemo(() => ([chain]), [chain])
 }

@@ -26,6 +26,7 @@ export type Simulated = {
     spread: string;
     commission: string;
     price: number;
+    error?: string
 }
 
 
@@ -79,7 +80,18 @@ const useSimulate = ({
     );
 
 
-    return useMemo(() => {
+    const simulatedError = useMemo(() => {
+        if (!error) return null
+
+        if (/unreachable: query wasm contract failed: invalid request/i.test(error?.toString()))
+            return "Insuifficient liquidity"
+
+    }, [error])
+
+
+
+
+    const simulatedData = useMemo(() => {
         if (data == null || amount == '') {
             return null;
         }
@@ -104,6 +116,12 @@ const useSimulate = ({
             price: Number(amount) / Number(data.return_amount)
         };
     }, [amount, data, isLoading]);
+
+    return {
+        simulated: simulatedData,
+        error: simulatedError,
+        isLoading
+    }
 
 
 }

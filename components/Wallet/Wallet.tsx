@@ -29,13 +29,13 @@ import { useToast } from '@chakra-ui/react'
 const options = [
   {
     label: "Juno",
-    value: "uni-3",
-    icon: "/logos/juno.svg"
+    icon: "/logos/juno.svg",
+    value: "uni-3"
   },
   {
     label: "Terra",
-    value: "pisco-1",
-    icon: "/logos/luna.svg"
+    icon: "/logos/luna.svg",
+    value: "pisco-1"
   }
 ]
 
@@ -43,10 +43,10 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
   const baseToken = useBaseTokenInfo()
   // const { address, chainId } = useRecoilValue(walletState)
-  const [{ address, chainId }, setWalletState] = useRecoilState(walletState)
+  const [{ address, chainId , status}, setWalletState] = useRecoilState(walletState)
   // const [activeChain, setActiveChain] = useRecoilState(activeChainAtom)
   const currentChain = options.find(({ value }) => value === chainId)
-  const [chainInfo] = useChainInfo(chainId || 'uni-3')
+  const [chainInfo] = useChainInfo(chainId)
   const { balance } = useTokenBalance(baseToken?.symbol)
   const toast = useToast()
 
@@ -61,11 +61,10 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const chains = useChains()
 
   const chainList = useMemo(() => {
-    return chains.map(({ chainId, chainName }) => ({
-      ...options.find(({ value }) => value === chainId),
-      chainName,
-      value: chainId,
-      active: chainId === chainInfo?.chainId
+    return chains.map((chain) => ({
+      // ...options.find(({ value }) => value === chainId),
+      ...chain,
+      active: chain?.chainId === chainInfo?.chainId
     }))
 
   }, [chains, chainInfo])
@@ -73,20 +72,20 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const onChainChange = (chain) => {
     setWalletState((value) => ({
       ...value,
-      chainId: chain?.value
+      chainId: chain?.chainId
     }))
   }
 
   const onChainChanage = (chain) => {
     if (connected)
-      onConnect(chain?.value)
+      onConnect(chain?.chainId)
   }
 
   useEffect(() => {
-    if (connected) {
+    if (connected && chainId && chainList.length) {
       onConnect(chainId)
     }
-  }, [])
+  }, [chainList, chainId, connected])
 
   if (!connected) {
     return (

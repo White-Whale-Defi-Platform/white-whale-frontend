@@ -85,7 +85,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                     <Text fontSize="14" fontWeight="700">{tokenBalance}</Text>
                 </HStack>
 

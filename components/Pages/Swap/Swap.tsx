@@ -9,8 +9,9 @@ import { walletState } from 'state/atoms/walletAtoms';
 import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
 import defaultTokens from './defaultTokens.json'
-import {usePriceForOneToken} from "./hooks/usePriceForOneToken"
+import { usePriceForOneToken } from "./hooks/usePriceForOneToken"
 import { fromChainAmount } from "libs/num";
+import getChainName from 'libs/getChainName'
 
 
 
@@ -20,24 +21,32 @@ type SwapProps = {
     initialTokenPair?: readonly [string, string]
 }
 
-const Swap: FC<SwapProps> = ({  }) => {
+const Swap: FC<SwapProps> = ({ }) => {
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState<boolean>(false)
-    const { chainId, key } = useRecoilValue(walletState)
+    const { chainId, address, key } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState<boolean>(false)
     const router = useRouter()
 
     useEffect(() => {
-        if (chainId) {
-            const [from, to] = defaultTokens[chainId]
+        if (address) {
+            const [from, to] = defaultTokens[getChainName(address)]
             const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
             setTokenSwapState([from, to])
             setResetForm(true)
             router.replace(params)
         }
-    }, [chainId])
+    }, [address, chainId])
 
-    const { tx, simulated, minReceive } = useSwap({ reverse})
+    const { tx, simulated, minReceive, state } = useSwap({ reverse })
+
+    const clearForm = (reset) => {
+        setTokenSwapState([
+            { ...tokenA, amount: 0 },
+            { ...tokenB, amount: 0 }
+        ])
+        setResetForm(reset)
+    }
 
     const onInputChange = ({ tokenSymbol, amount }, index: number) => {
         if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
@@ -48,15 +57,14 @@ const Swap: FC<SwapProps> = ({  }) => {
             tokenSymbol: tokenSymbol,
             amount: Number(amount)
         }
-
         setTokenSwapState(newState)
 
     }
 
     const onReverseDirection = () => {
 
-        const A = {...tokenB, amount : tokenA.amount || parseFloat(fromChainAmount(simulated?.amount))}
-        const B = {...tokenA, amount : tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))}
+        const A = { ...tokenB, amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)) }
+        const B = { ...tokenA, amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)) }
 
         setTokenSwapState([A, B])
     }
@@ -88,9 +96,10 @@ const Swap: FC<SwapProps> = ({  }) => {
                 minReceive={minReceive}
                 isReverse={reverse}
                 tx={tx}
+                state={state}
                 setReverse={setReverse}
                 resetForm={resetForm}
-                setResetForm={setResetForm}
+                setResetForm={clearForm}
             />
 
         </VStack>

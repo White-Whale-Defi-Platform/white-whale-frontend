@@ -59,7 +59,7 @@ const SwapSettings = () => {
                 >
                     <VStack width="full" alignItems="flex-start">
                         <Text fontSize="14" fontWeight="700">Transaction Settings</Text>
-                        <Text fontSize="14" fontWeight="400" color="brand.200">Slippage Tolerance?</Text>
+                        <Text fontSize="14" fontWeight="400" color="brand.200">Slippage Tolerance</Text>
                         <HStack>
                             <Button onClick={onAuto} paddingX={8} variant={auto ? "primary" : "outline"} size="sm">
                                 Auto
@@ -68,7 +68,7 @@ const SwapSettings = () => {
                                 color="brand.500"
                                 borderRadius="100px"
                                 border="1px solid rgba(255, 255, 255, 0.1)"
-                                borderColor="white"
+                                borderColor={slippage === 0? "white" : "brand.500"}
                                 paddingY={1}
                             >
                                 <Input
@@ -85,7 +85,8 @@ const SwapSettings = () => {
 
                                 />
                                 <InputRightElement
-                                    paddingBottom="5px"
+                                    color={slippage === 0? "#718096" : "brand.500"}
+                                    paddingBottom="10px"
                                     pointerEvents='none'
                                     children="%"
 

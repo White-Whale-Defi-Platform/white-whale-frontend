@@ -8,7 +8,7 @@ import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { TokenItemState } from './swapAtoms';
 import { Simulated } from './hooks/useSimulate'
-import {num} from 'libs/num'
+import { num } from 'libs/num'
 
 
 type Props = {
@@ -18,7 +18,8 @@ type Props = {
     onInputChange: (asset: TokenItemState, index: number) => void;
     simulated: Simulated;
     isReverse: boolean;
-    tx: any
+    tx: any;
+    state: any;
     minReceive: string
     onReverseDirection: () => void
     setReverse: (valuse: boolean) => void
@@ -34,6 +35,7 @@ const SwapForm: FC<Props> = ({
     onReverseDirection,
     simulated,
     tx,
+    state,
     minReceive,
     isReverse,
     setReverse,
@@ -51,18 +53,13 @@ const SwapForm: FC<Props> = ({
 
     useEffect(() => {
         if (resetForm || tx.txStep === TxStep.Success) {
-            setValue('tokenA', {
-                ...tokenA,
-                amount: 0
-            })
-            setValue('tokenB', {
-                ...tokenB,
-                amount: 0
-            })
+            setValue('tokenA', { ...tokenA, amount: 0 })
+            setValue('tokenB', { ...tokenB, amount: 0 })
             setResetForm(false)
         }
 
     }, [resetForm, tx?.txStep])
+
     const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
     const amountA = getValues('tokenA')
@@ -71,24 +68,26 @@ const SwapForm: FC<Props> = ({
     const buttonLabel = useMemo(() => {
 
         if (!connected)
-            return 'Connect wallet'
-        else if (!tokenB?.tokenSymbol)
-            return 'Select token'
+            return 'Connect Wallet'
+        else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol)
+            return 'Select Token'
+        else if (state?.error)
+            return state?.error
         else if (!!!amountA?.amount)
-            return 'Enter amount'
+            return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
             return 'Swap'
 
-    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
+    }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
     const onReverse = () => {
         // setValue("tokenA", tokenB?.amount === 0 ? {...tokenB, amount : parseFloat(fromChainAmount(simulated?.amount))} : tokenB, { shouldValidate: true })
         // setValue("tokenB", tokenA, { shouldValidate: true })
 
-        const A = {...tokenB, amount : tokenA.amount || parseFloat(fromChainAmount(simulated?.amount))}
-        const B = {...tokenA, amount : tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))}
+        const A = { ...tokenB, amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)) }
+        const B = { ...tokenA, amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)) }
         setValue("tokenA", A, { shouldValidate: true })
         setValue("tokenB", B, { shouldValidate: true })
 
@@ -120,7 +119,7 @@ const SwapForm: FC<Props> = ({
             }
             else {
                 const asset = { ...tokenA }
-                if (!!!asset?.amount) {
+                if (!!!asset?.amount || state?.error) {
                     asset.amount = 0
                     setValue("tokenB", asset, { shouldValidate: true })
                 }
@@ -156,7 +155,7 @@ const SwapForm: FC<Props> = ({
                 <HStack justifyContent="space-between" width="full" >
 
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                         <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(2)}</Text>
                     </HStack>
 
@@ -185,10 +184,10 @@ const SwapForm: FC<Props> = ({
                             balance={tokenABalance}
                             // onInputFocus={() => setIsReverse(true)}
                             disabled={isInputDisabled}
-                            onChange={(value, isTokenChange) => { 
-                                setReverse(false); 
-                                onInputChange(value, 0); 
-                                field.onChange(value); 
+                            onChange={(value, isTokenChange) => {
+                                setReverse(false);
+                                onInputChange(value, 0);
+                                field.onChange(value);
                             }}
 
                         />
@@ -205,7 +204,7 @@ const SwapForm: FC<Props> = ({
                     _active={{ background: "transparent" }}
                     _hover={{ background: "transparent", color: "white" }}
                     icon={<DoubleArrowsIcon width="2rem" height="2rem" />}
-                    disabled={isInputDisabled }
+                    disabled={isInputDisabled}
                     onClick={onReverse}
                 />
             </HStack>
@@ -214,7 +213,7 @@ const SwapForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8} style={{ margin: 'unset' }}>
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                         <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(2)}</Text>
                     </HStack>
                     <HStack>
@@ -244,11 +243,11 @@ const SwapForm: FC<Props> = ({
                             balance={tokenBBalance}
                             disabled={isInputDisabled}
                             // onInputFocus={() => setIsReverse(true)}
-                            onChange={(value, isTokenChange) => { 
-                                if(tokenB?.tokenSymbol && !isTokenChange) setReverse(true); 
-                                if(isTokenChange && isReverse) setReverse(false)
-                                onInputChange(value, 1); 
-                                field.onChange(value); 
+                            onChange={(value, isTokenChange) => {
+                                if (tokenB?.tokenSymbol && !isTokenChange) setReverse(true);
+                                if (isTokenChange && isReverse) setReverse(false)
+                                onInputChange(value, 1);
+                                field.onChange(value);
                             }}
                         />
                     )}
@@ -259,14 +258,14 @@ const SwapForm: FC<Props> = ({
                 type='submit'
                 width="full"
                 variant="primary"
-                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting || state?.isLoading}
                 disabled={tx.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}
             </Button>
 
 
-            {(amountB.amount && minReceive) && (
+            {(amountB.amount) && (
                 <VStack alignItems="flex-start" width="full">
                     <Text
                         color="brand.500"
@@ -275,7 +274,8 @@ const SwapForm: FC<Props> = ({
                     </Text>
                     <HStack justifyContent="space-between" width="full">
                         <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                        <Text color="brand.500" fontSize={12}> Min Receive: {minReceive} </Text>
+                        {minReceive &&  <Text color="brand.500" fontSize={12}> Min Receive: {minReceive} </Text>}
+                        
                     </HStack>
                 </VStack>
             )}

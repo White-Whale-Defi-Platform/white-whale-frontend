@@ -1,5 +1,5 @@
 {
-    "uni-3": [
+    "juno": [
         {
             "tokenSymbol": "JUNOX",
             "amount": 0
@@ -9,7 +9,7 @@
             "amount": 0
         }
     ],
-    "pisco-1": [
+    "terra": [
         {
             "tokenSymbol": "LUNA",
             "amount": 0

@@ -107,8 +107,28 @@ export const ibcWalletState = createWalletState<
 
 type Network = 'testnet' | 'mainnet'
 
+// export const networkAtom = atom<Network>({
+//   key: 'network',
+//   default: 'mainnet',
+// })
 export const networkAtom = atom<Network>({
   key: 'network',
-  default: 'testnet',
-})
+  default: 'mainnet',
+  effects_UNSTABLE: [
+    ({ onSet, setSelf }) => {
 
+      const network = localStorage.getItem('network') as Network
+      setSelf(network)
+
+      onSet((newValue, oldValue) => {
+        const isReset = !!!newValue
+
+        if (isReset) {
+          localStorage.removeItem('network')
+        } else {
+          localStorage.setItem('network', String(newValue))
+        }
+      })
+    },
+  ]
+})

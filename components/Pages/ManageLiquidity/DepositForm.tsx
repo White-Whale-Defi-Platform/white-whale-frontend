@@ -95,7 +95,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                     <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
                 </HStack>
                 <Controller
@@ -117,7 +117,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance</Text>
+                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
                     <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
                 </HStack>
                 <Controller

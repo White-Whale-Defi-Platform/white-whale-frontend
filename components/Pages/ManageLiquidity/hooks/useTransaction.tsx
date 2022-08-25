@@ -99,9 +99,9 @@ export const useTransaction = ({
         if (/insufficient funds/i.test(error.toString()) || /Overflow: Cannot Sub with/i.test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Insufficent funds")
-          setButtonLabel('Insufficent funds')
-          throw new Error('Insufficent funds')
+          setError("Insufficient Funds")
+          setButtonLabel('Insufficient Funds')
+          throw new Error('Insufficient Funds')
         } else {
           console.error(error)
           setTxStep(TxStep.Idle)
@@ -145,8 +145,8 @@ export const useTransaction = ({
         let message = ''
         console.error(e?.toString())
         if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())){
-          setError("Insufficent funds")
-          message = "Insufficent funds"
+          setError("Insufficient Funds")
+          message = "Insufficient Funds"
         }
         else if (/Max spread assertion/i.test(e?.toString())){
           setError("Try increasing slippage")

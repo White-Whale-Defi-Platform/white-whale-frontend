@@ -28,7 +28,7 @@ const SearchInput: FC<Props> = ({ onChange }) => {
                 paddingX={6}
             >
                 <Input
-                    placeholder='Search token'
+                    placeholder='Search Token'
                     variant="unstyled"
                     color="brand.500"
                     onChange={({ target: { value } }) => setSearch(value)}
