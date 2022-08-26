@@ -25,6 +25,7 @@
     "native": true,
     "denom": "ujunox"
   },
+  "factory_address": "terra1f4cr4sr5eulp3f2us8unu6qv8a5rhjltqsg7ujjx6f2mrlqh923sljwhn3",
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
