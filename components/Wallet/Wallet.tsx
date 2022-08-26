@@ -25,27 +25,11 @@ import WalletSelect from './WalletSelect';
 import { useToast } from '@chakra-ui/react'
 
 
-
-const options = [
-  {
-    label: "Juno",
-    icon: "/logos/juno.svg",
-    value: "uni-3"
-  },
-  {
-    label: "Terra",
-    icon: "/logos/luna.svg",
-    value: "pisco-1"
-  }
-]
-
 const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
   const baseToken = useBaseTokenInfo()
-  // const { address, chainId } = useRecoilValue(walletState)
   const [{ address, chainId , status}, setWalletState] = useRecoilState(walletState)
-  // const [activeChain, setActiveChain] = useRecoilState(activeChainAtom)
-  const currentChain = options.find(({ value }) => value === chainId)
+  const chains = useChains()
   const [chainInfo] = useChainInfo(chainId)
   const { balance } = useTokenBalance(baseToken?.symbol)
   const toast = useToast()
@@ -58,7 +42,6 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
   }, [chainInfo,])
 
-  const chains = useChains()
 
   const chainList = useMemo(() => {
     return chains.map((chain) => ({

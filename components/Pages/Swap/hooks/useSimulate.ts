@@ -7,6 +7,7 @@ import { SimulationResponse, ReverseSimulationResponse } from "types";
 type QuerySimulate = {
     client: SigningCosmWasmClient;
     token: string;
+    isNative: boolean;
     amount: string;
     reverse: boolean;
     swapAddress: string;
@@ -15,6 +16,7 @@ type QuerySimulate = {
 type SwapSimulate = {
     client: SigningCosmWasmClient;
     token: string;
+    isNative: boolean;
     amount: string;
     reverse: boolean;
     swapAddress: string;
@@ -34,6 +36,7 @@ const simulate = ({
     client,
     token,
     amount,
+    isNative,
     reverse = false,
     swapAddress
 }: QuerySimulate): Promise<SimulationResponse | ReverseSimulationResponse> => {
@@ -41,14 +44,14 @@ const simulate = ({
     if (reverse) {
         return client?.queryContractSmart(swapAddress, {
             reverse_simulation: {
-                ask_asset: toAsset({ token, amount }),
+                ask_asset: toAsset({ token, amount , isNative}),
             },
         });
     }
 
     return client?.queryContractSmart(swapAddress, {
         simulation: {
-            offer_asset: toAsset({ token, amount }),
+            offer_asset: toAsset({ token, amount, isNative }),
         }
     })
 };
@@ -57,6 +60,7 @@ const useSimulate = ({
     client,
     token,
     amount,
+    isNative,
     reverse = false,
     swapAddress,
     enabled
@@ -68,6 +72,7 @@ const useSimulate = ({
         return simulate({
             client,
             token,
+            isNative,
             amount,
             reverse,
             swapAddress

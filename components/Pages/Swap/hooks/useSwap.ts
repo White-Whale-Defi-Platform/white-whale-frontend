@@ -20,6 +20,7 @@ const useSwap = ({ reverse }) => {
     const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
     const slippage = useRecoilValue(slippageAtom)
     const token = tokenA?.token_address
+    const isNative = tokenA?.native
     const denom = tokenA?.denom
     const amount = reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
     const swapAddress = matchingPools?.streamlinePoolAB?.swap_address || matchingPools?.streamlinePoolBA?.swap_address
@@ -29,6 +30,7 @@ const useSwap = ({ reverse }) => {
     const { simulated, error, isLoading } = useSimulate({
         client,
         token: reverse ? tokenB?.token_address : tokenA?.token_address,
+        isNative: reverse ? tokenB?.native : tokenA?.native,
         amount: reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : '',
         swapAddress,
         enabled: !(swapTokenA?.tokenSymbol === swapTokenB?.tokenSymbol),
@@ -59,6 +61,7 @@ const useSwap = ({ reverse }) => {
         return {
             msgs: createMsg({
                 token,
+                isNative,
                 amount: reverse ? simulated?.amount : amount,
                 slippage: String(slippageToDecimal),
                 price: num(simulated.price).dp(6).toString(),
@@ -67,6 +70,7 @@ const useSwap = ({ reverse }) => {
             encodedMsgs: [createSwapMsgs(
                 {
                     token,
+                    isNative,
                     amount: reverse ? simulated?.amount : amount,
                     denom,
                     slippage: num(slippageToDecimal).dp(3).toString(),

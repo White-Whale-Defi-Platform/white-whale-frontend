@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image, Text } from '@chakra-ui/react';
+import { background, Box, Button, HStack, Image, Text } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 import useFilter from 'hooks/useFilter'
 import { useTokenList } from 'hooks/useTokenList'
@@ -10,7 +10,7 @@ type AssetListProps = {
     onChange: (token: any, isTokenChange?: boolean) => void;
     search: string;
     currentToken: string;
-    amount? : number
+    amount?: number
 
 }
 
@@ -48,7 +48,10 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken, amount 
             overflowY="scroll"
             sx={{
                 '&::-webkit-scrollbar': {
-                    width: 'none',
+                    width: '.4rem'
+                },
+                '&::-webkit-scrollbar-thumb' : {
+                    background: 'rgba(0,0,0,0.8)'
                 }
             }}
         >
@@ -65,11 +68,18 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken, amount 
                         borderBottom={(index == filterAssets?.length - 1) ? 'unset' : "1px solid rgba(0, 0, 0, 0.5)"}
                         onClick={() => onChange({
                             tokenSymbol: item?.symbol,
-                            amount: amount 
+                            amount: amount
                         }, true)}
                     >
                         <HStack>
-                            <Image src={item?.logoURI} alt="logo-small" boxSize="2rem" fallback={<FallbackImage />}/>
+                            <Image
+                                src={item?.logoURI}
+                                alt="logo-small"
+                                // boxSize="2rem" 
+                                width="auto"
+                                maxW="1.5rem"
+                                maxH="1.5rem"
+                                fallback={<FallbackImage />} />
                             <Text fontSize="18" fontWeight="400" >{item?.symbol}</Text>
                         </HStack>
                         <Text fontSize="16" fontWeight="400">{Number(item?.balance || 0).toFixed(2)}</Text>
