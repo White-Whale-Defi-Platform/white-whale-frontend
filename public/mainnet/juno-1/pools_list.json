@@ -1,7 +1,9 @@
 {
   "name": "Pools list on mainnet",
   "logoURI": "/img/logo.svg",
-  "keywords": ["special tokens"],
+  "keywords": [
+    "special tokens"
+  ],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -17,48 +19,213 @@
     "name": "Junox",
     "decimals": 6,
     "logoURI": "/logos/juno.svg",
-    "tags": ["native"],
+    "tags": [
+      "native"
+    ],
     "native": true,
     "denom": "ujunox"
   },
   "factory_address": "terra1f4cr4sr5eulp3f2us8unu6qv8a5rhjltqsg7ujjx6f2mrlqh923sljwhn3",
   "pools": [
     {
-      "pair": "Atom-Luna",
-      "label": "ibc/C4CF...19F9-ibc/107D...5CBF pair",
-      "contract": "juno1k9cw9yghf04cqlu290n4zlveker5cev5ahweqkh07y7zc3xq9hrshjruk8",
-      "lp_token": "juno1fkejwm7alyfnjngtpgtxvreqfcz8uwer2jgwjn40suvgq20tm8ss73cj05"
+      "pool_id": "ATOM-LUNA",
+      "pool_assets": [
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+          "symbol": "ATOM",
+          "name": "Atom",
+          "decimals": 6,
+          "logoURI": "/logos/atom.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+        },
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ibc/107D152BB3176FAEBF4C2A84C5FFDEEA7C7CB4FE1BBDAB710F1FD25BCD055CBF",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/107D152BB3176FAEBF4C2A84C5FFDEEA7C7CB4FE1BBDAB710F1FD25BCD055CBF"
+        }
+      ],
+      "lp_token": "juno1fkejwm7alyfnjngtpgtxvreqfcz8uwer2jgwjn40suvgq20tm8ss73cj05",
+      "swap_address": "juno1k9cw9yghf04cqlu290n4zlveker5cev5ahweqkh07y7zc3xq9hrshjruk8",
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
-      "pair": "Atom-Juno",
-      "label": "ibc/C4CF...19F9-ujuno pair",
-      "contract": "juno1p9z8xe96fyvg3h5gtvnpjjv2u47q6l7sdhg6asmyfgc6q8l8ttgqfvxnxh",
-      "lp_token": "juno1g3549wm0tffdzdpasufjr0nccu9ynzpzway5g3u6ucmhfd4ds05swswasc"
+      "pool_id": "ATOM-JUNO",
+      "pool_assets": [
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+          "symbol": "ATOM",
+          "name": "Atom",
+          "decimals": 6,
+          "logoURI": "/logos/atom.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+        },
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ujuno",
+          "symbol": "JUNOX",
+          "name": "Junox",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujuno"
+        }
+      ],
+      "lp_token": "juno1g3549wm0tffdzdpasufjr0nccu9ynzpzway5g3u6ucmhfd4ds05swswasc",
+      "swap_address": "juno1p9z8xe96fyvg3h5gtvnpjjv2u47q6l7sdhg6asmyfgc6q8l8ttgqfvxnxh",
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
-      "pair": "Atom-Usdc",
-      "label": "ibc/C4CF...19F9-ibc/EAC3...8034 pair",
-      "contract": "juno1v6stcdrvwrthfvcwvlmmzht32ft9g9nw85tthcjqer242xg3nvdq8fjasx",
-      "lp_token": "juno12caca3ymhxr7a73wtdefye86djs69704ktzkv02xkf59se8hx72qwyxq72"
+      "pool_id": "ATOM-USDC",
+      "pool_assets": [
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+          "symbol": "ATOM",
+          "name": "Atom",
+          "decimals": 6,
+          "logoURI": "/logos/atom.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+        },
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
+          "symbol": "USDC",
+          "name": "USDC",
+          "decimals": 6,
+          "logoURI": "/logos/usdc.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034"
+        }
+      ],
+      "lp_token": "juno12caca3ymhxr7a73wtdefye86djs69704ktzkv02xkf59se8hx72qwyxq72",
+      "swap_address": "juno1v6stcdrvwrthfvcwvlmmzht32ft9g9nw85tthcjqer242xg3nvdq8fjasx",
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
-      "pair": "Juno-Raw",
-      "label": "ujuno-Raw pair",
-      "contract": "juno1xpt9mkncxadadn5t8s4t74nmw5zlarghmpme26857s07xz388d6sukvtnz",
-      "lp_token": "juno1zetjfu8j0ndt4d3mgewhatgpfrj8pwhev2tdp3sa9dwwmqlgdxws4257we"
+      "pool_id": "JUNO-RAW",
+      "pool_assets": [
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ujuno",
+          "symbol": "JUNOX",
+          "name": "Junox",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujuno"
+        },
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
+          "symbol": "RAW",
+          "name": "Raw",
+          "decimals": 6,
+          "logoURI": "/logos/raw.png",
+          "tags": [],
+          "native": false,
+          "denom": "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g"
+        }
+      ],
+      "lp_token": "juno1zetjfu8j0ndt4d3mgewhatgpfrj8pwhev2tdp3sa9dwwmqlgdxws4257we",
+      "swap_address": "juno1xpt9mkncxadadn5t8s4t74nmw5zlarghmpme26857s07xz388d6sukvtnz",
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
-      "pair": "Juno-Loop",
-      "label": "ujuno-LOOP pair",
-      "contract": "juno158mcxa5ajpjfxgy60asrg3m0823m2el5n333xdypcw8h5uwhuvyqkyc4a7",
-      "lp_token": "juno1zmsgdpdej4g4m4fc5y5p6wr8gn6peh9vx5dk5vf7v7w32jjmcetshl0yw4"
+      "pool_id": "JUNO-LOOP",
+      "pool_assets": [
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ujuno",
+          "symbol": "JUNOX",
+          "name": "Junox",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujuno"
+        },
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "juno1qsrercqegvs4ye0yqg93knv73ye5dc3prqwd6jcdcuj8ggp6w0us66deup",
+          "symbol": "LOOP",
+          "name": "Loop",
+          "decimals": 6,
+          "logoURI": "/logos/loop.png",
+          "tags": [],
+          "native": false,
+          "denom": "juno1qsrercqegvs4ye0yqg93knv73ye5dc3prqwd6jcdcuj8ggp6w0us66deup"
+        }
+      ],
+      "lp_token": "juno1zmsgdpdej4g4m4fc5y5p6wr8gn6peh9vx5dk5vf7v7w32jjmcetshl0yw4",
+      "swap_address": "juno158mcxa5ajpjfxgy60asrg3m0823m2el5n333xdypcw8h5uwhuvyqkyc4a7",
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
-      "pair": "Juno-Usdc",
-      "label": "ujuno-ibc/EAC3...8034 pair",
-      "contract": "juno1wkjy5wl0pd5xxvwtrx37r7ydkt3dkwvghs00tvvqyd3xnjukah7qpj0vj7",
-      "lp_token": "juno19mkjyvydnq440a3ms4fccpltrzmxlvlz6nvz6qul0mgxvse42n2q9qkf72"
+      "pool_id": "JUNO-USDC",
+      "pool_assets": [
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ujuno",
+          "symbol": "JUNOX",
+          "name": "Junox",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujuno"
+        },
+        {
+          "id": "juno-1",
+          "chain_id": "juno-1",
+          "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
+          "symbol": "USDC",
+          "name": "USDC",
+          "decimals": 6,
+          "logoURI": "/logos/usdc.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034"
+        }
+      ],
+      "lp_token": "juno19mkjyvydnq440a3ms4fccpltrzmxlvlz6nvz6qul0mgxvse42n2q9qkf72",
+      "swap_address": "juno1wkjy5wl0pd5xxvwtrx37r7ydkt3dkwvghs00tvvqyd3xnjukah7qpj0vj7",
+      "staking_address": "",
+      "rewards_tokens": []
     }
+
   ],
   "version": {
     "major": 0,

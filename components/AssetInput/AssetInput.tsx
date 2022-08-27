@@ -12,7 +12,7 @@ interface AssetInputProps {
     image?: boolean;
     token: any;
     value: any;
-    onChange: (value: any, isTokenChange?:boolean) => void;
+    onChange: (value: any, isTokenChange?: boolean) => void;
     showList?: boolean;
     onInputFocus?: () => void;
     balance?: number;
@@ -115,22 +115,24 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                 <HStack flex={1}>
                     {
                         showList ? (
-                            <AssetSelectModal 
-                                onChange={onChange} 
-                                currentToken={tokenInfo?.symbol || hideToken} 
+                            <AssetSelectModal
+                                onChange={onChange}
+                                currentToken={tokenInfo?.symbol || hideToken}
                                 disabled={disabled}
                                 amount={token.amount}
-                                >
-                                
+                            >
+
                                 {tokenInfo?.symbol ? (
                                     <HStack>
                                         {
                                             image && (
                                                 <Image
+                                                    width="auto"
+                                                    maxW="1.5rem"
+                                                    maxH="1.5rem"
                                                     style={{ margin: 'unset' }}
-                                                    maxH={{ base: 5, md: 7 }}
                                                     src={tokenInfo?.logoURI} alt="logo-small"
-                                                    boxSize="2.5rem"
+                                                    // boxSize="2.5rem"
                                                     fallback={<FallbackImage />}
                                                 />
                                             )
@@ -171,7 +173,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                     maxH={{ base: 5, md: 7 }}
                                     src={tokenInfo?.logoURI}
                                     alt="logo-small"
-                                    boxSize="2.5rem"
+                                    // boxSize="2.5rem"
                                     fallback={<FallbackImage />} />
                                 }
 

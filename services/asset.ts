@@ -14,8 +14,8 @@ export const isNativeAsset = (info: AssetInfo): boolean => {
   return "native_token" in info;
 };
 
-export const toAssetInfo = (token: string): AssetInfo => {
-  if (isNativeToken(token)) {
+export const toAssetInfo = (token: string, isNative: boolean): AssetInfo => {
+  if (isNative) {
     return { native_token: { denom: token } };
   }
 
@@ -25,12 +25,13 @@ export const toAssetInfo = (token: string): AssetInfo => {
 type ToAssetOpts = {
   amount: string;
   token: string;
+  isNative: boolean
 };
 
-export const toAsset = ({ amount, token }: ToAssetOpts) => {
+export const toAsset = ({ amount, token, isNative }: ToAssetOpts) => {
   return {
     amount,
-    info: toAssetInfo(token),
+    info: toAssetInfo(token, isNative),
   };
 };
 
@@ -50,8 +51,8 @@ export const findAsset = (infos: AssetInfo[], token: string) => {
   return asset;
 };
 
-export const createAsset = (amount: string, token: string) => {
-  const info = toAssetInfo(token);
+export const createAsset = (amount: string, token: string, isNative) => {
+  const info = toAssetInfo(token, isNative);
 
 
   return {

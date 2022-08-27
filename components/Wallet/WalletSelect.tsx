@@ -13,7 +13,7 @@ import { Switch, FormControl, FormLabel } from '@chakra-ui/react'
 import { networkAtom } from 'state/atoms/walletAtoms'
 import { useRecoilState } from 'recoil'
 
-const walletSelect = ({ denom, chainList = [], onChange, connected , onNetworkChange}) => {
+const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
     const [network, setNetwork] = useRecoilState(networkAtom)
@@ -75,7 +75,6 @@ const walletSelect = ({ denom, chainList = [], onChange, connected , onNetworkCh
                                     id='network'
                                     isChecked={network === 'testnet'}
                                     onChange={({ target }) => {
-                                            onNetworkChange?.(target.checked)
                                             setNetwork(target.checked ? 'testnet' : 'mainnet')
 
                                     }} />

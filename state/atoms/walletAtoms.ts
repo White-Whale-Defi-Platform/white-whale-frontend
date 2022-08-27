@@ -40,7 +40,7 @@ function createWalletState<TClient = any, TState = {}>({
     default: {
       status: WalletStatusType.idle,
       client: null,
-      chainId: 'uni-3',
+      chainId: 'juno-1',
       address: '',
       ...defaultState,
     },
@@ -118,7 +118,7 @@ export const networkAtom = atom<Network>({
     ({ onSet, setSelf }) => {
 
       const network = localStorage.getItem('network') as Network
-      setSelf(network)
+      setSelf(network || 'mainnet')
 
       onSet((newValue, oldValue) => {
         const isReset = !!!newValue
