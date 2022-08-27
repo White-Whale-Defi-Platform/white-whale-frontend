@@ -11,8 +11,8 @@ import {
 
 
 const createLpMsg = ({ tokenA, tokenB, amountA, amountB }) => {
-  const asset1 = createAsset(amountA, tokenA);
-  const asset2 = createAsset(amountB, tokenB);
+  const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native);
+  const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native);
 
   return {
     "provide_liquidity": {
@@ -25,17 +25,17 @@ export const createLPExecuteMsgs = (
   { swapAddress, tokenA, tokenB, amountA, amountB },
   sender: string,
 ) => {
-  const asset1 = createAsset(amountA, tokenA?.token_address);
-  const isNativeA = isNativeAsset(asset1.info);
+  // const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native);
+  // // const isNativeA = isNativeAsset(asset1.info);
 
-  const asset2 = createAsset(amountB, tokenB?.token_address);
-  const isNativeB = isNativeAsset(asset2.info);
+  // const asset2 = createAsset(amountB, tokenB?.token_address,tokenB?.native);
+  // // const isNativeB = isNativeAsset(asset2.info);
 
 
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
     /* increase allowance for each non-native token */
-    if (!isNativeA) {
+    if (!tokenA?.native) {
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
           tokenAmount: amountA,
@@ -45,7 +45,7 @@ export const createLPExecuteMsgs = (
         })
       )
     }
-    if (!isNativeB) {
+    if (!tokenB?.native) {
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
           tokenAmount: amountB,
@@ -61,10 +61,10 @@ export const createLPExecuteMsgs = (
     createExecuteMessage({
     senderAddress: sender,
     contractAddress: swapAddress,
-    message: createLpMsg({ tokenA: tokenA?.token_address, tokenB : tokenB?.token_address, amountA, amountB }),
+    message: createLpMsg({ tokenA, tokenB, amountA, amountB }),
     funds: [
-      isNativeA && coin(amountA, tokenA?.denom),
-      isNativeB && coin(amountB, tokenB?.denom),
+      tokenA?.native && coin(amountA, tokenA?.denom),
+      tokenB?.native && coin(amountB, tokenB?.denom),
     ].filter(Boolean),
   })]
 }

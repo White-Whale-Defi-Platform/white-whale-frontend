@@ -43,9 +43,9 @@ const useProvideLP = ({reverse = false}) => {
 
     return {
       msgs: createLpMsg({
-        tokenA:  tokenA?.token_address,
+        tokenA,
         amountA: reverse? toChainAmount(simulated) : tokenAAmount,
-        tokenB: tokenB?.token_address,
+        tokenB,
         amountB:  reverse ?  tokenBAmount: toChainAmount(simulated),
       }),
       encodedMsgs: createLPExecuteMsgs({
