@@ -105,18 +105,20 @@ export const useTransaction = ({
           setError("Try increasing slippage")
           throw new Error('Try increasing slippage')
         }
-        // else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
-        //   console.error(error)
-        //   setTxStep(TxStep.Idle)
-        //   setButtonLabel('Insuifficient liquidity')
-        //   setError("Insuifficient liquidity")
-        //   throw new Error('Insuifficient liquidity')
-        // }
         else {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Failed to execute transaction.")
-          throw Error("Failed to execute transaction.")
+          setError("Failed to simulate transaction.")
+          // toast({
+          //   title: 'Simulation Failed.',
+          //   description: "Failed to simulate transaction.",
+          //   status: 'error',
+          //   duration: 9000,
+          //   position: "top-right",
+          //   isClosable: true,
+          // })
+          throw Error("Failed to simulate transaction.")
+          
         }
       }
     },

@@ -45,14 +45,16 @@ const useSimulate = ({ client, msg, routerAddress }) => {
     },
         {
             enabled: !!client && !!msg,
-            onError: (err) => console.log(err)
+            // onError: (err) => {
+            //     console.log({err : (err as any)?.code})
+            // }
         },
     );
-
+    
     const simulatedError = useMemo(() => {
         if (!error) return null
-
-        if (/unreachable: query wasm contract failed: invalid request/i.test(error?.toString()))
+    
+        if (/unreachable: query wasm contract failed: invalid request/i.test(error?.toString()) || /codespace: wasm, code: 9: query wasm/i.test(error?.toString()))
             return "Insuifficient liquidity"
 
     }, [error])
