@@ -30,7 +30,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     } = {}] = useQueryPoolLiquidity({ poolId })
 
     const [token, setToken] = useState<TokenItemState>(tokenA)
-    const tx = useWithdraw({ token, contract, swapAddress , poolId})
+    const tx = useWithdraw({ token, contract, swapAddress, poolId })
 
     useEffect(() => {
 
@@ -101,14 +101,6 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                 />
             </VStack>
 
-            {(Number(token.amount) > 0) && (
-                <VStack alignItems="flex-start" width="full">
-                    <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                    </HStack>
-                </VStack>
-            )}
-
             <Button
                 type='submit'
                 width="full"
@@ -118,6 +110,17 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
             >
                 {buttonLabel}
             </Button>
+
+            {(Number(token.amount) > 0) && (
+                <VStack alignItems="flex-start" width="full" p={3}>
+                    <HStack justifyContent="space-between" width="full">
+                        <Text color="brand.500" fontSize={12}> Fees </Text>
+                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                    </HStack>
+                </VStack>
+            )}
+
+
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)

@@ -1,16 +1,14 @@
+import { slippageAtom, tokenSwapAtom } from "components/Pages/Swap/swapAtoms";
+import { useTokenInfo } from 'hooks/useTokenInfo';
+import { num, toChainAmount } from "libs/num";
+import { usePoolsListQuery } from 'queries/usePoolsListQuery';
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
 import { useMemo } from "react";
 import { useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
-import { minAmountReceive } from "hooks/helpers";
-import { useTokenInfo } from 'hooks/useTokenInfo';
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
-import { createMsg, createSwapMsgs } from './createSwapMsg';
-import useSimulate, { Simulated } from "./useSimulate";
-import useTransaction from "hooks/useTransaction";
-import { tokenSwapAtom } from "components/Pages/Swap/swapAtoms";
-import { slippageAtom } from 'components/Pages/Swap/swapAtoms'
-import { toChainAmount,fromChainAmount, num } from "libs/num";
-
+import useRoute from './useRoute';
+import useSimulate from "./useSimulate";
+import useTransaction from "./useTransaction";
 
 const useSwap = ({ reverse }) => {
     const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -19,91 +17,47 @@ const useSwap = ({ reverse }) => {
     const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
     const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
     const slippage = useRecoilValue(slippageAtom)
-    const token = tokenA?.token_address
-    const isNative = tokenA?.native
-    const denom = tokenA?.denom
-    const amount = reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
-    const swapAddress = matchingPools?.streamlinePoolAB?.swap_address || matchingPools?.streamlinePoolBA?.swap_address
+    const { data: poolsList } = usePoolsListQuery()
 
+    const amount = reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
+    const { routerAddress } = poolsList || {}
     const slippageToDecimal = slippage / 100
 
-    const { simulated, error, isLoading } = useSimulate({
-        client,
-        token: reverse ? tokenB?.token_address : tokenA?.token_address,
-        isNative: reverse ? tokenB?.native : tokenA?.native,
-        amount: reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : '',
-        swapAddress,
-        enabled: !(swapTokenA?.tokenSymbol === swapTokenB?.tokenSymbol),
-        reverse
-    })
-
-    const minReceive = useMemo(() => {
-        if (simulated?.amount == null || slippageToDecimal === 0) return null
-
-        // if (slippageToDecimal === 0) {
-            
-        //     const amount = reverse ? toChainAmount(swapTokenB?.amount) : simulated.amount
-        //     console.log({amount, simulated})
-        //     return fromChainAmount(num(amount).minus(simulated.spread).toString())
-        // }
-
-        return minAmountReceive({
-            amount: reverse ? num(swapTokenB?.amount).toString() : fromChainAmount(simulated.amount),
-            maxSpread: String(slippageToDecimal),
-        });
-    }, [simulated?.amount, slippageToDecimal, reverse, swapTokenB?.amount]);
-
-
-
-    const { msgs, encodedMsgs } = useMemo(() => {
-        if (token == null || simulated == null || simulated?.error) return {};
-
-        return {
-            msgs: createMsg({
-                token,
-                isNative,
-                amount: reverse ? simulated?.amount : amount,
-                slippage: String(slippageToDecimal),
-                price: num(simulated.price).dp(6).toString(),
-                swapAddress
-            }),
-            encodedMsgs: [createSwapMsgs(
-                {
-                    token,
-                    isNative,
-                    amount: reverse ? simulated?.amount : amount,
-                    denom,
-                    slippage: num(slippageToDecimal).dp(3).toString(),
-                    price: num(simulated.price).dp(6).toString(),
-                    swapAddress
-                },
-                address,
-            )]
+    const { simulateMsg, encodedExecuteMsg, executeMsg, path } = useRoute(
+        {
+            tokenA: { ...tokenA, ...swapTokenA },
+            tokenB: { ...tokenB, ...swapTokenB },
+            amount,
+            reverse,
+            senderAddress: address,
+            slippage: slippageToDecimal
         }
-    }, [address, token, amount, simulated, slippageToDecimal]);
+    )
+
+    const { simulated, error, isLoading } = useSimulate({ client, msg: simulateMsg, routerAddress })
 
     const tx = useTransaction({
-        enabled: !!encodedMsgs,
-        swapAddress,
+        enabled: !!executeMsg,
+        swapAddress: routerAddress,
         swapAssets: [tokenA, tokenB],
         senderAddress: address,
         client,
-        msgs,
-        encodedMsgs,
+        msgs: executeMsg,
+        encodedMsgs: encodedExecuteMsg,
         amount: reverse ? simulated?.amount : amount,
         price: num(simulated?.price).dp(6).toNumber(),
         onSuccess: () => { },
         onError: () => { }
     });
 
-
     return useMemo(() => ({
+        path,
         tx,
         simulated,
-        minReceive,
-        state : {error, isLoading}
+        // minReceive,
+        state: { error, isLoading }
 
-    }), [tx, simulated, minReceive, error, isLoading])
+    }), [tx, simulated, error, isLoading])
 
 }
 

@@ -31,8 +31,9 @@ export type PoolEntityType = {
   rewards_tokens: Array<TokenInfoWithReward>
 }
 
-type PoolsListQueryResponse = {
+export type PoolsListQueryResponse = {
   base_token: TokenInfo
+  routerAddress: string
   pools: Array<PoolEntityType>
   poolsById: Record<string, PoolEntityType>
   name: string

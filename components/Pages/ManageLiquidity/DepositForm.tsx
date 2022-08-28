@@ -137,19 +137,6 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                 />
             </VStack>
 
-            {(tokenB?.tokenSymbol && Number(amountA.amount) > 0) && (
-                <VStack alignItems="flex-start" width="full">
-                    <Text
-                        color="brand.500"
-                        fontSize={12}>
-                        1 {tokenA.tokenSymbol} = {Number(amountB.amount / amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
-                    </Text>
-                    <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                    </HStack>
-                </VStack>
-            )}
-
             <Button
                 type='submit'
                 width="full"
@@ -159,6 +146,17 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
             >
                 {buttonLabel}
             </Button>
+
+            {(tokenB?.tokenSymbol && Number(amountA.amount) > 0) && (
+                <VStack alignItems="flex-start" width="full" p={3}>
+                    <HStack justifyContent="space-between" width="full">
+                        <Text color="brand.500" fontSize={12}> Fees </Text>
+                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                    </HStack>
+                </VStack>
+            )}
+
+
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)

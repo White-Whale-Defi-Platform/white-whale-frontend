@@ -104,8 +104,8 @@ type GetMatchingPoolArgs = {
 
 export const useGetQueryMatchingPoolForSwap = () => {
   const baseToken = useBaseTokenInfo()
-  const { chainId } = useRecoilValue(walletState)
-  const { data: poolsListResponse, isLoading } = usePoolsListQuery(chainId)
+  // const { chainId } = useRecoilValue(walletState)
+  const { data: poolsListResponse, isLoading } = usePoolsListQuery()
 
   const getMatchingPool = useCallback(
     ({ tokenA, tokenB }: GetMatchingPoolArgs) => {
