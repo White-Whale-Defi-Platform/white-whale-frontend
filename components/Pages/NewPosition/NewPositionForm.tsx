@@ -153,8 +153,8 @@ const NewPositionForm: FC<Props> = ({
                             balance={tokenBBalance}
                             {...field} token={tokenB}
                             onChange={(value, isTokenChange) => {
-                                if(tokenB?.tokenSymbol && !isTokenChange) setReverse(true); 
-                                if(isTokenChange && reverse) setReverse(false)
+                                if (tokenB?.tokenSymbol && !isTokenChange) setReverse(true);
+                                if (isTokenChange && reverse) setReverse(false)
                                 onInputChange(value, 1);
                                 field.onChange(value)
                             }}
@@ -162,19 +162,6 @@ const NewPositionForm: FC<Props> = ({
                     )}
                 />
             </VStack>
-
-            {(tokenB?.tokenSymbol) && (
-                <VStack alignItems="flex-start" width="full">
-                    <Text
-                        color="brand.500"
-                        fontSize={12}>
-                        1 {tokenA.tokenSymbol} = {Number(amountB.amount / amountA.amount).toFixed(1)} {tokenB.tokenSymbol}
-                    </Text>
-                    <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                    </HStack>
-                </VStack>
-            )}
 
             <Button
                 type='submit'
@@ -185,6 +172,17 @@ const NewPositionForm: FC<Props> = ({
             >
                 {buttonLabel}
             </Button>
+
+            {(tokenB?.tokenSymbol && amountB.amount) && (
+                <VStack alignItems="flex-start" width="full" px={3}>
+                    <HStack justifyContent="space-between" width="full">
+                        <Text color="brand.500" fontSize={12}> Fees </Text>
+                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                    </HStack>
+                </VStack>
+            )}
+
+
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)

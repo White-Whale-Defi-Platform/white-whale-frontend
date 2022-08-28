@@ -32,58 +32,22 @@ export type Simulated = {
 }
 
 
-const simulate = ({
-    client,
-    token,
-    amount,
-    isNative,
-    reverse = false,
-    swapAddress
-}: QuerySimulate): Promise<SimulationResponse | ReverseSimulationResponse> => {
-
-    if (reverse) {
-        return client?.queryContractSmart(swapAddress, {
-            reverse_simulation: {
-                ask_asset: toAsset({ token, amount , isNative}),
-            },
-        });
-    }
-
-    return client?.queryContractSmart(swapAddress, {
-        simulation: {
-            offer_asset: toAsset({ token, amount, isNative }),
-        }
-    })
+const simulate = ({ client, msg, routerAddress }): Promise<any> => {
+    return client?.queryContractSmart(routerAddress, msg)
 };
 
-const useSimulate = ({
-    client,
-    token,
-    amount,
-    isNative,
-    reverse = false,
-    swapAddress,
-    enabled
-}: SwapSimulate) => {
+const useSimulate = ({ client, msg, routerAddress }) => {
 
-    const { data, isLoading, error } = useQuery<any>(["simulation", token, amount, reverse, swapAddress], () => {
-        if (token == null || amount == '') return
+    const { data, isLoading, error } = useQuery<any>(["simulation", msg], () => {
+        if (msg == null) return
 
-        return simulate({
-            client,
-            token,
-            isNative,
-            amount,
-            reverse,
-            swapAddress
-        });
+        return simulate({ client, msg, routerAddress });
     },
         {
-            enabled: !!client && amount?.length > 0 && enabled && !!swapAddress,
+            enabled: !!client && !!msg,
             onError: (err) => console.log(err)
         },
     );
-
 
     const simulatedError = useMemo(() => {
         if (!error) return null
@@ -93,41 +57,11 @@ const useSimulate = ({
 
     }, [error])
 
-
-
-
-    const simulatedData = useMemo(() => {
-        if (data == null || amount == '') {
-            return null;
-        }
-
-        const spread = data.spread_amount;
-        const commission = data.commission_amount;
-
-
-        if (reverse) {
-            return {
-                amount: data.offer_amount,
-                spread,
-                commission,
-                price: Number(data.offer_amount) / Number(amount)
-            };
-        }
-
-        return {
-            amount: data.return_amount,
-            spread,
-            commission,
-            price: Number(amount) / Number(data.return_amount)
-        };
-    }, [amount, data, isLoading]);
-
     return {
-        simulated: simulatedData,
+        simulated: data,
         error: simulatedError,
         isLoading
     }
-
 
 }
 

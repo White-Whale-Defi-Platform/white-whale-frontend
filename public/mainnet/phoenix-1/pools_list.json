@@ -21,6 +21,7 @@
     "native": true,
     "denom": "uluna"
   },
+  "routerAddress" : "terra1p37jrwlaqpklzlu4rwjyjrmzuezdgk3pyuyk2zclc4rda6awkm3qnj6f0a",
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
@@ -74,8 +75,8 @@
           "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "ibc/4CD525F166D32B0132C095F353F4C6F033B0FF5C49141470D1EFDA1D63303D04",
-          "symbol": "JUNOX",
-          "name": "Junox",
+          "symbol": "JUNO",
+          "name": "Juno",
           "decimals": 6,
           "logoURI": "/logos/juno.svg",
           "tags": ["native"],

@@ -1,7 +1,7 @@
 import { Button, HStack, IconButton, Text, VStack, Hide, Show } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
-import { useEffect, FC, useMemo } from 'react';
+import { useEffect, FC, useMemo, Fragment } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { TxStep } from 'hooks/useTransaction';
@@ -25,6 +25,7 @@ type Props = {
     setReverse: (valuse: boolean) => void
     resetForm: boolean
     setResetForm: (value: boolean) => void
+    path: string[]
 }
 
 const SwapForm: FC<Props> = ({
@@ -40,7 +41,8 @@ const SwapForm: FC<Props> = ({
     isReverse,
     setReverse,
     resetForm,
-    setResetForm
+    setResetForm,
+    path
 }) => {
 
     const { control, handleSubmit, setValue, getValues } = useForm({
@@ -52,7 +54,7 @@ const SwapForm: FC<Props> = ({
     });
 
     useEffect(() => {
-        if (resetForm || tx.txStep === TxStep.Success) {
+        if (resetForm || tx?.txStep === TxStep.Success) {
             setValue('tokenA', { ...tokenA, amount: 0 })
             setValue('tokenB', { ...tokenB, amount: 0 })
             setResetForm(false)
@@ -129,7 +131,6 @@ const SwapForm: FC<Props> = ({
     }, [simulated])
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
-    
 
     return (
         <VStack
@@ -259,26 +260,56 @@ const SwapForm: FC<Props> = ({
                 width="full"
                 variant="primary"
                 isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting || state?.isLoading}
-                disabled={tx.txStep != TxStep.Ready || simulated == null}
+                disabled={tx?.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}
             </Button>
 
 
-            {(amountB.amount) && (
-                <VStack alignItems="flex-start" width="full">
-                    <Text
-                        color="brand.500"
-                        fontSize={12}>
-                        1 {tokenA.tokenSymbol} = {num(amountB.amount).div(amountA.amount).toFixed(6)} {tokenB.tokenSymbol}
-                    </Text>
+
+
+
+            <VStack alignItems="flex-start" width="full" px={3}>
+                {(amountB.amount) && (<>
                     <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Fees: {fromChainAmount(tx?.fee)} </Text>
-                        {minReceive &&  <Text color="brand.500" fontSize={12}> Min Receive: {minReceive} </Text>}
-                        
+                        <Text color="brand.500" fontSize={12}> Price</Text>
+                        <Text
+                            color="brand.500"
+                            fontSize={12}>
+                            1 {tokenA.tokenSymbol} = {num(amountB.amount).div(amountA.amount).toFixed(6)} {tokenB.tokenSymbol}
+                        </Text>
                     </HStack>
-                </VStack>
-            )}
+
+
+                    <HStack justifyContent="space-between" width="full">
+                        <Text color="brand.500" fontSize={12}> Fees </Text>
+                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                    </HStack>
+
+                    {minReceive && (
+                        <HStack>
+                            <Text color="brand.500" fontSize={12}> Min Receive </Text>
+                            <Text color="brand.500" fontSize={12}> {minReceive} </Text>
+                        </HStack>
+                    )}
+
+                </>
+                )}
+
+                <HStack justifyContent="space-between" width="full">
+                    <Text color="brand.500" fontSize={12}> Route </Text>
+                    <HStack>
+                        {path?.map((item, index) => (
+                            <Fragment key={item} >
+                                <Text color="brand.500" fontSize={12}>  {item}</Text>
+                                {index < (path.length - 1) && <Text fontSize={12} >  → </Text>}
+                            </Fragment>
+                        ))}
+                    </HStack>
+                </HStack>
+
+            </VStack>
+
 
 
 

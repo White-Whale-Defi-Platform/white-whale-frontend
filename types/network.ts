@@ -17,7 +17,7 @@ export interface LocalNetworkConfig {
   /** Graphql server URL */
   mantle: string;
   stats: string;
-  factory: string;
+  routerAddress: string;
   /** Fixed fee */
   fee: { gasPrice: number; amount: number };
 }
