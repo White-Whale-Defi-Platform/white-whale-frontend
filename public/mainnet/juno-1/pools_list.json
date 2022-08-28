@@ -25,7 +25,7 @@
     "native": true,
     "denom": "ujuno"
   },
-  "routerAddress": "juno14m9rd2trjytvxvu4ldmqvru50ffxsafs8kequmfky7jh97uyqrxqs5xrnx",
+  "routerAddress": "juno128lewlw6kv223uw4yzdffl8rnh3k9qs8vrf6kef28579w8ygccyq7m90n2",
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
