@@ -9,6 +9,7 @@ import Loader from '../../Loader';
 import { fromChainAmount, formatPrice } from "libs/num";
 
 import PoolsTable from './PoolsTable'
+import MobilePools from './MobilePools';
 
 
 type Props = {
@@ -44,6 +45,9 @@ const Pools: FC<Props> = () => {
             }))
     }, [pools])
 
+    // if (isLoading || pools === undefined)
+    //     return <Loader />
+
     return (
         <VStack width={{ base: '100%', md: '1058px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={10} paddingX={4}>
@@ -51,28 +55,8 @@ const Pools: FC<Props> = () => {
                 <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New Position</Button>
             </HStack>
 
-            <Flex padding={10} width={["full", "1160px"]}
-                background="#1C1C1C"
-                boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-                borderRadius="30px">
-
-
-                <VStack width="full" color="white">
-
-                    {
-
-                        (isLoading || pools === undefined)
-                            ?
-                            <Loader />
-                            : (!myPools.length) && (
-                                <Text py={10} color="white"> Your active liquidity positions will appear here. </Text>
-                            )
-                    }
-
-                    <PoolsTable pools={myPools} />
-
-                </VStack>
-            </Flex>
+            <PoolsTable pools={myPools} isLoading={isLoading} />
+            <MobilePools  pools={myPools}/>
         </VStack>
     )
 }

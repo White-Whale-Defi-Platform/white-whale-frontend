@@ -27,7 +27,7 @@ const SwapSettings = () => {
             setSlippage(target?.value)
         }
         else {
-            if(!!target?.value) setError(true)
+            if (!!target?.value) setError(true)
             setSlippage(0)
             setAuto.on()
         }
@@ -52,6 +52,7 @@ const SwapSettings = () => {
             >
                 <PopoverArrow
                     bg='black'
+                    sx={{ '--popper-arrow-shadow-color': 'black'}}
                 />
                 <PopoverBody
                     paddingX={8}
@@ -68,7 +69,7 @@ const SwapSettings = () => {
                                 color="brand.500"
                                 borderRadius="100px"
                                 border="1px solid rgba(255, 255, 255, 0.1)"
-                                borderColor={slippage === 0? "white" : "brand.500"}
+                                borderColor={slippage === 0 ? "white" : "brand.500"}
                                 paddingY={1}
                             >
                                 <Input
@@ -85,7 +86,7 @@ const SwapSettings = () => {
 
                                 />
                                 <InputRightElement
-                                    color={slippage === 0? "#718096" : "brand.500"}
+                                    color={slippage === 0 ? "#718096" : "brand.500"}
                                     paddingBottom="10px"
                                     pointerEvents='none'
                                     children="%"

@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton, Text, VStack, Hide, Show } from '@chakra-ui/react';
+import { Button, HStack, IconButton, Text, VStack, Hide, Show, Box } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
 import { useEffect, FC, useMemo, Fragment } from 'react';
@@ -9,6 +9,8 @@ import { fromChainAmount } from "libs/num";
 import { TokenItemState } from './swapAtoms';
 import { Simulated } from './hooks/useSimulate'
 import { num } from 'libs/num'
+import { Tooltip } from '@chakra-ui/react'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 
 
 type Props = {
@@ -95,6 +97,13 @@ const SwapForm: FC<Props> = ({
 
         onReverseDirection()
     }
+
+    const rate = useMemo(() => {
+        if(!simulated) return null
+        
+        const e = num(tokenA.amount).times(Math.pow(10, 6))
+        return  num(e).div(simulated?.amount).toFixed(6)
+    },[simulated, tokenA.amount])
 
     useEffect(() => {
 
@@ -272,33 +281,61 @@ const SwapForm: FC<Props> = ({
             <VStack alignItems="flex-start" width="full" px={3}>
                 {(amountB.amount) && (<>
                     <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Price</Text>
+                        <HStack style={{ marginTop: 'unset' }}>
+                            <Text color="brand.500" fontSize={12}> Rate</Text>
+                            <Tooltip label="Swap price is calculated based on the pool price and spread" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                                <Box cursor="pointer" color="brand.200">
+                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                </Box>
+                            </Tooltip>
+                        </HStack>
                         <Text
                             color="brand.500"
                             fontSize={12}>
-                            1 {tokenA.tokenSymbol} = {num(amountB.amount).div(amountA.amount).toFixed(6)} {tokenB.tokenSymbol}
+                            {rate} {tokenA?.tokenSymbol} per {tokenB?.tokenSymbol}
                         </Text>
                     </HStack>
 
 
-                    <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Fees </Text>
+                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }}>
+                        <HStack >
+                            <Text color="brand.500" fontSize={12}> Fee</Text>
+                            <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                                <Box cursor="pointer" color="brand.200">
+                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                </Box>
+                            </Tooltip>
+                        </HStack>
                         <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
                     </HStack>
 
                     {minReceive && (
-                        <HStack>
-                            <Text color="brand.500" fontSize={12}> Min Receive </Text>
-                            <Text color="brand.500" fontSize={12}> {minReceive} </Text>
+                        <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }}>
+                            <HStack >
+                                <Text color="brand.500" fontSize={12}> Min Receive </Text>
+                                <Tooltip label="Expected minimum quantity to be received based on the current price, maximum spread, and trading fee" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                                    <Box cursor="pointer" color="brand.200">
+                                        <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                    </Box>
+                                </Tooltip>
+                            </HStack>
+                            <Text color="brand.500" fontSize={12}> {num(minReceive).toFixed(6)} </Text>
                         </HStack>
                     )}
 
                 </>
                 )}
 
-                <HStack justifyContent="space-between" width="full">
-                    <Text color="brand.500" fontSize={12}> Route </Text>
-                    <HStack>
+                <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} alignItems="flex-start" > 
+                    <HStack >
+                        <Text color="brand.500" fontSize={12}> Route </Text>
+                        <Tooltip label="Optimized route for your optimal gain" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                            <Box cursor="pointer" color="brand.200">
+                                <InfoOutlineIcon width=".7rem" height=".7rem" />
+                            </Box>
+                        </Tooltip>
+                    </HStack>
+                    <HStack maxW="70%" flexWrap="wrap" >
                         {path?.map((item, index) => (
                             <Fragment key={item} >
                                 <Text color="brand.500" fontSize={12}>  {item}</Text>

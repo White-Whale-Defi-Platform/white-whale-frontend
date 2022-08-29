@@ -28,7 +28,7 @@ import { useToast } from '@chakra-ui/react'
 const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
   const baseToken = useBaseTokenInfo()
-  const [{ address, chainId , status}, setWalletState] = useRecoilState(walletState)
+  const [{ address, chainId, status }, setWalletState] = useRecoilState(walletState)
   const chains = useChains()
   const [chainInfo] = useChainInfo(chainId)
   const { balance } = useTokenBalance(baseToken?.symbol)
@@ -98,7 +98,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
   const truncatWalletAddress = (addr: string) => {
     const chainName = addr.substring(0, addr.indexOf("1") | 4)
-    return `${chainName}${truncate(address, [0, 6])}`
+    return `${chainName}${truncate(address, [0, 4])}`
   }
 
   const copyToClipboard = () => {
@@ -108,7 +108,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
         title: 'Address copied to clipboard',
         status: 'success',
         duration: 1000,
-        position:"top-right",
+        position: "top-right",
         isClosable: true
       })
     } catch (error) {
@@ -120,10 +120,10 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
       {/* <Select options={options} width="fit-content" onChange={onChainChanage} defaultSelcted={defaultChain} /> */}
 
 
-      <Card paddingY={1} paddingX={6} gap={4}>
+      <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
 
-        <HStack spacing="4" display={{ base: "flex", md: "flex" }}>
-          <Text fontSize="16px">{balance?.toFixed(1)}</Text>
+        <HStack spacing="4"  >
+          <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
           <WalletSelect
             connected={connected}
             denom={denom?.coinDenom}
@@ -136,9 +136,11 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
           <Divider orientation="vertical" borderColor="rgba(255, 255, 255, 0.1);" />
         </Box>
 
-        <HStack spacing="3" as={Button} variant="unstyled" onClick={copyToClipboard}>
-          <KeplrWalletIcon />
-          <Text color="brand.200" size="16px">
+        <HStack as={Button} variant="unstyled" onClick={copyToClipboard} width="full">
+          <Box>
+            <KeplrWalletIcon />
+          </Box>
+          <Text color="brand.200" fontSize={['14px', '16px']}>
             {truncatWalletAddress(address)}
           </Text>
         </HStack>
