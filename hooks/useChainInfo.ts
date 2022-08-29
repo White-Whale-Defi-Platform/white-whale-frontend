@@ -36,10 +36,16 @@ export const useChains = () => {
   return data || []
 }
 
-export const useChainInfo = (id) => {
+export const useChainInfo = (id = null) => {
+
 
   const chainInfo = useChains()
-  const chain = !id ? chainInfo?.[0] : chainInfo.find(({ chainId }) => chainId === id)
+  
+  const chain = useMemo(() => {
+    if (!chainInfo) return []
 
-  return useMemo(() => ([chain]), [chain])
+    return chainInfo.find(({ chainId }) => chainId === id) || chainInfo?.[0]
+  }, [chainInfo, id])
+  
+  return [chain]
 }

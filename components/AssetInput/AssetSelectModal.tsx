@@ -9,13 +9,14 @@ import { Asset } from 'types/blockchain'
 
 interface AssetSelectModalProps {
     children: ReactNode,
-    currentToken: string,
+    currentToken: string[],
+    edgeTokenList: string[],
     onChange: (asset: Asset, isTokenChange?: boolean) => void,
     disabled: boolean
     amount? : number
 }
 
-const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, currentToken = "" , disabled, amount}) => {
+const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, currentToken = [], edgeTokenList = [] , disabled, amount}) => {
     
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [search, setSearch] = useState<string>('')
@@ -59,6 +60,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({ children, onChange, curre
                             // assetList={assets} 
                             onChange={onAssetChange} 
                             search={search} 
+                            edgeTokenList={edgeTokenList}
                             currentToken={currentToken} />
                     </ModalBody>
                 </ModalContent>

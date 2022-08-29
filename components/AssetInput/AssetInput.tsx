@@ -20,6 +20,7 @@ interface AssetInputProps {
     minMax?: boolean
     isSingleInput?: boolean;
     hideToken?: string;
+    edgeTokenList? : string[]
 }
 
 
@@ -34,7 +35,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
     disabled,
     minMax = true,
     isSingleInput = false,
-    hideToken
+    hideToken,
+    edgeTokenList
 
 },
     ref) => {
@@ -117,13 +119,14 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                         showList ? (
                             <AssetSelectModal
                                 onChange={onChange}
-                                currentToken={tokenInfo?.symbol || hideToken}
+                                currentToken={[tokenInfo?.symbol || hideToken]}
+                                edgeTokenList={edgeTokenList}
                                 disabled={disabled}
                                 amount={token.amount}
                             >
 
                                 {tokenInfo?.symbol ? (
-                                    <HStack pl={[4]} gap={[1]} >
+                                    <HStack pl={[4,0]} gap={[1]} >
                                         {
                                             image && (
                                                 <Image
@@ -165,7 +168,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                 justifyContent="flex-start"
                                 width={["full", "160px"]}
                                 sx={{ 'button': { margin: 'unset' } }}
-                                pl={[4]} gap={[1]}
+                                pl={[4, 0]} 
+                                gap={[1]}
                             // paddingX={3}
                             // style={{ margin: "unset" }}
                             >

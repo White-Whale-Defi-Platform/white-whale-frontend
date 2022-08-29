@@ -67,22 +67,22 @@ export const useConnectWallet = (
       })
     } catch (e) {
       /* set the error state */
-      setWalletState({
-        key: null,
-        address: '',
-        client: null,
-        chainId: null,
-        status: WalletStatusType.error,
-      })
+      // setWalletState({
+      //   key: null,
+      //   address: '',
+      //   client: null,
+      //   chainId: null,
+      //   status: WalletStatusType.error,
+      // })
 
-      toast({
-        // title: 'Account created.',
-        description: "Failed to connect wallet.",
-        status: 'error',
-        duration: 9000,
-        position: "top",
-        isClosable: true,
-      })
+      // toast({
+      //   // title: 'Account created.',
+      //   description: "Failed to connect thiere.",
+      //   status: 'error',
+      //   duration: 9000,
+      //   position: "top",
+      //   isClosable: true,
+      // })
 
       /* throw the error for the UI */
       throw e
