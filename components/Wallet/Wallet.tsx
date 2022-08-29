@@ -37,7 +37,8 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const denom = useMemo(() => {
 
     if (!chainInfo) return
-    return  ((chainInfo as any)?.label || '').toUpperCase()
+    const [coinDenom] = (chainInfo as any)?.currencies || []
+    return coinDenom
 
   }, [chainInfo, chainId])
 
@@ -75,8 +76,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
         {/* <Select options={options} width="fit-content" onChange={onChainChange} defaultSelcted={options?.[0]} /> */}
         <WalletSelect
           connected={connected}
-          // denom={denom?.coinDenom}
-          denom={denom}
+          denom={denom?.coinDenom}
           chainList={chainList}
           onChange={onChainChange} />
         <Button
@@ -126,8 +126,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
           <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
           <WalletSelect
             connected={connected}
-            // denom={denom?.coinDenom}
-            denom={denom}
+            denom={denom?.coinDenom}
             chainList={chainList}
             onChange={onChainChanage} />
           {/* <Text fontSize="16px">{denom?.coinDenom}</Text> */}

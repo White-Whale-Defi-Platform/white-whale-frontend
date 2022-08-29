@@ -7,8 +7,8 @@
         "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
         "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
         "stakeCurrency": {
-            "coinDenom": "JUNOX",
-            "coinMinimalDenom": "ujunox",
+            "coinDenom": "JUNO",
+            "coinMinimalDenom": "ujuno",
             "coinDecimals": 6
         },
         "bip44": {
@@ -24,16 +24,16 @@
         },
         "currencies": [
             {
-                "coinDenom": "JUNOX",
-                "coinMinimalDenom": "ujunox",
+                "coinDenom": "JUNO",
+                "coinMinimalDenom": "ujuno",
                 "coinDecimals": 6,
                 "coinGeckoId": "juno-network"
             }
         ],
         "feeCurrencies": [
             {
-                "coinDenom": "JUNOX",
-                "coinMinimalDenom": "ujunox",
+                "coinDenom": "JUNO",
+                "coinMinimalDenom": "ujuno",
                 "coinDecimals": 6,
                 "coinGeckoId": "juno-network"
             }
