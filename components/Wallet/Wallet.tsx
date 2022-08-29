@@ -37,20 +37,19 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const denom = useMemo(() => {
 
     if (!chainInfo) return
-    const [coinDenom] = chainInfo?.currencies || []
-    return coinDenom
+    return  ((chainInfo as any)?.label || '').toUpperCase()
 
-  }, [chainInfo,])
+  }, [chainInfo, chainId])
 
 
   const chainList = useMemo(() => {
     return chains.map((chain) => ({
       // ...options.find(({ value }) => value === chainId),
       ...chain,
-      active: chain?.chainId === chainInfo?.chainId
+      active: chain?.chainId === (chainInfo as any)?.chainId
     }))
 
-  }, [chains, chainInfo])
+  }, [chains, chainInfo, chainId])
 
   const onChainChange = (chain) => {
     setWalletState((value) => ({
@@ -65,10 +64,10 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   }
 
   useEffect(() => {
-    if (connected && chainId && chainList.length) {
+    if (connected && chainId && chains.length > 0) {
       onConnect(chainId)
     }
-  }, [chainList, chainId, connected])
+  }, [chains, chainId, connected])
 
   if (!connected) {
     return (
@@ -76,7 +75,8 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
         {/* <Select options={options} width="fit-content" onChange={onChainChange} defaultSelcted={options?.[0]} /> */}
         <WalletSelect
           connected={connected}
-          denom={denom?.coinDenom}
+          // denom={denom?.coinDenom}
+          denom={denom}
           chainList={chainList}
           onChange={onChainChange} />
         <Button
@@ -126,7 +126,8 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
           <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
           <WalletSelect
             connected={connected}
-            denom={denom?.coinDenom}
+            // denom={denom?.coinDenom}
+            denom={denom}
             chainList={chainList}
             onChange={onChainChanage} />
           {/* <Text fontSize="16px">{denom?.coinDenom}</Text> */}

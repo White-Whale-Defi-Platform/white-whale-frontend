@@ -6,10 +6,11 @@ const index = () => {
   const router = useRouter()
 
   useEffect(() => {
+    console.log("index page")
     router.replace('/swap')
   }, [])
 
-  return null
+  return <div></div>
 }
 
 export default index

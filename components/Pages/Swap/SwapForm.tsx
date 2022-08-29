@@ -99,11 +99,11 @@ const SwapForm: FC<Props> = ({
     }
 
     const rate = useMemo(() => {
-        if(!simulated) return null
-        
+        if (!simulated) return null
+
         const e = num(tokenA.amount).times(Math.pow(10, 6))
-        return  num(e).div(simulated?.amount).toFixed(6)
-    },[simulated, tokenA.amount])
+        return num(e).div(simulated?.amount).toFixed(6)
+    }, [simulated, tokenA.amount])
 
     useEffect(() => {
 
@@ -326,24 +326,28 @@ const SwapForm: FC<Props> = ({
                 </>
                 )}
 
-                <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} alignItems="flex-start" > 
-                    <HStack >
-                        <Text color="brand.500" fontSize={12}> Route </Text>
-                        <Tooltip label="Optimized route for your optimal gain" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                            <Box cursor="pointer" color="brand.200">
-                                <InfoOutlineIcon width=".7rem" height=".7rem" />
-                            </Box>
-                        </Tooltip>
+                {!!path.length && (
+                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} alignItems="flex-start" >
+                        <HStack >
+                            <Text color="brand.500" fontSize={12}> Route </Text>
+                            <Tooltip label="Optimized route for your optimal gain" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                                <Box cursor="pointer" color="brand.200">
+                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                </Box>
+                            </Tooltip>
+                        </HStack>
+                        <HStack maxW="70%" flexWrap="wrap" >
+                            {path?.map((item, index) => (
+                                <Fragment key={item} >
+                                    <Text color="brand.500" fontSize={12}>  {item}</Text>
+                                    {index < (path.length - 1) && <Text fontSize={12} >  → </Text>}
+                                </Fragment>
+                            ))}
+                        </HStack>
                     </HStack>
-                    <HStack maxW="70%" flexWrap="wrap" >
-                        {path?.map((item, index) => (
-                            <Fragment key={item} >
-                                <Text color="brand.500" fontSize={12}>  {item}</Text>
-                                {index < (path.length - 1) && <Text fontSize={12} >  → </Text>}
-                            </Fragment>
-                        ))}
-                    </HStack>
-                </HStack>
+                )}
+
+
 
             </VStack>
 

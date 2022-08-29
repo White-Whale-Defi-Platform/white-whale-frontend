@@ -9,12 +9,13 @@ type AssetListProps = {
     // assetList?: Asset[];
     onChange: (token: any, isTokenChange?: boolean) => void;
     search: string;
-    currentToken: string;
+    currentToken: string[];
+    edgeTokenList: string[];
     amount?: number
 
 }
 
-const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken, amount }) => {
+const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken = [], amount, edgeTokenList = [] }) => {
 
     const [tokenList] = useTokenList()
 
@@ -28,7 +29,7 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken, amount 
                 ...token,
                 balance: tokenBalance?.[index]
             }
-        )).filter(({ symbol }) => symbol !== currentToken)
+        )).filter(({ symbol }) => edgeTokenList?.length > 0 ? edgeTokenList.includes(symbol) : !currentToken?.includes(symbol))
 
     }, [tokenList, tokenBalance])
 
@@ -50,7 +51,7 @@ const AssetList: FC<AssetListProps> = ({ onChange, search, currentToken, amount 
                 '&::-webkit-scrollbar': {
                     width: '.4rem'
                 },
-                '&::-webkit-scrollbar-thumb' : {
+                '&::-webkit-scrollbar-thumb': {
                     background: 'rgba(0,0,0,0.8)'
                 }
             }}

@@ -6,6 +6,7 @@ import { TokenItemState } from '../ManageLiquidity/lpAtoms';
 import { TxStep } from 'hooks/useTransaction';
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { fromChainAmount } from "libs/num";
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 
 
@@ -46,6 +47,8 @@ const NewPositionForm: FC<Props> = ({
 
     const amountA = getValues('token1')
     const amountB = getValues('token2')
+
+    const { data: poolList } = usePoolsListQuery()
 
     useEffect(() => {
         if (resetForm || tx?.txStep === TxStep.Success) {
@@ -97,6 +100,30 @@ const NewPositionForm: FC<Props> = ({
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
 
+    const edgeList = useMemo(() => {
+        const { pools = [] } = poolList || {}
+        const edge = pools
+            .map(({ pool_assets }) => pool_assets)
+            .map(([a, b]) => {
+                if (a.symbol === tokenA.tokenSymbol) return b.symbol
+                else if (b.symbol === tokenA.tokenSymbol) return a.symbol
+            })
+            .filter(item => !!item)
+        return edge
+
+    }, [tokenA.tokenSymbol, poolList])
+
+    useEffect(() => {
+
+        if(!edgeList.includes(tokenB.tokenSymbol)){
+            setValue('token2', { ...tokenB, tokenSymbol : null })
+            onInputChange({ ...tokenB, tokenSymbol : null }, 1);
+        }
+
+
+    },[tokenA?.tokenSymbol, edgeList])
+
+
     return (
         <VStack padding={10}
             width="full"
@@ -129,7 +156,11 @@ const NewPositionForm: FC<Props> = ({
                             disabled={isInputDisabled}
                             balance={tokenABalance}
                             {...field} token={tokenA}
-                            onChange={(value) => { setReverse(false); onInputChange(value, 0); field.onChange(value) }}
+                            onChange={(value) => { 
+                                setReverse(false);
+                                onInputChange(value, 0); 
+                                field.onChange(value) 
+                            }}
                         />
                     )}
                 />
@@ -147,6 +178,7 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            edgeTokenList={edgeList}
                             hideToken={tokenA?.tokenSymbol}
                             minMax={false}
                             disabled={isInputDisabled}
@@ -181,8 +213,6 @@ const NewPositionForm: FC<Props> = ({
                     </HStack>
                 </VStack>
             )}
-
-
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
