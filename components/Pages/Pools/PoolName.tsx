@@ -19,19 +19,19 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
             >
                 <Image
                     src={token1Img}
-                    alt="logo-small" boxSize="2.5rem"
+                    alt="logo-small" boxSize={["2rem", "2.5rem"]}
                     fallback={<FallbackImage width="8" height='8' color={["#5DB7DE", "#343434"]} />} />
             </Box>
             <Box borderRadius="full">
                 <Image
                     src={token2Img}
-                    alt="ust" boxSize="2.5rem"
-                    fallback={<FallbackImage width="8" height='8' color={["#FFE66D", "#343434"]} />}
+                    alt="ust" boxSize={["2rem", "2.5rem"]}
+                    fallback={<FallbackImage width={["7", "8"]} height={["7", "8"]} color={["#FFE66D", "#343434"]} />}
                 />
 
             </Box>
         </HStack>
-        <Text textAlign="center" > {poolId} </Text>
+        <Text textAlign="center" fontSize={["12px", "18px"]}> {poolId} </Text>
 
     </HStack>
 )

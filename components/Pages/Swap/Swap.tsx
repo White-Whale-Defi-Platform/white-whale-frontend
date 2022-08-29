@@ -38,7 +38,7 @@ const Swap: FC<SwapProps> = ({ }) => {
         }
     }, [address, chainId])
 
-    const { tx, simulated, state, path } = useSwap({ reverse })
+    const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
 
     const clearForm = (reset) => {
         setTokenSwapState([
@@ -93,7 +93,7 @@ const Swap: FC<SwapProps> = ({ }) => {
                 onReverseDirection={onReverseDirection}
                 onInputChange={onInputChange}
                 simulated={simulated}
-                minReceive={null}
+                minReceive={minReceive}
                 isReverse={reverse}
                 tx={tx}
                 state={state}

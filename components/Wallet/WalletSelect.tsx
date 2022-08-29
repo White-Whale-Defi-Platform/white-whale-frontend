@@ -31,7 +31,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                         as={Button}
                         variant="unstyled"
                     >
-                        <Text>{denom}</Text>
+                        <Text fontSize={["14px", "16px"]} >{denom}</Text>
                         <ChevronDownIcon />
                     </HStack>
 
@@ -47,7 +47,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                         paddingX={6}
                         paddingY={1}
                     >
-                        <Text>{denom}</Text>
+                        <Text fontSize={["14px", "16px"]}>{denom}</Text>
                         <ChevronDownIcon />
                     </HStack>
 
@@ -61,7 +61,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                 width="253px"
                 marginTop={3}
             >
-                <PopoverArrow bg='#1C1C1C' boxShadow="unset" style={{ boxShadow: "unset" }} />
+                <PopoverArrow bg='#1C1C1C' boxShadow="unset" style={{ boxShadow: "unset" }}  sx={{ '--popper-arrow-shadow-color': 'black'}}/>
                 <PopoverBody padding={6}  >
                     <VStack alignItems="flex-start" width="full" gap={2}>
                         <Text color="brand.200" fontSize="22px" fontWeight="400">Select network</Text>

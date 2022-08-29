@@ -101,10 +101,16 @@ const Navbar = ({ }) => {
         py="4"
         display={{ base: 'flex', md: 'none' }}
       >
-        <VStack width="full">
-          <HStack justifyContent="space-between" width="full">
+        {/* <VStack width="full"> */}
+          {/* <HStack justifyContent="space-between" width="full"> */}
 
             <Logo />
+            <Wallet
+              connected={Boolean(key?.name)}
+              walletName={key?.name}
+              onConnect={connectWallet}
+              onDisconnect={resetWalletConnection}
+            />
             <IconButton
               aria-label="Open drawer"
               variant="ghost"
@@ -124,14 +130,9 @@ const Navbar = ({ }) => {
             >
               Open
             </IconButton>
-          </HStack>
-          <Wallet
-            connected={Boolean(key?.name)}
-            walletName={key?.name}
-            onConnect={connectWallet}
-            onDisconnect={resetWalletConnection}
-          />
-        </VStack>
+          {/* </HStack> */}
+
+        {/* </VStack> */}
       </Flex>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>

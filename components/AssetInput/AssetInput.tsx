@@ -123,7 +123,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                             >
 
                                 {tokenInfo?.symbol ? (
-                                    <HStack>
+                                    <HStack pl={[4]} gap={[1]} >
                                         {
                                             image && (
                                                 <Image
@@ -165,6 +165,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                 justifyContent="flex-start"
                                 width={["full", "160px"]}
                                 sx={{ 'button': { margin: 'unset' } }}
+                                pl={[4]} gap={[1]}
                             // paddingX={3}
                             // style={{ margin: "unset" }}
                             >

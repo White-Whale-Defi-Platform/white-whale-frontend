@@ -9,6 +9,7 @@ import { walletState } from 'state/atoms/walletAtoms';
 import useRoute from './useRoute';
 import useSimulate from "./useSimulate";
 import useTransaction from "./useTransaction";
+import { fromChainAmount } from "libs/num";
 
 const useSwap = ({ reverse }) => {
     const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -36,6 +37,15 @@ const useSwap = ({ reverse }) => {
 
     const { simulated, error, isLoading } = useSimulate({ client, msg: simulateMsg, routerAddress })
 
+    const minReceive = useMemo(() => {
+        if (!simulated) return null
+
+        const rate1 = num(1).minus(slippageToDecimal)
+        const rate2 = num(1).minus(.001)
+        return fromChainAmount(num(simulated.amount).times(rate1).times(rate2).toFixed(6))
+
+    }, [simulated, slippageToDecimal])
+
     const tx = useTransaction({
         enabled: !!executeMsg,
         swapAddress: routerAddress,
@@ -54,7 +64,7 @@ const useSwap = ({ reverse }) => {
         path,
         tx,
         simulated,
-        // minReceive,
+        minReceive,
         state: { error, isLoading }
 
     }), [tx, simulated, error, isLoading])
