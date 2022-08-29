@@ -62,7 +62,7 @@ const NewPosition: FC = () => {
                     icon={<ArrowBackIcon />}
                     onClick={() => router.back()}
                 />
-                <Text as="h2" fontSize="24" fontWeight="900">New position</Text>
+                <Text as="h2" fontSize="24" fontWeight="900">New Position</Text>
             </HStack>
 
             <NewPositionForm
