@@ -29,6 +29,7 @@
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
+      "lpOrder" : ["LUNA", "ATOM"],
       "pool_assets": [
         {
           "id": "juno-1",
@@ -96,6 +97,7 @@
     },
     {
       "pool_id": "ATOM-axlUSDC",
+      "lpOrder" : ["ATOM", "axlUSDC"],
       "pool_assets": [
         {
           "id": "juno-1",

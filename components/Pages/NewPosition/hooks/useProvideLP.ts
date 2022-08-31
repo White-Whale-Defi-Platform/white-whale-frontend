@@ -45,7 +45,7 @@ const useProvideLP = ({ reverse = false }) => {
 
   const simulated = useMemo(() => {
     if ((!reverse && !lpTokenA?.amount) || (reverse && !lpTokenB?.amount) || tokenAReserve === 0 || tokenBReserve === 0) return null
-    
+
 
     const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0;
     const ratio = (reverse || matchingPools?.streamlinePoolBA) ? num(tokenAReserve).div(tokenBReserve) : num(tokenBReserve).div(tokenAReserve);
