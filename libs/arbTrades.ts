@@ -24,7 +24,7 @@ const ibc = {
         base_denom: "uatom",
         symbol: "ATOM",
         name: "Cosmos",
-        icon: "https://assets.terra.money/icon/svg/ibc/ATOM.svg"
+        icon: "https://assets.terra.money/icon/svg/ibc/atom.png"
     }
 }
 

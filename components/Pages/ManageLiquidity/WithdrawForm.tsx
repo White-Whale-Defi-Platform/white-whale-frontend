@@ -1,18 +1,12 @@
 
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { Button, HStack, Text, VStack } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
-import { FC, useEffect, useState, useMemo } from 'react';
-import { Controller, useForm } from "react-hook-form";
-import { Asset } from 'types/blockchain';
-import { TokenItemState } from './lpAtoms';
-import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { tokenLpAtom } from './lpAtoms';
-import { walletState } from 'state/atoms/walletAtoms';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
-import useWithdraw from './hooks/useWithdraw'
+import { useQueryPoolLiquidity } from 'queries/useQueryPools';
+import { useEffect, useMemo, useState } from 'react';
+import useWithdraw from './hooks/useWithdraw';
+import { TokenItemState } from './lpAtoms';
 
 
 type Props = {
@@ -111,7 +105,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                 {buttonLabel}
             </Button>
 
-            {(Number(token.amount) > 0) && (
+            {(Number(tx?.fee) > 0) && (
                 <VStack alignItems="flex-start" width="full" p={3}>
                     <HStack justifyContent="space-between" width="full">
                         <Text color="brand.500" fontSize={12}> Fees </Text>

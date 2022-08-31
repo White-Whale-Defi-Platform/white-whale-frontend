@@ -15,10 +15,16 @@ const getUrl = (chainId, txHash, network) => {
 
     switch (chainId) {
         case 'uni-3':
-            return `https://${network === 'testnet' && "testnet."}mintscan.io/juno-testnet/txs/${txHash}`
+            return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
             break;
         case 'pisco-1':
-            return `https://finder.terra.money/${network === 'testnet' && "testnet/"}tx/${txHash}`
+            return `https://finder.terra.money/testnet/tx/${txHash}`
+            break;
+        case 'juno-1':
+            return `https://mintscan.io/juno/txs/${txHash}`
+            break;
+        case 'phoenix-1':
+            return `https://finder.terra.money/mainnet/tx/${txHash}`
             break;
         default:
             return null

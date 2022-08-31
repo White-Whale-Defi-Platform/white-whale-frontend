@@ -24,6 +24,7 @@ export type TokenInfoWithReward = TokenInfo & {
 
 export type PoolEntityType = {
   pool_id: string
+  lpOrder: string[] | undefined
   lp_token: string
   pool_assets: [TokenInfo, TokenInfo]
   swap_address: string

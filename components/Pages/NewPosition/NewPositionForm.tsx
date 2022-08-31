@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from '@chakra-ui/react';
+import { Button, HStack, Text, VStack, Spinner } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import { FC, useEffect, useMemo } from 'react';
 import { Controller, useForm } from "react-hook-form";
@@ -43,7 +43,7 @@ const NewPositionForm: FC<Props> = ({
         },
     });
 
-    const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
     const amountA = getValues('token1')
     const amountB = getValues('token2')
@@ -100,13 +100,22 @@ const NewPositionForm: FC<Props> = ({
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
 
+    const tokenAList = useMemo(() => {
+        const { pools = [] } = poolList || {}
+        const edge = pools
+            .map(({ pool_assets }) => pool_assets)
+            .map(([a, b]) => a?.symbol)
+        return edge
+
+    }, [poolList])
+
     const edgeList = useMemo(() => {
         const { pools = [] } = poolList || {}
         const edge = pools
             .map(({ pool_assets }) => pool_assets)
             .map(([a, b]) => {
                 if (a.symbol === tokenA.tokenSymbol) return b.symbol
-                else if (b.symbol === tokenA.tokenSymbol) return a.symbol
+                if (b.symbol === tokenA.tokenSymbol) return a.symbol
             })
             .filter(item => !!item)
         return edge
@@ -115,13 +124,13 @@ const NewPositionForm: FC<Props> = ({
 
     useEffect(() => {
 
-        if(!edgeList.includes(tokenB.tokenSymbol)){
-            setValue('token2', { ...tokenB, tokenSymbol : null })
-            onInputChange({ ...tokenB, tokenSymbol : null }, 1);
+        if (!edgeList.includes(tokenB.tokenSymbol)) {
+            setValue('token2', { ...tokenB, tokenSymbol: null })
+            onInputChange({ ...tokenB, tokenSymbol: null }, 1);
         }
 
 
-    },[tokenA?.tokenSymbol, edgeList])
+    }, [tokenA?.tokenSymbol, edgeList])
 
 
     return (
@@ -142,7 +151,11 @@ const NewPositionForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                    {isLoading ? (
+                        <Spinner color='band.500' size='xs' />
+                    ) : (
+                        <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                    )}
                 </HStack>
 
                 <Controller
@@ -151,15 +164,17 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            // edgeTokenList={tokenAList}
+                            // showList={false}
                             hideToken={tokenB?.tokenSymbol}
-                            minMax={false}
+                            // minMax={false}
                             disabled={isInputDisabled}
                             balance={tokenABalance}
                             {...field} token={tokenA}
-                            onChange={(value) => { 
+                            onChange={(value) => {
                                 setReverse(false);
-                                onInputChange(value, 0); 
-                                field.onChange(value) 
+                                onInputChange(value, 0);
+                                field.onChange(value)
                             }}
                         />
                     )}
@@ -169,7 +184,12 @@ const NewPositionForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    {!!tokenBBalance && (<Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>)}
+                    {isLoading ? (
+                        <Spinner color='band.500' size='xs' />
+                    ) : (
+                        !!tokenBBalance && (<Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>)
+                    )}
+
 
                 </HStack>
                 <Controller
@@ -178,9 +198,10 @@ const NewPositionForm: FC<Props> = ({
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput
+                            // showList={false}
                             edgeTokenList={edgeList}
                             hideToken={tokenA?.tokenSymbol}
-                            minMax={false}
+                            // minMax={false}
                             disabled={isInputDisabled}
                             balance={tokenBBalance}
                             {...field} token={tokenB}
@@ -205,7 +226,7 @@ const NewPositionForm: FC<Props> = ({
                 {buttonLabel}
             </Button>
 
-            {(tokenB?.tokenSymbol && amountB.amount) && (
+            {(Number(tx?.fee) > 0) && (
                 <VStack alignItems="flex-start" width="full" px={3}>
                     <HStack justifyContent="space-between" width="full">
                         <Text color="brand.500" fontSize={12}> Fees </Text>

@@ -5,7 +5,8 @@ import {
   Box,
   Divider,
   Button,
-  Text
+  Text,
+  Spinner
 } from "@chakra-ui/react";
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
@@ -31,7 +32,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
   const [{ address, chainId, status }, setWalletState] = useRecoilState(walletState)
   const chains = useChains()
   const [chainInfo] = useChainInfo(chainId)
-  const { balance } = useTokenBalance(baseToken?.symbol)
+  const { balance, isLoading } = useTokenBalance(baseToken?.symbol)
   const toast = useToast()
 
   const denom = useMemo(() => {
@@ -123,7 +124,12 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
       <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
 
         <HStack spacing="4"  >
-          <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
+          {isLoading ? (
+            <Spinner color='band.500' size='xs' />
+          ) : (
+            <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
+          )}
+          
           <WalletSelect
             connected={connected}
             denom={denom?.coinDenom}

@@ -1,15 +1,11 @@
-import { isNativeAsset, toAsset, createAsset } from "../../../../services/asset";
-import { createExecuteMessage } from 'util/messages';
-import { coin } from "@cosmjs/proto-signing";
 import {
-  MsgExecuteContractEncodeObject,
-  SigningCosmWasmClient,
-} from '@cosmjs/cosmwasm-stargate'
+  MsgExecuteContractEncodeObject
+} from '@cosmjs/cosmwasm-stargate';
+import { createExecuteMessage } from 'util/messages';
 
 import {
-  createIncreaseAllowanceMessage,
-  validateTransactionSuccess,
-} from 'util/messages'
+  createIncreaseAllowanceMessage
+} from 'util/messages';
 
 export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
@@ -42,7 +38,7 @@ export const createWithdrawExecuteMsgs = ({ contract, amount, swapAddress }, sen
     )
 
     return [
-      // ...increaseAllowanceMessages,
+      ...increaseAllowanceMessages,
       createExecuteMessage({
         senderAddress,
         contractAddress: contract,

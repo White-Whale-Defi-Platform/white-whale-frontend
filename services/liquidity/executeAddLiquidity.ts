@@ -24,7 +24,7 @@ type ExecuteAddLiquidityArgs = {
   senderAddress: string
   swapAddress: string
   client: SigningCosmWasmClient
-  msgs:any
+  msgs: any
 }
 
 export const executeAddLiquidity = async ({
@@ -35,15 +35,8 @@ export const executeAddLiquidity = async ({
   client,
   swapAddress,
   senderAddress,
-  msgs 
+  msgs
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  // const addLiquidityMessage = {
-  //   add_liquidity: {
-  //     token1_amount: `${tokenAAmount}`,
-  //     max_token2: `${maxTokenBAmount}`,
-  //     min_liquidity: `${0}`,
-  //   },
-  // }
 
   if (!tokenA.native || !tokenB.native) {
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
@@ -95,7 +88,8 @@ export const executeAddLiquidity = async ({
   const funds = [
     coin(tokenAAmount, tokenA.denom),
     coin(maxTokenBAmount, tokenB.denom),
-  ].sort((a, b) => (a.denom > b.denom ? 1 : -1))
+  ]
+  // .sort((a, b) => (a.denom > b.denom ? 1 : -1))
 
   return await client.execute(
     senderAddress,

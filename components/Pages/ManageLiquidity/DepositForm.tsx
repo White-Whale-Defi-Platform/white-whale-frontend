@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from '@chakra-ui/react';
+import { Button, HStack, Text, VStack, Spinner } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import { FC, useEffect, useState, useMemo } from 'react';
 import { Controller, useForm } from "react-hook-form";
@@ -27,7 +27,7 @@ type Props = {
 
 const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, setReverse, reverse }: Props) => {
 
-    const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
     const { control, handleSubmit, formState, setValue, getValues } = useForm({
         mode: "onChange",
@@ -96,7 +96,12 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                    {isLoading ? (
+                        <Spinner color='band.500' size='xs' />
+                    ) : (
+                        <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                    )}
+
                 </HStack>
                 <Controller
                     name="token1"
@@ -104,7 +109,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput {...field}
-                            minMax={false}
+                            // minMax={false}
                             token={tokenA}
                             disabled={isInputDisabled}
                             balance={tokenABalance}
@@ -118,7 +123,12 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
+                    {isLoading ? (
+                        <Spinner color='band.500' size='xs' />
+                    ) : (
+                        <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
+                    )}
+
                 </HStack>
                 <Controller
                     name="token2"
@@ -126,7 +136,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                     rules={{ required: true }}
                     render={({ field }) => (
                         <AssetInput {...field}
-                            minMax={false}
+                            // minMax={false}
                             disabled={isInputDisabled || !tokenB?.tokenSymbol}
                             token={tokenB}
                             balance={tokenBBalance}
