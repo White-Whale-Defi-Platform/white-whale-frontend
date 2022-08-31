@@ -62,6 +62,7 @@
     },
     {
       "pool_id": "ATOM-JUNO",
+      "lpOrder" : ["ATOM", "JUNO"],
       "pool_assets": [
         {
           "id": "juno-1",
@@ -194,6 +195,7 @@
     },
     {
       "pool_id": "JUNO-axlUSDC",
+      "lpOrder" : ["axlUSDC", "JUNO"],
       "pool_assets": [
         {
           "id": "juno-1",

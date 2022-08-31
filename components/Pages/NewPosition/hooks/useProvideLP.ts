@@ -29,16 +29,23 @@ const useProvideLP = ({ reverse = false }) => {
     return lpOrder?.[0] === A?.symbol ? [A, B] : [B, A]
   }, [A, B, lpOrder])
 
+  const [lpA, lpB] = useMemo(() => {
+    if (!lpOrder) return [lpTokenA, lpTokenB]
+
+    return lpOrder?.[0] === lpTokenA?.tokenSymbol ? [lpTokenA, lpTokenB] : [lpTokenB, lpTokenA]
+  }, [lpTokenA, lpTokenB, lpOrder])
+
 
   const slippage = "0.1"
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
 
-  const tokenAAmount = toChainAmount(lpTokenA?.amount)
-  const tokenBAmount = toChainAmount(lpTokenB?.amount)
+  const tokenAAmount = toChainAmount(lpA?.amount)
+  const tokenBAmount = toChainAmount(lpB?.amount)
 
   const simulated = useMemo(() => {
     if ((!reverse && !lpTokenA?.amount) || (reverse && !lpTokenB?.amount) || tokenAReserve === 0 || tokenBReserve === 0) return null
+    
 
     const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0;
     const ratio = (reverse || matchingPools?.streamlinePoolBA) ? num(tokenAReserve).div(tokenBReserve) : num(tokenBReserve).div(tokenAReserve);

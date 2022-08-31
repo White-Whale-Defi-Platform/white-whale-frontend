@@ -86,14 +86,14 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                     disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
                                     variant="outline"
                                     size="xs"
-                                    onClick={() => onChange({ ...token, amount: balance / 2 })}>
+                                    onClick={() => onChange({ ...token, amount: Number(balance / 2).toFixed(6) })}>
                                     half
                                 </Button>
                                 <Button
                                     disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
                                     variant="outline"
                                     size="xs"
-                                    onClick={() => onChange({ ...token, amount: tokenInfo?.symbol === baseToken?.symbol ? Number(balance - 0.10) : balance })}>
+                                    onClick={() => onChange({ ...token, amount: tokenInfo?.symbol === baseToken?.symbol ? Number(balance - 0.10).toFixed(6) : balance })}>
                                     max
                                 </Button>
                             </HStack>
