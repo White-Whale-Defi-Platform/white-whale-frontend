@@ -50,7 +50,7 @@ export const useConnectWallet = (
         chainInfo.rpc,
         offlineSigner,
         {
-          gasPrice: GasPrice.fromString(GAS_PRICE)
+          gasPrice: GasPrice.fromString(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`)
         }
       )
 
@@ -92,7 +92,7 @@ export const useConnectWallet = (
   useEffect(
     function restoreWalletConnectionIfHadBeenConnectedBefore() {
       /* restore wallet connection if the state has been set with the */
-      if (chainInfo?.rpc && status === WalletStatusType.restored) {
+      if ((chainInfo as any)?.rpc && status === WalletStatusType.restored) {
         mutation.mutate(chainId)
       }
     }, // eslint-disable-next-line

@@ -25,6 +25,7 @@
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
+      "lpOrder" : ["ATOM", "LUNA"],
       "pool_assets": [
         {
           "id": "phoenix-1",
@@ -33,7 +34,7 @@
           "symbol": "ATOM",
           "name": "Atom",
           "decimals": 6,
-          "logoURI": "/logos/atom.svg",
+          "logoURI": "/logos/atom.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
@@ -58,6 +59,7 @@
     },
     {
       "pool_id": "ATOM-JUNO",
+      "lpOrder" : ["ATOM", "JUNO"],
       "pool_assets": [
         {
           "id": "phoenix-1",
@@ -66,7 +68,7 @@
           "symbol": "ATOM",
           "name": "Atom",
           "decimals": 6,
-          "logoURI": "/logos/atom.svg",
+          "logoURI": "/logos/atom.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
@@ -90,7 +92,8 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "ATOM-USDC",
+      "pool_id": "ATOM-axlUSDC",
+      "lpOrder" : ["ATOM", "axlUSDC"],
       "pool_assets": [
         {
           "id": "phoenix-1",
@@ -99,7 +102,7 @@
           "symbol": "ATOM",
           "name": "Atom",
           "decimals": 6,
-          "logoURI": "/logos/atom.svg",
+          "logoURI": "/logos/atom.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
@@ -108,10 +111,10 @@
           "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
-          "symbol": "USDC",
-          "name": "USDC",
+          "symbol": "axlUSDC",
+          "name": "axlUSDC",
           "decimals": 6,
-          "logoURI": "/logos/usdc.svg",
+          "logoURI": "/logos/axlUSDC.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
@@ -189,7 +192,8 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "LUNA-USDC",
+      "pool_id": "LUNA-axlUSDC",
+      "lpOrder" : ["axlUSDC", "LUNA"],
       "pool_assets": [
         {
           "id": "phoenix-1",
@@ -207,10 +211,10 @@
           "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
-          "symbol": "USDC",
-          "name": "USDC",
+          "symbol": "axlUSDC",
+          "name": "axlUSDC",
           "decimals": 6,
-          "logoURI": "/logos/usdc.svg",
+          "logoURI": "/logos/axlUSDC.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"

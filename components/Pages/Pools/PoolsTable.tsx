@@ -20,6 +20,7 @@ export type Pool = {
     volume24hr: number | string
     totalLiq: number | string
     cta?: () => void
+    ctaLabel?: string
 }
 
 const columnHelper = createColumnHelper<Pool>()
@@ -60,7 +61,8 @@ const columns = [
                     size="sm"
                     onClick={() => info.getValue()()}
                 >
-                    Manage Liquidity
+                    {info.row.original?.ctaLabel}
+                    {/* Manage Liquidity */}
                 </Button>
             </HStack>
         )

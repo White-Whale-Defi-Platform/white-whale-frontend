@@ -7,6 +7,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import FallbackImage from 'components/FallbackImage'
 import { useTokenList } from 'hooks/useTokenList'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 
 interface AssetInputProps {
     image?: boolean;
@@ -42,6 +43,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
     ref) => {
 
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
+    const baseToken = useBaseTokenInfo()
 
     const [tokenList] = useTokenList()
     useMultipleTokenBalance(tokenList?.tokens?.map(({ symbol }) => symbol))
@@ -84,14 +86,14 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                     disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
                                     variant="outline"
                                     size="xs"
-                                    onClick={() => onChange({ ...token, amount: balance / 2 })}>
+                                    onClick={() => onChange({ ...token, amount: Number(balance / 2).toFixed(6) })}>
                                     half
                                 </Button>
                                 <Button
                                     disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
                                     variant="outline"
                                     size="xs"
-                                    onClick={() => onChange({ ...token, amount: tokenInfo?.native ? Number(balance - 0.10) : balance })}>
+                                    onClick={() => onChange({ ...token, amount: tokenInfo?.symbol === baseToken?.symbol ? Number(balance - 0.10).toFixed(6) : balance })}>
                                     max
                                 </Button>
                             </HStack>
@@ -166,9 +168,9 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                         ) : (
                             <HStack
                                 justifyContent="flex-start"
-                                width={["full", "160px"]}
+                                width={["full", 'fit-content']}
                                 sx={{ 'button': { margin: 'unset' } }}
-                                pl={[4, 0]} 
+                                pl={[4,0]} 
                                 gap={[1]}
                             // paddingX={3}
                             // style={{ margin: "unset" }}

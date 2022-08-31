@@ -81,7 +81,7 @@ const ManageLiquidity: FC = () => {
 
     return (
         <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5} margin="auto">
-            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4, md: 14 }} >
+            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4}} >
                 <IconButton
                     variant="unstyled"
                     color="#7A7A7A"

@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton, Text, VStack, Hide, Show, Box } from '@chakra-ui/react';
+import { Button, HStack, IconButton, Text, VStack, Hide, Show, Box, Spinner } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
 import { useEffect, FC, useMemo, Fragment } from 'react';
@@ -64,7 +64,7 @@ const SwapForm: FC<Props> = ({
 
     }, [resetForm, tx?.txStep])
 
-    const [[tokenABalance, tokenBBalance] = []] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
 
     const amountA = getValues('tokenA')
     const amountB = getValues('tokenB')
@@ -166,7 +166,12 @@ const SwapForm: FC<Props> = ({
 
                     <HStack>
                         <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                        <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(2)}</Text>
+                        {isLoading ? (
+                            <Spinner color='band.500' size='xs' />
+                        ) : (
+                            <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(6)}</Text>
+                        )}
+
                     </HStack>
 
                     <HStack visibility={{ base: 'visible', md: 'hidden' }}>
@@ -224,7 +229,11 @@ const SwapForm: FC<Props> = ({
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
                         <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                        <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(2)}</Text>
+                        {isLoading ? (
+                            <Spinner color='band.500' size='xs' />
+                        ) : (
+                            <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(6)}</Text>
+                        )}
                     </HStack>
                     <HStack>
                         <Hide above='md'>
