@@ -58,7 +58,7 @@
         "stakeCurrency": {
             "coinDenom": "LUNA",
             "coinMinimalDenom": "uluna",
-            "coinDecimals": 18
+            "coinDecimals": 6
         },
         "bip44": {
             "coinType": 118
@@ -75,8 +75,8 @@
             {
                 "coinDenom": "LUNA",
                 "coinMinimalDenom": "uluna",
-                "coinDecimals": 18,
-                "coinGeckoId": "terra"
+                "coinDecimals": 6,
+                "coinGeckoId": "terra-luna-2"
             }
         ],
         "feeCurrencies": [
@@ -84,14 +84,14 @@
                 "coinDenom": "LUNA",
                 "coinMinimalDenom": "uluna",
                 "coinDecimals": 6,
-                "coinGeckoId": "terra"
+                "coinGeckoId": "terra-luna-2"
             }
         ],
         "coinType": 118,
         "gasPriceStep": {
-            "low": 0.5,
-            "average": 0.75,
-            "high": 1
+            "low": 0.1,
+            "average": 0.15,
+            "high": 0.20
         },
         "features": [
             "cosmwasm"

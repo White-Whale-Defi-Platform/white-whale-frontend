@@ -11,6 +11,7 @@ import { Simulated } from './hooks/useSimulate'
 import { num } from 'libs/num'
 import { Tooltip } from '@chakra-ui/react'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { useTokenBalance } from 'hooks/useTokenBalance'
 
 
 type Props = {
@@ -64,7 +65,11 @@ const SwapForm: FC<Props> = ({
 
     }, [resetForm, tx?.txStep])
 
-    const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    // const [[_, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+
+    const {balance: tokenABalance, isLoading : tokanAloading} = useTokenBalance(tokenA?.tokenSymbol)
+    const {balance: tokenBBalance, isLoading : tokanBloading} = useTokenBalance(tokenB?.tokenSymbol)
+
 
     const amountA = getValues('tokenA')
     const amountB = getValues('tokenB')
@@ -166,8 +171,8 @@ const SwapForm: FC<Props> = ({
 
                     <HStack>
                         <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                        {isLoading ? (
-                            <Spinner color='band.500' size='xs' />
+                        {tokanAloading ? (
+                            <Spinner color='white' size='xs' />
                         ) : (
                             <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(6)}</Text>
                         )}
@@ -229,8 +234,8 @@ const SwapForm: FC<Props> = ({
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
                         <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                        {isLoading ? (
-                            <Spinner color='band.500' size='xs' />
+                        {tokanBloading ? (
+                            <Spinner color='white' size='xs' />
                         ) : (
                             <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(6)}</Text>
                         )}
@@ -277,7 +282,7 @@ const SwapForm: FC<Props> = ({
                 type='submit'
                 width="full"
                 variant="primary"
-                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting || state?.isLoading}
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting  || tx?.txStep == TxStep.Broadcasting || state?.isLoading}
                 disabled={tx?.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}

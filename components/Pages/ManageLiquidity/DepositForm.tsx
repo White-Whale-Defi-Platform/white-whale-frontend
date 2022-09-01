@@ -10,6 +10,7 @@ import { tokenLpAtom } from './lpAtoms';
 import { walletState } from 'state/atoms/walletAtoms';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount, num } from "libs/num";
+import { useTokenBalance } from 'hooks/useTokenBalance'
 
 
 type Props = {
@@ -27,7 +28,9 @@ type Props = {
 
 const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, setReverse, reverse }: Props) => {
 
-    const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    // const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    const {balance: tokenABalance, isLoading : tokanAloading} = useTokenBalance(tokenA?.tokenSymbol)
+    const {balance: tokenBBalance, isLoading : tokanBloading} = useTokenBalance(tokenB?.tokenSymbol)
 
     const { control, handleSubmit, formState, setValue, getValues } = useForm({
         mode: "onChange",
@@ -96,8 +99,8 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    {isLoading ? (
-                        <Spinner color='band.500' size='xs' />
+                    {tokanAloading ? (
+                        <Spinner color='white' size='xs' />
                     ) : (
                         <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
                     )}
@@ -123,8 +126,8 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    {isLoading ? (
-                        <Spinner color='band.500' size='xs' />
+                    {tokanBloading ? (
+                        <Spinner color='white' size='xs' />
                     ) : (
                         <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
                     )}
@@ -151,7 +154,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                 type='submit'
                 width="full"
                 variant="primary"
-                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting}
                 disabled={tx.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}

@@ -9,7 +9,6 @@ import { walletState } from 'state/atoms/walletAtoms';
 import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
 import defaultTokens from './defaultTokens.json'
-import { usePriceForOneToken } from "./hooks/usePriceForOneToken"
 import { fromChainAmount } from "libs/num";
 import getChainName from 'libs/getChainName'
 

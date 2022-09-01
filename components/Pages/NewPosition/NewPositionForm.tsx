@@ -7,6 +7,7 @@ import { TxStep } from 'hooks/useTransaction';
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { fromChainAmount } from "libs/num";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { useTokenBalance } from 'hooks/useTokenBalance'
 
 
 
@@ -43,7 +44,9 @@ const NewPositionForm: FC<Props> = ({
         },
     });
 
-    const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    // const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
+    const {balance: tokenABalance, isLoading : tokanAloading} = useTokenBalance(tokenA?.tokenSymbol)
+    const {balance: tokenBBalance, isLoading : tokanBloading} = useTokenBalance(tokenB?.tokenSymbol)
 
     const amountA = getValues('token1')
     const amountB = getValues('token2')
@@ -151,8 +154,8 @@ const NewPositionForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    {isLoading ? (
-                        <Spinner color='band.500' size='xs' />
+                    {tokanAloading ? (
+                        <Spinner color='white' size='xs' />
                     ) : (
                         <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
                     )}
@@ -184,8 +187,8 @@ const NewPositionForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    {isLoading ? (
-                        <Spinner color='band.500' size='xs' />
+                    {tokanBloading ? (
+                        <Spinner color='white' size='xs' />
                     ) : (
                         !!tokenBBalance && (<Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>)
                     )}
@@ -220,7 +223,7 @@ const NewPositionForm: FC<Props> = ({
                 type='submit'
                 width="full"
                 variant="primary"
-                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting}
                 disabled={tx.txStep != TxStep.Ready || simulated == null}
             >
                 {buttonLabel}

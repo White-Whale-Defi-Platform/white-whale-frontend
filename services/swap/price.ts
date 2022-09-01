@@ -1,6 +1,7 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { Pool } from 'types'
 import { num } from 'libs/num'
+import { dp } from '../../libs/parse'
 
 export interface GetToken1ForToken2PriceInput {
   nativeAmount: number | string
@@ -18,7 +19,7 @@ export const getToken1ForToken2Price = async ({
       pool: {}
     })
     const [asset1, asset2] = assets
-    return num(asset1.amount).div(asset2.amount).toNumber()
+    return num(asset2.amount).div(asset1.amount).toNumber()
   } catch (e) {
     console.error('err(getToken1ForToken2Price):', e)
   }
@@ -40,7 +41,7 @@ export const getToken2ForToken1Price = async ({
       pool: {}
     })
     const [asset1, asset2] = assets
-    return num(asset2.amount).div(asset1.amount).toString()
+    return num(asset1.amount).div(asset2.amount).toNumber()
   } catch (e) {
     console.error('err(getToken2ForToken1Price):', e)
   }

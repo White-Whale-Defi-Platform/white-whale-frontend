@@ -118,7 +118,7 @@ export const useTransaction = ({
           //   isClosable: true,
           // })
           throw Error("Failed to simulate transaction.")
-          
+
         }
       }
     },
@@ -153,14 +153,15 @@ export const useTransaction = ({
       onMutate: () => {
         setTxStep(TxStep.Posting)
       },
-      onError: (e: unknown) => {
+      onError: (e: any) => {
         let message = ''
+        console.error({ message: e?.message() })
         console.error(e?.toString())
-        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())){
+        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())) {
           setError("Insufficient Funds")
           message = "Insufficient Funds"
         }
-        else if (/Max spread assertion/i.test(e?.toString())){
+        else if (/Max spread assertion/i.test(e?.toString())) {
           setError("Try increasing slippage")
           message = "Try increasing slippage"
         }
@@ -168,12 +169,12 @@ export const useTransaction = ({
           setError("User Denied")
           message = "User Denied"
         }
-        else{
+        else {
           setError("Failed to execute transaction.")
           message = "Failed to execute transaction."
         }
 
-        
+
         toast({
           title: 'Swap Failed.',
           description: message,
@@ -182,17 +183,16 @@ export const useTransaction = ({
           position: "top-right",
           isClosable: true,
         })
-        
+
         setTxStep(TxStep.Failed)
-        
+
         onError?.()
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
-        const queryPath = `multipleTokenBalances/${swapAssets.map(({symbol}) => symbol)?.join('+')}`
-        queryClient.invalidateQueries([queryPath])
+        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
         toast({
           title: 'Swap Success.',
           description: <Finder txHash={data.transactionHash} chainId={client.chainId} > From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
@@ -206,7 +206,7 @@ export const useTransaction = ({
     },
   )
 
-  const { data: txInfo } = useQuery(
+  const { data: txInfo} = useQuery(
     ['txInfo', txHash],
     () => {
       if (txHash == null) {

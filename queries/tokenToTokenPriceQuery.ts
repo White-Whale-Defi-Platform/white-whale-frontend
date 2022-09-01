@@ -11,6 +11,8 @@ import {
 } from '../util/conversion'
 import { TokenInfo } from './usePoolsListQuery'
 import { PoolMatchForSwap } from './useQueryMatchingPoolForSwap'
+import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
+import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
 
 type TokenToTokenPriceQueryArgs = {
   matchingPools: PoolMatchForSwap
@@ -18,6 +20,7 @@ type TokenToTokenPriceQueryArgs = {
   tokenB: TokenInfo
   amount: number
   client: CosmWasmClient
+  id?: string
 }
 
 export async function tokenToTokenPriceQueryWithPools({
@@ -26,6 +29,7 @@ export async function tokenToTokenPriceQueryWithPools({
   tokenB,
   amount,
   client,
+  id
 }: TokenToTokenPriceQueryArgs): Promise<number | undefined> {
   if (tokenA.symbol === tokenB.symbol) {
     return 1
@@ -39,31 +43,37 @@ export async function tokenToTokenPriceQueryWithPools({
   const { streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool } =
     matchingPools
 
+  console.log({
+    streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool
+  })
+
+  if (id) {
+    const [price] = await tokenDollarValueQuery([id])
+    return price
+  }
+
   if (streamlinePoolAB) {
     return await getToken1ForToken2Price({
-        nativeAmount: convertedTokenAmount,
-        swapAddress: streamlinePoolAB.swap_address,
-        client
-      })
+      nativeAmount: convertedTokenAmount,
+      swapAddress: streamlinePoolAB.swap_address,
+      client
+    })
   }
 
   if (streamlinePoolBA) {
-    return formatPrice(
-      await getToken2ForToken1Price({
-        tokenAmount: convertedTokenAmount,
-        swapAddress: streamlinePoolBA.swap_address,
-        client,
-      })
-    )
-  }
-
-  return formatPrice(
-    await getTokenForTokenPrice({
+    return await getToken2ForToken1Price({
       tokenAmount: convertedTokenAmount,
-      swapAddress: baseTokenAPool.swap_address,
-      outputSwapAddress: baseTokenBPool.swap_address,
+      swapAddress: streamlinePoolBA.swap_address,
       client,
     })
+  }
+
+  return await formatPrice(getTokenForTokenPrice({
+    tokenAmount: convertedTokenAmount,
+    swapAddress: baseTokenAPool.swap_address,
+    outputSwapAddress: baseTokenBPool.swap_address,
+    client,
+  })
   )
 }
 
@@ -89,8 +99,11 @@ export async function tokenToTokenPriceQuery({
   const shouldQueryBaseTokenForTokenB =
     fromTokenInfo.symbol === baseToken.symbol && toTokenInfo.swap_address
 
+
   const shouldQueryTokenBForBaseToken =
     toTokenInfo.symbol === baseToken.symbol && fromTokenInfo.swap_address
+
+  console.log({ shouldQueryBaseTokenForTokenB, shouldQueryTokenBForBaseToken })
 
   if (shouldQueryBaseTokenForTokenB) {
     const resp = await getToken1ForToken2Price({
@@ -101,21 +114,17 @@ export async function tokenToTokenPriceQuery({
 
     return formatPrice(resp)
   } else if (shouldQueryTokenBForBaseToken) {
-    return formatPrice(
-      await getToken2ForToken1Price({
-        tokenAmount: convertedTokenAmount,
-        swapAddress: fromTokenInfo.swap_address,
-        client,
-      })
-    )
-  }
-
-  return formatPrice(
-    await getTokenForTokenPrice({
+    return await getToken2ForToken1Price({
       tokenAmount: convertedTokenAmount,
       swapAddress: fromTokenInfo.swap_address,
-      outputSwapAddress: toTokenInfo.swap_address,
       client,
     })
-  )
+  }
+
+  return await getTokenForTokenPrice({
+    tokenAmount: convertedTokenAmount,
+    swapAddress: fromTokenInfo.swap_address,
+    outputSwapAddress: toTokenInfo.swap_address,
+    client,
+  })
 }
