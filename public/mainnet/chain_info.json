@@ -53,8 +53,8 @@
         "chainName": "Terra Mainnet",
         "label": "Terra",
         "icon": "/logos/luna.svg",
-        "rpc": "https://terra-rpc.stakely.io",
-        "rest": "https://terra-api.polkachu.com",
+        "rpc": "https://rpc.cosmos.directory/terra2",
+        "rest": "https://rest.cosmos.directory/terra2",
         "stakeCurrency": {
             "coinDenom": "LUNA",
             "coinMinimalDenom": "uluna",
@@ -89,9 +89,9 @@
         ],
         "coinType": 118,
         "gasPriceStep": {
-            "low": 0.1,
-            "average": 0.15,
-            "high": 0.20
+            "low": 0.15,
+            "average": 0.20,
+            "high": 0.25
         },
         "features": [
             "cosmwasm"
