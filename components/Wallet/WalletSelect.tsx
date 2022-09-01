@@ -12,11 +12,13 @@ import { ChevronDownIcon } from '@chakra-ui/icons'
 import { Switch, FormControl, FormLabel } from '@chakra-ui/react'
 import { networkAtom } from 'state/atoms/walletAtoms'
 import { useRecoilState } from 'recoil'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
     const [network, setNetwork] = useRecoilState(networkAtom)
+    const queryClient = useQueryClient()
 
     return (
         <Popover placement='top-end'
@@ -75,6 +77,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                     id='network'
                                     isChecked={network === 'testnet'}
                                     onChange={({ target }) => {
+                                        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
                                         setNetwork(target.checked ? 'testnet' : 'mainnet')
 
                                     }} />
@@ -96,7 +99,11 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                     _hover={{
                                         opacity: 1
                                     }}
-                                    onClick={() => { onChange(chain); onClose() }}
+                                    onClick={() => { 
+                                        onChange(chain); 
+                                        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+                                        onClose() 
+                                    }}
                                 >
                                     <HStack>
                                         <Image src={chain?.icon} boxSize={30} objectFit='cover' />

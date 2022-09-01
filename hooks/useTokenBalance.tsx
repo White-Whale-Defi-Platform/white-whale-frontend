@@ -83,26 +83,26 @@ export const useTokenBalance = (tokenSymbol: string) => {
   const network = useRecoilValue(networkAtom)
 
 
-  const { data: balance = 0, isLoading } = useQuery(
+  const { data: balance = 0, isLoading} = useQuery(
     ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
-      if (symbol && client && (tokenInfo || ibcAssetInfo)) {
+      // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
         return await fetchTokenBalance({
           client,
           address,
           token: tokenInfo || ibcAssetInfo,
         })
-      }
+      // }
     },
     {
-      enabled: Boolean(tokenSymbol && status === WalletStatusType.connected),
+      enabled: !!tokenSymbol && !!client && (!!tokenInfo || !!ibcAssetInfo),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
     }
   )
 
-  return { balance, isLoading }
+  return { balance, isLoading : isLoading }
 }
 
 
