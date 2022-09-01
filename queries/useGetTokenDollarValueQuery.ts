@@ -5,15 +5,16 @@
 import { useCosmWasmClient } from '../hooks/useCosmWasmClient'
 import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
 import { useBaseTokenInfo } from '../hooks/useTokenInfo'
-import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
+import { tokenToTokenPriceQueryWithPools, tokenToTokenPriceQuery } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
 import { walletState } from '../state/atoms/walletAtoms'
+import { useTokenInfo } from '../hooks/useTokenInfo'
 
 export const useGetTokenDollarValueQuery = () => {
   const tokenA = useBaseTokenInfo()
   // const client = useCosmWasmClient()
-  const {client} = useRecoilValue(walletState)
+  const { client } = useRecoilValue(walletState)
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     tokenA?.symbol
   )
@@ -32,9 +33,13 @@ export const useGetTokenDollarValueQuery = () => {
         tokenB: tokenInfo,
         client,
         amount: 1,
+        id: tokenInfo?.id
       })
 
-      return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
+      if (tokenA?.id === tokenInfo?.id)
+        return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
+      else return priceForOneToken
+      
     },
     Boolean(
       tokenA && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher

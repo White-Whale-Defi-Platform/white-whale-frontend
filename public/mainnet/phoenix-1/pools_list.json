@@ -10,7 +10,7 @@
   },
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
-    "id": "phoenix-1",
+    "id": "terra-luna-2",
     "chain_id": "phoenix-1",
     "token_address": "",
     "symbol": "LUNA",
@@ -28,7 +28,7 @@
       "lpOrder" : ["ATOM", "LUNA"],
       "pool_assets": [
         {
-          "id": "phoenix-1",
+          "id": "cosmos",
           "chain_id": "phoenix-1",
           "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
           "symbol": "ATOM",
@@ -40,7 +40,7 @@
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
         {
-          "id": "phoenix-1",
+          "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "uluna",
           "symbol": "LUNA",
@@ -62,7 +62,7 @@
       "lpOrder" : ["ATOM", "JUNO"],
       "pool_assets": [
         {
-          "id": "phoenix-1",
+          "id": "cosmos",
           "chain_id": "phoenix-1",
           "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
           "symbol": "ATOM",
@@ -74,7 +74,6 @@
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
         {
-          "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "ibc/4CD525F166D32B0132C095F353F4C6F033B0FF5C49141470D1EFDA1D63303D04",
           "symbol": "JUNO",
@@ -96,7 +95,7 @@
       "lpOrder" : ["ATOM", "axlUSDC"],
       "pool_assets": [
         {
-          "id": "phoenix-1",
+          "id": "cosmos",
           "chain_id": "phoenix-1",
           "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
           "symbol": "ATOM",
@@ -108,7 +107,6 @@
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
         {
-          "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
           "symbol": "axlUSDC",
@@ -129,7 +127,7 @@
       "pool_id": "LUNA-LUNAX",
       "pool_assets": [
         {
-          "id": "phoenix-1",
+          "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "uluna",
           "symbol": "LUNA",
@@ -141,7 +139,6 @@
           "denom": "uluna"
         },
         {
-          "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "terra14xsm2wzvu7xaf567r693vgfkhmvfs08l68h4tjj5wjgyn5ky8e2qvzyanh",
           "symbol": "LUNAX",
@@ -162,7 +159,7 @@
       "pool_id": "LUNA-ASTRO",
       "pool_assets": [
         {
-          "id": "phoenix-1",
+          "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "uluna",
           "symbol": "LUNA",
@@ -174,7 +171,6 @@
           "denom": "uluna"
         },
         {
-          "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "terra1nsuqsk6kh58ulczatwev87ttq2z6r3pusulg9r24mfj2fvtzd4uq3exn26",
           "symbol": "ASTRO",
@@ -196,7 +192,7 @@
       "lpOrder" : ["axlUSDC", "LUNA"],
       "pool_assets": [
         {
-          "id": "phoenix-1",
+          "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "uluna",
           "symbol": "LUNA",
@@ -208,7 +204,6 @@
           "denom": "uluna"
         },
         {
-          "id": "phoenix-1",
           "chain_id": "phoenix-1",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
           "symbol": "axlUSDC",

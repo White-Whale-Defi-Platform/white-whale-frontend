@@ -154,11 +154,11 @@ export const useTransaction = ({
       onError: (e: unknown) => {
         let message = ''
         console.error(e?.toString())
-        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())){
+        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())) {
           setError("Insufficient Funds")
           message = "Insufficient Funds"
         }
-        else if (/Max spread assertion/i.test(e?.toString())){
+        else if (/Max spread assertion/i.test(e?.toString())) {
           setError("Try increasing slippage")
           message = "Try increasing slippage"
         }
@@ -166,12 +166,12 @@ export const useTransaction = ({
           setError("User Denied")
           message = "User Denied"
         }
-        else{
+        else {
           setError("Failed to execute transaction.")
           message = "Failed to execute transaction."
         }
 
-        
+
         toast({
           title: 'Swap Failed.',
           description: message,
@@ -180,16 +180,16 @@ export const useTransaction = ({
           position: "top-right",
           isClosable: true,
         })
-        
+
         setTxStep(TxStep.Failed)
-        
+
         onError?.()
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
-        const queryPath = `multipleTokenBalances/${swapAssets.map(({symbol}) => symbol)?.join('+')}`
+        const queryPath = `multipleTokenBalances/${swapAssets.map(({ symbol }) => symbol)?.join('+')}`
         queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',

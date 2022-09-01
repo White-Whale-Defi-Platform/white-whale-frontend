@@ -99,7 +99,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                 type='submit'
                 width="full"
                 variant="primary"
-                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting}
+                isLoading={tx?.txStep == TxStep.Estimating || tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting}
                 disabled={tx.txStep != TxStep.Ready}
             >
                 {buttonLabel}

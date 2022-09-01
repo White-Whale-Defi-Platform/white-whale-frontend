@@ -3,12 +3,12 @@ type ApiResponse = Record<string, { usd: number }>
 
 
 export const fetchDollarPriceByTokenIds = debounce(
-  async (tokenIds: Array<string>, chainId): Promise<ApiResponse> => {
+  async (tokenIds: Array<string>): Promise<ApiResponse> => {
     const apiIds = tokenIds.flat().join(',')
 
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${chainId}&vs_currencies=usd`,
-      // `https://api.coingecko.com/api/v3/simple/price?ids=juno-network&vs_currencies=usd`,
+      // `https://api.coingecko.com/api/v3/simple/price?ids=${chainId}&vs_currencies=usd`,
+      `https://api.coingecko.com/api/v3/simple/price?ids=${apiIds}&vs_currencies=usd`,
       {
         method: 'GET',
       }
@@ -19,7 +19,7 @@ export const fetchDollarPriceByTokenIds = debounce(
   100
 )
 
-function debounce<T extends (args: any, chainId: string) => Promise<any>>(
+function debounce<T extends (args: any) => Promise<any>>(
   getPromise: T,
   timeoutMs: number
 ) {
@@ -27,7 +27,7 @@ function debounce<T extends (args: any, chainId: string) => Promise<any>>(
   let argsState = []
   let resolvers = []
 
-  const debouncedPromise = (args: Parameters<T>, chainId) => {
+  const debouncedPromise = (args: Parameters<T>) => {
     argsState.push(args)
 
     return new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ function debounce<T extends (args: any, chainId: string) => Promise<any>>(
 
       clearTimeout(timeout)
       timeout = setTimeout(function resolvePromises() {
-        const promise = getPromise([...argsState], chainId)
+        const promise = getPromise([...argsState])
         resolvers.forEach((promiseResolvers) =>
           promise.then(...promiseResolvers)
         )

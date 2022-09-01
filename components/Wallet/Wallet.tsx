@@ -125,7 +125,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
 
         <HStack spacing="4"  >
           {isLoading ? (
-            <Spinner color='band.500' size='xs' />
+            <Spinner color='white' size='xs' />
           ) : (
             <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
           )}

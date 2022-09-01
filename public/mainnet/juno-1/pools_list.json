@@ -12,7 +12,7 @@
   },
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
-    "id": "juno-1",
+    "id": "juno-network",
     "chain_id": "juno-1",
     "token_address": "",
     "symbol": "JUNO",
@@ -32,7 +32,7 @@
       "lpOrder" : ["LUNA", "ATOM"],
       "pool_assets": [
         {
-          "id": "juno-1",
+          "id": "cosmos",
           "chain_id": "juno-1",
           "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
           "symbol": "ATOM",
@@ -44,7 +44,6 @@
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
         },
         {
-          "id": "juno-1",
           "chain_id": "juno-1",
           "token_address": "ibc/107D152BB3176FAEBF4C2A84C5FFDEEA7C7CB4FE1BBDAB710F1FD25BCD055CBF",
           "symbol": "LUNA",
@@ -66,7 +65,7 @@
       "lpOrder" : ["ATOM", "JUNO"],
       "pool_assets": [
         {
-          "id": "juno-1",
+          "id": "cosmos",
           "chain_id": "juno-1",
           "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
           "symbol": "ATOM",
@@ -78,7 +77,7 @@
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
         },
         {
-          "id": "juno-1",
+          "id": "juno-network",
           "chain_id": "juno-1",
           "token_address": "ujuno",
           "symbol": "JUNO",
@@ -100,7 +99,7 @@
       "lpOrder" : ["ATOM", "axlUSDC"],
       "pool_assets": [
         {
-          "id": "juno-1",
+          "id": "cosmos",
           "chain_id": "juno-1",
           "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
           "symbol": "ATOM",
@@ -112,7 +111,6 @@
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
         },
         {
-          "id": "juno-1",
           "chain_id": "juno-1",
           "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
           "symbol": "axlUSDC",
@@ -133,7 +131,7 @@
       "pool_id": "JUNO-RAW",
       "pool_assets": [
         {
-          "id": "juno-1",
+          "id": "juno-network",
           "chain_id": "juno-1",
           "token_address": "ujuno",
           "symbol": "JUNO",
@@ -145,7 +143,6 @@
           "denom": "ujuno"
         },
         {
-          "id": "juno-1",
           "chain_id": "juno-1",
           "token_address": "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
           "symbol": "RAW",
@@ -166,7 +163,7 @@
       "pool_id": "JUNO-LOOP",
       "pool_assets": [
         {
-          "id": "juno-1",
+          "id": "juno-network",
           "chain_id": "juno-1",
           "token_address": "ujuno",
           "symbol": "JUNO",
@@ -178,7 +175,6 @@
           "denom": "ujuno"
         },
         {
-          "id": "juno-1",
           "chain_id": "juno-1",
           "token_address": "juno1qsrercqegvs4ye0yqg93knv73ye5dc3prqwd6jcdcuj8ggp6w0us66deup",
           "symbol": "LOOP",
@@ -200,7 +196,7 @@
       "lpOrder" : ["axlUSDC", "JUNO"],
       "pool_assets": [
         {
-          "id": "juno-1",
+          "id": "juno-network",
           "chain_id": "juno-1",
           "token_address": "ujuno",
           "symbol": "JUNO",
@@ -212,7 +208,6 @@
           "denom": "ujuno"
         },
         {
-          "id": "juno-1",
           "chain_id": "juno-1",
           "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
           "symbol": "axlUSDC",
