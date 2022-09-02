@@ -76,7 +76,7 @@ const Swap: FC<SwapProps> = ({ }) => {
 
 
     return (
-        <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5} margin="auto">
+        <VStack width={{ base: '100%', md: '600px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4}} >
                 <Text as="h2" fontSize="24" fontWeight="900">
                     Swap

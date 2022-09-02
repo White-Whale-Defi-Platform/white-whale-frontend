@@ -29,8 +29,8 @@ type Props = {
 const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, setReverse, reverse }: Props) => {
 
     // const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
-    const {balance: tokenABalance, isLoading : tokanAloading} = useTokenBalance(tokenA?.tokenSymbol)
-    const {balance: tokenBBalance, isLoading : tokanBloading} = useTokenBalance(tokenB?.tokenSymbol)
+    const { balance: tokenABalance, isLoading: tokanAloading } = useTokenBalance(tokenA?.tokenSymbol)
+    const { balance: tokenBBalance, isLoading: tokanBloading } = useTokenBalance(tokenB?.tokenSymbol)
 
     const { control, handleSubmit, formState, setValue, getValues } = useForm({
         mode: "onChange",
@@ -49,17 +49,30 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
     useEffect(() => {
 
         if (simulated) {
-            if (reverse)
-                setValue('token1', { ...tokenB, amount: num(simulated).toNumber() })
-            else
-                setValue('token2', { ...tokenA, amount: num(simulated).toNumber() })
+            if (reverse) {
+                onInputChange({ ...tokenA, amount: Number(simulated) }, 0);
+                setValue('token1', { ...tokenA, amount: Number(simulated) })
+            }
+            else {
+                onInputChange({ ...tokenB, amount: Number(simulated) }, 1);
+                setValue('token2', { ...tokenA, amount: Number(simulated) })
+
+            }
         }
         else {
-            setValue('token1', { ...tokenA, amount: 0 })
-            setValue('token2', { ...tokenB, amount: 0 })
+            if (reverse) {
+                if (!!!tokenB.amount)
+                    setValue('token1', { ...tokenA, amount: undefined })
+            } else {
+                if (!!!tokenA.amount)
+                    setValue('token2', { ...tokenB, amount: undefined })
+            }
         }
 
-        return () => tx?.reset()
+        return () => {
+            onInputChange({ ...tokenA, amount: 0 }, 0);
+            tx?.reset()
+        }
 
     }, [simulated, reverse])
 
