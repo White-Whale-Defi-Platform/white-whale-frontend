@@ -142,6 +142,11 @@ const SwapForm: FC<Props> = ({
             }
         }
 
+        return () => {
+            onInputChange({ ...tokenA, amount: 0 }, 0);
+            tx?.reset()
+        }
+
     }, [simulated])
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
@@ -156,7 +161,7 @@ const SwapForm: FC<Props> = ({
             borderRadius="30px"
             alignItems="flex-start"
             minH={400}
-            maxWidth={{ base: 'full', md: 650 }}
+            maxWidth={{ base: 'full', md: 600 }}
             gap={4}
             as="form"
             onSubmit={handleSubmit(tx?.submit)}
@@ -264,6 +269,7 @@ const SwapForm: FC<Props> = ({
                             hideToken={tokenA?.tokenSymbol}
                             {...field}
                             token={tokenB}
+                            minMax={false}
                             balance={tokenBBalance}
                             disabled={isInputDisabled}
                             // onInputFocus={() => setIsReverse(true)}

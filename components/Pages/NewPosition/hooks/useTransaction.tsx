@@ -127,7 +127,7 @@ export const useTransaction = ({
       }
     },
     {
-      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled && !!swapAddress,
+      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled && !!swapAddress && (!!tokenAAmount || !!tokenBAmount),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,

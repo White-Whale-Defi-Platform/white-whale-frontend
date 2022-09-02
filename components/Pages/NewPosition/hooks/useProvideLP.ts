@@ -23,10 +23,10 @@ const useProvideLP = ({ reverse = false }) => {
     liquidity = {}
   } = {}, isLoading] = useQueryPoolLiquidity({ poolId })
 
-  const [tokenA, tokenB] = useMemo(() => {
-    if (!lpOrder) return [A, B]
+  const [tokenA, tokenB, flipped] = useMemo(() => {
+    if (!lpOrder) return [A, B, false]
 
-    return lpOrder?.[0] === A?.symbol ? [A, B] : [B, A]
+    return lpOrder?.[0] === A?.symbol ? [A, B, false] : [B, A, true]
   }, [A, B, lpOrder])
 
   const [lpA, lpB] = useMemo(() => {
@@ -40,7 +40,7 @@ const useProvideLP = ({ reverse = false }) => {
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
 
-  const tokenAAmount = toChainAmount(lpA?.amount)
+  const tokenAAmount = toChainAmount(lpA?.amount )
   const tokenBAmount = toChainAmount(lpB?.amount)
 
   const simulated = useMemo(() => {
@@ -59,19 +59,19 @@ const useProvideLP = ({ reverse = false }) => {
     return {
       msgs: createLpMsg({
         tokenA,
-        amountA: reverse ? toChainAmount(simulated) : tokenAAmount,
+        amountA: reverse ? flipped ?  tokenAAmount  : toChainAmount(simulated)  : tokenAAmount ,
         tokenB,
-        amountB: reverse ? tokenBAmount : toChainAmount(simulated),
+        amountB: reverse ? tokenBAmount  : flipped ?  tokenBAmount : toChainAmount(simulated),
       }),
       encodedMsgs: createLPExecuteMsgs({
         tokenA,
-        amountA: reverse ? toChainAmount(simulated) : tokenAAmount,
+        amountA: reverse ? flipped ? tokenAAmount : toChainAmount(simulated)  : flipped ?  tokenAAmount : tokenAAmount ,
         tokenB,
-        amountB: reverse ? tokenBAmount : toChainAmount(simulated),
+        amountB: reverse ? flipped ?  tokenBAmount : tokenBAmount :  flipped ?  tokenBAmount : toChainAmount(simulated),
         swapAddress,
       }, address)
     }
-  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount]);
+  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse]);
 
   const tx = useTransaction({
     poolId,
@@ -82,8 +82,8 @@ const useProvideLP = ({ reverse = false }) => {
     client,
     msgs,
     encodedMsgs,
-    tokenAAmount: reverse ? num(toChainAmount(simulated)).toNumber() : num(tokenAAmount).toNumber(),
-    tokenBAmount: reverse ? num(tokenBAmount).toNumber() : num(toChainAmount(simulated)).toNumber(),
+    tokenAAmount: reverse ? num(flipped ? tokenAAmount : toChainAmount(simulated)).toNumber()  : num(tokenAAmount).toNumber() ,
+    tokenBAmount:  reverse ? num(tokenBAmount).toNumber()  : num(flipped ?  tokenBAmount : toChainAmount(simulated)).toNumber(),
     onSuccess: () => { },
     onError: () => { }
   });
