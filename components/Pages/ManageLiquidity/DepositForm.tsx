@@ -83,11 +83,11 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
     const buttonLabel = useMemo(() => {
 
         if (!connected)
-            return 'Connect wallet'
+            return 'Connect Wallet'
         else if (!tokenB?.tokenSymbol)
-            return 'Select token'
+            return 'Select Token'
         else if (!!!amountA?.amount)
-            return 'Enter amount'
+            return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
