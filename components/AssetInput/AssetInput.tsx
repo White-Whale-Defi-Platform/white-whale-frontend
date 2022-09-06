@@ -133,6 +133,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                             image && (
                                                 <Image
                                                     width="auto"
+                                                    minW="1.5rem"
                                                     maxW="1.5rem"
                                                     maxH="1.5rem"
                                                     style={{ margin: 'unset' }}

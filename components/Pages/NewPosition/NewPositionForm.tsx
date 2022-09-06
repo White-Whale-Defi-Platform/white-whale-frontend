@@ -84,10 +84,6 @@ const NewPositionForm: FC<Props> = ({
             }
         }
 
-        return () => {
-            onInputChange({ ...tokenA, amount: 0 }, 0);
-            tx?.reset()
-        }
 
     }, [simulated, reverse])
 

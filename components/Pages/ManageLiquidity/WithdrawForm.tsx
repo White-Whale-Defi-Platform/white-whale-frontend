@@ -1,5 +1,5 @@
 
-import { Button, HStack, Text, VStack } from '@chakra-ui/react';
+import { Button, HStack, Text, VStack , Spinner} from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
@@ -21,7 +21,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
         lp_token: contract = null,
         pool_assets = [],
         liquidity = {}
-    } = {}] = useQueryPoolLiquidity({ poolId })
+    } = {}, isLoading] = useQueryPoolLiquidity({ poolId })
 
     const [token, setToken] = useState<TokenItemState>(tokenA)
     const tx = useWithdraw({ token, contract, swapAddress, poolId })
@@ -80,7 +80,12 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
                     <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
-                    <Text fontSize="14" fontWeight="700">{tokenBalance}</Text>
+                    {/* <Text fontSize="14" fontWeight="700">{tokenBalance}</Text> */}
+                    {isLoading ? (
+                            <Spinner color='white' size='xs' />
+                        ) : (
+                            <Text fontSize="14" fontWeight="700">{tokenBalance}</Text>
+                        )}
                 </HStack>
 
                 <AssetInput

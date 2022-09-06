@@ -54,7 +54,7 @@ const useProvideLP = ({ reverse = false }) => {
   }, [lpTokenA, lpTokenB, swapAddress, tokenAReserve, tokenBReserve, reverse, matchingPools])
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (simulated == null || swapAddress == null) return {};
+    if (simulated == null || !tokenAAmount || !tokenBAmount  || swapAddress == null) return {};
 
     return {
       msgs: createLpMsg({

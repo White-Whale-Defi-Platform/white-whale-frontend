@@ -21,6 +21,7 @@ const ManageLiquidity: FC = () => {
     const { chainId, key } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState(false)
     const [reverse, setReverse] = useState<boolean>(false)
+    const [isTokenSet, SetIsToken] = useState<boolean>(false)
 
 
     const poolId = useMemo(() => {
@@ -48,6 +49,7 @@ const ManageLiquidity: FC = () => {
                     amount: 0,
                 },
             ])
+            SetIsToken(true)
         }
         return () => {
             setTokenLPState([
@@ -60,6 +62,7 @@ const ManageLiquidity: FC = () => {
                     amount: 0,
                 },
             ])
+            SetIsToken(true)
         }
     }, [poolId, setTokenLPState]
     )
@@ -81,7 +84,7 @@ const ManageLiquidity: FC = () => {
 
     return (
         <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5} margin="auto">
-            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4}} >
+            <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4 }} >
                 <IconButton
                     variant="unstyled"
                     color="#7A7A7A"
@@ -120,16 +123,19 @@ const ManageLiquidity: FC = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel padding={4}>
-                                <DepositForm
-                                    setReverse={setReverse}
-                                    reverse={reverse}
-                                    connected={Boolean(key?.name)}
-                                    tokenA={tokenA}
-                                    tokenB={tokenB}
-                                    onInputChange={onInputChange}
-                                    simulated={simulated}
-                                    tx={tx}
-                                />
+                                {isTokenSet && (
+                                    <DepositForm
+                                        setReverse={setReverse}
+                                        reverse={reverse}
+                                        connected={Boolean(key?.name)}
+                                        tokenA={tokenA}
+                                        tokenB={tokenB}
+                                        onInputChange={onInputChange}
+                                        simulated={simulated}
+                                        tx={tx}
+                                    />
+                                )}
+
                             </TabPanel>
                             <TabPanel padding={4}>
                                 <WithdrawForm
