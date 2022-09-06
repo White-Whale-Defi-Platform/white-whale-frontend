@@ -15,7 +15,6 @@ export type Pool = {
     pool: string
     token1Img: string
     token2Img: string
-    myPosition: number | string
     apr: number | string
     volume24hr: number | string
     totalLiq: number | string
@@ -35,10 +34,6 @@ const columns = [
                 token2Img={info.row.original?.token2Img}
             />
         )
-    }),
-    columnHelper.accessor('myPosition', {
-        header: () => <Text align="right" color="brand.200">My Position</Text>,
-        cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('apr', {
         header: () => <Text align="right" color="brand.200">Combined APR</Text>,
@@ -61,8 +56,7 @@ const columns = [
                     size="sm"
                     onClick={() => info.getValue()()}
                 >
-                    {info.row.original?.ctaLabel}
-                    {/* Manage Liquidity */}
+                    Add Liquidity
                 </Button>
             </HStack>
         )

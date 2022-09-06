@@ -43,10 +43,6 @@ export async function tokenToTokenPriceQueryWithPools({
   const { streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool } =
     matchingPools
 
-  console.log({
-    streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool
-  })
-
   if (id) {
     const [price] = await tokenDollarValueQuery([id])
     return price
