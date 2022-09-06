@@ -53,8 +53,8 @@
         "chainName": "Terra Mainnet",
         "label": "Terra",
         "icon": "/logos/luna.svg",
-        "rpc": "https://rpc.cosmos.directory/terra2",
-        "rest": "https://rest.cosmos.directory/terra2",
+        "rpc": "https://terra-rpc.stakely.io",
+        "rest": "https://terra-api.polkachu.com",
         "stakeCurrency": {
             "coinDenom": "LUNA",
             "coinMinimalDenom": "uluna",
