@@ -1,12 +1,13 @@
 import { Flex, Button, VStack, HStack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, Spacer } from '@chakra-ui/react'
-import { Pool } from './PoolsTable'
+import { Pool } from './MyPoolsTable'
 import PoolName from './PoolName'
 
 type Props = {
-    pools: Pool[]
+    pools: Pool[];
+    ctaLabel? : string
 }
 
-const MobilePools = ({ pools }: Props) => {
+const MobilePools = ({ pools, ctaLabel }: Props) => {
     return (
         <VStack width="full" display={['flex', 'none']} gap={8}>
             {
@@ -51,7 +52,7 @@ const MobilePools = ({ pools }: Props) => {
                             width="full"
                             onClick={() => pool?.cta()}
                         >
-                            Manage Liquidity
+                            {ctaLabel || "Manage Liquidity"}
                         </Button>
 
 

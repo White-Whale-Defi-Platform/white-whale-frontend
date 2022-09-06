@@ -8,7 +8,8 @@ import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import Loader from '../../Loader';
 import { fromChainAmount, formatPrice } from "libs/num";
 
-import PoolsTable from './PoolsTable'
+import MyPoolsTable from './MyPoolsTable'
+import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools';
 
 
@@ -41,42 +42,48 @@ const Pools: FC<Props> = () => {
                 apr: "coming soon",
                 volume24hr: "coming soon",
                 totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
-                cta: () => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`),
-                ctaLabel : "Manage Liquidity"
+                cta: () => router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`)
             }))
     }, [pools])
 
-    // const allPools = useMemo(() => {
-    //     if (!pools) return []
+    const allPools = useMemo(() => {
+        if (!pools) return []
 
-    //     return pools
-    //         .map(pool => ({
-    //             pool: pool?.pool_id,
-    //             token1Img: pool.pool_assets?.[0].logoURI,
-    //             token2Img: pool.pool_assets?.[1].logoURI,
-    //             myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
-    //             apr: "coming soon",
-    //             volume24hr: "coming soon",
-    //             totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
-    //             cta: () => router.push(`/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`),
-    //             ctaLabel : "Add Liquidity"
-    //         }))
-    // }, [pools])
+        return pools
+            .map(pool => ({
+                pool: pool?.pool_id,
+                token1Img: pool.pool_assets?.[0].logoURI,
+                token2Img: pool.pool_assets?.[1].logoURI,
+                apr: "coming soon",
+                volume24hr: "coming soon",
+                totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
+                cta: () => router.push(`/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`),
+            }))
+    }, [pools])
 
     // if (isLoading || pools === undefined)
     //     return <Loader />
 
     return (
-        <VStack width={{ base: '100%', md: '1160px' }} alignItems="center"  margin="auto">
-            <HStack justifyContent="space-between" width="full" paddingY={10}>
-                <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
-                <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New Position</Button>
-            </HStack>
+        <VStack width={{ base: '100%', md: '1160px' }} alignItems="center" margin="auto">
 
-            <PoolsTable pools={myPools} isLoading={isLoading} />
+            <Box>
+                <HStack justifyContent="space-between" width="full" paddingY={10}>
+                    <Text as="h2" fontSize="24" fontWeight="700">My Pools</Text>
+                    <Button variant="primary" size="sm" onClick={() => router.push(`/pools/new_position`)}>New Position</Button>
+                </HStack>
+                <MyPoolsTable pools={myPools} isLoading={isLoading} />
+                <MobilePools pools={myPools} />
+            </Box>
 
-            {/* <PoolsTable pools={allPools} isLoading={isLoading} />
-            <MobilePools pools={myPools} /> */}
+            <Box>
+                <HStack justifyContent="space-between" width="full" paddingY={10}>
+                    <Text as="h2" fontSize="24" fontWeight="700">All Pools</Text>
+                </HStack>
+                <AllPoolsTable pools={allPools} isLoading={isLoading} />
+                <MobilePools pools={allPools}  ctaLabel="Add Liquidity" />
+            </Box>
+
         </VStack>
     )
 }
