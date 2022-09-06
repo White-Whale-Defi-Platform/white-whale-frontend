@@ -142,11 +142,6 @@ const SwapForm: FC<Props> = ({
             }
         }
 
-        return () => {
-            onInputChange({ ...tokenA, amount: 0 }, 0);
-            tx?.reset()
-        }
-
     }, [simulated])
 
     const isInputDisabled = tx?.txStep == TxStep.Posting

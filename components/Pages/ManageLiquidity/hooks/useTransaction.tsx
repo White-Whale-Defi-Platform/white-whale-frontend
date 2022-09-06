@@ -177,7 +177,7 @@ export const useTransaction = ({
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
-        queryClient.invalidateQueries(['@pool-liquidity'])
+        queryClient.invalidateQueries(['@pool-liquidity','multipleTokenBalances', 'tokenBalance'])
         onBroadcasting?.(data.transactionHash)
         toast({
           title: 'Withdraw Liquidity Success.', 
