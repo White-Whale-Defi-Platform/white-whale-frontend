@@ -20,33 +20,29 @@ const NewPosition = () => {
     const [resetForm, setResetForm] = useState(false)
     const [reverse, setReverse] = useState<boolean>(false)
     const params = new URLSearchParams(location.search)
-    const { from, to } = router.query
-
-        useEffect(() => {
-            if (address) {
-                const [from, to] = defaultTokens[getChainName(address)]
-                const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
-                setTokenSwapState([from, to])
-                setResetForm(true)
-                router.replace(params)
-            }
-        }, [address])
+    const from = params.get('from')
+    const to = params.get('to')
 
         // useEffect(() => {
         //     if (address) {
-        //         const [A, B] = [from, to].map(token => ({
-        //             "tokenSymbol": token,
-        //             "amount": 0
-        //         }))
-        //         // const [from, to] = defaultTokens[getChainName(address)]
-        //         // const params = `?from=${A?.tokenSymbol || from?.tokenSymbol}&to=${B?.tokenSymbol || to?.tokenSymbol}`
-        //         // console.log({params})
-        //         setTokenSwapState([A, B])
-        //         console.log({ from, to, A, B })
+        //         const [from, to] = defaultTokens[getChainName(address)]
+        //         const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
+        //         setTokenSwapState([from, to])
         //         setResetForm(true)
-        //         // router.replace(params)
+        //         router.replace(params)
         //     }
-        // }, [address, from, to])
+        // }, [address])
+
+        useEffect(() => {
+            if (!!address && !!from && !!to) {
+                const [A, B] = [from, to].map(token => ({
+                    "tokenSymbol": token as string,
+                    "amount": 0
+                }))
+                setTokenSwapState([A, B])
+                setResetForm(true)
+            }
+        }, [address, from, to])
 
         useEffect(() => {
             const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`

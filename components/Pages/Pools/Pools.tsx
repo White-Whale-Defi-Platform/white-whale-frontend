@@ -49,6 +49,10 @@ const Pools: FC<Props> = () => {
     const allPools = useMemo(() => {
         if (!pools) return []
 
+        const myPoolsId = myPools.map(({pool}) => pool)
+
+        
+
         return pools
             .map(pool => ({
                 pool: pool?.pool_id,
@@ -59,7 +63,8 @@ const Pools: FC<Props> = () => {
                 totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
                 cta: () => router.push(`/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`),
             }))
-    }, [pools])
+            .filter(item => !myPoolsId.includes(item.pool))
+    }, [pools, myPools])
 
     // if (isLoading || pools === undefined)
     //     return <Loader />
