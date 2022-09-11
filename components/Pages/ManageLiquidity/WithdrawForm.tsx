@@ -1,10 +1,11 @@
-
-import { Button, HStack, Text, VStack , Spinner} from '@chakra-ui/react';
+import { Button, HStack, Spinner,Text, VStack } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { useQueryPoolLiquidity } from 'queries/useQueryPools';
 import { useEffect, useMemo, useState } from 'react';
+
+import { WalletStatusType } from '../../../state/atoms/walletAtoms';
 import useWithdraw from './hooks/useWithdraw';
 import { TokenItemState } from './lpAtoms';
 
@@ -12,7 +13,7 @@ import { TokenItemState } from './lpAtoms';
 type Props = {
     poolId: string;
     tokenA: TokenItemState;
-    connected: boolean;
+    connected: WalletStatusType;
 }
 
 const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
@@ -46,7 +47,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
 
     const buttonLabel = useMemo(() => {
 
-        if (!connected)
+        if (connected !== `@wallet-state/connected`)
             return 'Connect Wallet'
         else if (!!!token?.amount)
             return 'Enter Amount'

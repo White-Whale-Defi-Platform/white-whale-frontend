@@ -1,12 +1,8 @@
 import {
-  CosmWasmClient,
-  SigningCosmWasmClient,
-} from '@cosmjs/cosmwasm-stargate'
-
-import {
   createExecuteMessage,
   validateTransactionSuccess,
 } from '../util/messages'
+import {Wallet} from "../util/wallet-adapters";
 
 type Denom =
   | {
@@ -20,7 +16,7 @@ type Denom =
 export const claimRewards = async (
   senderAddress: string,
   rewardsAddresses: Array<string>,
-  client: SigningCosmWasmClient
+  client: Wallet
 ) => {
   const claimRewardsMsg = { claim: {} }
 
@@ -33,7 +29,7 @@ export const claimRewards = async (
   )
 
   return validateTransactionSuccess(
-    await client.signAndBroadcast(senderAddress, messages, 'auto')
+    await client.post(senderAddress, messages)
   )
 }
 
@@ -46,7 +42,7 @@ type PendingRewardsResponse = {
 export const getPendingRewards = async (
   address: string,
   rewardsAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ): Promise<PendingRewardsResponse> => {
   const msg = { get_pending_rewards: { address } }
   return await client.queryContractSmart(rewardsAddress, msg)
@@ -68,7 +64,7 @@ export type RewardsInfoResponse = {
 
 export const getRewardsInfo = async (
   rewardsAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ): Promise<RewardsInfoResponse> => {
   const msg = { info: {} }
   return await client.queryContractSmart(rewardsAddress, msg)

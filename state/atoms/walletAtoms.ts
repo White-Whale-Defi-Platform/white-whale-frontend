@@ -1,7 +1,7 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { SigningStargateClient } from '@cosmjs/stargate'
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
+
+import {Wallet} from "../../util/wallet-adapters";
 
 export enum WalletStatusType {
   /* nothing happens to the wallet */
@@ -83,7 +83,7 @@ function createWalletState<TClient = any, TState = {}>({
 }
 
 export const walletState = createWalletState<
-  SigningCosmWasmClient,
+  Wallet,
   { key?: Key }
 >({
   key: 'internal-wallet',
@@ -93,7 +93,7 @@ export const walletState = createWalletState<
 })
 
 export const ibcWalletState = createWalletState<
-  SigningStargateClient,
+  Wallet,
   {
     /* ibc wallet is connected */
     tokenSymbol?: string

@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  CreateTxFailed, Timeout, TxFailed,
-  TxUnspecifiedError, UserDenied
-} from '@terra-money/wallet-provider'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { directTokenSwap } from './directTokenSwap'
-import useDebounceValue from 'hooks/useDebounceValue'
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
-import { HStack } from '@chakra-ui/react'
+import useDebounceValue from 'hooks/useDebounceValue'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+
+import { directTokenSwap } from './directTokenSwap'
 
 export enum TxStep {
   /**
@@ -213,7 +209,7 @@ export const useTransaction = ({
         return
       }
 
-      return client.queryClient.tx.getTx(txHash)
+      return client.getTx(txHash)
     },
     {
       enabled: txHash != null,

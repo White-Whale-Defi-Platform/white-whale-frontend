@@ -1,16 +1,17 @@
 import { HStack, Text, VStack } from '@chakra-ui/react';
-import useSwap from './hooks/useSwap';
-import SwapSettings from './SwapSettings';
 import { TxStep } from 'hooks/useTransaction';
+import getChainName from 'libs/getChainName'
+import { fromChainAmount } from "libs/num";
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
+
+import defaultTokens from './defaultTokens.json'
+import useSwap from './hooks/useSwap';
 import { TokenItemState, tokenSwapAtom } from './swapAtoms';
 import SwapForm from './SwapForm';
-import defaultTokens from './defaultTokens.json'
-import { fromChainAmount } from "libs/num";
-import getChainName from 'libs/getChainName'
+import SwapSettings from './SwapSettings';
 
 
 
@@ -23,7 +24,7 @@ type SwapProps = {
 const Swap: FC<SwapProps> = ({ }) => {
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState<boolean>(false)
-    const { chainId, address, key } = useRecoilValue(walletState)
+    const { chainId, address, key, status } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState<boolean>(false)
     const router = useRouter()
 
@@ -83,10 +84,8 @@ const Swap: FC<SwapProps> = ({ }) => {
                 </Text>
                 <SwapSettings />
             </HStack>
-
-
             <SwapForm
-                connected={Boolean(key?.name)}
+                connected={status}
                 tokenA={tokenA}
                 tokenB={tokenB}
                 onReverseDirection={onReverseDirection}

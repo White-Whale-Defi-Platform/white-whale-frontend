@@ -1,21 +1,24 @@
-import React from 'react'
-import {
-    useDisclosure,
-    List,
-    ListItem,
-    ListIcon,
-    Image,
-    Popover, Text, PopoverContent, PopoverArrow, PopoverBody, Button, PopoverTrigger, VStack, HStack
-} from '@chakra-ui/react'
-import { BsCircleFill } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import { Switch, FormControl, FormLabel } from '@chakra-ui/react'
-import { networkAtom } from 'state/atoms/walletAtoms'
+import {
+Button, HStack,
+    Image,
+    List,
+    ListIcon,
+    ListItem,
+    Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Text,     useDisclosure,
+VStack} from '@chakra-ui/react'
+import { FormControl, FormLabel,Switch } from '@chakra-ui/react'
+import React from 'react'
+import { BsCircleFill } from 'react-icons/bs'
+import { useQueryClient } from 'react-query'
 import { useRecoilState } from 'recoil'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { networkAtom } from 'state/atoms/walletAtoms'
 
-const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
+import { activeWalletAtom } from '../../state/atoms/activeWalletAtom'
+
+const walletSelect = ({ denom, chainList = [], onChange, onDisconnect, connected, connectedWallet, disconnect }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
+    const [activeWallet] = useRecoilState(activeWalletAtom)
     const firstFieldRef = React.useRef(null)
     const [network, setNetwork] = useRecoilState(networkAtom)
     const queryClient = useQueryClient()
@@ -28,7 +31,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
             onClose={onClose}
         >
             <PopoverTrigger>
-                {connected ? (
+                {connected || connectedWallet ? (
                     <HStack
                         as={Button}
                         variant="unstyled"
@@ -77,7 +80,9 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                     id='network'
                                     isChecked={network === 'testnet'}
                                     onChange={({ target }) => {
-                                        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+                                        // connectedWallet && onDisconnect()
+                                        disconnect()
+                                        // queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
                                         setNetwork(target.checked ? 'testnet' : 'mainnet')
 
                                     }} />
@@ -85,7 +90,6 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                         )}
 
                         <List spacing={1} color="white" width="full" >
-
                             {chainList.map((chain, index) => (
                                 <ListItem
                                     key={chain.chainId + chain?.chainName}
@@ -99,10 +103,12 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                     _hover={{
                                         opacity: 1
                                     }}
-                                    onClick={() => { 
-                                        onChange(chain); 
+                                    onClick={() => {
+                                        connectedWallet && onDisconnect()
+                                        onChange(chain, activeWallet);
+                                        onChange(chain);
                                         queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
-                                        onClose() 
+                                        onClose()
                                     }}
                                 >
                                     <HStack>

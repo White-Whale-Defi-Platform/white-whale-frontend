@@ -1,4 +1,3 @@
-import { useConnectWallet } from 'hooks/useConnectWallet'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { Button, Inline, Spinner, styled, Text } from 'junoblocks'
 import React, { useEffect, useState } from 'react'
@@ -27,7 +26,6 @@ export const TransactionAction = ({
 
   /* wallet state */
   const { status } = useRecoilValue(walletState)
-  const { mutate: connectWallet } = useConnectWallet()
   const [slippage, setSlippage] = useRecoilState(slippageAtom)
 
   const { mutate: handleSwap, isLoading: isExecutingTransaction } =

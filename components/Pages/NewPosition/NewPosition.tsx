@@ -2,21 +2,20 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react';
 import { TxStep } from 'hooks/useTransaction';
 import { NextRouter, useRouter } from "next/router";
-import { FC, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
+
 import { TokenItemState, tokenLpAtom } from '../ManageLiquidity/lpAtoms';
 import useProvideLP from "./hooks/useProvideLP";
 import NewPositionForm from './NewPositionForm';
-import defaultTokens from './defaultTokens.json'
-import getChainName from 'libs/getChainName'
 
 
 const NewPosition = () => {
     const router: NextRouter = useRouter()
 
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenLpAtom)
-    const { chainId, key, address } = useRecoilValue(walletState)
+    const { chainId, key, address, status } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState(false)
     const [reverse, setReverse] = useState<boolean>(false)
     const params = new URLSearchParams(location.search)
@@ -82,7 +81,7 @@ const NewPosition = () => {
                 <NewPositionForm
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={Boolean(key?.name)}
+                    connected={status}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}

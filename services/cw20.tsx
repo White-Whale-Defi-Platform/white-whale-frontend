@@ -1,5 +1,6 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { Coin } from '@cosmjs/launchpad'
+
+import { Wallet } from "../util/wallet-adapters";
 
 export type Expiration =
   | { readonly at_height: number }
@@ -105,7 +106,7 @@ export interface CW20Contract {
   use: (contractAddress: string) => CW20Instance
 }
 
-export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
+export const CW20 = (client: Wallet): CW20Contract => {
   const use = (contractAddress: string): CW20Instance => {
     const balance = async (address: string): Promise<string> => {
       const result = await client?.queryContractSmart(contractAddress, {
@@ -175,8 +176,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           mint: { recipient, amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -192,8 +192,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           transfer: { recipient, amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -205,8 +204,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           burn: { amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -221,8 +219,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           increase_allowance: { spender, amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -237,8 +234,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           decrease_allowance: { spender, amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -254,8 +250,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           transfer_from: { owner, recipient, amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -265,8 +260,6 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         sender,
         contractAddress,
         { bond: {} },
-        'auto',
-        undefined,
         [coin]
       )
       return result.transactionHash
@@ -278,8 +271,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           unbond: { amount },
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }
@@ -290,8 +282,7 @@ export const CW20 = (client: SigningCosmWasmClient): CW20Contract => {
         contractAddress,
         {
           claim: {},
-        },
-        'auto'
+        }
       )
       return result.transactionHash
     }

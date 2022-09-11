@@ -1,11 +1,10 @@
 import { useMemo } from "react";
 import { useQuery } from 'react-query';
-import { toAsset } from "services/asset";
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { SimulationResponse, ReverseSimulationResponse } from "types";
+
+import {Wallet} from "../../../../util/wallet-adapters";
 
 type QuerySimulate = {
-    client: SigningCosmWasmClient;
+    client: Wallet;
     token: string;
     isNative: boolean;
     amount: string;
@@ -14,7 +13,7 @@ type QuerySimulate = {
 }
 
 type SwapSimulate = {
-    client: SigningCosmWasmClient;
+    client: Wallet;
     token: string;
     isNative: boolean;
     amount: string;
@@ -50,10 +49,10 @@ const useSimulate = ({ client, msg, routerAddress }) => {
             // }
         },
     );
-    
+
     const simulatedError = useMemo(() => {
         if (!error) return null
-    
+
         if (/unreachable: query wasm contract failed: invalid request/i.test(error?.toString()) || /codespace: wasm, code: 9: query wasm/i.test(error?.toString()))
             return "Insuifficient liquidity"
 

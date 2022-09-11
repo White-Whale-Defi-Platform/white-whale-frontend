@@ -1,16 +1,17 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from 'util/messages'
 
+import {Wallet} from "../../util/wallet-adapters";
+
 type ExecuteRemoveLiquidityArgs = {
   tokenAmount: number
   senderAddress: string
   swapAddress: string
   lpTokenAddress: string
-  client: SigningCosmWasmClient,
+  client: Wallet,
   msgs:any
 }
 
@@ -37,10 +38,6 @@ export const executeRemoveLiquidity = async ({
   })
 
   return validateTransactionSuccess(
-    await client.signAndBroadcast(
-      senderAddress,
-      [increaseAllowanceMessage, executeMessage],
-      'auto'
-    )
+    await client.post(senderAddress, [increaseAllowanceMessage, executeMessage])
   )
 }

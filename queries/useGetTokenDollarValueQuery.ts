@@ -2,18 +2,16 @@
  * takes base token price, fetches the ratio of the token provided vs the base token
  * and calculates the dollar value of the provided token
  * */
-import { useCosmWasmClient } from '../hooks/useCosmWasmClient'
+import { useRecoilValue } from 'recoil'
+
 import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
 import { useBaseTokenInfo } from '../hooks/useTokenInfo'
-import { tokenToTokenPriceQueryWithPools, tokenToTokenPriceQuery } from './tokenToTokenPriceQuery'
-import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
-import { useRecoilValue } from 'recoil'
 import { walletState } from '../state/atoms/walletAtoms'
-import { useTokenInfo } from '../hooks/useTokenInfo'
+import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
+import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 
 export const useGetTokenDollarValueQuery = () => {
   const tokenA = useBaseTokenInfo()
-  // const client = useCosmWasmClient()
   const { client } = useRecoilValue(walletState)
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     tokenA?.symbol
@@ -39,7 +37,7 @@ export const useGetTokenDollarValueQuery = () => {
       if (tokenA?.id === tokenInfo?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
       else return priceForOneToken
-      
+
     },
     Boolean(
       tokenA && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher

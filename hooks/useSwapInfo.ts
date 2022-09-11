@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query'
+import {useRecoilValue} from "recoil";
 
 import { usePoolsListQuery } from '../queries/usePoolsListQuery'
 import { getSwapInfo, InfoResponse } from '../services/swap'
+import {walletState} from "../state/atoms/walletAtoms";
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
-import { useCosmWasmClient } from './useCosmWasmClient'
 
 export type SwapInfo = Pick<
   InfoResponse,
@@ -25,7 +26,7 @@ export const useSwapInfo = ({
   refetchInBackground,
 }: UseMultipleSwapInfoArgs) => {
   const { data: poolsListResponse } = usePoolsListQuery()
-  const client = useCosmWasmClient()
+  const { client } = useRecoilValue(walletState)
 
   const { data, isLoading } = useQuery<SwapInfo>(
     `swapInfo/${poolId}`,

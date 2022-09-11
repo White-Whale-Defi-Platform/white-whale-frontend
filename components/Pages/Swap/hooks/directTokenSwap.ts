@@ -1,6 +1,4 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/stargate'
-
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import {
   createExecuteMessage,
@@ -8,12 +6,14 @@ import {
   validateTransactionSuccess,
 } from 'util/messages'
 
+import {Wallet} from "../../../../util/wallet-adapters";
+
 type DirectTokenSwapArgs = {
   tokenAmount: number
   senderAddress: string
   swapAddress: string
   tokenA: TokenInfo
-  client: SigningCosmWasmClient
+  client: Wallet
   msgs: Record<string, any>
 }
 
@@ -42,10 +42,9 @@ export const directTokenSwap = async ({
 
 
     return validateTransactionSuccess(
-      await client.signAndBroadcast(
+      await client.post(
         senderAddress,
-        [increaseAllowanceMessage, executeMessage],
-        'auto'
+        [increaseAllowanceMessage, executeMessage]
       )
     )
   }
@@ -54,8 +53,6 @@ export const directTokenSwap = async ({
     senderAddress,
     swapAddress,
     msgs,
-    'auto',
-    undefined,
     [coin(tokenAmount, tokenA.denom)]
   )
 }

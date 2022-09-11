@@ -2,6 +2,7 @@
   "tokens": [
     {
       "id": "cosmos",
+      "address_prefix": "juno",
       "name": "Atom",
       "symbol": "ATOM",
       "chain_id": "cosmoshub-4",
@@ -15,6 +16,7 @@
     },
     {
       "id": "terrausd",
+      "address_prefix": "terra",
       "name": "UST",
       "symbol": "UST",
       "chain_id": "terra-1",

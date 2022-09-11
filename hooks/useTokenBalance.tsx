@@ -1,24 +1,24 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
+import { networkAtom } from 'state/atoms/walletAtoms'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { CW20 } from '../services/cw20'
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
+import {Wallet} from "../util/wallet-adapters";
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import { networkAtom } from 'state/atoms/walletAtoms'
 
 async function fetchTokenBalance({
   client,
   token = {},
   address,
 }: {
-  client: SigningCosmWasmClient
+  client: Wallet
   token: any,
   address: string
 }) {
@@ -36,7 +36,7 @@ async function fetchTokenBalance({
    * if this is a native asset or an ibc asset that has juno_denom
    *  */
   if (native && !!client) {
-    const coin = await client?.getBalance(address, denom)
+    const coin = await client.getBalance(address, denom)
     const amount = coin ? Number(coin.amount) : 0
     return convertMicroDenomToDenom(amount, decimals)
     // return {

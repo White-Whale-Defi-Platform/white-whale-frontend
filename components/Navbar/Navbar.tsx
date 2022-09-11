@@ -1,32 +1,32 @@
-import React from 'react'
 import {
-  Flex, Box, HStack,
-  Drawer,
+Box,   Drawer,
   DrawerBody,
-  DrawerOverlay,
-  DrawerContent,
   DrawerCloseButton,
-  useDisclosure,
+  DrawerContent,
+  DrawerOverlay,
+  Flex, HStack,
   IconButton,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import Link from 'next/link';
-import Wallet from '../Wallet/Wallet';
-import { useConnectWallet } from 'hooks/useConnectWallet'
+import { useWallet } from '@terra-money/wallet-provider';
+import BurgerIcon from 'components/icons/BurgerIcon';
+import React from 'react'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+
 import Card from '../Card';
-import NavbarLink from './NavbarLink';
-import Logo from './Logo';
+import WalletModal from '../Wallet/Modal/Modal';
+import Wallet from '../Wallet/Wallet';
 import DrawerLink from './DrawerLink';
-import BurgerIcon from 'components/icons/BurgerIcon';
+import Logo from './Logo';
+import NavbarLink from './NavbarLink';
 
 
 const Navbar = ({ }) => {
 
   // const [selectedChain, setSelectedChain] = useState("uni-1")
-
-  const { mutate: connectWallet } = useConnectWallet()
+  const {disconnect} = useWallet()
   const [{ key, chainId }, setWalletState] = useRecoilState(walletState)
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,8 +39,8 @@ const Navbar = ({ }) => {
       client: null,
       chainId: chainId
     })
+    disconnect()
   }
-
   const links = [
     {
       lable: "Swap",
@@ -87,11 +87,16 @@ const Navbar = ({ }) => {
           <Wallet
             connected={Boolean(key?.name)}
             walletName={key?.name}
-            onConnect={connectWallet}
             onDisconnect={resetWalletConnection}
-          // onChange={setSelectedChain}
+            disconnect={disconnect}
 
           />
+          {/* <SendLuna onDisconnect={resetWalletConnection} /> */}
+          <WalletModal
+            isOpen={isOpen}
+            onClose={onClose}
+            // onConnect={connectWallet}
+/>
         </HStack>
       </Flex>
 
@@ -108,8 +113,8 @@ const Navbar = ({ }) => {
             <Wallet
               connected={Boolean(key?.name)}
               walletName={key?.name}
-              onConnect={connectWallet}
               onDisconnect={resetWalletConnection}
+              disconnect={disconnect}
             />
             <IconButton
               aria-label="Open drawer"

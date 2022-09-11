@@ -1,15 +1,13 @@
-import {
-  CosmWasmClient,
-  SigningCosmWasmClient,
-} from '@cosmjs/cosmwasm-stargate'
 import { toBase64, toUtf8 } from '@cosmjs/encoding'
+
+import {Wallet} from "../util/wallet-adapters";
 
 export const stakeTokens = async (
   senderAddress: string,
   stakeContractAddress: string,
   lpTokenAddress: string,
   amount: number,
-  client: SigningCosmWasmClient
+  client: Wallet
 ) => {
   const subMsg = { stake: {} }
   const encodedMsg = toBase64(toUtf8(JSON.stringify(subMsg)))
@@ -25,8 +23,6 @@ export const stakeTokens = async (
     senderAddress,
     lpTokenAddress,
     msg,
-    'auto',
-    undefined,
     []
   )
 }
@@ -35,7 +31,7 @@ export const unstakeTokens = async (
   senderAddress: string,
   stakingContractAddress: string,
   amount: number,
-  client: SigningCosmWasmClient
+  client: Wallet
 ) => {
   amount = Math.floor(amount)
   const msg = { unstake: { amount: amount.toString() } }
@@ -44,8 +40,6 @@ export const unstakeTokens = async (
     senderAddress,
     stakingContractAddress,
     msg,
-    'auto',
-    undefined,
     []
   )
 }
@@ -53,15 +47,13 @@ export const unstakeTokens = async (
 export const claimTokens = async (
   senderAddress: string,
   stakingContractAddress: string,
-  client: SigningCosmWasmClient
+  client: Wallet
 ) => {
   const msg = { claim: {} }
   return await client.execute(
     senderAddress,
     stakingContractAddress,
     msg,
-    'auto',
-    undefined,
     []
   )
 }
@@ -69,7 +61,7 @@ export const claimTokens = async (
 export const getProvidedStakedAmount = async (
   address: string,
   stakingContractAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ) => {
   const msg = { staked_value: { address: address } }
   const result = await client.queryContractSmart(stakingContractAddress, msg)
@@ -78,7 +70,7 @@ export const getProvidedStakedAmount = async (
 
 export const getTotalStakedAmount = async (
   stakingContractAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ) => {
   const msg = { total_value: {} }
   const result = await client.queryContractSmart(stakingContractAddress, msg)
@@ -93,7 +85,7 @@ export type Claim = {
 export const getClaims = async (
   address: string,
   stakingContractAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ): Promise<Array<Claim>> => {
   const msg = { claims: { address: address } }
   const resp = await client.queryContractSmart(stakingContractAddress, msg)
@@ -108,7 +100,7 @@ export const getClaims = async (
 
 export const getUnstakingDuration = async (
   stakingContractAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ): Promise<number> => {
   const msg = { get_config: {} }
   const result = await client.queryContractSmart(stakingContractAddress, msg)

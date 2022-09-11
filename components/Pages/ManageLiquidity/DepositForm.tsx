@@ -1,20 +1,17 @@
-import { Button, HStack, Text, VStack, Spinner } from '@chakra-ui/react';
+import { Button, HStack, Spinner,Text, VStack } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
-import { FC, useEffect, useState, useMemo } from 'react';
-import { Controller, useForm } from "react-hook-form";
-import { Asset } from 'types/blockchain';
-import { TokenItemState } from './lpAtoms';
-import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { tokenLpAtom } from './lpAtoms';
-import { walletState } from 'state/atoms/walletAtoms';
-import { TxStep } from 'hooks/useTransaction';
-import { fromChainAmount, num } from "libs/num";
 import { useTokenBalance } from 'hooks/useTokenBalance'
+import { TxStep } from 'hooks/useTransaction';
+import { fromChainAmount } from "libs/num";
+import { useEffect, useMemo } from 'react';
+import { Controller, useForm } from "react-hook-form";
+
+import { WalletStatusType } from '../../../state/atoms/walletAtoms';
+import { TokenItemState } from './lpAtoms';
 
 
 type Props = {
-    connected: boolean;
+    connected: WalletStatusType;
     tokenA: TokenItemState;
     tokenB: TokenItemState;
     tx: any
@@ -41,7 +38,6 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
         },
     });
 
-    const { chainId, key } = useRecoilValue(walletState)
     // const [resetForm, setResetForm] = useState(false)
 
     const isInputDisabled = tx?.txStep == TxStep.Posting
@@ -82,7 +78,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
 
     const buttonLabel = useMemo(() => {
 
-        if (!connected)
+        if (connected !== `@wallet-state/connected`)
             return 'Connect Wallet'
         else if (!tokenB?.tokenSymbol)
             return 'Select Token'
