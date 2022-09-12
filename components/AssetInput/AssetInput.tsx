@@ -1,4 +1,4 @@
-import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Stack } from '@chakra-ui/react';
+import { Input, forwardRef, Button, HStack, Image, Text, IconButton, Stack, VStack } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import AssetSelectModal from './AssetSelectModal';
 import { FC } from 'react'
@@ -22,6 +22,7 @@ interface AssetInputProps {
     isSingleInput?: boolean;
     hideToken?: string;
     edgeTokenList? : string[]
+    ignoreSlack?: boolean
 }
 
 
@@ -37,7 +38,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
     minMax = true,
     isSingleInput = false,
     hideToken,
-    edgeTokenList
+    edgeTokenList,
+    ignoreSlack = false
 
 },
     ref) => {
@@ -93,7 +95,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                     disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
                                     variant="outline"
                                     size="xs"
-                                    onClick={() => onChange({ ...token, amount: tokenInfo?.symbol === baseToken?.symbol ? Number(balance - 0.10).toFixed(6) : balance })}>
+                                    onClick={() => onChange({ ...token, amount: (tokenInfo?.symbol === baseToken?.symbol && !ignoreSlack) ? Number(balance - 0.10).toFixed(6) : balance })}>
                                     max
                                 </Button>
                             </HStack>
@@ -104,7 +106,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
             </HStack>
 
 
-            <HStack
+            <HStack   
+
                 // minWidth="180px"
                 width={["full", "180px"]}
                 border="1px solid rgba(255, 255, 255, 0.1)"

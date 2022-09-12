@@ -50,10 +50,10 @@ const Navbar = ({ }) => {
       lable: "Pools",
       link: "/pools"
     },
-    // {
-    //   lable: "Vault",
-    //   link: "/vault"
-    // },
+    {
+      lable: "Vaults",
+      link: "/vaults"
+    },
     // {
     //   lable: "Chart",
     //   link: "/chart"
