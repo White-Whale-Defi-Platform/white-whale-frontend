@@ -153,7 +153,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
                                         paddingLeft="10px"
                                         fontSize="18px"
                                         fontWeight="400"
-                                        color="brand.200">
+                                        color="brand.50">
                                         {tokenInfo?.symbol || 'Select Token'}
                                     </Text>
                                 }

@@ -14,7 +14,7 @@ const NavbarLink: FC<Props> = ({ text, href }) => {
   const wrapperStyle =
     asPath.startsWith(href)
       ? { color: "white", borderBottomColor: "white" }
-      : { color: "brand.200" };
+      : { color: "brand.50" };
 
   return (
     <Link href={href} passHref>

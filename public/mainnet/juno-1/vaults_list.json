@@ -1,0 +1,26 @@
+{
+  "factory": "",
+  "vaults": [
+    {
+      "pool_id": "JUNO",
+      "vault_assets": {
+        "id": "juno-network",
+        "chain_id": "juno-1",
+        "token_address": "ujuno",
+        "symbol": "JUNO",
+        "name": "Juno",
+        "decimals": 6,
+        "logoURI": "/logos/juno.svg",
+        "tags": [
+          "native"
+        ],
+        "native": true,
+        "denom": "ujuno"
+      },
+      "lp_token": "juno1menz0s2rgu62c0lrrfw7zswrs2deeh9emnawt5jjgdfgvja4uqmq50hfhp",
+      "vault_address": "juno1gz9qhtcafjc0c9hnvrn2au253yaae6qunymt5yrgvagxejr2n2lquk6ss8",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

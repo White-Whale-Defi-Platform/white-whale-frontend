@@ -1,11 +1,11 @@
 [
     {
-        "chainId": "juno-1",
-        "chainName": "Juno Mainnet",
+        "chainId": "uni-3",
+        "chainName": "Juno Uni Testnet",
         "label": "Juno",
         "icon": "/logos/juno.svg",
-        "rpc": "https://rpc-juno.whitewhale.money",
-        "rest": "https://lcd-juno.itastakers.com",
+        "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
+        "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
         "stakeCurrency": {
             "coinDenom": "JUNO",
             "coinMinimalDenom": "ujuno",
@@ -49,16 +49,16 @@
         ]
     },
     {
-        "chainId": "phoenix-1",
-        "chainName": "Terra Mainnet",
+        "chainId": "pisco-1",
+        "chainName": "Terra testnet",
         "label": "Terra",
         "icon": "/logos/luna.svg",
-        "rpc": "https://rpc-terra.whitewhale.money",
-        "rest": "https://terra-api.polkachu.com",
+        "rpc": "https://terra-testnet-rpc.polkachu.com",
+        "rest": "https://pisco-lcd.terra.dev",
         "stakeCurrency": {
             "coinDenom": "LUNA",
             "coinMinimalDenom": "uluna",
-            "coinDecimals": 6
+            "coinDecimals": 18
         },
         "bip44": {
             "coinType": 118
@@ -75,8 +75,8 @@
             {
                 "coinDenom": "LUNA",
                 "coinMinimalDenom": "uluna",
-                "coinDecimals": 6,
-                "coinGeckoId": "terra-luna-2"
+                "coinDecimals": 18,
+                "coinGeckoId": "terra"
             }
         ],
         "feeCurrencies": [
@@ -84,14 +84,14 @@
                 "coinDenom": "LUNA",
                 "coinMinimalDenom": "uluna",
                 "coinDecimals": 6,
-                "coinGeckoId": "terra-luna-2"
+                "coinGeckoId": "terra"
             }
         ],
         "coinType": 118,
         "gasPriceStep": {
-            "low": 0.15,
-            "average": 0.20,
-            "high": 0.25
+            "low": 0.25,
+            "average": 0.5,
+            "high": 0.75
         },
         "features": [
             "cosmwasm"

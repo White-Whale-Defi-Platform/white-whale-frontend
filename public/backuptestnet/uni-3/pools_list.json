@@ -10,7 +10,7 @@
   },
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
-    "id": "juno-network",
+    "id": "juno-testnet",
     "chain_id": "uni-3",
     "token_address": "",
     "symbol": "JUNO",
@@ -27,7 +27,7 @@
       "pool_id": "JUNO-JUNOONE",
       "pool_assets": [
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "ujunox",
           "symbol": "JUNO",
@@ -39,7 +39,7 @@
           "denom": "ujunox"
         },
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
@@ -60,7 +60,7 @@
       "pool_id": "JUNO-JUNOTWO",
       "pool_assets": [
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "",
           "symbol": "JUNO",
@@ -72,7 +72,7 @@
           "denom": "ujunox"
         },
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
           "symbol": "JUNOTWO",
@@ -93,7 +93,7 @@
       "pool_id": "JUNO-JUNOTHREE",
       "pool_assets": [
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "",
           "symbol": "JUNO",
@@ -105,7 +105,7 @@
           "denom": "ujunox"
         },
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k",
           "symbol": "JUNOTHREE",
@@ -126,7 +126,7 @@
       "pool_id": "JUNOONE-JUNOTWO",
       "pool_assets": [
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
@@ -138,7 +138,7 @@
           "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
         },
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
           "symbol": "JUNOTWO",
@@ -159,7 +159,7 @@
       "pool_id": "JUNOONE-JUNOFOUR",
       "pool_assets": [
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
@@ -171,7 +171,7 @@
           "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
         },
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1dlmv5zdnss9dqjetgczt2yegzaz0yh6ku85sfxdt9u4xvvhwvxysr9yafg",
           "symbol": "JUNOFOUR",
@@ -192,7 +192,7 @@
       "pool_id": "JUNOTHREE-JUNOFIVE",
       "pool_assets": [
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k",
           "symbol": "JUNOTHREE",
@@ -204,7 +204,7 @@
           "denom": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k"
         },
         {
-          "id": "juno-network",
+          "id": "juno-testnet",
           "chain_id": "uni-3",
           "token_address": "juno1r4kw8zp0g0yx9epnatuhzxm8esfapkkc4nx5hztap480skw4gynq3czeer",
           "symbol": "JUNOFIVE",

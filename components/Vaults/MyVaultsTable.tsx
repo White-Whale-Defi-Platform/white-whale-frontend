@@ -24,7 +24,7 @@ const columnHelper = createColumnHelper<Vault>()
 
 const columns = [
     columnHelper.accessor('vaultId', {
-        header: () => <Text color="brand.200">Vault</Text>,
+        header: () => <Text color="brand.50">Vault</Text>,
         cell: info => (
             <VaultName
                 vaultId={info.getValue()}
@@ -33,15 +33,15 @@ const columns = [
         )
     }),
     columnHelper.accessor('apr', {
-        header: () => <Text align="right" color="brand.200">Combined APR</Text>,
+        header: () => <Text align="right" color="brand.50">Combined APR</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('totalDeposit', {
-        header: () => <Text align="right" color="brand.200">Total Deposits</Text>,
+        header: () => <Text align="right" color="brand.50">Total Deposits</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('myDeposit', {
-        header: () => <Text align="right" color="brand.200">My Deposit</Text>,
+        header: () => <Text align="right" color="brand.50">My Deposit</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('cta', {
@@ -91,7 +91,7 @@ const MyVaultsTable = ({ vaults = [], isLoading }: { vaults: Vault[], isLoading?
         return (
             <Flex 
                 padding={10} 
-                width={["full", "800px"]}
+                width={["full", "1160px"]}
                 background="#1C1C1C"
                 boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
                 borderRadius="30px"
@@ -105,7 +105,7 @@ const MyVaultsTable = ({ vaults = [], isLoading }: { vaults: Vault[], isLoading?
     
 
     return (
-        <Flex padding={10} width={["full", "800px"]}
+        <Flex padding={10} width={["full", "1160px"]}
             background="#1C1C1C"
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
             borderRadius="30px"
@@ -117,7 +117,7 @@ const MyVaultsTable = ({ vaults = [], isLoading }: { vaults: Vault[], isLoading?
                         {table.getHeaderGroups().map((headerGroup, index) => (
                             <Tr key={headerGroup.id} >
                                 {headerGroup.headers.map(header => (
-                                    <Th key={header.id} color="brand.200">
+                                    <Th key={header.id} color="brand.50">
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(

@@ -92,7 +92,7 @@ export const useVaultMultiDepost = (lpTokens: string[]) => {
 
         },
         {
-            enabled: !!chainId && !!client && !!lpTokens.length,
+            enabled: !!chainId && !!client && !!lpTokens?.length,
             refetchOnMount: false,
 
         }
@@ -135,6 +135,7 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
 
         const _vaults = vaults.vaults.map((vault, index) => ({
             ...vault,
+            hasDepost : Number(balance?.[index]) > 0 ? true : false,
             deposits: { lptoken: balance?.[index] }
         }))
 

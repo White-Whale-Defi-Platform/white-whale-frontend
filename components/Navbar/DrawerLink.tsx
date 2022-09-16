@@ -15,7 +15,7 @@ const DrawerLink: FC<Props> = ({ text, href, onClick }) => {
   const wrapperStyle =
     asPath === href
       ? { color: "brand.500", borderBottomColor: "brand.500" }
-      : { color: "brand.200" };
+      : { color: "brand.50" };
 
   return (
     <Link href={href} passHref>

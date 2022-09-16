@@ -26,7 +26,7 @@ const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
     columnHelper.accessor('pool', {
-        header: () => <Text color="brand.200">Pool</Text>,
+        header: () => <Text color="brand.50">Pool</Text>,
         cell: info => (
             <PoolName
                 poolId={info.getValue()}
@@ -36,19 +36,19 @@ const columns = [
         )
     }),
     columnHelper.accessor('myPosition', {
-        header: () => <Text align="right" color="brand.200">My Position</Text>,
+        header: () => <Text align="right" color="brand.50">My Position</Text>,
         cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('apr', {
-        header: () => <Text align="right" color="brand.200">Combined APR</Text>,
+        header: () => <Text align="right" color="brand.50">Combined APR</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('volume24hr', {
-        header: () => <Text align="right" color="brand.200">24hr Volume</Text>,
+        header: () => <Text align="right" color="brand.50">24hr Volume</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('totalLiq', {
-        header: () => <Text align="right" color="brand.200">Total Liquidity</Text>,
+        header: () => <Text align="right" color="brand.50">Total Liquidity</Text>,
         cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('cta', {
@@ -122,7 +122,7 @@ const PoolsTable = ({ pools = [], isLoading }: { pools: Pool[], isLoading: boole
                         {table.getHeaderGroups().map((headerGroup, index) => (
                             <Tr key={headerGroup.id} >
                                 {headerGroup.headers.map(header => (
-                                    <Th key={header.id} color="brand.200">
+                                    <Th key={header.id} color="brand.50">
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react'
-import { Button, HStack, Text, VStack, Spinner, useToast } from '@chakra-ui/react';
+import { Button, HStack, Text, VStack, Spinner, useToast, Tooltip, Box } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import useDepost from '../hooks/useDeposit';
 import { TxStep } from '../hooks/useTransaction';
@@ -8,6 +8,8 @@ import Finder from 'components/Finder'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
 import { useRouter } from "next/router";
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 
 type Props = {
     connected: boolean
@@ -30,6 +32,8 @@ const DepositForm = ({
 }: Props) => {
 
     const router = useRouter()
+    const baseToken = useBaseTokenInfo()
+
 
     const [token, setToken] = useState({
         amount: 0,
@@ -96,7 +100,7 @@ const DepositForm = ({
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
+                    <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">Balance: </Text>
                     {isLoading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
@@ -128,8 +132,15 @@ const DepositForm = ({
 
             <VStack alignItems="flex-start" width="full" p={3}>
                 <HStack justifyContent="space-between" width="full">
-                    <Text color="brand.500" fontSize={12}> Fees </Text>
-                    <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                    <HStack >
+                        <Text color="brand.500" fontSize={12}> Fee</Text>
+                        <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                            <Box cursor="pointer" color="brand.50">
+                                <InfoOutlineIcon width=".7rem" height=".7rem" />
+                            </Box>
+                        </Tooltip>
+                    </HStack>
+                    <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol} </Text>
                 </HStack>
             </VStack>
 
