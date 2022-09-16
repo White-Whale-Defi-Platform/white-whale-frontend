@@ -10,7 +10,7 @@ const styles = {
     item: {
       py: "0.6rem",
       px: "1.2rem",
-      color: "brand.200", 
+      color: "brand.50", 
       fontWeight: "500",
       fontSize: "sm",
       _hover: {

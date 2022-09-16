@@ -11,7 +11,7 @@
   "timestamp": "2021-06-12T00:00:00+00:00",
   "routerAddress" : "terra1cg5h385gkqft48rjz6kvgmxnplrrvcl3mx5ln0f6jaanv9mf4tgsksh67a",
   "base_token": {
-    "id": "terra-luna-2",
+    "id": "pisco-1",
     "chain_id": "pisco-1",
     "token_address": "",
     "symbol": "LUNA",
@@ -27,7 +27,7 @@
       "pool_id": "LUNA-LUNAONE",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "uluna",
           "symbol": "LUNA",
@@ -39,7 +39,7 @@
           "denom": "uluna"
         },
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
           "symbol": "LUNAONE",
@@ -60,7 +60,7 @@
       "pool_id": "LUNA-LUNATWO",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "",
           "symbol": "LUNA",
@@ -72,7 +72,7 @@
           "denom": "uluna"
         },
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
           "symbol": "LUNATWO",
@@ -93,7 +93,7 @@
       "pool_id": "LUNAONE-LUNATHREE",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
           "symbol": "LUNAONE",
@@ -105,7 +105,7 @@
           "denom": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu"
         },
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra1hl58aew65n63qr4g87ar3m0dgtdfst7nhh4kcagam7fwa8zex43sq7ujfn",
           "symbol": "LUNATHREE",
@@ -126,7 +126,7 @@
       "pool_id": "LUNAONE-LUNATWO",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
           "symbol": "LUNAONE",
@@ -138,7 +138,7 @@
           "denom": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu"
         },
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
           "symbol": "LUNATWO",
@@ -159,7 +159,7 @@
       "pool_id": "LUNATWO-LUNAFOUR",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "",
           "symbol": "LUNA",
@@ -171,7 +171,7 @@
           "denom": "uluna"
         },
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra1e8sqchdyrgtgf2jwsq0jerj0gp0wkezelj9sjw98z22g3s0v0qrqjwr39u",
           "symbol": "LUNAFOUR",
@@ -192,7 +192,7 @@
       "pool_id": "LUNA-LUNAFIVE",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "",
           "symbol": "LUNA",
@@ -204,7 +204,7 @@
           "denom": "uluna"
         },
         {
-          "id": "terra-luna-2",
+          "id": "pisco-1",
           "chain_id": "pisco-1",
           "token_address": "terra1rzvdn9cc7efpqsgl4ha7q5egqlpnyfdkgu0at6fkzmmj9dr7aspsy4a5js",
           "symbol": "LUNAFIVE",

@@ -4,7 +4,7 @@ export default {
   },
   variants: {
     light: {
-      color: "brand.200",
+      color: "brand.50",
       fontSize: "sm",
     },
   },

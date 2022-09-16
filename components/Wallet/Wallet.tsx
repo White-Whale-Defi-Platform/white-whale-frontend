@@ -146,7 +146,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
           <Box>
             <KeplrWalletIcon />
           </Box>
-          <Text color="brand.200" fontSize={['14px', '16px']}>
+          <Text color="brand.50" fontSize={['14px', '16px']}>
             {truncatWalletAddress(address)}
           </Text>
         </HStack>

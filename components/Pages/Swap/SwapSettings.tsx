@@ -60,7 +60,7 @@ const SwapSettings = () => {
                 >
                     <VStack width="full" alignItems="flex-start">
                         <Text fontSize="14" fontWeight="700">Transaction Settings</Text>
-                        <Text fontSize="14" fontWeight="400" color="brand.200">Slippage Tolerance</Text>
+                        <Text fontSize="14" fontWeight="400" color="brand.50">Slippage Tolerance</Text>
                         <HStack>
                             <Button onClick={onAuto} paddingX={8} variant={auto ? "primary" : "outline"} size="sm">
                                 Auto

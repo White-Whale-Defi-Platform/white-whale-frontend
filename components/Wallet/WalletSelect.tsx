@@ -33,7 +33,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                         as={Button}
                         variant="unstyled"
                     >
-                        <Text fontSize={["14px", "16px"]} >{denom}</Text>
+                        <Text fontSize={["14px", "16px"]}  textTransform="capitalize">{denom?.toLowerCase()}</Text>
                         <ChevronDownIcon />
                     </HStack>
 
@@ -49,7 +49,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                         paddingX={6}
                         paddingY={1}
                     >
-                        <Text fontSize={["14px", "16px"]}>{denom}</Text>
+                        <Text fontSize={["14px", "16px"]} textTransform="capitalize">{denom?.toLowerCase()}</Text>
                         <ChevronDownIcon />
                     </HStack>
 
@@ -66,12 +66,12 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                 <PopoverArrow bg='#1C1C1C' boxShadow="unset" style={{ boxShadow: "unset" }} sx={{ '--popper-arrow-shadow-color': 'black' }} />
                 <PopoverBody padding={6}  >
                     <VStack alignItems="flex-start" width="full" gap={2}>
-                        <Text color="brand.200" fontSize="16px" fontWeight="400">Select network</Text>
+                        <Text color="brand.50" fontSize="16px" fontWeight="400">Select network</Text>
 
                         {!process?.env?.production && (
                             <FormControl display='flex' alignItems='center' justifyContent="space-between">
                                 <FormLabel htmlFor='network' mb='0'>
-                                    <Text color="brand.200" fontSize="16px" fontWeight="400">Testnet</Text>
+                                    <Text color="brand.50" fontSize="16px" fontWeight="400">Testnet</Text>
                                 </FormLabel>
                                 <Switch
                                     id='network'
@@ -107,7 +107,7 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                 >
                                     <HStack>
                                         <Image src={chain?.icon} boxSize={30} objectFit='cover' />
-                                        <Text paddingLeft={3} >{chain?.label?.toUpperCase()}</Text>
+                                        <Text paddingLeft={3} >{chain?.label}</Text>
                                     </HStack>
                                     <ListIcon as={BsCircleFill} color='#3CCD64' boxShadow="0px 0px 14.0801px #298F46" bg="#1C1C1C" borderRadius="full" />
                                 </ListItem>

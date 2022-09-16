@@ -7,49 +7,42 @@ import {
 
 import { Flex, Button, HStack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 
-import PoolName from './PoolName'
+import VaultName from './VaultName'
 import { useEffect, useState } from 'react'
-import Loader from '../../Loader'
+import Loader from 'components/Loader'
 
-export type Pool = {
-    pool: string
-    token1Img: string
-    token2Img: string
-    myPosition?: number | string
+export type Vault = {
+    vaultId: string
+    myDeposit: string,
+    totalDeposit: string,
+    tokenImage: string
     apr: number | string
-    volume24hr: number | string
-    totalLiq: number | string
     cta?: () => void
 }
 
-const columnHelper = createColumnHelper<Pool>()
+const columnHelper = createColumnHelper<Vault>()
 
 const columns = [
-    columnHelper.accessor('pool', {
-        header: () => <Text color="brand.50">Pool</Text>,
+    columnHelper.accessor('vaultId', {
+        header: () => <Text color="brand.50">Vault</Text>,
         cell: info => (
-            <PoolName
-                poolId={info.getValue()}
-                token1Img={info.row.original?.token1Img}
-                token2Img={info.row.original?.token2Img}
+            <VaultName
+                vaultId={info.getValue()}
+                tokenImage={info.row.original?.tokenImage}
             />
         )
-    }),
-    columnHelper.accessor('myPosition', {
-        header: () => <Text align="right" color="brand.50">My Position</Text>,
-        cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('apr', {
         header: () => <Text align="right" color="brand.50">Combined APR</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
-    columnHelper.accessor('volume24hr', {
-        header: () => <Text align="right" color="brand.50">24hr Volume</Text>,
+    columnHelper.accessor('totalDeposit', {
+        header: () => <Text align="right" color="brand.50">Total Deposits</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
-    columnHelper.accessor('totalLiq', {
-        header: () => <Text align="right" color="brand.50">Total Liquidity</Text>,
-        cell: info => <Text align="right">${info.getValue()}</Text>,
+    columnHelper.accessor('myDeposit', {
+        header: () => <Text align="right" color="brand.50">My Deposit</Text>,
+        cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('cta', {
         header: '',
@@ -60,20 +53,20 @@ const columns = [
                     size="sm"
                     onClick={() => info.getValue()()}
                 >
-                    Manage Liquidity
+                    Manage Position
                 </Button>
             </HStack>
         )
     })
 ]
 
-const PoolsTable = ({ pools = [], isLoading }: { pools: Pool[], isLoading: boolean }) => {
+const MyVaultsTable = ({ vaults = [], isLoading }: { vaults: Vault[], isLoading?: boolean }) => {
 
-    const [data, setData] = useState(() => [...pools])
+    const [data, setData] = useState(() => [...vaults])
 
     useEffect(() => {
-        setData(pools)
-    }, [pools])
+        setData(vaults)
+    }, [vaults])
 
     const table = useReactTable({
         data,
@@ -94,15 +87,17 @@ const PoolsTable = ({ pools = [], isLoading }: { pools: Pool[], isLoading: boole
         )
     }
 
-    if (!pools.length) {
+    if (!vaults.length) {
         return (
-            <Flex padding={10} width={["full", "1160px"]}
+            <Flex 
+                padding={10} 
+                width={["full", "1160px"]}
                 background="#1C1C1C"
                 boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
                 borderRadius="30px"
                 justifyContent="center"
                 >
-                    <Text py={10} color="white"> Your active liquidity positions will appear here. </Text>
+                    <Text py={10} color="white"> Your active vault deposts will appear here. </Text>
             </Flex>
         )
     }
@@ -110,7 +105,7 @@ const PoolsTable = ({ pools = [], isLoading }: { pools: Pool[], isLoading: boole
     
 
     return (
-        <Flex padding={10} width={["full", "1170px"]}
+        <Flex padding={10} width={["full", "1160px"]}
             background="#1C1C1C"
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
             borderRadius="30px"
@@ -151,4 +146,4 @@ const PoolsTable = ({ pools = [], isLoading }: { pools: Pool[], isLoading: boole
     )
 }
 
-export default PoolsTable
+export default MyVaultsTable

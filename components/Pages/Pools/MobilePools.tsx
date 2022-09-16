@@ -19,8 +19,8 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                         justifyContent="center"
                     >
                         <HStack width="full" justifyContent="space-between">
-                            <Text color="brand.200"> Pool</Text>
-                            <Text color="brand.200"> APY</Text>
+                            <Text color="brand.50"> Pool</Text>
+                            <Text color="brand.50"> APY</Text>
                         </HStack>
 
                         <HStack width="full" justifyContent="space-between">
@@ -29,14 +29,14 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                                 token1Img={pool.token1Img}
                                 token2Img={pool?.token2Img}
                             />
-                            <Text color="brand.200"> coming soon</Text>
+                            <Text color="brand.50"> coming soon</Text>
                         </HStack>
 
                         <HStack height="24px" />
 
                         <HStack width="full" justifyContent="space-between">
-                            <Text color="brand.200"> Total Liquidity</Text>
-                            <Text color="brand.200"> 24h volume</Text>
+                            <Text color="brand.50"> Total Liquidity</Text>
+                            <Text color="brand.50"> 24h volume</Text>
                         </HStack>
 
                         <HStack width="full" justifyContent="space-between">
