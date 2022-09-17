@@ -1,0 +1,230 @@
+{
+  "name": "Pools list on testnet",
+  "logoURI": "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/29231450/Poodle-Standard-Gray-On-White-Standing.jpg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "Project",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "routerAddress" : "terra1cg5h385gkqft48rjz6kvgmxnplrrvcl3mx5ln0f6jaanv9mf4tgsksh67a",
+  "base_token": {
+    "id": "pisco-1",
+    "chain_id": "pisco-1",
+    "token_address": "",
+    "symbol": "LUNA",
+    "name": "Luna",
+    "decimals": 6,
+    "logoURI": "/logos/luna.svg",
+    "tags": ["native"],
+    "native": true,
+    "denom": "uluna"
+  },
+  "pools": [
+    {
+      "pool_id": "LUNA-LUNAONE",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI":  "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
+          "decimals": 6,
+          "logoURI": "/logos/lunaone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu"
+        }
+      ],
+      "lp_token" : "terra1gg95kafta4rqpqh8z4q2p9yt76fkvu6dyc3mv6uqn75e242xtsxqkm0atp",
+      "swap_address": "terra1v75km8nwwtjp0ttkptrqfc6gd7h2e628nz905mfggj3720gvyn0s4uz999",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-LUNATWO",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "symbol": "LUNATWO",
+          "name": "Lunatwo",
+          "decimals": 6,
+          "logoURI": "/logos/lunatwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz"
+        }
+      ],
+      "lp_token" : "terra10fwrwphp6ylxmq99yu37w8e93lw39n7ptqw0hdxy73jfheptxq6q2h0c5z",
+      "swap_address": "terra1u8qnt3avwvzhgh9k0ltv2zusnlq2d4avufkwpzpr3yt9lpv2dptqpge22q",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNAONE-LUNATHREE",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
+          "decimals": 6,
+          "logoURI": "/logos/lunaone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1hl58aew65n63qr4g87ar3m0dgtdfst7nhh4kcagam7fwa8zex43sq7ujfn",
+          "symbol": "LUNATHREE",
+          "name": "Lunathree",
+          "decimals": 6,
+          "logoURI":  "/logos/lunathree.svg",
+          "tags": [],
+          "native": false,
+          "denom": "terra1hl58aew65n63qr4g87ar3m0dgtdfst7nhh4kcagam7fwa8zex43sq7ujfn"
+        }
+      ],
+      "lp_token" : "terra18krnd4n6w0t4qlnkyvumn6njgj0pw79wr98e9jcwqz4n3rrglfhszrk4ce",
+      "swap_address": "terra1f0et0ta2lrlrx0guz37wkh45w8mk3p47a6gzkvce59nt4y57ns8sru3ufz",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNAONE-LUNATWO",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu",
+          "symbol": "LUNAONE",
+          "name": "Lunaone",
+          "decimals": 6,
+          "logoURI": "/logos/lunaone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra1cmcxxrn3cy82kmjfyv3sgzk4ggf349e56yqpzle76ma909862l2shv3csu"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz",
+          "symbol": "LUNATWO",
+          "name": "Lunatwo",
+          "decimals": 6,
+          "logoURI": "/logos/lunatwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra19ly6wcdgtmlfmld6h4p2fjhc2m5muycsp60jcq5ny5g2amz0q74qa423nz"
+        }
+      ],
+      "lp_token" : "terra1nj9d93f2xkr583pvxnmtvtg09w45rxfm2kxj7u2wqwu7sx3kqunqvtwmx8",
+      "swap_address": "terra1xh7gzf4yh2dqek52v7fsvfh6qzh0tchcrfdau6q0qhx58ed8su9q3j7sse",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNATWO-LUNAFOUR",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1e8sqchdyrgtgf2jwsq0jerj0gp0wkezelj9sjw98z22g3s0v0qrqjwr39u",
+          "symbol": "LUNAFOUR",
+          "name": "Lunafour",
+          "decimals": 6,
+          "logoURI": "/logos/lunafour.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra1e8sqchdyrgtgf2jwsq0jerj0gp0wkezelj9sjw98z22g3s0v0qrqjwr39u"
+        }
+      ],
+      "lp_token" : "terra12m50xdz2lggt46v5vz0hfnc0q9v3q86tj6v36dt5rs8tm7r6rfpsdx52qq",
+      "swap_address": "terra1q50gnl9lnujamy3j4w49s49gpdsxfacjj64g2hccr0azr4s8k6yssupaza",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-LUNAFIVE",
+      "pool_assets": [
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "pisco-1",
+          "chain_id": "pisco-1",
+          "token_address": "terra1rzvdn9cc7efpqsgl4ha7q5egqlpnyfdkgu0at6fkzmmj9dr7aspsy4a5js",
+          "symbol": "LUNAFIVE",
+          "name": "Lunafive",
+          "decimals": 6,
+          "logoURI": "/logos/lunafive.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "terra1rzvdn9cc7efpqsgl4ha7q5egqlpnyfdkgu0at6fkzmmj9dr7aspsy4a5js"
+        }
+      ],
+      "lp_token" : "terra1hhv2l0fdjdxm70kc9942evczuq8nchftd98rcds8snw8qqv8q8gs5ueap3",
+      "swap_address": "terra1afn0gmy0w03mh2u0uevnz7fqajjzzmxxe73f522awaalkd5tu6js63xn59",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

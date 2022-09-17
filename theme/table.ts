@@ -11,7 +11,7 @@ const numericStyles = {
 const simpleVariant = (props: Dict) => {
   return {
     th: {
-      color: "brand.200",
+      color: "brand.50",
       fontSize: "sm",
       fontWeight: "500",
       textTransform: "none",

@@ -4,6 +4,7 @@ import { Tooltip } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
 import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { num } from 'libs/num'
@@ -48,6 +49,8 @@ const SwapForm: FC<Props> = ({
     setResetForm,
     path
 }) => {
+
+    const baseToken = useBaseTokenInfo()
 
     const { control, handleSubmit, setValue, getValues } = useForm({
         mode: "onChange",
@@ -171,7 +174,7 @@ const SwapForm: FC<Props> = ({
                 <HStack justifyContent="space-between" width="full" >
 
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
+                        <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">Balance: </Text>
                         {tokanAloading ? (
                             <Spinner color='white' size='xs' />
                         ) : (
@@ -223,7 +226,7 @@ const SwapForm: FC<Props> = ({
                     color="brand.500"
                     _focus={{ boxShadow: "none" }}
                     _active={{ background: "transparent" }}
-                    _hover={{ background: "transparent", color: "white" }}
+                    _hover={{ background: "transparent", color: "brand.300" }}
                     icon={<DoubleArrowsIcon width="2rem" height="2rem" />}
                     disabled={isInputDisabled}
                     onClick={onReverse}
@@ -234,7 +237,7 @@ const SwapForm: FC<Props> = ({
             <VStack width="full" alignItems="flex-start" paddingBottom={8} style={{ margin: 'unset' }}>
                 <HStack justifyContent="space-between" width="full" >
                     <HStack>
-                        <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
+                        <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">Balance: </Text>
                         {tokanBloading ? (
                             <Spinner color='white' size='xs' />
                         ) : (
@@ -294,13 +297,13 @@ const SwapForm: FC<Props> = ({
 
 
 
-            <VStack alignItems="flex-start" width="full" px={3}>
+            <VStack alignItems="flex-start" width="full" px={3}  >
                 {(amountB.amount) && (<>
                     <HStack justifyContent="space-between" width="full">
                         <HStack style={{ marginTop: 'unset' }}>
                             <Text color="brand.500" fontSize={12}> Rate</Text>
                             <Tooltip label="Swap price is calculated based on the pool price and spread" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                <Box cursor="pointer" color="brand.200">
+                                <Box cursor="pointer" color="brand.50">
                                     <InfoOutlineIcon width=".7rem" height=".7rem" />
                                 </Box>
                             </Tooltip>
@@ -317,12 +320,12 @@ const SwapForm: FC<Props> = ({
                         <HStack >
                             <Text color="brand.500" fontSize={12}> Fee</Text>
                             <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                <Box cursor="pointer" color="brand.200">
+                                <Box cursor="pointer" color="brand.50">
                                     <InfoOutlineIcon width=".7rem" height=".7rem" />
                                 </Box>
                             </Tooltip>
                         </HStack>
-                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol} </Text>
                     </HStack>
 
                     {minReceive && (
@@ -330,7 +333,7 @@ const SwapForm: FC<Props> = ({
                             <HStack >
                                 <Text color="brand.500" fontSize={12}> Min Receive </Text>
                                 <Tooltip label="Expected minimum quantity to be received based on the current price, maximum spread, and trading fee" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                    <Box cursor="pointer" color="brand.200">
+                                    <Box cursor="pointer" color="brand.50">
                                         <InfoOutlineIcon width=".7rem" height=".7rem" />
                                     </Box>
                                 </Tooltip>
@@ -343,12 +346,12 @@ const SwapForm: FC<Props> = ({
                 )}
 
                 {!!path.length && (
-                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} alignItems="flex-start" >
-                        <HStack >
+                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} >
+                        <HStack>
                             <Text color="brand.500" fontSize={12}> Route </Text>
                             <Tooltip label="Optimized route for your optimal gain" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                <Box cursor="pointer" color="brand.200">
-                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                <Box cursor="pointer" color="brand.50" marginTop="-1px">
+                                    <InfoOutlineIcon width=".7rem"  />
                                 </Box>
                             </Tooltip>
                         </HStack>

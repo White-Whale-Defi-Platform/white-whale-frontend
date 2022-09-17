@@ -1,9 +1,12 @@
-import { Button, HStack, Spinner,Text, VStack } from '@chakra-ui/react';
+import { Button, HStack, Text, VStack, Spinner, Tooltip, Box } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useMemo } from 'react';
 import { Controller, useForm } from "react-hook-form";
 
@@ -37,6 +40,7 @@ const NewPositionForm: FC<Props> = ({
     setReverse,
     reverse
 }) => {
+    const baseToken = useBaseTokenInfo()
     const { control, handleSubmit, formState, setValue, getValues } = useForm({
         mode: "onChange",
         defaultValues: {
@@ -46,8 +50,8 @@ const NewPositionForm: FC<Props> = ({
     });
 
     // const [[tokenABalance, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
-    const {balance: tokenABalance, isLoading : tokanAloading} = useTokenBalance(tokenA?.tokenSymbol)
-    const {balance: tokenBBalance, isLoading : tokanBloading} = useTokenBalance(tokenB?.tokenSymbol)
+    const { balance: tokenABalance, isLoading: tokanAloading } = useTokenBalance(tokenA?.tokenSymbol)
+    const { balance: tokenBBalance, isLoading: tokanBloading } = useTokenBalance(tokenB?.tokenSymbol)
 
     const amountA = getValues('token1')
     const amountB = getValues('token2')
@@ -155,7 +159,7 @@ const NewPositionForm: FC<Props> = ({
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
+                    <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">Balance: </Text>
                     {tokanAloading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
@@ -188,7 +192,7 @@ const NewPositionForm: FC<Props> = ({
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.200" fontSize="14" fontWeight="500">Balance: </Text>
+                    <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">Balance: </Text>
                     {tokanBloading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
@@ -234,8 +238,15 @@ const NewPositionForm: FC<Props> = ({
             {(Number(tx?.fee) > 0) && (
                 <VStack alignItems="flex-start" width="full" px={3}>
                     <HStack justifyContent="space-between" width="full">
-                        <Text color="brand.500" fontSize={12}> Fees </Text>
-                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
+                        <HStack >
+                            <Text color="brand.500" fontSize={12}> Fee</Text>
+                            <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
+                                <Box cursor="pointer" color="brand.50">
+                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                </Box>
+                            </Tooltip>
+                        </HStack>
+                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol}</Text>
                     </HStack>
                 </VStack>
             )}

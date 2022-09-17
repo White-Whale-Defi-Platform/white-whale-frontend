@@ -27,7 +27,7 @@ const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpe
   const {showTerraModalOrConnectKeplr} = useTerraModalOrConnectKeplr(onOpenModal)
 
   const lcd = useLCDClient()
-  
+
   const denom = useMemo(() => {
   if (!chainInfo) return
     const [coinDenom] = (chainInfo as any)?.currencies || []
@@ -42,7 +42,7 @@ const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpe
   }, [currentWalletState.chainId, chainInfo])
 
   useEffect(() => {
-    currentWalletState.activeWallet === 'station' && connectStation(currentWalletState.chainId) 
+    currentWalletState.activeWallet === 'station' && connectStation(currentWalletState.chainId)
   }, [currentWalletState.chainId, currentWalletState.activeWallet, connectedWallet])
 
   // useEffect(() => {

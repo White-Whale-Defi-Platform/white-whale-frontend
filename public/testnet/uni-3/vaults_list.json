@@ -1,0 +1,46 @@
+{
+  "factory": "juno185uhpsnyfaksn5xvheu5wht6slhtdf7vmxg44xah6svnvklpy77qqga6ea",
+  "vaults": [
+    {
+      "pool_id": "JUNOX",
+      "vault_assets": {
+        "id": "juno-testnet",
+        "chain_id": "uni-3",
+        "token_address": "ujunox",
+        "symbol": "JUNO",
+        "name": "Juno",
+        "decimals": 6,
+        "logoURI": "/logos/juno.svg",
+        "tags": [
+          "native"
+        ],
+        "native": true,
+        "denom": "ujunox"
+      },
+      "lp_token": "juno1wnm70568y9vta35nnckhwum8ywv6y6ms4r7tjl3cunkugam0v94qlkvlty",
+      "vault_address": "juno1jlzyaaezn2h6k6uvmsl5px3huudg5u7redcdyssz8x0kqpwzvfrsv0rvpv",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "JUNOONE",
+      "vault_assets": {
+        "id": "juno-testnet",
+        "chain_id": "uni-3",
+        "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
+        "symbol": "JUNOONE",
+        "name": "Junoone",
+        "decimals": 6,
+        "logoURI": "/logos/junoone.svg",
+        "tags": [
+        ],
+        "native": false,
+        "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
+      },
+      "lp_token": "juno1etr77ceq63fa56h9lkc5ukeeqxcfsyun7x6pnddrfd38tkj7qeuq6m4x2a",
+      "vault_address": "juno1n8k84k4x29a6u8kfaekyjmjvv4t7y5uwy9y0u28s850alg7q5jhqg8e6pn",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

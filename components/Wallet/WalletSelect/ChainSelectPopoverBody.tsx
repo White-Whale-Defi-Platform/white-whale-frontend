@@ -7,7 +7,7 @@ function ChainSelectPopoverBody({onChange, onClose, chainList, onDisconnect}) {
   return (
     <PopoverBody padding={6}  >
       <VStack alignItems="flex-start" width="full" gap={2}>
-        <Text color="brand.200" fontSize="16px" fontWeight="400">Select network</Text>
+        <Text color="brand.50" fontSize="16px" fontWeight="400">Select network</Text>
         {!process?.env?.production && (
           <NetworkForm onDisconnect={onDisconnect}/>
         )}

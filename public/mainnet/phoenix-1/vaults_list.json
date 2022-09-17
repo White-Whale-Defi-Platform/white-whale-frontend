@@ -1,0 +1,26 @@
+{
+  "factory": "",
+  "vaults": [
+    {
+      "pool_id": "LUNA",
+      "vault_assets": {
+        "id": "terra-luna-2",
+        "chain_id": "phoenix-1",
+        "token_address": "uluna",
+        "symbol": "LUNA",
+        "name": "Luna",
+        "decimals": 6,
+        "logoURI": "/logos/luna.svg",
+        "tags": [
+          "native"
+        ],
+        "native": true,
+        "denom": "uluna"
+      },
+      "lp_token": "terra1pm6s5x770t27xajnj2qqkn6mku8s4k44ujs0m53h9epqqcarulnqwva8nt",
+      "vault_address": "terra1clwlcv2kekklzxdud2d938d0kyrgjryvr4a86qfal4n7wjerxrvsey7ch9",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

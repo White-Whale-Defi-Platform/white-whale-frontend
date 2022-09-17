@@ -4,7 +4,7 @@
         "chainName": "Juno Mainnet",
         "label": "Juno",
         "icon": "/logos/juno.svg",
-        "rpc": "https://rpc-juno.itastakers.com",
+        "rpc": "https://rpc-juno.whitewhale.money",
         "rest": "https://lcd-juno.itastakers.com",
         "stakeCurrency": {
             "coinDenom": "JUNO",
@@ -53,7 +53,7 @@
         "chainName": "Terra Mainnet",
         "label": "Terra",
         "icon": "/logos/luna.svg",
-        "rpc": "https://terra-rpc.stakely.io",
+        "rpc": "https://rpc-terra.whitewhale.money",
         "rest": "https://terra-api.polkachu.com",
         "stakeCurrency": {
             "coinDenom": "LUNA",

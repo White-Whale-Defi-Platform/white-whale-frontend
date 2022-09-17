@@ -1,0 +1,230 @@
+{
+  "name": "Pools list on testnet",
+  "logoURI": "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/29231450/Poodle-Standard-Gray-On-White-Standing.jpg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "Project",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "juno-testnet",
+    "chain_id": "uni-3",
+    "token_address": "",
+    "symbol": "JUNO",
+    "name": "Juno",
+    "decimals": 6,
+    "logoURI": "https://cryptologos.cc/logos/anyswap-any-logo.svg?v=022",
+    "tags": ["native"],
+    "native": true,
+    "denom": "ujunox"
+  },
+  "routerAddress" : "juno1cf7gqfclvzvs4tu6p3mukkjcrjte9kz8cx0ev78aqmgxds3rnzqqk5xsxg",
+  "pools": [
+    {
+      "pool_id": "JUNO-JUNOONE",
+      "pool_assets": [
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "ujunox",
+          "symbol": "JUNO",
+          "name": "Juno",
+          "decimals": 6,
+          "logoURI":  "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujunox"
+        },
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
+          "symbol": "JUNOONE",
+          "name": "Junoone",
+          "decimals": 6,
+          "logoURI": "/logos/junoone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
+        }
+      ],
+      "lp_token" : "juno1vrqgzd8kwqk7s6jgs5tk73m9npl5f3xdr0ytkezkdlca46xpgrqql6f7j2",
+      "swap_address": "juno18mgne4yxutsuw2mr4zha38tz9l9gqse7lnhtcdfhdap70wyz99jsm8m7ga",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "JUNO-JUNOTWO",
+      "pool_assets": [
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "",
+          "symbol": "JUNO",
+          "name": "Juno",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujunox"
+        },
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
+          "symbol": "JUNOTWO",
+          "name": "Junotwo",
+          "decimals": 6,
+          "logoURI": "/logos/junotwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake"
+        }
+      ],
+      "lp_token" : "juno1xefdvqhreycghdyas2tqsdw9u6jah62sywkx7xg7cwrum2vrd7kqtkflka",
+      "swap_address": "juno152pp0ayrwjqym7x982t0ngqca3a40qdpd06lvxvapu2cu52s5grq9q5fwe",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "JUNO-JUNOTHREE",
+      "pool_assets": [
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "",
+          "symbol": "JUNO",
+          "name": "Juno",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujunox"
+        },
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k",
+          "symbol": "JUNOTHREE",
+          "name": "Junothree",
+          "decimals": 6,
+          "logoURI": "/logos/junothree.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k"
+        }
+      ],
+      "lp_token" : "juno1w6jj2q84uxy66eu8an2mpr98yzyz4secksraxl4ely67xkf5c7sql567jz",
+      "swap_address": "juno1k5shgnjs8fh49j572t7ptyyur08rk7zhnhhdwp7vjf020ut62q8qmm39dy",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "JUNOONE-JUNOTWO",
+      "pool_assets": [
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
+          "symbol": "JUNOONE",
+          "name": "Junoone",
+          "decimals": 6,
+          "logoURI": "/logos/junoone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
+        },
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
+          "symbol": "JUNOTWO",
+          "name": "Junotwo",
+          "decimals": 6,
+          "logoURI": "/logos/junotwo.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake"
+        }
+      ],
+      "lp_token" : "juno1nd5ypaj56mqcwp7m2lwlvara6rjvlpy5u86vdjqc9dh3wu74ve4s4n43m7",
+      "swap_address": "juno1n2j8gwtl5kkwxvxh98xtd4hkc0e0yhh2gyrmw9ry6vqjqc96g4eq72y6mm",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "JUNOONE-JUNOFOUR",
+      "pool_assets": [
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
+          "symbol": "JUNOONE",
+          "name": "Junoone",
+          "decimals": 6,
+          "logoURI": "/logos/junoone.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
+        },
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1dlmv5zdnss9dqjetgczt2yegzaz0yh6ku85sfxdt9u4xvvhwvxysr9yafg",
+          "symbol": "JUNOFOUR",
+          "name": "Junofour",
+          "decimals": 6,
+          "logoURI": "/logos/junofour.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1dlmv5zdnss9dqjetgczt2yegzaz0yh6ku85sfxdt9u4xvvhwvxysr9yafg"
+        }
+      ],
+      "lp_token" : "juno17uty5vaeadj2ju5zkcaa5fp6y6f9yv06klrlesqum00hgwmgjhwq4vwpur",
+      "swap_address": "juno10kv033x2msxpmfdjkurq7g3skkshfqhulgwndmg8qauvj7n9q8aqrdslpu",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "JUNOTHREE-JUNOFIVE",
+      "pool_assets": [
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k",
+          "symbol": "JUNOTHREE",
+          "name": "Junothree",
+          "decimals": 6,
+          "logoURI": "/logos/junothree.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k"
+        },
+        {
+          "id": "juno-testnet",
+          "chain_id": "uni-3",
+          "token_address": "juno1r4kw8zp0g0yx9epnatuhzxm8esfapkkc4nx5hztap480skw4gynq3czeer",
+          "symbol": "JUNOFIVE",
+          "name": "Junofive",
+          "decimals": 6,
+          "logoURI": "/logos/junofive.svg",
+          "tags": ["memecoin"],
+          "native": false,
+          "denom": "juno1r4kw8zp0g0yx9epnatuhzxm8esfapkkc4nx5hztap480skw4gynq3czeer"
+        }
+      ],
+      "lp_token" : "juno1cvmpkf7n8603ygeuq75pcn4lp2smnk05r9umqgkh26p7tsgd45gqhjr4ff",
+      "swap_address": "juno1pvwkygd2w4gjn725mhgv0z0fhw5hd8en37hxqp594uj4zl2rg5uqhjhclu",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

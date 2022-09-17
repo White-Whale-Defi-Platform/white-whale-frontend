@@ -69,7 +69,7 @@ const NewPosition = () => {
                 <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4 }} >
                     <IconButton
                         variant="unstyled"
-                        color="#7A7A7A"
+                        color="white"
                         fontSize="28px"
                         aria-label='go back'
                         icon={<ArrowBackIcon />}
