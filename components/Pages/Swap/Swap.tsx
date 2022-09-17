@@ -23,7 +23,7 @@ type SwapProps = {
 const Swap: FC<SwapProps> = ({ }) => {
     const [[tokenA, tokenB], setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
     const [reverse, setReverse] = useState<boolean>(false)
-    const { chainId, address, key } = useRecoilValue(walletState)
+    const { chainId, address, key, client } = useRecoilValue(walletState)
     const [resetForm, setResetForm] = useState<boolean>(false)
     const router = useRouter()
 

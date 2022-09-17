@@ -131,8 +131,6 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
 
         if (!vaults) return null
 
-        console.log({ balance })
-
         const _vaults = vaults.vaults.map((vault, index) => ({
             ...vault,
             hasDepost : Number(balance?.[index]) > 0 ? true : false,

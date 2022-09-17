@@ -30,8 +30,6 @@ const Vaults = (props: Props) => {
 
   }, [vaults])
 
-  console.log({ vaults })
-
   const allVaults = useMemo(() => {
     if (!vaults) return []
 
@@ -53,7 +51,7 @@ const Vaults = (props: Props) => {
   }, [vaults])
 
   return (
-    <VStack width={{ base: '100%', md: '1160px' }} alignItems="center" margin="auto">
+    <VStack width={{ base: '100%', md: '1160px' }} alignItems="center" >
 
       {/* <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
