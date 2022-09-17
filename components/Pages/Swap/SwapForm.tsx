@@ -225,7 +225,7 @@ const SwapForm: FC<Props> = ({
                     color="brand.500"
                     _focus={{ boxShadow: "none" }}
                     _active={{ background: "transparent" }}
-                    _hover={{ background: "transparent", color: "white" }}
+                    _hover={{ background: "transparent", color: "brand.300" }}
                     icon={<DoubleArrowsIcon width="2rem" height="2rem" />}
                     disabled={isInputDisabled}
                     onClick={onReverse}
@@ -296,7 +296,7 @@ const SwapForm: FC<Props> = ({
 
 
 
-            <VStack alignItems="flex-start" width="full" px={3}>
+            <VStack alignItems="flex-start" width="full" px={3}  >
                 {(amountB.amount) && (<>
                     <HStack justifyContent="space-between" width="full">
                         <HStack style={{ marginTop: 'unset' }}>
@@ -345,12 +345,12 @@ const SwapForm: FC<Props> = ({
                 )}
 
                 {!!path.length && (
-                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} alignItems="flex-start" >
-                        <HStack >
+                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} >
+                        <HStack>
                             <Text color="brand.500" fontSize={12}> Route </Text>
                             <Tooltip label="Optimized route for your optimal gain" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                <Box cursor="pointer" color="brand.50">
-                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
+                                <Box cursor="pointer" color="brand.50" marginTop="-1px">
+                                    <InfoOutlineIcon width=".7rem"  />
                                 </Box>
                             </Tooltip>
                         </HStack>
