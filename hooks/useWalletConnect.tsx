@@ -1,25 +1,27 @@
 import { useWallet } from '@terra-money/wallet-provider'
-import { useSetRecoilState} from 'recoil'
+import { useRecoilState, useSetRecoilState} from 'recoil'
 
-import { activeWalletAtom } from "../state/atoms/activeWalletAtom";
+import { walletState } from '../state/atoms/walletAtoms';
 import useConnectKeplr from "./useConnectKeplr";
 import useConnectStation from "./useConnectStation";
 
-export default function useWalletConnect () {
-  const {connectKeplr} = useConnectKeplr()
+export default function useWalletConnect (onCloseModal) {
+  const {connectKeplr, connectKeplrMemo} = useConnectKeplr()
   const {connectStation} = useConnectStation()
-  const setActiveWallet = useSetRecoilState(activeWalletAtom)
+  const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)
   const {connect} = useWallet()
 
-  const setKeplr = (chainId: string) => {
-    setActiveWallet('keplr')
-    connectKeplr(chainId)
+  const setKeplr = () => {
+  
+    setCurrentWalletState({...currentWalletState, activeWallet: 'keplr'})
+    localStorage.removeItem('__terra_extension_router_session__')
+    connectKeplrMemo()
   }
   const setTerraActiveAndConnect = (type, identifier) => {
-    setActiveWallet(identifier)
+    setCurrentWalletState({...currentWalletState, activeWallet: identifier})
     connect(type, identifier)
-    return
+    onCloseModal()
   }
 
-  return {connectKeplr, connectStation, setKeplr, setTerraActiveAndConnect}
+  return {connectKeplr, connectKeplrMemo, connectStation, setKeplr, setTerraActiveAndConnect}
 }

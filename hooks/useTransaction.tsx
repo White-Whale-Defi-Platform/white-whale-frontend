@@ -189,7 +189,7 @@ export const useTransaction = ({
         queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',
-          description: <Finder txHash={data.transactionHash} chainId={client.chainId} > From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
+          description: <Finder txHash={data.transactionHash} chainId={client.chainId}> From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
           status: 'success',
           duration: 9000,
           position: "top-right",

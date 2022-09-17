@@ -1,19 +1,19 @@
 import { GasPrice } from '@cosmjs/stargate';
 import { useConnectedWallet, useWallet } from "@terra-money/wallet-provider"
+import { useCallback } from 'react';
 import { useRecoilState } from "recoil"
 
-import {  walletState } from "../state/atoms/walletAtoms"
-import { WalletStatusType } from "../state/atoms/walletAtoms"
+import {  walletState, WalletStatusType } from "../state/atoms/walletAtoms"
 import { OfflineSigningWallet } from '../util/wallet-adapters';
 import { useChainInfo } from "./useChainInfo"
 
 export default function useConnectKeplr() {
-  const [{chainId}, setWalletState] = useRecoilState(walletState)
+  const [{chainId, network}, setWalletState] = useRecoilState(walletState)
   let [chainInfo] = useChainInfo(chainId)
   const connectedWallet = useConnectedWallet()
   const {disconnect} = useWallet()
 
-  const connectKeplr = async (id = chainId) => {
+  const connectKeplr = async () => {
     if(connectedWallet){
       disconnect()
     }
@@ -30,6 +30,7 @@ export default function useConnectKeplr() {
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           chainInfo.rpc,
           offlineSigner,
+          network,
           {
             gasPrice: GasPrice.fromString(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`)
           }
@@ -42,7 +43,9 @@ export default function useConnectKeplr() {
         address: address,
         client: wasmChainClient,
         chainId: chainId,
+        network: network,
         status: WalletStatusType.connected,
+        activeWallet:'keplr'
       })
       }
     } catch (e) {
@@ -50,5 +53,9 @@ export default function useConnectKeplr() {
     }
   }
 
-  return {connectKeplr}
+  const connectKeplrMemo = useCallback(() => {
+    connectKeplr(chainId)
+  }, [chainId, network])
+
+  return {connectKeplr, connectKeplrMemo}
 }

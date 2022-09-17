@@ -20,14 +20,16 @@ import {TxResponse, Wallet} from "./wallet";
 
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient
+  network: string
 
-  constructor(client: SigningCosmWasmClient) {
+  constructor(client: SigningCosmWasmClient, network: string) {
     this.client = client;
+    this.network = network
   }
 
-  static connectWithSigner(endpoint: string, signer: OfflineSigner, options?: SigningStargateClientOptions): Promise<OfflineSigningWallet> {
+  static connectWithSigner(endpoint: string, signer: OfflineSigner, network: string, options?: SigningStargateClientOptions): Promise<OfflineSigningWallet> {
     return SigningCosmWasmClient.connectWithSigner(endpoint, signer, options)
-      .then(client => new OfflineSigningWallet(client))
+      .then(client => new OfflineSigningWallet(client, network))
   }
 
   post(senderAddress: string, msgs: EncodeObject[], memo?: string): Promise<TxResponse> {
@@ -48,6 +50,10 @@ export class OfflineSigningWallet implements Wallet {
 
   getChainId(): Promise<String> {
     return this.client.getChainId();
+  }
+
+  getNetwork(): Promise<String> {
+    return Promise.resolve(this.network);
   }
 
   getBalance(address: string, searchDenom: string): Promise<Coin>{

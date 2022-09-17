@@ -59,3 +59,6 @@ Session.vim
 *~
 # auto-generated tag files
 tags
+
+#vscode settings
+.vscode/launch.json

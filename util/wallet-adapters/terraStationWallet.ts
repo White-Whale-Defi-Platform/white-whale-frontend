@@ -13,10 +13,12 @@ import {TxResponse, Wallet} from "./wallet";
 export class TerraStationWallet implements Wallet {
   client: ConnectedWallet
   lcdClient: LCDClient
+  network: string
 
-  constructor(client: ConnectedWallet, lcdClient: LCDClient) {
+  constructor(client: ConnectedWallet, lcdClient: LCDClient, network: string) {
     this.client = client;
     this.lcdClient = lcdClient;
+    this.network = network;
   }
 
   convertType(type: string): string {
@@ -134,7 +136,6 @@ export class TerraStationWallet implements Wallet {
         sequenceNumber: result.getSequenceNumber()
       }], tx)
     }).then(result => {
-      console.log(result)
       return result.amount.get("uluna").amount.toNumber()
     }).catch(err => {
       if (axios.isAxiosError(err)) {
@@ -148,10 +149,20 @@ export class TerraStationWallet implements Wallet {
     return Promise.resolve(this.lcdClient.config.chainID);
   }
 
+  getNetwork(): Promise<String> {
+    return Promise.resolve(this.network);
+  }
+
   getBalance(address: string, searchDenom: string): Promise<Coin> {
     return this.lcdClient.bank.balance(address)
       .then(([coins]) => {
         const coin = coins.get(searchDenom)
+        if(coin === undefined){
+          return {
+            denom: searchDenom,
+            amount: '0'
+          }
+        }
         return {
           denom: coin.denom,
           amount: coin.amount.toString()

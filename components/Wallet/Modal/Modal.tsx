@@ -10,27 +10,26 @@ import {
   VStack
 } from '@chakra-ui/react'
 import React from 'react'
-
 import KeplrWallet from './KeplrWallet';
 import TerraWallets from './TerraWallets';
 
-function WalletModal({isOpen, onClose}) {
+function WalletModal({ isOpenModal, onCloseModal}) {
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpenModal} onClose={onCloseModal}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Select Wallet</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack>
-            <TerraWallets  />
-            <KeplrWallet  />
+              <TerraWallets onCloseModal={onCloseModal}  />
+              <KeplrWallet onCloseModal={onCloseModal} />
             </VStack>
           </ModalBody>
 
           <ModalFooter >
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='blue' mr={3} onClick={onCloseModal}>
               Close
             </Button>
           </ModalFooter>
@@ -40,4 +39,4 @@ function WalletModal({isOpen, onClose}) {
   )
 }
 
-export default WalletModal
+export default React.memo(WalletModal)

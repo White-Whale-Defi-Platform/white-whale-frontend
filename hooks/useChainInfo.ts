@@ -5,9 +5,10 @@ import { queryClient } from '../services/queryClient'
 
 const chainInfoQueryKey = '@chain-info'
 // import chainInfo from "components/Wallet/chainInfo.json"
-import { networkAtom } from 'state/atoms/walletAtoms'
-import { useRecoilValue } from 'recoil'
 import { useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+
 
 
 export const unsafelyReadChainInfoCache = () =>
@@ -16,7 +17,7 @@ export const unsafelyReadChainInfoCache = () =>
   | undefined
 
 export const useChains = () => {
-  const network = useRecoilValue(networkAtom)
+  const { network } = useRecoilValue(walletState)
 
   const { data = [], isLoading } = useQuery<ChainInfo[]>(
     ['chainInfo', network],
@@ -37,7 +38,6 @@ export const useChains = () => {
 }
 
 export const useChainInfo = (id = null) => {
-
 
   const chainInfo = useChains()
   

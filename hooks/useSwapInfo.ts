@@ -26,10 +26,10 @@ export const useSwapInfo = ({
   refetchInBackground,
 }: UseMultipleSwapInfoArgs) => {
   const { data: poolsListResponse } = usePoolsListQuery()
-  const { client } = useRecoilValue(walletState)
+  const { client, activeWallet } = useRecoilValue(walletState)
 
   const { data, isLoading } = useQuery<SwapInfo>(
-    `swapInfo/${poolId}`,
+    [`swapInfo/${poolId}`, client, activeWallet],
     async () => {
       const pool = poolsListResponse.poolsById[poolId]
       const swap = await getSwapInfo(pool.swap_address, client)

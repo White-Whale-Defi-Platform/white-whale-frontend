@@ -16,18 +16,17 @@ import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 import Card from '../Card';
-import WalletModal from '../Wallet/Modal/Modal';
 import Wallet from '../Wallet/Wallet';
 import DrawerLink from './DrawerLink';
 import Logo from './Logo';
 import NavbarLink from './NavbarLink';
+import WalletModal from '../Wallet/Modal/Modal';
 
 
 const Navbar = ({ }) => {
-
-  // const [selectedChain, setSelectedChain] = useState("uni-1")
   const {disconnect} = useWallet()
-  const [{ key, chainId }, setWalletState] = useRecoilState(walletState)
+  const [{ key, chainId, network, activeWallet }, setWalletState] = useRecoilState(walletState)
+  const { isOpen: isOpenModal, onOpen: onOpenModal, onClose: onCloseModal } = useDisclosure()
   const { isOpen, onOpen, onClose } = useDisclosure();
 
 
@@ -37,7 +36,9 @@ const Navbar = ({ }) => {
       address: '',
       key: null,
       client: null,
-      chainId: chainId
+      network: network,
+      chainId: chainId,
+      activeWallet: 'keplr'
     })
     disconnect()
   }
@@ -65,8 +66,6 @@ const Navbar = ({ }) => {
     <Box
       py={{ base: '4', md: '10' }}
       px={{ base: '4', md: '10' }}
-    // borderBottomWidth="2px"
-    // borderColor="brand.100"
     >
       <Flex
         justifyContent="space-between"
@@ -89,32 +88,26 @@ const Navbar = ({ }) => {
             walletName={key?.name}
             onDisconnect={resetWalletConnection}
             disconnect={disconnect}
-
+            isOpenModal={isOpenModal}
+            onOpenModal={onOpenModal}
+            onCloseModal={onCloseModal}
           />
-          {/* <SendLuna onDisconnect={resetWalletConnection} /> */}
-          <WalletModal
-            isOpen={isOpen}
-            onClose={onClose}
-            // onConnect={connectWallet}
-/>
+          <WalletModal isOpenModal={isOpenModal} onCloseModal={onCloseModal} />
         </HStack>
       </Flex>
-
       <Flex
         justify="space-between"
         align="center"
         py="4"
         display={{ base: 'flex', md: 'none' }}
       >
-        {/* <VStack width="full"> */}
-          {/* <HStack justifyContent="space-between" width="full"> */}
-
-            <Logo />
+      <Logo />
             <Wallet
               connected={Boolean(key?.name)}
               walletName={key?.name}
               onDisconnect={resetWalletConnection}
               disconnect={disconnect}
+              onOpenModal={onOpenModal}
             />
             <IconButton
               aria-label="Open drawer"
@@ -135,9 +128,6 @@ const Navbar = ({ }) => {
             >
               Open
             </IconButton>
-          {/* </HStack> */}
-
-        {/* </VStack> */}
       </Flex>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>

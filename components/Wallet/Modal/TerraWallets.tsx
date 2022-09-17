@@ -2,16 +2,19 @@ import {
   Button
 } from '@chakra-ui/react'
 import { useWallet } from "@terra-money/wallet-provider";
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useRecoilValue } from 'recoil';
 
 import useWalletConnect from '../../../hooks/useWalletConnect';
+import { activeWalletAtom } from '../../../state/atoms/activeWalletAtom';
 
-function TerraWallets() {
+function TerraWallets({onCloseModal}) {
   const {
     availableConnections,
     availableInstallations,
+    connection
   } = useWallet();
-  const {setTerraActiveAndConnect} = useWalletConnect()
+  const {setTerraActiveAndConnect} = useWalletConnect(onCloseModal)
 
   const getTerraStation = (connection) => {
     return connection.identifier === 'station'
@@ -21,6 +24,7 @@ function TerraWallets() {
           <>
             {availableConnections.filter(getTerraStation)
               .map(({ type, identifier, name, icon }) => (
+                
                 <Button colorScheme='black' key={identifier} onClick={() => setTerraActiveAndConnect(type, identifier)}>
                   <img
                     src={icon}

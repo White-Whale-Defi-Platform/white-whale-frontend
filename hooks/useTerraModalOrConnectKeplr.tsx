@@ -2,15 +2,20 @@ import { useRecoilValue } from "recoil"
 
 import { walletState } from "../state/atoms/walletAtoms"
 import { useChainInfo } from "./useChainInfo"
-import useWalletConnect from "./useWalletConnect"
+import useConnectKeplr from "./useConnectKeplr"
 
-export default function useTerraModalOrConnectKeplr (onOpen) {
-  const {setKeplr} = useWalletConnect()
-    const {chainId} = useRecoilValue(walletState)
-    let [chainInfo] = useChainInfo(chainId)
+export default function useTerraModalOrConnectKeplr (onOpenModal) {
+  const {chainId, network} = useRecoilValue(walletState)
+  let [chainInfo] = useChainInfo(chainId)
+  const {connectKeplr} = useConnectKeplr()
 
   const showTerraModalOrConnectKeplr = () => {
-    chainInfo.label === 'Terra' ? onOpen() :  setKeplr(chainId)
+    if (chainInfo?.label){
+      chainInfo.label === 'Terra' ?  onOpenModal() :  connectKeplr()
+    }else{
+      console.log('no chaininfo')
+    }
+
     return
   }
 

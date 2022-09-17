@@ -10,6 +10,7 @@ export interface Wallet {
   queryContractSmart: (address: string, queryMsg: Record<string, unknown>) => Promise<JsonObject>;
   simulate: (signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined) => Promise<number>;
   getChainId: () => Promise<String>;
+  getNetwork: () => Promise<String>;
   getBalance: (address: string, searchDenom: string) => Promise<Coin>;
   getTx: (txHash: string) => Promise<TxInfo>;
 }

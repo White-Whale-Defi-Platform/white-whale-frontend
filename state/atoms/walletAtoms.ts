@@ -23,7 +23,9 @@ type GeneratedWalletState<
     client: TClient | null
     status: WalletStatusType
     address: string,
-    chainId: string
+    chainId: string,
+    network: Network,
+    activeWallet:string
   }
 
 type CreateWalletStateArgs<TState = {}> = {
@@ -42,16 +44,19 @@ function createWalletState<TClient = any, TState = {}>({
       client: null,
       chainId: 'juno-1',
       address: '',
+      network: 'mainnet',
+      activeWallet: 'keplr',
       ...defaultState,
     },
     dangerouslyAllowMutability: true,
     effects_UNSTABLE: [
       ({ onSet, setSelf }) => {
-        const CACHE_KEY = `@wasmswap/wallet-state/type-${key}`
+        const CACHE_KEY = `@wasmswap/wallet-state/wallet-type-${key}`
 
         const savedValue = localStorage.getItem(CACHE_KEY)
-
+        console.log(savedValue)
         if (savedValue) {
+          console.log(savedValue)
           try {
             const parsedSavedState = JSON.parse(savedValue)
             if (parsedSavedState?.address) {
@@ -66,6 +71,7 @@ function createWalletState<TClient = any, TState = {}>({
 
         onSet((newValue, oldValue) => {
           const isReset = !newValue.address && (oldValue as any)?.address
+          console.log(newValue)
 
           if (isReset) {
             localStorage.removeItem(CACHE_KEY)
@@ -107,28 +113,3 @@ export const ibcWalletState = createWalletState<
 
 type Network = 'testnet' | 'mainnet'
 
-// export const networkAtom = atom<Network>({
-//   key: 'network',
-//   default: 'mainnet',
-// })
-export const networkAtom = atom<Network>({
-  key: 'network',
-  default: 'mainnet',
-  effects_UNSTABLE: [
-    ({ onSet, setSelf }) => {
-
-      const network = localStorage.getItem('network') as Network
-      setSelf(network || 'mainnet')
-
-      onSet((newValue, oldValue) => {
-        const isReset = !!!newValue
-
-        if (isReset) {
-          localStorage.removeItem('network')
-        } else {
-          localStorage.setItem('network', String(newValue))
-        }
-      })
-    },
-  ]
-})

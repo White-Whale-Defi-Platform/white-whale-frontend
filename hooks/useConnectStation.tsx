@@ -2,14 +2,14 @@ import { LCDClient } from '@terra-money/terra.js';
 import { useConnectedWallet } from "@terra-money/wallet-provider"
 import { useRecoilValue,useSetRecoilState } from "recoil"
 
-import { networkAtom, walletState } from "../state/atoms/walletAtoms"
+import { walletState } from "../state/atoms/walletAtoms"
 import { WalletStatusType } from "../state/atoms/walletAtoms"
 import { TerraStationWallet } from "../util/wallet-adapters/terraStationWallet"
 
 export default function useConnectStation() {
   const setWalletState = useSetRecoilState(walletState)
   const connectedWallet = useConnectedWallet()
-  const network = useRecoilValue(networkAtom)
+   const { network, activeWallet } = useRecoilValue(walletState)
 
   const connectStation = (chainId: string) => {
     if (window && !window?.terraWallets){
@@ -21,13 +21,15 @@ export default function useConnectStation() {
       chainID: "pisco-1",
     })
     const mainnet = new LCDClient({
-      URL: "https://terra-api.polkachu.com",
+      URL: "https://phoenix-lcd.terra.dev",
       chainID: "phoenix-1"
     })
+    if(connectedWallet){
     const wasmChainClient = new TerraStationWallet(
       connectedWallet,
       // This should be driven from the chainInfo, however the REST endpoint defined has CORS restrictions
-      network === 'mainnet' ? mainnet : testnet
+      network === 'mainnet' ? mainnet : testnet,
+      network
       /*
       new LCDClient({
         URL: chainInfo.rest,
@@ -36,11 +38,16 @@ export default function useConnectStation() {
       */
     )
     setWalletState({
+      key:null,
       status: WalletStatusType.connected,
       address: wasmChainClient.client?.terraAddress,
       chainId: chainId,
-      client: wasmChainClient
+      network: network,
+      client: wasmChainClient,
+      activeWallet: 'station'
     })
+    }
+    
   }
 
   return {connectStation}

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
-import { networkAtom } from 'state/atoms/walletAtoms'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { CW20 } from '../services/cw20'
@@ -76,15 +75,14 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, status, client } = useRecoilValue(walletState)
+  const { address, network, client, activeWallet } = useRecoilValue(walletState)
 
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
-  const network = useRecoilValue(networkAtom)
 
 
   const { data: balance = 0, isLoading} = useQuery(
-    ['tokenBalance', tokenSymbol, address, network],
+    ['tokenBalance', tokenSymbol, address, network, activeWallet],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
         return await fetchTokenBalance({
@@ -95,7 +93,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: !!tokenSymbol && !!client && (!!tokenInfo || !!ibcAssetInfo),
+      enabled: true,
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
@@ -107,11 +105,9 @@ export const useTokenBalance = (tokenSymbol: string) => {
 
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
-  const { address, status, client , chainId} = useRecoilValue(walletState)
+  const { address, status, client , chainId, network} = useRecoilValue(walletState)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
-  const network = useRecoilValue(networkAtom)
-
 
   const queryKey = useMemo(
     () => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
