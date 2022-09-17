@@ -1,10 +1,11 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { protectAgainstNaN } from 'junoblocks'
+
+import {Wallet} from "../../util/wallet-adapters";
 
 type QueryLiquidityBalanceArgs = {
   address: string
   tokenAddress: string
-  client: CosmWasmClient
+  client: Wallet
 }
 
 export const queryLiquidityBalance = async ({

@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 import { useRecoilValue } from 'recoil'
 
-import { useCosmWasmClient } from '../hooks/useCosmWasmClient'
 import { walletState } from '../state/atoms/walletAtoms'
 import {
   __POOL_REWARDS_ENABLED__,
@@ -229,7 +228,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   }, [poolId, poolsListResponse])
 
 
-  
+
   const [poolResponse] = useQueryMultiplePoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,

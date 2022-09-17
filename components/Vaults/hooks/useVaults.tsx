@@ -2,7 +2,6 @@
 import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { networkAtom } from 'state/atoms/walletAtoms'
 import { useEffect, useMemo } from 'react'
 
 export type TokenInfo = {
@@ -57,8 +56,7 @@ type useVaultDepostProps = {
 
 export const useVaultDepost = (lpToken: string) => {
 
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, address, network } = useRecoilValue(walletState)
 
     const { data: balance, isLoading } = useQuery(
         ['@vaults/deposits', lpToken, chainId, network],
@@ -78,8 +76,7 @@ export const useVaultDepost = (lpToken: string) => {
 }
 export const useVaultMultiDepost = (lpTokens: string[]) => {
 
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, address, network } = useRecoilValue(walletState)
 
     const { data: balance, isLoading } = useQuery(
         ['@vaults/deposits', lpTokens, chainId, network],
@@ -106,8 +103,7 @@ export const useVaultMultiDepost = (lpTokens: string[]) => {
 
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, address, network } = useRecoilValue(walletState)
 
     const { data: vaults, isLoading } = useQuery<VaultsResponse>(
         ['@vaults/list', chainId, network],

@@ -1,13 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  CreateTxFailed, Timeout, TxFailed,
-  TxUnspecifiedError, UserDenied
-} from '@terra-money/wallet-provider'
-import { useMutation, useQuery , useQueryClient} from 'react-query'
-import { directTokenSwap } from 'services/swap'
-import useDebounceValue from 'hooks/useDebounceValue'
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMutation, useQuery , useQueryClient} from 'react-query'
 import { executeRemoveLiquidity } from 'services/liquidity'
 
 export enum TxStep {
@@ -124,7 +119,7 @@ export const useTransaction = ({
     }
   )
 
-  
+
 
   const { mutate } = useMutation(
     (data: any) => {
@@ -180,7 +175,7 @@ export const useTransaction = ({
         queryClient.invalidateQueries(['@pool-liquidity','multipleTokenBalances', 'tokenBalance'])
         onBroadcasting?.(data.transactionHash)
         toast({
-          title: 'Withdraw Liquidity Success.', 
+          title: 'Withdraw Liquidity Success.',
           description:  <Finder txHash={data.transactionHash} chainId={client.chainId} >  </Finder> ,
           status: 'success',
           duration: 9000,
@@ -199,7 +194,7 @@ const { data: txInfo } = useQuery(
       return
     }
 
-    return client.queryClient.tx.getTx(txHash)
+    return client.getTx(txHash)
   },
   {
     enabled: txHash != null,

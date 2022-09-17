@@ -7,8 +7,8 @@ export async function querySwapInfo({ context: { client }, swap_address }) {
   return {
     ...swap,
     swap_address,
-    token1_reserve: Number(asset1.amount),
-    token2_reserve: Number(asset2.amount),
-    lp_token_supply: Number(swap.total_share),
+    token1_reserve: Number(asset1?.amount),
+    token2_reserve: Number(asset2?.amount),
+    lp_token_supply: Number(swap?.total_share),
   }
 }

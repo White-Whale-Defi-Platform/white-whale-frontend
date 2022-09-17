@@ -2,6 +2,7 @@ import { useQuery } from 'react-query'
 
 export type IBCAssetInfo = {
   id: string
+  address_prefix: string,
   name: string
   symbol: string
   chain_id: string

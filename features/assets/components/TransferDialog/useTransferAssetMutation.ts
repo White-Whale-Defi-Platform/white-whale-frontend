@@ -1,18 +1,18 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import {
   Coin,
-  DeliverTxResponse,
   MsgTransferEncodeObject,
 } from '@cosmjs/stargate'
+import { bech32 } from 'bech32';
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { Height } from 'cosmjs-types/ibc/core/client/v1/client'
 import { IBCAssetInfo } from 'hooks/useIbcAssetList'
 import Long from 'long'
 import { useMutation } from 'react-query'
 import { useRecoilValue } from 'recoil'
-import { ibcWalletState, walletState } from 'state/atoms/walletAtoms'
+import { walletState } from 'state/atoms/walletAtoms'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
+import { TxResponse,Wallet } from "../../../../util/wallet-adapters";
 import { TransactionKind } from './types'
 
 type UseTransferAssetMutationArgs = {
@@ -31,8 +31,8 @@ const sendIbcTokens = (
   /** timeout in seconds */
   timeoutTimestamp: number | undefined,
   memo = '',
-  client: SigningCosmWasmClient
-): Promise<DeliverTxResponse> => {
+  client: Wallet
+): Promise<TxResponse> => {
   const timeoutTimestampNanoseconds = timeoutTimestamp
     ? Long.fromNumber(timeoutTimestamp).multiply(1_000_000_000)
     : undefined
@@ -48,7 +48,7 @@ const sendIbcTokens = (
       timeoutTimestamp: timeoutTimestampNanoseconds,
     }),
   }
-  return client.signAndBroadcast(senderAddress, [transferMsg], 'auto', memo)
+  return client.post(senderAddress, [transferMsg], memo)
 }
 
 export const useTransferAssetMutation = ({
@@ -58,14 +58,15 @@ export const useTransferAssetMutation = ({
   ...mutationArgs
 }: UseTransferAssetMutationArgs) => {
   const { address, client } = useRecoilValue(walletState)
-  const { address: ibcAddress, client: ibcClient } =
-    useRecoilValue(ibcWalletState)
+
+  const decodedAddress = bech32.decode(address);
+  const ibcAddress = bech32.encode(tokenInfo.address_prefix, decodedAddress.words);
 
   return useMutation(async () => {
     const timeout = Math.floor(new Date().getTime() / 1000) + 600
 
     if (transactionKind == 'deposit') {
-      return await ibcClient.sendIbcTokens(
+      return await sendIbcTokens(
         ibcAddress,
         address,
         {
@@ -79,7 +80,8 @@ export const useTransferAssetMutation = ({
         tokenInfo.channel,
         undefined,
         timeout,
-        'auto'
+        '',
+        client
       )
     }
 
