@@ -92,11 +92,11 @@ const NewPositionForm: FC<Props> = ({
     const buttonLabel = useMemo(() => {
 
         if (!connected)
-            return 'Connect wallet'
+            return 'Connect Wallet'
         else if (!tokenB?.tokenSymbol)
-            return 'Select token'
+            return 'Select Token'
         else if (!!!amountA?.amount)
-            return 'Enter amount'
+            return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
@@ -160,7 +160,7 @@ const NewPositionForm: FC<Props> = ({
                     {tokanAloading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
-                        <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                        <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(6)}</Text>
                     )}
                 </HStack>
 

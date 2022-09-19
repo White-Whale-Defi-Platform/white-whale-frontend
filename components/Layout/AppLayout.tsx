@@ -21,7 +21,7 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
       direction="column"
       backgroundColor="transparent"
       height="100vh"
-      paddingBottom={8}
+      // paddingBottom={8}
     >
       <RadialGradient />
       <Navbar />

@@ -209,17 +209,7 @@ export const useTransaction = ({
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
-        queryClient.invalidateQueries(["@vaults/deposits"])
-        // onSuccess(data.transactionHash)
-        // toast({
-        //   title: 'Deposit to Vault Success.',
-        //   description: <Finder txHash={data.transactionHash} chainId={client.chainId} > </Finder>,
-        //   status: 'success',
-        //   duration: 9000,
-        //   position: "top-right",
-        //   isClosable: true,
-        // })
-
+        queryClient.invalidateQueries(["vaultsInfo", "vaultsDposits", "vaultsDeposit", 'multipleTokenBalances', 'tokenBalance'])
       },
     },
   )

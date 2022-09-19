@@ -13,12 +13,14 @@ import { Switch, FormControl, FormLabel } from '@chakra-ui/react'
 import { networkAtom } from 'state/atoms/walletAtoms'
 import { useRecoilState } from 'recoil'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useRouter } from 'next/router'
 
 const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
     const [network, setNetwork] = useRecoilState(networkAtom)
     const queryClient = useQueryClient()
+    const router = useRouter()
 
     return (
         <Popover placement='top-end'
@@ -103,6 +105,8 @@ const walletSelect = ({ denom, chainList = [], onChange, connected }) => {
                                         onChange(chain); 
                                         queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
                                         onClose() 
+                                        const url = location?.pathname?.split("/")?.[1]
+                                        router.replace(`/${url}`)
                                     }}
                                 >
                                     <HStack>

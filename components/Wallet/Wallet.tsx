@@ -127,7 +127,7 @@ const Wallet: any = ({ walletName, connected, onConnect, onDisconnect }) => {
           {isLoading ? (
             <Spinner color='white' size='xs' />
           ) : (
-            <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(1)}</Text>
+            <Text fontSize="16px" display={['none', 'flex']}>{balance?.toFixed(2)}</Text>
           )}
           
           <WalletSelect

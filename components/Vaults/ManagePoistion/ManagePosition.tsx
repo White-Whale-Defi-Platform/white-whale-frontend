@@ -12,31 +12,33 @@ import { useTokenBalance } from 'hooks/useTokenBalance'
 
 const ManagePosition = () => {
     const router: NextRouter = useRouter()
-    const { vaults, isLoading } = useVault()
+    const { vaults, isLoading, refetch: vaultsRefetch } = useVault()
     const params = new URLSearchParams(location.search)
     const { chainId, key, address } = useRecoilValue(walletState)
     const vaultId = params.get('vault') || 'JUNO'
 
     const vault = useMemo(() => vaults?.vaults.find(v => v.vault_assets?.symbol === vaultId), [vaults, vaultId])
+    const { balance: lpTokenBalance, isLoading: lpTokenBalanceLoading, refetch: lpRefetch } = useVaultDepost(vault?.lp_token, vault?.vault_address, vault?.vault_assets)
+    const { balance: tokenBalance, isLoading: tokenBalanceLoading, refetch : tokenRefetch} = useTokenBalance(vault?.vault_assets?.symbol)
 
-    console.log({vaults})
-
-    
-    const { balance: lpTokenBalance, isLoading: lpTokenBalanceLoading } = useVaultDepost(vault?.lp_token)
-    const { balance: tokenBalance, isLoading: tokenBalanceLoading } = useTokenBalance(vault?.vault_assets?.symbol)
+    const refetch = () => {
+        vaultsRefetch()
+        lpRefetch()
+        tokenRefetch()
+    }
 
     return (
         <VStack width={{ base: '100%', md: '700px' }} alignItems="center" padding={5} margin="auto">
             <HStack justifyContent="space-between" width="full" paddingY={5} paddingX={{ base: 4 }} >
                 <IconButton
                     variant="unstyled"
-                    color="#7A7A7A"
+                    color="white"
                     fontSize="28px"
                     aria-label='go back'
                     icon={<ArrowBackIcon />}
                     onClick={() => router.back()}
                 />
-                <Text as="h2" fontSize="24" fontWeight="900">Manage Positiion</Text>
+                <Text as="h2" fontSize="24" fontWeight="900">Manage Position</Text>
             </HStack>
 
             <Box
@@ -71,6 +73,7 @@ const ManagePosition = () => {
                                             isLoading={tokenBalanceLoading}
                                             balance={tokenBalance}
                                             defaultToken={vault?.vault_assets?.symbol}
+                                            refetch={refetch}
                                         />
                                     )
                                 }
@@ -85,8 +88,10 @@ const ManagePosition = () => {
                                             lpToken={vault?.lp_token}
                                             connected={Boolean(key?.name)}
                                             isLoading={lpTokenBalanceLoading}
-                                            balance={lpTokenBalance}
+                                            balance={lpTokenBalance?.lpBalance}
+                                            assetBlance={lpTokenBalance?.underlyingAsset}
                                             defaultToken={vault?.vault_assets?.symbol}
+                                            refetch={refetch}
                                         />
                                     )
                                 }

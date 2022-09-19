@@ -19,6 +19,7 @@ type Props = {
     edgeTokenList?: string[]
     showList?: boolean
     vaultAddress: string
+    refetch: () => void
 }
 
 const DepositForm = ({
@@ -28,7 +29,8 @@ const DepositForm = ({
     defaultToken,
     edgeTokenList = [],
     showList = false,
-    vaultAddress
+    vaultAddress,
+    refetch
 }: Props) => {
 
     const router = useRouter()
@@ -42,6 +44,7 @@ const DepositForm = ({
     const toast = useToast()
     const { chainId } = useRecoilValue(walletState)
     const onSuccess = useCallback((txHash) => {
+        refetch?.()
         toast({
             title: 'Deposit to Vault Success.',
             description: <Finder txHash={txHash} chainId={chainId} > </Finder>,
@@ -63,11 +66,11 @@ const DepositForm = ({
     const buttonLabel = useMemo(() => {
 
         if (!connected)
-            return 'Connect wallet'
+            return 'Connect Wallet'
         // else if (!tokenB?.tokenSymbol)
         //     return 'Select token'
         else if (!!!token?.amount)
-            return 'Enter amount'
+            return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
@@ -104,7 +107,7 @@ const DepositForm = ({
                     {isLoading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
-                        <Text fontSize="14" fontWeight="700">{balance}</Text>
+                        <Text fontSize="14" fontWeight="700">{balance?.toFixed(6)}</Text>
                     )}
 
                 </HStack>
@@ -112,8 +115,8 @@ const DepositForm = ({
                     value={token}
                     token={token}
                     disabled={false}
-                    minMax={false}
-                    balance={0}
+                    minMax={true}
+                    balance={balance}
                     showList={showList}
                     edgeTokenList={edgeTokenList}
                     onChange={(value) => setToken(value)}

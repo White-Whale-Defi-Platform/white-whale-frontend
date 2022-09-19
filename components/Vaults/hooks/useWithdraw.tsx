@@ -42,7 +42,7 @@ const useWithdraw = ({ vaultAddress, lpToken,  token , onSuccess}: DepostProps) 
     }, [amount, tokenInfo])
 
     const tx = useTransaction({
-        isNative : tokenInfo?.native,
+        isNative : false,
         denom: tokenInfo?.denom,
         contractAddress: lpToken,
         enabled: !!encodedMsgs,

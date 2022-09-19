@@ -83,7 +83,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
   const network = useRecoilValue(networkAtom)
 
 
-  const { data: balance = 0, isLoading} = useQuery(
+  const { data: balance = 0, isLoading, refetch} = useQuery(
     ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
@@ -102,7 +102,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
     }
   )
 
-  return { balance, isLoading : isLoading }
+  return { balance, isLoading : isLoading , refetch}
 }
 
 

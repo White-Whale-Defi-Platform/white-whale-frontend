@@ -26,17 +26,17 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
           {/* <ErrorBoundary> */}
-            <ChakraProvider theme={theme}>
-              <CSSReset />
-              {
-                !mounted ? <AppLoading /> : (
-                  <AppLayout >
-                    <Component {...pageProps} />
-                  </AppLayout>
-                )
-              }
-            </ChakraProvider>
-            <Toaster position="top-right" toastOptions={{ duration: 10000 }} />
+          <ChakraProvider theme={theme}>
+            <CSSReset />
+            {
+              !mounted ? <AppLoading /> : (
+                <AppLayout >
+                  <Component {...pageProps} />
+                </AppLayout>
+              )
+            }
+          </ChakraProvider>
+          <Toaster position="top-right" toastOptions={{ duration: 10000 }} />
           {/* </ErrorBoundary> */}
         </QueryClientProvider>
       </RecoilRoot>
