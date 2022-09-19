@@ -2,7 +2,6 @@
 import { useQuery, useQueries } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { networkAtom } from 'state/atoms/walletAtoms'
 import { useEffect, useMemo } from 'react'
 import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
 import { fromChainAmount, formatPrice } from 'libs/num'
@@ -86,8 +85,7 @@ type useVaultDepostProps = {
 
 
 export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, address , network} = useRecoilValue(walletState)
     const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
     const { data: balance, isLoading , refetch} = useQuery(
@@ -106,8 +104,7 @@ export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
 }
 export const useVaultMultiDepost = (lpTokens: any[]) => {
 
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, address, network } = useRecoilValue(walletState)
     const [getTokenDollarValue] =
         useGetTokenDollarValueQuery()
 
@@ -130,8 +127,7 @@ export const useVaultMultiDepost = (lpTokens: any[]) => {
 
 }
 export const useVaulTotal = (lpTokenIds: any[]) => {
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, address, network } = useRecoilValue(walletState)
     const [getTokenDollarValue] =
         useGetTokenDollarValueQuery()
 
@@ -157,8 +153,7 @@ export const useVaulTotal = (lpTokenIds: any[]) => {
 
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
-    const { chainId, client, address } = useRecoilValue(walletState)
-    const network = useRecoilValue(networkAtom)
+    const { chainId, client, network } = useRecoilValue(walletState)
     const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
 
