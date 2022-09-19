@@ -9,7 +9,6 @@ import {
 import { useQueryClient } from 'react-query'
 import { BsCircleFill } from 'react-icons/bs'
 
-
 function ChainItem({chain, index, onChange, onClose, chainList}) {
 
   const queryClient = useQueryClient()

@@ -93,7 +93,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: true,
+      enabled: !!tokenSymbol && !!client && (!!tokenInfo || !!ibcAssetInfo),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,

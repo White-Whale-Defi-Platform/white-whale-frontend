@@ -1,32 +1,26 @@
+import React, { useCallback, useMemo } from 'react'
+import { useRecoilState} from 'recoil'
 import {
   Box,
   Button,
-  Divider,
-  useDisclosure} from "@chakra-ui/react";
-import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
-import { useChainInfo, useChains } from 'hooks/useChainInfo';
-import React, { useCallback, useEffect, useMemo } from 'react'
-import { useRecoilState} from 'recoil'
+  Divider} from "@chakra-ui/react";
+import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { useChainInfo} from 'hooks/useChainInfo';
+
 import { walletState} from 'state/atoms/walletAtoms'
+import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr';
+import Card from 'components/Card';
+import WalletIcon from "components/icons/WalletIcon";
+import ConnectedWalletWithDisconnect from "components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect";
+import ChainSelectWithBalance from "components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance";
+import Select from 'components/Wallet/ChainSelect/Select';
 
-import useTerraModalOrConnectKeplr from '../../hooks/useTerraModalOrConnectKeplr';
-import useWalletConnect from '../../hooks/useWalletConnect';
-import Card from '../Card';
-import WalletIcon from "../icons/WalletIcon";
-import ConnectedWalletWithDisconnect from "./ConnectedWallet/ConnectedWalletWithDisconnect";
-import WalletSelectWithBalance from "./ConnectedWallet/WalletSelectWithBalance";
-import Select from './Select';
-
-const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpenModal}) => {
+const Wallet: any = ({ connected, onDisconnect, onOpenModal}) => {
   const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)
 
   const connectedWallet = useConnectedWallet()
-  const chains = useChains()
   let [chainInfo] = useChainInfo(currentWalletState.chainId)
-  const {connectKeplrMemo, connectStation} = useWalletConnect(onCloseModal)
   const {showTerraModalOrConnectKeplr} = useTerraModalOrConnectKeplr(onOpenModal)
-
-  const lcd = useLCDClient()
 
   const denom = useMemo(() => {
   if (!chainInfo) return
@@ -36,18 +30,9 @@ const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpe
 
 
   const onChainChange = useCallback((chain) => {
-    // should *not* need to disconnect on chain change,
     onDisconnect()
     setCurrentWalletState({...currentWalletState, chainId: chain.chainId})
   }, [currentWalletState.chainId, chainInfo])
-
-  useEffect(() => {
-    currentWalletState.activeWallet === 'station' && connectStation(currentWalletState.chainId)
-  }, [currentWalletState.chainId, currentWalletState.activeWallet, connectedWallet])
-
-  // useEffect(() => {
-  //   chainInfo && setCurrentWalletState({...currentWalletState, chainId: chainInfo.chainId})
-  // }, [currentWalletState.network])
 
   if (!connected && !connectedWallet) {
     return (
@@ -55,9 +40,7 @@ const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpe
         <Select
           connected={connected}
           denom={denom?.coinDenom}
-          chainList={chains}
           onChange={onChainChange}
-          onDisconnect={onDisconnect}
         />
         <Button
           variant="outline"
@@ -70,7 +53,6 @@ const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpe
           <WalletIcon />
           Connect wallet
         </Button>
-        {/* <WalletModal isOpenModal={isOpenModal} onCloseModal={onCloseModal} /> */}
       </>
     )
   }
@@ -78,7 +60,7 @@ const Wallet: any = ({ connected, onDisconnect, isOpenModal, onCloseModal, onOpe
   return (
     <>
       <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
-        <WalletSelectWithBalance connected={connected} denom={denom} onChainChange={onChainChange} />
+        <ChainSelectWithBalance connected={connected} denom={denom} onChainChange={onChainChange} />
         <Box display={{ base: "none", md: "block" }}>
           <Divider orientation="vertical" borderColor="rgba(255, 255, 255, 0.1);" />
         </Box>

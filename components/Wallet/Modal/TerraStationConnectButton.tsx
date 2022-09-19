@@ -1,31 +1,23 @@
-import {
-  Button
-} from '@chakra-ui/react'
+import React from 'react'
+import { Button } from '@chakra-ui/react'
 import { useWallet } from "@terra-money/wallet-provider";
-import React, { useCallback } from 'react'
-import { useRecoilValue } from 'recoil';
 
-import useWalletConnect from '../../../hooks/useWalletConnect';
-import { activeWalletAtom } from '../../../state/atoms/activeWalletAtom';
+import { useTerraStation } from 'hooks/useTerraStation';
 
-function TerraWallets({onCloseModal}) {
+function TerraStationConnectButton({onCloseModal}) {
   const {
     availableConnections,
     availableInstallations,
-    connection
   } = useWallet();
-  const {setTerraActiveAndConnect} = useWalletConnect(onCloseModal)
+  const {connectTerraAndCloseModal, filterForStation} = useTerraStation(onCloseModal)
 
-  const getTerraStation = (connection) => {
-    return connection.identifier === 'station'
-  }
 
   return (
           <>
-            {availableConnections.filter(getTerraStation)
+            {availableConnections.filter(filterForStation)
               .map(({ type, identifier, name, icon }) => (
-                
-                <Button colorScheme='black' key={identifier} onClick={() => setTerraActiveAndConnect(type, identifier)}>
+
+                <Button colorScheme='black' key={identifier} onClick={() => connectTerraAndCloseModal(type, identifier)}>
                   <img
                     src={icon}
                     alt={name}
@@ -34,7 +26,7 @@ function TerraWallets({onCloseModal}) {
                 Connect {name} [{identifier}]
                 </Button>
             ))}
-            {availableInstallations.filter(getTerraStation)
+            {availableInstallations.filter(filterForStation)
               .map(({ identifier, name, icon, url }) => (
                 <Button colorScheme="black" key={identifier} onClick={() => (window.location.href = url)}>
                   <img
@@ -49,4 +41,4 @@ function TerraWallets({onCloseModal}) {
   )
 }
 
-export default TerraWallets
+export default TerraStationConnectButton

@@ -1,9 +1,11 @@
 import React from 'react'
-import { Text } from '@chakra-ui/react'
-import { truncate } from '../../../util/truncate'
-import { walletState } from '../../../state/atoms/walletAtoms'
 import { useRecoilValue } from 'recoil'
+import { Text } from '@chakra-ui/react'
 import { useConnectedWallet } from '@terra-money/wallet-provider'
+
+import { truncate } from 'util/truncate'
+import { walletState } from 'state/atoms/walletAtoms'
+
 function TruncatedAddress({connected}) {
   const {address} = useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()

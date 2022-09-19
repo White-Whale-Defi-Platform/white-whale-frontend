@@ -1,9 +1,11 @@
 import React from 'react'
-import { HStack, Button, useToast } from '@chakra-ui/react'
-import ConnectedWalletIcon from './ConnectedWalletIcon'
-import TruncatedAddress from './TruncatedAddress'
 import { useRecoilValue } from 'recoil'
-import { walletState } from '../../../state/atoms/walletAtoms'
+import { HStack, Button, useToast } from '@chakra-ui/react'
+
+import ConnectedWalletIcon from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWalletIcon'
+import TruncatedAddress from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/TruncatedAddress'
+import { walletState } from 'state/atoms/walletAtoms'
+
 function ConnectedWallet({connected}) {
     const toast = useToast()
     const {address} = useRecoilValue(walletState)

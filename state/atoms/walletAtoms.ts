@@ -52,11 +52,8 @@ function createWalletState<TClient = any, TState = {}>({
     effects_UNSTABLE: [
       ({ onSet, setSelf }) => {
         const CACHE_KEY = `@wasmswap/wallet-state/wallet-type-${key}`
-
         const savedValue = localStorage.getItem(CACHE_KEY)
-        console.log(savedValue)
         if (savedValue) {
-          console.log(savedValue)
           try {
             const parsedSavedState = JSON.parse(savedValue)
             if (parsedSavedState?.address) {
@@ -71,7 +68,9 @@ function createWalletState<TClient = any, TState = {}>({
 
         onSet((newValue, oldValue) => {
           const isReset = !newValue.address && (oldValue as any)?.address
-          console.log(newValue)
+          // when changed, log old and new value
+          // console.log('newValue', newValue)
+          // console.log('oldValue', oldValue)
 
           if (isReset) {
             localStorage.removeItem(CACHE_KEY)
@@ -112,4 +111,3 @@ export const ibcWalletState = createWalletState<
 })
 
 type Network = 'testnet' | 'mainnet'
-

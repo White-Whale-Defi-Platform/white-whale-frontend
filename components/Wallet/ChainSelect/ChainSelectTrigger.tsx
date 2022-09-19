@@ -1,9 +1,10 @@
-import { useConnectedWallet } from '@terra-money/wallet-provider'
 import React from 'react'
 import { HStack, Button, PopoverTrigger, Text } from '@chakra-ui/react'
-import ChevronDownIcon from '../../../icons/ChevronDownIcon'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 
-function WalletSelectTrigger({connected, denom}) {
+import ChevronDownIcon from '../../icons/ChevronDownIcon'
+
+function ChainSelectTrigger({connected, denom}) {
   const connectedWallet = useConnectedWallet()
   return (
     <PopoverTrigger>
@@ -35,4 +36,4 @@ function WalletSelectTrigger({connected, denom}) {
   )
 }
 
-export default WalletSelectTrigger
+export default ChainSelectTrigger

@@ -1,15 +1,14 @@
 import { GasPrice } from '@cosmjs/stargate';
-import { useConnectedWallet, useWallet } from "@terra-money/wallet-provider"
-import { useCallback } from 'react';
 import { useRecoilState } from "recoil"
+import { useConnectedWallet, useWallet } from "@terra-money/wallet-provider"
 
-import {  walletState, WalletStatusType } from "../state/atoms/walletAtoms"
-import { OfflineSigningWallet } from '../util/wallet-adapters';
-import { useChainInfo } from "./useChainInfo"
+import {  walletState, WalletStatusType } from "state/atoms/walletAtoms"
+import { OfflineSigningWallet } from 'util/wallet-adapters';
+import { useChainInfo } from "hooks/useChainInfo"
 
 export default function useConnectKeplr() {
-  const [{chainId, network}, setWalletState] = useRecoilState(walletState)
-  let [chainInfo] = useChainInfo(chainId)
+  const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)
+  let [chainInfo] = useChainInfo(currentWalletState.chainId)
   const connectedWallet = useConnectedWallet()
   const {disconnect} = useWallet()
 
@@ -25,25 +24,25 @@ export default function useConnectKeplr() {
     try {
       if(chainInfo !== undefined){
         await window.keplr?.experimentalSuggestChain(chainInfo)
-        await window.keplr.enable(chainId)
-        const offlineSigner = await window.getOfflineSignerAuto(chainId)
+        await window.keplr.enable(currentWalletState.chainId)
+        const offlineSigner = await window.getOfflineSignerAuto(currentWalletState.chainId)
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           chainInfo.rpc,
           offlineSigner,
-          network,
+          currentWalletState.network,
           {
             gasPrice: GasPrice.fromString(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`)
           }
       )
         const [{ address }] = await offlineSigner.getAccounts()
-        const key = await window.keplr.getKey(chainId)
+        const key = await window.keplr.getKey(currentWalletState.chainId)
         /* successfully update the wallet state */
-      setWalletState({
+      setCurrentWalletState({
         key,
         address: address,
         client: wasmChainClient,
-        chainId: chainId,
-        network: network,
+        chainId: currentWalletState.chainId,
+        network: currentWalletState.network,
         status: WalletStatusType.connected,
         activeWallet:'keplr'
       })
@@ -53,9 +52,11 @@ export default function useConnectKeplr() {
     }
   }
 
-  const connectKeplrMemo = useCallback(() => {
-    connectKeplr(chainId)
-  }, [chainId, network])
+  const setKeplrAndConnect = () => {
+    setCurrentWalletState({...currentWalletState, activeWallet: 'keplr'})
+    localStorage.removeItem('__terra_extension_router_session__')
+    connectKeplr()
+  }
 
-  return {connectKeplr, connectKeplrMemo}
+  return {connectKeplr, setKeplrAndConnect}
 }
