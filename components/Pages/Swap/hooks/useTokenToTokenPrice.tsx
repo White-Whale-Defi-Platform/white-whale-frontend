@@ -1,13 +1,11 @@
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useQuery } from 'react-query'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
-
-import { useCosmWasmClient } from 'hooks/useCosmWasmClient'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import { TokenInfo } from 'queries/usePoolsListQuery'
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil';
 import { walletState } from 'state/atoms/walletAtoms';
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
 
 type UseTokenPairsPricesArgs = {
   tokenASymbol: TokenInfo['symbol']
@@ -24,7 +22,6 @@ export const useTokenToTokenPriceQuery = ({
   enabled = true,
   refetchInBackground,
 }: UseTokenPairsPricesArgs) => {
-  // const client = useCosmWasmClient()
   const { client } = useRecoilValue(walletState)
 
   const tokenA = useTokenInfo(tokenASymbol)

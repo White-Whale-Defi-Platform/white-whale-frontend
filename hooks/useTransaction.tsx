@@ -1,14 +1,10 @@
+import { useToast } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  CreateTxFailed, Timeout, TxFailed,
-  TxUnspecifiedError, UserDenied
-} from '@terra-money/wallet-provider'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+
+import Finder from '../components/Finder'
 import { directTokenSwap } from '../services/swap'
 import useDebounceValue from './useDebounceValue'
-import { useToast } from '@chakra-ui/react'
-import Finder from '../components/Finder'
-import { HStack } from '@chakra-ui/react'
 
 export enum TxStep {
   /**
@@ -193,7 +189,7 @@ export const useTransaction = ({
         queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',
-          description: <Finder txHash={data.transactionHash} chainId={client.chainId} > From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
+          description: <Finder txHash={data.transactionHash} chainId={client.chainId}> From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
           status: 'success',
           duration: 9000,
           position: "top-right",
@@ -211,7 +207,7 @@ export const useTransaction = ({
         return
       }
 
-      return client.queryClient.tx.getTx(txHash)
+      return client.getTx(txHash)
     },
     {
       enabled: txHash != null,

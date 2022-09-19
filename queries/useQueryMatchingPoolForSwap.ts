@@ -1,6 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
 
 import { useBaseTokenInfo } from '../hooks/useTokenInfo'
 import {

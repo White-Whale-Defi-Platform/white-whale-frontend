@@ -1,19 +1,22 @@
 import { Button, HStack, Text, VStack, Spinner, Tooltip, Box } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
-import { FC, useEffect, useMemo } from 'react';
-import { Controller, useForm } from "react-hook-form";
-import { TokenItemState } from '../ManageLiquidity/lpAtoms';
+import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TxStep } from 'hooks/useTransaction';
-import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
 import { fromChainAmount } from "libs/num";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useTokenBalance } from 'hooks/useTokenBalance'
+// import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { FC, useEffect, useMemo } from 'react';
+import { Controller, useForm } from "react-hook-form";
+
+import { WalletStatusType } from '../../../state/atoms/walletAtoms';
+import { TokenItemState } from '../ManageLiquidity/lpAtoms';
+
 
 
 type Props = {
-    connected: boolean;
+    connected: WalletStatusType;
     tokenA: TokenItemState;
     tokenB: TokenItemState;
     tx: any

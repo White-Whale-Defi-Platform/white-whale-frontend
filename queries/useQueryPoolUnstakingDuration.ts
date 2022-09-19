@@ -1,7 +1,8 @@
 import { useQuery } from 'react-query'
+import {useRecoilValue} from "recoil";
 
-import { useCosmWasmClient } from '../hooks/useCosmWasmClient'
 import { getUnstakingDuration } from '../services/staking'
+import {walletState} from "../state/atoms/walletAtoms";
 import { PoolEntityType, usePoolFromListQueryById } from './usePoolsListQuery'
 
 type UseQueryPoolUnstakingDurationArgs = {
@@ -12,7 +13,7 @@ export const useQueryPoolUnstakingDuration = ({
   poolId,
 }: UseQueryPoolUnstakingDurationArgs) => {
   const [pool] = usePoolFromListQueryById({ poolId })
-  const client = useCosmWasmClient()
+  const { client } = useRecoilValue(walletState)
   return useQuery(
     `@unstaking-duration/${poolId}`,
     async () => {

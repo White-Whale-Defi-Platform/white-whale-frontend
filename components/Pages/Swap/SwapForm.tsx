@@ -1,22 +1,23 @@
-import { Button, HStack, IconButton, Text, VStack, Hide, Show, Box, Spinner } from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { Box, Button, Hide, HStack, IconButton, Show, Spinner,Text, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput';
 import DoubleArrowsIcon from "components/icons/DoubleArrowsIcon";
-import { useEffect, FC, useMemo, Fragment } from 'react';
-import { Controller, useForm } from "react-hook-form";
-import { useMultipleTokenBalance } from 'hooks/useTokenBalance';
-import { TxStep } from 'hooks/useTransaction';
-import { fromChainAmount } from "libs/num";
-import { TokenItemState } from './swapAtoms';
-import { Simulated } from './hooks/useSimulate'
-import { num } from 'libs/num'
-import { Tooltip } from '@chakra-ui/react'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { TxStep } from 'hooks/useTransaction';
+import { fromChainAmount } from "libs/num";
+import { num } from 'libs/num'
+import { FC, Fragment,useEffect, useMemo } from 'react';
+import { Controller, useForm } from "react-hook-form";
+
+import { WalletStatusType } from '../../../state/atoms/walletAtoms';
+import { Simulated } from './hooks/useSimulate'
+import { TokenItemState } from './swapAtoms';
 
 
 type Props = {
-    connected: boolean;
+    connected: WalletStatusType;
     tokenA: TokenItemState;
     tokenB: TokenItemState;
     onInputChange: (asset: TokenItemState, index: number) => void;
@@ -79,7 +80,7 @@ const SwapForm: FC<Props> = ({
 
     const buttonLabel = useMemo(() => {
 
-        if (!connected)
+        if (connected !== `@wallet-state/connected`)
             return 'Connect Wallet'
         else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol)
             return 'Select Token'

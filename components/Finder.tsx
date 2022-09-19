@@ -1,9 +1,6 @@
 import { ReactNode } from 'react'
-import { Text, Link, VStack} from '@chakra-ui/react'
+import { Link } from '@chakra-ui/react'
 import { truncate } from '../libs/text'
-import { networkAtom } from 'state/atoms/walletAtoms'
-import { useRecoilValue } from 'recoil'
-
 
 type Props = {
     chainId: string;
@@ -11,7 +8,7 @@ type Props = {
     children?: ReactNode
 }
 
-const getUrl = (chainId, txHash, network) => {
+const getUrl = (chainId, txHash) => {
 
     switch (chainId) {
         case 'uni-3':
@@ -33,10 +30,9 @@ const getUrl = (chainId, txHash, network) => {
 
 }
 
-const Finder = ({ children, txHash, chainId }: Props) => {
-    const network = useRecoilValue(networkAtom)
+const Finder = ({ children, txHash, chainId}: Props) => {
     return (
-        <Link isExternal href={getUrl(chainId, txHash, network)} >
+        <Link isExternal href={getUrl(chainId, txHash)} >
             {children} TxHash: {truncate(txHash, [4, 4])}
         </Link>
     )

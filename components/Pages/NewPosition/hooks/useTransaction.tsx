@@ -1,13 +1,9 @@
 import { useToast } from '@chakra-ui/react'
-import {
-  CreateTxFailed, Timeout, TxFailed,
-  TxUnspecifiedError, UserDenied
-} from '@terra-money/wallet-provider'
+import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { executeAddLiquidity } from 'services/liquidity'
-import Finder from 'components/Finder'
-import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**
@@ -203,7 +199,7 @@ export const useTransaction = ({
           isClosable: true,
         })
 
-        
+
 
         onError?.()
       },
@@ -232,8 +228,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-
-      return client.queryClient.tx.getTx(txHash)
+      return client.getTx(txHash)
     },
     {
       enabled: txHash != null,

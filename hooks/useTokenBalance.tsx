@@ -1,4 +1,3 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
@@ -7,18 +6,18 @@ import { convertMicroDenomToDenom } from 'util/conversion'
 import { CW20 } from '../services/cw20'
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
+import {Wallet} from "../util/wallet-adapters";
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import { networkAtom } from 'state/atoms/walletAtoms'
 
 async function fetchTokenBalance({
   client,
   token = {},
   address,
 }: {
-  client: SigningCosmWasmClient
+  client: Wallet
   token: any,
   address: string
 }) {
@@ -36,7 +35,7 @@ async function fetchTokenBalance({
    * if this is a native asset or an ibc asset that has juno_denom
    *  */
   if (native && !!client) {
-    const coin = await client?.getBalance(address, denom)
+    const coin = await client.getBalance(address, denom)
     const amount = coin ? Number(coin.amount) : 0
     return convertMicroDenomToDenom(amount, decimals)
     // return {
@@ -76,11 +75,10 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, status, client } = useRecoilValue(walletState)
+  const { address, network, client, activeWallet } = useRecoilValue(walletState)
 
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
-  const network = useRecoilValue(networkAtom)
 
 
   const { data: balance = 0, isLoading, refetch} = useQuery(
@@ -95,7 +93,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: !!tokenSymbol && !!client && (!!tokenInfo || !!ibcAssetInfo),
+      enabled: true,
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
@@ -107,11 +105,9 @@ export const useTokenBalance = (tokenSymbol: string) => {
 
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
-  const { address, status, client , chainId} = useRecoilValue(walletState)
+  const { address, status, client , chainId, network} = useRecoilValue(walletState)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
-  const network = useRecoilValue(networkAtom)
-
 
   const queryKey = useMemo(
     () => `multipleTokenBalances/${tokenSymbols?.join('+')}`,

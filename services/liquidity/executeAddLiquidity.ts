@@ -1,6 +1,5 @@
 import {
   MsgExecuteContractEncodeObject,
-  SigningCosmWasmClient,
 } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/stargate'
 
@@ -10,6 +9,7 @@ import {
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from '../../util/messages'
+import {Wallet} from "../../util/wallet-adapters";
 
 type ExecuteAddLiquidityArgs = {
   tokenA: TokenInfo
@@ -23,7 +23,7 @@ type ExecuteAddLiquidityArgs = {
   maxTokenBAmount: number
   senderAddress: string
   swapAddress: string
-  client: SigningCosmWasmClient
+  client: Wallet
   msgs: any
 }
 
@@ -77,11 +77,7 @@ export const executeAddLiquidity = async ({
 
 
     return validateTransactionSuccess(
-      await client.signAndBroadcast(
-        senderAddress,
-        [...increaseAllowanceMessages, executeAddLiquidityMessage],
-        'auto'
-      )
+      await client.post(senderAddress, [...increaseAllowanceMessages, executeAddLiquidityMessage])
     )
   }
 
@@ -95,8 +91,6 @@ export const executeAddLiquidity = async ({
     senderAddress,
     swapAddress,
     msgs,
-    'auto',
-    undefined,
     funds
   )
 }

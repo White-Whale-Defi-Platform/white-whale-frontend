@@ -1,12 +1,12 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { Pool } from 'types'
 import { num } from 'libs/num'
-import { dp } from '../../libs/parse'
+import { Pool } from 'types'
+
+import {Wallet} from "../../util/wallet-adapters";
 
 export interface GetToken1ForToken2PriceInput {
   nativeAmount: number | string
   swapAddress: string
-  client: CosmWasmClient
+  client: Wallet
 }
 
 export const getToken1ForToken2Price = async ({
@@ -28,7 +28,7 @@ export const getToken1ForToken2Price = async ({
 export interface GetToken2ForToken1PriceInput {
   tokenAmount: number
   swapAddress: string
-  client: CosmWasmClient
+  client: Wallet
 }
 
 export const getToken2ForToken1Price = async ({
@@ -51,7 +51,7 @@ export interface GetTokenForTokenPriceInput {
   tokenAmount: number
   swapAddress: string
   outputSwapAddress: string
-  client: CosmWasmClient
+  client: Wallet
 }
 
 export const getTokenForTokenPrice = async (
@@ -81,7 +81,7 @@ export type InfoResponse = {
 
 export const getSwapInfo = async (
   swapAddress: string,
-  client: CosmWasmClient
+  client: Wallet
 ): Promise<Pool> => {
   try {
     if (!swapAddress || !client) {
@@ -90,7 +90,7 @@ export const getSwapInfo = async (
           swapAddress,
           client,
         })}`
-      ) 
+      )
     }
 
     return await client.queryContractSmart(swapAddress, {

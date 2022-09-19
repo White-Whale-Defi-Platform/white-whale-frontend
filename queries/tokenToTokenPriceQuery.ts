@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
 
 import {
   getToken1ForToken2Price,
@@ -9,17 +9,16 @@ import {
   convertDenomToMicroDenom,
   convertMicroDenomToDenom,
 } from '../util/conversion'
+import {Wallet} from "../util/wallet-adapters";
 import { TokenInfo } from './usePoolsListQuery'
 import { PoolMatchForSwap } from './useQueryMatchingPoolForSwap'
-import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
-import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
 
 type TokenToTokenPriceQueryArgs = {
   matchingPools: PoolMatchForSwap
   tokenA: TokenInfo
   tokenB: TokenInfo
   amount: number
-  client: CosmWasmClient
+  client: Wallet
   id?: string
 }
 
