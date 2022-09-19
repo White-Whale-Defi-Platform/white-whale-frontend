@@ -33,18 +33,19 @@ const columns = [
             />
         )
     }),
+    columnHelper.accessor('myDeposit', {
+        header: () => <Text align="right" color="brand.50">My Deposit</Text>,
+        cell: info => <Text align="right">{info.getValue()}</Text>,
+    }),
     columnHelper.accessor('apr', {
-        header: () => <Text align="right" color="brand.50">Combined APR</Text>,
+        header: () => <Text align="right" color="brand.50">APR</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('totalDeposts', {
-        header: () => <Text align="right" color="brand.50">Combined APR</Text>,
+        header: () => <Text align="right" color="brand.50">Total Deposits</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
-    columnHelper.accessor('myDeposit', {
-        header: () => <Text align="right" color="brand.50">Combined APR</Text>,
-        cell: info => <Text align="right">{info.getValue()}</Text>,
-    }),
+    
     columnHelper.accessor('cta', {
         header: '',
         cell: info => (

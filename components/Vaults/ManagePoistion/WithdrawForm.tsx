@@ -15,6 +15,8 @@ type Props = {
     defaultToken: string
     vaultAddress: string
     lpToken: string
+    assetBlance: string,
+    refetch: () => void
 }
 
 const WithdrawForm = ({
@@ -23,7 +25,9 @@ const WithdrawForm = ({
     balance,
     defaultToken,
     vaultAddress,
-    lpToken
+    lpToken,
+    assetBlance,
+    refetch
 }: Props) => {
 
     const [token, setToken] = useState({
@@ -33,6 +37,7 @@ const WithdrawForm = ({
     const toast = useToast()
     const { chainId } = useRecoilValue(walletState)
     const onSuccess = useCallback((txHash) => {
+        refetch?.()
         toast({
             title: 'Withdraw from Vault Success.',
             description: <Finder txHash={txHash} chainId={chainId} > </Finder>,
@@ -48,9 +53,9 @@ const WithdrawForm = ({
     const buttonLabel = useMemo(() => {
 
         if (!connected)
-            return 'Connect wallet'
+            return 'Connect Wallet'
         else if (!!!token?.amount)
-            return 'Enter amount'
+            return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel
         else
@@ -64,7 +69,7 @@ const WithdrawForm = ({
     }
 
     useEffect(() => {
-        if (tx.txStep === TxStep.Success){
+        if (tx.txStep === TxStep.Success) {
             setToken({ ...token, amount: 0 })
             tx?.reset()
         }
@@ -82,11 +87,18 @@ const WithdrawForm = ({
 
             <VStack width="full" alignItems="flex-start" paddingBottom={8}>
                 <HStack>
-                    <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">Balance: </Text>
+                    <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">LP Balance: </Text>
                     {isLoading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
-                        <Text fontSize="14" fontWeight="700">{fromChainAmount(balance)}</Text>
+                        <HStack>
+                            <Text fontSize="14" fontWeight="700">
+                                {Number(fromChainAmount(balance))?.toFixed(6)}
+                            </Text>
+                            <Text color="gray" fontSize="14">
+                                ( {token?.tokenSymbol}: {Number(fromChainAmount(assetBlance))?.toFixed(6)} )
+                            </Text>
+                        </HStack>
                     )}
 
                 </HStack>

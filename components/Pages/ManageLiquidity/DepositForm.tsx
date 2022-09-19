@@ -81,7 +81,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
 
     const buttonLabel = useMemo(() => {
 
-        if (connected !== `@wallet-state/connected`)
+        if (!connected)
             return 'Connect Wallet'
         else if (!tokenB?.tokenSymbol)
             return 'Select Token'
@@ -114,7 +114,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                     {tokanAloading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
-                        <Text fontSize="14" fontWeight="700">{tokenABalance}</Text>
+                        <Text fontSize="14" fontWeight="700">{tokenABalance?.toFixed(6)}</Text>
                     )}
 
                 </HStack>
@@ -141,7 +141,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                     {tokanBloading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
-                        <Text fontSize="14" fontWeight="700">{tokenBBalance}</Text>
+                        <Text fontSize="14" fontWeight="700">{tokenBBalance?.toFixed(6)}</Text>
                     )}
 
                 </HStack>

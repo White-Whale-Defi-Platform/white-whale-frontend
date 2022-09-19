@@ -49,7 +49,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
 
     const buttonLabel = useMemo(() => {
 
-        if (connected !== `@wallet-state/connected`)
+        if (!connected)
             return 'Connect Wallet'
         else if (!!!token?.amount)
             return 'Enter Amount'
@@ -87,7 +87,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                     {isLoading ? (
                         <Spinner color='white' size='xs' />
                     ) : (
-                        <Text fontSize="14" fontWeight="700">{tokenBalance}</Text>
+                        <Text fontSize="14" fontWeight="700">{Number(tokenBalance)?.toFixed(6)}</Text>
                     )}
                 </HStack>
 

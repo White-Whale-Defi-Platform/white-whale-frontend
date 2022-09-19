@@ -17,7 +17,7 @@ const Vaults = (props: Props) => {
     if (!vaults) return []
 
     return vaults.vaults
-      .filter(vault => !!Number(vault.deposits.lptoken))
+      .filter(vault => !!Number(vault?.deposits?.lpBalance))
       .map(vault => ({
         totalDeposts: "comming soon",
         myDeposit: "comming soon",
@@ -42,8 +42,8 @@ const Vaults = (props: Props) => {
           vaultId: vault?.pool_id,
           tokenImage: vault.vault_assets?.logoURI,
           apr: "coming soon",
-          totalDeposts: "comming soon",
-          myDeposit: "comming soon",
+          totalDeposts: vault?.totalDepost?.dollarValue,
+          myDeposit: vault?.deposits?.dollarValue,
           cta: () => router.push(url),
           ctaLabel,
         }

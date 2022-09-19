@@ -81,8 +81,8 @@ export const useTokenBalance = (tokenSymbol: string) => {
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
 
 
-  const { data: balance = 0, isLoading} = useQuery(
-    ['tokenBalance', tokenSymbol, address, network, activeWallet],
+  const { data: balance = 0, isLoading, refetch} = useQuery(
+    ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
         return await fetchTokenBalance({
@@ -100,7 +100,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
     }
   )
 
-  return { balance, isLoading : isLoading }
+  return { balance, isLoading : isLoading , refetch}
 }
 
 

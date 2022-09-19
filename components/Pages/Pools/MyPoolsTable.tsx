@@ -40,7 +40,7 @@ const columns = [
         cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('apr', {
-        header: () => <Text align="right" color="brand.50">Combined APR</Text>,
+        header: () => <Text align="right" color="brand.50">APR</Text>,
         cell: info => <Text align="right">{info.getValue()}</Text>,
     }),
     columnHelper.accessor('volume24hr', {
