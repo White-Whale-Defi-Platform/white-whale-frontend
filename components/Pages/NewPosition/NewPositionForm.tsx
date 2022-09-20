@@ -3,7 +3,7 @@ import AssetInput from 'components/AssetInput';
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-// import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useMemo } from 'react';
