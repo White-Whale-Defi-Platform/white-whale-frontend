@@ -1,9 +1,10 @@
 import React from 'react'
 import ChainItem from './ChainItem'
 import { List } from '@chakra-ui/react'
-import { useChains } from '../../../../hooks/useChainInfo'
 
-function ChainList({onChange, onClose, chainList}) {
+import { useChains } from 'hooks/useChainInfo'
+
+function ChainList({onChange, onClose}) {
   const chains = useChains()
   return (
   <List spacing={1} color="white" width="full" >

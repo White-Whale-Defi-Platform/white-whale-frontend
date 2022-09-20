@@ -1,6 +1,5 @@
 import { Button, HStack, Text, VStack, Spinner, Tooltip, Box } from '@chakra-ui/react';
 import AssetInput from 'components/AssetInput';
-import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TxStep } from 'hooks/useTransaction';
 import { fromChainAmount } from "libs/num";
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'

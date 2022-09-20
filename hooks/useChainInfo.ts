@@ -17,17 +17,17 @@ export const unsafelyReadChainInfoCache = () =>
   | undefined
 
 export const useChains = () => {
-  const { network } = useRecoilValue(walletState)
+  const currentWalletState = useRecoilValue(walletState)
 
   const { data = [], isLoading } = useQuery<ChainInfo[]>(
-    ['chainInfo', network],
+    ['chainInfo', currentWalletState.network],
     async () => {
-      const url = `/${network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
+      const url = `/${currentWalletState.network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
       const response = await fetch(url)
       return await response.json()
     },
     {
-      enabled: !!network,
+      enabled: !!currentWalletState.network,
       onError(e) {
         console.error('Error loading chain info:', e)
       },

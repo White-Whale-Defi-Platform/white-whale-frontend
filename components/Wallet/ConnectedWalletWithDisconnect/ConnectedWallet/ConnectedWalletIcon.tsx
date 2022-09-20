@@ -1,7 +1,9 @@
 import React from 'react'
 import { Box, Img } from '@chakra-ui/react'
 import { useConnectedWallet } from '@terra-money/wallet-provider'
-import KeplrWalletIcon from '../../icons/KeplrWalletIcon'
+
+import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
+
 function ConnectedWalletIcon({connected}) {
   const connectedWallet = useConnectedWallet()
   return (
