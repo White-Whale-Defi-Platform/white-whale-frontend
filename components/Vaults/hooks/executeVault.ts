@@ -1,30 +1,22 @@
-import {
-  MsgExecuteContractEncodeObject,
-  SigningCosmWasmClient,
-} from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/stargate'
-
-import { TokenInfo } from 'queries/usePoolsListQuery'
 import {
-  createExecuteMessage,
-  createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from 'util/messages'
+
+import {Wallet} from "../../../util/wallet-adapters";
 
 type ExecuteAddLiquidityArgs = {
   isNative: boolean,
   denom: string,
-  // tokenInfo: TokenInfo
   amount: string
   senderAddress: string
   contractAddress: string
-  client: SigningCosmWasmClient
+  client: Wallet
   msgs: any
   encodedMsgs: any
 }
 
 export const executeVault = async ({
-  // tokenInfo,
   isNative,
   denom,
   msgs,
@@ -37,10 +29,9 @@ export const executeVault = async ({
 
   if (!isNative) {
     return validateTransactionSuccess(
-      await client.signAndBroadcast(
+      await client.post(
         senderAddress,
-        encodedMsgs,
-        'auto'
+        encodedMsgs
       )
     )
   }
@@ -53,8 +44,6 @@ export const executeVault = async ({
     senderAddress,
     contractAddress,
     msgs,
-    'auto',
-    undefined,
     funds
   )
 }

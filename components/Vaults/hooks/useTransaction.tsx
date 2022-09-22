@@ -221,7 +221,7 @@ export const useTransaction = ({
         return
       }
 
-      return client.queryClient.tx.getTx(txHash)
+      return client.getTx(txHash)
     },
     {
       enabled: txHash != null,
