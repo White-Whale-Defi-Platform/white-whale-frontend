@@ -98,7 +98,7 @@ const PoolsTable = ({ pools = [], isLoading }: { pools: Pool[], isLoading: boole
                 borderRadius="30px"
                 justifyContent="center"
                 >
-                    <Text py={10} color="white"> Your active liquidity positions will appear here. </Text>
+                    <Text py={10} color="white"> All remaining pools will appear here. </Text>
             </Flex>
         )
     }
