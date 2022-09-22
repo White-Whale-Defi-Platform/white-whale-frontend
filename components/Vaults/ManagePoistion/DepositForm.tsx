@@ -6,13 +6,13 @@ import { TxStep } from '../hooks/useTransaction';
 import { fromChainAmount } from 'libs/num'
 import Finder from 'components/Finder'
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { walletState } from 'state/atoms/walletAtoms';
+import {walletState, WalletStatusType} from 'state/atoms/walletAtoms';
 import { useRouter } from "next/router";
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 
 type Props = {
-    connected: boolean
+    connected: WalletStatusType
     isLoading: boolean
     balance: number | undefined
     defaultToken: string
@@ -65,7 +65,7 @@ const DepositForm = ({
 
     const buttonLabel = useMemo(() => {
 
-        if (!connected)
+        if (connected !== `@wallet-state/connected`)
             return 'Connect Wallet'
         // else if (!tokenB?.tokenSymbol)
         //     return 'Select token'
