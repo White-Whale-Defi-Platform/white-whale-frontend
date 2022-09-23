@@ -113,7 +113,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                 {buttonLabel}
             </Button>
 
-            {(Number(tx?.fee) > 0) && (
+            {/* {(Number(tx?.fee) > 0) && (
                 <VStack alignItems="flex-start" width="full" p={3}>
                     <HStack justifyContent="space-between" width="full">
                         <HStack >
@@ -127,7 +127,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
                         <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol}</Text>
                     </HStack>
                 </VStack>
-            )}
+            )} */}
 
 
 

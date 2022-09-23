@@ -234,7 +234,7 @@ const NewPositionForm: FC<Props> = ({
                 {buttonLabel}
             </Button>
 
-            {(Number(tx?.fee) > 0) && (
+            {/* {(Number(tx?.fee) > 0) && (
                 <VStack alignItems="flex-start" width="full" px={3}>
                     <HStack justifyContent="space-between" width="full">
                         <HStack >
@@ -248,7 +248,7 @@ const NewPositionForm: FC<Props> = ({
                         <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol}</Text>
                     </HStack>
                 </VStack>
-            )}
+            )} */}
 
             {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)

@@ -172,7 +172,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                 {buttonLabel}
             </Button>
 
-            {(tokenB?.tokenSymbol && Number(amountA.amount) > 0) && (
+            {/* {(tokenB?.tokenSymbol && Number(amountA.amount) > 0) && (
                 <VStack alignItems="flex-start" width="full" p={3}>
                     <HStack justifyContent="space-between" width="full">
                         <HStack >
@@ -186,7 +186,7 @@ const DepositForm = ({ tokenA, tokenB, onInputChange, connected, tx, simulated, 
                         <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol} </Text>
                     </HStack>
                 </VStack>
-            )}
+            )} */}
 
 
 

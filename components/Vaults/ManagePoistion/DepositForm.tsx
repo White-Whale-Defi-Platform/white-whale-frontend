@@ -133,7 +133,7 @@ const DepositForm = ({
                 {buttonLabel}
             </Button>
 
-            <VStack alignItems="flex-start" width="full" p={3}>
+            {/* <VStack alignItems="flex-start" width="full" p={3}>
                 <HStack justifyContent="space-between" width="full">
                     <HStack >
                         <Text color="brand.500" fontSize={12}> Fee</Text>
@@ -145,7 +145,7 @@ const DepositForm = ({
                     </HStack>
                     <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol} </Text>
                 </HStack>
-            </VStack>
+            </VStack> */}
 
 
 
