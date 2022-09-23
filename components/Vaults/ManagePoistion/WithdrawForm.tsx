@@ -124,12 +124,12 @@ const WithdrawForm = ({
                 {buttonLabel}
             </Button>
 
-            <VStack alignItems="flex-start" width="full" p={3}>
+            {/* <VStack alignItems="flex-start" width="full" p={3}>
                 <HStack justifyContent="space-between" width="full">
                     <Text color="brand.500" fontSize={12}> Fees </Text>
                     <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
                 </HStack>
-            </VStack>
+            </VStack> */}
 
 
 

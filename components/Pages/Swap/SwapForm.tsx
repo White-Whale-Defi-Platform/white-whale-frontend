@@ -316,7 +316,7 @@ const SwapForm: FC<Props> = ({
                     </HStack>
 
 
-                    <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }}>
+                    {/* <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }}>
                         <HStack >
                             <Text color="brand.500" fontSize={12}> Fee</Text>
                             <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
@@ -326,7 +326,7 @@ const SwapForm: FC<Props> = ({
                             </Tooltip>
                         </HStack>
                         <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol} </Text>
-                    </HStack>
+                    </HStack> */}
 
                     {minReceive && (
                         <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }}>
