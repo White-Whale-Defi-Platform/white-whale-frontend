@@ -18,5 +18,15 @@
             "tokenSymbol": null,
             "amount": 0
         }
+    ],
+    "chihuahua1luw": [
+        {
+            "tokenSymbol": "ATOM",
+            "amount": 0
+        },
+        {
+            "tokenSymbol": null,
+            "amount": 0
+        }
     ]
 }

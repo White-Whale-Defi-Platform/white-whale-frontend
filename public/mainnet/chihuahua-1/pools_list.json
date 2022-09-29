@@ -14,9 +14,9 @@
   "base_token": {
     "id": "chihuahua",
     "chain_id": "chihuahua-1",
-    "token_address": "",
+    "token_address": "uhuahua",
     "symbol": "HUAHUA",
-    "name": "Chihuahua",
+    "name": "HUAHUA",
     "decimals": 6,
     "logoURI": "/logos/huahua.png",
     "tags": [
@@ -28,7 +28,7 @@
   "routerAddress": "juno128lewlw6kv223uw4yzdffl8rnh3k9qs8vrf6kef28579w8ygccyq7m90n2",
   "pools": [
     {
-      "pool_id": "ATOM-Chihuahua",
+      "pool_id": "ATOM-HUAHUA",
       "lpOrder" : ["HUAHUA", "ATOM"],
       "pool_assets": [
         {
@@ -44,10 +44,10 @@
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
         },
         {
-          "chain_id": "chihuahua-1",
+          "chain_id": "chihuahua",
           "token_address": "uhuahua",
-          "symbol": "Chihuahua",
-          "name": "Chihuahua",
+          "symbol": "HUAHUA",
+          "name": "HUAHUA",
           "decimals": 6,
           "logoURI": "/logos/huahua.png",
           "tags": ["native"],
