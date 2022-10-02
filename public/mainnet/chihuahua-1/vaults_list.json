@@ -4,7 +4,7 @@
     {
       "pool_id": "HUAHUA",
       "vault_assets": {
-        "id": "chihuahua-network",
+        "id": "chihuahua-token",
         "chain_id": "chihuahua-1",
         "token_address": "uhuahua",
         "symbol": "HUAHUA",

@@ -32,7 +32,7 @@ const Vaults = (props: Props) => {
 
   const allVaults = useMemo(() => {
     if (!vaults) return []
-
+    console.log(vaults);
     return vaults.vaults
       // .filter(vault => !!!Number(vault.deposits.lptoken))
       .map(vault => {
