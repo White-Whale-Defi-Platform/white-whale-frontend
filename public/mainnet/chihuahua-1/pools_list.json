@@ -13,7 +13,7 @@
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
     "_note": "deposits goes to zero when this is chihuahua-token instead of chihuahua",
-    "id": "chihuahua",
+    "id": "chihuahua-token",
     "chain_id": "chihuahua-1",
     "token_address": "uhuahua",
     "symbol": "HUAHUA",
@@ -45,19 +45,52 @@
         },
         {
           "id": "cosmos",
-          "chain_id": "juno-1",
-          "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/8975823883A07F8A56E1A20AB298E1424C08A0004D3F319E047E549AE6A227D8",
           "symbol": "ATOM",
           "name": "Atom",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
           "tags": ["native"],
           "native": true,
-          "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+          "denom": "ibc/8975823883A07F8A56E1A20AB298E1424C08A0004D3F319E047E549AE6A227D8"
         }
       ],
-      "lp_token": "juno1fkejwm7alyfnjngtpgtxvreqfcz8uwer2jgwjn40suvgq20tm8ss73cj05",
-      "swap_address": "juno1k9cw9yghf04cqlu290n4zlveker5cev5ahweqkh07y7zc3xq9hrshjruk8",
+      "lp_token": "chihuahua1tbd",
+      "swap_address": "chihuahua1tbd",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "Huahua-Juno",
+      "lpOrder" : ["HUAHUA", "JUNO"],
+      "pool_assets": [
+        {
+          "chain_id": "chihuahua-token",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "HUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        },
+        {
+          "id": "juno",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C",
+          "symbol": "JUNO",
+          "name": "Juno",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C"
+        }
+      ],
+      "lp_token": "chihuahua1tbd",
+      "swap_address": "chihuahua1tbd",
       "staking_address": "",
       "rewards_tokens": []
     }

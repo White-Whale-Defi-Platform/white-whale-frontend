@@ -26,7 +26,7 @@ export const useGetTokenDollarValueQuery = () => {
   return [
     async function getTokenDollarValue({ tokenInfo, tokenAmountInDenom }) {
       console.log('In return ');
-      debugger;
+      // debugger;
       if (!tokenAmountInDenom) return 0
 
       const priceForOneToken = await tokenToTokenPriceQueryWithPools({
