@@ -34,6 +34,7 @@
       "pool_assets": [
         {
           "chain_id": "chihuahua-token",
+          "id": "chihuahua-token",
           "token_address": "uhuahua",
           "symbol": "HUAHUA",
           "name": "HUAHUA",
@@ -67,6 +68,7 @@
       "pool_assets": [
         {
           "chain_id": "chihuahua-token",
+          "id": "chihuahua-token",
           "token_address": "uhuahua",
           "symbol": "HUAHUA",
           "name": "HUAHUA",
@@ -77,7 +79,7 @@
           "denom": "uhuahua"
         },
         {
-          "id": "juno",
+          "id": "juno-network",
           "chain_id": "chihuahua-1",
           "token_address": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C",
           "symbol": "JUNO",
