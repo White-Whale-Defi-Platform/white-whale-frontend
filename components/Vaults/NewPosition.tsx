@@ -17,8 +17,6 @@ const NewPosition = () => {
     const vaultId = params.get('vault') || 'JUNOX'
     const vault = useMemo(() => vaults?.vaults.find(v => v.vault_assets?.symbol === vaultId), [vaults, vaultId])
     const edgeTokenList = useMemo(() => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol), [vaults])
-    console.log(vault);
-    console.log(edgeTokenList);
     const { balance: lpTokenBalance, isLoading: lpTokenBalanceLoading, refetch: lpRefetch } = useVaultDepost(vault?.lp_token, vault?.vault_address, vault?.vault_assets)
     const { balance: tokenBalance, isLoading: tokenBalanceLoading, refetch : tokenRefetch} = useTokenBalance(vault?.vault_assets?.symbol)
     

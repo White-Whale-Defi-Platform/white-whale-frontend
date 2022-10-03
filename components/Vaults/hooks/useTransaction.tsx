@@ -94,7 +94,6 @@ export const useTransaction = ({
       try {
         // console.log({senderAddress, debouncedMsgs, msg : JSON.parse(String.fromCharCode.apply(null, debouncedMsgs?.[0]?.value?.msg))})
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        console.log({ response })
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response

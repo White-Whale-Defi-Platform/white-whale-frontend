@@ -32,8 +32,6 @@ export type Simulated = {
 
 
 const simulate = ({ client, msg, routerAddress }): Promise<any> => {
-    console.log(msg);
-    console.log(routerAddress);
     return client?.queryContractSmart(routerAddress, msg)
 };
 

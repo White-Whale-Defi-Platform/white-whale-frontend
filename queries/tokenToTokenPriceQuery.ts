@@ -98,7 +98,7 @@ export async function tokenToTokenPriceQuery({
   const shouldQueryTokenBForBaseToken =
     toTokenInfo.symbol === baseToken.symbol && fromTokenInfo.swap_address
 
-  console.log({ shouldQueryBaseTokenForTokenB, shouldQueryTokenBForBaseToken })
+  // console.log({ shouldQueryBaseTokenForTokenB, shouldQueryTokenBForBaseToken })
 
   if (shouldQueryBaseTokenForTokenB) {
     const resp = await getToken1ForToken2Price({

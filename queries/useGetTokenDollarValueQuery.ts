@@ -16,8 +16,6 @@ export const useGetTokenDollarValueQuery = () => {
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     tokenA?.symbol
   )
-  console.log(tokenA);
-  console.log(tokenADollarPrice)
 
 
   const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
@@ -25,8 +23,6 @@ export const useGetTokenDollarValueQuery = () => {
 
   return [
     async function getTokenDollarValue({ tokenInfo, tokenAmountInDenom }) {
-      console.log('In return ');
-      // debugger;
       if (!tokenAmountInDenom) return 0
 
       const priceForOneToken = await tokenToTokenPriceQueryWithPools({
@@ -37,7 +33,6 @@ export const useGetTokenDollarValueQuery = () => {
         amount: 1,
         id: tokenInfo?.id
       })
-      console.log(priceForOneToken);
 
       if (tokenA?.id === tokenInfo?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
