@@ -1,0 +1,48 @@
+[{
+    "create_pair": {
+      "asset_infos": [
+        {
+          "native_token": {
+            "denom": "uhuahua"
+          }
+        },
+        {
+          "native_token": {
+            "denom": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C"
+          }
+        }
+      ],
+      "pool_fees": {
+        "protocol_fee": {
+          "share": "0.001"
+        },
+        "swap_fee": {
+          "share": "0.002"
+        }
+      }
+    }
+  },
+  {
+    "create_pair": {
+      "asset_infos": [
+        {
+          "native_token": {
+            "denom": "uhuahua"
+          }
+        },
+        {
+          "native_token": {
+            "denom": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C"
+          }
+        }
+      ],
+      "pool_fees": {
+        "protocol_fee": {
+          "share": "0.001"
+        },
+        "swap_fee": {
+          "share": "0.002"
+        }
+      }
+    }
+  }]

@@ -28,5 +28,15 @@
             "tokenSymbol": null,
             "amount": 0
         }
+    ],
+    "injective": [
+        {
+            "tokenSymbol": "Injective",
+            "amount": 0
+        },
+        {
+            "tokenSymbol": null,
+            "amount": 0
+        }
     ]
 }
