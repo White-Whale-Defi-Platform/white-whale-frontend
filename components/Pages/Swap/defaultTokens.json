@@ -21,11 +21,11 @@
     ],
     "chihuahua": [
         {
-            "tokenSymbol": "ATOM",
+            "tokenSymbol": "HUAHUA",
             "amount": 0
         },
         {
-            "tokenSymbol": null,
+            "tokenSymbol": "PUPPY",
             "amount": 0
         }
     ]

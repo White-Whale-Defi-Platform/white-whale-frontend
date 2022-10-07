@@ -64,10 +64,10 @@ const DepositForm = ({
     const { tx } = useDepost({ vaultAddress, token, onSuccess })
 
     const buttonLabel = useMemo(() => {
-
-        if (connected !== `@wallet-state/connected`)
+        // TODO: Note for later, Select Token is commented 
+        if (connected == `@wallet-state/connected`)
             return 'Connect Wallet'
-        // else if (!tokenB?.tokenSymbol)
+        // else if (!token?.tokenSymbol)
         //     return 'Select token'
         else if (!!!token?.amount)
             return 'Enter Amount'

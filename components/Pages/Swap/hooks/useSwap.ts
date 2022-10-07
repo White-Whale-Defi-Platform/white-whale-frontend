@@ -23,7 +23,6 @@ const useSwap = ({ reverse }) => {
     const amount = reverse ? swapTokenB?.amount > 0 ? toChainAmount(swapTokenB?.amount) : '' : swapTokenA?.amount > 0 ? toChainAmount(swapTokenA?.amount) : ''
     const { routerAddress } = poolsList || {}
     const slippageToDecimal = slippage / 100
-
     const { simulateMsg, encodedExecuteMsg, executeMsg, path } = useRoute(
         {
             tokenA: { ...tokenA, ...swapTokenA },
@@ -36,7 +35,6 @@ const useSwap = ({ reverse }) => {
     )
 
     const { simulated, error, isLoading } = useSimulate({ client, msg: simulateMsg, routerAddress })
-
     const minReceive = useMemo(() => {
         if (!simulated) return null
 
@@ -59,7 +57,6 @@ const useSwap = ({ reverse }) => {
         onSuccess: () => { },
         onError: () => { }
     });
-
     return useMemo(() => ({
         path,
         tx,

@@ -12,12 +12,11 @@
   },
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
-    "_note": "deposits goes to zero when this is chihuahua-token instead of chihuahua",
     "id": "chihuahua-token",
     "chain_id": "chihuahua-1",
     "token_address": "uhuahua",
     "symbol": "HUAHUA",
-    "name": "HUAHUA",
+    "name": "Huahua",
     "decimals": 6,
     "logoURI": "/logos/huahua.png",
     "tags": [
@@ -29,15 +28,15 @@
   "routerAddress": "chihuahua1w3z9kpv08ya8ketrd8sc9008wxq6ygeuur40dlvh3df2u54pcdmq52sguh",
   "pools": [
     {
-      "pool_id": "Huahua-Atom",
-      "lpOrder" : ["HUAHUA", "ATOM"],
+      "pool_id": "HUAHUA-PUPPY",
+      "lpOrder" : ["HUAHUA", "PUPPY"],
       "pool_assets": [
         {
-          "chain_id": "chihuahua-token",
           "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
           "symbol": "HUAHUA",
-          "name": "HUAHUA",
+          "name": "Huahua",
           "decimals": 6,
           "logoURI": "/logos/huahua.png",
           "tags": ["native"],
@@ -45,58 +44,22 @@
           "denom": "uhuahua"
         },
         {
-          "id": "cosmos",
           "chain_id": "chihuahua-1",
-          "token_address": "ibc/8975823883A07F8A56E1A20AB298E1424C08A0004D3F319E047E549AE6A227D8",
-          "symbol": "ATOM",
-          "name": "Atom",
+          "token_address": "chihuahua1yl8z39ugle8s02fpwkhh293509q5xcpalmdzc4amvchz8nkexrmsy95gef",
+          "symbol": "PUPPY",
+          "name": "Puppy",
           "decimals": 6,
-          "logoURI": "/logos/atom.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/8975823883A07F8A56E1A20AB298E1424C08A0004D3F319E047E549AE6A227D8"
+          "logoURI": "/logos/puppyhuahua_logo.png",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1yl8z39ugle8s02fpwkhh293509q5xcpalmdzc4amvchz8nkexrmsy95gef"
         }
       ],
-      "lp_token": "chihuahua1tbd",
-      "swap_address": "chihuahua1tbd",
-      "staking_address": "",
-      "rewards_tokens": []
-    },
-    {
-      "pool_id": "Huahua-Juno",
-      "lpOrder" : ["HUAHUA", "JUNO"],
-      "pool_assets": [
-        {
-          "chain_id": "chihuahua-token",
-          "id": "chihuahua-token",
-          "token_address": "uhuahua",
-          "symbol": "HUAHUA",
-          "name": "HUAHUA",
-          "decimals": 6,
-          "logoURI": "/logos/huahua.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "uhuahua"
-        },
-        {
-          "id": "juno-network",
-          "chain_id": "chihuahua-1",
-          "token_address": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C",
-          "symbol": "JUNO",
-          "name": "Juno",
-          "decimals": 6,
-          "logoURI": "/logos/juno.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/89C79BD28DCCF300B9EE87740B061011AD870EC480777FAB95D85B3ED36BC06C"
-        }
-      ],
-      "lp_token": "chihuahua1tbd",
-      "swap_address": "chihuahua1tbd",
+      "lp_token": "chihuahua15hyh6lh6wehnezuhyxqvlgz8x3fm2fcslhx9kfdlehfltslu3u9qjm5lll",
+      "swap_address": "chihuahua1zu6n9xtm6n7ksg4gawefg34n790jgdsfhqrrgjn9d9vc60k8q67sd96en9",
       "staking_address": "",
       "rewards_tokens": []
     }
-
   ],
   "version": {
     "major": 0,

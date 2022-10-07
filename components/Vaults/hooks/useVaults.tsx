@@ -90,7 +90,6 @@ export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
     const { data: balance, isLoading , refetch} = useQuery(
         ['vaultsDeposit', lpToken, chainId, network],
         async () => {
-            console.log("calling depost")
             return queryBalance(client, lpToken, address, vaultAddress, tokenInfo,  getTokenDollarValue)
         },
         {
