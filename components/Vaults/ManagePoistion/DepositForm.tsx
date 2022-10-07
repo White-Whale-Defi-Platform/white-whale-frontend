@@ -36,7 +36,6 @@ const DepositForm = ({
     const router = useRouter()
     const baseToken = useBaseTokenInfo()
 
-
     const [token, setToken] = useState({
         amount: 0,
         tokenSymbol: defaultToken
@@ -65,11 +64,11 @@ const DepositForm = ({
 
     const buttonLabel = useMemo(() => {
         // TODO: Note for later, Select Token is commented 
-        if (connected == `@wallet-state/connected`)
+        if (connected !== `@wallet-state/connected`)
             return 'Connect Wallet'
         // else if (!token?.tokenSymbol)
         //     return 'Select token'
-        else if (!!!token?.amount)
+        else if (!!token?.amount)
             return 'Enter Amount'
         else if (tx?.buttonLabel)
             return tx?.buttonLabel

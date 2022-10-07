@@ -13,7 +13,7 @@ const NewPosition = () => {
     const router: NextRouter = useRouter()
     const { vaults, isLoading, refetch: vaultsRefetch } = useVault()
     const params = new URLSearchParams(location.search)
-    const { chainId, key, address } = useRecoilValue(walletState)
+    const { chainId, key, address, status } = useRecoilValue(walletState)
     const vaultId = params.get('vault') || 'JUNOX'
     const vault = useMemo(() => vaults?.vaults.find(v => v.vault_assets?.symbol === vaultId), [vaults, vaultId])
     const edgeTokenList = useMemo(() => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol), [vaults])
@@ -61,7 +61,7 @@ const NewPosition = () => {
                         vault?.vault_assets?.symbol && (
                             <DepositForm
                                 vaultAddress={vault?.vault_address}
-                                connected={Boolean(key?.name)}
+                                connected={status}
                                 isLoading={tokenBalanceLoading}
                                 balance={tokenBalance}
                                 defaultToken={vault?.vault_assets?.symbol}
