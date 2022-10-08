@@ -38,11 +38,11 @@ const columns = [
     }),
     columnHelper.accessor('totalDeposit', {
         header: () => <Text align="right" color="brand.50">Total Deposits</Text>,
-        cell: info => <Text align="right">{info.getValue()}</Text>,
+        cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('myDeposit', {
         header: () => <Text align="right" color="brand.50">My Deposit</Text>,
-        cell: info => <Text align="right">{info.getValue()}</Text>,
+        cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('cta', {
         header: '',

@@ -35,7 +35,7 @@ const columns = [
     }),
     columnHelper.accessor('myDeposit', {
         header: () => <Text align="right" color="brand.50">My Deposit</Text>,
-        cell: info => <Text align="right">{info.getValue()}</Text>,
+        cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     columnHelper.accessor('apr', {
         header: () => <Text align="right" color="brand.50">APR</Text>,
@@ -43,7 +43,7 @@ const columns = [
     }),
     columnHelper.accessor('totalDeposts', {
         header: () => <Text align="right" color="brand.50">Total Deposits</Text>,
-        cell: info => <Text align="right">{info.getValue()}</Text>,
+        cell: info => <Text align="right">${info.getValue()}</Text>,
     }),
     
     columnHelper.accessor('cta', {
