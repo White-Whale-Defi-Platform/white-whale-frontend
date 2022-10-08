@@ -18,5 +18,15 @@
             "tokenSymbol": null,
             "amount": 0
         }
+    ],
+    "chihuahua": [
+        {
+            "tokenSymbol": "HUAHUA",
+            "amount": 0
+        },
+        {
+            "tokenSymbol": "PUPPY",
+            "amount": 0
+        }
     ]
 }

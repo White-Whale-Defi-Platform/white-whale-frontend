@@ -54,7 +54,7 @@ const useSimulate = ({ client, msg, routerAddress }) => {
         if (!error) return null
 
         if (/unreachable: query wasm contract failed: invalid request/i.test(error?.toString()) || /codespace: wasm, code: 9: query wasm/i.test(error?.toString()))
-            return "Insuifficient liquidity"
+            return "Insufficient liquidity"
 
     }, [error])
 

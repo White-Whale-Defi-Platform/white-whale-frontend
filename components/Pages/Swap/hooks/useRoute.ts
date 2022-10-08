@@ -104,7 +104,6 @@ const useRoute = ({tokenA, tokenB, amount, reverse, senderAddress, slippage}) =>
 
         const pools = poolsList?.pools?.map(({ pool_id }) => pool_id)
         const tokens = tokenList?.tokens?.map(({ symbol }) => symbol)
-
         tokens.forEach(token => graph[token] = [])
         pools.forEach(pool => {
             const [a, b] = pool?.split("-")
@@ -114,7 +113,6 @@ const useRoute = ({tokenA, tokenB, amount, reverse, senderAddress, slippage}) =>
 
         const path = buildRoute(graph, tokenA?.symbol, tokenB.symbol)
         const route = []
-
         if (path?.length > 0) {
             path.reduce((prev, curr) => {
                 route.push([
@@ -131,6 +129,7 @@ const useRoute = ({tokenA, tokenB, amount, reverse, senderAddress, slippage}) =>
     }, [poolsList, tokenList, tokenA?.symbol, tokenB?.symbol])
 
     const { simulateMsg, executeMsg, encodedExecuteMsg } = useMemo(() => {
+
         if (route.length < 1) return {}
 
         const { simulateMsg, executeMsg } = createRouteMessage(route, amount, tokenA, reverse, routerAddress, slippage)

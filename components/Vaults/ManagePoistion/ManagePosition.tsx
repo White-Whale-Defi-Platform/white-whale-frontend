@@ -20,7 +20,6 @@ const ManagePosition = () => {
     const vault = useMemo(() => vaults?.vaults.find(v => v.vault_assets?.symbol === vaultId), [vaults, vaultId])
     const { balance: lpTokenBalance, isLoading: lpTokenBalanceLoading, refetch: lpRefetch } = useVaultDepost(vault?.lp_token, vault?.vault_address, vault?.vault_assets)
     const { balance: tokenBalance, isLoading: tokenBalanceLoading, refetch : tokenRefetch} = useTokenBalance(vault?.vault_assets?.symbol)
-
     const refetch = () => {
         vaultsRefetch()
         lpRefetch()
@@ -66,6 +65,7 @@ const ManagePosition = () => {
                         <TabPanels>
                             <TabPanel padding={4}>
                                 {
+                                    
                                     vault?.vault_assets?.symbol && (
                                         <DepositForm
                                             vaultAddress={vault?.vault_address}

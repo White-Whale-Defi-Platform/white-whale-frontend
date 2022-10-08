@@ -345,7 +345,7 @@ const SwapForm: FC<Props> = ({
                 </>
                 )}
 
-                {!!path.length && (
+                {!!path?.length && (
                     <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }} >
                         <HStack>
                             <Text color="brand.500" fontSize={12}> Route </Text>

@@ -68,7 +68,6 @@ const queryBalance = async (client, contract, address, vault, tokenInfo, getToke
     })
 
     const underlyingAsset = await queryShare(client, vault, lpBalance?.balance)
-
     const dollarValue = await getTokenDollarValue({
         tokenInfo: tokenInfo,
         tokenAmountInDenom: fromChainAmount(underlyingAsset),
@@ -91,7 +90,6 @@ export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
     const { data: balance, isLoading , refetch} = useQuery(
         ['vaultsDeposit', lpToken, chainId, network],
         async () => {
-            console.log("calling depost")
             return queryBalance(client, lpToken, address, vaultAddress, tokenInfo,  getTokenDollarValue)
         },
         {
@@ -155,7 +153,7 @@ export const useVaulTotal = (lpTokenIds: any[]) => {
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
     const { chainId, client, network } = useRecoilValue(walletState)
     const [getTokenDollarValue] = useGetTokenDollarValueQuery()
-
+    // console.log(`Chain ID is ${chainId}, network is ${network} this is ${process.env.NEXT_PUBLIC_VAULTS_LIST_URL}`)
 
     const { data: vaults, isLoading } = useQuery<VaultsResponse>(
         ['vaults/list', chainId, network],
@@ -174,7 +172,6 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
 
     // const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
     const { balance, refetch } = useVaultMultiDepost(vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })))
-
     const {balance: vaultInfo} = useVaulTotal(vaults?.vaults?.map(({lp_token, vault_assets}) => ({lp_token, vault_assets})))
 
     const withBalance = useMemo(() => {

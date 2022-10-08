@@ -6,7 +6,7 @@ const index = () => {
   const router = useRouter()
 
   useEffect(() => {
-    console.log("index page")
+    // console.log("index page")
     router.replace('/swap')
   }, [])
 

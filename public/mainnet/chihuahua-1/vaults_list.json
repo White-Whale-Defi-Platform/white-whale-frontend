@@ -1,0 +1,26 @@
+{
+  "factory": "",
+  "vaults": [
+    {
+      "pool_id": "HUAHUA",
+      "vault_assets": {
+        "id": "chihuahua-token",
+        "chain_id": "chihuahua-1",
+        "token_address": "uhuahua",
+        "symbol": "HUAHUA",
+        "name": "Huahua",
+        "decimals": 6,
+        "logoURI": "/logos/huahua.png",
+        "tags": [
+          "native"
+        ],
+        "native": true,
+        "denom": "uhuahua"
+      },
+      "lp_token": "chihuahua12pl0k32gvzn259qhx6qce45kg85tysftt65xuek3rgf47s0gca4sut5nme",
+      "vault_address": "chihuahua1j37gdce2l5wuy7tdv4hygc98ajd8jswe352erlwgyw2ve3v58a5qv688fs",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}
