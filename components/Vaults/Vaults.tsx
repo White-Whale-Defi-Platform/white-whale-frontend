@@ -50,23 +50,13 @@ const Vaults = (props: Props) => {
   }, [vaults])
 
   return (
-    <VStack width={{ base: '100%', md: '1160px' }} alignItems="center" >
-
-      {/* <Box>
-        <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">My Vaults</Text>
-          <Button variant="primary" size="sm" onClick={() => router.push(`/vaults/new_position?vault=JUNO`)}>New Position</Button>
-        </HStack>
-        <MyVaultsTable vaults={myVaults}  isLoading={isLoading} />
-        <MobilePools pools={myPools} />
-      </Box> */}
+    <VStack width={{ base: '100%', md: '1160px' }} alignItems="center" margin="auto">
 
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">Vaults</Text>
         </HStack>
         <AllVaultsTable vaults={allVaults} isLoading={isLoading} />
-        {/* <MobilePools pools={allPools} ctaLabel="Add Liquidity" /> */}
       </Box>
 
     </VStack>
