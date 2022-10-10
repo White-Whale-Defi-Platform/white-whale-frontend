@@ -138,9 +138,9 @@
         ],
         "coinType": 118,
         "gasPriceStep": {
-            "low": 0.07,
-            "average": 0.15,
-            "high": 0.20
+            "low": 1,
+            "average": 5,
+            "high": 10
         },
         "features": [
             "cosmwasm"
