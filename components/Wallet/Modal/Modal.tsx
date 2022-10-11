@@ -14,29 +14,31 @@ import {
 import TerraStationConnectButton from 'components/Wallet/Modal/TerraStationConnectButton';
 import KeplrConnectButton from 'components/Wallet/Modal/KeplrConnectButton';
 
-function WalletModal({ isOpenModal, onCloseModal}) {
+function WalletModal({ isOpenModal, onCloseModal }) {
   return (
-    <>
-      <Modal isOpen={isOpenModal} onClose={onCloseModal}>
+      <Modal isOpen={isOpenModal} onClose={onCloseModal} >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent >
           <ModalHeader>Select Wallet</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <VStack>
-              <TerraStationConnectButton onCloseModal={onCloseModal}  />
+          <ModalBody >
+            <VStack
+              justify="center"
+              align="center"
+              textAlign="center"
+            >
+              <TerraStationConnectButton onCloseModal={onCloseModal} />
               <KeplrConnectButton onCloseModal={onCloseModal} />
             </VStack>
           </ModalBody>
 
-          <ModalFooter >
+          {/* <ModalFooter >
             <Button colorScheme='blue' mr={3} onClick={onCloseModal}>
               Close
             </Button>
-          </ModalFooter>
+          </ModalFooter> */}
         </ModalContent>
       </Modal>
-    </>
   )
 }
 

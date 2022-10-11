@@ -9,7 +9,7 @@ import {
 import { useQueryClient } from 'react-query'
 import { BsCircleFill } from 'react-icons/bs'
 
-function ChainItem({chain, index, onChange, onClose, chainList}) {
+function ChainItem({chain, index, onChange, onClose, chainList, active}) {
 
   const queryClient = useQueryClient()
   return (
@@ -19,7 +19,7 @@ function ChainItem({chain, index, onChange, onClose, chainList}) {
       alignItems="center"
       borderBottom={index === chainList.length - 1 ? 'unset' : "1px solid rgba(255, 255, 255, 0.1)"}
       paddingY={1}
-      opacity={chain.active ? 1 : 0.3}
+      opacity={active ? 1 : 0.3}
       cursor="pointer"
       _hover={{
           opacity: 1

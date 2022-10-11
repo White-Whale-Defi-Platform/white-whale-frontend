@@ -41,6 +41,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal}) => {
           connected={connected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
+          currentWalletState={currentWalletState}
         />
         <Button
           variant="outline"
@@ -60,7 +61,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal}) => {
   return (
     <>
       <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
-        <ChainSelectWithBalance connected={connected} denom={denom} onChainChange={onChainChange} />
+        <ChainSelectWithBalance connected={connected} denom={denom} onChainChange={onChainChange}  currentWalletState={currentWalletState}/>
         <Box display={{ base: "none", md: "block" }}>
           <Divider orientation="vertical" borderColor="rgba(255, 255, 255, 0.1);" />
         </Box>

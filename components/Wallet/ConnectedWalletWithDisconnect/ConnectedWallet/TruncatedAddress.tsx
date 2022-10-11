@@ -11,7 +11,7 @@ function TruncatedAddress({connected}) {
   const connectedWallet = useConnectedWallet()
 
   const truncatWalletAddress = (addr: string) => {
-    const chainName = addr.substring(0, addr.indexOf("1") | 4)
+    const chainName = addr.substring(0, addr.indexOf("1"))
     return connected ? `${chainName}${truncate(address, [0, 4])}` : `${chainName}${truncate(connectedWallet.walletAddress, [0, 4])}`
   }
 
