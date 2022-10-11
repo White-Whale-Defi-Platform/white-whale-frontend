@@ -1,43 +1,43 @@
 import React from 'react'
-import { Button } from '@chakra-ui/react'
+import { Button, Text, Image, HStack } from '@chakra-ui/react'
 import { useWallet } from "@terra-money/wallet-provider";
 
 import { useTerraStation } from 'hooks/useTerraStation';
 
-function TerraStationConnectButton({onCloseModal}) {
+function TerraStationConnectButton({ onCloseModal }) {
   const {
     availableConnections,
     availableInstallations,
   } = useWallet();
-  const {connectTerraAndCloseModal, filterForStation} = useTerraStation(onCloseModal)
-
+  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(onCloseModal)
 
   return (
-          <>
-            {availableConnections.filter(filterForStation)
-              .map(({ type, identifier, name, icon }) => (
-
-                <Button colorScheme='black' key={identifier} onClick={() => connectTerraAndCloseModal(type, identifier)}>
-                  <img
-                    src={icon}
-                    alt={name}
-                    style={{ width: "1em", height: "1em" }}
-                  />
-                Connect {name} [{identifier}]
-                </Button>
-            ))}
-            {availableInstallations.filter(filterForStation)
-              .map(({ identifier, name, icon, url }) => (
-                <Button colorScheme="black" key={identifier} onClick={() => (window.location.href = url)}>
-                  <img
-                  src={icon}
-                  alt={name}
-                  style={{ width: "1em", height: "1em" }}
-                />
-                Install {name} [{identifier}]
-                </Button>
-            ))}
-            </>
+    <>
+      {availableConnections.filter(filterForStation)
+        .map(({ type, identifier, name, icon }) => (
+          <Button
+            variant="wallet"
+            key={identifier} 
+            onClick={() => connectTerraAndCloseModal(type, identifier)}
+          >
+            <HStack justify="space-between" width="full">
+              <Text>{name}</Text>
+              <Image boxSize='24px' objectFit='cover' src={icon} alt={name} />
+            </HStack>
+          </Button>
+        ))}
+      {availableInstallations.filter(filterForStation)
+        .map(({ identifier, name, icon, url }) => (
+          <Button colorScheme="black" key={identifier} onClick={() => (window.location.href = url)}>
+            <img
+              src={icon}
+              alt={name}
+              style={{ width: "1em", height: "1em" }}
+            />
+            Install {name} [{identifier}]
+          </Button>
+        ))}
+    </>
   )
 }
 

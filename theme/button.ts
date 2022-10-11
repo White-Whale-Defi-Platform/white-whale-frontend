@@ -92,6 +92,19 @@ const button = {
         boxShadow: "none",
       },
     },
+    wallet: {
+      transition: "0.2s all",
+      width: "full",
+      colorScheme: 'black',
+      borderRadius: "xl",
+      bg: "dark.900",
+      mb: 4,
+      p: 8,
+      _hover: {
+        bg: 'brand.500',
+        color: 'dark.900',
+      }
+    }
   },
 };
 
