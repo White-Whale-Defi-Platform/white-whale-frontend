@@ -11,6 +11,7 @@ import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
+import useConnectKeplr from "hooks/useConnectKeplr"
 
 async function fetchTokenBalance({
   client,
@@ -30,6 +31,7 @@ async function fetchTokenBalance({
     //   `No denom or token_address were provided to fetch the balance.`
     // )
   }
+  
 
   /*
    * if this is a native asset or an ibc asset that has juno_denom
@@ -75,12 +77,15 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet } = useRecoilValue(walletState)
-
+  const { address, network, client, activeWallet, status } = useRecoilValue(walletState)
+  // TODO: Adding this fixes the issue where refresh means no client 
+  const {connectKeplr} = useConnectKeplr();
+  if (!client && status == "@wallet-state/restored"){
+    connectKeplr();
+  }
+  console.log(address, network, client, activeWallet, status)
   const tokenInfo = useTokenInfo(tokenSymbol)
-  const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
-
-
+  const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)  
   const { data: balance = 0, isLoading, refetch} = useQuery(
     ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
@@ -99,7 +104,6 @@ export const useTokenBalance = (tokenSymbol: string) => {
       refetchIntervalInBackground: true,
     }
   )
-
   return { balance, isLoading : isLoading , refetch}
 }
 
