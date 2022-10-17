@@ -84,17 +84,14 @@
 // const useAsset = ({list = [], skip = ''}: Props = {}) => {
 //     const [tokeassetsnList] = useTokenList()
 
-
 //     const assetByName = tokeassetsnList?.tokens.map(({symbol}) => symbol)
 //     const [withBalance] = useMultipleTokenBalance(assetByName)
-    
+
 //     const assetWithBalance = useMemo(() => {
 //         if(!withBalance) return tokeassetsnList?.tokens || []
 
 //         return withBalance
 //     },[withBalance])
-
-
 
 //     if (!list.length) return assetWithBalance.filter(({name}) => name !== skip)
 

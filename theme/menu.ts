@@ -1,32 +1,32 @@
 const styles = {
   baseStyle: {
     list: {
-      bg: "brand.600",
-      border: "none",
-      boxShadow: "lg",
-      minW: "9rem",
-      borderRadius: "2xl",
+      bg: 'brand.600',
+      border: 'none',
+      boxShadow: 'lg',
+      minW: '9rem',
+      borderRadius: '2xl',
     },
     item: {
-      py: "0.6rem",
-      px: "1.2rem",
-      color: "brand.50", 
-      fontWeight: "500",
-      fontSize: "sm",
+      py: '0.6rem',
+      px: '1.2rem',
+      color: 'brand.50',
+      fontWeight: '500',
+      fontSize: 'sm',
       _hover: {
-        color: "white",
+        color: 'white',
       },
       _focus: {
-        bg: "transparent",
+        bg: 'transparent',
       },
       _active: {
-        bg: "transparent",
+        bg: 'transparent',
       },
       _expanded: {
-        bg: "transparent",
+        bg: 'transparent',
       },
     },
   },
-};
+}
 
-export default styles;
+export default styles

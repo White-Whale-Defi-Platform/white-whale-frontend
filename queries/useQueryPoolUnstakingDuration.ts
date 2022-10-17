@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query'
-import {useRecoilValue} from "recoil";
+import { useRecoilValue } from 'recoil'
 
 import { getUnstakingDuration } from '../services/staking'
-import {walletState} from "../state/atoms/walletAtoms";
+import { walletState } from '../state/atoms/walletAtoms'
 import { PoolEntityType, usePoolFromListQueryById } from './usePoolsListQuery'
 
 type UseQueryPoolUnstakingDurationArgs = {

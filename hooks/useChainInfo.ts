@@ -9,12 +9,10 @@ import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-
-
 export const unsafelyReadChainInfoCache = () =>
   queryClient.getQueryCache().find(chainInfoQueryKey)?.state?.data as
-  | ChainInfo
-  | undefined
+    | ChainInfo
+    | undefined
 
 export const useChains = () => {
   const currentWalletState = useRecoilValue(walletState)
@@ -38,14 +36,13 @@ export const useChains = () => {
 }
 
 export const useChainInfo = (id = null) => {
-
   const chainInfo = useChains()
-  
+
   const chain = useMemo(() => {
     if (!chainInfo) return []
 
     return chainInfo.find(({ chainId }) => chainId === id) || chainInfo?.[0]
   }, [chainInfo, id])
-  
+
   return [chain]
 }

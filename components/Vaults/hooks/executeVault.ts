@@ -1,13 +1,11 @@
 import { coin } from '@cosmjs/stargate'
-import {
-  validateTransactionSuccess,
-} from 'util/messages'
+import { validateTransactionSuccess } from 'util/messages'
 
-import {Wallet} from "../../../util/wallet-adapters";
+import { Wallet } from '../../../util/wallet-adapters'
 
 type ExecuteAddLiquidityArgs = {
-  isNative: boolean,
-  denom: string,
+  isNative: boolean
+  denom: string
   amount: string
   senderAddress: string
   contractAddress: string
@@ -24,26 +22,15 @@ export const executeVault = async ({
   amount,
   client,
   contractAddress,
-  senderAddress
+  senderAddress,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-
   if (!isNative) {
     return validateTransactionSuccess(
-      await client.post(
-        senderAddress,
-        encodedMsgs
-      )
+      await client.post(senderAddress, encodedMsgs)
     )
   }
 
-  const funds = [
-    coin(amount, denom)
-  ]
+  const funds = [coin(amount, denom)]
 
-  return await client.execute(
-    senderAddress,
-    contractAddress,
-    msgs,
-    funds
-  )
+  return await client.execute(senderAddress, contractAddress, msgs, funds)
 }

@@ -23,9 +23,9 @@ export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
         const [tokenA, tokenB] = newValue
         if (tokenA.tokenSymbol === tokenB.tokenSymbol) {
           requestAnimationFrame(() => {
-            const A = {...oldValue[1], amount : oldValue[0].amount}
-            const B = {...oldValue[0], amount : oldValue[1].amount}
-            setSelf([A,B])
+            const A = { ...oldValue[1], amount: oldValue[0].amount }
+            const B = { ...oldValue[0], amount: oldValue[1].amount }
+            setSelf([A, B])
           })
           // requestAnimationFrame(() => {
           //   setSelf([oldValue[1], oldValue[0]])
@@ -36,13 +36,11 @@ export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
   ],
 })
 
-
 export const slippageAtom = atom<number>({
   key: 'slippageForSwap',
   default: 0.1,
   effects_UNSTABLE: [
     ({ onSet, setSelf }) => {
-
       const slippage = localStorage.getItem('slippage')
       setSelf(Number(slippage))
 

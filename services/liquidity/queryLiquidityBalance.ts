@@ -1,6 +1,6 @@
 import { protectAgainstNaN } from 'junoblocks'
 
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 type QueryLiquidityBalanceArgs = {
   address: string

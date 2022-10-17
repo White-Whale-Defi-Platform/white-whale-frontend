@@ -14,6 +14,5 @@ export const usePriceForOneToken = ({ tokenASymbol, tokenBSymbol }) => {
   //   isPriceLoading ? undefined : currentTokenPrice
   // )
 
-
   return [currentTokenPrice, isPriceLoading] as const
 }
