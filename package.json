@@ -9,6 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "prettier:write": "prettier --write .",
+    "prettier": "prettier --check \"**/*.{ts,md}\" --list-different",
+    "format:yaml": "prettier --check \"**/*.{yml}\" --write",
+    "format:code": "prettier --check \"**/*.{yml}\" --write",
     "typecheck": "tsc"
   },
   "dependencies": {
