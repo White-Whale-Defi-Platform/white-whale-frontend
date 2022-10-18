@@ -1,5 +1,8 @@
-[[redirects]]
-  from = "/"
-  to = "/swap"
-  status = 200
-  force = true # COMMENT: ensure that we always redirect
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+
+# [[redirects]]
+#   from = "/"
+#   to = "/swap"
+#   status = 200
+#   force = true # COMMENT: ensure that we always redirect
