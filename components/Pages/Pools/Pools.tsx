@@ -50,14 +50,14 @@ const Pools: FC<Props> = () => {
         if (!pools) return []
 
         const myPoolsId = myPools.map(({pool}) => pool)
-
+        const imgOrder = "USDC"
         
 
         return pools
             .map(pool => ({
                 pool: pool?.pool_id,
-                token1Img: pool.pool_assets?.[0].logoURI,
-                token2Img: pool.pool_assets?.[1].logoURI,
+                token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
+                token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,
                 apr: "coming soon",
                 volume24hr: "coming soon",
                 totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
