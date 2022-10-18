@@ -1,6 +1,6 @@
 {
   "name": "wasmswap-interface",
-  "homepage": ".",
+  "homepage": "/",
   "version": "1.2.5",
   "scripts": {
     "dev": "next dev",
