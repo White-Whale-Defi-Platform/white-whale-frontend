@@ -1,1 +1,1 @@
-export {default} from './ManageLiquidity'
+export { default } from './ManageLiquidity'

@@ -1,11 +1,11 @@
 export default {
   baseStyle: {
-    color: "white"
+    color: 'white',
   },
   variants: {
     light: {
-      color: "brand.50",
-      fontSize: "sm",
+      color: 'brand.50',
+      fontSize: 'sm',
     },
   },
-};
+}

@@ -1,7 +1,7 @@
 import { num } from 'libs/num'
 import { Pool } from 'types'
 
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 export interface GetToken1ForToken2PriceInput {
   nativeAmount: number | string
@@ -15,8 +15,8 @@ export const getToken1ForToken2Price = async ({
   client,
 }: GetToken1ForToken2PriceInput) => {
   try {
-    const {assets} = await client.queryContractSmart(swapAddress, {
-      pool: {}
+    const { assets } = await client.queryContractSmart(swapAddress, {
+      pool: {},
     })
     const [asset1, asset2] = assets
     return num(asset2.amount).div(asset1.amount).toNumber()
@@ -37,8 +37,8 @@ export const getToken2ForToken1Price = async ({
   client,
 }: GetToken2ForToken1PriceInput) => {
   try {
-    const {assets} = await client.queryContractSmart(swapAddress, {
-      pool: {}
+    const { assets } = await client.queryContractSmart(swapAddress, {
+      pool: {},
     })
     const [asset1, asset2] = assets
     return num(asset1.amount).div(asset2.amount).toNumber()
