@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export default function BLunaIcon(props) {
   return (
@@ -33,5 +33,5 @@ export default function BLunaIcon(props) {
         fill="#FE6F03"
       />
     </svg>
-  );
+  )
 }

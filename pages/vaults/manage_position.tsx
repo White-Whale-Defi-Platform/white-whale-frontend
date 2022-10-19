@@ -1,4 +1,4 @@
-import ManagePoistion from "components/Vaults/ManagePoistion"
+import ManagePoistion from 'components/Vaults/ManagePoistion'
 
 const ManagePositionPage = () => <ManagePoistion />
 

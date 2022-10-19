@@ -1,5 +1,5 @@
 import ManageLiquidity from 'components/Pages/ManageLiquidity'
 
-const ManageLiquidityPage = () => ( <ManageLiquidity />)
+const ManageLiquidityPage = () => <ManageLiquidity />
 
 export default ManageLiquidityPage

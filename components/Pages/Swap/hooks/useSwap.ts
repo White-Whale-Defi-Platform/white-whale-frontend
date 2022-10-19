@@ -1,15 +1,17 @@
+import { useMemo } from 'react'
+
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Swap/swapAtoms'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
+import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+
 import useRoute from './useRoute'
 import useSimulate from './useSimulate'
 import useTransaction from './useTransaction'
-import { fromChainAmount } from 'libs/num'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)

@@ -1,6 +1,6 @@
 import { Coin } from '@cosmjs/launchpad'
 
-import { Wallet } from "../util/wallet-adapters";
+import { Wallet } from '../util/wallet-adapters'
 
 export type Expiration =
   | { readonly at_height: number }
@@ -171,13 +171,9 @@ export const CW20 = (client: Wallet): CW20Contract => {
       recipient: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          mint: { recipient, amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        mint: { recipient, amount },
+      })
       return result.transactionHash
     }
 
@@ -187,25 +183,17 @@ export const CW20 = (client: Wallet): CW20Contract => {
       recipient: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          transfer: { recipient, amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        transfer: { recipient, amount },
+      })
       return result.transactionHash
     }
 
     // burns tokens, returns transactionHash
     const burn = async (sender: string, amount: string): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          burn: { amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        burn: { amount },
+      })
       return result.transactionHash
     }
 
@@ -214,13 +202,9 @@ export const CW20 = (client: Wallet): CW20Contract => {
       spender: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          increase_allowance: { spender, amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        increase_allowance: { spender, amount },
+      })
       return result.transactionHash
     }
 
@@ -229,13 +213,9 @@ export const CW20 = (client: Wallet): CW20Contract => {
       spender: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          decrease_allowance: { spender, amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        decrease_allowance: { spender, amount },
+      })
       return result.transactionHash
     }
 
@@ -245,13 +225,9 @@ export const CW20 = (client: Wallet): CW20Contract => {
       recipient: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          transfer_from: { owner, recipient, amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        transfer_from: { owner, recipient, amount },
+      })
       return result.transactionHash
     }
 
@@ -266,24 +242,16 @@ export const CW20 = (client: Wallet): CW20Contract => {
     }
 
     const unbond = async (sender: string, amount: string): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          unbond: { amount },
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        unbond: { amount },
+      })
       return result.transactionHash
     }
 
     const claim = async (sender: string): Promise<string> => {
-      const result = await client.execute(
-        sender,
-        contractAddress,
-        {
-          claim: {},
-        }
-      )
+      const result = await client.execute(sender, contractAddress, {
+        claim: {},
+      })
       return result.transactionHash
     }
 

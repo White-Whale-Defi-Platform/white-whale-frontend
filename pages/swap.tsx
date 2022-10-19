@@ -7,6 +7,8 @@ function getInitialTokenPairFromSearchParams() {
   return from || to ? ([from, to] as const) : undefined
 }
 
-const SwapPage = () => (<Swap initialTokenPair={getInitialTokenPairFromSearchParams()} />)
+const SwapPage = () => (
+  <Swap initialTokenPair={getInitialTokenPairFromSearchParams()} />
+)
 
 export default SwapPage

@@ -1,15 +1,10 @@
 // import { TokenSelectList, TokenSelectListProps } from 'components'
 import { useTokenList } from 'hooks/useTokenList'
 
-export const TokenOptionsList = ({
-  activeTokenSymbol,
-  onSelect,
-  ...props
-}) => {
+export const TokenOptionsList = ({ activeTokenSymbol, onSelect, ...props }) => {
   const [tokenList] = useTokenList()
-  return  null
+  return null
 }
-
 
 // export const TokenOptionsList = ({
 //   activeTokenSymbol,

@@ -47,7 +47,7 @@ export const directTokenSwap = async ({
     )
   }
 
-  return await client.execute(senderAddress, swapAddress, msgs, [
+  return client.execute(senderAddress, swapAddress, msgs, [
     coin(tokenAmount, tokenA.denom),
   ])
 }

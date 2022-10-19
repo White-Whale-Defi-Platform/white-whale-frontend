@@ -1,12 +1,13 @@
-import { Flex } from "@chakra-ui/react"
+import { FC, ReactNode } from 'react'
+
+import { Flex } from '@chakra-ui/react'
 import Navbar from 'components/Navbar'
-import RadialGradient from "./RadialGradient"
-import { FC, ReactNode } from "react";
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import Status from "../Status";
-// import { useRouter } from "next/router";
 
+import Status from '../Status'
+import RadialGradient from './RadialGradient'
+// import { useRouter } from "next/router";
 
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
@@ -40,7 +41,6 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
         <Status />
       </Flex>
     </Flex>
-
   )
 }
 
