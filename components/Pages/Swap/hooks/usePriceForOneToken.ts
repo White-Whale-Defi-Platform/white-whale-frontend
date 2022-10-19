@@ -1,6 +1,3 @@
-import { usePersistance } from 'junoblocks'
-
-import { num } from '../../../../libs/num'
 import { useTokenToTokenPrice } from './useTokenToTokenPrice'
 
 export const usePriceForOneToken = ({ tokenASymbol, tokenBSymbol }) => {
@@ -9,10 +6,6 @@ export const usePriceForOneToken = ({ tokenASymbol, tokenBSymbol }) => {
     tokenBSymbol: tokenBSymbol,
     tokenAmount: 1,
   })
-
-  // const persistPrice = usePersistance(
-  //   isPriceLoading ? undefined : currentTokenPrice
-  // )
 
   return [currentTokenPrice, isPriceLoading] as const
 }

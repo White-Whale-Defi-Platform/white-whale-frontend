@@ -1,7 +1,7 @@
 // import { toBase64 } from "@arthuryeti/terra";
 // import { Coin } from 'hooks/useCosmWasmClient'
 import { Coin } from '@cosmjs/launchpad'
-import { coin, EncodeObject } from '@cosmjs/proto-signing'
+import { coin } from '@cosmjs/proto-signing'
 import { LCDClient } from '@terra-money/terra.js'
 import { createAsset, isNativeAsset, toAsset } from 'services/asset'
 import { ReverseSimulationResponse, Route, SimulationResponse } from 'types'

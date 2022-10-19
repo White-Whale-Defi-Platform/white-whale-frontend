@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { Button, HStack, Image, Text } from '@chakra-ui/react'
+import { Button, HStack, Text } from '@chakra-ui/react'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRecoilValue } from 'recoil'

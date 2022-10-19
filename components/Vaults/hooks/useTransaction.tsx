@@ -2,16 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
-import {
-  CreateTxFailed,
-  Timeout,
-  TxFailed,
-  TxUnspecifiedError,
-  UserDenied,
-} from '@terra-money/wallet-provider'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { executeAddLiquidity } from 'services/liquidity'
 
 import { executeVault } from './executeVault'
 

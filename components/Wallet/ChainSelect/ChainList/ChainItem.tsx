@@ -29,7 +29,7 @@ function ChainItem({ chain, index, onChange, onClose, chainList, active }) {
       }}
     >
       <HStack>
-        <Image src={chain?.icon} boxSize={30} objectFit="cover" />
+        <Image src={chain?.icon} alt="" boxSize={30} objectFit="cover" />
         <Text paddingLeft={3}>{chain?.label}</Text>
       </HStack>
       <ListIcon

@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react'
-import { useQueries, useQuery } from 'react-query'
+import { useMemo } from 'react'
+import { useQuery } from 'react-query'
 
 import { formatPrice, fromChainAmount } from 'libs/num'
 import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
@@ -86,11 +86,6 @@ const queryBalance = async (
   }
 }
 
-type useVaultDepostProps = {
-  lpToken: string[]
-  options?: Parameters<typeof useQuery>[1]
-}
-
 export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
   const { chainId, client, address, network } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
@@ -150,7 +145,7 @@ export const useVaultMultiDepost = (lpTokens: any[]) => {
   return { balance, isLoading, refetch }
 }
 export const useVaulTotal = (lpTokenIds: any[]) => {
-  const { chainId, client, address, network } = useRecoilValue(walletState)
+  const { chainId, client, network } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const { data: balance, isLoading } = useQuery(
@@ -174,7 +169,6 @@ export const useVaulTotal = (lpTokenIds: any[]) => {
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
   const { chainId, client, network } = useRecoilValue(walletState)
-  const [getTokenDollarValue] = useGetTokenDollarValueQuery()
   // console.log(`Chain ID is ${chainId}, network is ${network} this is ${process.env.NEXT_PUBLIC_VAULTS_LIST_URL}`)
 
   const { data: vaults, isLoading } = useQuery<VaultsResponse>(
