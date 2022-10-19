@@ -77,7 +77,18 @@
         "tsx": "never"
       }
     ],
-    "import/no-extraneous-dependencies": ["off"]
+    "import/no-extraneous-dependencies": ["off"],
+    // other rules
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "variable",
+        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
+        "leadingUnderscore": "allow"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": "off"
   },
   "settings": {
     "react": {
