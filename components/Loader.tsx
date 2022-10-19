@@ -1,5 +1,6 @@
-import React from "react";
-import { Flex } from "@chakra-ui/react";
+import React from 'react'
+
+import { Flex } from '@chakra-ui/react'
 
 const Loader = () => {
   return (
@@ -61,7 +62,7 @@ const Loader = () => {
         </g>
       </svg>
     </Flex>
-  );
-};
+  )
+}
 
-export default Loader;
+export default Loader

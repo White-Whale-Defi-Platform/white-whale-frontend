@@ -11,9 +11,7 @@
         "name": "Luna",
         "decimals": 6,
         "logoURI": "/logos/luna.svg",
-        "tags": [
-          "native"
-        ],
+        "tags": ["native"],
         "native": true,
         "denom": "uluna"
       },

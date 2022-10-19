@@ -1,13 +1,15 @@
-import { useTokenInfo } from 'hooks/useTokenInfo'
-import useTransaction from './useTransaction'
-import { num, toChainAmount } from 'libs/num'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
+
+import { useTokenInfo } from 'hooks/useTokenInfo'
+import { num, toChainAmount } from 'libs/num'
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+
 import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+import useTransaction from './useTransaction'
 
 const useProvideLP = ({ reverse = false }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)

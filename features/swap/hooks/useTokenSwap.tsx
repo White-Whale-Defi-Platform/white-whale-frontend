@@ -69,7 +69,6 @@ export const useTokenSwap = ({
         baseTokenBPool,
       } = matchingPools
 
-
       if (streamlinePoolAB || streamlinePoolBA) {
         const swapDirection = streamlinePoolAB?.swap_address
           ? 'tokenAtoTokenB'

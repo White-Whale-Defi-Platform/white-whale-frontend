@@ -1,10 +1,10 @@
 import React from 'react'
+
 import { IconButton } from '@chakra-ui/react'
-
-import ConnectedWallet from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWallet'
 import LogoutIcon from 'components/icons/LogoutIcon'
+import ConnectedWallet from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWallet'
 
-function ConnectedWalletWithDisconnect({connected, onDisconnect}) {
+function ConnectedWalletWithDisconnect({ connected, onDisconnect }) {
   return (
     <>
       <ConnectedWallet connected={connected} />
@@ -14,15 +14,14 @@ function ConnectedWalletWithDisconnect({connected, onDisconnect}) {
         variant="unstyled"
         size="xs"
         _focus={{
-          boxShadow: "none",
+          boxShadow: 'none',
         }}
         _hover={{
-          color: "brand.500",
+          color: 'brand.500',
         }}
-        onClick={ onDisconnect }
+        onClick={onDisconnect}
       />
     </>
-
   )
 }
 

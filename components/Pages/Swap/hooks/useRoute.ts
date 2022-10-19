@@ -1,16 +1,18 @@
-import useSimulate from './useSimulate'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useEffect, useMemo } from 'react'
-import { useTokenList } from 'hooks/useTokenList'
-import { findPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+
+import { coin } from '@cosmjs/proto-signing'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { useTokenList } from 'hooks/useTokenList'
 import {
-  usePoolsListQuery,
   PoolsListQueryResponse,
+  usePoolsListQuery,
 } from 'queries/usePoolsListQuery'
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+import { findPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { toAssetInfo } from 'services/asset'
 import { createExecuteMessage } from 'util/messages'
-import { coin } from '@cosmjs/proto-signing'
+
+import useSimulate from './useSimulate'
 
 export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
@@ -19,11 +21,11 @@ export const toBase64 = (obj: object) => {
 const buildRoute = (graph, start, end) => {
   if (!start || !end) return []
 
-  let queue = [[start, []]],
+  const queue = [[start, []]],
     seen = new Set()
 
   while (queue.length) {
-    let [curVert, [...path]] = queue.shift()
+    const [curVert, [...path]] = queue.shift()
     path.push(curVert)
     if (curVert === end) return path
 

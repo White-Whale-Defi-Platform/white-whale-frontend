@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { CSS } from '@stitches/react'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
@@ -16,7 +18,6 @@ import {
   Valid,
   Wallet,
 } from 'junoblocks'
-import React from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 

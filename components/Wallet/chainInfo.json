@@ -42,9 +42,7 @@
       "average": 0.05,
       "high": 0.1
     },
-    "features": [
-      "cosmwasm"
-    ]
+    "features": ["cosmwasm"]
   },
   {
     "chainId": "uni-3",
@@ -91,5 +89,4 @@
     },
     "features": ["cosmwasm"]
   }
-  
 ]

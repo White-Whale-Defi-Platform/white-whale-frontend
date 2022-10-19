@@ -1,6 +1,6 @@
 import { usePersistance } from 'junoblocks'
-import { num } from '../../../../libs/num'
 
+import { num } from '../../../../libs/num'
 import { useTokenToTokenPrice } from './useTokenToTokenPrice'
 
 export const usePriceForOneToken = ({ tokenASymbol, tokenBSymbol }) => {

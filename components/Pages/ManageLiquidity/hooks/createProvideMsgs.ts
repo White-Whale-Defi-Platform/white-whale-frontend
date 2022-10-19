@@ -1,7 +1,7 @@
 import { Coin, MsgExecuteContract } from '@terra-money/terra.js'
-import { getTokenDenom, isNativeAsset } from '../../../../services/asset'
-
 import { Asset, Pool } from 'types/common'
+
+import { getTokenDenom, isNativeAsset } from '../../../../services/asset'
 
 type CreateProvideMsgsOptions = {
   pool: Pool

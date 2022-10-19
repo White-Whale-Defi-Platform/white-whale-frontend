@@ -32,5 +32,5 @@ export const executeVault = async ({
 
   const funds = [coin(amount, denom)]
 
-  return await client.execute(senderAddress, contractAddress, msgs, funds)
+  return client.execute(senderAddress, contractAddress, msgs, funds)
 }

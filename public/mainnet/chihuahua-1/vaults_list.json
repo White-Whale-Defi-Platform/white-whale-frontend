@@ -11,9 +11,7 @@
         "name": "Huahua",
         "decimals": 6,
         "logoURI": "/logos/huahua.png",
-        "tags": [
-          "native"
-        ],
+        "tags": ["native"],
         "native": true,
         "denom": "uhuahua"
       },

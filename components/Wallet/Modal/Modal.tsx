@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Button,
   Modal,
@@ -8,37 +9,32 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  VStack
+  VStack,
 } from '@chakra-ui/react'
-
-import TerraStationConnectButton from 'components/Wallet/Modal/TerraStationConnectButton';
-import KeplrConnectButton from 'components/Wallet/Modal/KeplrConnectButton';
+import KeplrConnectButton from 'components/Wallet/Modal/KeplrConnectButton'
+import TerraStationConnectButton from 'components/Wallet/Modal/TerraStationConnectButton'
 
 function WalletModal({ isOpenModal, onCloseModal }) {
   return (
-      <Modal isOpen={isOpenModal} onClose={onCloseModal} >
-        <ModalOverlay />
-        <ModalContent >
-          <ModalHeader>Select Wallet</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody >
-            <VStack
-              justify="center"
-              align="center"
-              textAlign="center"
-            >
-              <TerraStationConnectButton onCloseModal={onCloseModal} />
-              <KeplrConnectButton onCloseModal={onCloseModal} />
-            </VStack>
-          </ModalBody>
+    <Modal isOpen={isOpenModal} onClose={onCloseModal}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Select Wallet</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <VStack justify="center" align="center" textAlign="center">
+            <TerraStationConnectButton onCloseModal={onCloseModal} />
+            <KeplrConnectButton onCloseModal={onCloseModal} />
+          </VStack>
+        </ModalBody>
 
-          {/* <ModalFooter >
+        {/* <ModalFooter >
             <Button colorScheme='blue' mr={3} onClick={onCloseModal}>
               Close
             </Button>
           </ModalFooter> */}
-        </ModalContent>
-      </Modal>
+      </ModalContent>
+    </Modal>
   )
 }
 
