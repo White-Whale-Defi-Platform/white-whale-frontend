@@ -7,14 +7,9 @@ package = "@netlify/plugin-nextjs"
   status = 302
   force = true # COMMENT: ensure that we always redirect
 
-[[redirects]]
-  from = ""
-  to = "/swap"
-  status = 302
-  force = true # COMMENT: ensure that we always redirect
 
-[[redirects]]
-  from = "/index.html"
-  to = "/swap"
-  status = 301
-  force = true # COMMENT: ensure that we always redirect
+# [[redirects]]
+#   from = "/index.html"
+#   to = "/swap"
+#   status = 301
+#   force = true # COMMENT: ensure that we always redirect
