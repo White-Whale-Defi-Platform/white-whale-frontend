@@ -6,12 +6,12 @@ import { convertMicroDenomToDenom } from 'util/conversion'
 import { CW20 } from '../services/cw20'
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
-import {Wallet} from "../util/wallet-adapters";
+import { Wallet } from '../util/wallet-adapters'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import useConnectKeplr from "hooks/useConnectKeplr"
+import useConnectKeplr from 'hooks/useConnectKeplr'
 
 async function fetchTokenBalance({
   client,
@@ -19,11 +19,10 @@ async function fetchTokenBalance({
   address,
 }: {
   client: Wallet
-  token: any,
+  token: any
   address: string
 }) {
-
-  const{ denom, native, token_address, decimals }  = token || {}
+  const { denom, native, token_address, decimals } = token || {}
 
   if (!denom && !token_address) {
     return 0
@@ -31,7 +30,6 @@ async function fetchTokenBalance({
     //   `No denom or token_address were provided to fetch the balance.`
     // )
   }
-  
 
   /*
    * if this is a native asset or an ibc asset that has juno_denom
@@ -50,10 +48,10 @@ async function fetchTokenBalance({
    * everything else
    *  */
   if (token_address) {
-    try{
+    try {
       const balance = await CW20(client).use(token_address).balance(address)
       return convertMicroDenomToDenom(Number(balance), decimals)
-    }catch(err){
+    } catch (err) {
       return 0
     }
     // return {
@@ -77,24 +75,29 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet, status } = useRecoilValue(walletState)
-  // TODO: Adding this fixes the issue where refresh means no client 
-  const {connectKeplr} = useConnectKeplr();
-  if (!client && status == "@wallet-state/restored"){
-    connectKeplr();
+  const { address, network, client, activeWallet, status } =
+    useRecoilValue(walletState)
+  // TODO: Adding this fixes the issue where refresh means no client
+  const { connectKeplr } = useConnectKeplr()
+  if (!client && status == '@wallet-state/restored') {
+    connectKeplr()
   }
   console.log(address, network, client, activeWallet, status)
   const tokenInfo = useTokenInfo(tokenSymbol)
-  const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)  
-  const { data: balance = 0, isLoading, refetch} = useQuery(
+  const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
+  const {
+    data: balance = 0,
+    isLoading,
+    refetch,
+  } = useQuery(
     ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
-        return await fetchTokenBalance({
-          client,
-          address,
-          token: tokenInfo || ibcAssetInfo,
-        })
+      return await fetchTokenBalance({
+        client,
+        address,
+        token: tokenInfo || ibcAssetInfo,
+      })
       // }
     },
     {
@@ -104,12 +107,12 @@ export const useTokenBalance = (tokenSymbol: string) => {
       refetchIntervalInBackground: true,
     }
   )
-  return { balance, isLoading : isLoading , refetch}
+  return { balance, isLoading: isLoading, refetch }
 }
 
-
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
-  const { address, status, client , chainId, network} = useRecoilValue(walletState)
+  const { address, status, client, chainId, network } =
+    useRecoilValue(walletState)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
 
@@ -118,16 +121,13 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
     [tokenSymbols]
   )
 
-
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
     async () => {
       const balances = await Promise.all(
         tokenSymbols
-        // .filter(Boolean)
-        .map((tokenSymbol) =>
-          {
-
+          // .filter(Boolean)
+          .map((tokenSymbol) => {
             return fetchTokenBalance({
               client,
               address,
@@ -138,12 +138,10 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
                 ) ||
                 {},
             })
-          }
-        )
+          })
       )
 
       return balances
-
     },
     {
       enabled: Boolean(

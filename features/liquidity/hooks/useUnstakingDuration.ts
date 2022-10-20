@@ -1,8 +1,8 @@
 import { useChainInfo } from 'hooks/useChainInfo'
 import { useQuery } from 'react-query'
-import {useRecoilValue} from "recoil";
+import { useRecoilValue } from 'recoil'
 import { getUnstakingDuration } from 'services/staking'
-import {walletState, WalletStatusType} from 'state/atoms/walletAtoms'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 import {
   PoolEntityType,

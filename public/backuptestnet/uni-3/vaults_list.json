@@ -11,9 +11,7 @@
         "name": "Juno",
         "decimals": 6,
         "logoURI": "/logos/juno.svg",
-        "tags": [
-          "native"
-        ],
+        "tags": ["native"],
         "native": true,
         "denom": "ujunox"
       },
@@ -32,8 +30,7 @@
         "name": "Junoone",
         "decimals": 6,
         "logoURI": "/logos/junoone.svg",
-        "tags": [
-        ],
+        "tags": [],
         "native": false,
         "denom": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g"
       },

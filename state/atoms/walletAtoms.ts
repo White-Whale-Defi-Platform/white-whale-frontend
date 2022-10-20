@@ -1,7 +1,7 @@
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
 
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 export enum WalletStatusType {
   /* nothing happens to the wallet */
@@ -19,14 +19,14 @@ export enum WalletStatusType {
 type GeneratedWalletState<
   TClient extends any,
   TStateExtension extends {}
-  > = TStateExtension & {
-    client: TClient | null
-    status: WalletStatusType
-    address: string,
-    chainId: string,
-    network: Network,
-    activeWallet:string
-  }
+> = TStateExtension & {
+  client: TClient | null
+  status: WalletStatusType
+  address: string
+  chainId: string
+  network: Network
+  activeWallet: string
+}
 
 type CreateWalletStateArgs<TState = {}> = {
   key: string
@@ -63,7 +63,7 @@ function createWalletState<TClient = any, TState = {}>({
                 status: WalletStatusType.restored,
               })
             }
-          } catch (e) { }
+          } catch (e) {}
         }
 
         onSet((newValue, oldValue) => {
@@ -87,13 +87,10 @@ function createWalletState<TClient = any, TState = {}>({
   })
 }
 
-export const walletState = createWalletState<
-  Wallet,
-  { key?: Key }
->({
+export const walletState = createWalletState<Wallet, { key?: Key }>({
   key: 'internal-wallet',
   default: {
-    key: null
+    key: null,
   },
 })
 

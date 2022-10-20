@@ -1,3 +1,7 @@
+import { toast } from 'react-hot-toast'
+import { useMutation } from 'react-query'
+
+import { useRefetchQueries } from 'hooks/useRefetchQueries'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import {
   Button,
@@ -7,8 +11,7 @@ import {
   UpRightArrow,
   Valid,
 } from 'junoblocks'
-import { toast } from 'react-hot-toast'
-import { useMutation } from 'react-query'
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { directTokenSwap, passThroughTokenSwap } from 'services/swap'
 import {
@@ -18,8 +21,6 @@ import {
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
-import { useRefetchQueries } from 'hooks/useRefetchQueries'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
 
 type UseTokenSwapArgs = {
@@ -86,7 +87,7 @@ export const useTokenSwap = ({
         // })
       }
 
-      return await passThroughTokenSwap({
+      return passThroughTokenSwap({
         tokenAmount,
         price,
         slippage,

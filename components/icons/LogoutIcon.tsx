@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export default function LogoutIcon(props) {
   return (
@@ -15,5 +15,5 @@ export default function LogoutIcon(props) {
         fill="#3CCD64"
       />
     </svg>
-  );
+  )
 }

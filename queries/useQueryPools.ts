@@ -67,15 +67,18 @@ export const useQueryMultiplePoolsLiquidity = ({
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
 
-  const { address, client: signingClient, chainId } = useRecoilValue(walletState)
+  const {
+    address,
+    client: signingClient,
+    chainId,
+  } = useRecoilValue(walletState)
   // const client = useCosmWasmClient()
 
   const context = {
-    client : signingClient,
+    client: signingClient,
     signingClient,
     getTokenDollarValue,
   }
-
 
   async function queryPoolLiquidity(
     pool: PoolEntityType
@@ -87,15 +90,12 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
         context,
-        swap : {...swap, ...pool},
+        swap: { ...swap, ...pool },
         address,
       })
-
-
 
     const {
       providedStakedAmountInMicroDenom,
@@ -109,7 +109,6 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalReserve,
       swap,
     })
-
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenInfo: tokenA,
@@ -198,11 +197,12 @@ export const useQueryMultiplePoolsLiquidity = ({
     }
   }
 
-
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled: Boolean(!!signingClient && pool.pool_id && enabledGetTokenDollarValue),
+      enabled: Boolean(
+        !!signingClient && pool.pool_id && enabledGetTokenDollarValue
+      ),
 
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
@@ -218,7 +218,6 @@ export const useQueryMultiplePoolsLiquidity = ({
 }
 
 export const useQueryPoolLiquidity = ({ poolId }) => {
-
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
     usePoolsListQuery()
 
@@ -227,13 +226,10 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     return pool ? [pool] : undefined
   }, [poolId, poolsListResponse])
 
-
-
   const [poolResponse] = useQueryMultiplePoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,
   })
-
 
   // const persistedData = usePersistance(poolResponse?.data)
 

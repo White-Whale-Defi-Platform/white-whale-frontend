@@ -2,7 +2,7 @@ import {
   createExecuteMessage,
   validateTransactionSuccess,
 } from '../util/messages'
-import {Wallet} from "../util/wallet-adapters";
+import { Wallet } from '../util/wallet-adapters'
 
 type Denom =
   | {
@@ -28,9 +28,7 @@ export const claimRewards = async (
     })
   )
 
-  return validateTransactionSuccess(
-    await client.post(senderAddress, messages)
-  )
+  return validateTransactionSuccess(await client.post(senderAddress, messages))
 }
 
 type PendingRewardsResponse = {

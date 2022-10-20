@@ -1,10 +1,11 @@
+import { useQuery } from 'react-query'
+
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useQuery } from 'react-query'
-import { useRecoilValue } from 'recoil';
-import { walletState } from 'state/atoms/walletAtoms';
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
 
 type UseTokenPairsPricesArgs = {
@@ -36,7 +37,7 @@ export const useTokenToTokenPriceQuery = ({
     ],
     async queryFn() {
       if (tokenA && tokenB && matchingPools) {
-        return await tokenToTokenPriceQueryWithPools({
+        return tokenToTokenPriceQueryWithPools({
           matchingPools,
           tokenA,
           tokenB,

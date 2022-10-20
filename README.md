@@ -13,6 +13,7 @@ yarn dev
 Access the app on `http://localhost:3000/`.
 
 ## Netlify Integration
+
 In order to ensure successful deploys to Netlify via the CI/CD process, ensure the `yarn build` command is passing locally before a push, any failures here will fail the deploy too.
 
 ## Configuration

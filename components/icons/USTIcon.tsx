@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export default function USTIcon(props) {
   return (
@@ -36,5 +36,5 @@ export default function USTIcon(props) {
         fill="#1A1B2A"
       />
     </svg>
-  );
+  )
 }

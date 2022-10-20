@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export default function BurgerIcon(props) {
   return (
@@ -27,5 +27,5 @@ export default function BurgerIcon(props) {
       />
       <rect y="21.8184" width="34" height="5.06383" rx="2.53191" fill="white" />
     </svg>
-  );
+  )
 }

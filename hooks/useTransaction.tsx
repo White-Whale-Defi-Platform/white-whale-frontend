@@ -38,20 +38,20 @@ export enum TxStep {
 }
 
 type Params = {
-  enabled: boolean;
-  swapAddress: string;
-  swapAssets: any[];
-  price: number;
-  client: any;
-  senderAddress: string;
-  msgs: any | null;
-  encodedMsgs: any | null;
-  amount: string;
-  gasAdjustment?: number;
-  estimateEnabled?: boolean;
-  onBroadcasting?: (txHash: string) => void;
-  onSuccess?: (txHash: string, txInfo?: any) => void;
-  onError?: (txHash?: string, txInfo?: any) => void;
+  enabled: boolean
+  swapAddress: string
+  swapAssets: any[]
+  price: number
+  client: any
+  senderAddress: string
+  msgs: any | null
+  encodedMsgs: any | null
+  amount: string
+  gasAdjustment?: number
+  estimateEnabled?: boolean
+  onBroadcasting?: (txHash: string) => void
+  onSuccess?: (txHash: string, txInfo?: any) => void
+  onError?: (txHash?: string, txInfo?: any) => void
 }
 
 export const useTransaction = ({
@@ -79,7 +79,8 @@ export const useTransaction = ({
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', amount, debouncedMsgs, error], async () => {
+    ['fee', amount, debouncedMsgs, error],
+    async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
@@ -88,17 +89,19 @@ export const useTransaction = ({
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
-        if (/insufficient funds/i.test(error.toString()) || /Overflow: Cannot Sub with/i.test(error.toString())) {
+        if (
+          /insufficient funds/i.test(error.toString()) ||
+          /Overflow: Cannot Sub with/i.test(error.toString())
+        ) {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Insufficient Funds")
+          setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        }
-        else if (/Max spread assertion/i.test(error.toString())) {
+        } else if (/Max spread assertion/i.test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Try increasing slippage")
+          setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
         }
         // else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
@@ -111,13 +114,17 @@ export const useTransaction = ({
         else {
           console.error(error)
           setTxStep(TxStep.Idle)
-          setError("Failed to execute transaction.")
-          throw Error("Failed to execute transaction.")
+          setError('Failed to execute transaction.')
+          throw Error('Failed to execute transaction.')
         }
       }
     },
     {
-      enabled: debouncedMsgs != null && txStep == TxStep.Idle && error == null && enabled,
+      enabled:
+        debouncedMsgs != null &&
+        txStep == TxStep.Idle &&
+        error == null &&
+        enabled,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -129,8 +136,6 @@ export const useTransaction = ({
       },
     }
   )
-
-
 
   const { mutate } = useMutation(
     (data: any) => {
@@ -150,30 +155,29 @@ export const useTransaction = ({
       onError: (e: unknown) => {
         let message = ''
         console.error(e?.toString())
-        if (/insufficient funds/i.test(e?.toString()) || /Overflow: Cannot Sub with/i.test(e?.toString())) {
-          setError("Insufficient Funds")
-          message = "Insufficient Funds"
+        if (
+          /insufficient funds/i.test(e?.toString()) ||
+          /Overflow: Cannot Sub with/i.test(e?.toString())
+        ) {
+          setError('Insufficient Funds')
+          message = 'Insufficient Funds'
+        } else if (/Max spread assertion/i.test(e?.toString())) {
+          setError('Try increasing slippage')
+          message = 'Try increasing slippage'
+        } else if (/Request rejected/i.test(e?.toString())) {
+          setError('User Denied')
+          message = 'User Denied'
+        } else {
+          setError('Failed to execute transaction.')
+          message = 'Failed to execute transaction.'
         }
-        else if (/Max spread assertion/i.test(e?.toString())) {
-          setError("Try increasing slippage")
-          message = "Try increasing slippage"
-        }
-        else if (/Request rejected/i.test(e?.toString())) {
-          setError("User Denied")
-          message = "User Denied"
-        }
-        else {
-          setError("Failed to execute transaction.")
-          message = "Failed to execute transaction."
-        }
-
 
         toast({
           title: 'Swap Failed.',
           description: message,
           status: 'error',
           duration: 9000,
-          position: "top-right",
+          position: 'top-right',
           isClosable: true,
         })
 
@@ -185,19 +189,25 @@ export const useTransaction = ({
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
-        const queryPath = `multipleTokenBalances/${swapAssets.map(({ symbol }) => symbol)?.join('+')}`
+        const queryPath = `multipleTokenBalances/${swapAssets
+          .map(({ symbol }) => symbol)
+          ?.join('+')}`
         queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',
-          description: <Finder txHash={data.transactionHash} chainId={client.chainId}> From: {tokenA.symbol}  To: {tokenB.symbol}  </Finder>,
+          description: (
+            <Finder txHash={data.transactionHash} chainId={client.chainId}>
+              {' '}
+              From: {tokenA.symbol} To: {tokenB.symbol}{' '}
+            </Finder>
+          ),
           status: 'success',
           duration: 9000,
-          position: "top-right",
+          position: 'top-right',
           isClosable: true,
         })
-
       },
-    },
+    }
   )
 
   const { data: txInfo } = useQuery(
@@ -212,9 +222,8 @@ export const useTransaction = ({
     {
       enabled: txHash != null,
       retry: true,
-    },
+    }
   )
-
 
   const reset = () => {
     setError(null)
@@ -229,7 +238,7 @@ export const useTransaction = ({
 
     mutate({
       msgs,
-      fee
+      fee,
     })
   }, [msgs, fee, mutate, price])
 
@@ -249,7 +258,6 @@ export const useTransaction = ({
     if (error) {
       setError(null)
     }
-
 
     if (txStep != TxStep.Idle) {
       setTxStep(TxStep.Idle)

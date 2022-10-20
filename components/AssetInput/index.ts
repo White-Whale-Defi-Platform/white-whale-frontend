@@ -1,1 +1,1 @@
-export { default } from "./AssetInput"
+export { default } from './AssetInput'

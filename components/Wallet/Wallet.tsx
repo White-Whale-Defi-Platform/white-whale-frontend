@@ -1,38 +1,45 @@
 import React, { useCallback, useMemo } from 'react'
-import { useRecoilState} from 'recoil'
-import {
-  Box,
-  Button,
-  Divider} from "@chakra-ui/react";
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useChainInfo} from 'hooks/useChainInfo';
 
-import { walletState} from 'state/atoms/walletAtoms'
-import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr';
-import Card from 'components/Card';
-import WalletIcon from "components/icons/WalletIcon";
-import ConnectedWalletWithDisconnect from "components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect";
-import ChainSelectWithBalance from "components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance";
-import Select from 'components/Wallet/ChainSelect/Select';
+import { Box, Button, Divider } from '@chakra-ui/react'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
+import Card from 'components/Card'
+import WalletIcon from 'components/icons/WalletIcon'
+import Select from 'components/Wallet/ChainSelect/Select'
+import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
+import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
+import { useChainInfo } from 'hooks/useChainInfo'
+import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr'
+import { useRecoilState } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
-const Wallet: any = ({ connected, onDisconnect, onOpenModal}) => {
-  const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)
+const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
+  const [currentWalletState, setCurrentWalletState] =
+    useRecoilState(walletState)
 
   const connectedWallet = useConnectedWallet()
-  let [chainInfo] = useChainInfo(currentWalletState.chainId)
-  const {showTerraModalOrConnectKeplr} = useTerraModalOrConnectKeplr(onOpenModal)
+  const [chainInfo] = useChainInfo(currentWalletState.chainId)
+  const { showTerraModalOrConnectKeplr } =
+    useTerraModalOrConnectKeplr(onOpenModal)
 
   const denom = useMemo(() => {
-  if (!chainInfo) return
+    if (!chainInfo) return
     const [coinDenom] = (chainInfo as any)?.currencies || []
     return coinDenom
-  }, [chainInfo, currentWalletState.chainId, currentWalletState.network, currentWalletState.activeWallet, currentWalletState.address])
+  }, [
+    chainInfo,
+    currentWalletState.chainId,
+    currentWalletState.network,
+    currentWalletState.activeWallet,
+    currentWalletState.address,
+  ])
 
-
-  const onChainChange = useCallback((chain) => {
-    onDisconnect()
-    setCurrentWalletState({...currentWalletState, chainId: chain.chainId})
-  }, [currentWalletState.chainId, chainInfo])
+  const onChainChange = useCallback(
+    (chain) => {
+      onDisconnect()
+      setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+    },
+    [currentWalletState.chainId, chainInfo]
+  )
 
   if (!connected && !connectedWallet) {
     return (
@@ -50,7 +57,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal}) => {
           color="white"
           borderColor="whiteAlpha.400"
           borderRadius="full"
-          onClick={showTerraModalOrConnectKeplr}>
+          onClick={showTerraModalOrConnectKeplr}
+        >
           <WalletIcon />
           Connect wallet
         </Button>
@@ -61,11 +69,22 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal}) => {
   return (
     <>
       <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
-        <ChainSelectWithBalance connected={connected} denom={denom} onChainChange={onChainChange}  currentWalletState={currentWalletState}/>
-        <Box display={{ base: "none", md: "block" }}>
-          <Divider orientation="vertical" borderColor="rgba(255, 255, 255, 0.1);" />
+        <ChainSelectWithBalance
+          connected={connected}
+          denom={denom}
+          onChainChange={onChainChange}
+          currentWalletState={currentWalletState}
+        />
+        <Box display={{ base: 'none', md: 'block' }}>
+          <Divider
+            orientation="vertical"
+            borderColor="rgba(255, 255, 255, 0.1);"
+          />
         </Box>
-        <ConnectedWalletWithDisconnect connected={connected} onDisconnect={onDisconnect} />
+        <ConnectedWalletWithDisconnect
+          connected={connected}
+          onDisconnect={onDisconnect}
+        />
       </Card>
     </>
   )

@@ -1,1 +1,1 @@
-export {default} from './Pools'
+export { default } from './Pools'
