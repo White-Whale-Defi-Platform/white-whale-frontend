@@ -41,8 +41,8 @@ const Pools: FC<Props> = () => {
       .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       .map((pool) => ({
         pool: pool?.pool_id,
-        token1Img: pool.pool_assets?.[0].logoURI,
-        token2Img: pool.pool_assets?.[1].logoURI,
+        token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
+        token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,
         myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
         apr: 'coming soon',
         volume24hr: 'coming soon',
@@ -60,8 +60,8 @@ const Pools: FC<Props> = () => {
     return pools
       .map((pool) => ({
         pool: pool?.pool_id,
-        token1Img: pool.pool_assets?.[0].logoURI,
-        token2Img: pool.pool_assets?.[1].logoURI,
+        token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
+        token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,
         apr: 'coming soon',
         volume24hr: 'coming soon',
         totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
