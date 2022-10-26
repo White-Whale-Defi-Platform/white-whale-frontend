@@ -4,7 +4,7 @@
     "chainName": "Juno Mainnet",
     "label": "Juno",
     "icon": "/logos/juno.svg",
-    "rpc": "https://rpc-juno.whitewhale.money",
+    "rpc": "https://juno-rpc.polkachu.com",
     "rest": "https://lcd-juno.itastakers.com",
     "stakeCurrency": {
       "coinDenom": "JUNO",
@@ -98,7 +98,7 @@
     "chainName": "Chihuahua mainnet",
     "label": "Chihuahua",
     "icon": "/logos/huahua.png",
-    "rpc": "https://rpc-chihuahua.whitewhale.money",
+    "rpc": "https://chihuahua-rpc.polkachu.com",
     "rest": "https://api.chihuahua.wtf",
     "stakeCurrency": {
       "coinDenom": "huahua",
