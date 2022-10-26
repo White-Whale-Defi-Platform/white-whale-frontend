@@ -98,7 +98,7 @@
     "chainName": "Chihuahua mainnet",
     "label": "Chihuahua",
     "icon": "/logos/huahua.png",
-    "rpc": "https://chihuahua-rpc.polkachu.com",
+    "rpc": "https://rpc.chihuahua.wtf",
     "rest": "https://api.chihuahua.wtf",
     "stakeCurrency": {
       "coinDenom": "huahua",
