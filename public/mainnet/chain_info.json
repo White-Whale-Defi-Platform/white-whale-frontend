@@ -4,7 +4,7 @@
     "chainName": "Juno Mainnet",
     "label": "Juno",
     "icon": "/logos/juno.svg",
-    "rpc": "https://rpc.juno.interbloc.org",
+    "rpc": "https://rpc-juno.itastakers.com",
     "rest": "https://lcd-juno.itastakers.com",
     "stakeCurrency": {
       "coinDenom": "JUNO",
