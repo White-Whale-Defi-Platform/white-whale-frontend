@@ -1,6 +1,15 @@
-## Wasmswap interface
+## White Whale Migaloo Cross-Chain Frontend
 
-An open-source interface for a CosmWasm decentralized exchange.
+An open-source interface for multiple CosmWasm decentralized exchanges across chains.
+Additionally there are Pools and Flashloan enabled Vaults deployed on each chain as part of the White Whale's Liquidity Platform. 
+
+The interface is general in the sense that multiple Cosmos-SDK chains can be swapped to and from with all the details coming from config files. This serves as an allowlist of pools, vaults and any other contract.
+
+The app was originally based on the Wasmswap frontend and rebuilt from there.
+
+For a quick access to some docs, head [here](https://ww0-1.gitbook.io/migaloo-docs/)
+
+## Quickstart
 
 Run the app in dev mode locally.
 
@@ -144,4 +153,4 @@ Raise the bar for Web 3.0 with us! We would love you to contribute. Submit your 
 
 ## License
 
-Wasmswap interface is licensed under Apache 2.0.
+Migaloo-frontend interface is licensed under Apache 2.0.
