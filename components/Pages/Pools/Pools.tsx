@@ -16,7 +16,6 @@ import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 
-import Loader from '../../Loader'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
@@ -40,6 +39,7 @@ const Pools: FC<Props> = () => {
     return pools
       .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       .map((pool) => ({
+        contract : pool?.swap_address, 
         pool: pool?.pool_id,
         token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
         token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,
@@ -59,6 +59,7 @@ const Pools: FC<Props> = () => {
 
     return pools
       .map((pool) => ({
+        contract : pool?.swap_address, 
         pool: pool?.pool_id,
         token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
         token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,

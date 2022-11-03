@@ -19,11 +19,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import dayjs from "dayjs";
 
 import Loader from '../../Loader'
 import PoolName from './PoolName'
+import Volume from './Volume'
 
 export type Pool = {
+  contract: string
   pool: string
   token1Img: string
   token2Img: string
@@ -61,7 +64,10 @@ const columns = [
         24hr Volume
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => {
+      const datetime = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss')
+      return <Volume pair={info?.row?.original?.contract} datetime={datetime} />
+    }
   }),
   columnHelper.accessor('totalLiq', {
     header: () => (

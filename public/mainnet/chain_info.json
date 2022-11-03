@@ -6,6 +6,7 @@
     "icon": "/logos/juno.svg",
     "rpc": "https://rpc-juno.itastakers.com",
     "rest": "https://lcd-juno.itastakers.com",
+    "indexerUrl" : "https://api.subquery.network/sq/White-Whale-Defi-Platform/wwsubhist",
     "stakeCurrency": {
       "coinDenom": "JUNO",
       "coinMinimalDenom": "ujuno",
