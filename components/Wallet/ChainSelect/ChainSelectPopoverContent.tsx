@@ -12,6 +12,8 @@ import ChainList from './ChainList/ChainList'
 import NetworkForm from './NetworkForm/NetworkForm'
 
 function ChainSelectPopoverContent({ onChange, onClose, currentWalletState }) {
+  if(currentWalletState?.activeWallet === "station") return null
+
   return (
     <PopoverContent
       borderColor="#1C1C1C"
@@ -24,7 +26,7 @@ function ChainSelectPopoverContent({ onChange, onClose, currentWalletState }) {
         bg="#1C1C1C"
         boxShadow="unset"
         style={{ boxShadow: 'unset' }}
-        sx={{ '--popper-arrow-shadow-color': 'black' }}
+        sx={{ '--popper-arrow-shadow-color': '#1C1C1C' }}
       />
       <PopoverBody padding={6}>
         <VStack alignItems="flex-start" width="full" gap={2}>
