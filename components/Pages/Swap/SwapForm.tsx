@@ -25,6 +25,7 @@ import { num } from 'libs/num'
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { Simulated } from './hooks/useSimulate'
 import { TokenItemState } from './swapAtoms'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 type Props = {
   connected: WalletStatusType
@@ -60,6 +61,7 @@ const SwapForm: FC<Props> = ({
   path,
 }) => {
   const baseToken = useBaseTokenInfo()
+  const { data: poolList } = usePoolsListQuery()
 
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -105,10 +107,16 @@ const SwapForm: FC<Props> = ({
     const A = {
       ...tokenB,
       amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      decimals: poolList.pools
+        .map(({ pool_assets }) => pool_assets)
+        .map(([a, b]) => a?.symbol == tokenA.tokenSymbol as string ? a?.decimals : b?.decimals)[0]
     }
     const B = {
       ...tokenA,
       amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      decimals: poolList.pools
+        .map(({ pool_assets }) => pool_assets)
+        .map(([a, b]) => a?.symbol == tokenB.tokenSymbol as string ? a?.decimals : b?.decimals)[0]
     }
     setValue('tokenA', A, { shouldValidate: true })
     setValue('tokenB', B, { shouldValidate: true })
@@ -120,7 +128,7 @@ const SwapForm: FC<Props> = ({
     if (!simulated) return null
 
     const e = num(tokenA.amount).times(Math.pow(10, 6))
-    return num(e).div(simulated?.amount).toFixed(6)
+    return num(e).div(simulated?.amount).toFixed(tokenB.decimals)
   }, [simulated, tokenA.amount])
 
   useEffect(() => {
@@ -193,7 +201,7 @@ const SwapForm: FC<Props> = ({
               <Spinner color="white" size="xs" />
             ) : (
               <Text fontSize="14" fontWeight="700">
-                {tokenABalance?.toFixed(6)}
+                {tokenABalance?.toFixed(tokenA.decimals)}
               </Text>
             )}
           </HStack>
@@ -288,7 +296,7 @@ const SwapForm: FC<Props> = ({
               <Spinner color="white" size="xs" />
             ) : (
               <Text fontSize="14" fontWeight="700">
-                {tokenBBalance?.toFixed(6)}
+                {tokenBBalance?.toFixed(tokenB.decimals)}
               </Text>
             )}
           </HStack>
@@ -429,7 +437,7 @@ const SwapForm: FC<Props> = ({
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
                   {' '}
-                  {num(minReceive).toFixed(6)}{' '}
+                  {num(minReceive).toFixed(18)}{' '}
                 </Text>
               </HStack>
             )}
