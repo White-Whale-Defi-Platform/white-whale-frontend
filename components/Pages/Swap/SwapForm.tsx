@@ -230,7 +230,7 @@ const SwapForm: FC<Props> = ({
               <Spinner color="white" size="xs" />
             ) : (
               <Text fontSize="14" fontWeight="700">
-                {tokenABalance?.toFixed(tokenA.decimals)}
+                {tokenABalance?.toFixed(2)}
               </Text>
             )}
           </HStack>
