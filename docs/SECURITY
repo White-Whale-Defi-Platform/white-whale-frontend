@@ -15,7 +15,7 @@ Report security bugs in third-party modules to the person or team maintaining th
 If we receive a security bug report, we assign it to a primary handler. This person will coordinate the fix and release process, involving the following steps:
 * Confirm the problem and determine the affected versions.
 * Audit code to find any potentially similar problems.
-* Rollout the fixes
+* Rollout the fixes.
 
 ## Suggestions on this Policy
 If you have suggestions on how to improve this process, please submit a
