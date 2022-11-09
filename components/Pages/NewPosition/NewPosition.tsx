@@ -6,7 +6,7 @@ import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { TokenItemState, tokenLpAtom } from '../ManageLiquidity/lpAtoms'
 import useProvideLP from './hooks/useProvideLP'
 import NewPositionForm from './NewPositionForm'
@@ -22,6 +22,7 @@ const NewPosition = () => {
   const params = new URLSearchParams(location.search)
   const from = params.get('from')
   const to = params.get('to')
+  const { data: poolList } = usePoolsListQuery()
 
   // useEffect(() => {
   //     if (address) {
@@ -38,6 +39,9 @@ const NewPosition = () => {
       const [A, B] = [from, to].map((token) => ({
         tokenSymbol: token as string,
         amount: 0,
+        decimals: poolList.pools
+        .map(({ pool_assets }) => pool_assets)
+        .map(([a, b]) => a?.symbol == token as string ? a?.decimals : b?.decimals)[0]
       }))
       setTokenSwapState([A, B])
       setResetForm(true)

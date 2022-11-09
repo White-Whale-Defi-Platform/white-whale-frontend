@@ -113,6 +113,7 @@ const NewPositionForm: FC<Props> = ({
       .map(([a, b]) => a?.symbol)
     return edge
   }, [poolList])
+  // console.log(tokenAList)
 
   const edgeList = useMemo(() => {
     const { pools = [] } = poolList || {}
@@ -125,14 +126,14 @@ const NewPositionForm: FC<Props> = ({
       .filter((item) => !!item)
     return edge
   }, [tokenA.tokenSymbol, poolList])
-
   useEffect(() => {
     if (!edgeList.includes(tokenB.tokenSymbol)) {
       setValue('token2', { ...tokenB, tokenSymbol: null })
       onInputChange({ ...tokenB, tokenSymbol: null }, 1)
     }
   }, [tokenA?.tokenSymbol, edgeList])
-
+  console.log(tx);
+  console.log(simulated);
   return (
     <VStack
       padding={10}
@@ -229,12 +230,12 @@ const NewPositionForm: FC<Props> = ({
         type="submit"
         width="full"
         variant="primary"
-        isLoading={
-          tx?.txStep == TxStep.Estimating ||
-          tx?.txStep == TxStep.Posting ||
-          tx?.txStep == TxStep.Broadcasting
-        }
-        disabled={tx.txStep != TxStep.Ready || simulated == null}
+        // isLoading={
+        //   tx?.txStep == TxStep.Estimating ||
+        //   tx?.txStep == TxStep.Posting ||
+        //   tx?.txStep == TxStep.Broadcasting
+        // }
+        // disabled={tx.txStep != TxStep.Ready || simulated == null}
       >
         {buttonLabel}
       </Button>
