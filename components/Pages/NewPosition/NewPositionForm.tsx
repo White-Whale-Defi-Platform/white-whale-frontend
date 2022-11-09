@@ -62,6 +62,9 @@ const NewPositionForm: FC<Props> = ({
     tokenB?.tokenSymbol
   )
 
+  // const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
+  // const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
+
   const amountA = getValues('token1')
   const amountB = getValues('token2')
 

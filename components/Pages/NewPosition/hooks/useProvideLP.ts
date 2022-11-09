@@ -5,6 +5,8 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { fromChainAmount } from 'libs/num'
+
 import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
@@ -139,7 +141,6 @@ const useProvideLP = ({ reverse = false }) => {
       ),
     }
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse])
-
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,
@@ -162,7 +163,7 @@ const useProvideLP = ({ reverse = false }) => {
     onSuccess: () => {},
     onError: () => {},
   })
-
+  console.log()
   const noMatchingPool =
     swapAddress === null && !isLoading
       ? {
