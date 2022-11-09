@@ -39,7 +39,7 @@ const NewPosition = () => {
       const [A, B] = [from, to].map((token) => ({
         tokenSymbol: token as string,
         amount: 0,
-        decimals: poolList.pools
+        decimals: poolList?.pools
         .map(({ pool_assets }) => pool_assets)
         .map(([a, b]) => a?.symbol == token as string ? a?.decimals : b?.decimals)[0]
       }))

@@ -2,8 +2,11 @@ import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
+import { fromChainAmount, toChainAmount } from '../../../libs/num'
+import { Coin } from '@cosmjs/launchpad'
 
 import { createAsset, isNativeAsset } from '../../../services/asset'
+import { Coin } from '@terra-money/terra.js'
 
 const createLpMsg = ({ tokenA, tokenB, amountA, amountB }) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
@@ -21,7 +24,7 @@ export const createLPExecuteMsgs = (
   sender: string
 ) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
-
+  console.log(tokenA, tokenB, amountA, amountB)
   /* increase allowance for each non-native token */
   if (!tokenA?.native) {
     increaseAllowanceMessages.push(
@@ -43,7 +46,11 @@ export const createLPExecuteMsgs = (
       })
     )
   }
-
+  let coinA: Coin = {amount: amountA, denom: tokenA?.denom}
+  let coinB: Coin = {amount: amountB, denom: tokenB?.denom}
+  console.log(coinB)
+  // console.log(coin(amountA, tokenA?.denom))
+  console.log(coinB, tokenB?.denom)
   return [
     ...increaseAllowanceMessages,
     createExecuteMessage({
@@ -51,8 +58,8 @@ export const createLPExecuteMsgs = (
       contractAddress: swapAddress,
       message: createLpMsg({ tokenA, tokenB, amountA, amountB }),
       funds: [
-        tokenA?.native && coin(amountA, tokenA?.denom),
-        tokenB?.native && coin(amountB, tokenB?.denom),
+        tokenA?.native && coinA,
+        tokenB?.native && coinB,
       ].filter(Boolean),
     }),
   ]
