@@ -24,10 +24,10 @@ const useSwap = ({ reverse }) => {
 
   const amount = reverse
     ? swapTokenB?.amount > 0
-      ? toChainAmount(swapTokenB?.amount)
+      ? toChainAmount(swapTokenB?.amount, tokenB?.decimals)
       : ''
     : swapTokenA?.amount > 0
-    ? toChainAmount(swapTokenA?.amount)
+    ? toChainAmount(swapTokenA?.amount, tokenA?.decimals)
     : ''
   const { routerAddress } = poolsList || {}
   const slippageToDecimal = slippage / 100
@@ -39,6 +39,8 @@ const useSwap = ({ reverse }) => {
     senderAddress: address,
     slippage: slippageToDecimal,
   })
+
+  console.log({simulateMsg})
 
   const { simulated, error, isLoading } = useSimulate({
     client,
