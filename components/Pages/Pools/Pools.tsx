@@ -1,17 +1,8 @@
 import { FC, useMemo } from 'react'
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
-import FallbackImage from 'components/FallbackImage'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { formatPrice, fromChainAmount } from 'libs/num'
+import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -20,13 +11,14 @@ import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
 const Pools: FC<Props> = () => {
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
 
-  const [pools, isLoading, isError] = useQueriesDataSelector(
+  const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
@@ -39,10 +31,14 @@ const Pools: FC<Props> = () => {
     return pools
       .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       .map((pool) => ({
-        contract : pool?.swap_address, 
+        contract: pool?.swap_address,
         pool: pool?.pool_id,
-        token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
-        token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,
+        token1Img: pool?.pool_id.includes('USDC')
+          ? pool.pool_assets?.[0].logoURI
+          : pool.pool_assets?.[1].logoURI,
+        token2Img: pool?.pool_id.includes('USDC')
+          ? pool.pool_assets?.[1].logoURI
+          : pool.pool_assets?.[0].logoURI,
         myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
         apr: 'coming soon',
         volume24hr: 'coming soon',
@@ -50,6 +46,7 @@ const Pools: FC<Props> = () => {
         cta: () =>
           router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`),
       }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools])
 
   const allPools = useMemo(() => {
@@ -59,10 +56,14 @@ const Pools: FC<Props> = () => {
 
     return pools
       .map((pool) => ({
-        contract : pool?.swap_address, 
+        contract: pool?.swap_address,
         pool: pool?.pool_id,
-        token1Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[0].logoURI : pool.pool_assets?.[1].logoURI,
-        token2Img: pool?.pool_id.includes('USDC') ? pool.pool_assets?.[1].logoURI : pool.pool_assets?.[0].logoURI,
+        token1Img: pool?.pool_id.includes('USDC')
+          ? pool.pool_assets?.[0].logoURI
+          : pool.pool_assets?.[1].logoURI,
+        token2Img: pool?.pool_id.includes('USDC')
+          ? pool.pool_assets?.[1].logoURI
+          : pool.pool_assets?.[0].logoURI,
         apr: 'coming soon',
         volume24hr: 'coming soon',
         totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
@@ -72,10 +73,8 @@ const Pools: FC<Props> = () => {
           ),
       }))
       .filter((item) => !myPoolsId.includes(item.pool))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools, myPools])
-
-  // if (isLoading || pools === undefined)
-  //     return <Loader />
 
   return (
     <VStack

@@ -22,20 +22,9 @@ import {
 import dayjs from 'dayjs'
 
 import Loader from '../../Loader'
-import PoolName from './PoolName'
-import Volume from './Volume'
-
-export type Pool = {
-  contract: string
-  pool: string
-  token1Img: string
-  token2Img: string
-  apr: number | string
-  volume24hr: number | string
-  totalLiq: number | string
-  cta?: () => void
-  ctaLabel?: string
-}
+import PoolName from './components/PoolName'
+import Volume from './components/Volume'
+import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
 

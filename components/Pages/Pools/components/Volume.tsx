@@ -3,7 +3,7 @@ import React from 'react'
 import { Spinner, Text } from '@chakra-ui/react'
 import useVolume from 'hooks/useVolume'
 
-import { formatPrice } from '../../../libs/num'
+import { formatPrice } from '../../../../libs/num'
 
 type Props = {
   pair: string
@@ -15,7 +15,7 @@ const Volume = ({ pair, dateTime }: Props) => {
 
   if (!pair || !dateTime) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
-  return <Text align="right">{`${formatPrice(volume)}`}</Text>
+  return <Text align="right">{`$${formatPrice(volume)}`}</Text>
 }
 
 export default Volume
