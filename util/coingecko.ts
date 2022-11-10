@@ -40,7 +40,7 @@ export const getTokenCGCId = (address: string) => {
 
 export const getCGCTokenHistoryPriceUrl = (id: string, timestamp: number) => {
   const dateTime = moment(new Date(timestamp - (timestamp % 86400000))).format(
-    'MM-DD-YYYY'
+    'DD-MM-YYYY'
   )
 
   return `${coingeckoV3RootUrl}/${id}/history?date=${dateTime}&localization=false`
