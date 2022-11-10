@@ -65,6 +65,7 @@
     "intercept-stdout": "^0.1.2",
     "junoblocks": "^0.2.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "next": "12.1.6",
     "normalize.css": "^8.0.1",
     "numeral": "^2.0.6",
