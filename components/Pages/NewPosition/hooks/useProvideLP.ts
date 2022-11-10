@@ -45,10 +45,11 @@ const useProvideLP = ({ reverse = false }) => {
   const slippage = '0.1'
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
-
-  const tokenAAmount = toChainAmount(lpA?.amount, lpA?.decimals)
-  const tokenBAmount = toChainAmount(lpB?.amount, lpB?.decimals)
-
+  console.log(lpA)
+  const tokenAAmount = toChainAmount(lpA?.amount, tokenA.decimals)
+  const tokenBAmount = toChainAmount(lpB?.amount, tokenB.decimals)
+  console.log(`${lpA}${tokenAAmount} and reserve ${tokenAReserve}`)
+  console.log(`${lpB}${tokenBAmount} and reserve ${tokenBReserve}`)
   const simulated = useMemo(() => {
     if (
       (!reverse && !lpTokenA?.amount) ||
@@ -63,7 +64,8 @@ const useProvideLP = ({ reverse = false }) => {
       reverse || matchingPools?.streamlinePoolBA
         ? num(tokenAReserve).div(tokenBReserve)
         : num(tokenBReserve).div(tokenAReserve)
-    return fromChainAmount(num(normalizedValue).times(ratio).toFixed(lpTokenB?.decimals), lpTokenB?.decimals)
+        // TODO: This cunt here
+    return fromChainAmount(num(normalizedValue).times(ratio).toFixed(tokenB.decimals))
   }, [
     lpTokenA,
     lpTokenB,
@@ -89,14 +91,14 @@ const useProvideLP = ({ reverse = false }) => {
         amountA: reverse
           ? flipped
             ? tokenAAmount
-            : toChainAmount(simulated, tokenA?.decimals)
+            : toChainAmount(simulated, tokenA.decimals)
           : tokenAAmount,
         tokenB,
         amountB: reverse
           ? tokenBAmount
           : flipped
           ? tokenBAmount
-          : toChainAmount(simulated, tokenB?.decimals),
+          : toChainAmount(simulated, tokenB.decimals),
       }),
       encodedMsgs: createLPExecuteMsgs(
         {
@@ -104,7 +106,7 @@ const useProvideLP = ({ reverse = false }) => {
           amountA: reverse
             ? flipped
               ? tokenAAmount
-              : toChainAmount(simulated, tokenA?.decimals)
+              : toChainAmount(simulated, tokenA.decimals)
             : flipped
             ? tokenAAmount
             : tokenAAmount,
@@ -115,13 +117,14 @@ const useProvideLP = ({ reverse = false }) => {
               : tokenBAmount
             : flipped
             ? tokenBAmount
-            : toChainAmount(simulated, tokenB?.decimals),
+            : toChainAmount(simulated, tokenB.decimals),
           swapAddress,
         },
         address
       ),
     }
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse])
+  console.log(msgs)
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,
@@ -132,15 +135,15 @@ const useProvideLP = ({ reverse = false }) => {
     msgs,
     encodedMsgs,
     tokenAAmount: reverse
-      ? num(flipped ? tokenAAmount : toChainAmount(simulated, tokenA?.decimals)).toNumber()
-      : num(toChainAmount(tokenAAmount, tokenA?.decimals)).toNumber(),
+      ? num(flipped ? tokenAAmount : toChainAmount(simulated, tokenA.decimals)).toNumber()
+      : num(tokenAAmount).toNumber(),
     tokenBAmount: reverse
-      ? num(toChainAmount(tokenBAmount, tokenB?.decimals)).toNumber()
-      : num(flipped ? tokenBAmount : toChainAmount(simulated, tokenB?.decimals)).toNumber(),
+      ? num(tokenBAmount).toNumber()
+      : num(flipped ? tokenBAmount : toChainAmount(simulated, tokenB.decimals)).toNumber(),
     onSuccess: () => {},
     onError: () => {},
   })
-  console.log()
+
   const noMatchingPool =
     swapAddress === null && !isLoading
       ? {
