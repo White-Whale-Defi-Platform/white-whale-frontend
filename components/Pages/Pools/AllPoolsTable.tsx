@@ -19,7 +19,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import dayjs from "dayjs";
+import dayjs from 'dayjs'
 
 import Loader from '../../Loader'
 import PoolName from './PoolName'
@@ -53,7 +53,7 @@ const columns = [
   columnHelper.accessor('apr', {
     header: () => (
       <Text align="right" color="brand.50">
-        APR
+        {`APR`}
       </Text>
     ),
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
@@ -61,18 +61,18 @@ const columns = [
   columnHelper.accessor('volume24hr', {
     header: () => (
       <Text align="right" color="brand.50">
-        24hr Volume
+        {`24hr Volume`}
       </Text>
     ),
     cell: (info) => {
-      const datetime = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss')
-      return <Volume pair={info?.row?.original?.contract} datetime={datetime} />
-    }
+      const dateTime = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss')
+      return <Volume pair={info?.row?.original?.contract} dateTime={dateTime} />
+    },
   }),
   columnHelper.accessor('totalLiq', {
     header: () => (
       <Text align="right" color="brand.50">
-        Total Liquidity
+        {`Total Liquidity`}
       </Text>
     ),
     cell: (info) => <Text align="right">${info.getValue()}</Text>,
@@ -82,7 +82,7 @@ const columns = [
     cell: (info) => (
       <HStack justifyContent="flex-end">
         <Button variant="outline" size="sm" onClick={() => info.getValue()()}>
-          Add Liquidity
+          {`Add Liquidity`}
         </Button>
       </HStack>
     ),
@@ -134,8 +134,7 @@ const PoolsTable = ({
         justifyContent="center"
       >
         <Text py={10} color="white">
-          {' '}
-          All remaining pools will appear here.{' '}
+          {`All remaining pools will appear here.`}
         </Text>
       </Flex>
     )
