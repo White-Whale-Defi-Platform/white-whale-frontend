@@ -4,7 +4,6 @@ about: Suggest a new idea for a feature, component or something else on White Wh
 title: ''
 labels: 'enhancement'
 assignees: ''
-
 ---
 
 <!-- Thank you for using White Whale Migaloo!
@@ -42,7 +41,7 @@ assignees: ''
       * images
       * videos
       * code samples
-      * figma designs 
+      * figma designs
 
      Does this have to be provided by White Whale directly, or can it be provided
      by a third-party contract? If so, maybe consider implementing and
