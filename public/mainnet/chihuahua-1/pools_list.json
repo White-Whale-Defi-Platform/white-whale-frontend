@@ -58,7 +58,7 @@
     },
     {
       "pool_id": "HUAHUA-SHIBA",
-      "lpOrder": ["HUAHUA", "SHIBA"],
+      "lpOrder": ["SHIBA", "HUAHUA"],
       "pool_assets": [
         {
           "id": "chihuahua-token",
@@ -91,7 +91,7 @@
     },
     {
       "pool_id": "HUAHUA-WDOGE",
-      "lpOrder": ["HUAHUA", "WDOGE"],
+      "lpOrder": ["WDOGE", "HUAHUA"],
       "pool_assets": [
         {
           "id": "chihuahua-token",

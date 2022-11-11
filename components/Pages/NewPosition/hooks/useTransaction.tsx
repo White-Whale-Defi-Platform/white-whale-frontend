@@ -150,8 +150,8 @@ export const useTransaction = ({
       return executeAddLiquidity({
         tokenA,
         tokenB,
-        tokenAAmount: Number(tokenAAmount),
-        maxTokenBAmount: Number(tokenBAmount),
+        tokenAAmount: String(tokenAAmount),
+        maxTokenBAmount: String(tokenBAmount),
         client,
         swapAddress,
         senderAddress,
@@ -192,7 +192,7 @@ export const useTransaction = ({
         ) {
           setError(e?.toString())
           message = (
-            <Finder txHash={txInfo?.txHash} chainId={client?.chainId}>
+            <Finder txHash={txInfo?.txHash} chainId={client?.client?.chainId}>
               {' '}
             </Finder>
           )
@@ -221,7 +221,7 @@ export const useTransaction = ({
         toast({
           title: 'Add Liquidity Success.',
           description: (
-            <Finder txHash={data.transactionHash} chainId={client.chainId}>
+            <Finder txHash={data.transactionHash} chainId={client?.client?.chainId}>
               {' '}
             </Finder>
           ),

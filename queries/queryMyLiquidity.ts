@@ -16,6 +16,8 @@ export async function queryMyLiquidity({ swap, address, context: { client } }) {
     protectAgainstNaN(swap.token2_reserve),
   ]
 
+  console.log({totalReserve})
+
   const providedReserve: [number, number] = [
     protectAgainstNaN(
       totalReserve[0] * (providedLiquidityInMicroDenom / swap.lp_token_supply)

@@ -12,13 +12,13 @@ import { Wallet } from '../../util/wallet-adapters'
 type ExecuteAddLiquidityArgs = {
   tokenA: TokenInfo
   tokenB: TokenInfo
-  tokenAAmount: number
+  tokenAAmount: string
   /*
    * The contract calculates `tokenBAmount` automatically.
    * However, the user needs to set max amount of `tokenB` they're willing to spend.
    * If the calculated amount exceeds the max amount, the transaction then fails.
    */
-  maxTokenBAmount: number
+  maxTokenBAmount: string
   senderAddress: string
   swapAddress: string
   client: Wallet

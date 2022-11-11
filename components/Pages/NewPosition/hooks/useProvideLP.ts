@@ -1,130 +1,84 @@
-import { useMemo } from 'react'
-
-import { useTokenInfo } from 'hooks/useTokenInfo'
-import { num, toChainAmount } from 'libs/num'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import { fromChainAmount } from 'libs/num'
-
-import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms'
-import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg'
-import useTransaction from './useTransaction'
+import { useTokenInfo } from 'hooks/useTokenInfo';
+import useTransaction from "./useTransaction";
+import { num, toChainAmount } from 'libs/num';
+import { useQueryPoolLiquidity } from 'queries/useQueryPools';
+import { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
+import { walletState } from 'state/atoms/walletAtoms';
+import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms';
+import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg';
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap';
 
 const useProvideLP = ({ reverse = false }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
   const { address, client } = useRecoilValue(walletState)
-  const A = useTokenInfo(lpTokenA?.tokenSymbol)
-  const B = useTokenInfo(lpTokenB?.tokenSymbol)
-  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA: A, tokenB: B })
-  const poolId =
-    matchingPools?.streamlinePoolAB?.pool_id ||
-    matchingPools?.streamlinePoolBA?.pool_id
-  const lpOrder =
-    matchingPools?.streamlinePoolAB?.lpOrder ||
-    matchingPools?.streamlinePoolBA?.lpOrder
+  const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
+  const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
+  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA: tokenInfoA, tokenB: tokenInfoB })
+  const poolId = matchingPools?.streamlinePoolAB?.pool_id || matchingPools?.streamlinePoolBA?.pool_id
+  const lpOrder = matchingPools?.streamlinePoolAB?.lpOrder || matchingPools?.streamlinePoolBA?.lpOrder
 
-  const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
-    useQueryPoolLiquidity({ poolId })
+  const [{
+    swap_address: swapAddress = null,
+    liquidity = {}
+  } = {}, isLoading] = useQueryPoolLiquidity({ poolId })
 
   const [tokenA, tokenB, flipped] = useMemo(() => {
-    if (!lpOrder) return [A, B, false]
+    if (!lpOrder) return [tokenInfoA, tokenInfoB, false]
 
-    return lpOrder?.[0] === A?.symbol ? [A, B, false] : [B, A, true]
-  }, [A, B, lpOrder])
+    return lpOrder?.[0] === tokenInfoA?.symbol ? [tokenInfoA, tokenInfoB, false] : [tokenInfoB, tokenInfoA, true]
+  }, [tokenInfoA, tokenInfoB, lpOrder])
 
   const [lpA, lpB] = useMemo(() => {
     if (!lpOrder) return [lpTokenA, lpTokenB]
 
-    return lpOrder?.[0] === lpTokenA?.tokenSymbol
-      ? [lpTokenA, lpTokenB]
-      : [lpTokenB, lpTokenA]
+    return lpOrder?.[0] === lpTokenA?.tokenSymbol ? [lpTokenA, lpTokenB] : [lpTokenB, lpTokenA]
   }, [lpTokenA, lpTokenB, lpOrder])
 
-  const slippage = '0.1'
+
+  const slippage = "0.1"
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
-  console.log(lpA)
-  const tokenAAmount = toChainAmount(lpA?.amount, tokenA.decimals)
-  const tokenBAmount = toChainAmount(lpB?.amount, tokenB.decimals)
-  console.log(`${lpA}${tokenAAmount} and reserve ${tokenAReserve}`)
-  console.log(`${lpB}${tokenBAmount} and reserve ${tokenBReserve}`)
-  const simulated = useMemo(() => {
-    if (
-      (!reverse && !lpTokenA?.amount) ||
-      (reverse && !lpTokenB?.amount) ||
-      tokenAReserve === 0 ||
-      tokenBReserve === 0
-    )
-      return null
 
-    const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0
-    const ratio =
-      reverse || matchingPools?.streamlinePoolBA
-        ? num(tokenAReserve).div(tokenBReserve)
-        : num(tokenBReserve).div(tokenAReserve)
-        // TODO: This cunt here
-    return fromChainAmount(num(normalizedValue).times(ratio).toFixed(tokenB.decimals))
-  }, [
-    lpTokenA,
-    lpTokenB,
-    swapAddress,
-    tokenAReserve,
-    tokenBReserve,
-    reverse,
-    matchingPools,
-  ])
+  const tokenAAmount = toChainAmount(lpA?.amount, tokenInfoB?.decimals)
+  const tokenBAmount = toChainAmount(lpB?.amount, tokenInfoA?.decimals)
+
+  const simulated = useMemo(() => {
+    if ((!reverse && !lpTokenA?.amount) || (reverse && !lpTokenB?.amount) || tokenAReserve === 0 || tokenBReserve === 0) return null
+
+    const decimals = reverse ? tokenInfoA?.decimals: tokenInfoB?.decimals
+    const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0;
+    const tokenA = num(tokenAReserve).div(10 ** tokenInfoA?.decimals).toNumber()
+    const tokenB = num(tokenBReserve).div(10 ** tokenInfoB?.decimals).toNumber()
+    const ratio = (reverse || matchingPools?.streamlinePoolBA) ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA);
+    const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
+    console.log({sim, tokenA, tokenB,  ratio, reverse, decimals, tokenAReserve, tokenBReserve, normalizedValue})
+
+    return sim
+  }, [lpTokenA, lpTokenB, swapAddress, tokenAReserve, tokenBReserve, reverse, matchingPools])
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (
-      simulated == null ||
-      !tokenAAmount ||
-      !tokenBAmount ||
-      swapAddress == null
-    )
-      return {}
+    if (simulated == null || !tokenAAmount || !tokenBAmount  || swapAddress == null) return {};
 
     return {
       msgs: createLpMsg({
         tokenA,
-        amountA: reverse
-          ? flipped
-            ? tokenAAmount
-            : toChainAmount(simulated, tokenA.decimals)
-          : tokenAAmount,
+        amountA: reverse ? flipped ?  tokenAAmount  : toChainAmount(simulated, tokenInfoB?.decimals)  : tokenAAmount ,
         tokenB,
-        amountB: reverse
-          ? tokenBAmount
-          : flipped
-          ? tokenBAmount
-          : toChainAmount(simulated, tokenB.decimals),
+        amountB: reverse ? tokenBAmount  : flipped ?  tokenBAmount : toChainAmount(simulated, tokenInfoA?.decimals),
       }),
-      encodedMsgs: createLPExecuteMsgs(
-        {
-          tokenA,
-          amountA: reverse
-            ? flipped
-              ? tokenAAmount
-              : toChainAmount(simulated, tokenA.decimals)
-            : flipped
-            ? tokenAAmount
-            : tokenAAmount,
-          tokenB,
-          amountB: reverse
-            ? flipped
-              ? tokenBAmount
-              : tokenBAmount
-            : flipped
-            ? tokenBAmount
-            : toChainAmount(simulated, tokenB.decimals),
-          swapAddress,
-        },
-        address
-      ),
+      encodedMsgs: createLPExecuteMsgs({
+        tokenA,
+        amountA: reverse ? flipped ? tokenAAmount : toChainAmount(simulated, tokenInfoB?.decimals)  : flipped ?  tokenAAmount : tokenAAmount ,
+        tokenB,
+        amountB: reverse ? flipped ?  tokenBAmount : tokenBAmount :  flipped ?  tokenBAmount : toChainAmount(simulated, tokenInfoA.decimals),
+        swapAddress,
+      }, address)
     }
-  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse])
-  console.log(msgs)
+  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse]);
+
+  console.log({msgs,encodedMsgs })
+
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,
@@ -134,27 +88,19 @@ const useProvideLP = ({ reverse = false }) => {
     client,
     msgs,
     encodedMsgs,
-    tokenAAmount: reverse
-      ? num(flipped ? tokenAAmount : toChainAmount(simulated, tokenA.decimals)).toNumber()
-      : num(tokenAAmount).toNumber(),
-    tokenBAmount: reverse
-      ? num(tokenBAmount).toNumber()
-      : num(flipped ? tokenBAmount : toChainAmount(simulated, tokenB.decimals)).toNumber(),
-    onSuccess: () => {},
-    onError: () => {},
-  })
+    tokenAAmount: reverse ? num(flipped ? tokenAAmount : toChainAmount(simulated, tokenInfoA?.decimals)).toNumber()  : num(tokenAAmount).toNumber() ,
+    tokenBAmount:  reverse ? num(tokenBAmount).toNumber()  : num(flipped ?  tokenBAmount : toChainAmount(simulated, tokenInfoB?.decimals)).toNumber(),
+    onSuccess: () => { },
+    onError: () => { }
+  });
 
-  const noMatchingPool =
-    swapAddress === null && !isLoading
-      ? {
-          buttonLabel: 'No Matching Pool',
-        }
-      : {}
+  const noMatchingPool = swapAddress === null && !isLoading ? {
+    buttonLabel: "No Matching Pool"
+  } : {}
 
-  return useMemo(
-    () => ({ simulated, tx: { ...tx, ...noMatchingPool } }),
-    [simulated, tx]
-  )
+  return useMemo(() => ({ simulated, tx: { ...tx, ...noMatchingPool } }), [simulated, tx])
+
 }
+
 
 export default useProvideLP

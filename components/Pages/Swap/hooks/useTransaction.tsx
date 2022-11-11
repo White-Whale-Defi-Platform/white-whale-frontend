@@ -140,6 +140,7 @@ export const useTransaction = ({
 
   const { mutate } = useMutation(
     (data: any) => {
+      console.log("=== in swap submit")
       return directTokenSwap({
         tokenA,
         swapAddress,
@@ -195,7 +196,7 @@ export const useTransaction = ({
         toast({
           title: 'Swap Success.',
           description: (
-            <Finder txHash={data.transactionHash} chainId={client.chainId}>
+            <Finder txHash={data.transactionHash} chainId={client?.client?.chainId}>
               {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
             </Finder>
