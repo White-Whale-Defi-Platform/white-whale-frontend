@@ -90,7 +90,6 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-    console.log({swap})
 
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({

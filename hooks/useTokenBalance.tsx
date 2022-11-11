@@ -82,7 +82,6 @@ export const useTokenBalance = (tokenSymbol: string) => {
   if (!client && status == '@wallet-state/restored') {
     connectKeplr()
   }
-  // console.log(address, network, client, activeWallet, status)
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
   const {

@@ -69,8 +69,6 @@ function createWalletState<TClient = any, TState = {}>({
         onSet((newValue, oldValue) => {
           const isReset = !newValue.address && (oldValue as any)?.address
           // when changed, log old and new value
-          // console.log('newValue', newValue)
-          // console.log('oldValue', oldValue)
 
           if (isReset) {
             localStorage.removeItem(CACHE_KEY)

@@ -132,7 +132,7 @@ const SwapForm: FC<Props> = ({
     if (!simulated) return null
 
     const e = num(tokenA.amount).times(Math.pow(10, 6))
-    return num(e).div(simulated?.amount).toFixed(tokenB.decimals)
+    return num(e).div(simulated?.amount).toFixed(tokenBInfo.decimals)
   }, [simulated, tokenA.amount])
 
   useEffect(() => {
@@ -300,7 +300,7 @@ const SwapForm: FC<Props> = ({
               <Spinner color="white" size="xs" />
             ) : (
               <Text fontSize="14" fontWeight="700">
-                {tokenBBalance?.toFixed(tokenB.decimals)}
+                {tokenBBalance?.toFixed(tokenBInfo?.decimals)}
               </Text>
             )}
           </HStack>

@@ -90,7 +90,6 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        // console.log({senderAddress, debouncedMsgs, msg : JSON.parse(String.fromCharCode.apply(null, debouncedMsgs?.[0]?.value?.msg))})
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)

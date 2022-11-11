@@ -40,8 +40,8 @@ const useProvideLP = ({ reverse = false }) => {
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
 
-  const tokenAAmount = toChainAmount(lpA?.amount, tokenInfoB?.decimals)
-  const tokenBAmount = toChainAmount(lpB?.amount, tokenInfoA?.decimals)
+  const tokenAAmount = toChainAmount(lpA?.amount, flipped ? tokenInfoB?.decimals : tokenInfoA?.decimals)
+  const tokenBAmount = toChainAmount(lpB?.amount, flipped ? tokenInfoA?.decimals : tokenInfoB?.decimals)
 
   const simulated = useMemo(() => {
     if ((!reverse && !lpTokenA?.amount) || (reverse && !lpTokenB?.amount) || tokenAReserve === 0 || tokenBReserve === 0) return null
@@ -52,7 +52,6 @@ const useProvideLP = ({ reverse = false }) => {
     const tokenB = num(tokenBReserve).div(10 ** tokenInfoB?.decimals).toNumber()
     const ratio = (reverse || matchingPools?.streamlinePoolBA) ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA);
     const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
-    console.log({sim, tokenA, tokenB,  ratio, reverse, decimals, tokenAReserve, tokenBReserve, normalizedValue})
 
     return sim
   }, [lpTokenA, lpTokenB, swapAddress, tokenAReserve, tokenBReserve, reverse, matchingPools])
@@ -63,9 +62,9 @@ const useProvideLP = ({ reverse = false }) => {
     return {
       msgs: createLpMsg({
         tokenA,
-        amountA: reverse ? flipped ?  tokenAAmount  : toChainAmount(simulated, tokenInfoB?.decimals)  : tokenAAmount ,
+        amountA: reverse ? flipped ?  tokenAAmount  : toChainAmount(simulated, tokenInfoA?.decimals)  : tokenAAmount ,
         tokenB,
-        amountB: reverse ? tokenBAmount  : flipped ?  tokenBAmount : toChainAmount(simulated, tokenInfoA?.decimals),
+        amountB: reverse ? tokenBAmount  : flipped ?  tokenBAmount : toChainAmount(simulated, tokenInfoB?.decimals),
       }),
       encodedMsgs: createLPExecuteMsgs({
         tokenA,
@@ -77,7 +76,6 @@ const useProvideLP = ({ reverse = false }) => {
     }
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse]);
 
-  console.log({msgs,encodedMsgs })
 
   const tx = useTransaction({
     poolId,

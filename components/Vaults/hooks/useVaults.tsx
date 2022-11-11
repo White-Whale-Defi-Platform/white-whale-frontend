@@ -169,7 +169,6 @@ export const useVaulTotal = (lpTokenIds: any[]) => {
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
   const { chainId, client, network } = useRecoilValue(walletState)
-  // console.log(`Chain ID is ${chainId}, network is ${network} this is ${process.env.NEXT_PUBLIC_VAULTS_LIST_URL}`)
 
   const { data: vaults, isLoading } = useQuery<VaultsResponse>(
     ['vaults/list', chainId, network],

@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 
@@ -53,6 +53,13 @@ const DepositForm = ({
     tokenB?.tokenSymbol
   )
 
+  const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
+  const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
+
+  console.log({
+    tokenA,
+    tokenB
+  })
   const { control, handleSubmit, formState, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -119,7 +126,7 @@ const DepositForm = ({
             <Spinner color="white" size="xs" />
           ) : (
             <Text fontSize="14" fontWeight="700">
-              {tokenA?.decimals ? tokenABalance?.toFixed(tokenA?.decimals): tokenABalance?.toFixed(6)}
+              {tokenABalance?.toFixed(tokenAInfo?.decimals)}
             </Text>
           )}
         </HStack>
@@ -154,7 +161,7 @@ const DepositForm = ({
             <Spinner color="white" size="xs" />
           ) : (
             <Text fontSize="14" fontWeight="700">
-              {tokenB?.decimals ? tokenABalance?.toFixed(tokenB?.decimals): tokenABalance?.toFixed(6)}
+              {tokenBBalance?.toFixed(tokenBInfo?.decimals)}
             </Text>
           )}
         </HStack>
