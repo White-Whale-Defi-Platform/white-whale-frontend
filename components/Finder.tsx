@@ -33,7 +33,6 @@ const getUrl = (chainId, txHash) => {
 }
 
 const Finder = ({ children, txHash, chainId }: Props) => {
-  console.log({link: getUrl(chainId, txHash),  chainId, txHash})
   return (
     <Link isExternal href={getUrl(chainId, txHash)}>
       {children} TxHash: {truncate(txHash, [4, 4])}
