@@ -8,24 +8,23 @@
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
 [![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](https://www.firsttimersonly.com/)
-[![Discord badge][]][Discord invite]
-[![Twitter handle][]][Twitter badge]
+[![Discord badge][]][discord invite]
+[![Twitter handle][]][twitter badge]
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6401/badge)](https://bestpractices.coreinfrastructure.org/projects/6401)
 
+[discord invite]: https://discord.com/invite/tSxyyCWgYX
+[discord badge]: https://img.shields.io/discord/908044702794801233
+[twitter handle]: https://img.shields.io/twitter/follow/WhiteWhaleDefi.svg?style=social&label=Follow
+[twitter badge]: https://twitter.com/intent/follow?screen_name=WhiteWhaleDefi
 
-[Discord invite]: https://discord.com/invite/tSxyyCWgYX
-[Discord badge]: https://img.shields.io/discord/908044702794801233
-[Twitter handle]: https://img.shields.io/twitter/follow/WhiteWhaleDefi.svg?style=social&label=Follow
-[Twitter badge]: https://twitter.com/intent/follow?screen_name=WhiteWhaleDefi
 ## White Whale Migaloo Cross-Chain Frontend
 
 An open-source interface for multiple CosmWasm decentralized exchanges across chains.
-Additionally there are Pools and Flashloan enabled Vaults deployed on each chain as part of the White Whale's Liquidity Platform. 
+Additionally there are Pools and Flashloan enabled Vaults deployed on each chain as part of the White Whale's Liquidity Platform.
 
 The interface is general in the sense that multiple Cosmos-SDK chains can be swapped to and from with all the details coming from config files. This serves as an allowlist of pools, vaults and any other contract.
 
 The app was originally based on the Wasmswap frontend and rebuilt from there.
-
 
 ## Resources
 
@@ -35,7 +34,6 @@ The app was originally based on the Wasmswap frontend and rebuilt from there.
 4. [Discord](https://discord.com/invite/tSxyyCWgYX)
 5. [Twitter](https://twitter.com/WhiteWhaleDefi)
 6. [Telegram](https://t.me/whitewhaleofficial)
-
 
 ## Quickstart
 
@@ -88,8 +86,6 @@ Url
 
 NEXT_PUBLIC_CHAIN_INFO_URL=https://raw.githubusercontent.com/Wasmswap/asset-list-example/main/chain_info.json
 ```
-
-
 
 ## Branding configuration
 
