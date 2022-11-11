@@ -17,9 +17,6 @@ import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
-import { TokenItemState } from '../ManageLiquidity/lpAtoms'
-
 type Props = {
   connected: WalletStatusType
   tokenA: TokenItemState
@@ -62,9 +59,6 @@ const NewPositionForm: FC<Props> = ({
     tokenB?.tokenSymbol
   )
 
-  // const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
-  // const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
-
   const amountA = getValues('token1')
   const amountB = getValues('token2')
 
@@ -79,6 +73,7 @@ const NewPositionForm: FC<Props> = ({
   }, [resetForm, tx?.txStep])
 
   useEffect(() => {
+    console.log({ simulated })
     if (simulated) {
       if (reverse) {
         onInputChange({ ...tokenA, amount: Number(simulated) }, 0)
@@ -115,7 +110,6 @@ const NewPositionForm: FC<Props> = ({
       .map(([a, b]) => a?.symbol)
     return edge
   }, [poolList])
-  // console.log(tokenAList)
 
   const edgeList = useMemo(() => {
     const { pools = [] } = poolList || {}
@@ -128,14 +122,14 @@ const NewPositionForm: FC<Props> = ({
       .filter((item) => !!item)
     return edge
   }, [tokenA.tokenSymbol, poolList])
+
   useEffect(() => {
     if (!edgeList.includes(tokenB.tokenSymbol)) {
       setValue('token2', { ...tokenB, tokenSymbol: null })
       onInputChange({ ...tokenB, tokenSymbol: null }, 1)
     }
   }, [tokenA?.tokenSymbol, edgeList])
-  console.log(tx);
-  console.log(simulated);
+
   return (
     <VStack
       padding={10}
@@ -232,12 +226,12 @@ const NewPositionForm: FC<Props> = ({
         type="submit"
         width="full"
         variant="primary"
-        // isLoading={
-        //   tx?.txStep == TxStep.Estimating ||
-        //   tx?.txStep == TxStep.Posting ||
-        //   tx?.txStep == TxStep.Broadcasting
-        // }
-        // disabled={tx.txStep != TxStep.Ready || simulated == null}
+        isLoading={
+          tx?.txStep == TxStep.Estimating ||
+          tx?.txStep == TxStep.Posting ||
+          tx?.txStep == TxStep.Broadcasting
+        }
+        disabled={tx.txStep != TxStep.Ready || simulated == null}
       >
         {buttonLabel}
       </Button>

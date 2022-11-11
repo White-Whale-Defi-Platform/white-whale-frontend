@@ -40,8 +40,6 @@ const useSwap = ({ reverse }) => {
     slippage: slippageToDecimal,
   })
 
-  console.log({simulateMsg})
-
   const { simulated, error, isLoading } = useSimulate({
     client,
     msg: simulateMsg,

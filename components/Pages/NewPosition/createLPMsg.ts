@@ -1,12 +1,9 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage } from 'util/messages'
-import { createIncreaseAllowanceMessage } from 'util/messages'
-import { fromChainAmount, toChainAmount } from '../../../libs/num'
-import { Coin } from '@cosmjs/launchpad'
-
 import { createAsset, isNativeAsset } from '../../../services/asset'
-import { Coin } from '@terra-money/terra.js'
+
+import { createIncreaseAllowanceMessage } from 'util/messages'
 
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
