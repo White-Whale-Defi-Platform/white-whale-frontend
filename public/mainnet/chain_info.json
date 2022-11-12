@@ -98,8 +98,8 @@
     "chainName": "Chihuahua mainnet",
     "label": "Chihuahua",
     "icon": "/logos/huahua.png",
-    "rpc": "https://rpc.chihuahua.wtf",
-    "rest": "https://api.chihuahua.wtf",
+    "rpc": "https://ww-chihuahua-rpc.polkachu.com",
+    "rest": "https://ww-chihuahua-rest.polkachu.com",
     "stakeCurrency": {
       "coinDenom": "huahua",
       "coinMinimalDenom": "uhuahua",
