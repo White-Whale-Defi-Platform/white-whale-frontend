@@ -57,39 +57,6 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-SHIBA",
-      "lpOrder": ["SHIBA", "HUAHUA"],
-      "pool_assets": [
-        {
-          "id": "chihuahua-token",
-          "chain_id": "chihuahua-1",
-          "token_address": "uhuahua",
-          "symbol": "HUAHUA",
-          "name": "Huahua",
-          "decimals": 6,
-          "logoURI": "/logos/huahua.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "uhuahua"
-        },
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "ibc/91532E23037BBEBC1FA05D1D6A79AE3479A4B51A4CABA6C28E15EC24206FD50F",
-          "symbol": "SHIBA",
-          "name": "Shiba",
-          "decimals": 18,
-          "logoURI": "/logos/shiba-inu-shib-logo.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/91532E23037BBEBC1FA05D1D6A79AE3479A4B51A4CABA6C28E15EC24206FD50F"
-        }
-      ],
-      "lp_token": "chihuahua1xjj8j8r24fejlp8f65n40vgutl3d3ehq70g9tvyarss09z728w9svu4n3v",
-      "swap_address": "chihuahua193zmm83x0h99resrcdlrsr72gz6xl538r8qp4460te2wdrlhzh0sfle595",
-      "staking_address": "",
-      "rewards_tokens": []
-    },
-    {
       "pool_id": "HUAHUA-WDOGE",
       "lpOrder": ["WDOGE", "HUAHUA"],
       "pool_assets": [
