@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
-import { request, gql } from 'graphql-request'
+import { gql, request } from 'graphql-request'
 import { useChainInfo } from 'hooks/useChainInfo'
 import { fromChainAmount, num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
@@ -23,7 +23,7 @@ const query = gql`
   }
 `
 
-export const useVolume = ({ pair, dateTime }) => {
+export const useTradingVolume = ({ pair, dateTime }) => {
   const [volume, setVolume] = useState(0.0)
   const currentWalletState = useRecoilValue(walletState)
   const [activeChain]: any = useChainInfo(currentWalletState.chainId)
@@ -38,7 +38,7 @@ export const useVolume = ({ pair, dateTime }) => {
   }
 
   const { data: queryData, isLoading } = useQuery(
-    ['volume', pair, dateTime],
+    ['swapVolume', pair, dateTime],
     () => request(activeChain?.indexerUrl, query, { filter }),
     { enabled: !!activeChain?.indexerUrl }
   )
@@ -46,7 +46,10 @@ export const useVolume = ({ pair, dateTime }) => {
   const calculateVolume = async (data) => {
     if (!data) return 0
 
-    const [nodeData] = data?.tradingVolumes?.nodes
+    const nodeData = data?.tradingVolumes?.nodes
+      ? data?.tradingVolumes?.nodes[0]
+      : {}
+
     const tradingVolume = num(fromChainAmount(nodeData?.tradingVolume || 0))
     const offerAssetPrice = nodeData?.offerAsset
       ? await getTokenPrice(nodeData?.offerAsset, nodeData?.datetime)
@@ -63,4 +66,4 @@ export const useVolume = ({ pair, dateTime }) => {
   return { volume, isLoading }
 }
 
-export default useVolume
+export default useTradingVolume
