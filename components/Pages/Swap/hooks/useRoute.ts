@@ -13,6 +13,7 @@ import { toAssetInfo } from 'services/asset'
 import { createExecuteMessage } from 'util/messages'
 
 import useSimulate from './useSimulate'
+import { num } from 'libs/num'
 
 export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
@@ -61,13 +62,13 @@ const createRouteMessage = (
 
   const simulateMsg = {
     [simulateKey]: {
-      [amountKey]: amount,
+      [amountKey]: num(amount).toFixed(0),
       operations,
     },
   }
   const executeMsg = {
     execute_swap_operations: {
-      offer_amount: amount,
+      offer_amount: num(amount).toFixed(0),
       operations,
       max_spread: slippage,
     },
@@ -75,7 +76,7 @@ const createRouteMessage = (
 
   const nonNativeExecuteMsg = {
     send: {
-      amount: amount,
+      amount: num(amount).toFixed(0),
       contract: routerAddress,
       msg: toBase64(executeMsg),
     },
@@ -165,7 +166,7 @@ const useRoute = ({
     )
     const encodedMsgs = executeMessage(
       executeMsg,
-      amount,
+      num(amount).toFixed(0),
       tokenA,
       routerAddress,
       senderAddress
