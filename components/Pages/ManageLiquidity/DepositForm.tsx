@@ -132,7 +132,7 @@ const DepositForm = ({
             <Spinner color="white" size="xs" />
           ) : (
             <Text fontSize="14" fontWeight="700">
-              {tokenABalance?.toFixed(tokenAInfo?.decimals)}
+              {tokenABalance?.toFixed(6)}
             </Text>
           )}
         </HStack>
@@ -167,7 +167,7 @@ const DepositForm = ({
             <Spinner color="white" size="xs" />
           ) : (
             <Text fontSize="14" fontWeight="700">
-              {tokenBBalance?.toFixed(tokenBInfo?.decimals)}
+              {tokenBBalance?.toFixed(6)}
             </Text>
           )}
         </HStack>

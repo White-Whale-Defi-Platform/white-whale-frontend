@@ -103,7 +103,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
                   onClick={() =>
                     onChange({
                       ...token,
-                      amount: Number(balance / 2).toFixed(tokenInfo.decimals),
+                      amount: num(balance / 2).toFixed(6),
                     })
                   }
                 >
@@ -118,8 +118,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
                       ...token,
                       amount:
                         tokenInfo?.symbol === baseToken?.symbol && !ignoreSlack
-                          ? Number(balance - 0.1).toFixed(tokenInfo.decimals)
-                          : balance,
+                          ? num(balance - 0.1).toFixed(6)
+                          : num(balance).toFixed(6),
                     })
                   }
                 >

@@ -68,6 +68,7 @@ const createRouteMessage = (
   }
   const executeMsg = {
     execute_swap_operations: {
+      offer_amount: num(amount).toFixed(0),
       operations,
     },
   }
