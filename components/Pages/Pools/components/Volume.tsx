@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Spinner, Text } from '@chakra-ui/react'
-import useVolume from 'hooks/useVolume'
+import useTradingVolume from 'hooks/useTradingVolume'
 
 import { formatPrice } from '../../../../libs/num'
 
@@ -11,7 +11,7 @@ type Props = {
 }
 
 const Volume = ({ pair, dateTime }: Props) => {
-  const { volume, isLoading } = useVolume({ pair, dateTime })
+  const { volume, isLoading } = useTradingVolume({ pair, dateTime })
 
   if (!pair || !dateTime) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
