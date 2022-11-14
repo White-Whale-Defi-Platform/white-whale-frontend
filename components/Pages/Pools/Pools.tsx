@@ -42,7 +42,7 @@ const Pools: FC<Props> = () => {
         myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
         apr: 'coming soon',
         volume24hr: 'coming soon',
-        totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
+        totalLiq: pool.liquidity.available.total.dollarValue,
         cta: () =>
           router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`),
       }))
@@ -66,7 +66,7 @@ const Pools: FC<Props> = () => {
           : pool.pool_assets?.[0].logoURI,
         apr: 'coming soon',
         volume24hr: 'coming soon',
-        totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
+        totalLiq: pool.liquidity.available.total.dollarValue,
         cta: () =>
           router.push(
             `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`

@@ -20,8 +20,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import dayjs from 'dayjs'
+import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
+import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import { Pool } from './types'
@@ -53,7 +55,16 @@ const columns = [
         {`APR`}
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => {
+      const dateTime = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss')
+      return (
+        <Apr
+          pair={info?.row?.original?.contract}
+          dateTime={dateTime}
+          tvl={info?.row?.original?.totalLiq}
+        />
+      )
+    },
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
@@ -72,7 +83,9 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => <Text align="right">{`$${info.getValue()}`}</Text>,
+    cell: (info) => (
+      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+    ),
   }),
   columnHelper.accessor('cta', {
     header: '',

@@ -1,6 +1,7 @@
-import { useToast } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+
+import { useToast } from '@chakra-ui/react'
 
 import Finder from '../components/Finder'
 import { directTokenSwap } from '../services/swap'
@@ -88,18 +89,18 @@ export const useTransaction = ({
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
-      } catch (error) {
+      } catch (err) {
         if (
-          /insufficient funds/i.test(error.toString()) ||
-          /Overflow: Cannot Sub with/i.test(error.toString())
+          /insufficient funds/i.test(err.toString()) ||
+          /Overflow: Cannot Sub with/i.test(err.toString())
         ) {
-          console.error(error)
+          console.error(err)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/Max spread assertion/i.test(error.toString())) {
-          console.error(error)
+        } else if (/Max spread assertion/i.test(err.toString())) {
+          console.error(err)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
@@ -240,7 +241,7 @@ export const useTransaction = ({
       msgs,
       fee,
     })
-  }, [msgs, fee, mutate, price])
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -276,6 +277,7 @@ export const useTransaction = ({
       error,
       reset,
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txStep, txInfo, txHash, error, reset, fee])
 }
 
