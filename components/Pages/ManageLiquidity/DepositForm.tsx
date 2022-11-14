@@ -15,7 +15,7 @@ import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
-import { fromChainAmount } from 'libs/num'
+import { fromChainAmount, num } from 'libs/num'
 
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { TokenItemState } from './lpAtoms'
@@ -76,11 +76,11 @@ const DepositForm = ({
   useEffect(() => {
     if (simulated) {
       if (reverse) {
-        onInputChange({ ...tokenA, amount: Number(simulated) }, 0)
-        setValue('token1', { ...tokenA, amount: Number(simulated) })
+        onInputChange({ ...tokenA, amount: num(simulated).dp(6).toNumber() }, 0)
+        setValue('token1', { ...tokenA, amount: num(simulated).dp(6).toNumber() })
       } else {
-        onInputChange({ ...tokenB, amount: Number(simulated) }, 1)
-        setValue('token2', { ...tokenA, amount: Number(simulated) })
+        onInputChange({ ...tokenB, amount: num(simulated).dp(6).toNumber() }, 1)
+        setValue('token2', { ...tokenA, amount: num(simulated).dp(6).toNumber() })
       }
     } else {
       if (reverse) {
@@ -126,7 +126,7 @@ const DepositForm = ({
             <Spinner color="white" size="xs" />
           ) : (
             <Text fontSize="14" fontWeight="700">
-              {tokenABalance?.toFixed(tokenAInfo?.decimals)}
+              {tokenABalance?.toFixed(6)}
             </Text>
           )}
         </HStack>
@@ -161,7 +161,7 @@ const DepositForm = ({
             <Spinner color="white" size="xs" />
           ) : (
             <Text fontSize="14" fontWeight="700">
-              {tokenBBalance?.toFixed(tokenBInfo?.decimals)}
+              {tokenBBalance?.toFixed(6)}
             </Text>
           )}
         </HStack>

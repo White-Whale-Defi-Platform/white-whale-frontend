@@ -29,11 +29,11 @@ export const formatPrice = (amount, format = '0,0.00a') => {
 }
 
 export const fromChainAmount = (value: BigNumber.Value = '0', decimal = 6): string => {
-  return new BigNumber(value).div(10 ** decimal).toString()
+  return new BigNumber(value).div(10 ** decimal).toFixed(6)
 }
 
 export const toChainAmount = (value: BigNumber.Value = '0', decimal = 6): string => {
-  return new BigNumber(value).times(10 ** decimal).toString()
+  return new BigNumber(value).times(10 ** decimal).toFixed(0)
 }
 
 export const toDecimal = (
