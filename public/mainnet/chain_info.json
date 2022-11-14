@@ -51,7 +51,7 @@
     "chainName": "Terra Mainnet",
     "label": "Terra",
     "icon": "/logos/luna.svg",
-    "rpc": "https://terra-rpc.whitewhale.money",
+    "rpc": "https://ww-terra-rest.polkachu.com/",
     "rest": "https://terra-api.polkachu.com",
     "stakeCurrency": {
       "coinDenom": "LUNA",
@@ -98,7 +98,7 @@
     "chainName": "Chihuahua mainnet",
     "label": "Chihuahua",
     "icon": "/logos/huahua.png",
-    "rpc": "https://rpc-chihuahua-ia.cosmosia.notional.ventures",
+    "rpc": "https://ww-chihuahua-rest.polkachu.com/",
     "rest": "https://api.chihuahua.wtf",
     "stakeCurrency": {
       "coinDenom": "huahua",
