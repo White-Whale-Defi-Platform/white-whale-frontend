@@ -17,6 +17,9 @@ import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
+import { WalletStatusType } from '../../../state/atoms/walletAtoms'
+import { TokenItemState } from '../ManageLiquidity/lpAtoms'
+
 type Props = {
   connected: WalletStatusType
   tokenA: TokenItemState

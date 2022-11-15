@@ -5,8 +5,6 @@ import { createAsset, isNativeAsset } from '../../../services/asset'
 
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
-import { createIncreaseAllowanceMessage } from 'util/messages'
-
 const createLpMsg = ({ tokenA, tokenB, amountA, amountB }) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
   const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native)
