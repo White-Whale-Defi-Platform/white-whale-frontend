@@ -58,7 +58,7 @@ const DepositForm = ({
 
   console.log({
     tokenA,
-    tokenB
+    tokenB,
   })
   const { control, handleSubmit, formState, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -77,10 +77,16 @@ const DepositForm = ({
     if (simulated) {
       if (reverse) {
         onInputChange({ ...tokenA, amount: num(simulated).dp(6).toNumber() }, 0)
-        setValue('token1', { ...tokenA, amount: num(simulated).dp(6).toNumber() })
+        setValue('token1', {
+          ...tokenA,
+          amount: num(simulated).dp(6).toNumber(),
+        })
       } else {
         onInputChange({ ...tokenB, amount: num(simulated).dp(6).toNumber() }, 1)
-        setValue('token2', { ...tokenA, amount: num(simulated).dp(6).toNumber() })
+        setValue('token2', {
+          ...tokenA,
+          amount: num(simulated).dp(6).toNumber(),
+        })
       }
     } else {
       if (reverse) {

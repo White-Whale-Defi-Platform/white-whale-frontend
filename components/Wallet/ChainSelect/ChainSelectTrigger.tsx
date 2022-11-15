@@ -7,7 +7,7 @@ import ChevronDownIcon from '../../icons/ChevronDownIcon'
 
 function ChainSelectTrigger({ connected, denom, currentWalletState }) {
   const connectedWallet = useConnectedWallet()
-  const isStation = currentWalletState?.activeWallet === "station"
+  const isStation = currentWalletState?.activeWallet === 'station'
   return (
     <PopoverTrigger>
       {connected || connectedWallet ? (

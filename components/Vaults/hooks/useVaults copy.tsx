@@ -68,7 +68,6 @@ export const useVaultDepost = (lpToken: string, vaultAddress) => {
   const { chainId, client, address } = useRecoilValue(walletState)
   const network = useRecoilValue(networkAtom)
 
-
   const { data: balance, isLoading } = useQuery(
     ['@vaults/deposit', lpToken, chainId, network],
     async () => {

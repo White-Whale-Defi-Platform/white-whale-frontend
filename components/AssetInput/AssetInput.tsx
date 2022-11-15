@@ -18,7 +18,7 @@ import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
-import {num} from 'libs/num'
+import { num } from 'libs/num'
 
 import AssetSelectModal from './AssetSelectModal'
 

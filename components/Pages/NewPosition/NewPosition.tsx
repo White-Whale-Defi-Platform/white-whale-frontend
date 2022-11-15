@@ -40,8 +40,10 @@ const NewPosition = () => {
         tokenSymbol: token as string,
         amount: 0,
         decimals: poolList?.pools
-        .map(({ pool_assets }) => pool_assets)
-        .map(([a, b]) => a?.symbol == token as string ? a?.decimals : b?.decimals)[0]
+          .map(({ pool_assets }) => pool_assets)
+          .map(([a, b]) =>
+            a?.symbol == (token as string) ? a?.decimals : b?.decimals
+          )[0],
       }))
       setTokenSwapState([A, B])
       setResetForm(true)

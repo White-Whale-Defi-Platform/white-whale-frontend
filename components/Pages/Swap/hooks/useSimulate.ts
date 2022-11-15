@@ -32,7 +32,7 @@ export type Simulated = {
 
 const simulate = ({ client, msg, routerAddress }): Promise<any> => {
   console.log({
-    msg
+    msg,
   })
   return client?.queryContractSmart(routerAddress, msg)
 }

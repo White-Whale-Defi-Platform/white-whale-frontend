@@ -91,7 +91,6 @@ const SwapForm: FC<Props> = ({
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
 
-
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
 
@@ -110,17 +109,29 @@ const SwapForm: FC<Props> = ({
 
     const A = {
       ...tokenB,
-      amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
+      amount:
+        tokenA.amount ||
+        parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
       decimals: poolList.pools
         .map(({ pool_assets }) => pool_assets)
-        .map(([a, b]) => a?.symbol == tokenA.tokenSymbol as string ? a?.decimals : b?.decimals)[0]
+        .map(([a, b]) =>
+          a?.symbol == (tokenA.tokenSymbol as string)
+            ? a?.decimals
+            : b?.decimals
+        )[0],
     }
     const B = {
       ...tokenA,
-      amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
+      amount:
+        tokenB.amount ||
+        parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
       decimals: poolList.pools
         .map(({ pool_assets }) => pool_assets)
-        .map(([a, b]) => a?.symbol == tokenB.tokenSymbol as string ? a?.decimals : b?.decimals)[0]
+        .map(([a, b]) =>
+          a?.symbol == (tokenB.tokenSymbol as string)
+            ? a?.decimals
+            : b?.decimals
+        )[0],
     }
     setValue('tokenA', A, { shouldValidate: true })
     setValue('tokenB', B, { shouldValidate: true })
@@ -139,18 +150,32 @@ const SwapForm: FC<Props> = ({
     if (simulated) {
       if (isReverse) {
         const asset = { ...tokenA }
-        asset.amount = parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals))
+        asset.amount = parseFloat(
+          fromChainAmount(simulated?.amount, tokenAInfo?.decimals)
+        )
         setValue('tokenA', asset)
         onInputChange(
-          { ...tokenA, amount: parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)) },
+          {
+            ...tokenA,
+            amount: parseFloat(
+              fromChainAmount(simulated?.amount, tokenAInfo?.decimals)
+            ),
+          },
           0
         )
       } else {
         const asset = { ...tokenB }
-        asset.amount = parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals))
+        asset.amount = parseFloat(
+          fromChainAmount(simulated?.amount, tokenBInfo?.decimals)
+        )
         setValue('tokenB', asset)
         onInputChange(
-          { ...tokenB, amount: parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)) },
+          {
+            ...tokenB,
+            amount: parseFloat(
+              fromChainAmount(simulated?.amount, tokenBInfo?.decimals)
+            ),
+          },
           1
         )
       }

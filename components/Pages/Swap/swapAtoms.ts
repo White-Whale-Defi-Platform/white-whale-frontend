@@ -2,9 +2,8 @@ import { atom } from 'recoil'
 
 export type TokenItemState = {
   tokenSymbol: string
-  amount: number,
+  amount: number
   decimals: number
-
 }
 
 export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
@@ -14,13 +13,11 @@ export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
       tokenSymbol: null,
       amount: 0,
       decimals: 6,
-
     },
     {
       tokenSymbol: null,
       amount: 0,
       decimals: 6,
-
     },
   ],
   effects_UNSTABLE: [

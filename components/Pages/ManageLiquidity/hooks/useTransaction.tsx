@@ -188,7 +188,10 @@ export const useTransaction = ({
         toast({
           title: 'Withdraw Liquidity Success.',
           description: (
-            <Finder txHash={data.transactionHash} chainId={client?.client?.chainId}>
+            <Finder
+              txHash={data.transactionHash}
+              chainId={client?.client?.chainId}
+            >
               {' '}
             </Finder>
           ),
