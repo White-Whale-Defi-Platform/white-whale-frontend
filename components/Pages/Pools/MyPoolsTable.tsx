@@ -19,13 +19,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import dayjs from 'dayjs'
 import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
-import Apr from './components/Apr'
 import PoolName from './components/PoolName'
-import Volume from './components/Volume'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -56,13 +53,8 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      const dateTime = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss')
       return (
-        <Apr
-          pair={info?.row?.original?.contract}
-          dateTime={dateTime}
-          tvl={info?.row?.original?.totalLiq}
-        />
+        <Text align="right">{`${Number(info.getValue()).toFixed(2)} %`}</Text>
       )
     },
   }),
@@ -73,8 +65,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      const datetime = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss')
-      return <Volume pair={info?.row?.original?.contract} dateTime={datetime} />
+      return <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
     },
   }),
   columnHelper.accessor('totalLiq', {
