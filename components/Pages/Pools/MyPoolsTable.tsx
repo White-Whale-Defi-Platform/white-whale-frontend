@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   HStack,
+  Image,
   Table,
   TableContainer,
   Tbody,
@@ -149,6 +150,7 @@ const PoolsTable = ({
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}
+      flexDirection="column"
     >
       <TableContainer width="full">
         <Table variant="unstyled">
@@ -181,6 +183,15 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
+      <Flex justifyContent="center" alignItems="center" mt="16px">
+        <Text color="white" mr="8px">{`Powered By `}</Text>
+        <Image
+          src="/logos/coinhall.png"
+          width="auto"
+          maxH="1rem"
+          alt="coinhall logo"
+        />
+      </Flex>
     </Flex>
   )
 }
