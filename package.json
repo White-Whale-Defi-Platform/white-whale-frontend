@@ -63,6 +63,7 @@
     "graphql-request": "^5.0.0",
     "gsap": "^3.7.1",
     "intercept-stdout": "^0.1.2",
+    "jsoneditor": "^9.9.2",
     "junoblocks": "^0.2.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
