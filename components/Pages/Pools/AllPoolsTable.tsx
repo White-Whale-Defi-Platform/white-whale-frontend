@@ -4,7 +4,6 @@ import {
   Button,
   Flex,
   HStack,
-  Image,
   Table,
   TableContainer,
   Tbody,
@@ -175,14 +174,8 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      <Flex justifyContent="center" alignItems="center" mt="16px">
-        <Text color="white" mr="8px">{`Powered By `}</Text>
-        <Image
-          src="/logos/coinhall.png"
-          width="auto"
-          maxH="1rem"
-          alt="coinhall logo"
-        />
+      <Flex justifyContent="end" alignItems="center" mt="16px">
+        <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
       </Flex>
     </Flex>
   )
