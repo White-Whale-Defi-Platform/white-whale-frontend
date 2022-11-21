@@ -43,7 +43,6 @@ export type ProvideLiquidity = {
 
 export type Swap = {
   swap: {
-    offer_asset: Asset
     belief_price?: string
     max_spread?: string
     to?: string
@@ -55,6 +54,7 @@ export type Swap = {
 // ---------------------------------------------
 export type SwapHook = {
   swap: {
+    belief_price?: string
     max_spread?: string
     to?: string
   }
