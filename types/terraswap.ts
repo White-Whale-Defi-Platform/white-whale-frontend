@@ -55,7 +55,6 @@ export type Swap = {
 // ---------------------------------------------
 export type SwapHook = {
   swap: {
-    belief_price?: string
     max_spread?: string
     to?: string
   }
