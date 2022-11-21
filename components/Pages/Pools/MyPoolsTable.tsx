@@ -149,6 +149,7 @@ const PoolsTable = ({
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}
+      flexDirection="column"
     >
       <TableContainer width="full">
         <Table variant="unstyled">
@@ -181,6 +182,9 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
+      <Flex justifyContent="end" alignItems="center" mt="16px">
+        <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
+      </Flex>
     </Flex>
   )
 }
