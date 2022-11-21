@@ -67,7 +67,6 @@ const createRouteMessage = (
   }
   const executeMsg = {
     execute_swap_operations: {
-      offer_amount: amount,
       operations,
       max_spread: slippage,
     },
