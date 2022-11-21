@@ -68,7 +68,6 @@ const createRouteMessage = (
   const executeMsg = {
     execute_swap_operations: {
       operations,
-      max_spread: slippage,
     },
   }
 
