@@ -83,7 +83,7 @@ export const createMsg = ({
   if (isNative) {
     return {
       swap: addSlippage({
-        offer_asset: offerAsset,
+        // offer_asset: offerAsset,
         belief_price: price,
       }),
     }
