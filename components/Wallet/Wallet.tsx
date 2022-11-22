@@ -15,7 +15,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
-    
+
   const connectedWallet = useConnectedWallet()
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
   const { showTerraModalOrConnectKeplr } =

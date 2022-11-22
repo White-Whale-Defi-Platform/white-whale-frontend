@@ -89,17 +89,17 @@ export const useTransaction = ({
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        }
-        else if (
-          /Negative profits when attempting to flash-loan /i.test(err.toString())
+        } else if (
+          /Negative profits when attempting to flash-loan /i.test(
+            err.toString()
+          )
         ) {
           console.error(err)
           setTxStep(TxStep.Idle)
           setError('Negative profit')
           setButtonLabel('Negative profit')
           throw new Error('Negative profit')
-        }
-        else {
+        } else {
           console.error(err)
           setTxStep(TxStep.Idle)
           setError('Failed to execute transaction.')
@@ -173,7 +173,7 @@ export const useTransaction = ({
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
-        console.log({data})
+        console.log({ data })
         setTxHash(data.transactionHash)
         queryClient.invalidateQueries([
           '@pool-liquidity',
@@ -184,7 +184,10 @@ export const useTransaction = ({
         toast({
           title: 'Flashloan Success.',
           description: (
-            <Finder txHash={data?.transactionHash} chainId={client?.client?.chainId}>
+            <Finder
+              txHash={data?.transactionHash}
+              chainId={client?.client?.chainId}
+            >
               {' '}
             </Finder>
           ),
@@ -213,7 +216,6 @@ export const useTransaction = ({
   )
 
   const submit = useCallback(async () => {
-
     if (msgs == null || msgs.length < 1) {
       return
     }
@@ -248,7 +250,7 @@ export const useTransaction = ({
 
   return useMemo(() => {
     return {
-      simulate :refetch,
+      simulate: refetch,
       fee,
       buttonLabel,
       submit,

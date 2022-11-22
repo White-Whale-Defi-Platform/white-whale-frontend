@@ -6,10 +6,14 @@ export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
 }
 
-export const createFlashLoanMsg = ({ senderAddress, contractAddress, message }) => {
- return createExecuteMessage({
+export const createFlashLoanMsg = ({
+  senderAddress,
+  contractAddress,
+  message,
+}) => {
+  return createExecuteMessage({
     senderAddress,
     contractAddress,
-    message
+    message,
   })
 }

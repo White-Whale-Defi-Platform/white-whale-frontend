@@ -1,7 +1,5 @@
-import {
-    Box
-} from '@chakra-ui/react';
-import styled from "@emotion/styled";
+import { Box } from '@chakra-ui/react'
+import styled from '@emotion/styled'
 
 const JSONEditorInput = styled(Box)`
 
@@ -74,20 +72,20 @@ const JSONEditorInput = styled(Box)`
 `
 
 type Props = {
-    containerRef: any
+  containerRef: any
 }
 
 function Editor({ containerRef }: Props) {
-    return (
-        <JSONEditorInput
-            ref={containerRef}
-            width="full"
-            height="full"
-            border="1px solid #FFFFFF"
-            borderRadius="30px"
-            padding="24px"
-        />
-    )
+  return (
+    <JSONEditorInput
+      ref={containerRef}
+      width="full"
+      height="full"
+      border="1px solid #FFFFFF"
+      borderRadius="30px"
+      padding="24px"
+    />
+  )
 }
 
 export default Editor
