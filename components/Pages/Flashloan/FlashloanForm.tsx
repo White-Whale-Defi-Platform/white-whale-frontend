@@ -74,7 +74,7 @@ function FlashloanForm({ }: Props) {
                 setError("Messgae validation failed.")
             }
         } catch (error) {
-            setError("Invlid JSON")
+            setError("Invalid JSON")
         }
     }
 
@@ -97,7 +97,8 @@ function FlashloanForm({ }: Props) {
                 setJson(JSON.parse(e?.target?.result))
                 editorRef.current.set(JSON.parse(e.target.result));
             } catch (errro) {
-                setError("Invlid JSON")
+                editorRef.current.set(e.target.result);
+                setError("Invalid JSON")
             }
         };
     };
@@ -112,7 +113,7 @@ function FlashloanForm({ }: Props) {
                 setJson(jsonData)
             }
             catch (error) {
-                setError("Invlid JSON")
+                setError("Invalid JSON")
             }
         }
     }

@@ -184,7 +184,7 @@ export const useTransaction = ({
         toast({
           title: 'Flashloan Success.',
           description: (
-            <Finder txHash={data?.transactionHash} chainId={client?.chainId}>
+            <Finder txHash={data?.transactionHash} chainId={client?.client?.chainId}>
               {' '}
             </Finder>
           ),
