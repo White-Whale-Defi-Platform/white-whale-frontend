@@ -19,7 +19,7 @@ const UploadFile = ({handleChange}: Props) => {
             <Button leftIcon={<MdOutlineUploadFile size={18} />} colorScheme='gray' variant='outline' onClick={handleFile}>
                 Upload File
             </Button>
-            <input ref={fileRef} id="upload" type="file" onChange={handleChange} style={{ visibility: 'hidden' }} />
+            <input ref={fileRef} id="upload" type="file" onChange={handleChange} style={{ visibility: 'hidden', width:0 }} />
 
         </>
     )

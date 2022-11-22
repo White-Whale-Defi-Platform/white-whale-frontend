@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react'
 
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import Editor from './Editor'
 import Error from './Error'
 import useFlashloan from './hooks/useFlashloan'
@@ -13,6 +13,8 @@ import { TxStep } from './hooks/useTransaction'
 import "jsoneditor/dist/jsoneditor.css";
 import schema from './schema.json'
 import UploadFile from './UploadFile'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 const defualtJson = {
     flash_loan: {
@@ -40,6 +42,8 @@ function FlashloanForm({ }: Props) {
     const containerRef = useRef(null);
     const [error, setError] = useState(null);
     const [json, setJson] = useState(defualtJson)
+    const { status } = useRecoilValue(walletState)
+    const isConnected = status === `@wallet-state/connected`
 
     const tx = useFlashloan({ json })
 
@@ -53,14 +57,20 @@ function FlashloanForm({ }: Props) {
         };
     }, [containerRef, editorRef, options]);
 
+    const buttonLabel = useMemo(() => {
+        if (!isConnected) return 'Connect Wallet'
+        else if (!!error) return error
+        else return 'Flashloan'
+    }, [tx?.buttonLabel, status, error])
+
     const onChange = async (data) => {
         try {
-            if (error) setError('')
             const isValid = await editorRef?.current?.validate()
             if (isValid?.length === 0) {
                 const jsonData = editorRef?.current?.get()
                 setJson(jsonData)
-            }else {
+                setError('')
+            } else {
                 setError("Messgae validation failed.")
             }
         } catch (error) {
@@ -122,7 +132,7 @@ function FlashloanForm({ }: Props) {
                     <Box>
                         <Text alignSelf="flex-start" > JSON to execute the trade</Text>
                     </Box>
-                    <Error message={error || tx?.error} />
+                    {/* <Error message={error || tx?.error} /> */}
                 </HStack>
 
                 <Editor containerRef={containerRef} />
@@ -137,6 +147,16 @@ function FlashloanForm({ }: Props) {
                             Format
                         </Button>
                         <UploadFile handleChange={handleChange} />
+                        {/* <Button
+                            variant='outline'
+                            isLoading={
+                                tx?.txStep == TxStep.Estimating
+                            }
+                            disabled={!!error}
+                            onClick={() => tx?.simulate()}
+                        >
+                            {tx?.buttonLabel ||  'Simulate'}
+                        </Button> */}
                     </HStack>
 
                     <Button
@@ -144,13 +164,13 @@ function FlashloanForm({ }: Props) {
                         variant="primary"
                         width={60}
                         isLoading={
-                            tx?.txStep == TxStep.Estimating ||
+                            // tx?.txStep == TxStep.Estimating ||
                             tx?.txStep == TxStep.Posting ||
                             tx?.txStep == TxStep.Broadcasting
                         }
-                        disabled={!!error}
+                        disabled={!!error || !isConnected}
                     >
-                        Flashloan
+                        {buttonLabel}
                     </Button>
                 </HStack>
 

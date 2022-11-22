@@ -70,7 +70,7 @@ export const useTransaction = ({
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
 
-  const { data: fee } = useQuery<unknown, unknown, any | null>(
+  const { data: fee, refetch } = useQuery<unknown, unknown, any | null>(
     ['fee', msgs, error],
     async () => {
       setTxStep(TxStep.Estimating)
@@ -159,7 +159,7 @@ export const useTransaction = ({
         }
 
         toast({
-          title: 'Swap Failed.',
+          title: 'Flashloan Failed.',
           description: message,
           status: 'error',
           duration: 9000,
@@ -182,7 +182,7 @@ export const useTransaction = ({
         ])
         onBroadcasting?.(data.transactionHash)
         toast({
-          title: 'Withdraw Liquidity Success.',
+          title: 'Flashloan Success.',
           description: (
             <Finder txHash={data?.transactionHash} chainId={client?.chainId}>
               {' '}
@@ -248,6 +248,7 @@ export const useTransaction = ({
 
   return useMemo(() => {
     return {
+      simulate :refetch,
       fee,
       buttonLabel,
       submit,
@@ -256,7 +257,7 @@ export const useTransaction = ({
       txHash,
       error,
     }
-  }, [txStep, txInfo, txHash, error, fee, buttonLabel, submit])
+  }, [txStep, txInfo, txHash, error, fee, buttonLabel, submit, refetch])
 }
 
 export default useTransaction
