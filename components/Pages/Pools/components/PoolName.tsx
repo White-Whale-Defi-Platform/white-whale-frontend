@@ -42,6 +42,7 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           }
         />
       </Box>
+      
     </HStack>
     <Text textAlign="center" fontSize={['12px', '16px']}>
       {poolId.includes('USDC') ? poolId : poolId.split('-').reverse().join('-')}

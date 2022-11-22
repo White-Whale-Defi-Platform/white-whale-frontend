@@ -104,6 +104,7 @@ const Pools: FC<Props> = () => {
         <MyPoolsTable pools={myPools} isLoading={isLoading} />
         <MobilePools pools={myPools} />
       </Box>
+      
 
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
