@@ -19,7 +19,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { CHIHUAHUA_MAINNET_CHAIN_ID } from 'constants/chain'
 import { formatPrice } from 'libs/num'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
 import PoolName from './components/PoolName'
@@ -98,6 +101,7 @@ const PoolsTable = ({
   isLoading: boolean
 }) => {
   const [data, setData] = useState(() => [...pools])
+  const currentWalletState = useRecoilValue(walletState)
 
   useEffect(() => {
     setData(pools)
@@ -182,9 +186,11 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      <Flex justifyContent="end" alignItems="center" mt="16px">
-        <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
-      </Flex>
+      {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
+        <Flex justifyContent="end" alignItems="center" mt="16px">
+          <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
+        </Flex>
+      )}
     </Flex>
   )
 }
