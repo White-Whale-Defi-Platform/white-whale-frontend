@@ -76,9 +76,10 @@ const Pools: FC<Props> = () => {
   // get a list of my pools
   const myPools = allPools
     .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-    .map((pool) => ({
-      ...pool,
-      myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
+    .map((item) => ({
+      ...item,
+      myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+      cta: () => router.push(`/pools/manage_liquidity?poolId=${item.pool}`),
     }))
 
   // get a list of all pools excepting myPools
