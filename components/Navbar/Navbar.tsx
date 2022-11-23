@@ -58,6 +58,10 @@ const Navbar = ({}) => {
       link: '/pools',
     },
     {
+      lable: 'Flashloan',
+      link: '/flashloan',
+    },
+    {
       lable: 'Vaults',
       link: '/vaults',
     },

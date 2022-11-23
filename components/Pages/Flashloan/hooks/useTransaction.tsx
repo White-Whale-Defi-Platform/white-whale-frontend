@@ -2,10 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import Finder from 'components/Finder'
 
-import Finder from '../components/Finder'
-import { directTokenSwap } from '../services/swap'
-import useDebounceValue from './useDebounceValue'
+import { executeFlashloan } from './executeFlashloan'
 
 export enum TxStep {
   /**
@@ -40,16 +39,11 @@ export enum TxStep {
 
 type Params = {
   enabled: boolean
-  swapAddress: string
-  swapAssets: any[]
-  price: number
   client: any
   senderAddress: string
-  msgs: any | null
   encodedMsgs: any | null
-  amount: string
-  gasAdjustment?: number
-  estimateEnabled?: boolean
+  contractAddress: string | undefined
+  msgs: any | null
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -57,35 +51,31 @@ type Params = {
 
 export const useTransaction = ({
   enabled,
-  swapAddress,
-  swapAssets,
   client,
   senderAddress,
-  msgs,
   encodedMsgs,
-  amount,
-  price,
+  msgs,
+  contractAddress,
   onBroadcasting,
   onSuccess,
   onError,
 }: Params) => {
-  const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
-  const [tokenA, tokenB] = swapAssets
+  // const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
+  // const [tokenA, tokenB] = swapAssets
   const toast = useToast()
-  const queryClient = useQueryClient()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
+  const queryClient = useQueryClient()
 
-  const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', amount, debouncedMsgs, error],
+  const { data: fee, refetch } = useQuery<unknown, unknown, any | null>(
+    ['fee', msgs, error],
     async () => {
-      setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await client.simulate(senderAddress, encodedMsgs, '')
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
@@ -99,21 +89,18 @@ export const useTransaction = ({
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/Max spread assertion/i.test(err.toString())) {
+        } else if (
+          /Negative profits when attempting to flash-loan /i.test(
+            err.toString()
+          )
+        ) {
           console.error(err)
           setTxStep(TxStep.Idle)
-          setError('Try increasing slippage')
-          throw new Error('Try increasing slippage')
-        }
-        // else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
-        //   console.error(error)
-        //   setTxStep(TxStep.Idle)
-        //   setButtonLabel('Insuifficient liquidity')
-        //   setError("Insuifficient liquidity")
-        //   throw new Error('Insuifficient liquidity')
-        // }
-        else {
-          console.error(error)
+          setError('Negative profit')
+          setButtonLabel('Negative profit')
+          throw new Error('Negative profit')
+        } else {
+          console.error(err)
           setTxStep(TxStep.Idle)
           setError('Failed to execute transaction.')
           throw Error('Failed to execute transaction.')
@@ -122,7 +109,7 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
+        encodedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
         enabled,
@@ -140,13 +127,11 @@ export const useTransaction = ({
 
   const { mutate } = useMutation(
     (data: any) => {
-      return directTokenSwap({
-        tokenA,
-        swapAddress,
-        senderAddress,
+      return executeFlashloan({
         msgs,
-        tokenAmount: Number(amount),
         client,
+        contractAddress,
+        senderAddress,
       })
     },
     {
@@ -174,7 +159,7 @@ export const useTransaction = ({
         }
 
         toast({
-          title: 'Swap Failed.',
+          title: 'Flashloan Failed.',
           description: message,
           status: 'error',
           duration: 9000,
@@ -188,18 +173,22 @@ export const useTransaction = ({
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
+        console.log({ data })
         setTxHash(data.transactionHash)
+        queryClient.invalidateQueries([
+          '@pool-liquidity',
+          'multipleTokenBalances',
+          'tokenBalance',
+        ])
         onBroadcasting?.(data.transactionHash)
-        const queryPath = `multipleTokenBalances/${swapAssets
-          .map(({ symbol }) => symbol)
-          ?.join('+')}`
-        queryClient.invalidateQueries([queryPath])
         toast({
-          title: 'Swap Success.',
+          title: 'Flashloan Success.',
           description: (
-            <Finder txHash={data.transactionHash} chainId={client.chainId}>
+            <Finder
+              txHash={data?.transactionHash}
+              chainId={client?.client?.chainId}
+            >
               {' '}
-              From: {tokenA.symbol} To: {tokenB.symbol}{' '}
             </Finder>
           ),
           status: 'success',
@@ -226,22 +215,15 @@ export const useTransaction = ({
     }
   )
 
-  const reset = () => {
-    setError(null)
-    setTxHash(undefined)
-    setTxStep(TxStep.Idle)
-  }
-
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
+    if (msgs == null || msgs.length < 1) {
       return
     }
 
     mutate({
       msgs,
-      fee,
     })
-  }, [msgs, fee, mutate])
+  }, [msgs, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -264,10 +246,11 @@ export const useTransaction = ({
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedMsgs])
+  }, [msgs])
 
   return useMemo(() => {
     return {
+      simulate: refetch,
       fee,
       buttonLabel,
       submit,
@@ -275,10 +258,8 @@ export const useTransaction = ({
       txInfo,
       txHash,
       error,
-      reset,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txStep, txInfo, txHash, error, reset, fee])
+  }, [txStep, txInfo, txHash, error, fee, buttonLabel, submit, refetch])
 }
 
 export default useTransaction

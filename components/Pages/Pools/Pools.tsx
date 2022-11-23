@@ -1,88 +1,86 @@
-import { FC, useMemo } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
-import FallbackImage from 'components/FallbackImage'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { formatPrice, fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import { getPairApryAnd24HrVolume } from 'util/coinhall'
 
-import Loader from '../../Loader'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
 const Pools: FC<Props> = () => {
+  const [allPools, setAllPools] = useState<any[]>([])
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
 
-  const [pools, isLoading, isError] = useQueriesDataSelector(
+  const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
     })
   )
 
-  const myPools = useMemo(() => {
-    if (!pools) return []
+  const initPools = useCallback(async () => {
+    if (!pools || pools.length === 0) return
+    if (allPools.length > 0) return
 
-    return pools
-      .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-      .map((pool) => ({
-        pool: pool?.pool_id,
-        token1Img: pool?.pool_id.includes('USDC')
-          ? pool.pool_assets?.[0].logoURI
-          : pool.pool_assets?.[1].logoURI,
-        token2Img: pool?.pool_id.includes('USDC')
-          ? pool.pool_assets?.[1].logoURI
-          : pool.pool_assets?.[0].logoURI,
-        myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
-        apr: 'coming soon',
-        volume24hr: 'coming soon',
-        totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
-        cta: () =>
-          router.push(`/pools/manage_liquidity?poolId=${pool?.pool_id}`),
-      }))
+    const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
+    const poosWithAprAnd24HrVolume = await getPairApryAnd24HrVolume(
+      poolPairAddrList
+    )
+
+    const _pools = pools.map((pool: any) => {
+      return {
+        ...pool,
+        ...poosWithAprAnd24HrVolume.find(
+          (row: any) => row.pairAddress === pool.swap_address
+        ),
+      }
+    })
+
+    const _allPools = _pools.map((pool) => ({
+      contract: pool?.swap_address,
+      pool: pool?.pool_id,
+      token1Img: pool?.pool_id.includes('USDC')
+        ? pool.pool_assets?.[0].logoURI
+        : pool.pool_assets?.[1].logoURI,
+      token2Img: pool?.pool_id.includes('USDC')
+        ? pool.pool_assets?.[1].logoURI
+        : pool.pool_assets?.[0].logoURI,
+      apr: pool.apr24h,
+      volume24hr: pool.usdVolume24h,
+      totalLiq: pool.liquidity.available.total.dollarValue,
+      cta: () =>
+        router.push(
+          `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
+        ),
+    }))
+
+    setAllPools(_allPools)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pools, router])
+
+  useEffect(() => {
+    initPools()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools])
 
-  const allPools = useMemo(() => {
-    if (!pools) return []
+  // get a list of my pools
+  const myPools = allPools.filter(
+    ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
+  )
 
-    const myPoolsId = myPools.map(({ pool }) => pool)
-
-    return pools
-      .map((pool) => ({
-        pool: pool?.pool_id,
-        token1Img: pool?.pool_id.includes('USDC')
-          ? pool.pool_assets?.[0].logoURI
-          : pool.pool_assets?.[1].logoURI,
-        token2Img: pool?.pool_id.includes('USDC')
-          ? pool.pool_assets?.[1].logoURI
-          : pool.pool_assets?.[0].logoURI,
-        apr: 'coming soon',
-        volume24hr: 'coming soon',
-        totalLiq: formatPrice(pool.liquidity.available.total.dollarValue),
-        cta: () =>
-          router.push(
-            `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
-          ),
-      }))
-      .filter((item) => !myPoolsId.includes(item.pool))
-  }, [pools, myPools])
-
-  // if (isLoading || pools === undefined)
-  //     return <Loader />
+  // get a list of all pools excepting myPools
+  const myPoolsId = myPools.map(({ pool }) => pool)
+  const allPoolsForShown = allPools.filter(
+    (item) => !myPoolsId.includes(item.pool)
+  )
 
   return (
     <VStack
@@ -106,6 +104,7 @@ const Pools: FC<Props> = () => {
         <MyPoolsTable pools={myPools} isLoading={isLoading} />
         <MobilePools pools={myPools} />
       </Box>
+      
 
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
@@ -113,8 +112,8 @@ const Pools: FC<Props> = () => {
             All Pools
           </Text>
         </HStack>
-        <AllPoolsTable pools={allPools} isLoading={isLoading} />
-        <MobilePools pools={allPools} ctaLabel="Add Liquidity" />
+        <AllPoolsTable pools={allPoolsForShown} isLoading={isLoading} />
+        <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
       </Box>
     </VStack>
   )
