@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
+import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -56,6 +57,7 @@ const Pools: FC<Props> = () => {
       apr: pool.apr24h,
       volume24hr: pool.usdVolume24h,
       totalLiq: pool.liquidity.available.total.dollarValue,
+      liquidity: pool.liquidity,
       cta: () =>
         router.push(
           `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
@@ -72,9 +74,12 @@ const Pools: FC<Props> = () => {
   }, [pools])
 
   // get a list of my pools
-  const myPools = allPools.filter(
-    ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
-  )
+  const myPools = allPools
+    .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+    .map((pool) => ({
+      ...pool,
+      myPosition: formatPrice(pool?.liquidity?.providedTotal?.dollarValue),
+    }))
 
   // get a list of all pools excepting myPools
   const myPoolsId = myPools.map(({ pool }) => pool)
@@ -104,7 +109,6 @@ const Pools: FC<Props> = () => {
         <MyPoolsTable pools={myPools} isLoading={isLoading} />
         <MobilePools pools={myPools} />
       </Box>
-      
 
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
