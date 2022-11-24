@@ -150,19 +150,15 @@ const useProvideLP = ({ reverse = false }) => {
     msgs,
     encodedMsgs,
     tokenAAmount: reverse
-      ? num(
-          flipped
-            ? tokenAAmount
-            : toChainAmount(simulated, tokenInfoA?.decimals)
-        ).toNumber()
-      : num(tokenAAmount).toNumber(),
+      ? flipped
+        ? tokenAAmount
+        : toChainAmount(simulated, tokenInfoA?.decimals)
+      : tokenAAmount,
     tokenBAmount: reverse
-      ? num(tokenBAmount).toNumber()
-      : num(
-          flipped
-            ? tokenBAmount
-            : toChainAmount(simulated, tokenInfoB?.decimals)
-        ).toNumber(),
+      ? tokenBAmount
+      : flipped
+      ? tokenBAmount
+      : toChainAmount(simulated, tokenInfoB?.decimals),
     onSuccess: () => {},
     onError: () => {},
   })

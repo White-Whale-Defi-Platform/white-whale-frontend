@@ -50,8 +50,8 @@ type Params = {
   amount?: string
   gasAdjustment?: number
   estimateEnabled?: boolean
-  tokenAAmount?: number
-  tokenBAmount?: number
+  tokenAAmount?: string
+  tokenBAmount?: string
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -149,8 +149,8 @@ export const useTransaction = ({
       return executeAddLiquidity({
         tokenA,
         tokenB,
-        tokenAAmount: String(tokenAAmount),
-        maxTokenBAmount: String(tokenBAmount),
+        tokenAAmount: tokenAAmount,
+        maxTokenBAmount: tokenBAmount,
         client,
         swapAddress,
         senderAddress,
