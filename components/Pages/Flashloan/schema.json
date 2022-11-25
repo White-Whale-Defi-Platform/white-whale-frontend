@@ -1,0 +1,100 @@
+{
+  "title": "Flashloan",
+  "description": "Flash loan message",
+  "type": "object",
+  "additonalProperties": false,
+  "properties": {
+    "flash_loan": {
+      "type": "object",
+      "properties": {
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "info": {
+                "type": "object",
+                "properties": {
+                  "native_token": {
+                    "type": "object",
+                    "properties": {
+                      "denom": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["denom"]
+                  },
+                  "token": {
+                    "type": "object",
+                    "properties": {
+                      "contract_addr": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["contract_addr"]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "required": ["native_token"]
+                  },
+                  {
+                    "required": ["token"]
+                  }
+                ]
+              }
+            },
+            "required": ["amount", "info"]
+          }
+        },
+        "msgs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "wasm": {
+                "type": "object",
+                "properties": {
+                  "execute": {
+                    "type": "object",
+                    "properties": {
+                      "contract_addr": {
+                        "type": "string"
+                      },
+                      "msg": {
+                        "type": "string"
+                      },
+                      "funds": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "amount": {
+                              "type": "string"
+                            },
+                            "denom": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["amount", "denom"]
+                        }
+                      }
+                    },
+                    "required": ["contract_addr", "msg", "funds"]
+                  }
+                },
+                "required": ["execute"]
+              }
+            },
+            "required": ["wasm"]
+          }
+        }
+      },
+      "required": ["assets", "msgs"]
+    }
+  },
+  "required": ["flash_loan"]
+}

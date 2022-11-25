@@ -16,6 +16,7 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           width="auto"
           maxW="1.7rem"
           maxH="1.7rem"
+          alt="token1-img"
           fallback={
             <FallbackImage
               width="8"
@@ -31,6 +32,7 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           width="auto"
           maxW="1.7rem"
           maxH="1.7rem"
+          alt="token2-img"
           fallback={
             <FallbackImage
               width="7"
@@ -40,12 +42,10 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           }
         />
       </Box>
+      
     </HStack>
     <Text textAlign="center" fontSize={['12px', '16px']}>
-      {' '}
-      {poolId.includes('USDC')
-        ? poolId
-        : poolId.split('-').reverse().join('-')}{' '}
+      {poolId.includes('USDC') ? poolId : poolId.split('-').reverse().join('-')}
     </Text>
   </HStack>
 )
