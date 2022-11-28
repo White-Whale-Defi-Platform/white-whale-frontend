@@ -28,7 +28,6 @@ export const createProvideMsgs = (
   const coins = assets
     .filter((asset) => isNativeAsset(asset.info))
     .map((asset) => new Coin(getTokenDenom(asset.info), asset.amount))
-
   const allowanceMsgs = assets.reduce<MsgExecuteContract[]>((acc, asset) => {
     if (isNativeAsset(asset.info)) {
       return acc

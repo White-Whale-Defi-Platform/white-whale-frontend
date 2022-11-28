@@ -12,12 +12,18 @@ export const formatPrice = (amount, format = '0,0.00a') => {
   return numeral(amount).format(format).toUpperCase()
 }
 
-export const fromChainAmount = (value: BigNumber.Value = '0'): string => {
-  return new BigNumber(value).dp(6).div(ONE_TOKEN).toString()
+export const fromChainAmount = (
+  value: BigNumber.Value = '0',
+  decimal = 6
+): string => {
+  return new BigNumber(value).div(10 ** decimal).toFixed(6)
 }
 
-export const toChainAmount = (value: BigNumber.Value = '0'): string => {
-  return new BigNumber(value).dp(6).times(ONE_TOKEN).toString()
+export const toChainAmount = (
+  value: BigNumber.Value = '0',
+  decimal = 6
+): string => {
+  return new BigNumber(value).times(10 ** decimal).toFixed(0)
 }
 
 export const toDecimal = (

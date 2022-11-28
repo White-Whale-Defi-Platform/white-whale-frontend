@@ -1,33 +1,34 @@
-import { FC, useEffect, useMemo, useState } from 'react'
-
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
-  Box,
   HStack,
+  Text,
+  VStack,
   IconButton,
+  Box,
   Tab,
+  Tabs,
   TabList,
   TabPanel,
   TabPanels,
-  Tabs,
-  Text,
-  VStack,
 } from '@chakra-ui/react'
-import { TxStep } from 'hooks/useTransaction'
-import { NextRouter, useRouter } from 'next/router'
+import Page from 'components/Page'
+import { FC, useEffect, useMemo, useState } from 'react'
+import { ArrowBackIcon } from '@chakra-ui/icons'
+import { useRouter, NextRouter } from 'next/router'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
+import { tokenLpAtom } from './lpAtoms'
+import { useBondTokens } from '../../../hooks/useBondTokens'
+import { executeAddLiquidity } from '../../../services/liquidity'
+import DepositForm from './DepositForm'
+import WithdrawForm from './WithdrawForm'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
 import useProvideLP from '../NewPosition/hooks/useProvideLP'
-import DepositForm from './DepositForm'
-import { tokenLpAtom } from './lpAtoms'
-import WithdrawForm from './WithdrawForm'
+import { TxStep } from 'hooks/useTransaction'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const params = new URLSearchParams(location.search)
-  const { chainId, key, status } = useRecoilValue(walletState)
+  const { chainId, key } = useRecoilValue(walletState)
   const [resetForm, setResetForm] = useState(false)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, SetIsToken] = useState<boolean>(false)
@@ -140,7 +141,7 @@ const ManageLiquidity: FC = () => {
                   <DepositForm
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={status}
+                    connected={Boolean(key?.name)}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -151,7 +152,7 @@ const ManageLiquidity: FC = () => {
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  connected={status}
+                  connected={Boolean(key?.name)}
                   tokenA={{
                     tokenSymbol: poolId,
                     amount: 0,

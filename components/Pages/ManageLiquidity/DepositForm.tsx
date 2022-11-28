@@ -13,9 +13,9 @@ import {
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
-import { fromChainAmount } from 'libs/num'
+import { fromChainAmount, num } from 'libs/num'
 
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { TokenItemState } from './lpAtoms'
@@ -53,6 +53,13 @@ const DepositForm = ({
     tokenB?.tokenSymbol
   )
 
+  const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
+  const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
+
+  console.log({
+    tokenA,
+    tokenB,
+  })
   const { control, handleSubmit, formState, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -69,11 +76,17 @@ const DepositForm = ({
   useEffect(() => {
     if (simulated) {
       if (reverse) {
-        onInputChange({ ...tokenA, amount: Number(simulated) }, 0)
-        setValue('token1', { ...tokenA, amount: Number(simulated) })
+        onInputChange({ ...tokenA, amount: num(simulated).dp(6).toNumber() }, 0)
+        setValue('token1', {
+          ...tokenA,
+          amount: num(simulated).dp(6).toNumber(),
+        })
       } else {
-        onInputChange({ ...tokenB, amount: Number(simulated) }, 1)
-        setValue('token2', { ...tokenA, amount: Number(simulated) })
+        onInputChange({ ...tokenB, amount: num(simulated).dp(6).toNumber() }, 1)
+        setValue('token2', {
+          ...tokenA,
+          amount: num(simulated).dp(6).toNumber(),
+        })
       }
     } else {
       if (reverse) {

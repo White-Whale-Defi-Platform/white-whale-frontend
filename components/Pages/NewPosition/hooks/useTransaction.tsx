@@ -50,8 +50,8 @@ type Params = {
   amount?: string
   gasAdjustment?: number
   estimateEnabled?: boolean
-  tokenAAmount?: number
-  tokenBAmount?: number
+  tokenAAmount?: string
+  tokenBAmount?: string
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -90,7 +90,6 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        // console.log({senderAddress, debouncedMsgs, msg : JSON.parse(String.fromCharCode.apply(null, debouncedMsgs?.[0]?.value?.msg))})
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
@@ -150,8 +149,8 @@ export const useTransaction = ({
       return executeAddLiquidity({
         tokenA,
         tokenB,
-        tokenAAmount: Number(tokenAAmount),
-        maxTokenBAmount: Number(tokenBAmount),
+        tokenAAmount: tokenAAmount,
+        maxTokenBAmount: tokenBAmount,
         client,
         swapAddress,
         senderAddress,
@@ -192,7 +191,7 @@ export const useTransaction = ({
         ) {
           setError(e?.toString())
           message = (
-            <Finder txHash={txInfo?.txHash} chainId={client?.chainId}>
+            <Finder txHash={txInfo?.txHash} chainId={client?.client?.chainId}>
               {' '}
             </Finder>
           )
@@ -221,7 +220,10 @@ export const useTransaction = ({
         toast({
           title: 'Add Liquidity Success.',
           description: (
-            <Finder txHash={data.transactionHash} chainId={client.chainId}>
+            <Finder
+              txHash={data.transactionHash}
+              chainId={client?.client?.chainId}
+            >
               {' '}
             </Finder>
           ),
