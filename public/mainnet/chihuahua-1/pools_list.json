@@ -88,6 +88,39 @@
       "swap_address": "chihuahua1ncq4gg9c9du8u2jrp55dszxf00rr28m98q2n5sllwkmnsuxq4u6s2y2uu6",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "HUAHUA-rHUAHUA",
+      "lpOrder": ["rHUAHUA", "HUAHUA"],
+      "pool_assets": [
+        {
+          "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/C0AFA9090B2DE3B79EA0296A43CD8C3C2FDAF153CC81E90A234AB8CBB1EAD6D6",
+          "symbol": "rHUAHUA",
+          "name": "rHUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/C0AFA9090B2DE3B79EA0296A43CD8C3C2FDAF153CC81E90A234AB8CBB1EAD6D6"
+        }
+      ],
+      "lp_token": "chihuahua1v5yqf0jcw3hl8uc8ucug8fr98n45krwfl0k5ktxrevqpu3c60f7qsjys7v",
+      "swap_address": "chihuahua19du4llehge50k23pwwckj93lnvp9cyyer8ve9as663mz64nrhq9qn2gauk",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
