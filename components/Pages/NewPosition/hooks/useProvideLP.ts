@@ -142,8 +142,6 @@ const useProvideLP = ({ reverse = false }) => {
     }
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse])
 
-  console.log({ msgs, encodedMsgs })
-
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,

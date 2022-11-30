@@ -1,19 +1,12 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
-import {
-  PoolsListQueryResponse,
-  usePoolsListQuery,
-} from 'queries/usePoolsListQuery'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { findPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+import { num } from 'libs/num'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { toAssetInfo } from 'services/asset'
 import { createExecuteMessage } from 'util/messages'
-
-import useSimulate from './useSimulate'
-import { num } from 'libs/num'
 
 export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
@@ -68,7 +61,6 @@ const createRouteMessage = (
   }
   const executeMsg = {
     execute_swap_operations: {
-      offer_amount: num(amount).toFixed(0),
       operations,
     },
   }

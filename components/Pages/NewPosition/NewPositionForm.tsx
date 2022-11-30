@@ -76,7 +76,6 @@ const NewPositionForm: FC<Props> = ({
   }, [resetForm, tx?.txStep])
 
   useEffect(() => {
-    console.log({ simulated })
     if (simulated) {
       if (reverse) {
         onInputChange({ ...tokenA, amount: Number(simulated) }, 0)

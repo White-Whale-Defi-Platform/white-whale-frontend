@@ -1,9 +1,9 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage } from 'util/messages'
-import { createAsset, isNativeAsset } from '../../../services/asset'
-
 import { createIncreaseAllowanceMessage } from 'util/messages'
+
+import { createAsset, isNativeAsset } from '../../../services/asset'
 
 const createLpMsg = ({ tokenA, tokenB, amountA, amountB }) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
@@ -21,7 +21,6 @@ export const createLPExecuteMsgs = (
   sender: string
 ) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
-  console.log(tokenA, tokenB, amountA, amountB)
   /* increase allowance for each non-native token */
   if (!tokenA?.native) {
     increaseAllowanceMessages.push(
@@ -43,18 +42,17 @@ export const createLPExecuteMsgs = (
       })
     )
   }
-  let coinA: Coin = { amount: amountA, denom: tokenA?.denom }
-  let coinB: Coin = { amount: amountB, denom: tokenB?.denom }
-  console.log(coinB)
-  // console.log(coin(amountA, tokenA?.denom))
-  console.log(coinB, tokenB?.denom)
+
   return [
     ...increaseAllowanceMessages,
     createExecuteMessage({
       senderAddress: sender,
       contractAddress: swapAddress,
       message: createLpMsg({ tokenA, tokenB, amountA, amountB }),
-      funds: [tokenA?.native && coinA, tokenB?.native && coinB].filter(Boolean),
+      funds: [
+        tokenA?.native && coin(amountA, tokenA?.denom),
+        tokenB?.native && coin(amountB, tokenB?.denom),
+      ].filter(Boolean),
     }),
   ]
 }
