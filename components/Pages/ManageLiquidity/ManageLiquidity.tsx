@@ -1,31 +1,29 @@
-import { FC, useEffect, useMemo, useState } from 'react'
-
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
-  Box,
   HStack,
+  Text,
+  VStack,
   IconButton,
+  Box,
   Tab,
+  Tabs,
   TabList,
   TabPanel,
   TabPanels,
-  Tabs,
-  Text,
-  VStack,
 } from '@chakra-ui/react'
 import Page from 'components/Page'
-import { TxStep } from 'hooks/useTransaction'
-import { NextRouter, useRouter } from 'next/router'
+import { FC, useEffect, useMemo, useState } from 'react'
+import { ArrowBackIcon } from '@chakra-ui/icons'
+import { useRouter, NextRouter } from 'next/router'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-
+import { tokenLpAtom } from './lpAtoms'
 import { useBondTokens } from '../../../hooks/useBondTokens'
 import { executeAddLiquidity } from '../../../services/liquidity'
-import useProvideLP from '../NewPosition/hooks/useProvideLP'
 import DepositForm from './DepositForm'
-import { tokenLpAtom } from './lpAtoms'
 import WithdrawForm from './WithdrawForm'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import useProvideLP from '../NewPosition/hooks/useProvideLP'
+import { TxStep } from 'hooks/useTransaction'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()

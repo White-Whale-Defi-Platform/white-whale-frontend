@@ -102,6 +102,7 @@ const DepositForm = ({
       onInputChange({ ...tokenA, amount: 0 }, 0)
       tx?.reset()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, reverse])
 
   const amountA = getValues('token1')
