@@ -1,14 +1,15 @@
-import React, { FC } from "react";
-import { Box, Heading, Stack, Text, Button, Flex } from "@chakra-ui/react";
-import Link from "next/link";
+import React, { FC } from 'react'
+
+import { Box, Button, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import Link from 'next/link'
 
 interface IProps {
-  statusCode: number;
+  statusCode: number
 }
 
 const IndexPageComponent: FC<IProps> = ({ statusCode }) => {
-  const heightOfNavbar: string = "74px";
-  const containerPadding: string = "1rem";
+  const heightOfNavbar = '74px'
+  const containerPadding = '1rem'
 
   return (
     <Stack>
@@ -22,7 +23,7 @@ const IndexPageComponent: FC<IProps> = ({ statusCode }) => {
           <Text fontSize="xl" lineHeight="tall" textAlign="center">
             {statusCode
               ? `An error ${statusCode} occurred on server`
-              : "An error occurred on client"}
+              : 'An error occurred on client'}
           </Text>
           <Box>
             <Stack isInline align="center" justifyContent="center">
@@ -38,7 +39,7 @@ const IndexPageComponent: FC<IProps> = ({ statusCode }) => {
         </Stack>
       </Flex>
     </Stack>
-  );
-};
+  )
+}
 
-export default IndexPageComponent;
+export default IndexPageComponent

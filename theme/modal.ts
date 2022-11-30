@@ -1,23 +1,23 @@
 const styles = {
   baseStyle: {
     overlay: {
-      bg: "rgba(17, 17, 17, 0.2)",
-      backdropFilter: "blur(12px)",
+      bg: 'rgba(17, 17, 17, 0.2)',
+      backdropFilter: 'blur(12px)',
     },
     dialog: {
-      borderRadius: "2xl",
-      bg: "rgba(26,26,26,0.8)",
-      py: "8",
-      color: "white",
-      boxShadow: "2xl",
+      borderRadius: '2xl',
+      bg: 'rgba(26,26,26,0.8)',
+      py: '8',
+      color: 'white',
+      boxShadow: '2xl',
     },
     closeButton: {
-      color: "rgba(255, 255, 255, 0.6)",
+      color: 'rgba(255, 255, 255, 0.6)',
       _focus: {
-        boxShadow: "none",
+        boxShadow: 'none',
       },
     },
   },
-};
+}
 
-export default styles;
+export default styles

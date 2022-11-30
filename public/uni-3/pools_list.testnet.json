@@ -32,7 +32,7 @@
           "symbol": "JUNOX",
           "name": "Junox",
           "decimals": 6,
-          "logoURI":  "/logos/juno.svg",
+          "logoURI": "/logos/juno.svg",
           "tags": ["native"],
           "native": true,
           "denom": "ujunox"
@@ -50,7 +50,7 @@
           "denom": "junoonex"
         }
       ],
-      "lp_token" : "juno1nrw7gxaq4ag698dumm9zvmur8azj58gsls7ngn8pqwaxtlmz8shsecu6lt",
+      "lp_token": "juno1nrw7gxaq4ag698dumm9zvmur8azj58gsls7ngn8pqwaxtlmz8shsecu6lt",
       "swap_address": "juno1xrf2shh0lx93nzd4ug37zd6elj0gvzf6x2ct0xzf0jp3u28yvgssu4anms",
       "staking_address": "",
       "rewards_tokens": []
@@ -83,7 +83,7 @@
           "denom": "junotwox"
         }
       ],
-      "lp_token" : "juno1qg0z0eaj5mjlrxg8wunjg6wqrcgu69xfjwdsusmaxcheyr856t7qlq7p60",
+      "lp_token": "juno1qg0z0eaj5mjlrxg8wunjg6wqrcgu69xfjwdsusmaxcheyr856t7qlq7p60",
       "swap_address": "juno1kkwtx57qq8dg2nfm6ctw94gp93p3ee92srygrsr058kadn6cpums30wvkk",
       "staking_address": "",
       "rewards_tokens": []
@@ -116,7 +116,7 @@
           "denom": "junotwox"
         }
       ],
-      "lp_token" : "juno1sn62twavppppwsu5af2w3qthe20r9vw2mjujdc3vld254glzqdesm8ecz6",
+      "lp_token": "juno1sn62twavppppwsu5af2w3qthe20r9vw2mjujdc3vld254glzqdesm8ecz6",
       "swap_address": "juno1phget2lq2nmmnfk0qcjrnuahau4cxe3z6jw9zekxuda3zxezxeqq2mzx0s",
       "staking_address": "",
       "rewards_tokens": []

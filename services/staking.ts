@@ -1,6 +1,6 @@
 import { toBase64, toUtf8 } from '@cosmjs/encoding'
 
-import {Wallet} from "../util/wallet-adapters";
+import { Wallet } from '../util/wallet-adapters'
 
 export const stakeTokens = async (
   senderAddress: string,
@@ -19,12 +19,7 @@ export const stakeTokens = async (
     },
   }
 
-  return await client.execute(
-    senderAddress,
-    lpTokenAddress,
-    msg,
-    []
-  )
+  return await client.execute(senderAddress, lpTokenAddress, msg, [])
 }
 
 export const unstakeTokens = async (
@@ -36,12 +31,7 @@ export const unstakeTokens = async (
   amount = Math.floor(amount)
   const msg = { unstake: { amount: amount.toString() } }
 
-  return await client.execute(
-    senderAddress,
-    stakingContractAddress,
-    msg,
-    []
-  )
+  return await client.execute(senderAddress, stakingContractAddress, msg, [])
 }
 
 export const claimTokens = async (
@@ -50,12 +40,7 @@ export const claimTokens = async (
   client: Wallet
 ) => {
   const msg = { claim: {} }
-  return await client.execute(
-    senderAddress,
-    stakingContractAddress,
-    msg,
-    []
-  )
+  return await client.execute(senderAddress, stakingContractAddress, msg, [])
 }
 
 export const getProvidedStakedAmount = async (

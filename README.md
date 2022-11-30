@@ -1,6 +1,41 @@
-## Wasmswap interface
+<a href="https://whitewhale.money/">
+  <h1 align="center">
+    <picture>
+      <img alt="Flutter" src="https://miro.medium.com/max/1400/1*29OYRJqqddosWtWo-c3TYQ.png">
+    </picture>
+  </h1>
+</a>
 
-An open-source interface for a CosmWasm decentralized exchange.
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](https://www.firsttimersonly.com/)
+[![Discord badge][]][discord invite]
+[![Twitter handle][]][twitter badge]
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6401/badge)](https://bestpractices.coreinfrastructure.org/projects/6401)
+
+[discord invite]: https://discord.com/invite/tSxyyCWgYX
+[discord badge]: https://img.shields.io/discord/908044702794801233
+[twitter handle]: https://img.shields.io/twitter/follow/WhiteWhaleDefi.svg?style=social&label=Follow
+[twitter badge]: https://twitter.com/intent/follow?screen_name=WhiteWhaleDefi
+
+## White Whale Migaloo Cross-Chain Frontend
+
+An open-source interface for multiple CosmWasm decentralized exchanges across chains.
+Additionally there are Pools and Flashloan enabled Vaults deployed on each chain as part of the White Whale's Liquidity Platform.
+
+The interface is general in the sense that multiple Cosmos-SDK chains can be swapped to and from with all the details coming from config files. This serves as an allowlist of pools, vaults and any other contract.
+
+The app was originally based on the Wasmswap frontend and rebuilt from there.
+
+## Resources
+
+1. [Website](https://whitewhale.money/)
+2. [LitePaper](https://whitewhale.money/LitepaperV2.pdf)
+3. [Docs](https://white-whale-defi-platform.github.io/docs/)
+4. [Discord](https://discord.com/invite/tSxyyCWgYX)
+5. [Twitter](https://twitter.com/WhiteWhaleDefi)
+6. [Telegram](https://t.me/whitewhaleofficial)
+
+## Quickstart
 
 Run the app in dev mode locally.
 
@@ -12,7 +47,18 @@ yarn dev
 
 Access the app on `http://localhost:3000/`.
 
+## Contributing
+
+[Contributing Guide](./docs/CONTRIBUTING.md)
+
+[Code of Conduct](./docs/CODE_OF_CONDUCT)
+
+[Security Policies and Procedures](./docs/SECURITY)
+
+[License](./LICENSE)
+
 ## Netlify Integration
+
 In order to ensure successful deploys to Netlify via the CI/CD process, ensure the `yarn build` command is passing locally before a push, any failures here will fail the deploy too.
 
 ## Configuration
@@ -41,69 +87,7 @@ Url
 NEXT_PUBLIC_CHAIN_INFO_URL=https://raw.githubusercontent.com/Wasmswap/asset-list-example/main/chain_info.json
 ```
 
-### Provide token configuration
-
-You will need to provide a token list json file for the available assets. By default, the platform has example tokens based on the Juno Uni-1 testnet. Refer to the token list [example](https://github.com/Wasmswap/wasmswap-interface/blob/develop/public/token_list.testnet.json) for more information.
-
-Similarly to `NEXT_PUBLIC_CHAIN_INFO_URL` variable, the config will be loaded dynamically.
-
-```
-Local
-
-NEXT_PUBLIC_TOKEN_LIST_URL=/token_list.testnet.json
-```
-
-```
-Url
-
-NEXT_PUBLIC_TOKEN_LIST_URL=https://raw.githubusercontent.com/Wasmswap/asset-list-example/main/token_list.json
-```
-
-### Provide IBC assets configuration
-
-By default, the platform only renders the example IBC assets. To allow for interchain asset transfers you will need to provide your ibc tokens lists. Refer to the ibc asset configuration [example](https://github.com/Wasmswap/wasmswap-interface/blob/develop/public/ibc_assets.json) for more information.
-
-Similarly to `NEXT_PUBLIC_CHAIN_INFO_URL` & `NEXT_PUBLIC_TOKEN_LIST_URL` variables, the config will be loaded dynamically.
-
-```
-Local
-
-NEXT_PUBLIC_IBC_ASSETS_URL=/ibc_assets.json
-```
-
-```
-Url
-
-NEXT_PUBLIC_IBC_ASSETS_URL=https://raw.githubusercontent.com/Wasmswap/asset-list-example/main/ibc_assets.json
-```
-
 ## Branding configuration
-
-### App name
-
-By default, the app uses the `Wasmswap` name. To update the app name, go to the `.env` file and change the following variable:
-
-```
-NEXT_PUBLIC_SITE_TITLE=Wasmswap
-```
-
-That will change the site title and update the footer.
-
-### Demo mode
-
-By default, the app renders demo mode warning to warn the users that the app runs in a demo/simulation mode. If you'd like to disable the demo mode, update this env variable:
-
-```
-NEXT_PUBLIC_TEST_MODE_DISABLED=false
-```
-
-### App version
-
-Update this variable if you choose to run a different version.
-
-```
-NEXT_PUBLIC_APP_VERSION=1.0.0
-```
 
 ### Branding
 
@@ -135,7 +119,7 @@ To update the typography component configuration, go to `components/Text.tsx` an
 
 ## How to deploy
 
-This is a nextjs app; thus everything that a nextjs app supports for deployment technically is supported by `wasmswap-interface`. We would recommend looking into Vercel.
+This is a nextjs app; thus everything that a nextjs app supports for deployment technically is supported by `migaloo-frontend`. We would recommend looking into Vercel.
 
 ## Contributing
 
@@ -143,4 +127,4 @@ Raise the bar for Web 3.0 with us! We would love you to contribute. Submit your 
 
 ## License
 
-Wasmswap interface is licensed under Apache 2.0.
+Migaloo-frontend interface is licensed under Apache 2.0.

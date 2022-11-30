@@ -40,22 +40,19 @@ export const TokenSwapModule = ({ initialTokenPair }: TokenSwapModuleProps) => {
   }, [tokenList, tokenA, tokenB, setTokenSwapState])
 
   useEffect(() => {
-
-      // if (initialTokenPairValue) {
-        const [tokenASymbol, tokenBSymbol] = initialTokenPair || []
-        setTokenSwapState([
-          {
-            tokenSymbol: tokenASymbol,
-            amount: 0,
-          },
-          {
-            tokenSymbol: tokenBSymbol,
-            amount: 0,
-          },
-        ])
-    },
-    [initialTokenPair]
-  )
+    // if (initialTokenPairValue) {
+    const [tokenASymbol, tokenBSymbol] = initialTokenPair || []
+    setTokenSwapState([
+      {
+        tokenSymbol: tokenASymbol,
+        amount: 0,
+      },
+      {
+        tokenSymbol: tokenBSymbol,
+        amount: 0,
+      },
+    ])
+  }, [initialTokenPair])
 
   const isUiDisabled =
     transactionStatus === TransactionStatus.EXECUTING || isTokenListLoading
@@ -126,5 +123,5 @@ export const TokenSwapModule = ({ initialTokenPair }: TokenSwapModuleProps) => {
 const StyledDivForWrapper = styled('div', {
   borderRadius: '8px',
   // backgroundColor: '$colors$dark10',
-  backgroundColor: "White"
+  backgroundColor: 'White',
 })

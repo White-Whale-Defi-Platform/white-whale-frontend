@@ -1,9 +1,7 @@
 {
   "name": "Pools list on mainnet",
   "logoURI": "/img/logo.svg",
-  "keywords": [
-    "special tokens"
-  ],
+  "keywords": ["special tokens"],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -19,9 +17,7 @@
     "name": "Juno",
     "decimals": 6,
     "logoURI": "/logos/juno.svg",
-    "tags": [
-      "native"
-    ],
+    "tags": ["native"],
     "native": true,
     "denom": "ujuno"
   },
@@ -29,7 +25,7 @@
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
-      "lpOrder" : ["LUNA", "ATOM"],
+      "lpOrder": ["LUNA", "ATOM"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -62,7 +58,7 @@
     },
     {
       "pool_id": "ATOM-JUNO",
-      "lpOrder" : ["ATOM", "JUNO"],
+      "lpOrder": ["ATOM", "JUNO"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -96,7 +92,7 @@
     },
     {
       "pool_id": "ATOM-axlUSDC",
-      "lpOrder" : ["ATOM", "axlUSDC"],
+      "lpOrder": ["ATOM", "axlUSDC"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -193,7 +189,7 @@
     },
     {
       "pool_id": "JUNO-axlUSDC",
-      "lpOrder" : ["axlUSDC", "JUNO"],
+      "lpOrder": ["axlUSDC", "JUNO"],
       "pool_assets": [
         {
           "id": "juno-network",
@@ -224,7 +220,6 @@
       "staking_address": "",
       "rewards_tokens": []
     }
-
   ],
   "version": {
     "major": 0,

@@ -1,6 +1,4 @@
-import {
-  MsgExecuteContractEncodeObject,
-} from '@cosmjs/cosmwasm-stargate'
+import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/stargate'
 
 import { TokenInfo } from '../../queries/usePoolsListQuery'
@@ -9,18 +7,18 @@ import {
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from '../../util/messages'
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 type ExecuteAddLiquidityArgs = {
   tokenA: TokenInfo
   tokenB: TokenInfo
-  tokenAAmount: number
+  tokenAAmount: string
   /*
    * The contract calculates `tokenBAmount` automatically.
    * However, the user needs to set max amount of `tokenB` they're willing to spend.
    * If the calculated amount exceeds the max amount, the transaction then fails.
    */
-  maxTokenBAmount: number
+  maxTokenBAmount: string
   senderAddress: string
   swapAddress: string
   client: Wallet
@@ -35,9 +33,8 @@ export const executeAddLiquidity = async ({
   client,
   swapAddress,
   senderAddress,
-  msgs
+  msgs,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-
   if (!tokenA.native || !tokenB.native) {
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
@@ -74,10 +71,11 @@ export const executeAddLiquidity = async ({
       ].filter(Boolean),
     })
 
-
-
     return validateTransactionSuccess(
-      await client.post(senderAddress, [...increaseAllowanceMessages, executeAddLiquidityMessage])
+      await client.post(senderAddress, [
+        ...increaseAllowanceMessages,
+        executeAddLiquidityMessage,
+      ])
     )
   }
 
@@ -87,10 +85,5 @@ export const executeAddLiquidity = async ({
   ]
   // .sort((a, b) => (a.denom > b.denom ? 1 : -1))
 
-  return await client.execute(
-    senderAddress,
-    swapAddress,
-    msgs,
-    funds
-  )
+  return await client.execute(senderAddress, swapAddress, msgs, funds)
 }

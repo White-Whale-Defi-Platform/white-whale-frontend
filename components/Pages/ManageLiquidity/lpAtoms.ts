@@ -3,6 +3,7 @@ import { atom } from 'recoil'
 export type TokenItemState = {
   tokenSymbol: string
   amount: number
+  decimals: number
 }
 
 export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
@@ -11,10 +12,12 @@ export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
     {
       tokenSymbol: null,
       amount: 0,
+      decimals: 6,
     },
     {
       tokenSymbol: null,
       amount: 0,
+      decimals: 6,
     },
   ],
   effects_UNSTABLE: [
@@ -23,9 +26,9 @@ export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
         const [tokenA, tokenB] = newValue
         if (tokenA.tokenSymbol === tokenB.tokenSymbol) {
           requestAnimationFrame(() => {
-            const A = {...oldValue[1], amount : oldValue[0].amount}
-            const B = {...oldValue[0], amount : oldValue[1].amount}
-            setSelf([A,B])
+            const A = { ...oldValue[1], amount: oldValue[0].amount }
+            const B = { ...oldValue[0], amount: oldValue[1].amount }
+            setSelf([A, B])
           })
         }
       })

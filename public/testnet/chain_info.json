@@ -1,148 +1,145 @@
 [
-    {
-        "chainId": "uni-3",
-        "chainName": "Juno Uni Testnet",
-        "label": "Juno",
-        "icon": "/logos/juno.svg",
-        "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
-        "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
-        "stakeCurrency": {
-            "coinDenom": "JUNO",
-            "coinMinimalDenom": "ujuno",
-            "coinDecimals": 6
-        },
-        "bip44": {
-            "coinType": 118
-        },
-        "bech32Config": {
-            "bech32PrefixAccAddr": "juno",
-            "bech32PrefixAccPub": "junopub",
-            "bech32PrefixValAddr": "junovaloper",
-            "bech32PrefixValPub": "junovaloperpub",
-            "bech32PrefixConsAddr": "junovalcons",
-            "bech32PrefixConsPub": "junovalconspub"
-        },
-        "currencies": [
-            {
-                "coinDenom": "JUNO",
-                "coinMinimalDenom": "ujuno",
-                "coinDecimals": 6,
-                "coinGeckoId": "juno-network"
-            }
-        ],
-        "feeCurrencies": [
-            {
-                "coinDenom": "JUNO",
-                "coinMinimalDenom": "ujuno",
-                "coinDecimals": 6,
-                "coinGeckoId": "juno-network"
-            }
-        ],
-        "coinType": 118,
-        "gasPriceStep": {
-            "low": 0.025,
-            "average": 0.05,
-            "high": 0.1
-        },
-        "features": [
-            "cosmwasm"
-        ]
+  {
+    "chainId": "uni-3",
+    "chainName": "Juno Uni Testnet",
+    "label": "Juno",
+    "icon": "/logos/juno.svg",
+    "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
+    "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
+    "stakeCurrency": {
+      "coinDenom": "JUNO",
+      "coinMinimalDenom": "ujuno",
+      "coinDecimals": 6
     },
-    {
-        "chainId": "pisco-1",
-        "chainName": "Terra testnet",
-        "label": "Terra",
-        "icon": "/logos/luna.svg",
-        "rpc": "https://terra-testnet-rpc.polkachu.com",
-        "rest": "https://pisco-lcd.terra.dev",
-        "stakeCurrency": {
-            "coinDenom": "LUNA",
-            "coinMinimalDenom": "uluna",
-            "coinDecimals": 18
-        },
-        "bip44": {
-            "coinType": 118
-        },
-        "bech32Config": {
-            "bech32PrefixAccAddr": "terra",
-            "bech32PrefixAccPub": "terrapub",
-            "bech32PrefixValAddr": "terravaloper",
-            "bech32PrefixValPub": "terravaloperpub",
-            "bech32PrefixConsAddr": "terravalcons",
-            "bech32PrefixConsPub": "terravalconspub"
-        },
-        "currencies": [
-            {
-                "coinDenom": "LUNA",
-                "coinMinimalDenom": "uluna",
-                "coinDecimals": 18,
-                "coinGeckoId": "terra"
-            }
-        ],
-        "feeCurrencies": [
-            {
-                "coinDenom": "LUNA",
-                "coinMinimalDenom": "uluna",
-                "coinDecimals": 6,
-                "coinGeckoId": "terra"
-            }
-        ],
-        "coinType": 118,
-        "gasPriceStep": {
-            "low": 0.25,
-            "average": 0.5,
-            "high": 0.75
-        },
-        "features": [
-            "cosmwasm"
-        ]
-    },{
-        "chainId": "injective-888",
-        "chainName": "Injective testnet",
-        "label": "Injective",
-        "icon": "/logos/injective.png",
-        "rpc": "https://k8s.testnet.tm.injective.network/",
-        "rest": "https://k8s.testnet.lcd.injective.network/",
-        "stakeCurrency": {
-            "coinDenom": "inj",
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "juno",
+      "bech32PrefixAccPub": "junopub",
+      "bech32PrefixValAddr": "junovaloper",
+      "bech32PrefixValPub": "junovaloperpub",
+      "bech32PrefixConsAddr": "junovalcons",
+      "bech32PrefixConsPub": "junovalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "JUNO",
+        "coinMinimalDenom": "ujuno",
+        "coinDecimals": 6,
+        "coinGeckoId": "juno-network"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "JUNO",
+        "coinMinimalDenom": "ujuno",
+        "coinDecimals": 6,
+        "coinGeckoId": "juno-network"
+      }
+    ],
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 0.025,
+      "average": 0.05,
+      "high": 0.1
+    },
+    "features": ["cosmwasm"]
+  },
+  {
+    "chainId": "pisco-1",
+    "chainName": "Terra testnet",
+    "label": "Terra",
+    "icon": "/logos/luna.svg",
+    "rpc": "https://terra-testnet-rpc.polkachu.com",
+    "rest": "https://pisco-lcd.terra.dev",
+    "stakeCurrency": {
+      "coinDenom": "LUNA",
+      "coinMinimalDenom": "uluna",
+      "coinDecimals": 18
+    },
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "terra",
+      "bech32PrefixAccPub": "terrapub",
+      "bech32PrefixValAddr": "terravaloper",
+      "bech32PrefixValPub": "terravaloperpub",
+      "bech32PrefixConsAddr": "terravalcons",
+      "bech32PrefixConsPub": "terravalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "LUNA",
+        "coinMinimalDenom": "uluna",
+        "coinDecimals": 18,
+        "coinGeckoId": "terra"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "LUNA",
+        "coinMinimalDenom": "uluna",
+        "coinDecimals": 6,
+        "coinGeckoId": "terra"
+      }
+    ],
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 0.25,
+      "average": 0.5,
+      "high": 0.75
+    },
+    "features": ["cosmwasm"]
+  },
+  {
+    "chainId": "injective-888",
+    "chainName": "Injective testnet",
+    "label": "Injective",
+    "icon": "/logos/injective.png",
+    "rpc": "https://k8s.testnet.tm.injective.network/",
+    "rest": "https://k8s.testnet.lcd.injective.network/",
+    "stakeCurrency": {
+        "coinDenom": "inj",
+        "coinMinimalDenom": "uinj",
+        "coinDecimals": 6
+    },
+    "bip44": {
+        "coinType": 118
+    },
+    "bech32Config": {
+        "bech32PrefixAccAddr": "inj",
+        "bech32PrefixAccPub": "injpub",
+        "bech32PrefixValAddr": "injvaloper",
+        "bech32PrefixValPub": "injvaloperpub",
+        "bech32PrefixConsAddr": "injvalcons",
+        "bech32PrefixConsPub": "injvalconspub"
+    },
+    "currencies": [
+        {
+            "coinDenom": "Injective",
             "coinMinimalDenom": "uinj",
-            "coinDecimals": 6
-        },
-        "bip44": {
-            "coinType": 118
-        },
-        "bech32Config": {
-            "bech32PrefixAccAddr": "inj",
-            "bech32PrefixAccPub": "injpub",
-            "bech32PrefixValAddr": "injvaloper",
-            "bech32PrefixValPub": "injvaloperpub",
-            "bech32PrefixConsAddr": "injvalcons",
-            "bech32PrefixConsPub": "injvalconspub"
-        },
-        "currencies": [
-            {
-                "coinDenom": "Injective",
-                "coinMinimalDenom": "uinj",
-                "coinDecimals": 6,
-                "coinGeckoId": "injective-protocol"
-            }
-        ],
-        "feeCurrencies": [
-            {
-                "coinDenom": "Injective",
-                "coinMinimalDenom": "uinj",
-                "coinDecimals": 6,
-                "coinGeckoId": "injective-protocol"
-            }
-        ],
-        "coinType": 118,
-        "gasPriceStep": {
-            "low": 0.07,
-            "average": 0.15,
-            "high": 0.20
-        },
-        "features": [
-            "cosmwasm"
-        ]
-    }
+            "coinDecimals": 6,
+            "coinGeckoId": "injective-protocol"
+        }
+    ],
+    "feeCurrencies": [
+        {
+            "coinDenom": "Injective",
+            "coinMinimalDenom": "uinj",
+            "coinDecimals": 6,
+            "coinGeckoId": "injective-protocol"
+        }
+    ],
+    "coinType": 118,
+    "gasPriceStep": {
+        "low": 0.07,
+        "average": 0.15,
+        "high": 0.20
+    },
+    "features": [
+        "cosmwasm"
+    ]
+}
 ]

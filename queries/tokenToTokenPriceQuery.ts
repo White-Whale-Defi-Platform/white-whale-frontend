@@ -9,7 +9,7 @@ import {
   convertDenomToMicroDenom,
   convertMicroDenomToDenom,
 } from '../util/conversion'
-import {Wallet} from "../util/wallet-adapters";
+import { Wallet } from '../util/wallet-adapters'
 import { TokenInfo } from './usePoolsListQuery'
 import { PoolMatchForSwap } from './useQueryMatchingPoolForSwap'
 
@@ -28,7 +28,7 @@ export async function tokenToTokenPriceQueryWithPools({
   tokenB,
   amount,
   client,
-  id
+  id,
 }: TokenToTokenPriceQueryArgs): Promise<number | undefined> {
   if (tokenA.symbol === tokenB.symbol) {
     return 1
@@ -51,7 +51,7 @@ export async function tokenToTokenPriceQueryWithPools({
     return await getToken1ForToken2Price({
       nativeAmount: convertedTokenAmount,
       swapAddress: streamlinePoolAB.swap_address,
-      client
+      client,
     })
   }
 
@@ -63,12 +63,13 @@ export async function tokenToTokenPriceQueryWithPools({
     })
   }
 
-  return await formatPrice(getTokenForTokenPrice({
-    tokenAmount: convertedTokenAmount,
-    swapAddress: baseTokenAPool.swap_address,
-    outputSwapAddress: baseTokenBPool.swap_address,
-    client,
-  })
+  return await formatPrice(
+    getTokenForTokenPrice({
+      tokenAmount: convertedTokenAmount,
+      swapAddress: baseTokenAPool.swap_address,
+      outputSwapAddress: baseTokenBPool.swap_address,
+      client,
+    })
   )
 }
 
@@ -94,11 +95,8 @@ export async function tokenToTokenPriceQuery({
   const shouldQueryBaseTokenForTokenB =
     fromTokenInfo.symbol === baseToken.symbol && toTokenInfo.swap_address
 
-
   const shouldQueryTokenBForBaseToken =
     toTokenInfo.symbol === baseToken.symbol && fromTokenInfo.swap_address
-
-  // console.log({ shouldQueryBaseTokenForTokenB, shouldQueryTokenBForBaseToken })
 
   if (shouldQueryBaseTokenForTokenB) {
     const resp = await getToken1ForToken2Price({

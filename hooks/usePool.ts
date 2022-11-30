@@ -21,7 +21,7 @@
 //     stakingAddress: string,
 // }
 
-// export const pools: Pool[] = [ 
+// export const pools: Pool[] = [
 //     {
 //         "poolId": "JUNOX-JUNOONE",
 //         "lpToken": "juno1nrw7gxaq4ag698dumm9zvmur8azj58gsls7ngn8pqwaxtlmz8shsecu6lt",
@@ -41,8 +41,6 @@
 //         "stakingAddress": "juno189wqvuj8amqsag8ehn3vmz6cq26c44ffeltvljkcxx9lsfsew8mq9y7z4h",
 //     }
 // ]
-
-
 
 // const usePool = (poolById: string[] | null) => {
 

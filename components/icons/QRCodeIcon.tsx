@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export default function QRCodeIcon(props) {
   return (
@@ -84,5 +84,5 @@ export default function QRCodeIcon(props) {
         strokeLinejoin="round"
       />
     </svg>
-  );
+  )
 }

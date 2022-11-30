@@ -1,34 +1,40 @@
+import React from 'react'
+
 import {
-Box,   Drawer,
+  Box,
+  Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
   DrawerOverlay,
-  Flex, HStack,
+  Flex,
+  HStack,
   IconButton,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useWallet } from '@terra-money/wallet-provider';
-import BurgerIcon from 'components/icons/BurgerIcon';
-import React from 'react'
+import { useWallet } from '@terra-money/wallet-provider'
+import BurgerIcon from 'components/icons/BurgerIcon'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
-import Card from '../Card';
-import Wallet from '../Wallet/Wallet';
-import DrawerLink from './DrawerLink';
-import Logo from './Logo';
-import NavbarLink from './NavbarLink';
-import WalletModal from '../Wallet/Modal/Modal';
+import Card from '../Card'
+import WalletModal from '../Wallet/Modal/Modal'
+import Wallet from '../Wallet/Wallet'
+import DrawerLink from './DrawerLink'
+import Logo from './Logo'
+import NavbarLink from './NavbarLink'
 
-
-const Navbar = ({ }) => {
-  const {disconnect} = useWallet()
-  const [{ key, chainId, network, activeWallet }, setWalletState] = useRecoilState(walletState)
-  const { isOpen: isOpenModal, onOpen: onOpenModal, onClose: onCloseModal } = useDisclosure()
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+const Navbar = ({}) => {
+  const { disconnect } = useWallet()
+  const [{ key, chainId, network, activeWallet }, setWalletState] =
+    useRecoilState(walletState)
+  const {
+    isOpen: isOpenModal,
+    onOpen: onOpenModal,
+    onClose: onCloseModal,
+  } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   function resetWalletConnection() {
     setWalletState({
@@ -38,22 +44,26 @@ const Navbar = ({ }) => {
       client: null,
       network: network,
       chainId: chainId,
-      activeWallet: 'keplr'
+      activeWallet: 'keplr',
     })
     disconnect()
   }
   const links = [
     {
-      lable: "Swap",
-      link: "/swap"
+      lable: 'Swap',
+      link: '/swap',
     },
     {
-      lable: "Pools",
-      link: "/pools"
+      lable: 'Pools',
+      link: '/pools',
     },
     {
-      lable: "Vaults",
-      link: "/vaults"
+      lable: 'Flashloan',
+      link: '/flashloan',
+    },
+    {
+      lable: 'Vaults',
+      link: '/vaults',
     },
     // {
     //   lable: "Chart",
@@ -61,12 +71,8 @@ const Navbar = ({ }) => {
     // },
   ]
 
-
   return (
-    <Box
-      py={{ base: '4', md: '10' }}
-      px={{ base: '4', md: '10' }}
-    >
+    <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
       <Flex
         justifyContent="space-between"
         mx="auto"
@@ -74,7 +80,7 @@ const Navbar = ({ }) => {
         display={{ base: 'none', md: 'flex' }}
         alignItems="center"
       >
-        <Box flex="1" >
+        <Box flex="1">
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
@@ -101,33 +107,33 @@ const Navbar = ({ }) => {
         py="4"
         display={{ base: 'flex', md: 'none' }}
       >
-      <Logo />
-            <Wallet
-              connected={Boolean(key?.name)}
-              walletName={key?.name}
-              onDisconnect={resetWalletConnection}
-              disconnect={disconnect}
-              onOpenModal={onOpenModal}
-            />
-            <IconButton
-              aria-label="Open drawer"
-              variant="ghost"
-              color="white"
-              icon={<BurgerIcon width="1rem" height="1rem" />}
-              onClick={onOpen}
-              display={{ base: 'block', md: 'none' }}
-              _focus={{
-                bg: 'none',
-              }}
-              _active={{
-                bg: 'none',
-              }}
-              _hover={{
-                boxShadow: 'none',
-              }}
-            >
-              Open
-            </IconButton>
+        <Logo />
+        <Wallet
+          connected={Boolean(key?.name)}
+          walletName={key?.name}
+          onDisconnect={resetWalletConnection}
+          disconnect={disconnect}
+          onOpenModal={onOpenModal}
+        />
+        <IconButton
+          aria-label="Open drawer"
+          variant="ghost"
+          color="white"
+          icon={<BurgerIcon width="1rem" height="1rem" />}
+          onClick={onOpen}
+          display={{ base: 'block', md: 'none' }}
+          _focus={{
+            bg: 'none',
+          }}
+          _active={{
+            bg: 'none',
+          }}
+          _hover={{
+            boxShadow: 'none',
+          }}
+        >
+          Open
+        </IconButton>
       </Flex>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -137,12 +143,16 @@ const Navbar = ({ }) => {
 
           <DrawerBody as={VStack} alignItems="flex-start">
             {links.map(({ lable, link }) => (
-              <DrawerLink key={lable} text={lable} href={link} onClick={onClose} />
+              <DrawerLink
+                key={lable}
+                text={lable}
+                href={link}
+                onClick={onClose}
+              />
             ))}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-
     </Box>
   )
 }

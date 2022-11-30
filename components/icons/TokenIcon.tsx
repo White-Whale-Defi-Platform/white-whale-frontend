@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 export default function TokenIcon(props) {
   return (
@@ -16,5 +16,5 @@ export default function TokenIcon(props) {
         fill="#1A1B2A"
       />
     </svg>
-  );
+  )
 }

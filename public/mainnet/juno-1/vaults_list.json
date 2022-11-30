@@ -11,9 +11,7 @@
         "name": "Juno",
         "decimals": 6,
         "logoURI": "/logos/juno.svg",
-        "tags": [
-          "native"
-        ],
+        "tags": ["native"],
         "native": true,
         "denom": "ujuno"
       },

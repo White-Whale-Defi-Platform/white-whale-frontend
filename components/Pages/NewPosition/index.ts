@@ -1,1 +1,1 @@
-export {default} from './NewPosition'
+export { default } from './NewPosition'

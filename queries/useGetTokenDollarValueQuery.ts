@@ -17,7 +17,6 @@ export const useGetTokenDollarValueQuery = () => {
     tokenA?.symbol
   )
 
-
   const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
     useGetQueryMatchingPoolForSwap()
 
@@ -31,13 +30,12 @@ export const useGetTokenDollarValueQuery = () => {
         tokenB: tokenInfo,
         client,
         amount: 1,
-        id: tokenInfo?.id
+        id: tokenInfo?.id,
       })
 
       if (tokenA?.id === tokenInfo?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
       else return priceForOneToken
-
     },
     Boolean(
       tokenA && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher

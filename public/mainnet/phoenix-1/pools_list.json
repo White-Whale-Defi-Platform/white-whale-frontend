@@ -21,11 +21,11 @@
     "native": true,
     "denom": "uluna"
   },
-  "routerAddress" : "terra1p37jrwlaqpklzlu4rwjyjrmzuezdgk3pyuyk2zclc4rda6awkm3qnj6f0a",
+  "routerAddress": "terra1p37jrwlaqpklzlu4rwjyjrmzuezdgk3pyuyk2zclc4rda6awkm3qnj6f0a",
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
-      "lpOrder" : ["ATOM", "LUNA"],
+      "lpOrder": ["ATOM", "LUNA"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -59,7 +59,7 @@
     },
     {
       "pool_id": "ATOM-JUNO",
-      "lpOrder" : ["ATOM", "JUNO"],
+      "lpOrder": ["ATOM", "JUNO"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -92,7 +92,7 @@
     },
     {
       "pool_id": "ATOM-axlUSDC",
-      "lpOrder" : ["ATOM", "axlUSDC"],
+      "lpOrder": ["ATOM", "axlUSDC"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -189,7 +189,7 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder" : ["axlUSDC", "LUNA"],
+      "lpOrder": ["axlUSDC", "LUNA"],
       "pool_assets": [
         {
           "id": "terra-luna-2",

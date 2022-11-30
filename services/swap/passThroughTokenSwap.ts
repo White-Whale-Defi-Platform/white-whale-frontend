@@ -6,7 +6,7 @@ import {
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from '../../util/messages'
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 type PassThroughTokenSwapArgs = {
   tokenAmount: number
@@ -55,14 +55,14 @@ export const passThroughTokenSwap = async ({
     })
 
     return validateTransactionSuccess(
-      await client.post(senderAddress, [increaseAllowanceMessage, executeMessage])
+      await client.post(senderAddress, [
+        increaseAllowanceMessage,
+        executeMessage,
+      ])
     )
   }
 
-  return await client.execute(
-    senderAddress,
-    swapAddress,
-    swapMessage,
-    [coin(tokenAmount, tokenA.denom)]
-  )
+  return await client.execute(senderAddress, swapAddress, swapMessage, [
+    coin(tokenAmount, tokenA.denom),
+  ])
 }

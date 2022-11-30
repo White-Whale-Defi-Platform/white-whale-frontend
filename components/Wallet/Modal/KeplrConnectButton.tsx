@@ -1,14 +1,14 @@
-import { Button } from '@chakra-ui/react'
 import React, { useCallback } from 'react'
-import { useRecoilValue } from 'recoil'
 
-import useConnectKeplr from 'hooks/useConnectKeplr'
-import { walletState } from 'state/atoms/walletAtoms'
+import { Button, HStack, Text } from '@chakra-ui/react'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
+import useConnectKeplr from 'hooks/useConnectKeplr'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
-function KeplrConnectButton({onCloseModal}) {
-  const {setKeplrAndConnect} = useConnectKeplr()
-  const {chainId, activeWallet, network,} = useRecoilValue(walletState)
+function KeplrConnectButton({ onCloseModal }) {
+  const { setKeplrAndConnect } = useConnectKeplr()
+  const { chainId, activeWallet, network } = useRecoilValue(walletState)
 
   const setKeplrMemo = useCallback(() => {
     setKeplrAndConnect()
@@ -16,9 +16,13 @@ function KeplrConnectButton({onCloseModal}) {
   }, [activeWallet, chainId, network])
 
   return (
-    <Button onClick={() => setKeplrMemo()} colorScheme="black"><KeplrWalletIcon/> Connect Keplr Wallet</Button>
+    <Button variant="wallet" onClick={() => setKeplrMemo()} colorScheme="black">
+      <HStack justify="space-between" width="full">
+        <Text>Keplr Wallet</Text>
+        <KeplrWalletIcon />
+      </HStack>
+    </Button>
   )
 }
-
 
 export default KeplrConnectButton

@@ -3,7 +3,6 @@ import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-
 export type TokenInfo = {
   id: string
   chain_id: string
@@ -45,12 +44,17 @@ export type PoolsListQueryResponse = {
 export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
   const currentWalletState = useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()
-  
-  
+
   return useQuery<PoolsListQueryResponse>(
-    ['@pools-list', currentWalletState.chainId, currentWalletState.network, currentWalletState.activeWallet, connectedWallet],
+    [
+      '@pools-list',
+      currentWalletState.chainId,
+      currentWalletState.network,
+      currentWalletState.activeWallet,
+      connectedWallet,
+    ],
     async () => {
-      const url =  `/${currentWalletState.network}/${currentWalletState.chainId}${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`
+      const url = `/${currentWalletState.network}/${currentWalletState.chainId}${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`
       const response = await fetch(url)
       const tokenList = await response.json()
       return {
@@ -63,8 +67,8 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
     },
     Object.assign(
       {
-        retry:5,
-        enabled:true,
+        retry: 5,
+        enabled: true,
         refetchOnMount: false,
       },
       options || {}

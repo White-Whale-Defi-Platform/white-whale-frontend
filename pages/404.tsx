@@ -1,7 +1,8 @@
-import React from "react";
-import Head from "next/head";
-import Page from "components/Pages/Error";
-import { NextPage } from "next";
+import React from 'react'
+
+import Page from 'components/Pages/Error'
+import { NextPage } from 'next'
+import Head from 'next/head'
 
 const Custom404Page: NextPage = () => {
   return (
@@ -11,7 +12,7 @@ const Custom404Page: NextPage = () => {
       </Head>
       <Page statusCode={404} />
     </>
-  );
-};
+  )
+}
 
-export default Custom404Page;
+export default Custom404Page

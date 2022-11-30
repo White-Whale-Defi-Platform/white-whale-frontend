@@ -1,4 +1,4 @@
-import { TxResponse } from "../wallet-adapters";
+import { TxResponse } from '../wallet-adapters'
 
 export function validateTransactionSuccess(result: TxResponse) {
   if (!!result.code) {

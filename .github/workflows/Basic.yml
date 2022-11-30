@@ -1,0 +1,26 @@
+# Based on https://github.com/actions-rs/example/blob/master/.github/workflows/quickstart.yml
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+name: Basic
+
+jobs:
+  test_and_lint:
+    name: Test and lint code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+      - name: Use Node.js 17.3.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 17.3.0
+      - name: Install dependencies
+        run: yarn install
+      - run: yarn build
+      - run: yarn prettier
+      # - run: yarn test

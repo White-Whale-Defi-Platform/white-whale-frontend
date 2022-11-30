@@ -6,7 +6,7 @@ import {
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from '../../util/messages'
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 type DirectTokenSwapArgs = {
   // swapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
@@ -24,9 +24,8 @@ export const directTokenSwap = async ({
   senderAddress,
   tokenAmount,
   client,
-  msgs
+  msgs,
 }: DirectTokenSwapArgs) => {
-
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,
@@ -38,19 +37,18 @@ export const directTokenSwap = async ({
     const executeMessage = createExecuteMessage({
       senderAddress,
       contractAddress: tokenA.token_address,
-      message: msgs
+      message: msgs,
     })
 
-
     return validateTransactionSuccess(
-      await client.post(senderAddress, [increaseAllowanceMessage, executeMessage])
+      await client.post(senderAddress, [
+        increaseAllowanceMessage,
+        executeMessage,
+      ])
     )
   }
 
-  return await client.execute(
-    senderAddress,
-    swapAddress,
-    msgs,
-    [coin(tokenAmount, tokenA.denom)]
-  )
+  return await client.execute(senderAddress, swapAddress, msgs, [
+    coin(tokenAmount, tokenA.denom),
+  ])
 }

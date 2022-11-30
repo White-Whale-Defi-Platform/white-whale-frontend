@@ -1,22 +1,22 @@
 {
-    "juno": [
-        {
-            "tokenSymbol": "JUNO",
-            "amount": 0
-        },
-        {
-            "tokenSymbol": null,
-            "amount": 0
-        }
-    ],
-    "terra": [
-        {
-            "tokenSymbol": "LUNA",
-            "amount": 0
-        },
-        {
-            "tokenSymbol": null,
-            "amount": 0
-        }
-    ]
+  "juno": [
+    {
+      "tokenSymbol": "JUNO",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": null,
+      "amount": 0
+    }
+  ],
+  "terra": [
+    {
+      "tokenSymbol": "LUNA",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": null,
+      "amount": 0
+    }
+  ]
 }

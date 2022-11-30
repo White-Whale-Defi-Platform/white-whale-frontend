@@ -1,42 +1,32 @@
 {
-    "juno": [
-        {
-            "tokenSymbol": "JUNO",
-            "amount": 0
-        },
-        {
-            "tokenSymbol": null,
-            "amount": 0
-        }
-    ],
-    "terra": [
-        {
-            "tokenSymbol": "LUNA",
-            "amount": 0
-        },
-        {
-            "tokenSymbol": null,
-            "amount": 0
-        }
-    ],
-    "chihuahua1ux3": [
-        {
-            "tokenSymbol": "ATOM",
-            "amount": 0
-        },
-        {
-            "tokenSymbol": null,
-            "amount": 0
-        }
-    ],
-    "injective": [
-        {
-            "tokenSymbol": "Injective",
-            "amount": 0
-        },
-        {
-            "tokenSymbol": null,
-            "amount": 0
-        }
-    ]
+  "juno": [
+    {
+      "tokenSymbol": "JUNO",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": "ATOM",
+      "amount": 0
+    }
+  ],
+  "terra": [
+    {
+      "tokenSymbol": "LUNA",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": "ATOM",
+      "amount": 0
+    }
+  ],
+  "chihuahua": [
+    {
+      "tokenSymbol": "HUAHUA",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": "PUPPY",
+      "amount": 0
+    }
+  ]
 }

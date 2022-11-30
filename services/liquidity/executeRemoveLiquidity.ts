@@ -4,15 +4,15 @@ import {
   validateTransactionSuccess,
 } from 'util/messages'
 
-import {Wallet} from "../../util/wallet-adapters";
+import { Wallet } from '../../util/wallet-adapters'
 
 type ExecuteRemoveLiquidityArgs = {
   tokenAmount: number
   senderAddress: string
   swapAddress: string
   lpTokenAddress: string
-  client: Wallet,
-  msgs:any
+  client: Wallet
+  msgs: any
 }
 
 export const executeRemoveLiquidity = async ({
@@ -21,9 +21,8 @@ export const executeRemoveLiquidity = async ({
   senderAddress,
   lpTokenAddress,
   client,
-  msgs
+  msgs,
 }: ExecuteRemoveLiquidityArgs) => {
-
   const increaseAllowanceMessage = createIncreaseAllowanceMessage({
     tokenAmount,
     senderAddress,
