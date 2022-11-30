@@ -14,7 +14,7 @@
   "base_token": {
     "id": "injective-protocol",
     "chain_id": "injective-1",
-    "token_address": "uinj",
+    "token_address": "inj",
     "symbol": "INJ",
     "name": "INJ",
     "decimals": 6,
@@ -23,7 +23,7 @@
       "native"
     ],
     "native": true,
-    "denom": "uinj"
+    "denom": "inj"
   },
   "routerAddress": "<tbd>",
   "pools": [
@@ -34,14 +34,14 @@
         {
           "chain_id": "injective-1",
           "id": "injective-protocol",
-          "token_address": "uinj",
+          "token_address": "inj",
           "symbol": "INJ",
           "name": "INJ",
           "decimals": 6,
           "logoURI": "/logos/injective.png",
           "tags": ["native"],
           "native": true,
-          "denom": "uinj"
+          "denom": "inj"
         },
         {
           "id": "cosmos",

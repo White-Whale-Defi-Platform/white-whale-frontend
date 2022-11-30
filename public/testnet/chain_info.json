@@ -102,8 +102,8 @@
     "rest": "https://k8s.testnet.lcd.injective.network/",
     "stakeCurrency": {
         "coinDenom": "inj",
-        "coinMinimalDenom": "uinj",
-        "coinDecimals": 6
+        "coinMinimalDenom": "inj",
+        "coinDecimals": 18
     },
     "bip44": {
         "coinType": 118
@@ -119,7 +119,7 @@
     "currencies": [
         {
             "coinDenom": "Injective",
-            "coinMinimalDenom": "uinj",
+            "coinMinimalDenom": "inj",
             "coinDecimals": 6,
             "coinGeckoId": "injective-protocol"
         }
@@ -127,7 +127,7 @@
     "feeCurrencies": [
         {
             "coinDenom": "Injective",
-            "coinMinimalDenom": "uinj",
+            "coinMinimalDenom": "inj",
             "coinDecimals": 6,
             "coinGeckoId": "injective-protocol"
         }

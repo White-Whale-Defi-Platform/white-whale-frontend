@@ -6,7 +6,7 @@
       "vault_assets": {
         "id": "injective-protocol",
         "chain_id": "injective-1",
-        "token_address": "uinj",
+        "token_address": "inj",
         "symbol": "INJ",
         "name": "INJ",
         "decimals": 6,
@@ -15,7 +15,7 @@
           "native"
         ],
         "native": true,
-        "denom": "uinj"
+        "denom": "inj"
       },
       "lp_token": "inj1tbd",
       "vault_address": "inj1tbd",
