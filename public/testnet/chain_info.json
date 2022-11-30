@@ -96,5 +96,53 @@
         "features": [
             "cosmwasm"
         ]
+    },{
+        "chainId": "injective-888",
+        "chainName": "Injective testnet",
+        "label": "Injective",
+        "icon": "/logos/injective.png",
+        "rpc": "https://k8s.testnet.tm.injective.network/",
+        "rest": "https://k8s.testnet.lcd.injective.network/",
+        "stakeCurrency": {
+            "coinDenom": "inj",
+            "coinMinimalDenom": "uinj",
+            "coinDecimals": 6
+        },
+        "bip44": {
+            "coinType": 118
+        },
+        "bech32Config": {
+            "bech32PrefixAccAddr": "inj",
+            "bech32PrefixAccPub": "injpub",
+            "bech32PrefixValAddr": "injvaloper",
+            "bech32PrefixValPub": "injvaloperpub",
+            "bech32PrefixConsAddr": "injvalcons",
+            "bech32PrefixConsPub": "injvalconspub"
+        },
+        "currencies": [
+            {
+                "coinDenom": "Injective",
+                "coinMinimalDenom": "uinj",
+                "coinDecimals": 6,
+                "coinGeckoId": "injective-protocol"
+            }
+        ],
+        "feeCurrencies": [
+            {
+                "coinDenom": "Injective",
+                "coinMinimalDenom": "uinj",
+                "coinDecimals": 6,
+                "coinGeckoId": "injective-protocol"
+            }
+        ],
+        "coinType": 118,
+        "gasPriceStep": {
+            "low": 0.07,
+            "average": 0.15,
+            "high": 0.20
+        },
+        "features": [
+            "cosmwasm"
+        ]
     }
 ]

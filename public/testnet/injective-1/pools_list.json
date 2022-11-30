@@ -1,0 +1,104 @@
+{
+  "name": "Pools list on Injective testnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": [
+    "special tokens"
+  ],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "injective-protocol",
+    "chain_id": "injective-1",
+    "token_address": "uinj",
+    "symbol": "INJ",
+    "name": "INJ",
+    "decimals": 6,
+    "logoURI": "/logos/injective.png",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "uinj"
+  },
+  "routerAddress": "inj1gjvm4vpxu8mxz7dac6dfsdj9ce3n86s2a5hvqc",
+  "pools": [
+    {
+      "pool_id": "Injective-CWShib",
+      "lpOrder" : ["INJ", "cwShib"],
+      "pool_assets": [
+        {
+          "chain_id": "injective-1",
+          "id": "injective-protocol",
+          "token_address": "uinj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 6,
+          "logoURI": "/logos/injective.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uinj"
+        },
+        {
+          "id": "cwshib",
+          "chain_id": "injective-1",
+          "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
+          "symbol": "cwShib",
+          "name": "cwShib",
+          "decimals": 6,
+          "logoURI": "/logos/atom.png",
+          "tags": [""],
+          "native": false,
+          "denom": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc"
+        }
+      ],
+      "lp_token": "inj149e670larryslq3pvryuc04ulll8vvyffpexy7",
+      "swap_address": "inj1jv6ed3ftprh67n7d8uhlr7lktaf7ayh4a9as43",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "Injective-USDT",
+      "lpOrder" : ["INJ", "USDT"],
+      "pool_assets": [
+        {
+          "chain_id": "injective-1",
+          "id": "injective-protocol",
+          "token_address": "uinj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 6,
+          "logoURI": "/logos/injective.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uinj"
+        },
+        {
+          "id": "usdt",
+          "chain_id": "injective-1",
+          "token_address": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5",
+          "symbol": "USDT",
+          "name": "USDT",
+          "decimals": 6,
+          "logoURI": "/logos/usdt.png",
+          "tags": [""],
+          "native": false,
+          "denom": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5"
+        }
+      ],
+      "lp_token": "inj149e670larryslq3pvryuc04ulll8vvyffpexy7",
+      "swap_address": "inj1jv6ed3ftprh67n7d8uhlr7lktaf7ayh4a9as43",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}
