@@ -25,7 +25,7 @@
     "native": true,
     "denom": "inj"
   },
-  "routerAddress": "inj1atwxty2lwq4dgz0d8pzxtq3rc35hgksvn8jqhc",
+  "routerAddress": "inj1ckqz4r0n3m9smvharm65pgu8mm7vhep8cq89mg",
   "pools": [
     {
       "pool_id": "Injective-CWShib",
@@ -56,8 +56,8 @@
           "denom": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc"
         }
       ],
-      "lp_token": "inj1jv6ed3ftprh67n7d8uhlr7lktaf7ayh4a9as43",
-      "swap_address": "inj149e670larryslq3pvryuc04ulll8vvyffpexy7",
+      "lp_token": "inj1qr6srl0egqqyw4jdeqqm8xusclhef0epuvx8j7",
+      "swap_address": "inj1jjun9me022r589ytezhhrs29es8a2fwk9hgpyq",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -90,8 +90,8 @@
           "denom": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5"
         }
       ],
-      "lp_token": "inj1jv6ed3ftprh67n7d8uhlr7lktaf7ayh4a9as43",
-      "swap_address": "inj149e670larryslq3pvryuc04ulll8vvyffpexy7",
+      "lp_token": "inj129pns8jnlpth8pe0ualamv4m7lgtj8qsrrm2av",
+      "swap_address": "inj1yjayfr08tu5sl5uajsylh3kwntzc46zfkn7ua4",
       "staking_address": "",
       "rewards_tokens": []
     }

@@ -98,8 +98,8 @@
     "chainName": "Injective testnet",
     "label": "Injective",
     "icon": "/logos/injective.png",
-    "rpc": "https://k8s.testnet.tm.injective.network/",
-    "rest": "https://k8s.testnet.lcd.injective.network/",
+    "rpc": "http://176.9.147.152:26657",
+    "rest": "https://k8s.testnet.lcd.injective.network",
     "stakeCurrency": {
         "coinDenom": "inj",
         "coinMinimalDenom": "inj",
