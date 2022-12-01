@@ -50,7 +50,7 @@
           "symbol": "cwShib",
           "name": "cwShib",
           "decimals": 18,
-          "logoURI": "/logos/atom.png",
+          "logoURI": "/logos/shiba-inu-shib-logo.png",
           "tags": [""],
           "native": false,
           "denom": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc"
@@ -58,6 +58,40 @@
       ],
       "lp_token": "inj1qr6srl0egqqyw4jdeqqm8xusclhef0epuvx8j7",
       "swap_address": "inj1jjun9me022r589ytezhhrs29es8a2fwk9hgpyq",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "CWShib-cwSix",
+      "lpOrder" : ["cwSix", "cwShib"],
+      "pool_assets": [
+        {
+          "id": "cwShib",
+          "chain_id": "injective-1",
+          "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
+          "symbol": "cwShib",
+          "name": "cwShib",
+          "decimals": 18,
+          "logoURI": "/logos/shiba-inu-shib-logo.png",
+          "tags": [""],
+          "native": false,
+          "denom": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc"
+        },
+        {
+          "id": "cwSix",
+          "chain_id": "injective-1",
+          "token_address": "inj14efstake5h3kah7wezkxwvqqv4ew6ahlht0qfz",
+          "symbol": "cwSix",
+          "name": "cwSix",
+          "decimals": 18,
+          "logoURI": "/logos/shiba-inu-shib-logo.png",
+          "tags": [""],
+          "native": false,
+          "denom": "inj14efstake5h3kah7wezkxwvqqv4ew6ahlht0qfz"
+        }
+      ],
+      "lp_token": "inj16twsluegh25h7syt9yyraq4wqt2zf4js96vhfc",
+      "swap_address": "inj19tq8qe983z5fjhh0y4ym0276dm8al3entjjxhj",
       "staking_address": "",
       "rewards_tokens": []
     },
