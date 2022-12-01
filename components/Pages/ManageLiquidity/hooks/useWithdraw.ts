@@ -41,6 +41,7 @@ const useWithdraw = ({ token, contract, swapAddress, poolId }: Props) => {
         address
       ),
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, contract])
 
   return useTransaction({

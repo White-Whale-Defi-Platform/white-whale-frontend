@@ -88,6 +88,39 @@
       "swap_address": "chihuahua1ncq4gg9c9du8u2jrp55dszxf00rr28m98q2n5sllwkmnsuxq4u6s2y2uu6",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "HUAHUA-WDOGE",
+      "lpOrder": ["WDOGE", "HUAHUA"],
+      "pool_assets": [
+        {
+          "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/B0E35908659CC1C74966C2A868B2A553CBB7E3A6C42A1F3BEA311E3C17FD81EF",
+          "symbol": "WDOGE",
+          "name": "DOGE",
+          "decimals": 18,
+          "logoURI": "/logos/dogecoin-doge-logo.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/B0E35908659CC1C74966C2A868B2A553CBB7E3A6C42A1F3BEA311E3C17FD81EF"
+        }
+      ],
+      "lp_token": "chihuahua177qc0dufzlsytmlq7tx8s8mvjag062llr8ay53p3jnsm6y347qwqzzml96",
+      "swap_address": "chihuahua1mqcyratr5xcmzr2t008skvh5zzfx8xuqgxnv6vvz5fqkas4vsgys3hzga0",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

@@ -1,16 +1,16 @@
-import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
-
-import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 import { useEffect, useRef, useState, useMemo } from 'react'
+import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
+
+import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+
 import Editor from './Editor'
-import Error from './Error'
 import useFlashloan from './hooks/useFlashloan'
 import { TxStep } from './hooks/useTransaction'
 import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
 
 const defualtJson = {
   flash_loan: {
@@ -19,6 +19,7 @@ const defualtJson = {
   },
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
 const options = {
@@ -41,21 +42,6 @@ function FlashloanForm({}: Props) {
 
   const tx = useFlashloan({ json })
 
-  useEffect(() => {
-    init()
-    return () => {
-      if (editorRef?.current) {
-        editorRef?.current?.destroy()
-      }
-    }
-  }, [containerRef, editorRef, options])
-
-  const buttonLabel = useMemo(() => {
-    if (!isConnected) return 'Connect Wallet'
-    else if (!!error) return error
-    else return 'Flashloan'
-  }, [tx?.buttonLabel, status, error])
-
   const onChange = async (data) => {
     try {
       const isValid = await editorRef?.current?.validate()
@@ -66,7 +52,7 @@ function FlashloanForm({}: Props) {
       } else {
         setError('Messgae validation failed.')
       }
-    } catch (error) {
+    } catch (e) {
       setError('Invalid JSON')
     }
   }
@@ -82,9 +68,27 @@ function FlashloanForm({}: Props) {
     }
   }
 
+  useEffect(() => {
+    init()
+    return () => {
+      if (editorRef?.current) {
+        editorRef?.current?.destroy()
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [containerRef, editorRef, options])
+
+  const buttonLabel = useMemo(() => {
+    if (!isConnected) return 'Connect Wallet'
+    else if (!!error) return error
+    else return 'Flashloan'
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx?.buttonLabel, status, error])
+
   const handleChange = (event: any) => {
     const fileReader = new FileReader()
     fileReader.readAsText(event.target.files[0], 'UTF-8')
+    // eslint-disable-next-line no-param-reassign
     event.target.value = null
     fileReader.onload = (e: any) => {
       try {
@@ -106,7 +110,7 @@ function FlashloanForm({}: Props) {
         editorRef.current.format()
         const jsonData = editorRef?.current?.get()
         setJson(jsonData)
-      } catch (error) {
+      } catch (e) {
         setError('Invalid JSON')
       }
     }
