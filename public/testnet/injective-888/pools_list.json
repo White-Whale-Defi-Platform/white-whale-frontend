@@ -28,7 +28,7 @@
   "routerAddress": "inj1ckqz4r0n3m9smvharm65pgu8mm7vhep8cq89mg",
   "pools": [
     {
-      "pool_id": "Injective-CWShib",
+      "pool_id": "INJ-cwShib",
       "lpOrder" : ["INJ", "cwShib"],
       "pool_assets": [
         {
@@ -36,7 +36,7 @@
           "id": "injective-protocol",
           "token_address": "inj",
           "symbol": "INJ",
-          "name": "Injective",
+          "name": "INJ",
           "decimals": 18,
           "logoURI": "/logos/injective.png",
           "tags": ["native"],
@@ -44,7 +44,7 @@
           "denom": "inj"
         },
         {
-          "id": "cwShib",
+          "id": "injective-protocol",
           "chain_id": "injective-1",
           "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
           "symbol": "cwShib",
@@ -96,7 +96,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "Injective-USDT",
+      "pool_id": "INJ-USDT",
       "lpOrder" : ["INJ", "USDT"],
       "pool_assets": [
         {
@@ -112,7 +112,7 @@
           "denom": "inj"
         },
         {
-          "id": "usdt",
+          "id": "injective-protocol",
           "chain_id": "injective-1",
           "token_address": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5",
           "symbol": "USDT",
