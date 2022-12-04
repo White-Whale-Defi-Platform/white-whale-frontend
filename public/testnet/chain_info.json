@@ -44,9 +44,7 @@
       "average": 0.05,
       "high": 0.1
     },
-    "features": [
-      "cosmwasm"
-    ]
+    "features": ["cosmwasm"]
   },
   {
     "chainId": "pisco-1",
@@ -93,9 +91,7 @@
       "average": 0.5,
       "high": 0.75
     },
-    "features": [
-      "cosmwasm"
-    ]
+    "features": ["cosmwasm"]
   },
   {
     "chainId": "injective-888",
@@ -143,12 +139,7 @@
       "high": 40000000000
     },
     "coinType": 60,
-    "features": [
-      "ibc-transfer",
-      "ibc-go",
-      "eth-address-gen",
-      "eth-key-sign"
-    ],
+    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "beta": true
   }
 ]

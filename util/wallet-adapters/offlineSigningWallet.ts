@@ -5,7 +5,10 @@ import {
 } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Coin } from '@cosmjs/launchpad'
 import { EncodeObject, OfflineSigner } from '@cosmjs/proto-signing'
-import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
+import {
+  SigningStargateClient,
+  SigningStargateClientOptions,
+} from '@cosmjs/stargate/build/signingstargateclient'
 import {
   AuthInfo,
   Coin as StationCoin,
@@ -20,7 +23,12 @@ import {
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 
 import { TxResponse, Wallet } from './wallet'
+import { cosmwasmAminoConverters, getSigningCosmwasmClient } from 'injectivejs'
+// import {SigningStargateClient} from 'injectivejs/node_modules/@cosmjs/stargate/node_modules/@cosmjs/signingstargateclient';
+import getChainName from '../../libs/getChainName'
+import { AminoTypes } from '@cosmjs/stargate'
 
+import { chain } from 'lodash'
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient
   network: string
@@ -31,11 +39,24 @@ export class OfflineSigningWallet implements Wallet {
   }
 
   static connectWithSigner(
+    chainId: string,
     endpoint: string,
     signer: OfflineSigner,
     network: string,
     options?: SigningStargateClientOptions
   ): Promise<OfflineSigningWallet> {
+    if (getChainName(chainId) == 'injective') {
+      // We cant easily use the below as its a SigningStargateClient returned, even though it says getCosmwasm;..
+      // To fix we may need to manually define our own SigningCosmWasmClient here and then return a new OfflineSigningWallet
+      // If we do it here, and we do it and get a lil lucky no other changes will be needed.
+      // const aminoTypes = new AminoTypes(cosmwasmAminoConverters);
+      // See: https://github.com/cosmology-tech/injectivejs
+      // Also review: https://github.com/cosmology-tech/injectivejs#advanced-usage
+      // return getSigningCosmwasmClient({rpcEndpoint:endpoint, signer:signer }).then((client) => {
+      //   return new OfflineSigningWallet(client, network)
+      // })
+    }
+
     return SigningCosmWasmClient.connectWithSigner(
       endpoint,
       signer,
