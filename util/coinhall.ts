@@ -23,7 +23,6 @@ export const getPairApryAnd24HrVolume = async (pairs: string[]) => {
 
   return pairs.map((pair: any) => {
     const pairInfo = pairInfos.find((row: any) => row.pairAddress === pair)
-
     return {
       pairAddress: pair,
       usdVolume24h: pairInfo?.usdVolume24h || 0,
