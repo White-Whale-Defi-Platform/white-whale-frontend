@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   HStack,
+  Image,
   Table,
   TableContainer,
   Tbody,
@@ -202,7 +203,12 @@ const PoolsTable = ({
       </TableContainer>
       {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
-          <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
+          <Text
+            color="white"
+            fontSize="12px"
+            mr="4px"
+          >{`data provided by`}</Text>
+          <Image src="/logos/coinhall.png" alt="coinhall" height="14px" />
         </Flex>
       )}
     </Flex>
