@@ -49,7 +49,9 @@ const columns = [
     ),
     cell: (info) => {
       return (
-        <Text align="right">{`${Number(info.getValue()).toFixed(2)}`}</Text>
+        <Text align="right">{`${
+          info.row.original?.isUSDCPool ? '$' : ''
+        }${Number(info.getValue()).toFixed(2)}`}</Text>
       )
     },
   }),

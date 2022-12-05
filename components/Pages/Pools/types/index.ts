@@ -8,5 +8,6 @@ export type Pool = {
   volume24hr: number | string
   totalLiq: number | string
   price?: number
+  isUSDCPool?: boolean
   cta?: () => void
 }
