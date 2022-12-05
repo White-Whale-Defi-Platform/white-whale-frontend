@@ -7,5 +7,6 @@ export type Pool = {
   apr: number | string
   volume24hr: number | string
   totalLiq: number | string
+  lpPrice?: number
   cta?: () => void
 }

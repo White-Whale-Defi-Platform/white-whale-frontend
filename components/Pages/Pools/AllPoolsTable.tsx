@@ -41,6 +41,18 @@ const columns = [
       />
     ),
   }),
+  columnHelper.accessor('lpPrice', {
+    header: () => (
+      <Text align="right" color="brand.50">
+        {`price`}
+      </Text>
+    ),
+    cell: (info) => {
+      return (
+        <Text align="right">{`$${Number(info.getValue()).toFixed(2)}`}</Text>
+      )
+    },
+  }),
   columnHelper.accessor('apr', {
     header: () => (
       <Text align="right" color="brand.50">

@@ -8,6 +8,7 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { getPairApryAnd24HrVolume } from 'util/coinhall'
 
+import { POOL_TOKENS_DECIMALS } from '../../../util/constants'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
@@ -58,6 +59,12 @@ const Pools: FC<Props> = () => {
       volume24hr: pool.usdVolume24h,
       totalLiq: pool.liquidity.available.total.dollarValue,
       liquidity: pool.liquidity,
+      lpPrice:
+        pool.liquidity.available.total.tokenAmount > 0
+          ? pool.liquidity.available.total.dollarValue /
+            (pool.liquidity.available.total.tokenAmount /
+              10 ** POOL_TOKENS_DECIMALS)
+          : 0,
       cta: () =>
         router.push(
           `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
