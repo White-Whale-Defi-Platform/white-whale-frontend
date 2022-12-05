@@ -8,7 +8,6 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { getPairApryAnd24HrVolume } from 'util/coinhall'
 
-import { POOL_TOKENS_DECIMALS } from '../../../util/constants'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
