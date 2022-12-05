@@ -30,6 +30,8 @@ export const getPairApryAnd24HrVolume = async (pairs: string[]) => {
       usdVolume7d: pairInfo?.usdVolume7d || 0,
       apr24h: pairInfo?.apr24h || 0,
       apr7d: pairInfo?.apr7d || 0,
+      asset0Price: pairInfo?.asset0.usdPrice,
+      asset1Price: pairInfo?.asset1.usdPrice,
     }
   })
 }

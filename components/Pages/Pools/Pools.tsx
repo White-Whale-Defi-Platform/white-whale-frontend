@@ -59,12 +59,7 @@ const Pools: FC<Props> = () => {
       volume24hr: pool.usdVolume24h,
       totalLiq: pool.liquidity.available.total.dollarValue,
       liquidity: pool.liquidity,
-      lpPrice:
-        pool.liquidity.available.total.tokenAmount > 0
-          ? pool.liquidity.available.total.dollarValue /
-            (pool.liquidity.available.total.tokenAmount /
-              10 ** POOL_TOKENS_DECIMALS)
-          : 0,
+      price: pool.asset1Price > 0 ? pool.asset0Price / pool.asset1Price : 0,
       cta: () =>
         router.push(
           `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`

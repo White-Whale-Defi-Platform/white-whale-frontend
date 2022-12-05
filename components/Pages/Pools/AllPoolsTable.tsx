@@ -41,7 +41,7 @@ const columns = [
       />
     ),
   }),
-  columnHelper.accessor('lpPrice', {
+  columnHelper.accessor('price', {
     header: () => (
       <Text align="right" color="brand.50">
         {`price`}
@@ -49,7 +49,7 @@ const columns = [
     ),
     cell: (info) => {
       return (
-        <Text align="right">{`$${Number(info.getValue()).toFixed(2)}`}</Text>
+        <Text align="right">{`${Number(info.getValue()).toFixed(2)}`}</Text>
       )
     },
   }),
