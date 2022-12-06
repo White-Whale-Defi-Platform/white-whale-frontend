@@ -32,10 +32,8 @@ export const getPairApryAnd24HrVolume = async (pairs: string[]) => {
       asset0Price: pairInfo?.asset0.usdPrice,
       asset1Price: pairInfo?.asset1.usdPrice,
       isUSDCPool:
-        pairInfo?.asset0.symbol === 'USDC' ||
-        pairInfo?.asset0.symbol === 'axlUSDC' ||
-        pairInfo?.asset1.symbol === 'USDC' ||
-        pairInfo?.asset1.symbol === 'axlUSDC',
+        pairInfo?.asset0.symbol.includes('USDC') ||
+        pairInfo?.asset1.symbol.includes('USDC'),
     }
   })
 }
