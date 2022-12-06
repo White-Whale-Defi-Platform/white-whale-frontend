@@ -47,7 +47,7 @@ const Pools: FC<Props> = () => {
 
     const _allPools = _pools.map((pool) => {
       let price = 0
-      if (pool.isUSDCPool && pool.asset0Price > 0) {
+      if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
         price = pool.asset0Price / pool.asset1Price
       }
       if (!pool.isUSDCPool && pool.asset1Price > 0) {
