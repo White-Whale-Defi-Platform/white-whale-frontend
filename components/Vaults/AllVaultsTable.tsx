@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import {
   Button,
   Flex,
@@ -96,14 +94,8 @@ const AllVaultsTable = ({
   vaults: Vault[]
   isLoading?: boolean
 }) => {
-  const [data, setData] = useState(() => [...vaults])
-
-  useEffect(() => {
-    setData(vaults)
-  }, [vaults])
-
   const table = useReactTable({
-    data,
+    data: vaults,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
