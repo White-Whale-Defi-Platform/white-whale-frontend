@@ -125,6 +125,7 @@
     },
     {
       "pool_id": "LUNA-LUNAX",
+      "lpOrder": ["LUNA", "LUNAX"],
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -157,6 +158,7 @@
     },
     {
       "pool_id": "LUNA-ASTRO",
+      "lpOrder": ["LUNA", "ASTRO"],
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -189,7 +191,7 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder": ["axlUSDC", "LUNA"],
+      "lpOrder": ["LUNA", "axlUSDC"],
       "pool_assets": [
         {
           "id": "terra-luna-2",

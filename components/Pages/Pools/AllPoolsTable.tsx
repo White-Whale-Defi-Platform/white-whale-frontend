@@ -52,7 +52,7 @@ const columns = [
       return (
         <Text align="right">{`${
           info.row.original?.isUSDCPool ? '$' : ''
-        }${Number(info.getValue()).toFixed(2)}`}</Text>
+        }${Number(info.getValue()).toFixed(3)}`}</Text>
       )
     },
   }),

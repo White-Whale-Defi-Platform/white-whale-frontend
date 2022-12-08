@@ -45,26 +45,36 @@ const Pools: FC<Props> = () => {
       }
     })
 
-    const _allPools = _pools.map((pool) => ({
-      contract: pool?.swap_address,
-      pool: pool?.pool_id,
-      token1Img: pool?.pool_id.includes('USDC')
-        ? pool.pool_assets?.[0].logoURI
-        : pool.pool_assets?.[1].logoURI,
-      token2Img: pool?.pool_id.includes('USDC')
-        ? pool.pool_assets?.[1].logoURI
-        : pool.pool_assets?.[0].logoURI,
-      apr: pool.apr24h,
-      volume24hr: pool.usdVolume24h,
-      totalLiq: pool.liquidity.available.total.dollarValue,
-      liquidity: pool.liquidity,
-      price: pool.asset1Price > 0 ? pool.asset0Price / pool.asset1Price : 0,
-      isUSDCPool: pool?.isUSDCPool,
-      cta: () =>
-        router.push(
-          `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
-        ),
-    }))
+    const _allPools = _pools.map((pool) => {
+      let price = 0
+      if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
+        price = pool.asset0Price / pool.asset1Price
+      }
+      if (!pool.isUSDCPool && pool.asset1Price > 0) {
+        price = pool.asset1Price / pool.asset0Price
+      }
+
+      return {
+        contract: pool?.swap_address,
+        pool: pool?.pool_id,
+        token1Img: pool?.pool_id.includes('USDC')
+          ? pool.pool_assets?.[0].logoURI
+          : pool.pool_assets?.[1].logoURI,
+        token2Img: pool?.pool_id.includes('USDC')
+          ? pool.pool_assets?.[1].logoURI
+          : pool.pool_assets?.[0].logoURI,
+        apr: pool.apr24h,
+        volume24hr: pool.usdVolume24h,
+        totalLiq: pool.liquidity.available.total.dollarValue,
+        liquidity: pool.liquidity,
+        price,
+        isUSDCPool: pool?.isUSDCPool,
+        cta: () =>
+          router.push(
+            `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
+          ),
+      }
+    })
 
     setAllPools(_allPools)
     // eslint-disable-next-line react-hooks/exhaustive-deps
