@@ -170,7 +170,7 @@ const PoolsTable = ({
       display={['none', 'flex']}
       flexDirection="column"
     >
-      <TableContainer width="full">
+      <TableContainer width="full" overflowX="hidden">
         <Table variant="unstyled">
           <Thead>
             {table.getHeaderGroups().map((headerGroup, index) => (
