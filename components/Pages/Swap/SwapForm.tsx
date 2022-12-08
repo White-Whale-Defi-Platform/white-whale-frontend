@@ -407,9 +407,8 @@ const SwapForm: FC<Props> = ({
         {amountB.amount && (
           <>
             <HStack justifyContent="space-between" width="full">
-              <HStack style={{ marginTop: 'unset' }}>
+              <HStack style={{ marginTop: 'unset' }} height="24px">
                 <Text color="brand.500" fontSize={12}>
-                  {' '}
                   Rate
                 </Text>
                 <Tooltip
@@ -419,7 +418,12 @@ const SwapForm: FC<Props> = ({
                   fontSize="xs"
                   maxW="330px"
                 >
-                  <Box cursor="pointer" color="brand.50">
+                  <Box
+                    cursor="pointer"
+                    color="brand.50"
+                    display="flex"
+                    alignItems="center"
+                  >
                     <InfoOutlineIcon width=".7rem" height=".7rem" />
                   </Box>
                 </Tooltip>
@@ -446,11 +450,11 @@ const SwapForm: FC<Props> = ({
                 justifyContent="space-between"
                 width="full"
                 style={{ marginTop: 'unset' }}
+                height="24px"
               >
                 <HStack>
                   <Text color="brand.500" fontSize={12}>
-                    {' '}
-                    Min Receive{' '}
+                    Min Receive
                   </Text>
                   <Tooltip
                     label="Expected minimum quantity to be received based on the current price, maximum spread, and trading fee"
@@ -459,7 +463,12 @@ const SwapForm: FC<Props> = ({
                     fontSize="xs"
                     maxW="330px"
                   >
-                    <Box cursor="pointer" color="brand.50">
+                    <Box
+                      cursor="pointer"
+                      color="brand.50"
+                      display="flex"
+                      alignItems="center"
+                    >
                       <InfoOutlineIcon width=".7rem" height=".7rem" />
                     </Box>
                   </Tooltip>
@@ -478,10 +487,9 @@ const SwapForm: FC<Props> = ({
             width="full"
             style={{ marginTop: 'unset' }}
           >
-            <HStack>
+            <HStack height="24px">
               <Text color="brand.500" fontSize={12}>
-                {' '}
-                Route{' '}
+                Route
               </Text>
               <Tooltip
                 label="Optimized route for your optimal gain"
@@ -490,7 +498,13 @@ const SwapForm: FC<Props> = ({
                 fontSize="xs"
                 maxW="330px"
               >
-                <Box cursor="pointer" color="brand.50" marginTop="-1px">
+                <Box
+                  cursor="pointer"
+                  color="brand.50"
+                  marginTop="-1px"
+                  display="flex"
+                  alignItems="center"
+                >
                   <InfoOutlineIcon width=".7rem" />
                 </Box>
               </Tooltip>
