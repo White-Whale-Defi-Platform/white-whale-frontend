@@ -17,6 +17,7 @@ type Props = {}
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
+  const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
 
@@ -30,6 +31,8 @@ const Pools: FC<Props> = () => {
   const initPools = useCallback(async () => {
     if (!pools || pools.length === 0) return
     if (allPools.length > 0) return
+
+    setInitLoading(true)
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = await getPairApryAnd24HrVolume(
@@ -77,6 +80,7 @@ const Pools: FC<Props> = () => {
     })
 
     setAllPools(_allPools)
+    setInitLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools, router])
 
@@ -119,7 +123,7 @@ const Pools: FC<Props> = () => {
             New Position
           </Button>
         </HStack>
-        <MyPoolsTable pools={myPools} isLoading={isLoading} />
+        <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
         <MobilePools pools={myPools} />
       </Box>
 
@@ -129,7 +133,10 @@ const Pools: FC<Props> = () => {
             All Pools
           </Text>
         </HStack>
-        <AllPoolsTable pools={allPoolsForShown} isLoading={isLoading} />
+        <AllPoolsTable
+          pools={allPoolsForShown}
+          isLoading={isLoading || isInitLoading}
+        />
         <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
       </Box>
     </VStack>
