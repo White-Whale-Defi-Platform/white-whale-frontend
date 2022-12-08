@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   HStack,
+  Image,
   Table,
   TableContainer,
   Tbody,
@@ -40,6 +41,20 @@ const columns = [
         token2Img={info.row.original?.token2Img}
       />
     ),
+  }),
+  columnHelper.accessor('price', {
+    header: () => (
+      <Text align="right" color="brand.50">
+        {`price`}
+      </Text>
+    ),
+    cell: (info) => {
+      return (
+        <Text align="right">{`${
+          info.row.original?.isUSDCPool ? '$' : ''
+        }${Number(info.getValue()).toFixed(3)}`}</Text>
+      )
+    },
   }),
   columnHelper.accessor('myPosition', {
     header: () => (
@@ -188,7 +203,12 @@ const PoolsTable = ({
       </TableContainer>
       {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
-          <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
+          <Text
+            color="white"
+            fontSize="12px"
+            mr="4px"
+          >{`data provided by`}</Text>
+          <Image src="/logos/coinhall.png" alt="coinhall" height="14px" />
         </Flex>
       )}
     </Flex>

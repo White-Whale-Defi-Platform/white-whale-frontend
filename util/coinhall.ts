@@ -23,13 +23,20 @@ export const getPairApryAnd24HrVolume = async (pairs: string[]) => {
 
   return pairs.map((pair: any) => {
     const pairInfo = pairInfos.find((row: any) => row.pairAddress === pair)
-
     return {
       pairAddress: pair,
       usdVolume24h: pairInfo?.usdVolume24h || 0,
       usdVolume7d: pairInfo?.usdVolume7d || 0,
       apr24h: pairInfo?.apr24h || 0,
       apr7d: pairInfo?.apr7d || 0,
+      asset0Price: pairInfo?.asset0.usdPrice,
+      asset1Price: pairInfo?.asset1.usdPrice,
+      isUSDCPool:
+        pairInfo?.asset0.symbol.includes('USDC') ||
+        pairInfo?.asset1.symbol.includes('USDC'),
+      isLunaxPool:
+        pairInfo?.asset0.symbol.includes('LunaX') ||
+        pairInfo?.asset1.symbol.includes('LunaX'),
     }
   })
 }
