@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import {
   Button,
   Flex,
@@ -107,15 +105,9 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  const [data, setData] = useState(() => [...pools])
   const currentWalletState = useRecoilValue(walletState)
-
-  useEffect(() => {
-    setData(pools)
-  }, [pools])
-
   const table = useReactTable({
-    data,
+    data: pools,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
