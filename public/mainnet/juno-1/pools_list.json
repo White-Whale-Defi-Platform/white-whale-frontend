@@ -25,7 +25,7 @@
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
-      "lpOrder": ["ATOM", "LUNA"],
+      "lpOrder": ["LUNA", "ATOM"],
       "pool_assets": [
         {
           "id": "cosmos",
@@ -158,7 +158,6 @@
     },
     {
       "pool_id": "JUNO-LOOP",
-      "lpOrder": ["JUNO", "LOOP"],
       "pool_assets": [
         {
           "id": "juno-network",
@@ -191,7 +190,7 @@
     },
     {
       "pool_id": "JUNO-axlUSDC",
-      "lpOrder": ["JUNO", "axlUSDC"],
+      "lpOrder": ["axlUSDC", "axlUSDC"],
       "pool_assets": [
         {
           "id": "juno-network",
