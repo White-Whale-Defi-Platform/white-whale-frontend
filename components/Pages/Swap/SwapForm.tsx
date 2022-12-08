@@ -409,7 +409,6 @@ const SwapForm: FC<Props> = ({
             <HStack justifyContent="space-between" width="full">
               <HStack style={{ marginTop: 'unset' }}>
                 <Text color="brand.500" fontSize={12}>
-                  {' '}
                   Rate
                 </Text>
                 <Tooltip
@@ -419,7 +418,12 @@ const SwapForm: FC<Props> = ({
                   fontSize="xs"
                   maxW="330px"
                 >
-                  <Box cursor="pointer" color="brand.50">
+                  <Box
+                    cursor="pointer"
+                    color="brand.50"
+                    display="flex"
+                    alignItems="center"
+                  >
                     <InfoOutlineIcon width=".7rem" height=".7rem" />
                   </Box>
                 </Tooltip>
@@ -459,7 +463,12 @@ const SwapForm: FC<Props> = ({
                     fontSize="xs"
                     maxW="330px"
                   >
-                    <Box cursor="pointer" color="brand.50">
+                    <Box
+                      cursor="pointer"
+                      color="brand.50"
+                      display="flex"
+                      alignItems="center"
+                    >
                       <InfoOutlineIcon width=".7rem" height=".7rem" />
                     </Box>
                   </Tooltip>
@@ -490,7 +499,13 @@ const SwapForm: FC<Props> = ({
                 fontSize="xs"
                 maxW="330px"
               >
-                <Box cursor="pointer" color="brand.50" marginTop="-1px">
+                <Box
+                  cursor="pointer"
+                  color="brand.50"
+                  marginTop="-1px"
+                  display="flex"
+                  alignItems="center"
+                >
                   <InfoOutlineIcon width=".7rem" />
                 </Box>
               </Tooltip>
