@@ -407,7 +407,7 @@ const SwapForm: FC<Props> = ({
         {amountB.amount && (
           <>
             <HStack justifyContent="space-between" width="full">
-              <HStack style={{ marginTop: 'unset' }}>
+              <HStack style={{ marginTop: 'unset' }} height="24px">
                 <Text color="brand.500" fontSize={12}>
                   Rate
                 </Text>
@@ -450,11 +450,11 @@ const SwapForm: FC<Props> = ({
                 justifyContent="space-between"
                 width="full"
                 style={{ marginTop: 'unset' }}
+                height="24px"
               >
                 <HStack>
                   <Text color="brand.500" fontSize={12}>
-                    {' '}
-                    Min Receive{' '}
+                    Min Receive
                   </Text>
                   <Tooltip
                     label="Expected minimum quantity to be received based on the current price, maximum spread, and trading fee"
@@ -487,10 +487,9 @@ const SwapForm: FC<Props> = ({
             width="full"
             style={{ marginTop: 'unset' }}
           >
-            <HStack>
+            <HStack height="24px">
               <Text color="brand.500" fontSize={12}>
-                {' '}
-                Route{' '}
+                Route
               </Text>
               <Tooltip
                 label="Optimized route for your optimal gain"
