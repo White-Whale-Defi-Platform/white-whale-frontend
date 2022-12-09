@@ -28,16 +28,37 @@ const Swap: FC<SwapProps> = ({}) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (address) {
-      const [from, to] = defaultTokens[getChainName(address)]
-      const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
-      setTokenSwapState([from, to])
-      setResetForm(true)
-      router.replace(params)
+    const { from, to } = router.query
+
+    if (!from && !to) {
+      if (address) {
+        const [defaultFrom, defaultTo] = defaultTokens[getChainName(address)]
+        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
+
+        setTokenSwapState([defaultFrom, defaultTo])
+        router.replace(params)
+        setResetForm(true)
+      }
+    } else {
+      const newState: TokenItemState[] = [
+        {
+          tokenSymbol: String(from),
+          amount: 0,
+          decimals: 6,
+        },
+        {
+          tokenSymbol: String(to),
+          amount: 0,
+          decimals: 6,
+        },
+      ]
+      setTokenSwapState(newState)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, chainId])
 
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
+
   const clearForm = (reset) => {
     setTokenSwapState([
       { ...tokenA, amount: 0 },
@@ -54,6 +75,7 @@ const Swap: FC<SwapProps> = ({}) => {
     newState[index] = {
       tokenSymbol: tokenSymbol,
       amount: Number(amount),
+      decimals: 6,
     }
     setTokenSwapState(newState)
   }
@@ -72,8 +94,11 @@ const Swap: FC<SwapProps> = ({}) => {
   }
 
   useEffect(() => {
-    const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-    router.replace(params, undefined, { shallow: true })
+    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
+      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      router.replace(params, undefined, { shallow: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
 
   return (
