@@ -57,6 +57,14 @@ const Swap: FC<SwapProps> = ({}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, chainId])
 
+  useEffect(() => {
+    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
+      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      router.replace(params, undefined, { shallow: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenA, tokenB])
+
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
 
   const clearForm = (reset) => {
@@ -92,14 +100,6 @@ const Swap: FC<SwapProps> = ({}) => {
 
     setTokenSwapState([A, B])
   }
-
-  useEffect(() => {
-    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
-      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-      router.replace(params, undefined, { shallow: true })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenA, tokenB])
 
   return (
     <VStack
