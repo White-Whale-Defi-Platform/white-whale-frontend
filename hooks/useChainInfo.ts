@@ -26,12 +26,13 @@ export const useChains = () => {
     async () => {
       const url = `/${currentWalletState.network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
       const response = await fetch(url)
+
       return response.json()
     },
     {
       enabled: !!currentWalletState.network,
       onError(e) {
-        console.error('Error loading chain info:', e)
+        console.error('111Error loading chain info:', e)
       },
     }
   )
