@@ -22,16 +22,6 @@ const NewPosition = () => {
   const [reverse, setReverse] = useState<boolean>(false)
   const { simulated, tx } = useProvideLP({ reverse })
 
-  // useEffect(() => {
-  //     if (address) {
-  //         const [from, to] = defaultTokens[getChainName(address)]
-  //         const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
-  //         setTokenSwapState([from, to])
-  //         setResetForm(true)
-  //         router.replace(params)
-  //     }
-  // }, [address])
-
   useEffect(() => {
     const { from, to } = router.query
     if (!from && !to) {
@@ -58,7 +48,6 @@ const NewPosition = () => {
       ]
       setTokenSwapState(newState)
     }
-    // }, [address, from, to])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, chainId])
 
