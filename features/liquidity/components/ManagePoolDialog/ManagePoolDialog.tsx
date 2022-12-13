@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+
 import { usePrevious } from '@reach/utils'
 import { LiquidityInput } from 'components'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
@@ -20,7 +22,6 @@ import {
   Text,
 } from 'junoblocks'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
-import { useEffect, useRef, useState } from 'react'
 
 import { LiquidityInputSelector } from '../LiquidityInputSelector'
 import { PercentageSelection } from '../PercentageSelection'
