@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import {
   Box,
@@ -19,11 +19,14 @@ import MyVaultsTable from './MyVaultsTable'
 type Props = {}
 
 const Vaults = (props: Props) => {
+  const [isAllVaultsInited, setAllVaultsInited] = useState<boolean>(true)
+  const [isMyVaultsInited, setMyVaultsInited] = useState<boolean>(true)
   const { vaults, isLoading } = useVault()
   const router = useRouter()
 
   const myVaults = useMemo(() => {
     if (!vaults) return []
+    setMyVaultsInited(false)
 
     return vaults.vaults
       .filter((vault) => !!Number(vault?.deposits?.lpBalance))
@@ -38,18 +41,21 @@ const Vaults = (props: Props) => {
             `/vaults/manage_position?vault=${vault.vault_assets?.symbol}`
           ),
       }))
-  }, [vaults])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vaults, isMyVaultsInited])
 
   const allVaults = useMemo(() => {
     if (!vaults) return []
+    setAllVaultsInited(false)
+
     return (
       vaults.vaults
         // .filter(vault => !!!Number(vault.deposits.lptoken))
         .map((vault) => {
           const ctaLabel = vault?.hasDepost ? 'Manage Position' : 'New Position'
           const url = `/vaults/${
-            vault?.hasDepost ? 'manage' : 'new'
-          }_position?vault=${vault.vault_assets?.symbol}`
+            vault?.hasDepost ? 'manage_position' : 'new_position'
+          }?vault=${vault.vault_assets?.symbol}`
           return {
             vaultId: vault?.pool_id,
             tokenImage: vault.vault_assets?.logoURI,
@@ -61,7 +67,8 @@ const Vaults = (props: Props) => {
           }
         })
     )
-  }, [vaults])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vaults, isAllVaultsInited])
 
   return (
     <VStack
@@ -75,7 +82,10 @@ const Vaults = (props: Props) => {
             Vaults
           </Text>
         </HStack>
-        <AllVaultsTable vaults={allVaults} isLoading={isLoading} />
+        <AllVaultsTable
+          vaults={allVaults}
+          isLoading={isLoading || isAllVaultsInited}
+        />
       </Box>
     </VStack>
   )
