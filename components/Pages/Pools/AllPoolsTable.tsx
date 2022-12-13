@@ -99,7 +99,7 @@ const columns = [
 ]
 
 const PoolsTable = ({
-  pools = [],
+  pools,
   isLoading,
 }: {
   pools: Pool[]
@@ -112,7 +112,7 @@ const PoolsTable = ({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  if (isLoading) {
+  if (isLoading || !pools) {
     return (
       <Flex
         padding={10}
@@ -127,7 +127,7 @@ const PoolsTable = ({
     )
   }
 
-  if (!pools.length) {
+  if (pools && !pools.length) {
     return (
       <Flex
         padding={10}
