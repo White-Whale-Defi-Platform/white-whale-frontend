@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
@@ -36,19 +36,11 @@ const Pools: FC<Props> = () => {
     })
   )
 
-  useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(`/${currenChain.label.toLowerCase()}/pools`)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains])
-
-  const initPools = async () => {
+  const initPools = useCallback(async () => {
     if (!pools) return
-    if (poolApys.length > 0) return
+    if (poolApys.length > 0) {
+      return
+    }
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = await getPairApryAnd24HrVolume(
@@ -56,12 +48,20 @@ const Pools: FC<Props> = () => {
     )
     setPoolApys(poosWithAprAnd24HrVolume)
     setInitLoading(false)
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pools])
 
   useEffect(() => {
-    initPools()
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(`/${currenChain.label.toLowerCase()}/pools`)
+      } else {
+        initPools()
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
+  }, [chainId, chainIdParam, address, chains, pools])
 
   // get a list of all pools
   const allPools = useMemo(() => {
@@ -105,7 +105,7 @@ const Pools: FC<Props> = () => {
     })
     return _allPools
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolApys])
+  }, [pools, poolApys])
 
   // get a list of my pools
   const myPools = useMemo(() => {
