@@ -49,19 +49,11 @@ const Pools: FC<Props> = () => {
     })
   )
 
-  useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(`/${currenChain.label.toLowerCase()}/pools`)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains])
-
-  const initPools = async () => {
+  const initPools = useCallback(async () => {
     if (!pools) return
-    if (poolApys.length > 0) return
+    if (allPools.length > 0) {
+      return
+    }
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
