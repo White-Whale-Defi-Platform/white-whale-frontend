@@ -38,7 +38,9 @@ const Pools: FC<Props> = () => {
 
   const initPools = async () => {
     if (!pools) return
-    if (poolApys.length > 0) return
+    if (poolApys.length > 0) {
+      return
+    }
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
@@ -46,9 +48,16 @@ const Pools: FC<Props> = () => {
       : await getPairApryAnd24HrVolume(poolPairAddrList)
 
   useEffect(() => {
-    initPools()
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(`/${currenChain.label.toLowerCase()}/pools`)
+      } else {
+        initPools()
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
+  }, [chainId, chainIdParam, address, chains, pools])
 
   // get a list of all pools
   const allPools = useMemo(() => {
@@ -106,7 +115,7 @@ const Pools: FC<Props> = () => {
     setAllPools(_allPools)
     setInitLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolApys])
+  }, [pools, poolApys])
 
   // get a list of my pools
   const myPools = useMemo(() => {
