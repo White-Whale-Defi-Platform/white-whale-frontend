@@ -50,7 +50,7 @@ const Pools: FC<Props> = () => {
   )
 
   useEffect(() => {
-    if (chainId && address) {
+    if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
       if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
         router.push(`/${currenChain.label.toLowerCase()}/pools`)
@@ -61,6 +61,7 @@ const Pools: FC<Props> = () => {
 
   const initPools = async () => {
     if (!pools) return
+    if (poolApys.length > 0) return
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
