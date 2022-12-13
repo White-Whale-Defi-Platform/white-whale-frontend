@@ -36,6 +36,11 @@ const Pools: FC<Props> = () => {
   const chains = useChains()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
+
+  const showCommingSoon = useMemo(
+    () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
+    [chainId]
+  )
   const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
       refetchInBackground: true,
@@ -44,11 +49,18 @@ const Pools: FC<Props> = () => {
     })
   )
 
-  const initPools = useCallback(async () => {
-    if (!pools) return
-    if (poolApys.length > 0) {
-      return
+  useEffect(() => {
+    if (chainId && address) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(`/${currenChain.label.toLowerCase()}/pools`)
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, address, chains])
+
+  const initPools = async () => {
+    if (!pools) return
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
