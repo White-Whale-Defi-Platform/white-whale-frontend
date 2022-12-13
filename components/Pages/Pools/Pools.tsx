@@ -38,6 +38,7 @@ const Pools: FC<Props> = () => {
 
   const initPools = async () => {
     if (!pools) return
+    if (poolApys.length > 0) return
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
