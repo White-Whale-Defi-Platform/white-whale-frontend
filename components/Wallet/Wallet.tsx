@@ -25,6 +25,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (!chainInfo) return
     const [coinDenom] = (chainInfo as any)?.currencies || []
     return coinDenom
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     chainInfo,
     currentWalletState.chainId,
@@ -33,13 +34,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     currentWalletState.address,
   ])
 
-  const onChainChange = useCallback(
-    (chain) => {
-      onDisconnect()
-      setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
-    },
-    [currentWalletState.chainId, chainInfo]
-  )
+  const onChainChange = (chain) => {
+    onDisconnect()
+    setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+  }
 
   if (!connected && !connectedWallet) {
     return (
