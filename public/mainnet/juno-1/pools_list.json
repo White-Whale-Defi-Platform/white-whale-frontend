@@ -125,6 +125,7 @@
     },
     {
       "pool_id": "JUNO-RAW",
+      "lpOrder": ["JUNO", "RAW"],
       "pool_assets": [
         {
           "id": "juno-network",
@@ -189,7 +190,7 @@
     },
     {
       "pool_id": "JUNO-axlUSDC",
-      "lpOrder": ["axlUSDC", "JUNO"],
+      "lpOrder": ["axlUSDC", "axlUSDC"],
       "pool_assets": [
         {
           "id": "juno-network",

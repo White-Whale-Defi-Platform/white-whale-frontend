@@ -25,6 +25,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (!chainInfo) return
     const [coinDenom] = (chainInfo as any)?.currencies || []
     return coinDenom
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     chainInfo,
     currentWalletState.chainId,
@@ -38,6 +39,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       onDisconnect()
       setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentWalletState.chainId, chainInfo]
   )
 

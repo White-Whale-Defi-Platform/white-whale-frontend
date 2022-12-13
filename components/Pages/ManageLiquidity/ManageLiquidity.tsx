@@ -15,9 +15,9 @@ import {
 } from '@chakra-ui/react'
 import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 import useProvideLP from '../NewPosition/hooks/useProvideLP'
 import DepositForm from './DepositForm'
@@ -27,21 +27,24 @@ import WithdrawForm from './WithdrawForm'
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const params = new URLSearchParams(location.search)
-  const { chainId, key, status } = useRecoilValue(walletState)
-  const [resetForm, setResetForm] = useState(false)
+  const { chainId, key } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
-  const [isTokenSet, SetIsToken] = useState<boolean>(false)
+  const [isTokenSet, setIsToken] = useState<boolean>(false)
+  const { data: poolList } = usePoolsListQuery()
 
-  const poolId = useMemo(() => {
-    return params.get('poolId')
-  }, [params])
-
-  // const [lpTokens, setLpTokens] = useState(null)
+  const poolId = params.get('poolId')
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
-  // usePoolFromListQueryById returns PoolEntityType which includes the swap addr and lp staking addr
-  const [pool] = usePoolFromListQueryById({ poolId })
-
   const { simulated, tx } = useProvideLP({ reverse })
+
+  useEffect(() => {
+    if (poolId) {
+      const pools = poolList?.pools || []
+      if (!pools.find((pool: any) => pool.pool_id === poolId)) {
+        router.push('/pools')
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolId, poolList])
 
   useEffect(() => {
     if (poolId) {
@@ -50,26 +53,30 @@ const ManageLiquidity: FC = () => {
         {
           tokenSymbol: tokenASymbol,
           amount: 0,
+          decimals: 6,
         },
         {
           tokenSymbol: tokenBSymbol,
           amount: 0,
+          decimals: 6,
         },
       ])
-      SetIsToken(true)
+      setIsToken(true)
     }
     return () => {
       setTokenLPState([
         {
           tokenSymbol: null,
           amount: 0,
+          decimals: 6,
         },
         {
           tokenSymbol: null,
           amount: 0,
+          decimals: 6,
         },
       ])
-      SetIsToken(true)
+      setIsToken(true)
     }
   }, [poolId, setTokenLPState])
 
@@ -122,10 +129,7 @@ const ManageLiquidity: FC = () => {
           border="2px"
           borderColor="whiteAlpha.200"
           borderRadius="3xl"
-          // px="4"
-          // py="8"
           pt="8"
-          // boxSize="md"
           maxW="600px"
           maxH="fit-content"
         >
@@ -140,7 +144,7 @@ const ManageLiquidity: FC = () => {
                   <DepositForm
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={status}
+                    connected={key?.name as WalletStatusType}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -151,10 +155,11 @@ const ManageLiquidity: FC = () => {
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  connected={status}
+                  connected={key?.name as WalletStatusType}
                   tokenA={{
                     tokenSymbol: poolId,
                     amount: 0,
+                    decimals: 6,
                   }}
                   poolId={poolId}
                 />

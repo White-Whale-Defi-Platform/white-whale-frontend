@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -127,7 +128,7 @@ const NewPositionForm: FC<Props> = ({
   }, [tokenA.tokenSymbol, poolList])
 
   useEffect(() => {
-    if (!edgeList.includes(tokenB.tokenSymbol)) {
+    if (edgeList.length > 0 && !edgeList.includes(tokenB.tokenSymbol)) {
       setValue('token2', { ...tokenB, tokenSymbol: null })
       onInputChange({ ...tokenB, tokenSymbol: null }, 1)
     }

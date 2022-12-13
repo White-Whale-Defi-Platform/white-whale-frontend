@@ -24,10 +24,10 @@ const useSwap = ({ reverse }) => {
 
   const amount = reverse
     ? swapTokenB?.amount > 0
-      ? toChainAmount(swapTokenB?.amount)
+      ? toChainAmount(swapTokenB?.amount, tokenB?.decimals)
       : ''
     : swapTokenA?.amount > 0
-    ? toChainAmount(swapTokenA?.amount)
+    ? toChainAmount(swapTokenA?.amount, tokenA?.decimals)
     : ''
   const { routerAddress } = poolsList || {}
   const slippageToDecimal = slippage / 100
@@ -51,7 +51,8 @@ const useSwap = ({ reverse }) => {
     const rate1 = num(1).minus(slippageToDecimal)
     const rate2 = num(1).minus(0.001)
     return fromChainAmount(
-      num(simulated.amount).times(rate1).times(rate2).toFixed(6)
+      num(simulated.amount).times(rate1).times(rate2).toFixed(tokenB?.decimals),
+      tokenB?.decimals
     )
   }, [simulated, slippageToDecimal])
 

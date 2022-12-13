@@ -1,6 +1,8 @@
-import { protectAgainstNaN, usePersistance } from 'junoblocks'
 import { useMemo } from 'react'
 import { useQueries } from 'react-query'
+
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { protectAgainstNaN, usePersistance } from 'junoblocks'
 import { useRecoilValue } from 'recoil'
 
 import { walletState } from '../state/atoms/walletAtoms'
@@ -52,37 +54,36 @@ export type PoolLiquidityState = {
 }
 
 export type PoolEntityTypeWithLiquidity = PoolEntityType & {
-  liquidity: PoolLiquidityState
+  liquidity?: PoolLiquidityState
 }
 
 type QueryMultiplePoolsArgs = {
   pools: Array<PoolEntityType>
   refetchInBackground?: boolean
+  client: any
 }
 
 export const useQueryMultiplePoolsLiquidity = ({
   pools,
   refetchInBackground = false,
+  client,
 }: QueryMultiplePoolsArgs) => {
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
-
-  const {
-    address,
-    client: signingClient,
-    chainId,
-  } = useRecoilValue(walletState)
-  // const client = useCosmWasmClient()
+  const { address } = useRecoilValue(walletState)
 
   const context = {
-    client: signingClient,
-    signingClient,
+    // client: signingClient,
+    client,
+    signingClient: client,
     getTokenDollarValue,
   }
 
   async function queryPoolLiquidity(
     pool: PoolEntityType
   ): Promise<PoolEntityTypeWithLiquidity> {
+    if (!client) return pool
+
     const [tokenA] = pool.pool_assets
 
     const swap = await querySwapInfo({
@@ -200,10 +201,7 @@ export const useQueryMultiplePoolsLiquidity = ({
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled: Boolean(
-        !!signingClient && pool.pool_id && enabledGetTokenDollarValue
-      ),
-
+      enabled: Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue),
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
@@ -211,7 +209,8 @@ export const useQueryMultiplePoolsLiquidity = ({
       refetchIntervalInBackground: refetchInBackground,
 
       async queryFn() {
-        return await queryPoolLiquidity(pool)
+        if (!client) return pool
+        return queryPoolLiquidity(pool)
       },
     }))
   )
@@ -220,6 +219,8 @@ export const useQueryMultiplePoolsLiquidity = ({
 export const useQueryPoolLiquidity = ({ poolId }) => {
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
     usePoolsListQuery()
+  const { chainId } = useRecoilValue(walletState)
+  const client = useCosmwasmClient(chainId)
 
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]
@@ -229,6 +230,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   const [poolResponse] = useQueryMultiplePoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,
+    client,
   })
 
   // const persistedData = usePersistance(poolResponse?.data)

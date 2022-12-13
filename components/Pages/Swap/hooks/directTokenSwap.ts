@@ -9,7 +9,7 @@ import {
 import { Wallet } from '../../../../util/wallet-adapters'
 
 type DirectTokenSwapArgs = {
-  tokenAmount: number
+  tokenAmount: string
   senderAddress: string
   swapAddress: string
   tokenA: TokenInfo

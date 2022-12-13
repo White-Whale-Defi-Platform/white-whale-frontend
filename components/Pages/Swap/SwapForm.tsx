@@ -17,7 +17,7 @@ import { Tooltip } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import DoubleArrowsIcon from 'components/icons/DoubleArrowsIcon'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { num } from 'libs/num'
@@ -25,6 +25,7 @@ import { num } from 'libs/num'
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { Simulated } from './hooks/useSimulate'
 import { TokenItemState } from './swapAtoms'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 type Props = {
   connected: WalletStatusType
@@ -60,6 +61,7 @@ const SwapForm: FC<Props> = ({
   path,
 }) => {
   const baseToken = useBaseTokenInfo()
+  const { data: poolList } = usePoolsListQuery()
 
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -86,6 +88,9 @@ const SwapForm: FC<Props> = ({
     tokenB?.tokenSymbol
   )
 
+  const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
+  const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
+
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
 
@@ -104,11 +109,29 @@ const SwapForm: FC<Props> = ({
 
     const A = {
       ...tokenB,
-      amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      amount:
+        tokenA.amount ||
+        parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
+      decimals: poolList.pools
+        .map(({ pool_assets }) => pool_assets)
+        .map(([a, b]) =>
+          a?.symbol == (tokenA.tokenSymbol as string)
+            ? a?.decimals
+            : b?.decimals
+        )[0],
     }
     const B = {
       ...tokenA,
-      amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      amount:
+        tokenB.amount ||
+        parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
+      decimals: poolList.pools
+        .map(({ pool_assets }) => pool_assets)
+        .map(([a, b]) =>
+          a?.symbol == (tokenB.tokenSymbol as string)
+            ? a?.decimals
+            : b?.decimals
+        )[0],
     }
     setValue('tokenA', A, { shouldValidate: true })
     setValue('tokenB', B, { shouldValidate: true })
@@ -120,25 +143,39 @@ const SwapForm: FC<Props> = ({
     if (!simulated) return null
 
     const e = num(tokenA.amount).times(Math.pow(10, 6))
-    return num(e).div(simulated?.amount).toFixed(6)
+    return num(e).div(simulated?.amount).toFixed(tokenBInfo.decimals)
   }, [simulated, tokenA.amount])
 
   useEffect(() => {
     if (simulated) {
       if (isReverse) {
         const asset = { ...tokenA }
-        asset.amount = parseFloat(fromChainAmount(simulated?.amount))
+        asset.amount = parseFloat(
+          fromChainAmount(simulated?.amount, tokenAInfo?.decimals)
+        )
         setValue('tokenA', asset)
         onInputChange(
-          { ...tokenA, amount: parseFloat(fromChainAmount(simulated?.amount)) },
+          {
+            ...tokenA,
+            amount: parseFloat(
+              fromChainAmount(simulated?.amount, tokenAInfo?.decimals)
+            ),
+          },
           0
         )
       } else {
         const asset = { ...tokenB }
-        asset.amount = parseFloat(fromChainAmount(simulated?.amount))
+        asset.amount = parseFloat(
+          fromChainAmount(simulated?.amount, tokenBInfo?.decimals)
+        )
         setValue('tokenB', asset)
         onInputChange(
-          { ...tokenB, amount: parseFloat(fromChainAmount(simulated?.amount)) },
+          {
+            ...tokenB,
+            amount: parseFloat(
+              fromChainAmount(simulated?.amount, tokenBInfo?.decimals)
+            ),
+          },
           1
         )
       }
@@ -370,9 +407,8 @@ const SwapForm: FC<Props> = ({
         {amountB.amount && (
           <>
             <HStack justifyContent="space-between" width="full">
-              <HStack style={{ marginTop: 'unset' }}>
+              <HStack style={{ marginTop: 'unset' }} height="24px">
                 <Text color="brand.500" fontSize={12}>
-                  {' '}
                   Rate
                 </Text>
                 <Tooltip
@@ -382,7 +418,12 @@ const SwapForm: FC<Props> = ({
                   fontSize="xs"
                   maxW="330px"
                 >
-                  <Box cursor="pointer" color="brand.50">
+                  <Box
+                    cursor="pointer"
+                    color="brand.50"
+                    display="flex"
+                    alignItems="center"
+                  >
                     <InfoOutlineIcon width=".7rem" height=".7rem" />
                   </Box>
                 </Tooltip>
@@ -409,11 +450,11 @@ const SwapForm: FC<Props> = ({
                 justifyContent="space-between"
                 width="full"
                 style={{ marginTop: 'unset' }}
+                height="24px"
               >
                 <HStack>
                   <Text color="brand.500" fontSize={12}>
-                    {' '}
-                    Min Receive{' '}
+                    Min Receive
                   </Text>
                   <Tooltip
                     label="Expected minimum quantity to be received based on the current price, maximum spread, and trading fee"
@@ -422,14 +463,18 @@ const SwapForm: FC<Props> = ({
                     fontSize="xs"
                     maxW="330px"
                   >
-                    <Box cursor="pointer" color="brand.50">
+                    <Box
+                      cursor="pointer"
+                      color="brand.50"
+                      display="flex"
+                      alignItems="center"
+                    >
                       <InfoOutlineIcon width=".7rem" height=".7rem" />
                     </Box>
                   </Tooltip>
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
-                  {' '}
-                  {num(minReceive).toFixed(6)}{' '}
+                  {num(minReceive).toFixed(tokenBInfo?.decimals)}
                 </Text>
               </HStack>
             )}
@@ -442,10 +487,9 @@ const SwapForm: FC<Props> = ({
             width="full"
             style={{ marginTop: 'unset' }}
           >
-            <HStack>
+            <HStack height="24px">
               <Text color="brand.500" fontSize={12}>
-                {' '}
-                Route{' '}
+                Route
               </Text>
               <Tooltip
                 label="Optimized route for your optimal gain"
@@ -454,7 +498,13 @@ const SwapForm: FC<Props> = ({
                 fontSize="xs"
                 maxW="330px"
               >
-                <Box cursor="pointer" color="brand.50" marginTop="-1px">
+                <Box
+                  cursor="pointer"
+                  color="brand.50"
+                  marginTop="-1px"
+                  display="flex"
+                  alignItems="center"
+                >
                   <InfoOutlineIcon width=".7rem" />
                 </Box>
               </Tooltip>

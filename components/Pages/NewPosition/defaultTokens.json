@@ -5,7 +5,7 @@
       "amount": 0
     },
     {
-      "tokenSymbol": null,
+      "tokenSymbol": "ATOM",
       "amount": 0
     }
   ],
@@ -15,7 +15,17 @@
       "amount": 0
     },
     {
-      "tokenSymbol": null,
+      "tokenSymbol": "ATOM",
+      "amount": 0
+    }
+  ],
+  "chihuahua": [
+    {
+      "tokenSymbol": "HUAHUA",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": "PUPPY",
       "amount": 0
     }
   ]

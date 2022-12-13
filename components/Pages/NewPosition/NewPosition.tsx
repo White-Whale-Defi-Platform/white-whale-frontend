@@ -3,50 +3,60 @@ import { useEffect, useState } from 'react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { TxStep } from 'hooks/useTransaction'
+import getChainName from 'libs/getChainName'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 import { TokenItemState, tokenLpAtom } from '../ManageLiquidity/lpAtoms'
+import defaultTokens from './defaultTokens.json'
 import useProvideLP from './hooks/useProvideLP'
 import NewPositionForm from './NewPositionForm'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
-
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
   const { chainId, key, address, status } = useRecoilValue(walletState)
   const [resetForm, setResetForm] = useState(false)
   const [reverse, setReverse] = useState<boolean>(false)
-  const params = new URLSearchParams(location.search)
-  const from = params.get('from')
-  const to = params.get('to')
-
-  // useEffect(() => {
-  //     if (address) {
-  //         const [from, to] = defaultTokens[getChainName(address)]
-  //         const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
-  //         setTokenSwapState([from, to])
-  //         setResetForm(true)
-  //         router.replace(params)
-  //     }
-  // }, [address])
+  const { simulated, tx } = useProvideLP({ reverse })
 
   useEffect(() => {
-    if (!!address && !!from && !!to) {
-      const [A, B] = [from, to].map((token) => ({
-        tokenSymbol: token as string,
-        amount: 0,
-      }))
-      setTokenSwapState([A, B])
-      setResetForm(true)
+    const { from, to } = router.query
+    if (!from && !to) {
+      if (address) {
+        const [defaultFrom, defaultTo] = defaultTokens[getChainName(address)]
+        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
+
+        setTokenSwapState([defaultFrom, defaultTo])
+        setResetForm(true)
+        router.replace(params)
+      }
+    } else {
+      const newState: TokenItemState[] = [
+        {
+          tokenSymbol: String(from),
+          amount: 0,
+          decimals: 6,
+        },
+        {
+          tokenSymbol: String(to),
+          amount: 0,
+          decimals: 6,
+        },
+      ]
+      setTokenSwapState(newState)
     }
-  }, [address, from, to])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, chainId])
 
   useEffect(() => {
-    const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-    router.replace(params, undefined, { shallow: true })
+    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
+      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      router.replace(params, undefined, { shallow: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
 
   const onInputChange = (
@@ -60,12 +70,11 @@ const NewPosition = () => {
     newState[index] = {
       tokenSymbol: tokenSymbol,
       amount: Number(amount),
+      decimals: 6,
     }
 
     setTokenSwapState(newState)
   }
-
-  const { simulated, tx } = useProvideLP({ reverse })
 
   return (
     <VStack

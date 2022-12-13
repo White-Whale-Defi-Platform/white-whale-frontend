@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-
 import {
   Button,
   Flex,
   HStack,
+  Image,
   Table,
   TableContainer,
   Tbody,
@@ -40,6 +39,20 @@ const columns = [
         token2Img={info.row.original?.token2Img}
       />
     ),
+  }),
+  columnHelper.accessor('price', {
+    header: () => (
+      <Text align="right" color="brand.50">
+        {`price`}
+      </Text>
+    ),
+    cell: (info) => {
+      return (
+        <Text align="right">{`${
+          info.row.original?.isUSDCPool ? '$' : ''
+        }${Number(info.getValue()).toFixed(3)}`}</Text>
+      )
+    },
   }),
   columnHelper.accessor('myPosition', {
     header: () => (
@@ -94,26 +107,20 @@ const columns = [
 ]
 
 const PoolsTable = ({
-  pools = [],
+  pools,
   isLoading,
 }: {
   pools: Pool[]
   isLoading: boolean
 }) => {
-  const [data, setData] = useState(() => [...pools])
   const currentWalletState = useRecoilValue(walletState)
-
-  useEffect(() => {
-    setData(pools)
-  }, [pools])
-
   const table = useReactTable({
-    data,
+    data: pools,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
 
-  if (isLoading) {
+  if (isLoading || !pools) {
     return (
       <Flex
         padding={10}
@@ -128,7 +135,7 @@ const PoolsTable = ({
     )
   }
 
-  if (!pools.length) {
+  if (pools && !pools.length) {
     return (
       <Flex
         padding={10}
@@ -155,7 +162,7 @@ const PoolsTable = ({
       display={['none', 'flex']}
       flexDirection="column"
     >
-      <TableContainer width="full">
+      <TableContainer width="full" overflowX="hidden">
         <Table variant="unstyled">
           <Thead>
             {table.getHeaderGroups().map((headerGroup, index) => (
@@ -188,7 +195,12 @@ const PoolsTable = ({
       </TableContainer>
       {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
-          <Text color="white" mr="8px">{`data provided by Coinhall`}</Text>
+          <Text
+            color="white"
+            fontSize="12px"
+            mr="4px"
+          >{`data provided by`}</Text>
+          <Image src="/logos/coinhall.png" alt="coinhall" height="14px" />
         </Flex>
       )}
     </Flex>

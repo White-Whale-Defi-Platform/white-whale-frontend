@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
 
-import { useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 
-const index = () => {
-  const router = useRouter()
+const Index = () => {
+  const router: NextRouter = useRouter()
 
   useEffect(() => {
-    // console.log("index page")
     router.replace('/swap')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <div></div>
 }
 
-export default index
+export default Index
