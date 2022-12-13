@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
@@ -24,9 +25,10 @@ const COMING_SOON = 'coming soon'
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
+  const { address, chainId } = useRecoilValue(walletState)
+  const a = useRecoilValue(walletState)
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
-  const { chainId } = useRecoilValue(walletState)
 
   const showCommingSoon = useMemo(
     () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
