@@ -77,7 +77,6 @@ const NewPosition = () => {
           New Position
         </Text>
       </HStack>
-
       <Box
         background="#1C1C1C"
         padding={[6, 12]}
@@ -85,14 +84,7 @@ const NewPosition = () => {
         borderRadius="30px"
         width={['full']}
       >
-        <Box
-          // border="2px"
-          // borderColor="whiteAlpha.200"
-          // borderRadius="3xl"
-          pt="8"
-          maxW="600px"
-          maxH="fit-content"
-        >
+        <Box pt="8" maxW="600px" maxH="fit-content">
           {vault?.vault_assets?.symbol && (
             <DepositForm
               vaultAddress={vault?.vault_address}
