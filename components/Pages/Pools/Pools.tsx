@@ -24,7 +24,7 @@ const commingSoonNetworks = ['injective', 'comdex']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
-  const [allPools, setAllPools] = useState<any[]>([])
+  const [poolApys, setPoolApys] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { address, chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
@@ -58,12 +58,18 @@ const Pools: FC<Props> = () => {
       ? []
       : await getPairApryAnd24HrVolume(poolPairAddrList)
 
+  useEffect(() => {
+    initPools()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, client, pools])
+
+  // get a list of all pools
+  const allPools = useMemo(() => {
+    if (!pools || pools.length === 0) return
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
-        ...poosWithAprAnd24HrVolume.find(
-          (row: any) => row.pairAddress === pool.swap_address
-        ),
+        ...poolApys.find((row: any) => row.pairAddress === pool.swap_address),
       }
     })
 
