@@ -2,6 +2,7 @@
  * takes base token price, fetches the ratio of the token provided vs the base token
  * and calculates the dollar value of the provided token
  * */
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useRecoilValue } from 'recoil'
 
 import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
@@ -12,7 +13,9 @@ import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 
 export const useGetTokenDollarValueQuery = () => {
   const tokenA = useBaseTokenInfo()
-  const { client } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(walletState)
+  const client = useCosmwasmClient(chainId)
+
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     tokenA?.symbol
   )

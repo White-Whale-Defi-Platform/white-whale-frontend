@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
@@ -23,10 +24,10 @@ const commingSoonNetworks = ['injective', 'comdex']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
-  const [allPools, setAllPools] = useState<any[]>([])
+  const [poolApys, setPoolApys] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { address, chainId } = useRecoilValue(walletState)
-  const a = useRecoilValue(walletState)
+  const client = useCosmwasmClient(chainId)
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
 
@@ -35,30 +36,26 @@ const Pools: FC<Props> = () => {
     [chainId]
   )
 
-  const [pools, isLoading] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
-      refetchInBackground: false,
-      pools: poolList?.pools,
-    })
-  )
-
-  const initPools = useCallback(async () => {
-    if (!pools || pools.length === 0) return
-    if (allPools.length > 0) return
-
-    setInitLoading(true)
+  const initPools = async () => {
+    if (!pools) return
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
       ? []
       : await getPairApryAnd24HrVolume(poolPairAddrList)
 
+  useEffect(() => {
+    initPools()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, client, pools])
+
+  // get a list of all pools
+  const allPools = useMemo(() => {
+    if (!pools || pools.length === 0) return
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
-        ...poosWithAprAnd24HrVolume.find(
-          (row: any) => row.pairAddress === pool.swap_address
-        ),
+        ...poolApys.find((row: any) => row.pairAddress === pool.swap_address),
       }
     })
 
@@ -107,27 +104,27 @@ const Pools: FC<Props> = () => {
     setAllPools(_allPools)
     setInitLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools, router])
-
-  useEffect(() => {
-    initPools()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools])
+  }, [poolApys])
 
   // get a list of my pools
-  const myPools = allPools
-    .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-    .map((item) => ({
-      ...item,
-      myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-      cta: () => router.push(`/pools/manage_liquidity?poolId=${item.pool}`),
-    }))
+  const myPools = useMemo(() => {
+    return (
+      allPools &&
+      allPools
+        .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+        .map((item) => ({
+          ...item,
+          myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          cta: () => router.push(`/pools/manage_liquidity?poolId=${item.pool}`),
+        }))
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allPools])
 
   // get a list of all pools excepting myPools
-  const myPoolsId = myPools.map(({ pool }) => pool)
-  const allPoolsForShown = allPools.filter(
-    (item) => !myPoolsId.includes(item.pool)
-  )
+  const myPoolsId = myPools && myPools.map(({ pool }) => pool)
+  const allPoolsForShown =
+    allPools && allPools.filter((item) => !myPoolsId.includes(item.pool))
 
   return (
     <VStack
