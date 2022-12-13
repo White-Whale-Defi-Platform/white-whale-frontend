@@ -1,11 +1,14 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 import { getPairApryAnd24HrVolume } from 'util/coinhall'
 
 import AllPoolsTable from './AllPoolsTable'
@@ -18,8 +21,23 @@ type Props = {}
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
+  const { address, chainId } = useRecoilValue(walletState)
+  const a = useRecoilValue(walletState)
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
+  const chains = useChains()
+  const chainIdParam = router.query.chainId as string
+
+  useEffect(() => {
+    if (chainId && address) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(`/${currenChain.label.toLowerCase()}/pools`)
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, address, chains])
 
   const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
