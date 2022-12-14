@@ -67,6 +67,7 @@ const JSONEditorInput = styled(Box)`
   .ace-jsoneditor .ace_marker-layer .ace_bracket {
     // bracket border
     margin-left: 0px;
+    margin-top: 0px;
   }
 `
 
