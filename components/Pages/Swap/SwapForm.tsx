@@ -294,7 +294,6 @@ const SwapForm: FC<Props> = ({
           )}
         />
       </VStack>
-
       <HStack width="full" justifyContent="center">
         <IconButton
           aria-label="Reverse"
@@ -308,7 +307,6 @@ const SwapForm: FC<Props> = ({
           onClick={onReverse}
         />
       </HStack>
-
       <VStack
         width="full"
         alignItems="flex-start"
@@ -391,7 +389,6 @@ const SwapForm: FC<Props> = ({
           )}
         />
       </VStack>
-
       <Button
         type="submit"
         width="full"
@@ -406,7 +403,6 @@ const SwapForm: FC<Props> = ({
       >
         {buttonLabel}
       </Button>
-
       <VStack alignItems="flex-start" width="full" px={3}>
         {amountB.amount && (
           <>
@@ -528,7 +524,6 @@ const SwapForm: FC<Props> = ({
           </HStack>
         )}
       </VStack>
-
       {/* {
                 (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
             } */}

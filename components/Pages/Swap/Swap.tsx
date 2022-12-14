@@ -108,7 +108,7 @@ const Swap: FC<SwapProps> = ({}) => {
       width={{ base: '100%', md: '600px' }}
       alignItems="center"
       padding={5}
-      margin="auto"
+      margin="0px auto"
     >
       <HStack
         justifyContent="space-between"

@@ -98,7 +98,7 @@ const Navbar = ({}) => {
             />
           ))}
         </Card>
-        <HStack flex="1" spacing="6" justify="flex-end" py="3">
+        <HStack flex="1" spacing="6" justify="flex-end">
           <Wallet
             connected={Boolean(key?.name)}
             walletName={key?.name}
