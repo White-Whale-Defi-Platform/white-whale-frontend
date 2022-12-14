@@ -126,7 +126,7 @@ const ManageLiquidity: FC = () => {
           fontSize="28px"
           aria-label="go back"
           icon={<ArrowBackIcon />}
-          onClick={() => router.back()}
+          onClick={() => router.push(`/${chainIdParam}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">
           Manage Liquidity
