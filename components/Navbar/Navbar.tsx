@@ -75,7 +75,7 @@ const Navbar = ({}) => {
   }
 
   const currenChain = chains.find((row) => row.chainId === chainId)
-  const currentChainId = currenChain?.label.toLowerCase()
+  const currentChainName = currenChain?.label.toLowerCase()
 
   return (
     <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
@@ -94,7 +94,7 @@ const Navbar = ({}) => {
             <NavbarLink
               key={lable}
               text={lable}
-              href={lable === 'Pools' ? `/${currentChainId}${link}` : link}
+              href={lable === 'Pools' ? `/${currentChainName}${link}` : link}
             />
           ))}
         </Card>
