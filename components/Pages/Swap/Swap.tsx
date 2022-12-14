@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import getChainName from 'libs/getChainName'
 import { fromChainAmount } from 'libs/num'
@@ -24,15 +25,18 @@ const Swap: FC<SwapProps> = ({}) => {
     useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const [reverse, setReverse] = useState<boolean>(false)
   const { chainId, address, key, status } = useRecoilValue(walletState)
+  const chains = useChains()
   const [resetForm, setResetForm] = useState<boolean>(false)
   const router = useRouter()
+  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currenChain?.label.toLowerCase()
 
   useEffect(() => {
     const { from, to } = router.query
 
     if (!from && !to) {
-      if (address) {
-        const [defaultFrom, defaultTo] = defaultTokens[getChainName(address)]
+      if (currentChainId) {
+        const [defaultFrom, defaultTo] = defaultTokens[currentChainId]
         const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
 
         setTokenSwapState([defaultFrom, defaultTo])
