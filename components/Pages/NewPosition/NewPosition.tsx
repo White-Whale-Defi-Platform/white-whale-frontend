@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import getChainName from 'libs/getChainName'
 import { NextRouter, useRouter } from 'next/router'
@@ -15,6 +16,8 @@ import NewPositionForm from './NewPositionForm'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
+  const chains = useChains()
+
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
   const { chainId, key, address, status } = useRecoilValue(walletState)
@@ -22,9 +25,24 @@ const NewPosition = () => {
   const [reverse, setReverse] = useState<boolean>(false)
   const { simulated, tx } = useProvideLP({ reverse })
 
+  const chainIdParam = router.query.chainId as string
+  const { from, to } = router.query
+
   useEffect(() => {
-    const { from, to } = router.query
-    if (!from && !to) {
+    if (chainId && from && to) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(
+          `/${currenChain.label.toLowerCase()}/pools/new_position?from=${from}&to=${to}`
+        )
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, chains, from, to])
+
+  useEffect(() => {
+    if ((!from && !to) || (from === undefined && to === undefined)) {
       if (address) {
         const [defaultFrom, defaultTo] = defaultTokens[getChainName(address)]
         const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
@@ -52,9 +70,14 @@ const NewPosition = () => {
   }, [address, chainId])
 
   useEffect(() => {
-    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
-      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-      router.replace(params, undefined, { shallow: true })
+    if (
+      chainIdParam &&
+      tokenA?.tokenSymbol !== null &&
+      tokenB?.tokenSymbol !== null
+    ) {
+      const url = `/${chainIdParam}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      router.push(url)
+      // router.replace(params, undefined, { shallow: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
