@@ -101,6 +101,7 @@ const SwapForm: FC<Props> = ({
     else if (!!!amountA?.amount) return 'Enter Amount'
     else if (tx?.buttonLabel) return tx?.buttonLabel
     else return 'Swap'
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
   const onReverse = () => {

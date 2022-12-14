@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from 'react'
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
-import getChainName from 'libs/getChainName'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -30,6 +29,7 @@ const Swap: FC<SwapProps> = ({}) => {
   const router = useRouter()
   const currenChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currenChain?.label.toLowerCase()
+  const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
 
   useEffect(() => {
     const { from, to } = router.query
@@ -68,8 +68,6 @@ const Swap: FC<SwapProps> = ({}) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
-
-  const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
 
   const clearForm = (reset) => {
     setTokenSwapState([
