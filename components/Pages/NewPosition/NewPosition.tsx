@@ -44,10 +44,10 @@ const NewPosition = () => {
     if (!from && !to) {
       if (chainIdParam) {
         const [defaultFrom, defaultTo] = defaultTokens[chainIdParam]
-        const url = `/${chainIdParam}/pools/new_position?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
+        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
         setTokenSwapState([defaultFrom, defaultTo])
         setResetForm(true)
-        router.replace(url)
+        router.replace(params)
         return
       }
     } else {
@@ -65,6 +65,7 @@ const NewPosition = () => {
       ]
       setTokenSwapState(newState)
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, chainId])
 
@@ -76,6 +77,7 @@ const NewPosition = () => {
     ) {
       const url = `/${chainIdParam}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
       router.push(url)
+      // router.replace(params, undefined, { shallow: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
