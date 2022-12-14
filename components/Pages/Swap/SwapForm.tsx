@@ -21,11 +21,11 @@ import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { num } from 'libs/num'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { Simulated } from './hooks/useSimulate'
 import { TokenItemState } from './swapAtoms'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 type Props = {
   connected: WalletStatusType
@@ -77,6 +77,7 @@ const SwapForm: FC<Props> = ({
       setValue('tokenB', { ...tokenB, amount: 0 })
       setResetForm(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetForm, tx?.txStep])
 
   // const [[_, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
@@ -101,6 +102,7 @@ const SwapForm: FC<Props> = ({
     else if (!!!amountA?.amount) return 'Enter Amount'
     else if (tx?.buttonLabel) return tx?.buttonLabel
     else return 'Swap'
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
   const onReverse = () => {
@@ -144,6 +146,7 @@ const SwapForm: FC<Props> = ({
 
     const e = num(tokenA.amount).times(Math.pow(10, 6))
     return num(e).div(simulated?.amount).toFixed(tokenBInfo.decimals)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, tokenA.amount])
 
   useEffect(() => {
@@ -194,6 +197,7 @@ const SwapForm: FC<Props> = ({
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated])
 
   const isInputDisabled = tx?.txStep == TxStep.Posting
