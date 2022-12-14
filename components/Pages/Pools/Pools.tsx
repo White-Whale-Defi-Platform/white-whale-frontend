@@ -5,6 +5,7 @@ import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -126,7 +127,10 @@ const Pools: FC<Props> = () => {
         .map((item) => ({
           ...item,
           myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          cta: () => router.push(`/pools/manage_liquidity?poolId=${item.pool}`),
+          cta: () =>
+            router.push(
+              `/${chainIdParam}/pools/manage_liquidity?poolId=${item.pool}`
+            ),
         }))
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,7 +155,7 @@ const Pools: FC<Props> = () => {
           <Button
             variant="primary"
             size="sm"
-            onClick={() => router.push(`/pools/new_position`)}
+            onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
           >
             New Position
           </Button>

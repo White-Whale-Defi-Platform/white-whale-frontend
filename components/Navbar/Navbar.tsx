@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
+import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
@@ -25,10 +26,34 @@ import DrawerLink from './DrawerLink'
 import Logo from './Logo'
 import NavbarLink from './NavbarLink'
 
+const links = [
+  {
+    lable: 'Swap',
+    link: '/swap',
+  },
+  {
+    lable: 'Pools',
+    link: '/pools',
+  },
+  {
+    lable: 'Flashloan',
+    link: '/flashloan',
+  },
+  {
+    lable: 'Vaults',
+    link: '/vaults',
+  },
+  // {
+  //   lable: "Chart",
+  //   link: "/chart"
+  // },
+]
+
 const Navbar = ({}) => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network, activeWallet }, setWalletState] =
     useRecoilState(walletState)
+  const chains = useChains()
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -36,7 +61,7 @@ const Navbar = ({}) => {
   } = useDisclosure()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  function resetWalletConnection() {
+  const resetWalletConnection = () => {
     setWalletState({
       status: WalletStatusType.idle,
       address: '',
@@ -48,28 +73,9 @@ const Navbar = ({}) => {
     })
     disconnect()
   }
-  const links = [
-    {
-      lable: 'Swap',
-      link: '/swap',
-    },
-    {
-      lable: 'Pools',
-      link: '/pools',
-    },
-    {
-      lable: 'Flashloan',
-      link: '/flashloan',
-    },
-    {
-      lable: 'Vaults',
-      link: '/vaults',
-    },
-    // {
-    //   lable: "Chart",
-    //   link: "/chart"
-    // },
-  ]
+
+  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChainName = currenChain?.label.toLowerCase()
 
   return (
     <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
@@ -85,7 +91,11 @@ const Navbar = ({}) => {
         </Box>
         <Card paddingX={10} gap={6}>
           {links.map(({ lable, link }) => (
-            <NavbarLink key={lable} text={lable} href={link} />
+            <NavbarLink
+              key={lable}
+              text={lable}
+              href={lable === 'Pools' ? `/${currentChainName}${link}` : link}
+            />
           ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end" py="3">

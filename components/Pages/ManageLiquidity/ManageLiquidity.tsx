@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
@@ -13,6 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -26,25 +27,38 @@ import WithdrawForm from './WithdrawForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
-  const params = new URLSearchParams(location.search)
-  const { chainId, key } = useRecoilValue(walletState)
+  const chains = useChains()
+  const { address, chainId, key } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
-
-  const poolId = params.get('poolId')
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
   const { simulated, tx } = useProvideLP({ reverse })
 
+  const poolId = router.query.poolId as string
+  const chainIdParam = router.query.chainId as string
+
   useEffect(() => {
     if (poolId) {
-      const pools = poolList?.pools || []
-      if (!pools.find((pool: any) => pool.pool_id === poolId)) {
+      const pools = poolList?.pools
+      if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
         router.push('/pools')
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolId, poolList])
+
+  useEffect(() => {
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(
+          `/${currenChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
+        )
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, address, chains])
 
   useEffect(() => {
     if (poolId) {
@@ -78,7 +92,8 @@ const ManageLiquidity: FC = () => {
       ])
       setIsToken(true)
     }
-  }, [poolId, setTokenLPState])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolId])
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
@@ -111,7 +126,7 @@ const ManageLiquidity: FC = () => {
           fontSize="28px"
           aria-label="go back"
           icon={<ArrowBackIcon />}
-          onClick={() => router.back()}
+          onClick={() => router.push(`/${chainIdParam}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">
           Manage Liquidity

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
-import getChainName from 'libs/getChainName'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -15,6 +15,8 @@ import NewPositionForm from './NewPositionForm'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
+  const chains = useChains()
+
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
   const { chainId, key, address, status } = useRecoilValue(walletState)
@@ -22,16 +24,31 @@ const NewPosition = () => {
   const [reverse, setReverse] = useState<boolean>(false)
   const { simulated, tx } = useProvideLP({ reverse })
 
-  useEffect(() => {
-    const { from, to } = router.query
-    if (!from && !to) {
-      if (address) {
-        const [defaultFrom, defaultTo] = defaultTokens[getChainName(address)]
-        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
+  const chainIdParam = router.query.chainId as string
+  const { from, to } = router.query
 
+  useEffect(() => {
+    if (chainId && from && to) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(
+          `/${currenChain.label.toLowerCase()}/pools/new_position?from=${from}&to=${to}`
+        )
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, chains, from, to])
+
+  useEffect(() => {
+    if (!from && !to) {
+      if (chainIdParam) {
+        const [defaultFrom, defaultTo] = defaultTokens[chainIdParam]
+        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
         setTokenSwapState([defaultFrom, defaultTo])
         setResetForm(true)
         router.replace(params)
+        return
       }
     } else {
       const newState: TokenItemState[] = [
@@ -48,13 +65,19 @@ const NewPosition = () => {
       ]
       setTokenSwapState(newState)
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, chainId])
 
   useEffect(() => {
-    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
-      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-      router.replace(params, undefined, { shallow: true })
+    if (
+      chainIdParam &&
+      tokenA?.tokenSymbol !== null &&
+      tokenB?.tokenSymbol !== null
+    ) {
+      const url = `/${chainIdParam}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      router.push(url)
+      // router.replace(params, undefined, { shallow: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
@@ -95,7 +118,7 @@ const NewPosition = () => {
           fontSize="28px"
           aria-label="go back"
           icon={<ArrowBackIcon />}
-          onClick={() => router.back()}
+          onClick={() => router.push(`/${chainIdParam}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">
           New Position
