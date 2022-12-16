@@ -77,7 +77,6 @@ const NewPosition = () => {
     ) {
       const url = `/${chainIdParam}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
       router.push(url)
-      // router.replace(params, undefined, { shallow: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
