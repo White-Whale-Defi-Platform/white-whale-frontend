@@ -94,7 +94,7 @@ const Navbar = ({}) => {
             <NavbarLink
               key={lable}
               text={lable}
-              href={lable === 'Pools' ? `/${currentChainName}${link}` : link}
+              href={`/${currentChainName}${link}`}
             />
           ))}
         </Card>
