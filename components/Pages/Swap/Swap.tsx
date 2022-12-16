@@ -30,6 +30,7 @@ const Swap: FC<SwapProps> = ({}) => {
   const currenChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currenChain?.label.toLowerCase()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
+  const chainIdParam = router.query.chainId as string
 
   useEffect(() => {
     const { from, to } = router.query
@@ -38,10 +39,11 @@ const Swap: FC<SwapProps> = ({}) => {
       if (currentChainId) {
         const [defaultFrom, defaultTo] = defaultTokens[currentChainId]
         const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
+        const url = `/${currentChainId}/swap${params}`
 
         setTokenSwapState([defaultFrom, defaultTo])
-        router.replace(params)
         setResetForm(true)
+        router.push(url)
       }
     } else {
       const newState: TokenItemState[] = [
@@ -59,12 +61,25 @@ const Swap: FC<SwapProps> = ({}) => {
       setTokenSwapState(newState)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, chainId])
+  }, [address, chainId, chainIdParam, currentChainId])
 
   useEffect(() => {
-    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
-      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-      router.replace(params, undefined, { shallow: true })
+    if (chainId) {
+      if (currentChainId !== chainIdParam) {
+        router.push(`/${currentChainId}/swap`)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, address])
+
+  useEffect(() => {
+    if (
+      chainIdParam &&
+      tokenA?.tokenSymbol !== null &&
+      tokenB?.tokenSymbol !== null
+    ) {
+      const url = `/${chainIdParam}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      router.push(url)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
