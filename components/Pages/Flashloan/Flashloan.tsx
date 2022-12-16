@@ -12,7 +12,7 @@ import FlashloanForm from './FlashloanForm'
 type Props = {}
 
 const Flashloan: FC<Props> = () => {
-  const { address, chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(walletState)
   const router = useRouter()
   const chains = useChains()
   const chainIdParam = router.query.chainId as string
@@ -26,6 +26,7 @@ const Flashloan: FC<Props> = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, chainIdParam])
+
   return (
     <VStack width={{ base: '100%', md: '722px' }} alignItems="center">
       <Box>
