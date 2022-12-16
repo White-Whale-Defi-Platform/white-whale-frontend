@@ -18,8 +18,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const connectedWallet = useConnectedWallet()
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
-  const { showTerraModalOrConnectKeplr } =
-    useTerraModalOrConnectKeplr(onOpenModal)
+  // const { showTerraModalOrConnectKeplr } =
+  //   useTerraModalOrConnectKeplr(onOpenModal)
 
   const denom = useMemo(() => {
     if (!chainInfo) return
@@ -57,7 +57,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           color="white"
           borderColor="whiteAlpha.400"
           borderRadius="full"
-          onClick={showTerraModalOrConnectKeplr}
+          onClick={onOpenModal}
         >
           <WalletIcon />
           Connect wallet

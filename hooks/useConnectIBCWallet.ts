@@ -1,9 +1,13 @@
 import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useEffect } from 'react'
 import { useMutation } from 'react-query'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { ibcWalletState, WalletStatusType } from '../state/atoms/walletAtoms'
+import {
+  ibcWalletState,
+  walletState,
+  WalletStatusType,
+} from '../state/atoms/walletAtoms'
 import { GAS_PRICE } from '../util/constants'
 import { useIBCAssetInfo } from './useIBCAssetInfo'
 
@@ -14,12 +18,13 @@ export const useConnectIBCWallet = (
 ) => {
   const [{ status, tokenSymbol: storedTokenSymbol }, setWalletState] =
     useRecoilState(ibcWalletState)
+  const { activeWallet } = useRecoilValue(walletState)
 
   const assetInfo = useIBCAssetInfo(tokenSymbol || storedTokenSymbol)
 
   const mutation = useMutation(async () => {
-    if (window && !window?.keplr) {
-      alert('Please install Keplr extension and refresh the page.')
+    if (window && !window?.[activeWallet]) {
+      alert(`Please install ${activeWallet} extension and refresh the page.`)
       return
     }
 
@@ -46,8 +51,10 @@ export const useConnectIBCWallet = (
     try {
       const { chain_id, rpc } = assetInfo
 
-      await window.keplr.enable(chain_id)
-      const offlineSigner = await window.getOfflineSignerAuto(chain_id)
+      await window[activeWallet].enable(chain_id)
+      const offlineSigner = await window[activeWallet].getOfflineSignerAuto(
+        chain_id
+      )
 
       const wasmChainClient = await SigningStargateClient.connectWithSigner(
         rpc,

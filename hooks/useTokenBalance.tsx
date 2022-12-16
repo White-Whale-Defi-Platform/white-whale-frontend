@@ -1,5 +1,7 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useQuery } from 'react-query'
+
+import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRecoilValue } from 'recoil'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
@@ -7,11 +9,12 @@ import { CW20 } from '../services/cw20'
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
 import { Wallet } from '../util/wallet-adapters'
+import { useChainInfo } from './useChainInfo'
+import useConnectLeap from './useConnectLeap'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import useConnectKeplr from 'hooks/useConnectKeplr'
 
 async function fetchTokenBalance({
   client,
@@ -75,15 +78,27 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet, status } =
+  const { address, network, client, activeWallet, status, chainId } =
     useRecoilValue(walletState)
+  const [chainInfo] = useChainInfo(chainId)
   // TODO: Adding this fixes the issue where refresh means no client
   const { connectKeplr } = useConnectKeplr()
-  if (!client && status == '@wallet-state/restored') {
-    connectKeplr()
-  }
+  const { connectLeap } = useConnectLeap()
+
+  useEffect(() => {
+    if (!client && status == '@wallet-state/restored' && chainInfo) {
+      if (activeWallet === 'leap') {
+        connectLeap()
+      } else if (activeWallet === 'keplr') {
+        connectKeplr()
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeWallet, client, status, chainInfo])
+
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
+
   const {
     data: balance = 0,
     isLoading,
