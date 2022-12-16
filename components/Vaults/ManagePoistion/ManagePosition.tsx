@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
@@ -13,6 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -25,9 +26,23 @@ import WithdrawForm from './WithdrawForm'
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, isLoading, refetch: vaultsRefetch } = useVault()
+  const chains = useChains()
   const params = new URLSearchParams(location.search)
   const { chainId, key, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNO'
+  const chainIdParam = router.query.chainId as string
+
+  useEffect(() => {
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        router.push(
+          `/${currenChain.label.toLowerCase()}/vaults/manage_position?vault=${vaultId}`
+        )
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, chainIdParam, address, chains])
 
   const vault = useMemo(
     () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
