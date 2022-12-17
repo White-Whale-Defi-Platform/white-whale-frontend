@@ -21,6 +21,7 @@ import {
   TxInfo,
 } from '@terra-money/terra.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
+import { Network, getNetworkEndpoints } from '@injectivelabs/networks'
 
 import { TxResponse, Wallet } from './wallet'
 import { cosmwasmAminoConverters, getSigningCosmwasmClient } from 'injectivejs'
@@ -47,8 +48,8 @@ export class OfflineSigningWallet implements Wallet {
     options?: SigningStargateClientOptions
   ): Promise<OfflineSigningWallet> {
 
-    if (chainId === 'injective-888') {
-      const injectiveClient = new Injective(signer)
+    if (chainId.includes('injective')) {
+      const injectiveClient = new Injective(signer, chainId ==='injective-1'? Network.MainnetK8s : Network.TestnetK8s)
       return new Promise((resolve, reject) => {
         resolve(new OfflineSigningWallet(injectiveClient, network))
       })
@@ -66,6 +67,7 @@ export class OfflineSigningWallet implements Wallet {
     msgs: EncodeObject[],
     memo?: string
   ): Promise<TxResponse> {
+    console.log({messagesWallet: msgs})
     return this.client.signAndBroadcast(senderAddress, msgs, 'auto', memo)
   }
 

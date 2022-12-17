@@ -56,7 +56,6 @@ const useSwap = ({ reverse }) => {
     )
   }, [simulated, slippageToDecimal])
 
-  console.log({ encodedExecuteMsg, client })
 
   const tx = useTransaction({
     enabled: !!executeMsg,

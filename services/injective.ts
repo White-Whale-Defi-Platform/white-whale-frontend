@@ -47,15 +47,17 @@ class Injective {
     account: AccountDetails
     chainId: ChainId
     txRaw: TxRaw
+    network: Network
 
-    constructor(offlineSigner: OfflineSigner & OfflineDirectSigner) {
+    constructor(offlineSigner: OfflineSigner & OfflineDirectSigner, network: Network = Network.TestnetK8s) {
         const endpoints = getNetworkEndpoints(Network.TestnetK8s);
 
         this.offlineSigner = offlineSigner
         this.txClient = new TxRestClient(endpoints.rest)
         this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
         this.bankApi = new ChainRestBankApi(endpoints.rest)
-        this.chainId = ChainId.Testnet
+        this.chainId = network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
+        this.network = network
         this.init()
     }
 
@@ -79,7 +81,7 @@ class Injective {
     }
 
     getNetwork() {
-        return Network.TestnetK8s
+        return this.network
     }
 
     async getTx(txHash: string) {
@@ -128,10 +130,8 @@ class Injective {
             const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
             const latestHeight = latestBlock.header.height
             const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
-            console.log({ messagesPrepare: messages })
-            const [message] = messages
-            console.log({ messagesPrepare: messages })
-            
+
+            // For each msg in messages, create a MsgExecuteContract type so we can call toDirectSign()
             const encodedExecuteMsg = messages.map((msg) => {
                 const { msgT, contract, funds } = msg?.value || {}
                 const msgString = Buffer.from(msg?.value?.msg).toString('utf8')
@@ -158,32 +158,7 @@ class Injective {
                 const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
                 return MessageExecuteContract
             });
-            // const { msg, contract, funds } = message?.value || {}
-            // const msgString = Buffer.from(message?.value?.msg).toString('utf8')
-            // const jsonMessage = JSON.parse(msgString)
-
-            // console.log({ jsonMessage })
-
-            // const [[action, msgs]] = Object.entries(jsonMessage)
-
-            
-            // const executeMessageJson = {
-            //     action,
-            //     msg: msgs as object
-            // }
-            // console.log({ executeMessageJson })
-
-            // const params = {
-            //     funds: funds?.[0],
-            //     sender: this.account.address,
-            //     contractAddress: contract,
-            //     exec: executeMessageJson,
-            // };
-            // console.log({ params })
-
-
-            // const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
-
+            // Create the transaction for signing and broadcasting
             return createTransaction({
                 pubKey: this.pubKey,
                 chainId: this.chainId,
