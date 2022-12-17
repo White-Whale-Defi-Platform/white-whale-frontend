@@ -13,10 +13,11 @@ import {
 import { DEFAULT_STD_FEE, DEFAULT_BLOCK_TIMEOUT_HEIGHT, BigNumberInBase } from '@injectivelabs/utils'
 import { ChainId } from '@injectivelabs/ts-types'
 import { Network, getNetworkEndpoints } from '@injectivelabs/networks'
-import { MsgExecuteContract } from '@injectivelabs/sdk-ts'
+import { MsgExecuteContract, MsgSend } from '@injectivelabs/sdk-ts'
 import { Coin, EncodeObject, OfflineDirectSigner, OfflineSigner } from '@cosmjs/proto-signing'
 import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
 import { base64ToJson } from '../util/base64'
+import { StdFee } from '@cosmjs/stargate'
 
 type SimulateResponse = {
     result: {
@@ -87,8 +88,38 @@ class Injective {
         return response
     }
 
+    async signAndBroadcast(signerAddress: string, messages: EncodeObject[], fee: StdFee | "auto" | number, memo?: string){
+        try {
+            this.txRaw = null
+            const { txRaw } = await this.prepair(messages)
+            this.txRaw = txRaw
+            const signDoc = createCosmosSignDocFromTransaction({
+                txRaw: this.txRaw,
+                accountNumber: this.baseAccount.accountNumber,
+                chainId: this.chainId
+            })
 
-    async prepair(messages: EncodeObject[]) {
+            const directSignResponse = await this.offlineSigner?.signDirect(this.account.address, signDoc)
+            const signTxRaw = createTxRawFromSigResponse(directSignResponse)
+            this.txRaw = null
+            const res = await this.txClient.broadcast(signTxRaw)
+
+            return {
+                height: res.height,
+                code: res.code,
+                transactionHash: res.txHash,
+                rawLog: res.rawLog,
+
+            }
+        }
+        catch (error) {
+            console.log({ error })
+            throw new Error(error?.errorMessage)
+        }
+
+    }
+
+    async prepair(messages: EncodeObject[], send: boolean = true) {
         try {
             await this.init()
             const restEndpoint = getNetworkEndpoints(Network.Testnet).rest
@@ -108,7 +139,7 @@ class Injective {
 
             const [[action, msgs]] = Object.entries(jsonMessage)
 
-
+            
             const executeMessageJson = {
                 action,
                 msg: msgs as object
