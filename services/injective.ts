@@ -87,6 +87,7 @@ class Injective {
         return response
     }
 
+
     async prepair(messages: EncodeObject[]) {
         try {
             await this.init()
@@ -97,6 +98,7 @@ class Injective {
             const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
 
             const [message] = messages
+            console.log(message)
             console.log({ message })
             const { msg, contract, funds } = message?.value || {}
             const msgString = Buffer.from(message?.value?.msg).toString('utf8')
@@ -116,7 +118,7 @@ class Injective {
             const params = {
                 funds: funds?.[0],
                 sender: this.account.address,
-                contractAddress: 'inj1ckqz4r0n3m9smvharm65pgu8mm7vhep8cq89mg',
+                contractAddress: contract,
                 exec: executeMessageJson,
             };
             console.log({ params })

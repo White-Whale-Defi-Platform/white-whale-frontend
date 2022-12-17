@@ -58,7 +58,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "CWShib-cwSix",
+      "pool_id": "cwShib-cwSix",
       "lpOrder": ["cwSix", "cwShib"],
       "pool_assets": [
         {
@@ -79,7 +79,7 @@
           "token_address": "inj14efstake5h3kah7wezkxwvqqv4ew6ahlht0qfz",
           "symbol": "cwSix",
           "name": "cwSix",
-          "decimals": 18,
+          "decimals": 6,
           "logoURI": "/logos/shiba-inu-shib-logo.png",
           "tags": [""],
           "native": false,
