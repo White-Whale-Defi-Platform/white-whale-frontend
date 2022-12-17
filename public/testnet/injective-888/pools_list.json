@@ -11,7 +11,7 @@
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
     "id": "injective-protocol",
-    "chain_id": "injective-1",
+    "chain_id": "injective-888",
     "token_address": "inj",
     "symbol": "INJ",
     "name": "INJ",
@@ -28,7 +28,7 @@
       "lpOrder": ["INJ", "cwShib"],
       "pool_assets": [
         {
-          "chain_id": "injective-1",
+          "chain_id": "injective-888",
           "id": "injective-protocol",
           "token_address": "inj",
           "symbol": "INJ",
@@ -41,7 +41,7 @@
         },
         {
           "id": "injective-protocol",
-          "chain_id": "injective-1",
+          "chain_id": "injective-888",
           "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
           "symbol": "cwShib",
           "name": "cwShib",
@@ -63,7 +63,7 @@
       "pool_assets": [
         {
           "id": "cwShib",
-          "chain_id": "injective-1",
+          "chain_id": "injective-888",
           "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
           "symbol": "cwShib",
           "name": "cwShib",
@@ -75,7 +75,7 @@
         },
         {
           "id": "cwSix",
-          "chain_id": "injective-1",
+          "chain_id": "injective-888",
           "token_address": "inj14efstake5h3kah7wezkxwvqqv4ew6ahlht0qfz",
           "symbol": "cwSix",
           "name": "cwSix",
@@ -96,7 +96,7 @@
       "lpOrder": ["INJ", "USDT"],
       "pool_assets": [
         {
-          "chain_id": "injective-1",
+          "chain_id": "injective-888",
           "id": "injective-protocol",
           "token_address": "inj",
           "symbol": "INJ",
@@ -109,7 +109,7 @@
         },
         {
           "id": "injective-protocol",
-          "chain_id": "injective-1",
+          "chain_id": "injective-888",
           "token_address": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5",
           "symbol": "USDT",
           "name": "USDT",

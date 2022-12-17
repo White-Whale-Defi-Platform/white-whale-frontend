@@ -5,7 +5,7 @@
       "pool_id": "INJ",
       "vault_assets": {
         "id": "injective-protocol",
-        "chain_id": "injective-1",
+        "chain_id": "injective-888",
         "token_address": "inj",
         "symbol": "INJ",
         "name": "INJ",
@@ -24,7 +24,7 @@
       "pool_id": "USDT",
       "vault_assets": {
         "id": "usdt",
-        "chain_id": "injective-1",
+        "chain_id": "injective-888",
         "token_address": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5",
         "symbol": "USDT",
         "name": "USDT",
@@ -43,7 +43,7 @@
       "pool_id": "cwShib",
       "vault_assets": {
         "id": "usdt",
-        "chain_id": "injective-1",
+        "chain_id": "injective-888",
         "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
         "symbol": "cwShib",
         "name": "cwShib",

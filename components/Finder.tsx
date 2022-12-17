@@ -26,6 +26,8 @@ const getUrl = (chainId, txHash) => {
       break
     case 'chihuahua-1':
       return `https://www.mintscan.io/chihuahua/txs/${txHash}`
+    case 'injective-888':
+      return `https://testnet.explorer.injective.network/transaction/${txHash}`
     default:
       return null
       break
@@ -33,6 +35,7 @@ const getUrl = (chainId, txHash) => {
 }
 
 const Finder = ({ children, txHash, chainId }: Props) => {
+  console.log({chainId})
   return (
     <Link isExternal href={getUrl(chainId, txHash)}>
       {children} TxHash: {truncate(txHash, [4, 4])}

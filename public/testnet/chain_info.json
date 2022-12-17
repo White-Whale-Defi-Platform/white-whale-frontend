@@ -94,18 +94,20 @@
     "features": ["cosmwasm"]
   },
   {
+    "rpc": "https://testnet.tm.injective.dev",
+    "rest": "https://testnet.lcd.injective.dev",
     "chainId": "injective-888",
-    "chainName": "Injective testnet",
+    "chainName": "Injective Testnet",
     "label": "Injective",
     "icon": "/logos/injective.png",
-    "rpc": "http://176.9.147.152:26657",
-    "rest": "https://k8s.testnet.lcd.injective.network",
     "stakeCurrency": {
       "coinDenom": "INJ",
       "coinMinimalDenom": "inj",
       "coinDecimals": 18,
       "coinGeckoId": "injective-protocol"
     },
+    "walletUrl": "https://hub.injective.dev/",
+    "walletUrlForStaking": "https://hub.injective.dev/",
     "bip44": {
       "coinType": 60
     },
@@ -130,16 +132,26 @@
         "coinDenom": "INJ",
         "coinMinimalDenom": "inj",
         "coinDecimals": 18,
-        "coinGeckoId": "injective-protocol"
+        "coinGeckoId": "injective-protocol",
+        "gasPriceStep": {
+          "low": 9000000000,
+          "average": 50000000000,
+          "high": 80000000000
+        }
       }
     ],
     "gasPriceStep": {
-      "low": 5000000000,
-      "average": 25000000000,
-      "high": 40000000000
+      "low": 9000000000,
+      "average": 50000000000,
+      "high": 80000000000
     },
     "coinType": 60,
-    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
+    "features": [
+      "ibc-transfer",
+      "ibc-go",
+      "eth-address-gen",
+      "eth-key-sign"
+    ],
     "beta": true
   }
 ]

@@ -4,7 +4,7 @@ import {
   SigningCosmWasmClient,
 } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Coin } from '@cosmjs/launchpad'
-import { EncodeObject, OfflineSigner } from '@cosmjs/proto-signing'
+import { EncodeObject, OfflineDirectSigner, OfflineSigner } from '@cosmjs/proto-signing'
 import {
   SigningStargateClient,
   SigningStargateClientOptions,
@@ -29,11 +29,12 @@ import getChainName from '../../libs/getChainName'
 import { AminoTypes } from '@cosmjs/stargate'
 
 import { chain } from 'lodash'
+import Injective from '../../services/injective'
 export class OfflineSigningWallet implements Wallet {
-  client: SigningCosmWasmClient
+  client: SigningCosmWasmClient | Injective
   network: string
 
-  constructor(client: SigningCosmWasmClient, network: string) {
+  constructor(client: SigningCosmWasmClient | Injective, network?: string) {
     this.client = client
     this.network = network
   }
@@ -41,20 +42,16 @@ export class OfflineSigningWallet implements Wallet {
   static connectWithSigner(
     chainId: string,
     endpoint: string,
-    signer: OfflineSigner,
+    signer: OfflineSigner & OfflineDirectSigner,
     network: string,
     options?: SigningStargateClientOptions
   ): Promise<OfflineSigningWallet> {
-    if (getChainName(chainId) == 'injective') {
-      // We cant easily use the below as its a SigningStargateClient returned, even though it says getCosmwasm;..
-      // To fix we may need to manually define our own SigningCosmWasmClient here and then return a new OfflineSigningWallet
-      // If we do it here, and we do it and get a lil lucky no other changes will be needed.
-      // const aminoTypes = new AminoTypes(cosmwasmAminoConverters);
-      // See: https://github.com/cosmology-tech/injectivejs
-      // Also review: https://github.com/cosmology-tech/injectivejs#advanced-usage
-      // return getSigningCosmwasmClient({rpcEndpoint:endpoint, signer:signer }).then((client) => {
-      //   return new OfflineSigningWallet(client, network)
-      // })
+
+    if (chainId === 'injective-888') {
+      const injectiveClient = new Injective(signer)
+      return new Promise((resolve, reject) => {
+        resolve(new OfflineSigningWallet(injectiveClient, network))
+      })
     }
 
     return SigningCosmWasmClient.connectWithSigner(
@@ -84,7 +81,7 @@ export class OfflineSigningWallet implements Wallet {
       msg,
       'auto',
       undefined,
-      funds
+      funds,
     )
   }
 
@@ -97,7 +94,7 @@ export class OfflineSigningWallet implements Wallet {
 
   simulate(
     signerAddress: string,
-    messages: readonly EncodeObject[],
+    messages: readonly EncodeObject[] |  Record<string, unknown>,
     memo: string | undefined
   ): Promise<number> {
     return this.client.simulate(signerAddress, messages, memo)

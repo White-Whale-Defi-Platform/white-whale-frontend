@@ -188,15 +188,16 @@ export const useTransaction = ({
         onError?.()
       },
       onSuccess: (data: any) => {
+        console.log({success: data})
         setTxStep(TxStep.Broadcasting)
-        setTxHash(data.transactionHash)
+        setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash)
         queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
         toast({
           title: 'Swap Success.',
           description: (
             <Finder
-              txHash={data.transactionHash}
+              txHash={data.transactionHash || data?.txHash}
               chainId={client?.client?.chainId}
             >
               {' '}
@@ -209,17 +210,23 @@ export const useTransaction = ({
           isClosable: true,
         })
       },
+      onSettled(data, error, variables, context) {
+        console.log({
+          data, error, variables, context
+        })
+      },
     }
   )
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
+      console.log({txHash, client})
       if (txHash == null) {
         return
       }
-
-      return client.getTx(txHash)
+        return client.client.getTx(txHash)
+      
     },
     {
       enabled: txHash != null,
@@ -245,6 +252,7 @@ export const useTransaction = ({
   }, [msgs, fee, mutate, price])
 
   useEffect(() => {
+    console.log({txHash, txInfo})
     if (txInfo != null && txHash != null) {
       if (txInfo?.txResponse?.code) {
         setTxStep(TxStep.Failed)
