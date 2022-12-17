@@ -90,6 +90,7 @@ class Injective {
 
     async signAndBroadcast(signerAddress: string, messages: EncodeObject[], fee: StdFee | "auto" | number, memo?: string){
         try {
+            console.log({ messagesSignandBroadcast: messages })
             this.txRaw = null
             const { txRaw } = await this.prepair(messages)
             this.txRaw = txRaw
@@ -127,41 +128,67 @@ class Injective {
             const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
             const latestHeight = latestBlock.header.height
             const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
-
+            console.log({ messagesPrepare: messages })
             const [message] = messages
-            console.log(message)
-            console.log({ message })
-            const { msg, contract, funds } = message?.value || {}
-            const msgString = Buffer.from(message?.value?.msg).toString('utf8')
-            const jsonMessage = JSON.parse(msgString)
+            console.log({ messagesPrepare: messages })
+            
+            const encodedExecuteMsg = messages.map((msg) => {
+                const { msgT, contract, funds } = msg?.value || {}
+                const msgString = Buffer.from(msg?.value?.msg).toString('utf8')
+                const jsonMessage = JSON.parse(msgString)
 
-            console.log({ jsonMessage })
-
-            const [[action, msgs]] = Object.entries(jsonMessage)
+                const [[action, msgs]] = Object.entries(jsonMessage)
 
             
-            const executeMessageJson = {
-                action,
-                msg: msgs as object
-            }
-            console.log({ executeMessageJson })
+                const executeMessageJson = {
+                    action,
+                    msg: msgs as object
+                }
+                console.log({ executeMessageJson })
 
-            const params = {
-                funds: funds?.[0],
-                sender: this.account.address,
-                contractAddress: contract,
-                exec: executeMessageJson,
-            };
-            console.log({ params })
+                const params = {
+                    funds: funds?.[0],
+                    sender: this.account.address,
+                    contractAddress: contract,
+                    exec: executeMessageJson,
+                };
+                console.log({ params })
 
 
-            const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
+                const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
+                return MessageExecuteContract
+            });
+            // const { msg, contract, funds } = message?.value || {}
+            // const msgString = Buffer.from(message?.value?.msg).toString('utf8')
+            // const jsonMessage = JSON.parse(msgString)
+
+            // console.log({ jsonMessage })
+
+            // const [[action, msgs]] = Object.entries(jsonMessage)
+
+            
+            // const executeMessageJson = {
+            //     action,
+            //     msg: msgs as object
+            // }
+            // console.log({ executeMessageJson })
+
+            // const params = {
+            //     funds: funds?.[0],
+            //     sender: this.account.address,
+            //     contractAddress: contract,
+            //     exec: executeMessageJson,
+            // };
+            // console.log({ params })
+
+
+            // const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
 
             return createTransaction({
                 pubKey: this.pubKey,
                 chainId: this.chainId,
                 fee: DEFAULT_STD_FEE,
-                message: MessageExecuteContract.toDirectSign(),
+                message: encodedExecuteMsg.map((msg) => {return msg.toDirectSign()}),
                 sequence: this.baseAccount.sequence,
                 timeoutHeight: timeoutHeight.toNumber(),
                 accountNumber: this.baseAccount.accountNumber,
@@ -222,13 +249,20 @@ class Injective {
             const directSignResponse = await this.offlineSigner?.signDirect(this.account.address, signDoc)
             const signTxRaw = createTxRawFromSigResponse(directSignResponse)
             this.txRaw = null
-            return this.txClient.broadcast(signTxRaw)
+            return this.txClient.broadcast(signTxRaw).then((result) => {
+                if (!!result.code) {
+                  throw new Error(
+                    `Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
+                  )
+                } else {
+                  return result
+                }
+              })
         }
         catch (error) {
             console.log({ error })
             throw new Error(error?.errorMessage)
         }
-
     }
 }
 
