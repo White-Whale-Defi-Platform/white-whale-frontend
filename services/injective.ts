@@ -50,13 +50,15 @@ class Injective {
     network: Network
 
     constructor(offlineSigner: OfflineSigner & OfflineDirectSigner, network: Network = Network.TestnetK8s) {
-        const endpoints = getNetworkEndpoints(Network.TestnetK8s);
+        const endpoints = getNetworkEndpoints(network);
 
         this.offlineSigner = offlineSigner
         this.txClient = new TxRestClient(endpoints.rest)
         this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
         this.bankApi = new ChainRestBankApi(endpoints.rest)
+        console.log('network', network)
         this.chainId = network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
+        console.log('chainId', this.chainId)
         this.network = network
         this.init()
     }
@@ -64,7 +66,7 @@ class Injective {
     async init() {
         const key = await window.keplr.getKey(this.chainId);
         this.pubKey = Buffer.from(key.pubKey).toString('base64')
-        const restEndpoint = getNetworkEndpoints(Network.Testnet).rest
+        const restEndpoint = getNetworkEndpoints(this.network).rest
         const chainRestAuthApi = new ChainRestAuthApi(restEndpoint)
         const [{ address }] = await this.offlineSigner.getAccounts();
         const accountDetailsResponse = await chainRestAuthApi.fetchAccount(address)
@@ -125,7 +127,8 @@ class Injective {
     async prepair(messages: EncodeObject[], send: boolean = true) {
         try {
             await this.init()
-            const restEndpoint = getNetworkEndpoints(Network.Testnet).rest
+            console.log({ network: this.network, chainId:this.chainId })
+            const restEndpoint = getNetworkEndpoints(this.network).rest
             const chainRestTendermintApi = new ChainRestTendermintApi(restEndpoint)
             const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
             const latestHeight = latestBlock.header.height

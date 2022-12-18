@@ -15,17 +15,17 @@
     "token_address": "inj",
     "symbol": "INJ",
     "name": "INJ",
-    "decimals": 6,
+    "decimals": 18,
     "logoURI": "/logos/injective.png",
     "tags": ["native"],
     "native": true,
     "denom": "inj"
   },
-  "routerAddress": "<tbd>",
+  "routerAddress": "inj1657pee2jhf4jk8pq6yq64e758ngvum45nft8rf",
   "pools": [
     {
-      "pool_id": "Injective-Atom",
-      "lpOrder": ["INJ", "ATOM"],
+      "pool_id": "INJ-USDT",
+      "lpOrder": ["INJ", "USDT"],
       "pool_assets": [
         {
           "chain_id": "injective-1",
@@ -33,27 +33,61 @@
           "token_address": "inj",
           "symbol": "INJ",
           "name": "INJ",
-          "decimals": 6,
+          "decimals": 18,
           "logoURI": "/logos/injective.png",
           "tags": ["native"],
           "native": true,
           "denom": "inj"
         },
         {
-          "id": "cosmos",
+          "id": "injective-protocol",
           "chain_id": "injective-1",
-          "token_address": "ibc/tbd",
+          "token_address": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "symbol": "USDT",
+          "name": "USDT",
+          "decimals": 6,
+          "logoURI": "/logos/usdt.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7"
+        }
+      ],
+      "lp_token": "inj14n26cr7dj79smrgg44hfylhph9y45h4yx5gvzm",
+      "swap_address": "inj1zfw930csx0k5qzf35vndaulwada4wa3pywekyx",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ATOM-USDT",
+      "lpOrder": ["ATOM", "USDT"],
+      "pool_assets": [
+        {
+          "chain_id": "injective-1",
+          "id": "injective-protocol",
+          "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
           "symbol": "ATOM",
-          "name": "Atom",
+          "name": "ATOM",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
           "tags": ["native"],
           "native": true,
-          "denom": "ibc/tbd"
+          "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+        },
+        {
+          "id": "injective-protocol",
+          "chain_id": "injective-1",
+          "token_address": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "symbol": "USDT",
+          "name": "USDT",
+          "decimals": 6,
+          "logoURI": "/logos/usdt.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7"
         }
       ],
-      "lp_token": "inj1tbd",
-      "swap_address": "inj1tbd",
+      "lp_token": "inj1j30wx6kjfsessdx5mlp32hqwklj48ufvxx6tyc",
+      "swap_address": "inj14zykjnz94dr9nj4v2yzpvnlrw5uurk5hhea8xw",
       "staking_address": "",
       "rewards_tokens": []
     }

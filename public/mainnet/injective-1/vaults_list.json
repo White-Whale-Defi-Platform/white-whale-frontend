@@ -1,22 +1,22 @@
 {
-  "factory": "",
+  "factory": "inj1wastjc07zuuy46mzzl3egz4uzy6fs59758vrwr",
   "vaults": [
     {
       "pool_id": "INJ",
       "vault_assets": {
         "id": "injective-protocol",
         "chain_id": "injective-1",
-        "token_address": "inj",
-        "symbol": "INJ",
-        "name": "INJ",
+        "token_address": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        "symbol": "USDT",
+        "name": "USDT",
         "decimals": 6,
-        "logoURI": "/logos/injective.png",
+        "logoURI": "/logos/usdt.png",
         "tags": ["native"],
         "native": true,
-        "denom": "inj"
+        "denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7"
       },
-      "lp_token": "inj1tbd",
-      "vault_address": "inj1tbd",
+      "lp_token": "inj1s66zhks8v3fm24974crzxufh7w6ktt694g9t3j",
+      "vault_address": "inj17kfjhj8mf7l5qus4kjqxtxext2rtnpqzdjz2qm",
       "staking_address": "",
       "rewards_tokens": []
     }

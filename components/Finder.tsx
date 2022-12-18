@@ -28,6 +28,8 @@ const getUrl = (chainId, txHash) => {
       return `https://www.mintscan.io/chihuahua/txs/${txHash}`
     case 'injective-888':
       return `https://testnet.explorer.injective.network/transaction/${txHash}`
+    case 'injective-1':
+      return `https://explorer.injective.network/transaction/${txHash}`
     default:
       return null
       break
