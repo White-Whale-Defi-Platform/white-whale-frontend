@@ -75,8 +75,10 @@ const DepositForm = ({
 
   useEffect(() => {
     const chainIdParam = router.query.chainId as string
-    const path = router.route.replace('[chainId]', chainIdParam)
-    router.push(`${path}?vault=${token?.tokenSymbol}`)
+    if (chainIdParam) {
+      const path = router.route.replace('[chainId]', chainIdParam)
+      router.push(`${path}?vault=${token?.tokenSymbol}`)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token.tokenSymbol])
 
