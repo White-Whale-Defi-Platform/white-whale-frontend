@@ -31,7 +31,7 @@
     "@emotion/styled": "^11",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
-    "@injectivelabs/sdk-ts": "^1.0.293",
+    "@injectivelabs/sdk-ts": "^1.0.299",
     "@keplr-wallet/wc-qrcode-modal": "^0.10.13",
     "@next/bundle-analyzer": "^12.2.4",
     "@reach/portal": "^0.16.0",

@@ -88,13 +88,11 @@ class Injective {
 
     async getTx(txHash: string) {
         const response = await this.txClient.fetchTx(txHash)
-        console.log({ response })
         return response
     }
 
     async signAndBroadcast(signerAddress: string, messages: EncodeObject[], fee: StdFee | "auto" | number, memo?: string){
         try {
-            console.log({ messagesSignandBroadcast: messages })
             this.txRaw = null
             const { txRaw } = await this.prepair(messages)
             this.txRaw = txRaw
@@ -127,7 +125,6 @@ class Injective {
     async prepair(messages: EncodeObject[], send: boolean = true) {
         try {
             await this.init()
-            console.log({ network: this.network, chainId:this.chainId })
             const restEndpoint = getNetworkEndpoints(this.network).rest
             const chainRestTendermintApi = new ChainRestTendermintApi(restEndpoint)
             const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
@@ -135,27 +132,25 @@ class Injective {
             const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
 
             // For each msg in messages, create a MsgExecuteContract type so we can call toDirectSign()
-            const encodedExecuteMsg = messages.map((msg) => {
+            const encodedExecuteMsg = messages.map((msg, idx) => {
                 const { msgT, contract, funds } = msg?.value || {}
                 const msgString = Buffer.from(msg?.value?.msg).toString('utf8')
                 const jsonMessage = JSON.parse(msgString)
 
                 const [[action, msgs]] = Object.entries(jsonMessage)
 
-            
+
                 const executeMessageJson = {
                     action,
                     msg: msgs as object
                 }
-                console.log({ executeMessageJson })
-
+                // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins 
                 const params = {
-                    funds: funds?.[0],
+                    funds: funds,
                     sender: this.account.address,
                     contractAddress: contract,
                     exec: executeMessageJson,
                 };
-                console.log({ params })
 
 
                 const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
@@ -187,7 +182,6 @@ class Injective {
     ) {
 
         try {
-            console.log({ messages })
             this.txRaw = null
             const { txRaw } = await this.prepair(messages)
             this.txRaw = txRaw
