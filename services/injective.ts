@@ -20,7 +20,7 @@ import { base64ToJson } from '../util/base64'
 import { StdFee } from '@cosmjs/stargate'
 
 
-const HIGHER_DEFAULT_GAS_LIMIT = "20000000"
+const HIGHER_DEFAULT_GAS_LIMIT = "2000000"
 
 type SimulateResponse = {
     result: {
