@@ -19,6 +19,9 @@ import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
 import { base64ToJson } from '../util/base64'
 import { StdFee } from '@cosmjs/stargate'
 
+
+const HIGHER_DEFAULT_GAS_LIMIT = "20000000"
+
 type SimulateResponse = {
     result: {
         data: string;
@@ -160,7 +163,10 @@ class Injective {
             return createTransaction({
                 pubKey: this.pubKey,
                 chainId: this.chainId,
-                fee: DEFAULT_STD_FEE,
+                fee: {
+                    ...DEFAULT_STD_FEE,
+                    gas: HIGHER_DEFAULT_GAS_LIMIT || DEFAULT_STD_FEE.gas
+                },
                 message: encodedExecuteMsg.map((msg) => {return msg.toDirectSign()}),
                 sequence: this.baseAccount.sequence,
                 timeoutHeight: timeoutHeight.toNumber(),
