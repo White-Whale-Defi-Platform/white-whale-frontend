@@ -62,7 +62,7 @@ const Vaults: FC<Props> = () => {
         // .filter(vault => !!!Number(vault.deposits.lptoken))
         .map((vault) => {
           const ctaLabel = vault?.hasDepost ? 'Manage Position' : 'New Position'
-          const url = `${chainIdParam}/vaults/${
+          const url = `/${chainIdParam}/vaults/${
             vault?.hasDepost ? 'manage_position' : 'new_position'
           }?vault=${vault.vault_assets?.symbol}`
           return {
