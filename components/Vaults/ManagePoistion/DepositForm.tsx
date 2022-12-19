@@ -52,6 +52,7 @@ const DepositForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(walletState)
+
   const onSuccess = useCallback(
     (txHash) => {
       refetch?.()
@@ -68,12 +69,15 @@ const DepositForm = ({
         isClosable: true,
       })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [token]
   )
 
   useEffect(() => {
-    const params = `?vault=${token?.tokenSymbol}`
-    router.replace(params, undefined, { shallow: true })
+    const chainIdParam = router.query.chainId as string
+    const path = router.route.replace('[chainId]', chainIdParam)
+    router.push(`${path}?vault=${token?.tokenSymbol}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token.tokenSymbol])
 
   const { tx } = useDepost({ vaultAddress, token, onSuccess })
@@ -98,6 +102,7 @@ const DepositForm = ({
       setToken({ ...token, amount: 0 })
       tx?.reset()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx.txStep])
 
   return (
