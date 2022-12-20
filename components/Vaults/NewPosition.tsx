@@ -31,30 +31,26 @@ const NewPosition = () => {
   const vaultId = params.get('vault') || 'JUNOX'
   const chainIdParam = router.query.chainId as string
 
-  useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(
-          `/${currenChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`
-        )
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains])
-
   const vault = useMemo(
     () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
     [vaults, vaultId]
   )
 
   useEffect(() => {
-    if (!vault) {
+    if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
-      router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
+      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+        if (!vault) {
+          router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
+        } else {
+          router.push(
+            `/${currenChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`
+          )
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vault])
+  }, [chainId, chainIdParam, address, chains, vault])
 
   const edgeTokenList = useMemo(
     () => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
