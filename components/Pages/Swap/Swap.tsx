@@ -78,7 +78,7 @@ const Swap: FC<SwapProps> = ({}) => {
       tokenA?.tokenSymbol !== null &&
       tokenB?.tokenSymbol !== null
     ) {
-      const url = `/${chainIdParam}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+      const url = `/${currentChainId}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
       router.push(url)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
