@@ -48,10 +48,10 @@ const Pools: FC<Props> = () => {
     const _allPools = _pools.map((pool) => ({
       contract: pool?.swap_address,
       pool: pool?.pool_id,
-      token1Img: pool?.pool_id.includes('USDC')
+      token1Img: pool?.pool_id.includes('USD')
         ? pool.pool_assets?.[0].logoURI
         : pool.pool_assets?.[1].logoURI,
-      token2Img: pool?.pool_id.includes('USDC')
+      token2Img: pool?.pool_id.includes('USD')
         ? pool.pool_assets?.[1].logoURI
         : pool.pool_assets?.[0].logoURI,
       apr: pool.apr24h,

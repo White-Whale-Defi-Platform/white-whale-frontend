@@ -10,7 +10,7 @@
         "symbol": "USDT",
         "name": "USDT",
         "decimals": 6,
-        "logoURI": "/logos/usdt.png",
+        "logoURI": "/logos/injective.png",
         "tags": ["native"],
         "native": true,
         "denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7"
