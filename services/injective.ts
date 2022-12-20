@@ -140,6 +140,7 @@ class Injective {
 
                 const [[action, msgs]] = Object.entries(jsonMessage)
 
+                const isLPMessage = action?.includes('provide')
 
                 const executeMessageJson = {
                     action,
@@ -147,7 +148,7 @@ class Injective {
                 }
                 // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins 
                 const params = {
-                    funds: funds,
+                    funds: isLPMessage? funds: funds?.[0],
                     sender: this.account.address,
                     contractAddress: contract,
                     exec: executeMessageJson,
