@@ -47,6 +47,15 @@ const NewPosition = () => {
     () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
     [vaults, vaultId]
   )
+
+  useEffect(() => {
+    if (!vault) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vault])
+
   const edgeTokenList = useMemo(
     () => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
     [vaults]
