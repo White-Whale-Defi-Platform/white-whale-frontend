@@ -59,9 +59,7 @@ class Injective {
         this.txClient = new TxRestClient(endpoints.rest)
         this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
         this.bankApi = new ChainRestBankApi(endpoints.rest)
-        console.log('network', network)
         this.chainId = network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
-        console.log('chainId', this.chainId)
         this.network = network
         this.init()
     }
@@ -119,8 +117,8 @@ class Injective {
             }
         }
         catch (error) {
-            console.log({ error })
-            throw new Error(error?.errorMessage)
+            const errorMessage = error?.response?.data?.message || error?.message || error?.errorMessage
+            throw new Error(errorMessage)
         }
 
     }
@@ -175,8 +173,8 @@ class Injective {
 
         }
         catch (error) {
-            console.log({ error })
-            throw new Error(error?.errorMessage)
+            const errorMessage = error?.response?.data?.message || error?.message || error?.errorMessage
+            throw new Error(errorMessage)
         }
     }
 
@@ -186,7 +184,6 @@ class Injective {
         messages: EncodeObject[],
         memo: string | undefined
     ) {
-
         try {
             this.txRaw = null
             const { txRaw } = await this.prepair(messages)
@@ -195,7 +192,8 @@ class Injective {
             return await this.txClient.simulate(txRaw).then(({ gasInfo }: SimulateResponse) => gasInfo.gasUsed)
         } catch (error) {
             console.log({ error })
-            throw new Error(error?.errorMessage)
+            const errorMessage = error?.response?.data?.message || error?.message || error?.errorMessage
+            throw new Error(errorMessage)
         }
     }
 
@@ -238,8 +236,8 @@ class Injective {
               })
         }
         catch (error) {
-            console.log({ error })
-            throw new Error(error?.errorMessage)
+            const errorMessage = error?.response?.data?.message || error?.message || error?.errorMessage
+            throw new Error(errorMessage)
         }
     }
 }

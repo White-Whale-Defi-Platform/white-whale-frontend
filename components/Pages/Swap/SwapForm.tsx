@@ -142,8 +142,8 @@ const SwapForm: FC<Props> = ({
   const rate = useMemo(() => {
     if (!simulated) return null
 
-    const e = num(tokenA.amount).times(Math.pow(10, 6))
-    return num(e).div(simulated?.amount).toFixed(tokenBInfo.decimals)
+    const e = num(tokenA.amount).times(Math.pow(10, tokenBInfo.decimals))
+    return num(simulated?.amount).div(e).toFixed(6)
   }, [simulated, tokenA.amount])
 
   useEffect(() => {
@@ -425,7 +425,9 @@ const SwapForm: FC<Props> = ({
                 </Tooltip>
               </HStack>
               <Text color="brand.500" fontSize={12}>
-                {rate} {tokenA?.tokenSymbol} per {tokenB?.tokenSymbol}
+
+                {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
+                {/* {rate} {tokenA?.tokenSymbol} per {tokenB?.tokenSymbol} */}
               </Text>
             </HStack>
 
