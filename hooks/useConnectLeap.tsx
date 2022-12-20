@@ -13,7 +13,7 @@ export default function useConnectLeap() {
   const { disconnect } = useWallet()
 
   const connectLeap = async () => {
-    const isConnecting = localStorage.getItem('leap-connecting')
+    const isConnecting = sessionStorage.getItem('leap-connecting')
     if (isConnecting) return
 
     if (connectedWallet) {
@@ -26,15 +26,8 @@ export default function useConnectLeap() {
 
     try {
       if (chainInfo !== undefined) {
-        localStorage.setItem('leap-connecting', 'true')
-        try {
-          // In the event that the chain is already available in the leap wallet, this method will fail.
-          // this will be fixed in next build. BY MONDAY
-          await window.leap.experimentalSuggestChain(chainInfo)
-        } catch (error) {
-          // do nothing
-        }
-
+        sessionStorage.setItem('leap-connecting', 'true')
+        await window.leap.experimentalSuggestChain(chainInfo)
         await window.leap.enable(currentWalletState.chainId)
         const offlineSigner = await window.leap.getOfflineSignerAuto(
           currentWalletState.chainId
@@ -62,11 +55,11 @@ export default function useConnectLeap() {
           status: WalletStatusType.connected,
           activeWallet: 'leap',
         })
-        localStorage.removeItem('leap-connecting')
       }
     } catch (e) {
-      localStorage.removeItem('leap-connecting')
       throw e
+    } finally {
+      sessionStorage.removeItem('leap-connecting')
     }
   }
 
