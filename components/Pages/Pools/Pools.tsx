@@ -17,6 +17,7 @@ type Props = {}
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
+  const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const router = useRouter()
   const { data: poolList } = usePoolsListQuery()
 
@@ -30,6 +31,8 @@ const Pools: FC<Props> = () => {
   const initPools = useCallback(async () => {
     if (!pools || pools.length === 0) return
     if (allPools.length > 0) return
+
+    setInitLoading(true)
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = await getPairApryAnd24HrVolume(
@@ -45,26 +48,39 @@ const Pools: FC<Props> = () => {
       }
     })
 
-    const _allPools = _pools.map((pool) => ({
-      contract: pool?.swap_address,
-      pool: pool?.pool_id,
-      token1Img: pool?.pool_id.includes('USD')
-        ? pool.pool_assets?.[0].logoURI
-        : pool.pool_assets?.[1].logoURI,
-      token2Img: pool?.pool_id.includes('USD')
-        ? pool.pool_assets?.[1].logoURI
-        : pool.pool_assets?.[0].logoURI,
-      apr: pool.apr24h,
-      volume24hr: pool.usdVolume24h,
-      totalLiq: pool.liquidity.available.total.dollarValue,
-      liquidity: pool.liquidity,
-      cta: () =>
-        router.push(
-          `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
-        ),
-    }))
+    const _allPools = _pools.map((pool) => {
+      let price = 0
+      if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
+        price = pool.asset0Price / pool.asset1Price
+      }
+      if (!pool.isUSDCPool && pool.asset1Price > 0) {
+        price = pool.asset1Price / pool.asset0Price
+      }
+
+      return {
+        contract: pool?.swap_address,
+        pool: pool?.pool_id,
+        token1Img: pool?.pool_id.includes('USD')
+          ? pool.pool_assets?.[0].logoURI
+          : pool.pool_assets?.[1].logoURI,
+        token2Img: pool?.pool_id.includes('USD')
+          ? pool.pool_assets?.[1].logoURI
+          : pool.pool_assets?.[0].logoURI,
+        apr: pool.apr24h,
+        volume24hr: pool.usdVolume24h,
+        totalLiq: pool.liquidity.available.total.dollarValue,
+        liquidity: pool.liquidity,
+        price,
+        isUSDCPool: pool?.isUSDCPool,
+        cta: () =>
+          router.push(
+            `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
+          ),
+      }
+    })
 
     setAllPools(_allPools)
+    setInitLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools, router])
 
@@ -107,7 +123,7 @@ const Pools: FC<Props> = () => {
             New Position
           </Button>
         </HStack>
-        <MyPoolsTable pools={myPools} isLoading={isLoading} />
+        <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
         <MobilePools pools={myPools} />
       </Box>
 
@@ -117,7 +133,10 @@ const Pools: FC<Props> = () => {
             All Pools
           </Text>
         </HStack>
-        <AllPoolsTable pools={allPoolsForShown} isLoading={isLoading} />
+        <AllPoolsTable
+          pools={allPoolsForShown}
+          isLoading={isLoading || isInitLoading}
+        />
         <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
       </Box>
     </VStack>

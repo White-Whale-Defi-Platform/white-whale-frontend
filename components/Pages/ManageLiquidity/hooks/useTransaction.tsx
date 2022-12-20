@@ -92,18 +92,18 @@ export const useTransaction = ({
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
-      } catch (error) {
+      } catch (e) {
         if (
-          /insufficient funds/i.test(error.toString()) ||
-          /Overflow: Cannot Sub with/i.test(error.toString())
+          /insufficient funds/i.test(e.toString()) ||
+          /Overflow: Cannot Sub with/i.test(e.toString())
         ) {
-          console.error(error)
+          console.error(e)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
         } else {
-          console.error(error)
+          console.error(e)
           setTxStep(TxStep.Idle)
           setError('Failed to execute transaction.')
           throw Error('Failed to execute transaction.')
@@ -234,7 +234,7 @@ export const useTransaction = ({
       msgs,
       fee,
     })
-  }, [msgs, fee, mutate, price])
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -270,6 +270,7 @@ export const useTransaction = ({
       error,
       reset,
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txStep, txInfo, txHash, error, reset, fee])
 }
 

@@ -43,23 +43,23 @@ const JSONEditorInput = styled(Box)`
       .ace-jsoneditor .ace_string {
         color : #3b8aee;
       }
-      
+
       div.jsoneditor-value.jsoneditor-number {
         color: #ee422e;
       }
-      
+
       div.jsoneditor-value.jsoneditor-boolean {
         color: #ff8c00;
       }
-      
+
       div.jsoneditor-value.jsoneditor-null {
         color: #004ed0;
       }
-      
+
       div.jsoneditor-value.jsoneditor-color-value {
         color: #1a1a1a;
       }
-      
+
       div.jsoneditor-value.jsoneditor-invalid {
         color: #1a1a1a;
       }
