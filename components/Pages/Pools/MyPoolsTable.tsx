@@ -22,6 +22,7 @@ import { CHIHUAHUA_MAINNET_CHAIN_ID } from 'constants/chain'
 import { formatPrice } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 
 import Loader from '../../Loader'
 import PoolName from './components/PoolName'
@@ -47,11 +48,8 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <Text align="right">{`${
-          info.row.original?.isUSDCPool ? '$' : ''
-        }${Number(info.getValue()).toFixed(3)}`}</Text>
-      )
+      return <Text align="right">{info.getValue()}</Text>
+      
     },
   }),
   columnHelper.accessor('myPosition', {
@@ -70,7 +68,7 @@ const columns = [
     ),
     cell: (info) => {
       return (
-        <Text align="right">{`${Number(info.getValue()).toFixed(2)} %`}</Text>
+        <Text align="right">{info.getValue()}</Text>
       )
     },
   }),
@@ -81,7 +79,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('totalLiq', {
@@ -113,7 +111,8 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  const currentWalletState = useRecoilValue(walletState)
+  const datProvidedByCoinhall = useIgnoreCoinhall()
+
   const table = useReactTable({
     data: pools,
     columns,
@@ -162,7 +161,7 @@ const PoolsTable = ({
       display={['none', 'flex']}
       flexDirection="column"
     >
-      <TableContainer width="full">
+      <TableContainer width="full" overflowX='hidden'>
         <Table variant="unstyled">
           <Thead>
             {table.getHeaderGroups().map((headerGroup, index) => (
@@ -193,7 +192,7 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
+      { datProvidedByCoinhall && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
           <Text
             color="white"

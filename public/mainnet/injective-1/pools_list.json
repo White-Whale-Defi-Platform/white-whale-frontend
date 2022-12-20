@@ -40,7 +40,6 @@
           "denom": "inj"
         },
         {
-          "id": "injective-protocol",
           "chain_id": "injective-1",
           "token_address": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
           "symbol": "USDT",
@@ -63,7 +62,7 @@
       "pool_assets": [
         {
           "chain_id": "injective-1",
-          "id": "injective-protocol",
+          "id": "cosmos",
           "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
           "symbol": "ATOM",
           "name": "ATOM",
@@ -74,7 +73,6 @@
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
         },
         {
-          "id": "injective-protocol",
           "chain_id": "injective-1",
           "token_address": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
           "symbol": "USDT",

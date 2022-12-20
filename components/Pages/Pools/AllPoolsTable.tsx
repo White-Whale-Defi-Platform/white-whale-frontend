@@ -25,6 +25,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
 import PoolName from './components/PoolName'
+import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -48,9 +49,7 @@ const columns = [
     ),
     cell: (info) => {
       return (
-        <Text align="right">{`${
-          info.row.original?.isUSDCPool ? '$' : ''
-        }${Number(info.getValue()).toFixed(3)}`}</Text>
+        <Text align="right">{info.getValue()}</Text>
       )
     },
   }),
@@ -62,7 +61,7 @@ const columns = [
     ),
     cell: (info) => {
       return (
-        <Text align="right">{`${Number(info.getValue()).toFixed(2)} %`}</Text>
+        <Text align="right">{info.getValue()}</Text>
       )
     },
   }),
@@ -73,7 +72,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('totalLiq', {
@@ -105,7 +104,7 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  const currentWalletState = useRecoilValue(walletState)
+  const datProvidedByCoinhall = useIgnoreCoinhall()
   const table = useReactTable({
     data: pools,
     columns,
@@ -185,7 +184,7 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
+      {datProvidedByCoinhall && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
           <Text
             color="white"
