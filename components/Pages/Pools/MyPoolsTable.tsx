@@ -154,14 +154,14 @@ const PoolsTable = ({
   return (
     <Flex
       padding={10}
-      width={['full', '1170px']}
+      // width={['full', '1170px']}
       background="#1C1C1C"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}
       flexDirection="column"
     >
-      <TableContainer width="full" overflowX='hidden'>
+      <TableContainer width="full" >
         <Table variant="unstyled">
           <Thead>
             {table.getHeaderGroups().map((headerGroup, index) => (
