@@ -67,7 +67,6 @@ export class OfflineSigningWallet implements Wallet {
     msgs: EncodeObject[],
     memo?: string
   ): Promise<TxResponse> {
-    console.log({messagesWallet: msgs})
     return this.client.signAndBroadcast(senderAddress, msgs, 'auto', memo)
   }
 
@@ -115,9 +114,10 @@ export class OfflineSigningWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
+    if(this.client.getTx) return this.client.getTx(txHash)
+    
     // @ts-ignore
-    const promise: Promise<GetTxResponse> =
-      this.client.queryClient.tx.getTx(txHash)
+    const promise: Promise<GetTxResponse> = this.client.queryClient.tx.getTx(txHash)
     return promise.then((result) => {
       return {
         height: result.txResponse.height.toNumber(),

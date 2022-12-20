@@ -188,7 +188,6 @@ export const useTransaction = ({
         onError?.()
       },
       onSuccess: (data: any) => {
-        console.log({success: data})
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash)
@@ -209,19 +208,13 @@ export const useTransaction = ({
           position: 'top-right',
           isClosable: true,
         })
-      },
-      onSettled(data, error, variables, context) {
-        console.log({
-          data, error, variables, context
-        })
-      },
+      }
     }
   )
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      console.log({txHash, client})
       if (txHash == null) {
         return
       }
@@ -252,7 +245,6 @@ export const useTransaction = ({
   }, [msgs, fee, mutate, price])
 
   useEffect(() => {
-    console.log({txHash, txInfo})
     if (txInfo != null && txHash != null) {
       if (txInfo?.txResponse?.code) {
         setTxStep(TxStep.Failed)

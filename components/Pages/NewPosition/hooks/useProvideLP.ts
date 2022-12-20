@@ -56,8 +56,6 @@ const useProvideLP = ({ reverse = false }) => {
     lpB?.amount,
     flipped ? tokenInfoA?.decimals : tokenInfoB?.decimals
   )
-  console.log(tokenAAmount);
-  console.log(tokenBAmount);
   const simulated = useMemo(() => {
     if (
       (!reverse && !lpTokenA?.amount) ||

@@ -88,8 +88,7 @@ class Injective {
     }
 
     async getTx(txHash: string) {
-        const response = await this.txClient.fetchTx(txHash)
-        return response
+       return this.txClient.fetchTx(txHash)
     }
 
     async signAndBroadcast(signerAddress: string, messages: EncodeObject[], fee: StdFee | "auto" | number, memo?: string){
