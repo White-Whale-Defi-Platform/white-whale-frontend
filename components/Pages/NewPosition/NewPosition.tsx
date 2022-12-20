@@ -47,7 +47,7 @@ const NewPosition = () => {
         const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
         setTokenSwapState([defaultFrom, defaultTo])
         setResetForm(true)
-        router.replace(params)
+        router.push(`/${chainIdParam}/pools/new_position${params}`)
         return
       }
     } else {
@@ -71,12 +71,17 @@ const NewPosition = () => {
 
   useEffect(() => {
     if (
-      chainIdParam &&
+      chainId &&
       tokenA?.tokenSymbol !== null &&
       tokenB?.tokenSymbol !== null
     ) {
-      const url = `/${chainIdParam}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-      router.push(url)
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain) {
+        const url = `/${currenChain.label.toLowerCase()}/pools/new_position?from=${
+          tokenA?.tokenSymbol
+        }&to=${tokenB?.tokenSymbol}`
+        router.push(url)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
