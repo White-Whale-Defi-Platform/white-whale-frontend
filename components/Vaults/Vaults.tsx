@@ -67,7 +67,7 @@ const Vaults = (props: Props) => {
     <VStack
       width={{ base: '100%', md: '1160px' }}
       alignItems="center"
-      margin="auto"
+      // margin="auto"
     >
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>

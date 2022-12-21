@@ -189,14 +189,14 @@ export const useTransaction = ({
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
-        setTxHash(data.transactionHash)
+        setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash)
         queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
         toast({
           title: 'Swap Success.',
           description: (
             <Finder
-              txHash={data.transactionHash}
+              txHash={data.transactionHash || data?.txHash}
               chainId={client?.client?.chainId}
             >
               {' '}
@@ -218,8 +218,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-
-      return client.getTx(txHash)
+      return client.client.getTx(txHash)
     },
     {
       enabled: txHash != null,

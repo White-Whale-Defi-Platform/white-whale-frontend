@@ -140,5 +140,60 @@
       "high": 10
     },
     "features": ["cosmwasm"]
+  },
+  {
+    "chainId": "injective-1",
+    "chainName": "Injective",
+    "rpc": "https://ww-injective-rpc.polkachu.com",
+    "rest": "https://ww-injective-rest.polkachu.com",
+    "label": "Injective",
+    "icon": "/logos/injective.png",
+    "stakeCurrency": {
+      "coinDenom": "INJ",
+      "coinMinimalDenom": "inj",
+      "coinDecimals": 18,
+      "coinGeckoId": "injective-protocol"
+    },
+    "walletUrl": "https://hub.injective.dev/",
+    "walletUrlForStaking": "https://hub.injective.dev/",
+    "bip44": {
+      "coinType": 60
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "inj",
+      "bech32PrefixAccPub": "injpub",
+      "bech32PrefixValAddr": "injvaloper",
+      "bech32PrefixValPub": "injvaloperpub",
+      "bech32PrefixConsAddr": "injvalcons",
+      "bech32PrefixConsPub": "injvalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "INJ",
+        "coinMinimalDenom": "inj",
+        "coinDecimals": 18,
+        "coinGeckoId": "injective-protocol"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "INJ",
+        "coinMinimalDenom": "inj",
+        "coinDecimals": 18,
+        "coinGeckoId": "injective-protocol",
+        "gasPriceStep": {
+          "low": 9000000000,
+          "average": 50000000000,
+          "high": 80000000000
+        }
+      }
+    ],
+    "gasPriceStep": {
+      "low": 9000000000,
+      "average": 50000000000,
+      "high": 80000000000
+    },
+    "coinType": 60,
+    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
   }
 ]

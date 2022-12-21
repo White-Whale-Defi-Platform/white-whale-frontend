@@ -56,10 +56,6 @@ const DepositForm = ({
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
 
-  console.log({
-    tokenA,
-    tokenB,
-  })
   const { control, handleSubmit, formState, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
