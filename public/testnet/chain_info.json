@@ -146,12 +146,7 @@
       "high": 80000000000
     },
     "coinType": 60,
-    "features": [
-      "ibc-transfer",
-      "ibc-go",
-      "eth-address-gen",
-      "eth-key-sign"
-    ],
+    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "beta": true
   }
 ]

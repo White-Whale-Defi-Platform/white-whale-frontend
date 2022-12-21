@@ -208,7 +208,7 @@ export const useTransaction = ({
           position: 'top-right',
           isClosable: true,
         })
-      }
+      },
     }
   )
 
@@ -218,8 +218,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-        return client.client.getTx(txHash)
-      
+      return client.client.getTx(txHash)
     },
     {
       enabled: txHash != null,

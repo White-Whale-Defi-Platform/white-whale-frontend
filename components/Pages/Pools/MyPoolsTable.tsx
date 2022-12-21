@@ -49,7 +49,6 @@ const columns = [
     ),
     cell: (info) => {
       return <Text align="right">{info.getValue()}</Text>
-      
     },
   }),
   columnHelper.accessor('myPosition', {
@@ -67,9 +66,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <Text align="right">{info.getValue()}</Text>
-      )
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('volume24hr', {
@@ -192,7 +189,7 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      { datProvidedByCoinhall && (
+      {datProvidedByCoinhall && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
           <Text
             color="white"

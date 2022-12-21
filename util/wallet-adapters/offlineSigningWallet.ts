@@ -4,7 +4,11 @@ import {
   SigningCosmWasmClient,
 } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Coin } from '@cosmjs/launchpad'
-import { EncodeObject, OfflineDirectSigner, OfflineSigner } from '@cosmjs/proto-signing'
+import {
+  EncodeObject,
+  OfflineDirectSigner,
+  OfflineSigner,
+} from '@cosmjs/proto-signing'
 import {
   SigningStargateClient,
   SigningStargateClientOptions,
@@ -47,9 +51,11 @@ export class OfflineSigningWallet implements Wallet {
     network: string,
     options?: SigningStargateClientOptions
   ): Promise<OfflineSigningWallet> {
-
     if (chainId.includes('injective')) {
-      const injectiveClient = new Injective(signer, chainId ==='injective-1'? Network.MainnetK8s : Network.TestnetK8s)
+      const injectiveClient = new Injective(
+        signer,
+        chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s
+      )
       return new Promise((resolve, reject) => {
         resolve(new OfflineSigningWallet(injectiveClient, network))
       })
@@ -82,7 +88,7 @@ export class OfflineSigningWallet implements Wallet {
       msg,
       'auto',
       undefined,
-      funds,
+      funds
     )
   }
 
@@ -95,7 +101,7 @@ export class OfflineSigningWallet implements Wallet {
 
   simulate(
     signerAddress: string,
-    messages: readonly EncodeObject[] |  Record<string, unknown>,
+    messages: readonly EncodeObject[] | Record<string, unknown>,
     memo: string | undefined
   ): Promise<number> {
     return this.client.simulate(signerAddress, messages, memo)
@@ -114,10 +120,11 @@ export class OfflineSigningWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
-    if(this.client.getTx) return this.client.getTx(txHash)
-    
+    if (this.client.getTx) return this.client.getTx(txHash)
+
     // @ts-ignore
-    const promise: Promise<GetTxResponse> = this.client.queryClient.tx.getTx(txHash)
+    const promise: Promise<GetTxResponse> =
+      this.client.queryClient.tx.getTx(txHash)
     return promise.then((result) => {
       return {
         height: result.txResponse.height.toNumber(),

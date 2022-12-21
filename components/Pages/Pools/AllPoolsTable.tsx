@@ -48,9 +48,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <Text align="right">{info.getValue()}</Text>
-      )
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('apr', {
@@ -60,9 +58,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <Text align="right">{info.getValue()}</Text>
-      )
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('volume24hr', {

@@ -56,7 +56,6 @@ const useSwap = ({ reverse }) => {
     )
   }, [simulated, slippageToDecimal])
 
-
   const tx = useTransaction({
     enabled: !!executeMsg,
     swapAddress: routerAddress,

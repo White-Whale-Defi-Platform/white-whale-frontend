@@ -67,7 +67,7 @@ const useProvideLP = ({ reverse = false }) => {
     )
       return null
 
-    const decimals = reverse ? tokenInfoB?.decimals : tokenInfoA?.decimals;
+    const decimals = reverse ? tokenInfoB?.decimals : tokenInfoA?.decimals
     const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0
     const tokenA = num(tokenAReserve)
       .div(10 ** tokenInfoA?.decimals)

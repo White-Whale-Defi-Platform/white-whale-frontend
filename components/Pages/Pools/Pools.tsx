@@ -18,7 +18,7 @@ import MyPoolsTable from './MyPoolsTable'
 type Props = {}
 
 const commingSoonNetworks = ['injective']
-const COMING_SOON='coming soon'
+const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
@@ -27,7 +27,10 @@ const Pools: FC<Props> = () => {
   const { data: poolList } = usePoolsListQuery()
   const { chainId } = useRecoilValue(walletState)
 
-  const showCommingSoon = useMemo(() => commingSoonNetworks.includes(chainId?.split('-')?.[0]), [chainId])
+  const showCommingSoon = useMemo(
+    () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
+    [chainId]
+  )
 
   const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
@@ -74,11 +77,17 @@ const Pools: FC<Props> = () => {
         token2Img: pool?.pool_id.includes('USD')
           ? pool.pool_assets?.[1].logoURI
           : pool.pool_assets?.[0].logoURI,
-        apr: showCommingSoon? COMING_SOON : `${Number(pool.apr24h).toFixed(2)}%`,
-        volume24hr: showCommingSoon? COMING_SOON : `$${formatPrice(pool.usdVolume24h)}`,
+        apr: showCommingSoon
+          ? COMING_SOON
+          : `${Number(pool.apr24h).toFixed(2)}%`,
+        volume24hr: showCommingSoon
+          ? COMING_SOON
+          : `$${formatPrice(pool.usdVolume24h)}`,
         totalLiq: pool.liquidity.available.total.dollarValue,
         liquidity: pool.liquidity,
-        price : showCommingSoon? COMING_SOON : `${ pool?.isUSDCPool ? '$' : '' }${Number(price).toFixed(3)}`,
+        price: showCommingSoon
+          ? COMING_SOON
+          : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
         isUSDCPool: pool?.isUSDCPool,
         cta: () =>
           router.push(
