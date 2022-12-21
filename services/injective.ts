@@ -76,7 +76,11 @@ class Injective {
     }
 
     getBalance(address: string, searchDenom: string) {
-        return this.bankApi.fetchBalance(address, searchDenom)
+        try {
+            return this.bankApi.fetchBalance(address, searchDenom)
+        } catch (error) {
+            return 0
+        }
     }
 
     getChainId() {
@@ -88,10 +92,10 @@ class Injective {
     }
 
     async getTx(txHash: string) {
-       return this.txClient.fetchTx(txHash)
+        return this.txClient.fetchTx(txHash)
     }
 
-    async signAndBroadcast(signerAddress: string, messages: EncodeObject[], fee: StdFee | "auto" | number, memo?: string){
+    async signAndBroadcast(signerAddress: string, messages: EncodeObject[], fee: StdFee | "auto" | number, memo?: string) {
         try {
             this.txRaw = null
             const { txRaw } = await this.prepair(messages)
@@ -130,8 +134,30 @@ class Injective {
             const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
             const latestHeight = latestBlock.header.height
             const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
+            console.log({ messages })
 
-            // For each msg in messages, create a MsgExecuteContract type so we can call toDirectSign()
+            // const [[action, msgs]] = Object.entries(messages)
+
+            //     const isLPMessage = action?.includes('provide')
+
+            //     const executeMessageJson = {
+            //         action,
+            //         msg: msgs as object
+            //     }
+            //     // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins 
+            //     const params = {
+            //         funds: { denom: 'inj', amount: '100000000000000000'},
+            //         sender: this.account.address,
+            //         contractAddress: 'inj1hyja4uyjktpeh0fxzuw2fmjudr85rk2qxgqkvu',
+            //         exec: executeMessageJson,
+            //     };
+
+            //     console.log({executeMessageJson, params})
+
+            //     const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
+
+            //     console.log({MessageExecuteContract})
+
             const encodedExecuteMsg = messages.map((msg, idx) => {
                 const { msgT, contract, funds } = msg?.value || {}
                 const msgString = Buffer.from(msg?.value?.msg).toString('utf8')
@@ -145,9 +171,10 @@ class Injective {
                     action,
                     msg: msgs as object
                 }
+                console.log({ executeMessageJson })
                 // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins 
                 const params = {
-                    funds: isLPMessage? funds: funds?.[0],
+                    funds: isLPMessage ? funds : funds?.[0],
                     sender: this.account.address,
                     contractAddress: contract,
                     exec: executeMessageJson,
@@ -165,7 +192,7 @@ class Injective {
                     ...DEFAULT_STD_FEE,
                     gas: HIGHER_DEFAULT_GAS_LIMIT || DEFAULT_STD_FEE.gas
                 },
-                message: encodedExecuteMsg.map((msg) => {return msg.toDirectSign()}),
+                message: encodedExecuteMsg.map((msg) => msg.toDirectSign()),
                 sequence: this.baseAccount.sequence,
                 timeoutHeight: timeoutHeight.toNumber(),
                 accountNumber: this.baseAccount.accountNumber,
@@ -208,12 +235,54 @@ class Injective {
 
     }
 
+
+    async getTxRawFromJson(message: Record<string, unknown>, contractAddress, funds) {
+        await this.init()
+        const restEndpoint = getNetworkEndpoints(this.network).rest
+        const chainRestTendermintApi = new ChainRestTendermintApi(restEndpoint)
+        const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
+        const latestHeight = latestBlock.header.height
+        const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
+        const [[action, msgs]] = Object.entries(message)
+
+        const executeMessageJson = {
+            action,
+            msg: msgs as object
+        }
+
+        const params = {
+            funds,
+            sender: this.account.address,
+            contractAddress,
+            exec: executeMessageJson,
+        };
+
+        const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
+
+        return createTransaction({
+            pubKey: this.pubKey,
+            chainId: this.chainId,
+            fee: {
+                ...DEFAULT_STD_FEE,
+                gas: HIGHER_DEFAULT_GAS_LIMIT || DEFAULT_STD_FEE.gas
+            },
+            message: [MessageExecuteContract].map((msg) => msg.toDirectSign()),
+            sequence: this.baseAccount.sequence,
+            timeoutHeight: timeoutHeight.toNumber(),
+            accountNumber: this.baseAccount.accountNumber,
+        })
+    }
+
     async execute(
         senderAddress: string,
         contractAddress: string,
         msg: Record<string, unknown>,
         funds?: Coin[]
     ) {
+        if (!this.txRaw) {
+            const { txRaw } = await this.getTxRawFromJson(msg, contractAddress, [])
+            this.txRaw = txRaw
+        }
 
         try {
             const signDoc = createCosmosSignDocFromTransaction({
@@ -226,14 +295,15 @@ class Injective {
             const signTxRaw = createTxRawFromSigResponse(directSignResponse)
             this.txRaw = null
             return this.txClient.broadcast(signTxRaw).then((result) => {
+                console.log({result})
                 if (!!result.code) {
-                  throw new Error(
-                    `Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
-                  )
+                    throw new Error(
+                        `Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
+                    )
                 } else {
-                  return result
+                    return result
                 }
-              })
+            })
         }
         catch (error) {
             const errorMessage = error?.response?.data?.message || error?.message || error?.errorMessage
