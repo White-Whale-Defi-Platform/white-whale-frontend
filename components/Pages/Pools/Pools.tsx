@@ -12,6 +12,8 @@ import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { getPairApryAnd24HrVolume } from 'util/coinhall'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
@@ -19,6 +21,9 @@ import MyPoolsTable from './MyPoolsTable'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
+
+const commingSoonNetworks = ['injective']
+const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
   const [poolApys, setPoolApys] = useState<any[]>([])
@@ -86,17 +91,19 @@ const Pools: FC<Props> = () => {
       return {
         contract: pool?.swap_address,
         pool: pool?.pool_id,
-        token1Img: pool?.pool_id.includes('USDC')
+        token1Img: pool?.pool_id.includes('USD')
           ? pool.pool_assets?.[0].logoURI
           : pool.pool_assets?.[1].logoURI,
-        token2Img: pool?.pool_id.includes('USDC')
+        token2Img: pool?.pool_id.includes('USD')
           ? pool.pool_assets?.[1].logoURI
           : pool.pool_assets?.[0].logoURI,
         apr: pool.apr24h,
         volume24hr: pool.usdVolume24h,
         totalLiq: pool.liquidity?.available?.total?.dollarValue,
         liquidity: pool.liquidity,
-        price,
+        price: showCommingSoon
+          ? COMING_SOON
+          : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
         isUSDCPool: pool?.isUSDCPool,
         cta: () =>
           router.push(

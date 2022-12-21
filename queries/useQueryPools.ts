@@ -124,6 +124,7 @@ export const useQueryMultiplePoolsLiquidity = ({
           tokenSupply: swap.lp_token_supply,
           tokenReserves: totalReserve[0],
           tokenDollarPrice: tokenADollarPrice,
+          tokenDecimals: tokenA?.decimals,
         }),
       }
     }

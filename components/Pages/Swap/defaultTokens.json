@@ -28,5 +28,15 @@
       "tokenSymbol": "PUPPY",
       "amount": 0
     }
+  ],
+  "inj": [
+    {
+      "tokenSymbol": "INJ",
+      "amount": 0
+    },
+    {
+      "tokenSymbol": "USDT",
+      "amount": 0
+    }
   ]
 }
