@@ -92,7 +92,7 @@ const Pools: FC<Props> = () => {
           totalLiq: pool.liquidity.available.total.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
-            ? asset0Price?.toFixed(2)
+            ? `$${asset0Price?.toFixed(2)}`
             : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDCPool: pool?.isUSDCPool,
           cta: () =>
