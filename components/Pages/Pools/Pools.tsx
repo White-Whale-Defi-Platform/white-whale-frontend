@@ -14,6 +14,8 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { getPairApryAnd24HrVolume } from 'util/coinhall'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { getTokenPrice } from 'util/coingecko'
+import { getPairApryAnd24HrVolume } from 'util/coinhall'
 
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
@@ -49,9 +51,9 @@ const Pools: FC<Props> = () => {
     }
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
-    const poosWithAprAnd24HrVolume = await getPairApryAnd24HrVolume(
-      poolPairAddrList
-    )
+    const poosWithAprAnd24HrVolume = showCommingSoon
+      ? []
+      : await getPairApryAnd24HrVolume(poolPairAddrList)
     setPoolApys(poosWithAprAnd24HrVolume)
     setInitLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,14 +81,15 @@ const Pools: FC<Props> = () => {
       }
     })
 
-    const _allPools = _pools.map((pool) => {
-      let price = 0
-      if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
-        price = pool.asset0Price / pool.asset1Price
-      }
-      if (!pool.isUSDCPool && pool.asset1Price > 0) {
-        price = pool.asset1Price / pool.asset0Price
-      }
+    const _allPools = await Promise.all(
+      _pools.map(async (pool) => {
+        let price = 0
+        if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
+          price = pool.asset0Price / pool.asset1Price
+        }
+        if (!pool.isUSDCPool && pool.asset1Price > 0) {
+          price = pool.asset1Price / pool.asset0Price
+        }
 
       return {
         contract: pool?.swap_address,

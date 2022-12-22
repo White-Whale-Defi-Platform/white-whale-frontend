@@ -32,6 +32,19 @@ export const getTokenCGCId = (address: string) => {
       tokenCGCId = 'junoswap-raw-dao'
       break
 
+    case 'peggy0xdAC17F958D2ee523a2206206994597C13D831ec7':
+      // raw
+      tokenCGCId = 'tether'
+      break
+    case 'inj':
+      // raw
+      tokenCGCId = 'injective-protocol'
+      break
+    case 'ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9':
+      // raw
+      tokenCGCId = 'cosmos'
+      break
+
     default:
       break
   }
@@ -46,7 +59,7 @@ export const getCGCTokenHistoryPriceUrl = (id: string, timestamp: number) => {
   return `${coingeckoV3RootUrl}/${id}/history?date=${dateTime}&localization=false`
 }
 
-export const getTokenPrice = async (address: string, timestamp: number) => {
+export const getTokenPrice = async (address: string, timestamp?: number) => {
   const tokenCGCId = getTokenCGCId(address)
   if (tokenCGCId === '' || !timestamp) return 1
 
