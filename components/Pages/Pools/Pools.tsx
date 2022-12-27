@@ -56,7 +56,7 @@ const Pools: FC<Props> = () => {
     if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
       if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(`/${currenChain.label.toLowerCase()}/pools`)
+        // router.push(`/${currenChain.label.toLowerCase()}/pools`)
       } else {
         initPools()
       }
