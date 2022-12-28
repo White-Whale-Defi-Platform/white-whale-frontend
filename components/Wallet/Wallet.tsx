@@ -28,26 +28,22 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     useTerraModalOrConnectKeplr(onOpenModal)
 
   useEffect(() => {
-    if (currentWalletState.chainId) {
-      const defaultChain = chains.find((row) => row.chainId === 'juno-1')
-      const targetChain = chains.find(
-        (row) => row.label.toLowerCase() === chainIdParam
-      )
-
-      if (targetChain && targetChain.chainId !== currentWalletState.chainId) {
-        setCurrentWalletState({
-          ...currentWalletState,
-          chainId: targetChain.chainId,
-        })
-      }
-
-      if (chains && chains.length > 0 && !targetChain) {
-        setCurrentWalletState({
-          ...currentWalletState,
-          chainId: defaultChain.chainId,
-        })
-        router.push(getPathName(router.pathname, defaultChain.label))
-      }
+    const defaultChain = chains.find((row) => row.chainId === 'juno-1')
+    const targetChain = chains.find(
+      (row) => row.label.toLowerCase() === chainIdParam
+    )
+    if (targetChain && targetChain.chainId !== currentWalletState.chainId) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: targetChain.chainId,
+      })
+    }
+    if (chains && chains.length > 0 && !targetChain) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: defaultChain.chainId,
+      })
+      router.push(getPathName(router, defaultChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWalletState.chainId, chainIdParam, chains])
@@ -77,10 +73,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       const sourceChain = chains.find(
         (row) => row.chainId.toLowerCase() === chain.chainId
       )
-      router.push(getPathName(router.pathname, sourceChain.label))
+      router.push(getPathName(router, sourceChain.label))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentWalletState.chainId, chainInfo]
+    [currentWalletState.chainId, chains, router]
   )
 
   if (!connected && !connectedWallet) {

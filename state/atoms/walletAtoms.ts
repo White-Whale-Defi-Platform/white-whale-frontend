@@ -42,7 +42,8 @@ function createWalletState<TClient = any, TState = {}>({
     default: {
       status: WalletStatusType.idle,
       client: null,
-      chainId: 'juno-1',
+      // chainId: 'juno-1',
+      chainId: null,
       address: '',
       network: 'mainnet',
       activeWallet: 'keplr',

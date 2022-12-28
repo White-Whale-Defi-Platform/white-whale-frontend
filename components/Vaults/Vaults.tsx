@@ -1,15 +1,10 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
-import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
-import MyVaultsTable from './MyVaultsTable'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -18,20 +13,8 @@ const Vaults: FC<Props> = () => {
   const [isAllVaultsInited, setAllVaultsInited] = useState<boolean>(true)
   const [isMyVaultsInited, setMyVaultsInited] = useState<boolean>(true)
   const { vaults, isLoading } = useVault()
-  const { address, chainId } = useRecoilValue(walletState)
-  const chains = useChains()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
-
-  useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(`/${currenChain.label.toLowerCase()}/vaults`)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains])
 
   const myVaults = useMemo(() => {
     if (!vaults) return []
