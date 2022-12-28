@@ -5,7 +5,6 @@ import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -17,10 +16,7 @@ import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
-
-const Pools: FC<Props> = () => {
+const Pools: FC = () => {
   const [poolApys, setPoolApys] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { address, chainId } = useRecoilValue(walletState)
@@ -55,9 +51,7 @@ const Pools: FC<Props> = () => {
   useEffect(() => {
     if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        // router.push(`/${currenChain.label.toLowerCase()}/pools`)
-      } else {
+      if (currenChain && currenChain.label.toLowerCase() === chainIdParam) {
         initPools()
       }
     }
