@@ -8,6 +8,7 @@ import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
+import useConnectKeplr from 'hooks/useConnectKeplr'
 import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
@@ -27,6 +28,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { showTerraModalOrConnectKeplr } =
     useTerraModalOrConnectKeplr(onOpenModal)
 
+  const { connectKeplr } = useConnectKeplr()
+
   useEffect(() => {
     const defaultChain = chains.find((row) => row.chainId === 'juno-1')
     const targetChain = chains.find(
@@ -43,10 +46,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
         ...currentWalletState,
         chainId: defaultChain.chainId,
       })
-      router.push(getPathName(router, defaultChain.label))
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId, chainIdParam, chains])
+  }, [chainIdParam, chains])
 
   const denom = useMemo(() => {
     if (!chainInfo) return
@@ -63,21 +66,26 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const onChainChange = useCallback(
     (chain) => {
-      // disconnect
       onDisconnect()
-
-      // update state
       setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
-
-      // update route
-      const sourceChain = chains.find(
-        (row) => row.chainId.toLowerCase() === chain.chainId
-      )
-      router.push(getPathName(router, sourceChain.label))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentWalletState.chainId, chains, router]
   )
+
+  useEffect(() => {
+    // connect wallet
+    connectKeplr()
+
+    // update route
+    const sourceChain = chains.find(
+      (row) => row.chainId.toLowerCase() === currentWalletState.chainId
+    )
+    if (sourceChain) {
+      router.push(getPathName(router, sourceChain.label))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWalletState.chainId])
 
   if (!connected && !connectedWallet) {
     return (
