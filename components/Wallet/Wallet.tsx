@@ -12,6 +12,7 @@ import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { getPathName } from 'util/route'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [currentWalletState, setCurrentWalletState] =
@@ -45,6 +46,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           ...currentWalletState,
           chainId: defaultChain.chainId,
         })
+        router.push(getPathName(router.pathname, defaultChain.label))
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,8 +67,17 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const onChainChange = useCallback(
     (chain) => {
+      // disconnect
       onDisconnect()
+
+      // update state
       setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+
+      // update route
+      const sourceChain = chains.find(
+        (row) => row.chainId.toLowerCase() === chain.chainId
+      )
+      router.push(getPathName(router.pathname, sourceChain.label))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentWalletState.chainId, chainInfo]
