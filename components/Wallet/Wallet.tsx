@@ -31,6 +31,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { connectKeplr } = useConnectKeplr()
 
   useEffect(() => {
+    if (router.pathname === '/') return
+
     const defaultChain = chains.find((row) => row.chainId === 'juno-1')
     const targetChain = chains.find(
       (row) => row.label.toLowerCase() === chainIdParam
