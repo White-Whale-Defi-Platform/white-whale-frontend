@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -14,72 +15,92 @@ import useProvideLP from './hooks/useProvideLP'
 import NewPositionForm from './NewPositionForm'
 
 const NewPosition = () => {
-  const router: NextRouter = useRouter()
-  const chains = useChains()
+  const [resetForm, setResetForm] = useState(false)
+  const [reverse, setReverse] = useState<boolean>(false)
 
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
   const { chainId, key, address, status } = useRecoilValue(walletState)
-  const [resetForm, setResetForm] = useState(false)
-  const [reverse, setReverse] = useState<boolean>(false)
   const { simulated, tx } = useProvideLP({ reverse })
+  const router: NextRouter = useRouter()
+  const chains = useChains()
+  const { data: poolList } = usePoolsListQuery()
 
   const chainIdParam = router.query.chainId as string
   const { from, to } = router.query
+  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currenChain?.label.toLowerCase()
 
-  useEffect(() => {
-    if (chainId && from && to) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
+  const tokenList = useMemo(() => {
+    let listObj = {}
+    const { pools = [] } = poolList || {}
+    pools
+      .map(({ pool_assets }) => pool_assets)
+      .map(([a, b]) => {
+        listObj = { ...listObj, [a.symbol]: a, [b.symbol]: b }
+      })
 
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(
-          `/${currenChain.label.toLowerCase()}/pools/new_position?from=${from}&to=${to}`
-        )
+    return Object.keys(listObj).map((row) => {
+      return {
+        symbol: listObj[row].symbol,
+        decimals: listObj[row].decimals,
+        amount: 0,
       }
-    }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, chains, from, to])
+  }, [poolList, chainId])
 
   useEffect(() => {
-    if (!from && !to) {
-      if (chainIdParam) {
-        const [defaultFrom, defaultTo] = defaultTokens[chainIdParam]
-        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
-        setTokenSwapState([defaultFrom, defaultTo])
-        setResetForm(true)
-        router.push(`/${chainIdParam}/pools/new_position${params}`)
-        return
-      }
+    if (!currentChainId) return
+
+    const [defaultFrom, defaultTo] = defaultTokens[currentChainId]
+    let newState: TokenItemState[] = [
+      {
+        tokenSymbol: String(from),
+        amount: 0,
+        decimals: 6,
+      },
+      {
+        tokenSymbol: String(to),
+        amount: 0,
+        decimals: 6,
+      },
+    ]
+
+    if (
+      tokenList.find((row) => row.symbol === from) &&
+      tokenList.find((row) => row.symbol === to)
+    ) {
+      return
     } else {
-      const newState: TokenItemState[] = [
+      newState = [
         {
-          tokenSymbol: String(from),
+          tokenSymbol: String(defaultFrom.tokenSymbol),
           amount: 0,
           decimals: 6,
         },
         {
-          tokenSymbol: String(to),
+          tokenSymbol: String(defaultTo.tokenSymbol),
           amount: 0,
           decimals: 6,
         },
       ]
-      setTokenSwapState(newState)
+      setResetForm(true)
     }
 
+    setTokenSwapState(newState)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, chainId])
 
   useEffect(() => {
-    if (
-      chainId &&
-      tokenA?.tokenSymbol !== null &&
-      tokenB?.tokenSymbol !== null
-    ) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain) {
-        const url = `/${currenChain.label.toLowerCase()}/pools/new_position?from=${
-          tokenA?.tokenSymbol
-        }&to=${tokenB?.tokenSymbol}`
+    if (!currentChainId) return
+
+    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
+      if (
+        tokenList.find((row) => row.symbol === tokenA?.tokenSymbol) &&
+        tokenList.find((row) => row.symbol === tokenB?.tokenSymbol)
+      ) {
+        const url = `/${currentChainId}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
         router.push(url)
       }
     }
