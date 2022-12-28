@@ -40,7 +40,7 @@ const ManageLiquidity: FC = () => {
   const currenChain = chains.find((row) => row.chainId === chainId)
 
   useEffect(() => {
-    if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+    if (currenChain) {
       if (poolId) {
         const pools = poolList?.pools
         if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
@@ -53,7 +53,7 @@ const ManageLiquidity: FC = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, poolId, poolList, address, chains])
+  }, [chainId, poolId, poolList, address, chains])
 
   useEffect(() => {
     if (poolId) {
