@@ -31,6 +31,11 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { connectKeplr } = useConnectKeplr()
 
   useEffect(() => {
+    onDisconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (router.pathname === '/') return
 
     const defaultChain = chains.find((row) => row.chainId === 'juno-1')
@@ -76,6 +81,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   )
 
   useEffect(() => {
+    if (!currentWalletState.chainId) return
     // connect wallet
     connectKeplr()
 
