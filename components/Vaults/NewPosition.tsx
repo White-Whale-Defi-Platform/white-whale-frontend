@@ -39,7 +39,7 @@ const NewPosition = () => {
   useEffect(() => {
     if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+      if (currenChain) {
         if (!vault) {
           router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
         } else {
@@ -50,7 +50,7 @@ const NewPosition = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains, vault])
+  }, [chainId, address, chains, vault])
 
   const edgeTokenList = useMemo(
     () => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
