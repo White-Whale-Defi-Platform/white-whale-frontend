@@ -51,6 +51,8 @@ const Pools: FC<Props> = () => {
       return
     }
 
+    setInitLoading(true)
+
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
       ? []
@@ -125,7 +127,7 @@ const Pools: FC<Props> = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains, pools])
+  }, [chainId, address, chains, pools])
 
   // get a list of my pools
   const myPools = useMemo(() => {
