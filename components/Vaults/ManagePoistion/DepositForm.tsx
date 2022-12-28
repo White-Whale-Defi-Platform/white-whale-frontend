@@ -43,7 +43,6 @@ const DepositForm = ({
   vaultAddress,
   refetch,
 }: Props) => {
-  const router = useRouter()
   const baseToken = useBaseTokenInfo()
 
   const [token, setToken] = useState({
@@ -72,15 +71,6 @@ const DepositForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [token]
   )
-
-  useEffect(() => {
-    const chainIdParam = router.query.chainId as string
-    if (chainIdParam) {
-      const path = router.route.replace('[chainId]', chainIdParam)
-      router.push(`${path}?vault=${token?.tokenSymbol}`)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token.tokenSymbol])
 
   const { tx } = useDepost({ vaultAddress, token, onSuccess })
 
