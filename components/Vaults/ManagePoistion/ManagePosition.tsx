@@ -16,7 +16,7 @@ import {
 import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 import useVault, { useVaultDepost } from '../hooks/useVaults'
@@ -30,7 +30,6 @@ const ManagePosition = () => {
   const params = new URLSearchParams(location.search)
   const { chainId, key, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNO'
-  const chainIdParam = router.query.chainId as string
 
   const vault = useMemo(
     () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
@@ -40,7 +39,7 @@ const ManagePosition = () => {
   useEffect(() => {
     if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
+      if (currenChain) {
         if (!vault) {
           router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
         } else {
@@ -51,17 +50,7 @@ const ManagePosition = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains, vault])
-
-  useEffect(() => {
-    if (!vault) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain) {
-        router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vault, chainId, chains])
+  }, [chainId, address, chains, vault])
 
   const {
     balance: lpTokenBalance,
