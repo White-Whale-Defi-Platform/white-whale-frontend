@@ -20,7 +20,7 @@ const NewPosition = () => {
 
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
-  const { chainId, key, address, status } = useRecoilValue(walletState)
+  const { chainId, network, address, status } = useRecoilValue(walletState)
   const { simulated, tx } = useProvideLP({ reverse })
   const router: NextRouter = useRouter()
   const chains = useChains()
@@ -53,7 +53,7 @@ const NewPosition = () => {
   useEffect(() => {
     if (!currentChainId) return
 
-    const [defaultFrom, defaultTo] = defaultTokens[currentChainId]
+    const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
     let newState: TokenItemState[] = [
       {
         tokenSymbol: String(from),
