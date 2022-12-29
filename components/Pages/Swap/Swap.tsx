@@ -26,7 +26,7 @@ const Swap: FC<SwapProps> = ({}) => {
   const [reverse, setReverse] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
 
-  const { chainId, address, status } = useRecoilValue(walletState)
+  const { chainId, address, network, status } = useRecoilValue(walletState)
   const chains = useChains()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
@@ -56,7 +56,7 @@ const Swap: FC<SwapProps> = ({}) => {
   useEffect(() => {
     if (!currentChainId) return
     const { from, to } = router.query
-    const [defaultFrom, defaultTo] = defaultTokens[currentChainId]
+    const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
 
     let newState: TokenItemState[] = [
       {
