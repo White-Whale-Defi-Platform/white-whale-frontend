@@ -38,7 +38,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   useEffect(() => {
     if (router.pathname === '/') return
 
-    const defaultChain = chains.find((row) => row.chainId === 'juno-1')
+    const defaultChain =
+      currentWalletState.network === 'mainnet'
+        ? chains.find((row) => row.chainId === 'juno-1')
+        : chains.find((row) => row.chainId === 'uni-3')
     const targetChain = chains.find(
       (row) => row.label.toLowerCase() === chainIdParam
     )
