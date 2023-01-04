@@ -18,7 +18,7 @@ import MyPoolsTable from './MyPoolsTable'
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
-const commingSoonNetworks = ['injective']
+const commingSoonNetworks = ['injective', 'comdex']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
