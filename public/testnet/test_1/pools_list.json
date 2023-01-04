@@ -1,0 +1,60 @@
+{
+  "name": "Pools list on Comdex testnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "comdex",
+    "chain_id": "test-1",
+    "token_address": "ucmdx",
+    "symbol": "CMDX",
+    "name": "Comdex",
+    "decimals": 6,
+    "logoURI": "/logos/comdex.png",
+    "tags": ["native"],
+    "native": true,
+    "denom": "ucmdx"
+  },
+  "routerAddress": "comdex1vguuxez2h5ekltfj9gjd62fs5k4rl2zy5hfrncasykzw08rezpfscw6nu6",
+  "pools": [
+    {
+      "pool_id": "CMDX-Harbor",
+      "lpOrder": ["CMDX", "Harbor"],
+      "pool_assets": [
+        {
+          "chain_id": "test-1",
+          "id": "comdex",
+          "token_address": "ucmdx",
+          "symbol": "CMDX",
+          "name": "Comdex",
+          "decimals": 6,
+          "logoURI": "/logos/comdex.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ucmdx"
+        },
+        {
+          "chain_id": "test-1",
+          "token_address": "uharbor",
+          "symbol": "Harbor",
+          "name": "Harbor",
+          "decimals": 6,
+          "logoURI": "/logos/comdex.png",
+          "tags": [],
+          "native": true,
+          "denom": "uharbor"
+        }
+      ],
+      "lp_token": "comdex16yzagwlqrzjkjlnaecam5fwvtzgae5zujtcch7y2uf6q9fyksncqm4rrk6",
+      "swap_address": "comdex1gg6f95cymcfrfzhpek7cf5wl53t5kng52cd2m0krgdlu8k58vd8qmal0am",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "factory": "inj1wastjc07zuuy46mzzl3egz4uzy6fs59758vrwr",
+  "vaults": [
+    {
+      "pool_id": "ucmst",
+      "vault_assets": {
+        "id": "ucmst",
+        "chain_id": "comdex-1",
+        "token_address": "ucmst",
+        "symbol": "ucmst",
+        "name": "ucmst",
+        "decimals": 6,
+        "logoURI": "/logos/ucmst.png",
+        "tags": ["native"],
+        "native": true,
+        "denom": "ucmst"
+      },
+      "lp_token": "comdex1guczj53xxl4347adagh23eelyhnxvugw2nqq0q0dr6kws7q35jyqzf9hkm",
+      "vault_address": "comdex19hlynxzedrlqv99v6qscww7d3crhl86qtd0vprpltg5g9xx6jk9qcmxed5",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}
