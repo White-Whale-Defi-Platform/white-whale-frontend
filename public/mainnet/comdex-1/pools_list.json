@@ -24,20 +24,9 @@
   "routerAddress": "comdex1999u8suptza3rtxwk7lspve02m406xe7l622erg3np3aq05gawxsnu0md4",
   "pools": [
     {
-      "pool_id": "ATOM-CMDX",
+      "pool_id": "CMDX-ATOM",
       "lpOrder": ["ATOM", "CMDX"],
       "pool_assets": [
-        {
-          "chain_id": "comdex-1",
-          "token_address": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352",
-          "symbol": "ATOM",
-          "name": "ATOM",
-          "decimals": 6,
-          "logoURI": "/logos/atom.png",
-          "tags": [],
-          "native": true,
-          "denom": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352"
-        },
         {
           "chain_id": "comdex-1",
           "id": "comdex",
@@ -49,6 +38,18 @@
           "tags": ["native"],
           "native": true,
           "denom": "ucmdx"
+        },
+        {
+          "chain_id": "comdex-1",
+          "id": "cosmos",
+          "token_address": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352",
+          "symbol": "ATOM",
+          "name": "ATOM",
+          "decimals": 6,
+          "logoURI": "/logos/atom.png",
+          "tags": [],
+          "native": true,
+          "denom": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352"
         }
       ],
       "lp_token": "comdex1qyygux5t4s3a3l25k8psxjydhtudu5lnt0tk0szm8q4s27xa980sl6ct3v",
@@ -57,20 +58,9 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "CMST-CMDX",
+      "pool_id": "CMDX-CMST",
       "lpOrder": ["CMDX", "CMST"],
       "pool_assets": [
-        {
-          "chain_id": "comdex-1",
-          "token_address": "ucmst",
-          "symbol": "CMST",
-          "name": "CMST",
-          "decimals": 6,
-          "logoURI": "/logos/cmst.png",
-          "tags": [],
-          "native": true,
-          "denom": "ucmst"
-        },
         {
           "chain_id": "comdex-1",
           "id": "comdex",
@@ -82,6 +72,17 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+        },
+        {
+          "chain_id": "comdex-1",
+          "token_address": "ucmst",
+          "symbol": "CMST",
+          "name": "CMST",
+          "decimals": 6,
+          "logoURI": "/logos/cmst.png",
+          "tags": [],
+          "native": true,
+          "denom": "ucmst"
         }
       ],
       "lp_token": "comdex1y8tagmy897u5z4lx4dv36sy84rhyhqqgwcghxuj7pqjnzlxkgj3sxuhglf",
