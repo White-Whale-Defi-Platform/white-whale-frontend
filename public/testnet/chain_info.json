@@ -154,8 +154,8 @@
     "chainName": "Comdex Test Chain",
     "label": "Comdex",
     "icon": "/logos/comdex.png",
-    "rpc": "https://test-rpc.comdex.one",
-    "rest": "https://test-rest.comdex.one",
+    "rpc": "https://test2-rpc.comdex.one",
+    "rest": "https://test2-rest.comdex.one",
     "stakeCurrency": {
       "coinDenom": "CMDX",
       "coinMinimalDenom": "ucmdx",
@@ -185,12 +185,17 @@
         "coinMinimalDenom": "ucmdx",
         "coinDecimals": 6,
         "gasPriceStep": {
-          "low": 0,
-          "average": 0,
-          "high": 0
+          "low": 0.25,
+          "average": 0.50,
+          "high": 1.00
         }
       }
     ],
+    "gasPriceStep": {
+      "low": 0.25,
+      "average": 0.50,
+      "high": 1.00
+    },
     "coinType": 118,
     "beta": true
   }

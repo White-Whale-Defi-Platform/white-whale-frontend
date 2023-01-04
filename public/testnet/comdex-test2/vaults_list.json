@@ -1,0 +1,24 @@
+{
+  "factory": "comdex1vhndln95yd7rngslzvf6sax6axcshkxqpmpr886ntelh28p9ghuqp7z24e",
+  "vaults": [
+    {
+      "pool_id": "CMDX",
+      "vault_assets": {
+        "id": "comdex",
+        "chain_id": "comdex-test2",
+        "token_address": "ucmdx",
+        "symbol": "CMDX",
+        "name": "CMDX",
+        "decimals": 6,
+        "logoURI": "/logos/comdex.png",
+        "tags": ["native"],
+        "native": true,
+        "denom": "ucmdx"
+      },
+      "lp_token": "comdex1657pee2jhf4jk8pq6yq64e758ngvum45gl866knmjkd83w6jgn3s4ljy9s",
+      "vault_address": "comdex1x8gwn06l85q0lyncy7zsde8zzdn588k2dck00a8j6lkprydcutwqdsg6t3",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

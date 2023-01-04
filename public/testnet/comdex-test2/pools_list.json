@@ -11,7 +11,7 @@
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
     "id": "comdex",
-    "chain_id": "test-1",
+    "chain_id": "comdex-test2",
     "token_address": "ucmdx",
     "symbol": "CMDX",
     "name": "Comdex",
@@ -21,7 +21,7 @@
     "native": true,
     "denom": "ucmdx"
   },
-  "routerAddress": "comdex1vguuxez2h5ekltfj9gjd62fs5k4rl2zy5hfrncasykzw08rezpfscw6nu6",
+  "routerAddress": "comdex1fyr2mptjswz4w6xmgnpgm93x0q4s4wdl6srv3rtz3utc4f6fmxeqgytwdm",
   "pools": [
     {
       "pool_id": "CMDX-Harbor",
@@ -45,7 +45,7 @@
           "symbol": "Harbor",
           "name": "Harbor",
           "decimals": 6,
-          "logoURI": "/logos/comdex.png",
+          "logoURI": "/logos/harbor.png",
           "tags": [],
           "native": true,
           "denom": "uharbor"
