@@ -202,7 +202,7 @@
     "chainId": "comdex-1",
     "chainName": "Comdex",
     "label": "Comdex",
-    "icon": "/logos/comdex.jpeg",
+    "icon": "/logos/comdex.png",
     "stakeCurrency": {
       "coinDenom": "CMDX",
       "coinMinimalDenom": "ucmdx",

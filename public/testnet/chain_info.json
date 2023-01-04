@@ -152,6 +152,8 @@
   {
     "chainId": "comdex-test2",
     "chainName": "Comdex Test Chain",
+    "label": "Comdex",
+    "icon": "/logos/comdex.png",
     "rpc": "https://test-rpc.comdex.one",
     "rest": "https://test-rest.comdex.one",
     "stakeCurrency": {

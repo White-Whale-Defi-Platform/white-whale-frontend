@@ -10,7 +10,7 @@
         "symbol": "CMST",
         "name": "CMST",
         "decimals": 6,
-        "logoURI": "/logos/usdt.png",
+        "logoURI": "/logos/cmst.png",
         "tags": ["native"],
         "native": true,
         "denom": "ucmst"
