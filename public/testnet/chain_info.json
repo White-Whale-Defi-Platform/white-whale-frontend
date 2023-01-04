@@ -150,7 +150,7 @@
     "beta": true
   },
   {
-    "chainId": "test-1",
+    "chainId": "comdex-test2",
     "chainName": "Comdex Test Chain",
     "rpc": "https://test-rpc.comdex.one",
     "rest": "https://test-rest.comdex.one",

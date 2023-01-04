@@ -2,15 +2,15 @@
   "factory": "inj1wastjc07zuuy46mzzl3egz4uzy6fs59758vrwr",
   "vaults": [
     {
-      "pool_id": "ucmst",
+      "pool_id": "CMST",
       "vault_assets": {
         "id": "ucmst",
-        "chain_id": "comdex-1",
+        "chain_id": "comdex-test2",
         "token_address": "ucmst",
-        "symbol": "ucmst",
-        "name": "ucmst",
+        "symbol": "CMST",
+        "name": "CMST",
         "decimals": 6,
-        "logoURI": "/logos/ucmst.png",
+        "logoURI": "/logos/usdt.png",
         "tags": ["native"],
         "native": true,
         "denom": "ucmst"

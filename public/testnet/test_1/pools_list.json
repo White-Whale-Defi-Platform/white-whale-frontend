@@ -28,7 +28,7 @@
       "lpOrder": ["CMDX", "Harbor"],
       "pool_assets": [
         {
-          "chain_id": "test-1",
+          "chain_id": "comdex-test2",
           "id": "comdex",
           "token_address": "ucmdx",
           "symbol": "CMDX",
@@ -40,7 +40,7 @@
           "denom": "ucmdx"
         },
         {
-          "chain_id": "test-1",
+          "chain_id": "comdex-test2",
           "token_address": "uharbor",
           "symbol": "Harbor",
           "name": "Harbor",

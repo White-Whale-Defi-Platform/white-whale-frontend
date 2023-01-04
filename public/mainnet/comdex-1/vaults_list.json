@@ -1,16 +1,16 @@
 {
-  "factory": "inj1wastjc07zuuy46mzzl3egz4uzy6fs59758vrwr",
+  "factory": "comdex149ltwdnpxrhx9al42s359glcjnsuc6x3dalz28f04dsxhlu7jhmq3anmuq",
   "vaults": [
     {
-      "pool_id": "ucmst",
+      "pool_id": "USDT",
       "vault_assets": {
-        "id": "ucmst",
+        "id": "comdex",
         "chain_id": "comdex-1",
         "token_address": "ucmst",
-        "symbol": "ucmst",
-        "name": "ucmst",
+        "symbol": "CMST",
+        "name": "CMST",
         "decimals": 6,
-        "logoURI": "/logos/ucmst.png",
+        "logoURI": "/logos/usdt.png",
         "tags": ["native"],
         "native": true,
         "denom": "ucmst"
