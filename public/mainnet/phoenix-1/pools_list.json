@@ -1,7 +1,9 @@
 {
   "name": "Pools list on mainnet",
   "logoURI": "/img/logo.svg",
-  "keywords": ["special tokens"],
+  "keywords": [
+    "special tokens"
+  ],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -17,7 +19,9 @@
     "name": "Luna",
     "decimals": 6,
     "logoURI": "/logos/luna.svg",
-    "tags": ["native"],
+    "tags": [
+      "native"
+    ],
     "native": true,
     "denom": "uluna"
   },
@@ -25,7 +29,13 @@
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
-      "lpOrder": ["ATOM", "LUNA"],
+      "lpOrder": [
+        "ATOM",
+        "LUNA"
+      ],
+      "dispalyName": "LUNA-ATOM",
+      "displayLogo1": "/logos/luna.svg",
+      "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -35,7 +45,9 @@
           "name": "Atom",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
@@ -47,7 +59,9 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uluna"
         }
@@ -59,7 +73,13 @@
     },
     {
       "pool_id": "ATOM-JUNO",
-      "lpOrder": ["ATOM", "JUNO"],
+      "lpOrder": [
+        "ATOM",
+        "JUNO"
+      ],
+      "dispalyName": "JUNO-ATOM",
+      "displayLogo1": "/logos/juno.svg",
+      "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -69,7 +89,9 @@
           "name": "Atom",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
@@ -80,7 +102,9 @@
           "name": "Juno",
           "decimals": 6,
           "logoURI": "/logos/juno.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/4CD525F166D32B0132C095F353F4C6F033B0FF5C49141470D1EFDA1D63303D04"
         }
@@ -92,7 +116,13 @@
     },
     {
       "pool_id": "ATOM-axlUSDC",
-      "lpOrder": ["ATOM", "axlUSDC"],
+      "lpOrder": [
+        "ATOM",
+        "axlUSDC"
+      ],
+      "dispalyName": "ATOM-axlUSDC",
+      "displayLogo1": "/logos/atom.png",
+      "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -102,7 +132,9 @@
           "name": "Atom",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
@@ -113,7 +145,9 @@
           "name": "axlUSDC",
           "decimals": 6,
           "logoURI": "/logos/axlUSDC.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
         }
@@ -125,6 +159,9 @@
     },
     {
       "pool_id": "LUNA-LUNAX",
+      "dispalyName": "LUNAX-LUNA",
+      "displayLogo1": "/logos/lunax.png",
+      "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -134,7 +171,9 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uluna"
         },
@@ -157,6 +196,9 @@
     },
     {
       "pool_id": "LUNA-ASTRO",
+      "dispalyName": "ASTRO-LUNA",
+      "displayLogo1": "/logos/astro.png",
+      "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -166,7 +208,9 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uluna"
         },
@@ -189,7 +233,13 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder": ["axlUSDC", "LUNA"],
+      "lpOrder": [
+        "axlUSDC",
+        "LUNA"
+      ],
+      "dispalyName": "LUNA-axlUSDC",
+      "displayLogo1": "/logos/luna.svg",
+      "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -199,7 +249,9 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uluna"
         },
@@ -210,7 +262,9 @@
           "name": "axlUSDC",
           "decimals": 6,
           "logoURI": "/logos/axlUSDC.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
         }
