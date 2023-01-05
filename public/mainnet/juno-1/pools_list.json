@@ -26,6 +26,9 @@
     {
       "pool_id": "ATOM-LUNA",
       "lpOrder": ["LUNA", "ATOM"],
+      "dispalyName" :  "LUNA-ATOM",
+      "displayLogo1" : "/logos/luna.svg",
+      "displayLogo2" : "/logos/atom.png",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -59,6 +62,9 @@
     {
       "pool_id": "ATOM-JUNO",
       "lpOrder": ["ATOM", "JUNO"],
+      "dispalyName" :  "JUNO-ATOM",
+      "displayLogo1" : "/logos/juno.svg",
+      "displayLogo2" : "/logos/atom.png",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -93,6 +99,9 @@
     {
       "pool_id": "ATOM-axlUSDC",
       "lpOrder": ["ATOM", "axlUSDC"],
+      "dispalyName" :  "ATOM-axlUSDC",
+      "displayLogo1" : "/logos/atom.png",
+      "displayLogo2" : "/logos/axlUSDC.png",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -126,6 +135,9 @@
     {
       "pool_id": "JUNO-RAW",
       "lpOrder": ["JUNO", "RAW"],
+      "dispalyName" :  "RAW-JUNO",
+      "displayLogo1" : "/logos/raw.png",
+      "displayLogo2" :  "/logos/juno.svg",
       "pool_assets": [
         {
           "id": "juno-network",
@@ -158,6 +170,9 @@
     },
     {
       "pool_id": "JUNO-LOOP",
+      "dispalyName" :  "LOOP-JUNO",
+      "displayLogo1" : "/logos/loop.png",
+      "displayLogo2" :  "/logos/juno.svg",
       "pool_assets": [
         {
           "id": "juno-network",
@@ -190,7 +205,10 @@
     },
     {
       "pool_id": "JUNO-axlUSDC",
-      "lpOrder": ["axlUSDC", "axlUSDC"],
+      "lpOrder": ["JUNO", "axlUSDC"],
+      "dispalyName" :  "JUNO-axlUSDC",
+      "displayLogo1" : "/logos/juno.svg",
+      "displayLogo2" :  "/logos/axlUSDC.png",
       "pool_assets": [
         {
           "id": "juno-network",

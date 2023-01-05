@@ -31,6 +31,7 @@ export default function useConnectKeplr() {
         const offlineSigner = await window.getOfflineSigner(
           currentWalletState.chainId
         )
+        console.log(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`)
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           currentWalletState.chainId,
           chainInfo.rpc,

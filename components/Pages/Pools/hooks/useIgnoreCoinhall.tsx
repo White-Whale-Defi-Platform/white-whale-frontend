@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-const ignoreCoinhall = ['chihuahua', 'injective']
+const ignoreCoinhall = ['chihuahua', 'injective', 'comdex']
 
 const useIgnoreCoinhall = () => {
   const { chainId } = useRecoilValue(walletState)

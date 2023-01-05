@@ -18,7 +18,7 @@ import MyPoolsTable from './MyPoolsTable'
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
-const commingSoonNetworks = ['injective']
+const commingSoonNetworks = ['injective', 'comdex']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
@@ -73,16 +73,15 @@ const Pools: FC<Props> = () => {
         const asset0Price = showCommingSoon
           ? await getTokenPrice(pool?.pool_assets[0].token_address, Date.now())
           : 1
+        const asset1Price = showCommingSoon
+          ? await getTokenPrice(pool?.pool_assets[1].token_address, Date.now())
+          : 1
 
         return {
           contract: pool?.swap_address,
-          pool: pool?.pool_id,
-          token1Img: pool?.pool_id.includes('USD')
-            ? pool.pool_assets?.[0].logoURI
-            : pool.pool_assets?.[1].logoURI,
-          token2Img: pool?.pool_id.includes('USD')
-            ? pool.pool_assets?.[1].logoURI
-            : pool.pool_assets?.[0].logoURI,
+          pool: pool?.dispalyName,
+          token1Img: pool?.displayLogo1,
+          token2Img: pool?.displayLogo2,
           apr: showCommingSoon
             ? COMING_SOON
             : `${Number(pool.apr24h).toFixed(2)}%`,
@@ -92,7 +91,7 @@ const Pools: FC<Props> = () => {
           totalLiq: pool.liquidity.available.total.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
-            ? `$${asset0Price?.toFixed(2)}`
+            ? `$${(asset0Price / asset1Price)?.toFixed(2)}`
             : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDCPool: pool?.isUSDCPool,
           cta: () =>

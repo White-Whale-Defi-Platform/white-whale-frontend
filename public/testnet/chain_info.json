@@ -148,5 +148,55 @@
     "coinType": 60,
     "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
     "beta": true
+  },
+  {
+    "chainId": "comdex-test2",
+    "chainName": "Comdex Test Chain",
+    "label": "Comdex",
+    "icon": "/logos/comdex.png",
+    "rpc": "https://test2-rpc.comdex.one",
+    "rest": "https://test2-rest.comdex.one",
+    "stakeCurrency": {
+      "coinDenom": "CMDX",
+      "coinMinimalDenom": "ucmdx",
+      "coinDecimals": 6
+    },
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "comdex",
+      "bech32PrefixAccPub": "comdexpub",
+      "bech32PrefixValAddr": "comdexvaloper",
+      "bech32PrefixValPub": "comdexvaloperpub",
+      "bech32PrefixConsAddr": "comdexvalcons",
+      "bech32PrefixConsPub": "comdexvalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "CMDX",
+        "coinMinimalDenom": "ucmdx",
+        "coinDecimals": 6
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "CMDX",
+        "coinMinimalDenom": "ucmdx",
+        "coinDecimals": 6,
+        "gasPriceStep": {
+          "low": 0.25,
+          "average": 0.50,
+          "high": 1.00
+        }
+      }
+    ],
+    "gasPriceStep": {
+      "low": 0.25,
+      "average": 0.50,
+      "high": 1.00
+    },
+    "coinType": 118,
+    "beta": true
   }
 ]
