@@ -26,9 +26,9 @@
     {
       "pool_id": "CMDX-ATOM",
       "lpOrder": ["ATOM", "CMDX"],
-      "dispalyName" :  "CMDX-ATOM",
-      "displayLogo1" : "/logos/comdex.png",
-      "displayLogo2" : "/logos/atom.png",
+      "dispalyName": "CMDX-ATOM",
+      "displayLogo1": "/logos/comdex.png",
+      "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
           "chain_id": "comdex-1",
@@ -63,21 +63,21 @@
     {
       "pool_id": "CMDX-CMST",
       "lpOrder": ["CMDX", "CMST"],
-      "dispalyName" :  "CMDX-CMST",
-      "displayLogo1" : "/logos/comdex.png",
-      "displayLogo2" : "/logos/cmst.png",
+      "dispalyName": "CMDX-CMST",
+      "displayLogo1": "/logos/comdex.png",
+      "displayLogo2": "/logos/cmst.png",
       "pool_assets": [
         {
           "chain_id": "comdex-1",
           "id": "comdex",
-          "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+          "token_address": "ucmdx",
           "symbol": "CMDX",
           "name": "Comdex",
           "decimals": 6,
           "logoURI": "/logos/comdex.png",
           "tags": ["native"],
           "native": true,
-          "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
+          "denom": "ucmdx"
         },
         {
           "chain_id": "comdex-1",
