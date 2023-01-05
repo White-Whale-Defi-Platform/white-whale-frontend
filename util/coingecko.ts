@@ -40,7 +40,15 @@ export const getTokenCGCId = (address: string) => {
       // raw
       tokenCGCId = 'injective-protocol'
       break
-    case 'ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9':
+    case 'ucmdx':
+      // raw
+      tokenCGCId = 'comdex'
+      break
+    case 'ucmst':
+      // raw
+      tokenCGCId = 'axlusdc'
+      break
+    case 'ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352':
       // raw
       tokenCGCId = 'cosmos'
       break
