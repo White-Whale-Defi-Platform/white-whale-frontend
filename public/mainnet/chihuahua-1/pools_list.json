@@ -166,6 +166,114 @@
       "swap_address": "chihuahua19du4llehge50k23pwwckj93lnvp9cyyer8ve9as663mz64nrhq9qn2gauk",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "BDOG-HUAHUA",
+      "lpOrder": ["BDOG", "HUAHUA"],
+      "dispalyName": "BDOG-HUAHUA",
+      "displayLogo1": "/logos/bdog.svg",
+      "displayLogo2": "/logos/huahua.png",
+      "pool_assets": [
+        {
+          "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1077rtmdp5dd5xr83hqx3m9r4gepzp0xj0q9e2rl2c7e92qtcewzqf6gdaz",
+          "symbol": "BDOG",
+          "name": "BDOG",
+          "decimals": 6,
+          "logoURI": "/logos/bdog.svg",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1077rtmdp5dd5xr83hqx3m9r4gepzp0xj0q9e2rl2c7e92qtcewzqf6gdaz"
+        }
+      ],
+      "lp_token": "chihuahua1stvvl7rvgle8grcgum92hxx4mzlxr5246atmyrtphgnjp57tqldsu6wytz",
+      "swap_address": "chihuahua1nfu3nv6jxksf9kzs8hqt2ueqw63xdapqwfmsw98adj3e8836685shdv8hp",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ASH-GDOG",
+      "lpOrder": ["ASH", "GDOG"],
+      "dispalyName": "ASH-GDOG",
+      "displayLogo1": "/logos/ash.svg",
+      "displayLogo2": "/logos/gdog.svg",
+      "pool_assets": [
+        {
+          "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1y5tm6vstar43r65umu7tvv9lyxncfnlyyxyhzqq4pxqfq9uwz8xqakjg6v",
+          "symbol": "ASH",
+          "name": "ASH",
+          "decimals": 6,
+          "logoURI": "/logos/ash.svg",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1y5tm6vstar43r65umu7tvv9lyxncfnlyyxyhzqq4pxqfq9uwz8xqakjg6v"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua10qe2wuwcjcavg2waazmjlekhmsh4m9g7l3dtmu9vaxylla6697tszmp0c0",
+          "symbol": "GDOG",
+          "name": "GDOG",
+          "decimals": 6,
+          "logoURI": "/logos/gdog.svg",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua10qe2wuwcjcavg2waazmjlekhmsh4m9g7l3dtmu9vaxylla6697tszmp0c0"
+        }
+      ],
+      "lp_token": "chihuahua1d5zvqw4vlsx5fa8635t2z98ktwf9pel0cf5d9vy23ts6p3twnxyssxj3tp",
+      "swap_address": "chihuahua1zr0pz0pgwkk9mfznhlmp29eqa0vzkf9ywfhwxfyfh7gwga3zzxkq5sluvv",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ASH-BDOG",
+      "lpOrder": ["ASH", "BDOG"],
+      "dispalyName": "ASH-BDOG",
+      "displayLogo1": "/logos/ash.svg",
+      "displayLogo2": "/logos/bdog.svg",
+      "pool_assets": [
+        {
+          "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1y5tm6vstar43r65umu7tvv9lyxncfnlyyxyhzqq4pxqfq9uwz8xqakjg6v",
+          "symbol": "ASH",
+          "name": "ASH",
+          "decimals": 6,
+          "logoURI": "/logos/ash.svg",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1y5tm6vstar43r65umu7tvv9lyxncfnlyyxyhzqq4pxqfq9uwz8xqakjg6v"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1077rtmdp5dd5xr83hqx3m9r4gepzp0xj0q9e2rl2c7e92qtcewzqf6gdaz",
+          "symbol": "BDOG",
+          "name": "BDOG",
+          "decimals": 6,
+          "logoURI": "/logos/bdog.svg",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1077rtmdp5dd5xr83hqx3m9r4gepzp0xj0q9e2rl2c7e92qtcewzqf6gdaz"
+        }
+      ],
+      "lp_token": "chihuahua19grlsf4dxnqwqh36sh44qszqzqd054c9yyq3c7yfqwsd5c5vv9asyyscgg",
+      "swap_address": "chihuahua1lvmq3rlg4j354ysgzkeq8sleu8yk639yp2gml9mghuqygdk0zsuq8fch62",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
