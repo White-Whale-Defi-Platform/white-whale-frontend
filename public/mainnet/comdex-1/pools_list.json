@@ -1,0 +1,105 @@
+{
+  "name": "Pools list on Comdex mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "comdex",
+    "chain_id": "comdex-1",
+    "token_address": "ucmdx",
+    "symbol": "CMDX",
+    "name": "Comdex",
+    "decimals": 6,
+    "logoURI": "/logos/comdex.png",
+    "tags": ["native"],
+    "native": true,
+    "denom": "ucmdx"
+  },
+  "routerAddress": "comdex1999u8suptza3rtxwk7lspve02m406xe7l622erg3np3aq05gawxsnu0md4",
+  "pools": [
+    {
+      "pool_id": "CMDX-ATOM",
+      "lpOrder": ["ATOM", "CMDX"],
+      "dispalyName": "CMDX-ATOM",
+      "displayLogo1": "/logos/comdex.png",
+      "displayLogo2": "/logos/atom.png",
+      "pool_assets": [
+        {
+          "chain_id": "comdex-1",
+          "id": "comdex",
+          "token_address": "ucmdx",
+          "symbol": "CMDX",
+          "name": "Comdex",
+          "decimals": 6,
+          "logoURI": "/logos/comdex.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ucmdx"
+        },
+        {
+          "chain_id": "comdex-1",
+          "id": "cosmos",
+          "token_address": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352",
+          "symbol": "ATOM",
+          "name": "ATOM",
+          "decimals": 6,
+          "logoURI": "/logos/atom.png",
+          "tags": [],
+          "native": true,
+          "denom": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352"
+        }
+      ],
+      "lp_token": "comdex1qyygux5t4s3a3l25k8psxjydhtudu5lnt0tk0szm8q4s27xa980sl6ct3v",
+      "swap_address": "comdex1fuyxwxlsgjkfjmxfthq8427dm2am3ya3cwcdr8gls29l7jadtazsfqm2lu",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "CMDX-CMST",
+      "lpOrder": ["CMDX", "CMST"],
+      "dispalyName": "CMDX-CMST",
+      "displayLogo1": "/logos/comdex.png",
+      "displayLogo2": "/logos/cmst.png",
+      "pool_assets": [
+        {
+          "chain_id": "comdex-1",
+          "id": "comdex",
+          "token_address": "ucmdx",
+          "symbol": "CMDX",
+          "name": "Comdex",
+          "decimals": 6,
+          "logoURI": "/logos/comdex.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ucmdx"
+        },
+        {
+          "chain_id": "comdex-1",
+          "token_address": "ucmst",
+          "symbol": "CMST",
+          "name": "CMST",
+          "decimals": 6,
+          "logoURI": "/logos/cmst.png",
+          "tags": [],
+          "native": true,
+          "denom": "ucmst"
+        }
+      ],
+      "lp_token": "comdex1y8tagmy897u5z4lx4dv36sy84rhyhqqgwcghxuj7pqjnzlxkgj3sxuhglf",
+      "swap_address": "comdex13s9jpl2cqy8g3ggxhps40up3cys7ru6rgek5ad06zraf6xacsg3swcwmey",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

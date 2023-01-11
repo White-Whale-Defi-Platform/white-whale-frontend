@@ -4,8 +4,15 @@ import {
   SigningCosmWasmClient,
 } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Coin } from '@cosmjs/launchpad'
-import { EncodeObject, OfflineSigner } from '@cosmjs/proto-signing'
-import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
+import {
+  EncodeObject,
+  OfflineDirectSigner,
+  OfflineSigner,
+} from '@cosmjs/proto-signing'
+import {
+  SigningStargateClient,
+  SigningStargateClientOptions,
+} from '@cosmjs/stargate/build/signingstargateclient'
 import {
   AuthInfo,
   Coin as StationCoin,
@@ -18,24 +25,42 @@ import {
   TxInfo,
 } from '@terra-money/terra.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
+import { Network, getNetworkEndpoints } from '@injectivelabs/networks'
 
 import { TxResponse, Wallet } from './wallet'
+import { cosmwasmAminoConverters, getSigningCosmwasmClient } from 'injectivejs'
+// import {SigningStargateClient} from 'injectivejs/node_modules/@cosmjs/stargate/node_modules/@cosmjs/signingstargateclient';
+import getChainName from '../../libs/getChainName'
+import { AminoTypes } from '@cosmjs/stargate'
 
+import { chain } from 'lodash'
+import Injective from '../../services/injective'
 export class OfflineSigningWallet implements Wallet {
-  client: SigningCosmWasmClient
+  client: SigningCosmWasmClient | Injective
   network: string
 
-  constructor(client: SigningCosmWasmClient, network: string) {
+  constructor(client: SigningCosmWasmClient | Injective, network?: string) {
     this.client = client
     this.network = network
   }
 
   static connectWithSigner(
+    chainId: string,
     endpoint: string,
-    signer: OfflineSigner,
+    signer: OfflineSigner & OfflineDirectSigner,
     network: string,
     options?: SigningStargateClientOptions
   ): Promise<OfflineSigningWallet> {
+    if (chainId.includes('injective')) {
+      const injectiveClient = new Injective(
+        signer,
+        chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s
+      )
+      return new Promise((resolve, reject) => {
+        resolve(new OfflineSigningWallet(injectiveClient, network))
+      })
+    }
+
     return SigningCosmWasmClient.connectWithSigner(
       endpoint,
       signer,
@@ -76,7 +101,7 @@ export class OfflineSigningWallet implements Wallet {
 
   simulate(
     signerAddress: string,
-    messages: readonly EncodeObject[],
+    messages: readonly EncodeObject[] | Record<string, unknown>,
     memo: string | undefined
   ): Promise<number> {
     return this.client.simulate(signerAddress, messages, memo)
@@ -95,6 +120,8 @@ export class OfflineSigningWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
+    if (this.client.getTx) return this.client.getTx(txHash)
+
     // @ts-ignore
     const promise: Promise<GetTxResponse> =
       this.client.queryClient.tx.getTx(txHash)

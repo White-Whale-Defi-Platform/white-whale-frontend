@@ -5,6 +5,8 @@ import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
 import { useChainInfo } from 'hooks/useChainInfo'
+import getChainName from '../libs/getChainName'
+import { getSigningInjectiveClient } from 'injectivejs'
 
 export default function useConnectKeplr() {
   const [currentWalletState, setCurrentWalletState] =
@@ -26,10 +28,12 @@ export default function useConnectKeplr() {
       if (chainInfo !== undefined) {
         await window.keplr?.experimentalSuggestChain(chainInfo)
         await window.keplr.enable(currentWalletState.chainId)
-        const offlineSigner = await window.getOfflineSignerAuto(
+        const offlineSigner = await window.getOfflineSigner(
           currentWalletState.chainId
         )
+        console.log(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`)
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
+          currentWalletState.chainId,
           chainInfo.rpc,
           offlineSigner,
           currentWalletState.network,

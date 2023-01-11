@@ -26,6 +26,9 @@
     {
       "pool_id": "HUAHUA-PUPPY",
       "lpOrder": ["HUAHUA", "PUPPY"],
+      "dispalyName": "PUPPY-HUAHUA",
+      "displayLogo1": "/logos/puppyhuahua_logo.png",
+      "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
           "id": "chihuahua-token",
@@ -59,6 +62,9 @@
     {
       "pool_id": "HUAHUA-SHIB",
       "lpOrder": ["SHIB", "HUAHUA"],
+      "dispalyName": "SHIB-HUAHUA",
+      "displayLogo1": "/logos/shiba-inu-shib-logo.png",
+      "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
           "id": "chihuahua-token",
@@ -92,6 +98,9 @@
     {
       "pool_id": "HUAHUA-WDOGE",
       "lpOrder": ["WDOGE", "HUAHUA"],
+      "dispalyName": "WDOGE-HUAHUA",
+      "displayLogo1": "/logos/dogecoin-doge-logo.png",
+      "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
           "id": "chihuahua-token",
@@ -125,6 +134,9 @@
     {
       "pool_id": "HUAHUA-rHUAHUA",
       "lpOrder": ["rHUAHUA", "HUAHUA"],
+      "dispalyName": "rHUAHUA-HUAHUA",
+      "displayLogo1": "/logos/huahua.png",
+      "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
           "id": "chihuahua-token",

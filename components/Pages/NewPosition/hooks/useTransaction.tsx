@@ -213,15 +213,15 @@ export const useTransaction = ({
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
-        setTxHash(data.transactionHash)
-        onBroadcasting?.(data.transactionHash)
+        setTxHash(data.transactionHash || data?.txHash)
+        onBroadcasting?.(data.transactionHash || data?.txHash)
         const queryPath = `@pool-liquidity/${poolId}/${senderAddress}`
         queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Add Liquidity Success.',
           description: (
             <Finder
-              txHash={data.transactionHash}
+              txHash={data.transactionHash || data?.txHash}
               chainId={client?.client?.chainId}
             >
               {' '}

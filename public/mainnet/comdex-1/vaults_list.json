@@ -1,0 +1,43 @@
+{
+  "factory": "comdex149ltwdnpxrhx9al42s359glcjnsuc6x3dalz28f04dsxhlu7jhmq3anmuq",
+  "vaults": [
+    {
+      "pool_id": "CMST",
+      "vault_assets": {
+        "id": "comdex",
+        "chain_id": "comdex-1",
+        "token_address": "ucmst",
+        "symbol": "CMST",
+        "name": "CMST",
+        "decimals": 6,
+        "logoURI": "/logos/cmst.png",
+        "tags": ["native"],
+        "native": true,
+        "denom": "ucmst"
+      },
+      "lp_token": "comdex1guczj53xxl4347adagh23eelyhnxvugw2nqq0q0dr6kws7q35jyqzf9hkm",
+      "vault_address": "comdex19hlynxzedrlqv99v6qscww7d3crhl86qtd0vprpltg5g9xx6jk9qcmxed5",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ATOM",
+      "vault_assets": {
+        "id": "comdex",
+        "chain_id": "comdex-1",
+        "token_address": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352",
+        "symbol": "ATOM",
+        "name": "ATOM",
+        "decimals": 6,
+        "logoURI": "/logos/atom.png",
+        "tags": ["native"],
+        "native": true,
+        "denom": "ibc/961FA3E54F5DCCA639F37A7C45F7BBE41815579EF1513B5AFBEFCFEB8F256352"
+      },
+      "lp_token": "comdex1h49dzzas8glugpq95q8dvkgwl7gn8c75h7exl5kx8fpnc55ycqnqt44pvk",
+      "vault_address": "comdex1nu9wf9dw384attnpu0pwfet5fajn05w2ex4r07mghvk3xcwrt2yqkr8ray",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

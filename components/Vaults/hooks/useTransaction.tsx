@@ -208,8 +208,8 @@ export const useTransaction = ({
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
-        setTxHash(data.transactionHash)
-        onBroadcasting?.(data.transactionHash)
+        setTxHash(data.transactionHash || data?.txHash)
+        onBroadcasting?.(data.transactionHash || data?.txHash)
         queryClient.invalidateQueries([
           'vaultsInfo',
           'vaultsDposits',
