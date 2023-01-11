@@ -9,13 +9,11 @@ import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/Cha
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import useConnectKeplr from 'hooks/useConnectKeplr'
+import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
-
-import useConnectLeap from '../../hooks/useConnectLeap'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [currentWalletState, setCurrentWalletState] =
@@ -84,6 +82,39 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [chainIdParam, chains])
 
+  const { connectKeplr } = useConnectKeplr()
+
+  useEffect(() => {
+    onDisconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (router.pathname === '/') return
+
+    const defaultChain =
+      currentWalletState.network === 'mainnet'
+        ? chains.find((row) => row.chainId === 'juno-1')
+        : chains.find((row) => row.chainId === 'uni-3')
+    const targetChain = chains.find(
+      (row) => row.label.toLowerCase() === chainIdParam
+    )
+    if (targetChain && targetChain.chainId !== currentWalletState.chainId) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: targetChain.chainId,
+      })
+    }
+    if (chains && chains.length > 0 && !targetChain) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: defaultChain.chainId,
+      })
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainIdParam, chains])
+
   const denom = useMemo(() => {
     if (!chainInfo) return
     const [coinDenom] = (chainInfo as any)?.currencies || []
@@ -108,13 +139,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   useEffect(() => {
     if (!currentWalletState.chainId) return
-    if (!chains) return
-
-    if (currentWalletState.activeWallet === 'leap') {
-      connectLeap()
-    } else if (currentWalletState.activeWallet === 'keplr') {
-      connectKeplr()
-    }
+    // connect wallet
+    connectKeplr()
 
     // update route
     const sourceChain = chains.find(
@@ -124,7 +150,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId, currentWalletState.activeWallet, chains])
+  }, [currentWalletState.chainId])
 
   if (!connected && !connectedWallet) {
     return (
