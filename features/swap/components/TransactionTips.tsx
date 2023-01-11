@@ -1,3 +1,5 @@
+import React, { useState } from 'react'
+
 import {
   Button,
   Column,
@@ -9,7 +11,6 @@ import {
   styled,
   Text,
 } from 'junoblocks'
-import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { useTxRates } from '../hooks'

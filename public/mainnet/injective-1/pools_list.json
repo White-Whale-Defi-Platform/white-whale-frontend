@@ -28,7 +28,7 @@
       "lpOrder": ["INJ", "USDT"],
       "dispalyName": "INJ-USDT",
       "displayLogo1": "/logos/injective.png",
-      "displayLogo2":  "/logos/usdt.png",
+      "displayLogo2": "/logos/usdt.png",
       "pool_assets": [
         {
           "chain_id": "injective-1",
@@ -64,7 +64,7 @@
       "lpOrder": ["ATOM", "USDT"],
       "dispalyName": "ATOM-USDT",
       "displayLogo1": "/logos/atom.png",
-      "displayLogo2":  "/logos/usdt.png",
+      "displayLogo2": "/logos/usdt.png",
       "pool_assets": [
         {
           "chain_id": "injective-1",

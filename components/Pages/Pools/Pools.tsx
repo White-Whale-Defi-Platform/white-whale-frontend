@@ -5,7 +5,6 @@ import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -25,7 +24,7 @@ const commingSoonNetworks = ['injective', 'comdex']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
-  const [poolApys, setPoolApys] = useState<any[]>([])
+  const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { address, chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
@@ -39,34 +38,23 @@ const Pools: FC<Props> = () => {
 
   const initPools = async () => {
     if (!pools) return
-    if (poolApys.length > 0) {
+    if (allPools.length > 0) {
       return
     }
+
+    setInitLoading(true)
 
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = showCommingSoon
       ? []
       : await getPairApryAnd24HrVolume(poolPairAddrList)
 
-  useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(`/${currenChain.label.toLowerCase()}/pools`)
-      } else {
-        initPools()
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains, pools])
-
-  // get a list of all pools
-  const allPools = useMemo(() => {
-    if (!pools || pools.length === 0) return
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
-        ...poolApys.find((row: any) => row.pairAddress === pool.swap_address),
+        ...poosWithAprAnd24HrVolume.find(
+          (row: any) => row.pairAddress === pool.swap_address
+        ),
       }
     })
 
@@ -83,39 +71,53 @@ const Pools: FC<Props> = () => {
         const asset0Price = showCommingSoon
           ? await getTokenPrice(pool?.pool_assets[0].token_address, Date.now())
           : 1
-        const asset1Price = showCommingSoon
-          ? await getTokenPrice(pool?.pool_assets[1].token_address, Date.now())
-          : 1
 
         return {
           contract: pool?.swap_address,
-          pool: pool?.dispalyName,
-          token1Img: pool?.displayLogo1,
-          token2Img: pool?.displayLogo2,
+          pool: pool?.pool_id,
+          token1Img: pool?.pool_id.includes('USD')
+            ? pool.pool_assets?.[0].logoURI
+            : pool.pool_assets?.[1].logoURI,
+          token2Img: pool?.pool_id.includes('USD')
+            ? pool.pool_assets?.[1].logoURI
+            : pool.pool_assets?.[0].logoURI,
           apr: showCommingSoon
             ? COMING_SOON
             : `${Number(pool.apr24h).toFixed(2)}%`,
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: pool.liquidity.available.total.dollarValue,
+          totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
-            ? `$${(asset0Price / asset1Price)?.toFixed(2)}`
+            ? `$${asset0Price?.toFixed(2)}`
             : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDCPool: pool?.isUSDCPool,
           cta: () =>
             router.push(
-              `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
+              `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
             ),
         }
       })
     )
 
     setAllPools(_allPools)
-    setInitLoading(false)
+    setTimeout(() => {
+      setInitLoading(false)
+    }, 500)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools, poolApys])
+  }, [pools])
+
+  useEffect(() => {
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() === chainIdParam) {
+        initPools()
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, address, chains, pools])
 
   // get a list of my pools
   const myPools = useMemo(() => {
@@ -146,7 +148,7 @@ const Pools: FC<Props> = () => {
       alignItems="center"
       margin="auto"
     >
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
