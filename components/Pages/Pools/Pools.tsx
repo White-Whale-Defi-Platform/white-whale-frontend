@@ -93,13 +93,11 @@ const Pools: FC<Props> = () => {
           apr: showCommingSoon
             ? COMING_SOON
             : `${Number(pool.apr24h).toFixed(2)}%`,
-
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
           totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
-
           price: showCommingSoon
             ? `$${asset0Price?.toFixed(2)}`
             : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
@@ -116,6 +114,7 @@ const Pools: FC<Props> = () => {
     setTimeout(() => {
       setInitLoading(false)
     }, 500)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools])
 
@@ -158,7 +157,7 @@ const Pools: FC<Props> = () => {
       alignItems="center"
       margin="auto"
     >
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
