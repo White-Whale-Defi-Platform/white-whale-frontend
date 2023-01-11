@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { Box, Button, Divider } from '@chakra-ui/react'
 import { useConnectedWallet } from '@terra-money/wallet-provider'
@@ -7,19 +7,59 @@ import WalletIcon from 'components/icons/WalletIcon'
 import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { useChainInfo } from 'hooks/useChainInfo'
+import { useChainInfo, useChains } from 'hooks/useChainInfo'
+import useConnectKeplr from 'hooks/useConnectKeplr'
 import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr'
+import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { getPathName } from 'util/route'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
 
+  const chains = useChains()
+  const router = useRouter()
+  const chainIdParam = router.query.chainId as string
+
   const connectedWallet = useConnectedWallet()
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
   const { showTerraModalOrConnectKeplr } =
     useTerraModalOrConnectKeplr(onOpenModal)
+
+  const { connectKeplr } = useConnectKeplr()
+
+  useEffect(() => {
+    onDisconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (router.pathname === '/') return
+
+    const defaultChain =
+      currentWalletState.network === 'mainnet'
+        ? chains.find((row) => row.chainId === 'juno-1')
+        : chains.find((row) => row.chainId === 'uni-3')
+    const targetChain = chains.find(
+      (row) => row.label.toLowerCase() === chainIdParam
+    )
+    if (targetChain && targetChain.chainId !== currentWalletState.chainId) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: targetChain.chainId,
+      })
+    }
+    if (chains && chains.length > 0 && !targetChain) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: defaultChain.chainId,
+      })
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainIdParam, chains])
 
   const denom = useMemo(() => {
     if (!chainInfo) return
@@ -40,8 +80,23 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentWalletState.chainId, chainInfo]
+    [currentWalletState.chainId, chains, router]
   )
+
+  useEffect(() => {
+    if (!currentWalletState.chainId) return
+    // connect wallet
+    connectKeplr()
+
+    // update route
+    const sourceChain = chains.find(
+      (row) => row.chainId.toLowerCase() === currentWalletState.chainId
+    )
+    if (sourceChain) {
+      router.push(getPathName(router, sourceChain.label))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWalletState.chainId])
 
   if (!connected && !connectedWallet) {
     return (

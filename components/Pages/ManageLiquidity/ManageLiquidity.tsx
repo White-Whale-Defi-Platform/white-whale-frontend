@@ -37,28 +37,23 @@ const ManageLiquidity: FC = () => {
 
   const poolId = router.query.poolId as string
   const chainIdParam = router.query.chainId as string
+  const currenChain = chains.find((row) => row.chainId === chainId)
 
   useEffect(() => {
-    if (poolId) {
-      const pools = poolList?.pools
-      if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
-        router.push('/pools')
+    if (currenChain) {
+      if (poolId) {
+        const pools = poolList?.pools
+        if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
+          router.push(`/${currenChain.label.toLowerCase()}/pools`)
+        } else {
+          router.push(
+            `/${currenChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
+          )
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolId, poolList])
-
-  useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(
-          `/${currenChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
-        )
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains])
+  }, [chainId, poolId, poolList, address, chains])
 
   useEffect(() => {
     if (poolId) {

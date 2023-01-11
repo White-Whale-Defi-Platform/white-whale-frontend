@@ -32,7 +32,7 @@ export const useChains = () => {
     {
       enabled: !!currentWalletState.network,
       onError(e) {
-        console.error('Error loading chain info:', e)
+        console.error('111Error loading chain info:', e)
       },
     }
   )

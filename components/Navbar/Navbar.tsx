@@ -68,7 +68,7 @@ const Navbar = ({}) => {
       key: null,
       client: null,
       network: network,
-      chainId: chainId,
+      chainId: null,
       activeWallet: 'keplr',
     })
     disconnect()
@@ -94,7 +94,7 @@ const Navbar = ({}) => {
             <NavbarLink
               key={lable}
               text={lable}
-              href={lable === 'Pools' ? `/${currentChainName}${link}` : link}
+              href={`/${currentChainName}${link}`}
             />
           ))}
         </Card>
