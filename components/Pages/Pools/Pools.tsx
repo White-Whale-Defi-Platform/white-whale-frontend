@@ -27,7 +27,7 @@ const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
-  const [poolApys, setPoolApys] = useState<any[]>([])
+  const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { address, chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
@@ -71,7 +71,9 @@ const Pools: FC<Props> = () => {
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
-        ...poolApys.find((row: any) => row.pairAddress === pool.swap_address),
+        ...poosWithAprAnd24HrVolume.find(
+          (row: any) => row.pairAddress === pool.swap_address
+        ),
       }
     })
 
