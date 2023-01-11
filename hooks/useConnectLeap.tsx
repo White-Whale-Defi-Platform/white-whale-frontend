@@ -1,39 +1,40 @@
 import { GasPrice } from '@cosmjs/stargate'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
 import { useChainInfo } from 'hooks/useChainInfo'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
 
-let isConnecting = false
+import { clearWalletState } from '../util/cleatWalletState'
 
 export default function useConnectLeap() {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
+  const reset = useResetRecoilState(walletState)
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
   const connectedWallet = useConnectedWallet()
   const { disconnect } = useWallet()
 
   const connectLeap = async () => {
-    if (isConnecting) return
-
     if (connectedWallet) {
       disconnect()
     }
-    if (window && !window?.leap) {
-      alert('Please install leap extension and refresh the page.')
+    if (window && !window.leap) {
+      reset()
+      clearWalletState('leap')
       return
     }
 
     try {
       if (chainInfo !== undefined) {
-        isConnecting = true
         await window.leap.experimentalSuggestChain(chainInfo)
         await window.leap.enable(currentWalletState.chainId)
-        const offlineSigner = await window.leap.getOfflineSignerAuto(
+        const offlineSigner = await window.leap.getOfflineSigner(
           currentWalletState.chainId
         )
+
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
+          currentWalletState.chainId,
           chainInfo.rpc,
           offlineSigner,
           currentWalletState.network,
@@ -43,7 +44,6 @@ export default function useConnectLeap() {
             ),
           }
         )
-
         const [{ address }] = await offlineSigner.getAccounts()
         const key = await window.leap.getKey(currentWalletState.chainId)
         /* successfully update the wallet state */
@@ -60,8 +60,6 @@ export default function useConnectLeap() {
     } catch (e) {
       console.log(e)
       // throw e
-    } finally {
-      isConnecting = false
     }
   }
 

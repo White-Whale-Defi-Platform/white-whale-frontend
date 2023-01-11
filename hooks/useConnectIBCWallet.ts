@@ -1,6 +1,7 @@
-import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useEffect } from 'react'
 import { useMutation } from 'react-query'
+
+import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import {
@@ -8,6 +9,7 @@ import {
   walletState,
   WalletStatusType,
 } from '../state/atoms/walletAtoms'
+import { clearWalletState } from '../util/cleatWalletState'
 import { GAS_PRICE } from '../util/constants'
 import { useIBCAssetInfo } from './useIBCAssetInfo'
 
@@ -24,7 +26,7 @@ export const useConnectIBCWallet = (
 
   const mutation = useMutation(async () => {
     if (window && !window?.[activeWallet]) {
-      alert(`Please install ${activeWallet} extension and refresh the page.`)
+      clearWalletState(activeWallet)
       return
     }
 

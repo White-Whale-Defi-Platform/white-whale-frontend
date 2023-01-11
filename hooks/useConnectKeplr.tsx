@@ -1,17 +1,17 @@
 import { GasPrice } from '@cosmjs/stargate'
-import { useRecoilState } from 'recoil'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
-
+import { useChainInfo } from 'hooks/useChainInfo'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
-import { useChainInfo } from 'hooks/useChainInfo'
-import getChainName from '../libs/getChainName'
-import { getSigningInjectiveClient } from 'injectivejs'
+
+import { clearWalletState } from '../util/cleatWalletState'
 
 export default function useConnectKeplr() {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
-  let [chainInfo] = useChainInfo(currentWalletState.chainId)
+  const reset = useResetRecoilState(walletState)
+  const [chainInfo] = useChainInfo(currentWalletState.chainId)
   const connectedWallet = useConnectedWallet()
   const { disconnect } = useWallet()
 
@@ -20,7 +20,8 @@ export default function useConnectKeplr() {
       disconnect()
     }
     if (window && !window?.keplr) {
-      alert('Please install Keplr extension and refresh the page.')
+      reset()
+      clearWalletState('keplr')
       return
     }
 
@@ -31,7 +32,6 @@ export default function useConnectKeplr() {
         const offlineSigner = await window.getOfflineSigner(
           currentWalletState.chainId
         )
-        console.log(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`)
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           currentWalletState.chainId,
           chainInfo.rpc,
