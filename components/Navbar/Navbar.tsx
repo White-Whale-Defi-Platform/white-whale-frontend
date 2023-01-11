@@ -18,6 +18,7 @@ import BurgerIcon from 'components/icons/BurgerIcon'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
+import { useChainInfo } from '../../hooks/useChainInfo'
 import Card from '../Card'
 import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
@@ -29,6 +30,7 @@ const Navbar = ({}) => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network, activeWallet }, setWalletState] =
     useRecoilState(walletState)
+  const [chainInfo] = useChainInfo(chainId)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -98,7 +100,11 @@ const Navbar = ({}) => {
             onOpenModal={onOpenModal}
             onCloseModal={onCloseModal}
           />
-          <WalletModal isOpenModal={isOpenModal} onCloseModal={onCloseModal} />
+          <WalletModal
+            isOpenModal={isOpenModal}
+            onCloseModal={onCloseModal}
+            label={chainInfo?.label}
+          />
         </HStack>
       </Flex>
       <Flex
