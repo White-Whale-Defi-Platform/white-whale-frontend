@@ -58,7 +58,6 @@ const useProvideLP = ({ reverse = false }) => {
     lpB?.amount,
     flipped ? tokenInfoA?.decimals : tokenInfoB?.decimals
   )
-
   const simulated = useMemo(() => {
     if (
       (!reverse && !lpTokenA?.amount) ||
@@ -68,7 +67,7 @@ const useProvideLP = ({ reverse = false }) => {
     )
       return null
 
-    const decimals = reverse ? tokenInfoA?.decimals : tokenInfoB?.decimals
+    const decimals = reverse ? tokenInfoB?.decimals : tokenInfoA?.decimals
     const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0
     const tokenA = num(tokenAReserve)
       .div(10 ** tokenInfoA?.decimals)
@@ -123,7 +122,7 @@ const useProvideLP = ({ reverse = false }) => {
           amountA: reverse
             ? flipped
               ? tokenAAmount
-              : toChainAmount(simulated, tokenInfoB?.decimals)
+              : toChainAmount(simulated, tokenInfoA?.decimals)
             : flipped
             ? tokenAAmount
             : tokenAAmount,
@@ -134,7 +133,7 @@ const useProvideLP = ({ reverse = false }) => {
               : tokenBAmount
             : flipped
             ? tokenBAmount
-            : toChainAmount(simulated, tokenInfoA.decimals),
+            : toChainAmount(simulated, tokenInfoB?.decimals),
           swapAddress,
         },
         address

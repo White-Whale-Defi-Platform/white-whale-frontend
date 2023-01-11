@@ -1,28 +1,20 @@
-import React, { useMemo, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
-import { useTokenBalance } from 'hooks/useTokenBalance'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
-import MyVaultsTable from './MyVaultsTable'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
-const Vaults = (props: Props) => {
+const Vaults: FC<Props> = () => {
   const [isAllVaultsInited, setAllVaultsInited] = useState<boolean>(true)
   const [isMyVaultsInited, setMyVaultsInited] = useState<boolean>(true)
   const { vaults, isLoading } = useVault()
   const router = useRouter()
+  const chainIdParam = router.query.chainId as string
 
   const myVaults = useMemo(() => {
     if (!vaults) return []
@@ -38,7 +30,7 @@ const Vaults = (props: Props) => {
         apr: 'coming soon',
         cta: () =>
           router.push(
-            `/vaults/manage_position?vault=${vault.vault_assets?.symbol}`
+            `/${chainIdParam}/vaults/manage_position?vault=${vault.vault_assets?.symbol}`
           ),
       }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,7 +45,7 @@ const Vaults = (props: Props) => {
         // .filter(vault => !!!Number(vault.deposits.lptoken))
         .map((vault) => {
           const ctaLabel = vault?.hasDepost ? 'Manage Position' : 'New Position'
-          const url = `/vaults/${
+          const url = `/${chainIdParam}/vaults/${
             vault?.hasDepost ? 'manage_position' : 'new_position'
           }?vault=${vault.vault_assets?.symbol}`
           return {
@@ -74,7 +66,7 @@ const Vaults = (props: Props) => {
     <VStack
       width={{ base: '100%', md: '1160px' }}
       alignItems="center"
-      margin="auto"
+      // margin="auto"
     >
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>

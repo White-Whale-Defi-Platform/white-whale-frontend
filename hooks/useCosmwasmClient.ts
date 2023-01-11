@@ -8,13 +8,14 @@ export const useCosmwasmClient = (chainId?: string) => {
   const [clients, setClients] = useState<any>({})
 
   const getClients = async () => {
-    const clientList = []
+    const clientList = {}
     await Promise.all(
       chainInfo.map(async (row) => {
         clientList[row.chainId] = await CosmWasmClient.connect(row.rpc)
       })
     )
-    setClients(clientList)
+
+    if (Object.keys(clientList).length > 0) setClients(clientList)
   }
 
   useEffect(() => {

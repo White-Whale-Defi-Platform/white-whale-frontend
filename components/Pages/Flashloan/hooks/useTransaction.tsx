@@ -174,18 +174,18 @@ export const useTransaction = ({
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
         console.log({ data })
-        setTxHash(data.transactionHash)
+        setTxHash(data.transactionHash || data?.txHash)
         queryClient.invalidateQueries([
           '@pool-liquidity',
           'multipleTokenBalances',
           'tokenBalance',
         ])
-        onBroadcasting?.(data.transactionHash)
+        onBroadcasting?.(data.transactionHash || data?.txHash)
         toast({
           title: 'Flashloan Success.',
           description: (
             <Finder
-              txHash={data?.transactionHash}
+              txHash={data?.transactionHash || data?.txHash}
               chainId={client?.client?.chainId}
             >
               {' '}

@@ -1,0 +1,134 @@
+{
+  "name": "Pools list on Injective testnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "injective-protocol",
+    "chain_id": "injective-888",
+    "token_address": "inj",
+    "symbol": "INJ",
+    "name": "INJ",
+    "decimals": 18,
+    "logoURI": "/logos/injective.png",
+    "tags": ["native"],
+    "native": true,
+    "denom": "inj"
+  },
+  "routerAddress": "inj1ckqz4r0n3m9smvharm65pgu8mm7vhep8cq89mg",
+  "pools": [
+    {
+      "pool_id": "INJ-cwShib",
+      "lpOrder": ["INJ", "cwShib"],
+      "pool_assets": [
+        {
+          "chain_id": "injective-888",
+          "id": "injective-protocol",
+          "token_address": "inj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 18,
+          "logoURI": "/logos/injective.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "inj"
+        },
+        {
+          "id": "injective-protocol",
+          "chain_id": "injective-888",
+          "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
+          "symbol": "cwShib",
+          "name": "cwShib",
+          "decimals": 18,
+          "logoURI": "/logos/shiba-inu-shib-logo.png",
+          "tags": [""],
+          "native": false,
+          "denom": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc"
+        }
+      ],
+      "lp_token": "inj1qr6srl0egqqyw4jdeqqm8xusclhef0epuvx8j7",
+      "swap_address": "inj1jjun9me022r589ytezhhrs29es8a2fwk9hgpyq",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "cwShib-cwSix",
+      "lpOrder": ["cwSix", "cwShib"],
+      "pool_assets": [
+        {
+          "id": "cwShib",
+          "chain_id": "injective-888",
+          "token_address": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc",
+          "symbol": "cwShib",
+          "name": "cwShib",
+          "decimals": 18,
+          "logoURI": "/logos/shiba-inu-shib-logo.png",
+          "tags": [""],
+          "native": false,
+          "denom": "inj1dlg3xhqnhfucarxkjj8khlgrnx988cdjjsmasc"
+        },
+        {
+          "id": "cwSix",
+          "chain_id": "injective-888",
+          "token_address": "inj14efstake5h3kah7wezkxwvqqv4ew6ahlht0qfz",
+          "symbol": "cwSix",
+          "name": "cwSix",
+          "decimals": 6,
+          "logoURI": "/logos/shiba-inu-shib-logo.png",
+          "tags": [""],
+          "native": false,
+          "denom": "inj14efstake5h3kah7wezkxwvqqv4ew6ahlht0qfz"
+        }
+      ],
+      "lp_token": "inj16twsluegh25h7syt9yyraq4wqt2zf4js96vhfc",
+      "swap_address": "inj19tq8qe983z5fjhh0y4ym0276dm8al3entjjxhj",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "INJ-USDT",
+      "lpOrder": ["INJ", "USDT"],
+      "pool_assets": [
+        {
+          "chain_id": "injective-888",
+          "id": "injective-protocol",
+          "token_address": "inj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 18,
+          "logoURI": "/logos/injective.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "inj"
+        },
+        {
+          "id": "injective-protocol",
+          "chain_id": "injective-888",
+          "token_address": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5",
+          "symbol": "USDT",
+          "name": "USDT",
+          "decimals": 6,
+          "logoURI": "/logos/usdt.png",
+          "tags": [""],
+          "native": true,
+          "denom": "peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5"
+        }
+      ],
+      "lp_token": "inj129pns8jnlpth8pe0ualamv4m7lgtj8qsrrm2av",
+      "swap_address": "inj1yjayfr08tu5sl5uajsylh3kwntzc46zfkn7ua4",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

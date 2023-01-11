@@ -5,12 +5,12 @@ import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { getTokenPrice } from 'util/coingecko'
 import { getPairApryAnd24HrVolume } from 'util/coinhall'
 
 import AllPoolsTable from './AllPoolsTable'
@@ -20,8 +20,11 @@ import MyPoolsTable from './MyPoolsTable'
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
+const commingSoonNetworks = ['injective']
+const COMING_SOON = 'coming soon'
+
 const Pools: FC<Props> = () => {
-  const [poolApys, setPoolApys] = useState<any[]>([])
+  const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { address, chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
@@ -37,76 +40,93 @@ const Pools: FC<Props> = () => {
     })
   )
 
+  const showCommingSoon = useMemo(
+    () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
+    [chainId]
+  )
+
   const initPools = useCallback(async () => {
     if (!pools) return
-    if (poolApys.length > 0) {
+    if (allPools.length > 0) {
       return
     }
 
+    setInitLoading(true)
+
     const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
-    const poosWithAprAnd24HrVolume = await getPairApryAnd24HrVolume(
-      poolPairAddrList
+    const poosWithAprAnd24HrVolume = showCommingSoon
+      ? []
+      : await getPairApryAnd24HrVolume(poolPairAddrList)
+
+    const _pools = pools.map((pool: any) => {
+      return {
+        ...pool,
+        ...poosWithAprAnd24HrVolume.find(
+          (row: any) => row.pairAddress === pool.swap_address
+        ),
+      }
+    })
+
+    const _allPools = await Promise.all(
+      _pools.map(async (pool) => {
+        let price = 0
+        if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
+          price = pool.asset0Price / pool.asset1Price
+        }
+        if (!pool.isUSDCPool && pool.asset1Price > 0) {
+          price = pool.asset1Price / pool.asset0Price
+        }
+
+        const asset0Price = showCommingSoon
+          ? await getTokenPrice(pool?.pool_assets[0].token_address, Date.now())
+          : 1
+
+        return {
+          contract: pool?.swap_address,
+          pool: pool?.pool_id,
+          token1Img: pool?.pool_id.includes('USD')
+            ? pool.pool_assets?.[0].logoURI
+            : pool.pool_assets?.[1].logoURI,
+          token2Img: pool?.pool_id.includes('USD')
+            ? pool.pool_assets?.[1].logoURI
+            : pool.pool_assets?.[0].logoURI,
+          apr: showCommingSoon
+            ? COMING_SOON
+            : `${Number(pool.apr24h).toFixed(2)}%`,
+          volume24hr: showCommingSoon
+            ? COMING_SOON
+            : `$${formatPrice(pool.usdVolume24h)}`,
+          totalLiq: pool.liquidity?.available?.total?.dollarValue,
+          liquidity: pool.liquidity,
+          price: showCommingSoon
+            ? `$${asset0Price?.toFixed(2)}`
+            : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          isUSDCPool: pool?.isUSDCPool,
+          cta: () =>
+            router.push(
+              `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
+            ),
+        }
+      })
     )
-    setPoolApys(poosWithAprAnd24HrVolume)
-    setInitLoading(false)
+
+    setAllPools(_allPools)
+    setTimeout(() => {
+      setInitLoading(false)
+    }, 500)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools])
 
   useEffect(() => {
     if (chainId) {
       const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() !== chainIdParam) {
-        router.push(`/${currenChain.label.toLowerCase()}/pools`)
-      } else {
+      if (currenChain && currenChain.label.toLowerCase() === chainIdParam) {
         initPools()
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, chainIdParam, address, chains, pools])
-
-  // get a list of all pools
-  const allPools = useMemo(() => {
-    if (!pools || pools.length === 0) return
-    const _pools = pools.map((pool: any) => {
-      return {
-        ...pool,
-        ...poolApys.find((row: any) => row.pairAddress === pool.swap_address),
-      }
-    })
-
-    const _allPools = _pools.map((pool) => {
-      let price = 0
-      if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
-        price = pool.asset0Price / pool.asset1Price
-      }
-      if (!pool.isUSDCPool && pool.asset1Price > 0) {
-        price = pool.asset1Price / pool.asset0Price
-      }
-
-      return {
-        contract: pool?.swap_address,
-        pool: pool?.pool_id,
-        token1Img: pool?.pool_id.includes('USDC')
-          ? pool.pool_assets?.[0].logoURI
-          : pool.pool_assets?.[1].logoURI,
-        token2Img: pool?.pool_id.includes('USDC')
-          ? pool.pool_assets?.[1].logoURI
-          : pool.pool_assets?.[0].logoURI,
-        apr: pool.apr24h,
-        volume24hr: pool.usdVolume24h,
-        totalLiq: pool.liquidity?.available?.total?.dollarValue,
-        liquidity: pool.liquidity,
-        price,
-        isUSDCPool: pool?.isUSDCPool,
-        cta: () =>
-          router.push(
-            `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
-          ),
-      }
-    })
-    return _allPools
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools, poolApys])
+  }, [chainId, address, chains, pools])
 
   // get a list of my pools
   const myPools = useMemo(() => {
@@ -137,7 +157,7 @@ const Pools: FC<Props> = () => {
       alignItems="center"
       margin="auto"
     >
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools

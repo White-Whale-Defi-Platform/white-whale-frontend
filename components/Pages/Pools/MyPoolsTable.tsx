@@ -18,13 +18,11 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { CHIHUAHUA_MAINNET_CHAIN_ID } from 'constants/chain'
 import { formatPrice } from 'libs/num'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
 import PoolName from './components/PoolName'
+import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -47,11 +45,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <Text align="right">{`${
-          info.row.original?.isUSDCPool ? '$' : ''
-        }${Number(info.getValue()).toFixed(3)}`}</Text>
-      )
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('myPosition', {
@@ -69,9 +63,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <Text align="right">{`${Number(info.getValue()).toFixed(2)} %`}</Text>
-      )
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('volume24hr', {
@@ -81,7 +73,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('totalLiq', {
@@ -113,7 +105,8 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  const currentWalletState = useRecoilValue(walletState)
+  const datProvidedByCoinhall = useIgnoreCoinhall()
+
   const table = useReactTable({
     data: pools,
     columns,
@@ -155,7 +148,7 @@ const PoolsTable = ({
   return (
     <Flex
       padding={10}
-      width={['full', '1170px']}
+      // width={['full', '1170px']}
       background="#1C1C1C"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
@@ -193,7 +186,7 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      {currentWalletState.chainId !== CHIHUAHUA_MAINNET_CHAIN_ID && (
+      {datProvidedByCoinhall && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
           <Text
             color="white"
