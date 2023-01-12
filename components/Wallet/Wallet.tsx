@@ -100,7 +100,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId, currentWalletState.activeWallet])
+  }, [currentWalletState.chainId, currentWalletState.activeWallet, chains])
 
   if (!connected && !connectedWallet) {
     return (
