@@ -22,7 +22,7 @@ import MyPoolsTable from './MyPoolsTable'
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
-const commingSoonNetworks = ['injective', 'comdex']
+const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
 const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
 
@@ -60,14 +60,6 @@ const Pools: FC<Props> = () => {
 
     const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(pools)
 
-  useEffect(() => {
-    initPools()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
-
-  // get a list of all pools
-  const allPools = useMemo(() => {
-    if (!pools || pools.length === 0) return
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
@@ -79,25 +71,20 @@ const Pools: FC<Props> = () => {
 
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
-        let price = 0
-        if ((pool.isUSDPool || pool.isLunaxPool) && pool.asset0Price > 0) {
-          price = pool.asset0Price / pool.asset1Price
-        }
-        if (!pool.isUSDPool && pool.asset1Price > 0) {
-          price = pool.asset1Price / pool.asset0Price
-        }
-
-        const asset0Price = showCommingSoon
-          ? tokenPrices[getTokenCGCId(pool?.pool_assets[0].token_address)]
-          : 1
-        const asset1Price = showCommingSoon
-          ? tokenPrices[getTokenCGCId(pool?.pool_assets[1].token_address)]
-          : 1
-
+        const displayLpOrder = pool.displayName.split('-')
         const isUSDPool =
-          pool?.isUSDPool ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+        const pairInfos = pool.liquidity.reserves.total
+        const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
+        const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
+
+        let price = 0
+        if (displayLpOrder[0] === pool.lpOrder[0]) {
+          price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
+        } else {
+          price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
+        }
 
         return {
           contract: pool?.swap_address,
@@ -114,11 +101,7 @@ const Pools: FC<Props> = () => {
 
           totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
-          price: showCommingSoon
-            ? `${isUSDPool ? '$' : ''}${(asset0Price / asset1Price)?.toFixed(
-                2
-              )}`
-            : `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
           cta: () =>
