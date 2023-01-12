@@ -67,8 +67,8 @@ const Navbar = ({}) => {
       address: '',
       key: null,
       client: null,
-      network: network,
-      chainId: null,
+      network,
+      chainId,
       activeWallet: 'keplr',
     })
     disconnect()
