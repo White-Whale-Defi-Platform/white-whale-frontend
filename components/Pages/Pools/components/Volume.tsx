@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Spinner, Text } from '@chakra-ui/react'
-import useTradingVolume from 'hooks/useTradingVolume'
+import useTradingHistory from 'hooks/useTradingHistory'
 import moment from 'moment'
 
 import { formatPrice } from '../../../../libs/num'
@@ -16,7 +16,7 @@ const Volume = ({ pairAddr }: Props) => {
     .subtract(0, 'days')
     .startOf('day')
     .format('YYYY-MM-DDTHH:mm:ss')
-  const { volume, isLoading } = useTradingVolume({ pair: pairAddr, dateTime })
+  const { volume, isLoading } = useTradingHistory({ pair: pairAddr, dateTime })
 
   if (!pairAddr) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
