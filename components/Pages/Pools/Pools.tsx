@@ -80,6 +80,9 @@ const Pools: FC<Props> = () => {
         const asset0Price = showCommingSoon
           ? await getTokenPrice(pool?.pool_assets[0].token_address, Date.now())
           : 1
+        const asset1Price = showCommingSoon
+          ? await getTokenPrice(pool?.pool_assets[1].token_address, Date.now())
+          : 1
 
         return {
           contract: pool?.swap_address,
@@ -96,7 +99,7 @@ const Pools: FC<Props> = () => {
           totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
-            ? `$${asset0Price?.toFixed(2)}`
+            ? `$${(asset0Price / asset1Price)?.toFixed(2)}`
             : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDCPool: pool?.isUSDCPool,
           cta: () =>
