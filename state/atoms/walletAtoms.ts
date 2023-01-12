@@ -46,7 +46,7 @@ function createWalletState<TClient = any, TState = {}>({
       chainId: null,
       address: '',
       network: 'mainnet',
-      activeWallet: 'keplr',
+      activeWallet: '',
       ...defaultState,
     },
     dangerouslyAllowMutability: true,

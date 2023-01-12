@@ -9,11 +9,12 @@ import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/Cha
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import useConnectKeplr from 'hooks/useConnectKeplr'
-import useTerraModalOrConnectKeplr from 'hooks/useTerraModalOrConnectKeplr'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { getPathName } from 'util/route'
+
+import useConnectLeap from '../../hooks/useConnectLeap'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [currentWalletState, setCurrentWalletState] =
@@ -25,10 +26,9 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const connectedWallet = useConnectedWallet()
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
-  const { showTerraModalOrConnectKeplr } =
-    useTerraModalOrConnectKeplr(onOpenModal)
 
   const { connectKeplr } = useConnectKeplr()
+  const { connectLeap } = useConnectLeap()
 
   useEffect(() => {
     onDisconnect()
@@ -85,8 +85,12 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   useEffect(() => {
     if (!currentWalletState.chainId) return
-    // connect wallet
-    connectKeplr()
+
+    if (currentWalletState.activeWallet === 'leap') {
+      connectLeap()
+    } else if (currentWalletState.activeWallet === 'keplr') {
+      connectKeplr()
+    }
 
     // update route
     const sourceChain = chains.find(
@@ -96,7 +100,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId])
+  }, [currentWalletState.chainId, currentWalletState.activeWallet])
 
   if (!connected && !connectedWallet) {
     return (
@@ -114,7 +118,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           color="white"
           borderColor="whiteAlpha.400"
           borderRadius="full"
-          onClick={showTerraModalOrConnectKeplr}
+          onClick={onOpenModal}
         >
           <WalletIcon />
           Connect wallet

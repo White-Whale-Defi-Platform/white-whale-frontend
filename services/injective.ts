@@ -59,10 +59,12 @@ class Injective {
   chainId: ChainId
   txRaw: TxRaw
   network: Network
+  activeWallet: string
 
   constructor(
     offlineSigner: OfflineSigner & OfflineDirectSigner,
-    network: Network = Network.TestnetK8s
+    network: Network = Network.TestnetK8s,
+    activeWallet: string
   ) {
     const endpoints = getNetworkEndpoints(network)
 
@@ -73,11 +75,12 @@ class Injective {
     this.chainId =
       network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
     this.network = network
+    this.activeWallet = activeWallet
     this.init()
   }
 
   async init() {
-    const key = await window.keplr.getKey(this.chainId)
+    const key = await window[this.activeWallet].getKey(this.chainId)
     this.pubKey = Buffer.from(key.pubKey).toString('base64')
     const restEndpoint = getNetworkEndpoints(this.network).rest
     const chainRestAuthApi = new ChainRestAuthApi(restEndpoint)
