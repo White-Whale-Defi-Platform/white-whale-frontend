@@ -29,14 +29,23 @@ const Pools: FC<Props> = () => {
   const { address, chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
   const router = useRouter()
+  const chains = useChains()
+  const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
+  const [pools, isLoading] = useQueriesDataSelector(
+    useQueryMultiplePoolsLiquidity({
+      refetchInBackground: true,
+      pools: poolList?.pools,
+      client,
+    })
+  )
 
   const showCommingSoon = useMemo(
     () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
     [chainId]
   )
 
-  const initPools = async () => {
+  const initPools = useCallback(async () => {
     if (!pools) return
     if (allPools.length > 0) {
       return
