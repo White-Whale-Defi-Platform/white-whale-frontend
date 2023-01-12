@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from 'react-query'
+
 import { useRecoilValue } from 'recoil'
 import { claimRewards, getPendingRewards } from 'services/rewards'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
@@ -16,6 +17,23 @@ type UsePendingRewardsArgs = {
   pool: PoolEntityTypeWithLiquidity
 }
 
+const useGetTokenInfoByDenom = () => {
+  const [tokenList] = useTokenList()
+  return [
+    function getTokenInfoByDenom({ denom: tokenDenom }) {
+      return tokenList.tokens.find(({ denom, token_address }) => {
+        if ('native' in tokenDenom) {
+          return tokenDenom.native === denom
+        }
+        if ('cw20' in tokenDenom) {
+          return tokenDenom.cw20 === token_address
+        }
+      })
+    },
+    Boolean(tokenList?.tokens),
+  ] as const
+}
+
 export const usePendingRewards = ({ pool }: UsePendingRewardsArgs) => {
   const { address, status, client } = useRecoilValue(walletState)
 
@@ -31,7 +49,7 @@ export const usePendingRewards = ({ pool }: UsePendingRewardsArgs) => {
     `pendingRewards/${pool?.pool_id}/${address}/${shouldQueryRewards}`,
     async () => {
       if (shouldQueryRewards) {
-        return await Promise.all(
+        return Promise.all(
           pool.rewards_tokens.map(async ({ rewards_address, decimals }) => {
             const { pending_rewards, denom } = await getPendingRewards(
               address,
@@ -108,26 +126,9 @@ export const useClaimRewards = ({ pool, ...options }: UseClaimRewardsArgs) => {
           })
           .map(({ rewards_address }) => rewards_address)
 
-        return await claimRewards(address, rewardsAddresses, client)
+        return claimRewards(address, rewardsAddresses, client)
       }
     },
     options
   )
-}
-
-const useGetTokenInfoByDenom = () => {
-  const [tokenList] = useTokenList()
-  return [
-    function getTokenInfoByDenom({ denom: tokenDenom }) {
-      return tokenList.tokens.find(({ denom, token_address }) => {
-        if ('native' in tokenDenom) {
-          return tokenDenom.native === denom
-        }
-        if ('cw20' in tokenDenom) {
-          return tokenDenom.cw20 === token_address
-        }
-      })
-    },
-    Boolean(tokenList?.tokens),
-  ] as const
 }

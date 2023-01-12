@@ -19,12 +19,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { formatPrice } from 'libs/num'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 
 import Loader from '../../Loader'
 import PoolName from './components/PoolName'
+import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()

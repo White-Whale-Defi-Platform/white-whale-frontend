@@ -1,32 +1,33 @@
 import {
-  ChainGrpcWasmApi,
-  TxRestClient,
-  ChainRestBankApi,
-  createTransaction,
-  ChainRestAuthApi,
-  ChainRestTendermintApi,
-  BaseAccount,
-  createTxRawFromSigResponse,
-  createCosmosSignDocFromTransaction,
-  TxRaw,
-} from '@injectivelabs/sdk-ts'
-import {
-  DEFAULT_STD_FEE,
-  DEFAULT_BLOCK_TIMEOUT_HEIGHT,
-  BigNumberInBase,
-} from '@injectivelabs/utils'
-import { ChainId } from '@injectivelabs/ts-types'
-import { Network, getNetworkEndpoints } from '@injectivelabs/networks'
-import { MsgExecuteContract, MsgSend } from '@injectivelabs/sdk-ts'
-import {
   Coin,
   EncodeObject,
   OfflineDirectSigner,
   OfflineSigner,
 } from '@cosmjs/proto-signing'
-import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
-import { base64ToJson } from '../util/base64'
 import { StdFee } from '@cosmjs/stargate'
+import { getNetworkEndpoints, Network } from '@injectivelabs/networks'
+import {
+  BaseAccount,
+  ChainGrpcWasmApi,
+  ChainRestAuthApi,
+  ChainRestBankApi,
+  ChainRestTendermintApi,
+  createCosmosSignDocFromTransaction,
+  createTransaction,
+  createTxRawFromSigResponse,
+  TxRaw,
+  TxRestClient,
+} from '@injectivelabs/sdk-ts'
+import { MsgExecuteContract, MsgSend } from '@injectivelabs/sdk-ts'
+import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
+import { ChainId } from '@injectivelabs/ts-types'
+import {
+  BigNumberInBase,
+  DEFAULT_BLOCK_TIMEOUT_HEIGHT,
+  DEFAULT_STD_FEE,
+} from '@injectivelabs/utils'
+
+import { base64ToJson } from '../util/base64'
 
 const HIGHER_DEFAULT_GAS_LIMIT = '2000000'
 
@@ -50,15 +51,25 @@ type SimulateResponse = {
 
 class Injective {
   txClient: TxRestClient
+
   wasmApi: ChainGrpcWasmApi
+
   bankApi: ChainRestBankApi
+
   offlineSigner: OfflineSigner & OfflineDirectSigner
+
   pubKey: string
+
   baseAccount: BaseAccount
+
   account: AccountDetails
+
   chainId: ChainId
+
   txRaw: TxRaw
+
   network: Network
+
   activeWallet: string
 
   constructor(
@@ -147,7 +158,7 @@ class Injective {
     }
   }
 
-  async prepair(messages: EncodeObject[], send: boolean = true) {
+  async prepair(messages: EncodeObject[], send = true) {
     try {
       await this.init()
       const restEndpoint = getNetworkEndpoints(this.network).rest
@@ -323,7 +334,7 @@ class Injective {
       )
       const signTxRaw = createTxRawFromSigResponse(directSignResponse)
       this.txRaw = null
-      return this.txClient.broadcast(signTxRaw).then((result) => {
+      return await this.txClient.broadcast(signTxRaw).then((result) => {
         console.log({ result })
         if (!!result.code) {
           throw new Error(

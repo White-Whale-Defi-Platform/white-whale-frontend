@@ -11,6 +11,39 @@ import {
   useTokenInfo,
 } from './useTokenInfo'
 
+export const useTokenDollarValueQuery = (
+  tokenSymbols?: Array<string>,
+  chainId?: string
+) => {
+  const getMultipleTokenInfo = useGetMultipleTokenInfo()
+  const getMultipleIBCAssetInfo = useGetMultipleIBCAssetInfo()
+
+  const { data, isLoading } = useQuery(
+    `tokenDollarValue/${tokenSymbols?.join('/')}`,
+    async (): Promise<Array<number>> => {
+      const tokenIds = tokenSymbols?.map(
+        (tokenSymbol) =>
+          (
+            getMultipleTokenInfo([tokenSymbol])?.[0] ||
+            getMultipleIBCAssetInfo([tokenSymbol])?.[0]
+          )?.id
+      )
+
+      if (tokenIds) {
+        return tokenDollarValueQuery(tokenIds, chainId)
+      }
+    },
+    {
+      enabled: Boolean(tokenSymbols?.length),
+      refetchOnMount: 'always',
+      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+      refetchIntervalInBackground: true,
+    }
+  )
+
+  return [data || [], isLoading] as const
+}
+
 export const useTokenDollarValue = (tokenSymbol?: string) => {
   const { symbol: baseTokenSymbol } = useBaseTokenInfo() || {}
   const tokenInfo = useTokenInfo(tokenSymbol)
@@ -46,37 +79,4 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
     tokenDollarPrice * oneTokenToTokenPrice,
     fetchingTokenDollarPrice || fetchingTokenToTokenPrice,
   ] as const
-}
-
-export const useTokenDollarValueQuery = (
-  tokenSymbols?: Array<string>,
-  chainId?: string
-) => {
-  const getMultipleTokenInfo = useGetMultipleTokenInfo()
-  const getMultipleIBCAssetInfo = useGetMultipleIBCAssetInfo()
-
-  const { data, isLoading } = useQuery(
-    `tokenDollarValue/${tokenSymbols?.join('/')}`,
-    async (): Promise<Array<number>> => {
-      const tokenIds = tokenSymbols?.map(
-        (tokenSymbol) =>
-          (
-            getMultipleTokenInfo([tokenSymbol])?.[0] ||
-            getMultipleIBCAssetInfo([tokenSymbol])?.[0]
-          )?.id
-      )
-
-      if (tokenIds) {
-        return tokenDollarValueQuery(tokenIds, chainId)
-      }
-    },
-    {
-      enabled: Boolean(tokenSymbols?.length),
-      refetchOnMount: 'always',
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-      refetchIntervalInBackground: true,
-    }
-  )
-
-  return [data || [], isLoading] as const
 }

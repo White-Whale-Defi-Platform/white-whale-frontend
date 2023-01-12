@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
+
+import { LCDClient } from '@terra-money/terra.js'
 import {
   Connection,
   ConnectType,
   useConnectedWallet,
   useWallet,
 } from '@terra-money/wallet-provider'
-import { LCDClient } from '@terra-money/terra.js'
-
-import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
+import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
 
 export const useTerraStation = (onCloseModal) => {
   const { connect } = useWallet()
@@ -53,6 +53,7 @@ export const useTerraStation = (onCloseModal) => {
       client: wasmChainClient,
       activeWallet: 'station',
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedWallet, currentWalletState.network])
 
   return { connectTerraAndCloseModal, filterForStation }
