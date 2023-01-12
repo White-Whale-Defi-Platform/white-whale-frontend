@@ -2,17 +2,22 @@ import React from 'react'
 
 import { Spinner, Text } from '@chakra-ui/react'
 import useFeeVolume from 'hooks/useFeeVolume'
+import moment from 'moment'
 
 type Props = {
-  pair: string
-  dateTime: string
+  pairAddr?: string
   tvl: string | number
 }
 
-const Apr = ({ pair, tvl, dateTime }: Props) => {
-  const { volume, isLoading } = useFeeVolume({ pair, dateTime })
+const Apr = ({ pairAddr, tvl }: Props) => {
+  const dateTime = moment
+    .utc()
+    .subtract(0, 'days')
+    .startOf('day')
+    .format('YYYY-MM-DDTHH:mm:ss')
+  const { volume, isLoading } = useFeeVolume({ pair: pairAddr, dateTime })
 
-  if (!pair || !dateTime) return null
+  if (!pairAddr) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
 
   const apr =

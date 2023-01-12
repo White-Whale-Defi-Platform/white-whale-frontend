@@ -45,7 +45,7 @@ export const useFeeVolume = ({ pair, dateTime }) => {
     if (!data) return 0
 
     const nodeData = data?.feeVolumes?.nodes ? data?.feeVolumes?.nodes[0] : {}
-    const feeVolume = num(fromChainAmount(nodeData?.swapFee || 0))
+    const feeVolume = num(fromChainAmount(nodeData?.swapFee || 0, 18))
 
     const offerAssetPrice = nodeData?.offerAsset
       ? await getTokenPrice(nodeData?.offerAsset, nodeData?.datetime)

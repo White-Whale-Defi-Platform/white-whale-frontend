@@ -24,6 +24,7 @@ import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
+import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
@@ -59,7 +60,18 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
+      return (
+        <>
+          {info.row.original.isSubqueryNetwork ? (
+            <Apr
+              pairAddr={info.row.original.contract}
+              tvl={info.row.original.totalLiq}
+            />
+          ) : (
+            <Text align="right">{info.getValue()}</Text>
+          )}
+        </>
+      )
     },
   }),
   columnHelper.accessor('volume24hr', {
