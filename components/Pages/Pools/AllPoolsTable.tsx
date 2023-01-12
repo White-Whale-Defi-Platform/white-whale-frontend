@@ -25,6 +25,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
 import PoolName from './components/PoolName'
+import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
 
@@ -68,7 +69,15 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
+      return (
+        <>
+          {info.row.original.isSubqueryNetwork ? (
+            <Volume pairAddr={info.row.original.contract} />
+          ) : (
+            <Text align="right">{info.getValue()}</Text>
+          )}
+        </>
+      )
     },
   }),
   columnHelper.accessor('totalLiq', {

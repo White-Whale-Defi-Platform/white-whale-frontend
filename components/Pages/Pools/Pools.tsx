@@ -11,7 +11,7 @@ import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { getTokenPrice } from 'util/coingecko'
-import { getPairApryAnd24HrVolume } from 'util/coinhall'
+import { getPairAprAndDailyVolume } from 'util/coinhall'
 
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
@@ -21,6 +21,7 @@ import MyPoolsTable from './MyPoolsTable'
 type Props = {}
 
 const commingSoonNetworks = ['injective', 'comdex']
+const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
 
 const Pools: FC<Props> = () => {
@@ -53,10 +54,8 @@ const Pools: FC<Props> = () => {
 
     setInitLoading(true)
 
-    const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
-    const poosWithAprAnd24HrVolume = showCommingSoon
-      ? []
-      : await getPairApryAnd24HrVolume(poolPairAddrList)
+    // const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
+    const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(pools)
 
   useEffect(() => {
     initPools()
@@ -109,6 +108,7 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
+
           totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
