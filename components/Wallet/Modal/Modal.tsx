@@ -12,7 +12,9 @@ import {
 import KeplrConnectButton from 'components/Wallet/Modal/KeplrConnectButton'
 import TerraStationConnectButton from 'components/Wallet/Modal/TerraStationConnectButton'
 
-function WalletModal({ isOpenModal, onCloseModal }) {
+import LeapConnectButton from './LeapConnectButton'
+
+function WalletModal({ isOpenModal, onCloseModal, chainId }) {
   return (
     <Modal isOpen={isOpenModal} onClose={onCloseModal}>
       <ModalOverlay />
@@ -21,8 +23,11 @@ function WalletModal({ isOpenModal, onCloseModal }) {
         <ModalCloseButton />
         <ModalBody>
           <VStack justify="center" align="center" textAlign="center">
-            <TerraStationConnectButton onCloseModal={onCloseModal} />
+            {chainId === 'phoenix-1' && (
+              <TerraStationConnectButton onCloseModal={onCloseModal} />
+            )}
             <KeplrConnectButton onCloseModal={onCloseModal} />
+            <LeapConnectButton onCloseModal={onCloseModal} />
           </VStack>
         </ModalBody>
 
