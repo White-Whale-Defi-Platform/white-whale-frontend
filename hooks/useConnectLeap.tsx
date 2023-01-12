@@ -5,6 +5,8 @@ import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
 
+let isConnecting = false
+
 export default function useConnectLeap() {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
@@ -13,6 +15,8 @@ export default function useConnectLeap() {
   const { disconnect } = useWallet()
 
   const connectLeap = async () => {
+    if (isConnecting) return
+
     if (connectedWallet) {
       disconnect()
     }
@@ -22,6 +26,7 @@ export default function useConnectLeap() {
     }
     try {
       if (chainInfo !== undefined) {
+        isConnecting = true
         await window.leap.experimentalSuggestChain(chainInfo)
         await window.leap.enable(currentWalletState.chainId)
         const offlineSigner = await window.leap.getOfflineSigner(
@@ -54,6 +59,8 @@ export default function useConnectLeap() {
       }
     } catch (e) {
       throw e
+    } finally {
+      isConnecting = false
     }
   }
 
