@@ -12,6 +12,7 @@ import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
 
 import useConnectLeap from '../../hooks/useConnectLeap'
@@ -32,34 +33,56 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   useEffect(() => {
     onDisconnect()
+
+    if (router.pathname === '/') return
+
+    const defaultChainId =
+      currentWalletState.network === 'mainnet' ? 'juno-1' : 'uni-3'
+
+    if (
+      validChains[currentWalletState.network][chainIdParam] !==
+      currentWalletState.chainId
+    ) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: validChains[currentWalletState.network][chainIdParam],
+      })
+    }
+
+    if (!validChains[currentWalletState.network][chainIdParam]) {
+      setCurrentWalletState({
+        ...currentWalletState,
+        chainId: defaultChainId,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (router.pathname === '/') return
+  // useEffect(() => {
+  //   if (router.pathname === '/') return
 
-    const defaultChain =
-      currentWalletState.network === 'mainnet'
-        ? chains.find((row) => row.chainId === 'juno-1')
-        : chains.find((row) => row.chainId === 'uni-3')
-    const targetChain = chains.find(
-      (row) => row.label.toLowerCase() === chainIdParam
-    )
-    if (targetChain && targetChain.chainId !== currentWalletState.chainId) {
-      setCurrentWalletState({
-        ...currentWalletState,
-        chainId: targetChain.chainId,
-      })
-    }
-    if (chains && chains.length > 0 && !targetChain) {
-      setCurrentWalletState({
-        ...currentWalletState,
-        chainId: defaultChain.chainId,
-      })
-    }
+  //   const defaultChain =
+  //     currentWalletState.network === 'mainnet'
+  //       ? chains.find((row) => row.chainId === 'juno-1')
+  //       : chains.find((row) => row.chainId === 'uni-3')
+  //   const targetChain = chains.find(
+  //     (row) => row.label.toLowerCase() === chainIdParam
+  //   )
+  //   if (targetChain && targetChain.chainId !== currentWalletState.chainId) {
+  //     setCurrentWalletState({
+  //       ...currentWalletState,
+  //       chainId: targetChain.chainId,
+  //     })
+  //   }
+  //   if (chains && chains.length > 0 && !targetChain) {
+  //     setCurrentWalletState({
+  //       ...currentWalletState,
+  //       chainId: defaultChain.chainId,
+  //     })
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainIdParam, chains])
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [chainIdParam, chains])
 
   const denom = useMemo(() => {
     if (!chainInfo) return
@@ -85,6 +108,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   useEffect(() => {
     if (!currentWalletState.chainId) return
+    if (!chains) return
 
     if (currentWalletState.activeWallet === 'leap') {
       connectLeap()
