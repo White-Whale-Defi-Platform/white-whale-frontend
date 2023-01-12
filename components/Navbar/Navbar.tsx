@@ -68,8 +68,8 @@ const Navbar = ({}) => {
       key: null,
       client: null,
       network: network,
-      chainId: null,
-      activeWallet: 'keplr',
+      chainId: chainId,
+      activeWallet: '',
     })
     disconnect()
   }
@@ -108,7 +108,11 @@ const Navbar = ({}) => {
             onOpenModal={onOpenModal}
             onCloseModal={onCloseModal}
           />
-          <WalletModal isOpenModal={isOpenModal} onCloseModal={onCloseModal} />
+          <WalletModal
+            isOpenModal={isOpenModal}
+            onCloseModal={onCloseModal}
+            chainId={chainId}
+          />
         </HStack>
       </Flex>
       <Flex

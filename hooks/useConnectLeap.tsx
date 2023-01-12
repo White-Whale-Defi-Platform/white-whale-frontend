@@ -5,27 +5,26 @@ import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
 
-export default function useConnectKeplr() {
+export default function useConnectLeap() {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
   const connectedWallet = useConnectedWallet()
   const { disconnect } = useWallet()
 
-  const connectKeplr = async () => {
+  const connectLeap = async () => {
     if (connectedWallet) {
       disconnect()
     }
-    if (window && !window?.keplr) {
-      alert('Please install Keplr extension and refresh the page.')
+    if (window && !window?.leap) {
+      alert('Please install Leap extension and refresh the page.')
       return
     }
-
     try {
       if (chainInfo !== undefined) {
-        await window.keplr?.experimentalSuggestChain(chainInfo)
-        await window.keplr.enable(currentWalletState.chainId)
-        const offlineSigner = await window.getOfflineSigner(
+        await window.leap.experimentalSuggestChain(chainInfo)
+        await window.leap.enable(currentWalletState.chainId)
+        const offlineSigner = await window.leap.getOfflineSigner(
           currentWalletState.chainId
         )
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
@@ -38,10 +37,10 @@ export default function useConnectKeplr() {
               `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
             ),
           },
-          'keplr'
+          'leap'
         )
         const [{ address }] = await offlineSigner.getAccounts()
-        const key = await window.keplr.getKey(currentWalletState.chainId)
+        const key = await window.leap.getKey(currentWalletState.chainId)
         /* successfully update the wallet state */
         setCurrentWalletState({
           key,
@@ -50,7 +49,7 @@ export default function useConnectKeplr() {
           chainId: currentWalletState.chainId,
           network: currentWalletState.network,
           status: WalletStatusType.connected,
-          activeWallet: 'keplr',
+          activeWallet: 'leap',
         })
       }
     } catch (e) {
@@ -58,11 +57,11 @@ export default function useConnectKeplr() {
     }
   }
 
-  const setKeplrAndConnect = () => {
-    setCurrentWalletState({ ...currentWalletState, activeWallet: 'keplr' })
+  const setLeapAndConnect = () => {
+    setCurrentWalletState({ ...currentWalletState, activeWallet: 'leap' })
     localStorage.removeItem('__terra_extension_router_session__')
-    connectKeplr()
+    connectLeap()
   }
 
-  return { connectKeplr, setKeplrAndConnect }
+  return { connectLeap, setLeapAndConnect }
 }
