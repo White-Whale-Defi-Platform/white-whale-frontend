@@ -70,10 +70,10 @@ const Pools: FC<Props> = () => {
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
         let price = 0
-        if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
+        if ((pool.isUSDPool || pool.isLunaxPool) && pool.asset0Price > 0) {
           price = pool.asset0Price / pool.asset1Price
         }
-        if (!pool.isUSDCPool && pool.asset1Price > 0) {
+        if (!pool.isUSDPool && pool.asset1Price > 0) {
           price = pool.asset1Price / pool.asset0Price
         }
 
@@ -83,6 +83,11 @@ const Pools: FC<Props> = () => {
         const asset1Price = showCommingSoon
           ? await getTokenPrice(pool?.pool_assets[1].token_address, Date.now())
           : 1
+
+        const isUSDPool =
+          pool?.isUSDPool ||
+          pool?.pool_assets[0].symbol.includes('CMST') ||
+          pool?.pool_assets[1].symbol.includes('CMST')
 
         return {
           contract: pool?.swap_address,
@@ -102,9 +107,11 @@ const Pools: FC<Props> = () => {
           totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
-            ? `$${(asset0Price / asset1Price)?.toFixed(2)}`
-            : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
-          isUSDCPool: pool?.isUSDCPool,
+            ? `${isUSDPool ? '$' : ''}${(asset0Price / asset1Price)?.toFixed(
+                2
+              )}`
+            : `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          isUSDPool: isUSDPool,
           cta: () =>
             router.push(
               `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`

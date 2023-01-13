@@ -31,7 +31,7 @@ export const getPairApryAnd24HrVolume = async (pairs: string[]) => {
       apr7d: pairInfo?.apr7d || 0,
       asset0Price: pairInfo?.asset0.usdPrice,
       asset1Price: pairInfo?.asset1.usdPrice,
-      isUSDCPool:
+      isUSDPool:
         pairInfo?.asset0.symbol.includes('USDC') ||
         pairInfo?.asset1.symbol.includes('USDC'),
       isLunaxPool:
