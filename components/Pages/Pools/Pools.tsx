@@ -117,6 +117,7 @@ const Pools: FC<Props> = () => {
               )}`
             : `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDPool: isUSDPool,
+          isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
           cta: () =>
             router.push(
               `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
