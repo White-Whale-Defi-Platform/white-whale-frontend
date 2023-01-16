@@ -1,31 +1,34 @@
 import { GasPrice } from '@cosmjs/stargate'
-import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
-import { useChainInfo } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
+import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
+
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
+import { useChainInfo } from 'hooks/useChainInfo'
+import getChainName from '../libs/getChainName'
+import { getSigningInjectiveClient } from 'injectivejs'
 
-export default function useConnectKeplr() {
+export default function useConnectCosmostation() {
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
-  const [chainInfo] = useChainInfo(currentWalletState.chainId)
+  let [chainInfo] = useChainInfo(currentWalletState.chainId)
   const connectedWallet = useConnectedWallet()
   const { disconnect } = useWallet()
 
-  const connectKeplr = async () => {
+  const connectCosmostation = async () => {
     if (connectedWallet) {
       disconnect()
     }
-    if (window && !window?.keplr) {
-      alert('Please install Keplr extension and refresh the page.')
+    if (window && !window?.cosmostation) {
+      alert('Please install Cosmostation extension and refresh the page.')
       return
     }
 
     try {
       if (chainInfo !== undefined) {
-        await window.keplr?.experimentalSuggestChain(chainInfo)
-        await window.keplr.enable(currentWalletState.chainId)
-        const offlineSigner = await window.getOfflineSigner(
+        await window.cosmostation.providers.keplr?.experimentalSuggestChain(chainInfo)
+        await window.cosmostation.providers.keplr.enable(currentWalletState.chainId)
+        const offlineSigner = await window.cosmostation.providers.keplr.getOfflineSigner(
           currentWalletState.chainId
         )
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
@@ -37,11 +40,10 @@ export default function useConnectKeplr() {
             gasPrice: GasPrice.fromString(
               `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
             ),
-          },
-          'keplr'
+          }
         )
         const [{ address }] = await offlineSigner.getAccounts()
-        const key = await window.keplr.getKey(currentWalletState.chainId)
+        const key = await window.cosmostation.providers.keplr.getKey(currentWalletState.chainId)
         /* successfully update the wallet state */
         setCurrentWalletState({
           key,
@@ -50,7 +52,7 @@ export default function useConnectKeplr() {
           chainId: currentWalletState.chainId,
           network: currentWalletState.network,
           status: WalletStatusType.connected,
-          activeWallet: 'keplr',
+          activeWallet: 'cosmostation',
         })
       }
     } catch (e) {
@@ -58,11 +60,11 @@ export default function useConnectKeplr() {
     }
   }
 
-  const setKeplrAndConnect = () => {
-    setCurrentWalletState({ ...currentWalletState, activeWallet: 'keplr' })
+  const setCosmostationAndConnect = () => {
+    setCurrentWalletState({ ...currentWalletState, activeWallet: 'cosmostation' })
     localStorage.removeItem('__terra_extension_router_session__')
-    connectKeplr()
+    connectCosmostation()
   }
 
-  return { connectKeplr, setKeplrAndConnect }
+  return { connectCosmostation, setCosmostationAndConnect }
 }

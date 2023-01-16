@@ -9,8 +9,8 @@ export default function useTerraModalOrConnectKeplr(onOpenModal) {
   const { setKeplrAndConnect } = useConnectKeplr()
 
   const showTerraModalOrConnectKeplr = () => {
-    if (chainInfo?.label === 'Terra') onOpenModal()
-    else setKeplrAndConnect()
+    onOpenModal()
+    // chainInfo.label === 'Terra' ? onOpenModal() : setKeplrAndConnect()
   }
 
   return { showTerraModalOrConnectKeplr }

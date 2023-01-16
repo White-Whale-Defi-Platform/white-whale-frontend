@@ -98,7 +98,6 @@ const button = {
       colorScheme: 'black',
       borderRadius: 'xl',
       bg: 'dark.900',
-      mb: 4,
       p: 8,
       _hover: {
         bg: 'brand.500',
