@@ -4,6 +4,8 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
 import { ChainInfo } from '@keplr-wallet/types'
+import mainnetChainInfo from 'public/mainnet/chain_info.json'
+import testnetChainInfo from 'public/testnet/chain_info.json'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -21,23 +23,26 @@ export const unsafelyReadChainInfoCache = () =>
 export const useChains = () => {
   const currentWalletState = useRecoilValue(walletState)
 
-  const { data = [], isLoading } = useQuery<CustomChainType[]>(
-    ['chainInfo', currentWalletState.network],
-    async () => {
-      const url = `/${currentWalletState.network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
-      const response = await fetch(url)
+  // const { data = [], isLoading } = useQuery<CustomChainType[]>(
+  //   ['chainInfo', currentWalletState.network],
+  //   async () => {
+  //     const url = `/${currentWalletState.network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
+  //     const response = await fetch(url)
 
-      return response.json()
-    },
-    {
-      enabled: !!currentWalletState.network,
-      onError(e) {
-        console.error('111Error loading chain info:', e)
-      },
-    }
-  )
+  //     return response.json()
+  //   },
+  //   {
+  //     enabled: !!currentWalletState.network,
+  //     onError(e) {
+  //       console.error('Error loading chain info:', e)
+  //     },
+  //   }
+  // )
 
-  return data || []
+  // return data || []
+  return currentWalletState.network === 'testnet'
+    ? testnetChainInfo || []
+    : mainnetChainInfo || []
 }
 
 export const useChainInfo = (id = null) => {
