@@ -33,7 +33,7 @@
         "ATOM",
         "LUNA"
       ],
-      "dispalyName": "LUNA-ATOM",
+      "displayName": "LUNA-ATOM",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
@@ -77,7 +77,7 @@
         "ATOM",
         "JUNO"
       ],
-      "dispalyName": "JUNO-ATOM",
+      "displayName": "JUNO-ATOM",
       "displayLogo1": "/logos/juno.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
@@ -120,7 +120,7 @@
         "ATOM",
         "axlUSDC"
       ],
-      "dispalyName": "ATOM-axlUSDC",
+      "displayName": "ATOM-axlUSDC",
       "displayLogo1": "/logos/atom.png",
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
@@ -159,7 +159,7 @@
     },
     {
       "pool_id": "LUNA-LUNAX",
-      "dispalyName": "LUNAX-LUNA",
+      "displayName": "LUNAX-LUNA",
       "displayLogo1": "/logos/lunax.png",
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
@@ -196,7 +196,7 @@
     },
     {
       "pool_id": "LUNA-ASTRO",
-      "dispalyName": "ASTRO-LUNA",
+      "displayName": "ASTRO-LUNA",
       "displayLogo1": "/logos/astro.png",
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
@@ -237,7 +237,7 @@
         "axlUSDC",
         "LUNA"
       ],
-      "dispalyName": "LUNA-axlUSDC",
+      "displayName": "LUNA-axlUSDC",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
