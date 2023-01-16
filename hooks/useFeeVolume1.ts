@@ -7,19 +7,15 @@ import { fromChainAmount, num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { getTokenPrice } from 'util/coingecko'
-import { getTokenDecimal } from 'util/token'
 
 const query = gql`
-  query ($filter: TradingHistoryFilter) {
-    tradingHistories(first: 1000, filter: $filter) {
+  query ($filter: FeeVolumeFilter) {
+    feeVolumes(first: 1, filter: $filter) {
       nodes {
         id
         datetime
-        pairAddr
-        token
-        secondToken
-        baseVolume
-        targetVolume
+        swapFee
+        offerAsset
       }
     }
   }
@@ -30,21 +26,17 @@ export const useFeeVolume = ({ pair, dateTime }) => {
   const currentWalletState = useRecoilValue(walletState)
   const [activeChain]: any = useChainInfo(currentWalletState.chainId)
 
-  const SWAP_FEE = 0.002
   const filter = {
-    pairAddr: {
+    pair: {
       equalTo: pair,
     },
     datetime: {
-      greaterThan: dateTime,
-    },
-    txType: {
-      equalTo: 'SELL',
+      equalTo: dateTime,
     },
   }
 
   const { data: queryData, isLoading } = useQuery(
-    ['swapHistories', pair, dateTime],
+    ['swapFee', pair, dateTime],
     () => request(activeChain?.indexerUrl, query, { filter }),
     { enabled: !!activeChain?.indexerUrl }
   )
@@ -52,30 +44,14 @@ export const useFeeVolume = ({ pair, dateTime }) => {
   const calculateVolume = async (data) => {
     if (!data) return 0
 
-    const tradingHistories = data?.tradingHistories?.nodes
-      ? data?.tradingHistories?.nodes
-      : []
+    const nodeData = data?.feeVolumes?.nodes ? data?.feeVolumes?.nodes[0] : {}
+    const feeVolume = num(fromChainAmount(nodeData?.swapFee || 0, 18))
 
-    let feeVolume = 0
+    const offerAssetPrice = nodeData?.offerAsset
+      ? await getTokenPrice(nodeData?.offerAsset, nodeData?.datetime)
+      : 0
 
-    await Promise.all(
-      tradingHistories.map(async (row) => {
-        const returnVolume = num(
-          fromChainAmount(
-            row?.baseVolume || 0,
-            getTokenDecimal(row?.secondToken)
-          )
-        )
-
-        const askAssetPrice = await getTokenPrice(
-          row?.secondToken,
-          row?.datetime
-        )
-        feeVolume += askAssetPrice * returnVolume.toNumber() * SWAP_FEE
-      })
-    )
-
-    setVolume(feeVolume)
+    setVolume(feeVolume.toNumber() * offerAssetPrice)
   }
 
   useEffect(() => {
