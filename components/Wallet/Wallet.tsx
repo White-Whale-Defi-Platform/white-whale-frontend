@@ -48,7 +48,6 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
         chainId: validChains[currentWalletState.network][chainIdParam],
       })
     }
-
     if (!validChains[currentWalletState.network][chainIdParam]) {
       setCurrentWalletState({
         ...currentWalletState,
@@ -137,7 +136,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentWalletState.chainId, chains, router]
+    [currentWalletState.chainId, router]
   )
 
   useEffect(() => {
