@@ -79,7 +79,8 @@ const Pools: FC<Props> = () => {
 
         return {
           contract: pool?.swap_address,
-          pool: pool?.dispalyName,
+          pool: pool?.displayName,
+          poolId: pool?.pool_id,
           token1Img: pool?.displayLogo1,
           token2Img: pool?.displayLogo2,
           apr: showCommingSoon
@@ -118,7 +119,7 @@ const Pools: FC<Props> = () => {
     .map((item) => ({
       ...item,
       myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-      cta: () => router.push(`/pools/manage_liquidity?poolId=${item.pool}`),
+      cta: () => router.push(`/pools/manage_liquidity?poolId=${item.poolId}`),
     }))
 
   // get a list of all pools excepting myPools
