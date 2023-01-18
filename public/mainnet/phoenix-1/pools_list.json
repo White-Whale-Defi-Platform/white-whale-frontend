@@ -1,9 +1,7 @@
 {
   "name": "Pools list on mainnet",
   "logoURI": "/img/logo.svg",
-  "keywords": [
-    "special tokens"
-  ],
+  "keywords": ["special tokens"],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -19,9 +17,7 @@
     "name": "Luna",
     "decimals": 6,
     "logoURI": "/logos/luna.svg",
-    "tags": [
-      "native"
-    ],
+    "tags": ["native"],
     "native": true,
     "denom": "uluna"
   },
@@ -29,10 +25,7 @@
   "pools": [
     {
       "pool_id": "ATOM-LUNA",
-      "lpOrder": [
-        "ATOM",
-        "LUNA"
-      ],
+      "lpOrder": ["ATOM", "LUNA"],
       "displayName": "LUNA-ATOM",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/atom.png",
@@ -45,9 +38,7 @@
           "name": "Atom",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
@@ -59,9 +50,7 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "uluna"
         }
@@ -72,54 +61,8 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "ATOM-JUNO",
-      "lpOrder": [
-        "ATOM",
-        "JUNO"
-      ],
-      "displayName": "JUNO-ATOM",
-      "displayLogo1": "/logos/juno.svg",
-      "displayLogo2": "/logos/atom.png",
-      "pool_assets": [
-        {
-          "id": "cosmos",
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
-          "symbol": "ATOM",
-          "name": "Atom",
-          "decimals": 6,
-          "logoURI": "/logos/atom.png",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
-        },
-        {
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/4CD525F166D32B0132C095F353F4C6F033B0FF5C49141470D1EFDA1D63303D04",
-          "symbol": "JUNO",
-          "name": "Juno",
-          "decimals": 6,
-          "logoURI": "/logos/juno.svg",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/4CD525F166D32B0132C095F353F4C6F033B0FF5C49141470D1EFDA1D63303D04"
-        }
-      ],
-      "lp_token": "terra1avfsch3ee82wyrpwlawecyz6zktr9jln0zaxp58xuvmxyl5g305q3rwuj3",
-      "swap_address": "terra1p2xgcr2ewnetug8ahqms5y3k6rxyh2xglnzzx500ylh4420h9ucqz8w7x5",
-      "staking_address": "",
-      "rewards_tokens": []
-    },
-    {
       "pool_id": "ATOM-axlUSDC",
-      "lpOrder": [
-        "ATOM",
-        "axlUSDC"
-      ],
+      "lpOrder": ["ATOM", "axlUSDC"],
       "displayName": "ATOM-axlUSDC",
       "displayLogo1": "/logos/atom.png",
       "displayLogo2": "/logos/axlUSDC.png",
@@ -132,9 +75,7 @@
           "name": "Atom",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
         },
@@ -145,52 +86,13 @@
           "name": "axlUSDC",
           "decimals": 6,
           "logoURI": "/logos/axlUSDC.png",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
         }
       ],
       "lp_token": "terra17ly9laewec70qu6tl0e3qrwh2vhz9akpf2jd7mxqram63xg2n0rsj36xvr",
       "swap_address": "terra17l9xj8f6m8smumhn8wgpgnswr3mu60wfkcm6pjc69drxp0t398rs7335vn",
-      "staking_address": "",
-      "rewards_tokens": []
-    },
-    {
-      "pool_id": "LUNA-LUNAX",
-      "displayName": "LUNAX-LUNA",
-      "displayLogo1": "/logos/lunax.png",
-      "displayLogo2": "/logos/luna.svg",
-      "pool_assets": [
-        {
-          "id": "terra-luna-2",
-          "chain_id": "phoenix-1",
-          "token_address": "uluna",
-          "symbol": "LUNA",
-          "name": "Luna",
-          "decimals": 6,
-          "logoURI": "/logos/luna.svg",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "uluna"
-        },
-        {
-          "chain_id": "phoenix-1",
-          "token_address": "terra14xsm2wzvu7xaf567r693vgfkhmvfs08l68h4tjj5wjgyn5ky8e2qvzyanh",
-          "symbol": "LUNAX",
-          "name": "LunaX",
-          "decimals": 6,
-          "logoURI": "/logos/lunax.png",
-          "tags": [],
-          "native": false,
-          "denom": "terra14xsm2wzvu7xaf567r693vgfkhmvfs08l68h4tjj5wjgyn5ky8e2qvzyanh"
-        }
-      ],
-      "lp_token": "terra1lt586fhwyuccktk58v8k96ugzp9szurhqvmlnjxhyn6yapa6v2jsmc468d",
-      "swap_address": "terra1qzux5j9he9nv95kq3unkuzy0hddf080um2t243raatg3f6requwsaahpqp",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -208,9 +110,7 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "uluna"
         },
@@ -233,10 +133,7 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder": [
-        "axlUSDC",
-        "LUNA"
-      ],
+      "lpOrder": ["axlUSDC", "LUNA"],
       "displayName": "LUNA-axlUSDC",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/axlUSDC.png",
@@ -249,9 +146,7 @@
           "name": "Luna",
           "decimals": 6,
           "logoURI": "/logos/luna.svg",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "uluna"
         },
@@ -262,9 +157,7 @@
           "name": "axlUSDC",
           "decimals": 6,
           "logoURI": "/logos/axlUSDC.png",
-          "tags": [
-            "native"
-          ],
+          "tags": ["native"],
           "native": true,
           "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
         }
