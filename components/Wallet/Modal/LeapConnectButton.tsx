@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 
 import { Button, HStack, Text } from '@chakra-ui/react'
 import useConnectLeap from 'hooks/useConnectLeap'
+import leapWalletIcon from 'public/img/leap-wallet.svg'
 
 function LeapConnectButton({ onCloseModal }) {
   const { setLeapAndConnect } = useConnectLeap()
@@ -16,7 +17,7 @@ function LeapConnectButton({ onCloseModal }) {
       <HStack justify="space-between" width="full">
         <Text>Leap Wallet</Text>
         <img
-          src="https://assets.leapwallet.io/leap/cosmos.svg"
+          src="/img/leap-wallet.svg"
           alt="leap logo"
           width="24"
           height="24"
