@@ -12,6 +12,7 @@ import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
 import useConnectKeplr from 'hooks/useConnectKeplr'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 async function fetchTokenBalance({
   client,
@@ -75,8 +76,11 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet, status } =
+  const { network, client, chainId, activeWallet, status } =
     useRecoilValue(walletState)
+  const connectedWallet = useConnectedWallet()
+  const address = connectedWallet?.addresses[chainId];
+  console.log(address, network, client, activeWallet, status)
   // TODO: Adding this fixes the issue where refresh means no client
   const { connectKeplr } = useConnectKeplr()
   if (!client && status == '@wallet-state/restored') {

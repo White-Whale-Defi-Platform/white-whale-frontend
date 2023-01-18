@@ -57,7 +57,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           color="white"
           borderColor="whiteAlpha.400"
           borderRadius="full"
-          onClick={showTerraModalOrConnectKeplr}
+          onClick={onOpenModal}
         >
           <WalletIcon />
           Connect wallet

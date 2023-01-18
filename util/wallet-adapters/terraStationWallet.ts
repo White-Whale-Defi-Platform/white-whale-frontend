@@ -9,8 +9,9 @@ import {
   MsgExecuteContract,
   MsgTransfer,
   TxInfo,
-} from '@terra-money/terra.js'
-import { LCDClient } from '@terra-money/terra.js/dist/client/lcd/LCDClient'
+} from '@terra-money/feather.js'
+// import { LCDClient } from '@terra-money/terra.js/dist/client/lcd/LCDClient'
+import { LCDClient } from '@terra-money/feather.js/dist/client/lcd/LCDClient'
 import { ConnectedWallet } from '@terra-money/wallet-provider'
 import axios from 'axios'
 
@@ -197,7 +198,9 @@ export class TerraStationWallet implements Wallet {
   }
 
   getBalance(address: string, searchDenom: string): Promise<Coin> {
+    console.log(address)
     return this.lcdClient.bank.balance(address).then(([coins]) => {
+      console.log(coins)
       const coin = coins.get(searchDenom)
       if (coin === undefined) {
         return {
