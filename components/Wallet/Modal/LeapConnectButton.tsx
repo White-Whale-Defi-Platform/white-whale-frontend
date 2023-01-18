@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 
 import { Button, HStack, Text } from '@chakra-ui/react'
 import useConnectLeap from 'hooks/useConnectLeap'
-import leapWalletIcon from 'public/img/leap-wallet.svg'
 
 function LeapConnectButton({ onCloseModal }) {
   const { setLeapAndConnect } = useConnectLeap()

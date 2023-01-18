@@ -14,12 +14,7 @@ function ConnectedWalletIcon({ connected }) {
       {connected ? (
         <Box>
           {activeWallet === 'leap' ? (
-            <img
-              src="https://assets.leapwallet.io/leap/cosmos.svg"
-              alt=""
-              width="24"
-              height="24"
-            />
+            <img src="/img/leap-wallet.svg" alt="" width="24" height="24" />
           ) : (
             <KeplrWalletIcon />
           )}
