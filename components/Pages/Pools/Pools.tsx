@@ -146,7 +146,7 @@ const Pools: FC<Props> = () => {
           myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
           cta: () =>
             router.push(
-              `/${chainIdParam}/pools/manage_liquidity?poolId=${item.pool}`
+              `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
             ),
         }))
     )
