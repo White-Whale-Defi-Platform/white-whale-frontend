@@ -99,7 +99,7 @@
     {
       "pool_id": "JUNO-axlUSDC",
       "lpOrder": ["axlUSDC", "JUNO"],
-      "dispalyName": "JUNO-axlUSDC",
+      "displayName": "JUNO-axlUSDC",
       "displayLogo1": "/logos/juno.svg",
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
