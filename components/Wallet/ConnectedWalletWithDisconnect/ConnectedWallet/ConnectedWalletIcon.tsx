@@ -21,7 +21,6 @@ function ConnectedWalletIcon({ connected }) {
     default:
       return <></>
   }
-
 }
 
 export default ConnectedWalletIcon

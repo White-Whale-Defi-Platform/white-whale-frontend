@@ -28,6 +28,7 @@ export default function useConnectKeplr() {
         const offlineSigner = await window.getOfflineSigner(
           currentWalletState.chainId
         )
+
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           currentWalletState.chainId,
           chainInfo.rpc,

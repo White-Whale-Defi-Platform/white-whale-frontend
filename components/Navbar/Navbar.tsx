@@ -61,7 +61,7 @@ const Navbar = ({}) => {
   } = useDisclosure()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  function resetWalletConnection() {
+  const resetWalletConnection = () => {
     setWalletState({
       status: WalletStatusType.idle,
       address: '',

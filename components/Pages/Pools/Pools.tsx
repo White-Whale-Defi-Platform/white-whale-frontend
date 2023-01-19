@@ -91,13 +91,10 @@ const Pools: FC<Props> = () => {
 
         return {
           contract: pool?.swap_address,
-          pool: pool?.pool_id,
-          token1Img: pool?.pool_id.includes('USD')
-            ? pool.pool_assets?.[0].logoURI
-            : pool.pool_assets?.[1].logoURI,
-          token2Img: pool?.pool_id.includes('USD')
-            ? pool.pool_assets?.[1].logoURI
-            : pool.pool_assets?.[0].logoURI,
+          pool: pool?.displayName,
+          poolId: pool?.pool_id,
+          token1Img: pool?.displayLogo1,
+          token2Img: pool?.displayLogo2,
           apr: showCommingSoon
             ? COMING_SOON
             : `${Number(pool.apr24h).toFixed(2)}%`,
