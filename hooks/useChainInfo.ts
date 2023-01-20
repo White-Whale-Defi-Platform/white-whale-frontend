@@ -1,13 +1,17 @@
-import { ChainInfo } from '@keplr-wallet/types'
-import { useQuery } from 'react-query'
-
-import { queryClient } from '../services/queryClient'
-
 const chainInfoQueryKey = '@chain-info'
 // import chainInfo from "components/Wallet/chainInfo.json"
 import { useMemo } from 'react'
+import { useQuery } from 'react-query'
+
+import { ChainInfo } from '@keplr-wallet/types'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+
+import { queryClient } from '../services/queryClient'
+
+interface CustomChainType extends ChainInfo {
+  label: string
+}
 
 export const unsafelyReadChainInfoCache = () =>
   queryClient.getQueryCache().find(chainInfoQueryKey)?.state?.data as
@@ -17,12 +21,13 @@ export const unsafelyReadChainInfoCache = () =>
 export const useChains = () => {
   const currentWalletState = useRecoilValue(walletState)
 
-  const { data = [], isLoading } = useQuery<ChainInfo[]>(
+  const { data = [], isLoading } = useQuery<CustomChainType[]>(
     ['chainInfo', currentWalletState.network],
     async () => {
       const url = `/${currentWalletState.network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
       const response = await fetch(url)
-      return await response.json()
+
+      return response.json()
     },
     {
       enabled: !!currentWalletState.network,

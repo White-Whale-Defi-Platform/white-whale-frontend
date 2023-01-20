@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
@@ -13,9 +13,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 import useVault, { useVaultDepost } from './hooks/useVaults'
@@ -25,12 +26,31 @@ const NewPosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, isLoading, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
+  const chains = useChains()
   const { chainId, key, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNOX'
+
   const vault = useMemo(
     () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
     [vaults, vaultId]
   )
+
+  useEffect(() => {
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain) {
+        if (!vault) {
+          router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
+        } else {
+          router.push(
+            `/${currenChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`
+          )
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, address, chains, vault])
+
   const edgeTokenList = useMemo(
     () => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
     [vaults]
@@ -77,7 +97,6 @@ const NewPosition = () => {
           New Position
         </Text>
       </HStack>
-
       <Box
         background="#1C1C1C"
         padding={[6, 12]}
@@ -85,14 +104,7 @@ const NewPosition = () => {
         borderRadius="30px"
         width={['full']}
       >
-        <Box
-          // border="2px"
-          // borderColor="whiteAlpha.200"
-          // borderRadius="3xl"
-          pt="8"
-          maxW="600px"
-          maxH="fit-content"
-        >
+        <Box pt="8" maxW="600px" maxH="fit-content">
           {vault?.vault_assets?.symbol && (
             <DepositForm
               vaultAddress={vault?.vault_address}

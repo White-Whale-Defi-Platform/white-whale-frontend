@@ -1,6 +1,8 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
@@ -24,25 +26,30 @@ const COMING_SOON = 'coming soon'
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
+  const { address, chainId } = useRecoilValue(walletState)
+  const client = useCosmwasmClient(chainId)
   const router = useRouter()
+  const chains = useChains()
+  const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
-  const { chainId } = useRecoilValue(walletState)
+  const [pools, isLoading] = useQueriesDataSelector(
+    useQueryMultiplePoolsLiquidity({
+      refetchInBackground: true,
+      pools: poolList?.pools,
+      client,
+    })
+  )
 
   const showCommingSoon = useMemo(
     () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
     [chainId]
   )
 
-  const [pools, isLoading] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
-      refetchInBackground: false,
-      pools: poolList?.pools,
-    })
-  )
-
   const initPools = useCallback(async () => {
-    if (!pools || pools.length === 0) return
-    if (allPools.length > 0) return
+    if (!pools) return
+    if (allPools.length > 0) {
+      return
+    }
 
     setInitLoading(true)
 
@@ -63,10 +70,10 @@ const Pools: FC<Props> = () => {
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
         let price = 0
-        if ((pool.isUSDCPool || pool.isLunaxPool) && pool.asset0Price > 0) {
+        if ((pool.isUSDPool || pool.isLunaxPool) && pool.asset0Price > 0) {
           price = pool.asset0Price / pool.asset1Price
         }
-        if (!pool.isUSDCPool && pool.asset1Price > 0) {
+        if (!pool.isUSDPool && pool.asset1Price > 0) {
           price = pool.asset1Price / pool.asset0Price
         }
 
@@ -76,6 +83,11 @@ const Pools: FC<Props> = () => {
         const asset1Price = showCommingSoon
           ? await getTokenPrice(pool?.pool_assets[1].token_address, Date.now())
           : 1
+
+        const isUSDPool =
+          pool?.isUSDPool ||
+          pool?.pool_assets[0].symbol.includes('CMST') ||
+          pool?.pool_assets[1].symbol.includes('CMST')
 
         return {
           contract: pool?.swap_address,
@@ -89,44 +101,62 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: pool.liquidity.available.total.dollarValue,
+          totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           price: showCommingSoon
-            ? `$${(asset0Price / asset1Price)?.toFixed(2)}`
-            : `${pool?.isUSDCPool ? '$' : ''}${Number(price).toFixed(3)}`,
-          isUSDCPool: pool?.isUSDCPool,
+            ? `${isUSDPool ? '$' : ''}${(asset0Price / asset1Price)?.toFixed(
+                2
+              )}`
+            : `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          isUSDPool: isUSDPool,
           cta: () =>
             router.push(
-              `/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
+              `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
             ),
         }
       })
     )
 
     setAllPools(_allPools)
-    setInitLoading(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools, router])
+    setTimeout(() => {
+      setInitLoading(false)
+    }, 500)
 
-  useEffect(() => {
-    initPools()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools])
 
+  useEffect(() => {
+    if (chainId) {
+      const currenChain = chains.find((row) => row.chainId === chainId)
+      if (currenChain && currenChain.label.toLowerCase() === chainIdParam) {
+        initPools()
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, address, chains, pools])
+
   // get a list of my pools
-  const myPools = allPools
-    .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-    .map((item) => ({
-      ...item,
-      myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-      cta: () => router.push(`/pools/manage_liquidity?poolId=${item.poolId}`),
-    }))
+  const myPools = useMemo(() => {
+    return (
+      allPools &&
+      allPools
+        .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+        .map((item) => ({
+          ...item,
+          myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          cta: () =>
+            router.push(
+              `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
+            ),
+        }))
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allPools])
 
   // get a list of all pools excepting myPools
-  const myPoolsId = myPools.map(({ pool }) => pool)
-  const allPoolsForShown = allPools.filter(
-    (item) => !myPoolsId.includes(item.pool)
-  )
+  const myPoolsId = myPools && myPools.map(({ pool }) => pool)
+  const allPoolsForShown =
+    allPools && allPools.filter((item) => !myPoolsId.includes(item.pool))
 
   return (
     <VStack
@@ -134,7 +164,7 @@ const Pools: FC<Props> = () => {
       alignItems="center"
       margin="auto"
     >
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
@@ -142,7 +172,7 @@ const Pools: FC<Props> = () => {
           <Button
             variant="primary"
             size="sm"
-            onClick={() => router.push(`/pools/new_position`)}
+            onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
           >
             New Position
           </Button>

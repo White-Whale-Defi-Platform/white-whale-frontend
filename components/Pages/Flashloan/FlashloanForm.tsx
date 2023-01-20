@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 
 import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
@@ -134,13 +134,11 @@ function FlashloanForm({}: Props) {
           alignItems="center"
         >
           <Box>
-            <Text alignSelf="flex-start"> JSON to execute the trade</Text>
+            <Text alignSelf="flex-start">JSON to execute the trade</Text>
           </Box>
           {/* <Error message={error || tx?.error} /> */}
         </HStack>
-
         <Editor containerRef={containerRef} />
-
         <HStack justify="space-between" width="full" p={4} alignItems="center">
           <HStack>
             <Button
@@ -152,15 +150,13 @@ function FlashloanForm({}: Props) {
             </Button>
             <UploadFile handleChange={handleChange} />
             {/* <Button
-                            variant='outline'
-                            isLoading={
-                                tx?.txStep == TxStep.Estimating
-                            }
-                            disabled={!!error}
-                            onClick={() => tx?.simulate()}
-                        >
-                            {tx?.buttonLabel ||  'Simulate'}
-                        </Button> */}
+              variant="outline"
+              isLoading={tx?.txStep == TxStep.Estimating}
+              disabled={!!error}
+              onClick={() => tx?.simulate()}
+            >
+              {tx?.buttonLabel || 'Simulate'}
+            </Button> */}
           </HStack>
 
           <Button

@@ -1,3 +1,6 @@
+import React, { useMemo } from 'react'
+import { toast } from 'react-hot-toast'
+
 import {
   useClaimTokens,
   usePoolPairTokenAmount,
@@ -20,8 +23,6 @@ import {
   UpRightArrow,
   Valid,
 } from 'junoblocks'
-import React, { useMemo } from 'react'
-import { toast } from 'react-hot-toast'
 
 import { TokenInfo } from '../../../queries/usePoolsListQuery'
 import { UnbondingLiquidityCard } from './UnbondingLiquidityCard'
