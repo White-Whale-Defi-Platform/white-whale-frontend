@@ -2,11 +2,11 @@
   "mainnet": {
     "juno": [
       {
-        "tokenSymbol": "JUNO",
+        "tokenSymbol": "ATOM",
         "amount": 0
       },
       {
-        "tokenSymbol": "ATOM",
+        "tokenSymbol": "JUNO",
         "amount": 0
       }
     ],
@@ -37,6 +37,16 @@
       },
       {
         "tokenSymbol": "USDT",
+        "amount": 0
+      }
+    ],
+    "comdex": [
+      {
+        "tokenSymbol": "CMDX",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "ATOM",
         "amount": 0
       }
     ]
