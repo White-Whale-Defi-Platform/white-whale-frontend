@@ -30,7 +30,7 @@ export const useTokenDollarValueQuery = (
       )
 
       if (tokenIds) {
-        return tokenDollarValueQuery(tokenIds, chainId)
+        return tokenDollarValueQuery(tokenIds)
       }
     },
     {
