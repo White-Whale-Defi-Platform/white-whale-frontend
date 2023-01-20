@@ -25,7 +25,7 @@ export default function useConnectKeplr() {
       if (chainInfo !== undefined) {
         await window.keplr?.experimentalSuggestChain(chainInfo)
         await window.keplr.enable(currentWalletState.chainId)
-        const offlineSigner = await window.getOfflineSigner(
+        const offlineSigner = await window.getOfflineSignerAuto(
           currentWalletState.chainId
         )
 

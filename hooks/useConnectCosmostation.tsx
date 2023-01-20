@@ -40,7 +40,8 @@ export default function useConnectCosmostation() {
             gasPrice: GasPrice.fromString(
               `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
             ),
-          }
+          },
+          'cosmostation'
         )
         const [{ address }] = await offlineSigner.getAccounts()
         const key = await window.cosmostation.providers.keplr.getKey(currentWalletState.chainId)
