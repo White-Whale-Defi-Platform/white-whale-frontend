@@ -60,14 +60,6 @@ const Pools: FC<Props> = () => {
 
     const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(pools)
 
-  useEffect(() => {
-    initPools()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
-
-  // get a list of all pools
-  const allPools = useMemo(() => {
-    if (!pools || pools.length === 0) return
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
@@ -101,8 +93,7 @@ const Pools: FC<Props> = () => {
 
         return {
           contract: pool?.swap_address,
-          pool: pool?.displayName,
-          poolId: pool?.pool_id,
+          pool: pool?.pool_id,
           token1Img: pool?.displayLogo1,
           token2Img: pool?.displayLogo2,
           apr: showCommingSoon
@@ -138,14 +129,9 @@ const Pools: FC<Props> = () => {
   }, [pools])
 
   useEffect(() => {
-    if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain && currenChain.label.toLowerCase() === chainIdParam) {
-        initPools()
-      }
-    }
+    initPools()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, address, chains, pools])
+  }, [address, client, pools])
 
   // get a list of my pools
   const myPools = useMemo(() => {
