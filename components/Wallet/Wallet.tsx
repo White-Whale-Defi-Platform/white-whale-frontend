@@ -19,6 +19,7 @@ import { getPathName } from 'util/route'
 import useConnectLeap from '../../hooks/useConnectLeap'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
+  const [isInitialized, setInitialized] = useState(false)
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
 
@@ -56,6 +57,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
         chainId: defaultChainId,
       })
     }
+    setInitialized(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -108,6 +110,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   )
 
   useEffect(() => {
+    if (!isInitialized) return
     if (!currentWalletState.chainId) return
 
     if (currentWalletState.activeWallet === 'leap') {
@@ -124,7 +127,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId, currentWalletState.activeWallet, chains])
+  }, [currentWalletState.chainId])
 
   if (!connected && !connectedWallet) {
     return (

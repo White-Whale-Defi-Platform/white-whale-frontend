@@ -88,7 +88,8 @@ const Pools: FC<Props> = () => {
 
         return {
           contract: pool?.swap_address,
-          pool: pool?.pool_id,
+          pool: pool?.displayName,
+          poolId: pool?.pool_id,
           token1Img: pool?.displayLogo1,
           token2Img: pool?.displayLogo2,
           apr: showCommingSoon
