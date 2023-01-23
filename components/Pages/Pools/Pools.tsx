@@ -4,14 +4,16 @@ import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
+import { useTokenPrice } from 'hooks/useTokenPrice'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { getTokenPrice } from 'util/coingecko'
+import { getTokenCGCId } from 'util/coingecko'
 import { getPairAprAndDailyVolume } from 'util/coinhall'
+import { STABLE_COIN_LIST } from 'util/constants'
 
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
@@ -33,9 +35,10 @@ const Pools: FC<Props> = () => {
   const chains = useChains()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
+  const { tokenPrices } = useTokenPrice()
   const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
-      refetchInBackground: true,
+      refetchInBackground: false,
       pools: poolList?.pools,
       client,
     })
@@ -47,6 +50,7 @@ const Pools: FC<Props> = () => {
   )
 
   const initPools = useCallback(async () => {
+    if (Object.keys(tokenPrices).length === 0) return
     if (!pools) return
     if (allPools.length > 0) {
       return
@@ -54,7 +58,6 @@ const Pools: FC<Props> = () => {
 
     setInitLoading(true)
 
-    // const poolPairAddrList = pools.map((pool: any) => pool.swap_address)
     const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(pools)
 
   useEffect(() => {
@@ -85,16 +88,16 @@ const Pools: FC<Props> = () => {
         }
 
         const asset0Price = showCommingSoon
-          ? await getTokenPrice(pool?.pool_assets[0].token_address, Date.now())
+          ? tokenPrices[getTokenCGCId(pool?.pool_assets[0].token_address)]
           : 1
-          const asset1Price = showCommingSoon
-          ? await getTokenPrice(pool?.pool_assets[1].token_address, Date.now())
+        const asset1Price = showCommingSoon
+          ? tokenPrices[getTokenCGCId(pool?.pool_assets[1].token_address)]
           : 1
 
         const isUSDPool =
           pool?.isUSDPool ||
-          pool?.pool_assets[0].symbol.includes('CMST') ||
-          pool?.pool_assets[1].symbol.includes('CMST')
+          STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
+          STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
 
         return {
           contract: pool?.swap_address,

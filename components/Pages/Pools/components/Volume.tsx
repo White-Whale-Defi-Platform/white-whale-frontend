@@ -16,12 +16,15 @@ const Volume = ({ pairAddr }: Props) => {
     .subtract(0, 'days')
     .startOf('day')
     .format('YYYY-MM-DDTHH:mm:ss')
-  const { volume, isLoading } = useTradingHistory({ pair: pairAddr, dateTime })
+  const { tradingVolume, isLoading } = useTradingHistory({
+    pair: pairAddr,
+    dateTime,
+  })
 
   if (!pairAddr) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
 
-  return <Text align="right">{`$${formatPrice(volume)}`}</Text>
+  return <Text align="right">{`$${formatPrice(tradingVolume)}`}</Text>
 }
 
 export default Volume

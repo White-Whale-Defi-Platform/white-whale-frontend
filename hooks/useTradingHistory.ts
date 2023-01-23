@@ -26,9 +26,10 @@ const query = gql`
 `
 
 export const useTradingHistory = ({ pair, dateTime }) => {
-  const [volume, setVolume] = useState(0.0)
+  const [volume, setVolume] = useState<number | undefined>()
   const currentWalletState = useRecoilValue(walletState)
   const [activeChain]: any = useChainInfo(currentWalletState.chainId)
+  const SWAP_FEE = 0.002
 
   const filter = {
     pairAddr: {
@@ -45,11 +46,12 @@ export const useTradingHistory = ({ pair, dateTime }) => {
   const { data: queryData, isLoading } = useQuery(
     ['swapHistories', pair, dateTime],
     () => request(activeChain?.indexerUrl, query, { filter }),
-    { enabled: !!activeChain?.indexerUrl }
+    { enabled: !!activeChain?.indexerUrl, refetchIntervalInBackground: false }
   )
 
   const calculateVolume = async (data) => {
     if (!data) return 0
+    if (volume !== undefined) return
 
     const tradingHistories = data?.tradingHistories?.nodes
       ? data?.tradingHistories?.nodes
@@ -73,9 +75,14 @@ export const useTradingHistory = ({ pair, dateTime }) => {
   useEffect(() => {
     if (!queryData) return
     calculateVolume(queryData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryData])
 
-  return { volume, isLoading }
+  return {
+    tradingVolume: volume || 0,
+    feeVolume: (volume || 0) * SWAP_FEE,
+    isLoading,
+  }
 }
 
 export default useTradingHistory
