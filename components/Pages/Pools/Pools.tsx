@@ -38,7 +38,7 @@ const Pools: FC<Props> = () => {
   const { tokenPrices } = useTokenPrice()
   const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
-      refetchInBackground: true,
+      refetchInBackground: false,
       pools: poolList?.pools,
       client,
     })
