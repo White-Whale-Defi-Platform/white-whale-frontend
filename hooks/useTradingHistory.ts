@@ -25,12 +25,12 @@ const query = gql`
   }
 `
 
-export const useFeeVolume = ({ pair, dateTime }) => {
+export const useTradingHistory = ({ pair, dateTime }) => {
   const [volume, setVolume] = useState<number | undefined>()
   const currentWalletState = useRecoilValue(walletState)
   const [activeChain]: any = useChainInfo(currentWalletState.chainId)
-
   const SWAP_FEE = 0.002
+
   const filter = {
     pairAddr: {
       equalTo: pair,
@@ -57,26 +57,19 @@ export const useFeeVolume = ({ pair, dateTime }) => {
       ? data?.tradingHistories?.nodes
       : []
 
-    let feeVolume = 0
+    let tradingVolume = 0
 
     await Promise.all(
       tradingHistories.map(async (row) => {
-        const returnVolume = num(
-          fromChainAmount(
-            row?.baseVolume || 0,
-            getTokenDecimal(row?.secondToken)
-          )
+        const baseVolume = num(
+          fromChainAmount(row?.targetVolume || 0, getTokenDecimal(row?.token))
         )
-
-        const askAssetPrice = await getTokenPrice(
-          row?.secondToken,
-          row?.datetime
-        )
-        feeVolume += askAssetPrice * returnVolume.toNumber() * SWAP_FEE
+        const offerAssetPrice = await getTokenPrice(row?.token, row?.datetime)
+        tradingVolume += offerAssetPrice * baseVolume.toNumber()
       })
     )
 
-    setVolume(feeVolume)
+    setVolume(tradingVolume)
   }
 
   useEffect(() => {
@@ -85,7 +78,11 @@ export const useFeeVolume = ({ pair, dateTime }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryData])
 
-  return { volume: volume || 0, isLoading }
+  return {
+    tradingVolume: volume || 0,
+    feeVolume: (volume || 0) * SWAP_FEE,
+    isLoading,
+  }
 }
 
-export default useFeeVolume
+export default useTradingHistory

@@ -9,5 +9,6 @@ export type Pool = {
   totalLiq: number | string
   price?: number
   isUSDPool?: boolean
+  isSubqueryNetwork?: boolean
   cta?: () => void
 }

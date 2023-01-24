@@ -146,6 +146,7 @@
     "chainName": "Injective",
     "rpc": "https://ww-injective-rpc.polkachu.com",
     "rest": "https://ww-injective-rest.polkachu.com",
+    "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
     "label": "Injective",
     "icon": "/logos/injective.png",
     "stakeCurrency": {

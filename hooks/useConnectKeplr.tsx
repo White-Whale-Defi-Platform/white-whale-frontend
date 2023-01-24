@@ -4,6 +4,8 @@ import { useChainInfo } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
+import getChainName from '../libs/getChainName'
+import { getSigningInjectiveClient } from 'injectivejs'
 
 export default function useConnectKeplr() {
   const [currentWalletState, setCurrentWalletState] =
