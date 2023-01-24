@@ -22,7 +22,7 @@ function TruncatedAddress({ connected }) {
   return (
     <Text color="brand.500" fontSize={['14px', '16px']}>
       {connected
-        ? truncatWalletAddress(connectedWallet.addresses[chainId])
+        ? truncatWalletAddress(address)
         : truncatWalletAddress(connectedWallet.addresses[chainId])}
     </Text>
   )

@@ -162,12 +162,14 @@ export class TerraStationWallet implements Wallet {
           return msg
         }),
       memo: memo,
+      chainID: 'juno-1',
     }
 
     // @ts-ignore
     return this.lcdClient.auth
       .accountInfo(signerAddress)
       .then((result) => {
+        console.log(this.lcdClient.config)
         return this.lcdClient.tx.estimateFee(
           [
             {
@@ -179,11 +181,12 @@ export class TerraStationWallet implements Wallet {
         )
       })
       .then((result) => {
+        console.log(result)
         return result.amount.get('uluna').amount.toNumber()
       })
       .catch((err) => {
         if (axios.isAxiosError(err)) {
-          throw new Error(err.response.data.message)
+          throw new Error(err.response.data)
         }
         throw err
       })
@@ -198,9 +201,9 @@ export class TerraStationWallet implements Wallet {
   }
 
   getBalance(address: string, searchDenom: string): Promise<Coin> {
-    console.log(address)
+    // console.log(address)
     return this.lcdClient.bank.balance(address).then(([coins]) => {
-      console.log(coins)
+      // console.log(coins)
       const coin = coins.get(searchDenom)
       if (coin === undefined) {
         return {

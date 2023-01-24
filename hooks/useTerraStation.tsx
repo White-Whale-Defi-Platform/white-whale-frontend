@@ -96,7 +96,7 @@ export const useTerraStation = (onCloseModal) => {
     setCurrentWalletState({
       key: null,
       status: WalletStatusType.connected,
-      address: wasmChainClient.client?.walletAddress,
+      address: connectedWallet.addresses[currentWalletState.chainId],
       chainId: currentWalletState.chainId,
       network: currentWalletState.network,
       client: wasmChainClient,
