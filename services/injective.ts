@@ -29,7 +29,8 @@ import {
 
 import { base64ToJson } from '../util/base64'
 
-const HIGHER_DEFAULT_GAS_LIMIT = '2000000'
+const DEFAULT_GAS = '250000000000000'
+const HIGHER_DEFAULT_GAS_LIMIT = '450000'
 
 type SimulateResponse = {
   result: {
@@ -46,6 +47,16 @@ type SimulateResponse = {
   gasInfo: {
     gasWanted: number
     gasUsed: number
+  }
+}
+
+const getKey = async (wallet, chainId) => {
+
+  switch (wallet) {
+    case 'cosmostation':
+      return await window.cosmostation.providers.keplr.getKey(chainId)
+    default:
+      return await window[wallet].getKey(chainId)
   }
 }
 
@@ -91,7 +102,7 @@ class Injective {
   }
 
   async init() {
-    const key = await window[this.activeWallet].getKey(this.chainId)
+    const key = await getKey(this.activeWallet, this.chainId)
     this.pubKey = Buffer.from(key.pubKey).toString('base64')
     const restEndpoint = getNetworkEndpoints(this.network).rest
     const chainRestAuthApi = new ChainRestAuthApi(restEndpoint)
@@ -222,8 +233,13 @@ class Injective {
         pubKey: this.pubKey,
         chainId: this.chainId,
         fee: {
-          ...DEFAULT_STD_FEE,
-          gas: HIGHER_DEFAULT_GAS_LIMIT || DEFAULT_STD_FEE.gas,
+          amount: [
+            {
+              amount: DEFAULT_GAS,
+              denom: "inj"
+            }
+          ],
+          gas: HIGHER_DEFAULT_GAS_LIMIT
         },
         message: encodedExecuteMsg.map((msg) => msg.toDirectSign()),
         sequence: this.baseAccount.sequence,
@@ -334,7 +350,7 @@ class Injective {
       )
       const signTxRaw = createTxRawFromSigResponse(directSignResponse)
       this.txRaw = null
-      return await this.txClient.broadcast(signTxRaw).then((result) => {
+      return this.txClient.broadcast(signTxRaw).then((result) => {
         console.log({ result })
         if (!!result.code) {
           throw new Error(
