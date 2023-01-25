@@ -47,7 +47,7 @@ export const useTerraStation = (onCloseModal) => {
     let mainnet = new LCDClient({
       
       'juno-1':{
-        lcd: 'https://ww-juno-rest.polkachu.com',
+        lcd: 'https://rest.cosmos.directory/juno',
         chainID: 'juno-1',
         gasAdjustment: 1.75,
         gasPrices: { ujuno: 0.015 },

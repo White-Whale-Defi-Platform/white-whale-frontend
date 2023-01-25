@@ -80,6 +80,7 @@ export class TerraStationWallet implements Wallet {
       .post({
         msgs: msgs.map((msg) => this.convertMsg(msg)),
         memo: memo,
+        chainID: 'juno-1',
       })
       .then((result) => {
         return {
@@ -106,6 +107,7 @@ export class TerraStationWallet implements Wallet {
     return this.client
       .post({
         msgs: [executeMsg],
+        chainID: 'juno-1',
       })
       .then((result) => {
         return {
@@ -182,10 +184,11 @@ export class TerraStationWallet implements Wallet {
       })
       .then((result) => {
         console.log(result)
-        return result.amount.get('uluna').amount.toNumber()
+        return result.amount.get('ujuno').amount.toNumber()
       })
       .catch((err) => {
         if (axios.isAxiosError(err)) {
+          console.log(err)
           throw new Error(err.response.data)
         }
         throw err
@@ -219,6 +222,7 @@ export class TerraStationWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
-    return this.lcdClient.tx.txInfo(txHash)
+    return this.lcdClient.tx.txInfo(txHash,'juno-1',
+    )
   }
 }
