@@ -9,7 +9,6 @@ import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
-import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -17,6 +16,8 @@ import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
 
 import useConnectLeap from '../../hooks/useConnectLeap'
+import useConnectKeplr from 'hooks/useConnectKeplr'
+import useConnectCosmostation from 'hooks/useConnectCosmostation'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [isInitialized, setInitialized] = useState(false)
@@ -32,9 +33,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const { connectKeplr } = useConnectKeplr()
   const { connectLeap } = useConnectLeap()
+  const { connectCosmostation } = useConnectCosmostation()
 
   useEffect(() => {
-    onDisconnect()
+    // onDisconnect()
 
     if (router.pathname === '/') return
 
@@ -100,14 +102,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     currentWalletState.address,
   ])
 
-  const onChainChange = useCallback(
-    (chain) => {
-      onDisconnect()
-      setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentWalletState.chainId, chains, router]
-  )
+  const onChainChange = (chain) => {
+    // onDisconnect()
+    setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+  }
 
   useEffect(() => {
     if (!isInitialized) return
@@ -117,6 +115,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       connectLeap()
     } else if (currentWalletState.activeWallet === 'keplr') {
       connectKeplr()
+    } else if (currentWalletState.activeWallet === 'cosmostation') {
+      connectCosmostation()
     }
 
     // update route
@@ -127,7 +127,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId])
+  }, [currentWalletState.chainId, isInitialized])
 
   if (!connected && !connectedWallet) {
     return (
