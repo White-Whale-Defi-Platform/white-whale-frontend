@@ -13,8 +13,7 @@ type Props = {
 const Volume = ({ pairAddr }: Props) => {
   const dateTime = moment
     .utc()
-    .subtract(0, 'days')
-    .startOf('day')
+    .subtract(24, 'hours')
     .format('YYYY-MM-DDTHH:mm:ss')
   const { tradingVolume, isLoading } = useTradingHistory({
     pair: pairAddr,
