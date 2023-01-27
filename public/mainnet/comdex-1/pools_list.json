@@ -25,7 +25,7 @@
   "pools": [
     {
       "pool_id": "CMDX-ATOM",
-      "lpOrder": ["CMDX", "ATOM"],
+      "lpOrder": ["ATOM", "CMDX"],
       "assetOrder": ["CMDX", "ATOM"],
       "displayName": "CMDX-ATOM",
       "displayLogo1": "/logos/comdex.png",

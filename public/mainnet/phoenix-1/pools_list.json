@@ -137,7 +137,7 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder": ["LUNA", "axlUSDC"],
+      "lpOrder": ["axlUSDC", "LUNA"],
       "assetOrder": ["LUNA", "axlUSDC"],
       "displayName": "LUNA-axlUSDC",
       "displayLogo1": "/logos/luna.svg",
