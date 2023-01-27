@@ -98,6 +98,7 @@
     },
     {
       "pool_id": "LUNA-ASTRO",
+      "lpOrder": ["LUNA", "ASTRO"],
       "displayName": "ASTRO-LUNA",
       "displayLogo1": "/logos/astro.png",
       "displayLogo2": "/logos/luna.svg",
@@ -133,7 +134,7 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder": ["axlUSDC", "LUNA"],
+      "lpOrder": ["LUNA", "axlUSDC"],
       "displayName": "LUNA-axlUSDC",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/axlUSDC.png",

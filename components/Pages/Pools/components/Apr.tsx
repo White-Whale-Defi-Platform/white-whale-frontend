@@ -12,8 +12,7 @@ type Props = {
 const Apr = ({ pairAddr, tvl }: Props) => {
   const dateTime = moment
     .utc()
-    .subtract(0, 'days')
-    .startOf('day')
+    .subtract(24, 'hours')
     .format('YYYY-MM-DDTHH:mm:ss')
   const { feeVolume, isLoading } = useTradingHistory({
     pair: pairAddr,
