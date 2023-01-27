@@ -136,7 +136,7 @@
     },
     {
       "pool_id": "HUAHUA-rHUAHUA",
-      "lpOrder": ["rHUAHUA", "HUAHUA"],
+      "lpOrder": ["HUAHUA", "rHUAHUA"],
       "assetOrder": ["rHUAHUA", "HUAHUA"],
       "displayName": "rHUAHUA-HUAHUA",
       "displayLogo1": "/logos/huahua.png",
