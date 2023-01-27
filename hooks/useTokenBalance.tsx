@@ -14,6 +14,7 @@ import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 async function fetchTokenBalance({
   client,

@@ -7,11 +7,11 @@ import {
   useConnectedWallet,
   useWallet,
 } from '@terra-money/wallet-provider'
-import { LCDClient } from '@terra-money/feather.js'
 
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
+import { useChainInfo } from './useChainInfo'
 
 export const useTerraStation = (onCloseModal) => {
   const { connect } = useWallet()
