@@ -18,7 +18,7 @@ import {
   TxRaw,
   TxRestClient,
 } from '@injectivelabs/sdk-ts'
-import { MsgExecuteContract, MsgSend } from '@injectivelabs/sdk-ts'
+import { MsgExecuteContract } from '@injectivelabs/sdk-ts'
 import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
 import { ChainId } from '@injectivelabs/ts-types'
 import {
@@ -51,7 +51,6 @@ type SimulateResponse = {
 }
 
 const getKey = async (wallet, chainId) => {
-
   switch (wallet) {
     case 'cosmostation':
       return await window.cosmostation.providers.keplr.getKey(chainId)
@@ -85,8 +84,8 @@ class Injective {
 
   constructor(
     offlineSigner: OfflineSigner & OfflineDirectSigner,
-    network: Network = Network.TestnetK8s,
-    activeWallet: string
+    activeWallet: string,
+    network: Network = Network.TestnetK8s
   ) {
     const endpoints = getNetworkEndpoints(network)
 
@@ -236,10 +235,10 @@ class Injective {
           amount: [
             {
               amount: DEFAULT_GAS,
-              denom: "inj"
-            }
+              denom: 'inj',
+            },
           ],
-          gas: HIGHER_DEFAULT_GAS_LIMIT
+          gas: HIGHER_DEFAULT_GAS_LIMIT,
         },
         message: encodedExecuteMsg.map((msg) => msg.toDirectSign()),
         sequence: this.baseAccount.sequence,
