@@ -70,44 +70,20 @@ export const useTerraStation = (onCloseModal) => {
         prefix: 'chihuahua',
       },
       'comdex-1':{
-        lcd: 'https://ww-comdex-rest.polkachu.com/comdex',
+        lcd: 'https://rest.cosmos.directory/comdex',
         chainID: 'comdex-1',
         gasAdjustment: 1.75,
         gasPrices: { ucmdx: 0.015 },
         prefix: 'comdex',
+      },
+      'injective-1':{
+        lcd: 'https://rest.cosmos.directory/injective',
+        chainID: 'injective-1',
+        gasAdjustment: 1.75,
+        gasPrices: { uinj: 0.015 },
+        prefix: 'inj',
       }
     })
-
-    // // If we have chainInfo, overwrite with that info
-    // if (chainInfo!== undefined){
-    //     console.log(chainInfo)
-        
-    //     testnet = new LCDClient({
-    //       'uni-5':{
-    //         lcd: chainInfo.rpc,
-    //         chainID: chainInfo.chainID,
-    //         gasAdjustment: 1.75,
-    //         gasPrices: { ujuno: 0.015 },
-    //         prefix: 'juno',
-    //       }
-          
-    //     })
-    //     mainnet = new LCDClient({
-    //       'juno-1':{
-    //         lcd: chainInfo.rest,
-    //         chainID: chainInfo.chainID,
-    //         gasAdjustment: 1.75,
-    //         gasPrices: { ujuno: 0.015 },
-    //         prefix: 'juno',
-    //       },'phoenix-1':{
-    //         lcd: 'https://phoenix-lcd.terra.dev',
-    //         chainID: 'phoenix-1',
-    //         gasAdjustment: 1.75,
-    //         gasPrices: { uluna: 0.015 },
-    //         prefix: 'terra',
-    //       }
-    //     })
-    // }
     console.log(mainnet);
     console.log(connectedWallet)
     const wasmChainClient = new TerraStationWallet(
@@ -116,9 +92,10 @@ export const useTerraStation = (onCloseModal) => {
       currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
       currentWalletState.chainId
     )
+    const key = window.keplr.getKey(currentWalletState.chainId)
     console.log(wasmChainClient.client)
     setCurrentWalletState({
-      key: null,
+      key: key,
       status: WalletStatusType.connected,
       address: connectedWallet.addresses[currentWalletState.chainId],
       chainId: currentWalletState.chainId,
