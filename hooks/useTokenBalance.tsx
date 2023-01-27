@@ -80,7 +80,6 @@ export const useTokenBalance = (tokenSymbol: string) => {
     useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()
   const address = connectedWallet?.addresses[chainId];
-  console.log(address, network, client, activeWallet, status)
   // TODO: Adding this fixes the issue where refresh means no client
   const { connectKeplr } = useConnectKeplr()
   if (!client && status == '@wallet-state/restored') {

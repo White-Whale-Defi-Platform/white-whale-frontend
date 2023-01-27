@@ -17,15 +17,23 @@ import axios from 'axios'
 
 import { TxResponse, Wallet } from './wallet'
 
+const TX_MAAP = new Map([
+  ['juno-1',  'ujuno'],
+  ['phoenix-1', 'uluna'],
+  ['chihuahua-1', 'uhuahua'],  
+  ['comdex-1',  'ucmdx']
+])
 export class TerraStationWallet implements Wallet {
   client: ConnectedWallet
   lcdClient: LCDClient
   network: string
+  chainID: string
 
-  constructor(client: ConnectedWallet, lcdClient: LCDClient, network: string) {
+  constructor(client: ConnectedWallet, lcdClient: LCDClient, network: string, chainID: string) {
     this.client = client
     this.lcdClient = lcdClient
     this.network = network
+    this.chainID = chainID
   }
 
   convertType(type: string): string {
@@ -74,13 +82,14 @@ export class TerraStationWallet implements Wallet {
   post(
     senderAddress: string,
     msgs: EncodeObject[],
-    memo: string | undefined
+    memo: string | undefined,
+    chainID: string = 'juno-1'
   ): Promise<TxResponse> {
     return this.client
       .post({
         msgs: msgs.map((msg) => this.convertMsg(msg)),
         memo: memo,
-        chainID: 'juno-1',
+        chainID: this.chainID,
       })
       .then((result) => {
         return {
@@ -107,7 +116,7 @@ export class TerraStationWallet implements Wallet {
     return this.client
       .post({
         msgs: [executeMsg],
-        chainID: 'juno-1',
+        chainID: this.chainID,
       })
       .then((result) => {
         return {
@@ -146,6 +155,8 @@ export class TerraStationWallet implements Wallet {
     messages: readonly EncodeObject[],
     memo: string | undefined
   ): Promise<number> {
+
+    console.log(this.lcdClient.config)
     let tx = {
       msgs: messages
         .map((msg) =>
@@ -164,7 +175,7 @@ export class TerraStationWallet implements Wallet {
           return msg
         }),
       memo: memo,
-      chainID: 'juno-1',
+      chainID: this.chainID,
     }
 
     // @ts-ignore
@@ -184,7 +195,8 @@ export class TerraStationWallet implements Wallet {
       })
       .then((result) => {
         console.log(result)
-        return result.amount.get('ujuno').amount.toNumber()
+        console.log(TX_MAAP.get(this.chainID))
+        return result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
       })
       .catch((err) => {
         if (axios.isAxiosError(err)) {
@@ -198,6 +210,7 @@ export class TerraStationWallet implements Wallet {
   getChainId(): Promise<String> {
     return Promise.resolve(this.lcdClient.config.chainID)
   }
+
 
   getNetwork(): Promise<String> {
     return Promise.resolve(this.network)

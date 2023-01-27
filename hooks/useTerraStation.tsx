@@ -44,14 +44,36 @@ export const useTerraStation = (onCloseModal) => {
       }
       
     })
-    let mainnet = new LCDClient({
-      
+    // TODO: Make this better and derived from like a config or something
+    // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
+    let mainnet = new LCDClient({ 
       'juno-1':{
         lcd: 'https://rest.cosmos.directory/juno',
         chainID: 'juno-1',
         gasAdjustment: 1.75,
         gasPrices: { ujuno: 0.015 },
         prefix: 'juno',
+      },
+      'phoenix-1':{
+        lcd: 'https://rest.cosmos.directory/terra2',
+        chainID: 'phoenix-1',
+        gasAdjustment: 1.75,
+        gasPrices: { uluna: 0.015 },
+        prefix: 'luna',
+      },
+      'chihuahua-1':{
+        lcd: 'https://rest.cosmos.directory/chihuahua',
+        chainID: 'chihuahua-1',
+        gasAdjustment: 1.75,
+        gasPrices: { uhuahua: 0.015 },
+        prefix: 'chihuahua',
+      },
+      'comdex-1':{
+        lcd: 'https://ww-comdex-rest.polkachu.com/comdex',
+        chainID: 'comdex-1',
+        gasAdjustment: 1.75,
+        gasPrices: { ucmdx: 0.015 },
+        prefix: 'comdex',
       }
     })
 
@@ -90,7 +112,8 @@ export const useTerraStation = (onCloseModal) => {
     const wasmChainClient = new TerraStationWallet(
       connectedWallet,
       currentWalletState.network === 'mainnet' ? mainnet : testnet,
-      currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet'
+      currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
+      currentWalletState.chainId
     )
     console.log(wasmChainClient.client)
     setCurrentWalletState({
