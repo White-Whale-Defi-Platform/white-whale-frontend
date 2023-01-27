@@ -92,10 +92,9 @@ export const useTerraStation = (onCloseModal) => {
       currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
       currentWalletState.chainId
     )
-    const key = window.keplr.getKey(currentWalletState.chainId)
-    console.log(wasmChainClient.client)
+     
     setCurrentWalletState({
-      key: key,
+      key: null,
       status: WalletStatusType.connected,
       address: connectedWallet.addresses[currentWalletState.chainId],
       chainId: currentWalletState.chainId,
@@ -103,6 +102,9 @@ export const useTerraStation = (onCloseModal) => {
       client: wasmChainClient,
       activeWallet: 'station',
     })
+
+
+   
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedWallet, currentWalletState.network])
 
