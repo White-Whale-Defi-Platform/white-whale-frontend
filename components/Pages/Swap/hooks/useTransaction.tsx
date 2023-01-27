@@ -197,7 +197,7 @@ export const useTransaction = ({
           description: (
             <Finder
               txHash={data.transactionHash || data?.txHash}
-              chainId={client?.client?.chainId}
+              chainId={client?.client?.chainId || client?.chainID}
             >
               {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}

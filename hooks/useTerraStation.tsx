@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { LCDClient } from '@terra-money/terra.js'
+import { LCDClient } from '@terra-money/feather.js'
 import {
   Connection,
   ConnectType,

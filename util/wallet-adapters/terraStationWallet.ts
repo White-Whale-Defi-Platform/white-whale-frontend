@@ -208,7 +208,7 @@ export class TerraStationWallet implements Wallet {
   }
 
   getChainId(): Promise<String> {
-    return Promise.resolve(this.lcdClient.config.chainID)
+    return Promise.resolve(this.chainID)
   }
 
 
@@ -217,7 +217,7 @@ export class TerraStationWallet implements Wallet {
   }
 
   getBalance(address: string, searchDenom: string): Promise<Coin> {
-    // console.log(address)
+
     return this.lcdClient.bank.balance(address).then(([coins]) => {
       // console.log(coins)
       const coin = coins.get(searchDenom)
@@ -235,7 +235,7 @@ export class TerraStationWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
-    return this.lcdClient.tx.txInfo(txHash,'juno-1',
+    return this.lcdClient.tx.txInfo(txHash,this.chainID,
     )
   }
 }
