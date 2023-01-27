@@ -1,34 +1,36 @@
 import {
-  ChainGrpcWasmApi,
-  TxRestClient,
-  ChainRestBankApi,
-  createTransaction,
-  ChainRestAuthApi,
-  ChainRestTendermintApi,
-  BaseAccount,
-  createTxRawFromSigResponse,
-  createCosmosSignDocFromTransaction,
-  TxRaw,
-} from '@injectivelabs/sdk-ts'
-import {
-  DEFAULT_STD_FEE,
-  DEFAULT_BLOCK_TIMEOUT_HEIGHT,
-  BigNumberInBase,
-} from '@injectivelabs/utils'
-import { ChainId } from '@injectivelabs/ts-types'
-import { Network, getNetworkEndpoints } from '@injectivelabs/networks'
-import { MsgExecuteContract, MsgSend } from '@injectivelabs/sdk-ts'
-import {
   Coin,
   EncodeObject,
   OfflineDirectSigner,
   OfflineSigner,
 } from '@cosmjs/proto-signing'
-import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
-import { base64ToJson } from '../util/base64'
 import { StdFee } from '@cosmjs/stargate'
+import { getNetworkEndpoints, Network } from '@injectivelabs/networks'
+import {
+  BaseAccount,
+  ChainGrpcWasmApi,
+  ChainRestAuthApi,
+  ChainRestBankApi,
+  ChainRestTendermintApi,
+  createCosmosSignDocFromTransaction,
+  createTransaction,
+  createTxRawFromSigResponse,
+  TxRaw,
+  TxRestClient,
+} from '@injectivelabs/sdk-ts'
+import { MsgExecuteContract, MsgSend } from '@injectivelabs/sdk-ts'
+import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
+import { ChainId } from '@injectivelabs/ts-types'
+import {
+  BigNumberInBase,
+  DEFAULT_BLOCK_TIMEOUT_HEIGHT,
+  DEFAULT_STD_FEE,
+} from '@injectivelabs/utils'
 
-const HIGHER_DEFAULT_GAS_LIMIT = '2000000'
+import { base64ToJson } from '../util/base64'
+
+const DEFAULT_GAS = '250000000000000'
+const HIGHER_DEFAULT_GAS_LIMIT = '450000'
 
 type SimulateResponse = {
   result: {
@@ -48,21 +50,43 @@ type SimulateResponse = {
   }
 }
 
+const getKey = async (wallet, chainId) => {
+
+  switch (wallet) {
+    case 'cosmostation':
+      return await window.cosmostation.providers.keplr.getKey(chainId)
+    default:
+      return await window[wallet].getKey(chainId)
+  }
+}
+
 class Injective {
   txClient: TxRestClient
+
   wasmApi: ChainGrpcWasmApi
+
   bankApi: ChainRestBankApi
+
   offlineSigner: OfflineSigner & OfflineDirectSigner
+
   pubKey: string
+
   baseAccount: BaseAccount
+
   account: AccountDetails
+
   chainId: ChainId
+
   txRaw: TxRaw
+
   network: Network
+
+  activeWallet: string
 
   constructor(
     offlineSigner: OfflineSigner & OfflineDirectSigner,
-    network: Network = Network.TestnetK8s
+    network: Network = Network.TestnetK8s,
+    activeWallet: string
   ) {
     const endpoints = getNetworkEndpoints(network)
 
@@ -73,11 +97,12 @@ class Injective {
     this.chainId =
       network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
     this.network = network
+    this.activeWallet = activeWallet
     this.init()
   }
 
   async init() {
-    const key = await window.keplr.getKey(this.chainId)
+    const key = await getKey(this.activeWallet, this.chainId)
     this.pubKey = Buffer.from(key.pubKey).toString('base64')
     const restEndpoint = getNetworkEndpoints(this.network).rest
     const chainRestAuthApi = new ChainRestAuthApi(restEndpoint)
@@ -144,7 +169,7 @@ class Injective {
     }
   }
 
-  async prepair(messages: EncodeObject[], send: boolean = true) {
+  async prepair(messages: EncodeObject[], send = true) {
     try {
       await this.init()
       const restEndpoint = getNetworkEndpoints(this.network).rest
@@ -208,8 +233,13 @@ class Injective {
         pubKey: this.pubKey,
         chainId: this.chainId,
         fee: {
-          ...DEFAULT_STD_FEE,
-          gas: HIGHER_DEFAULT_GAS_LIMIT || DEFAULT_STD_FEE.gas,
+          amount: [
+            {
+              amount: DEFAULT_GAS,
+              denom: "inj"
+            }
+          ],
+          gas: HIGHER_DEFAULT_GAS_LIMIT
         },
         message: encodedExecuteMsg.map((msg) => msg.toDirectSign()),
         sequence: this.baseAccount.sequence,

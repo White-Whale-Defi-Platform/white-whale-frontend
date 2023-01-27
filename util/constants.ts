@@ -28,3 +28,6 @@ export const __DARK_MODE_ENABLED_BY_DEFAULT__ = JSON.parse(
   process.env.NEXT_PUBLIC_DARK_MODE_ENABLED_BY_DEFAULT
 )
 /* /feature flags */
+
+// stable coins
+export const STABLE_COIN_LIST = ['CMST', 'USDT', 'axlUSDC']

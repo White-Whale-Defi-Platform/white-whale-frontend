@@ -42,10 +42,11 @@ function createWalletState<TClient = any, TState = {}>({
     default: {
       status: WalletStatusType.idle,
       client: null,
-      chainId: 'juno-1',
+      // chainId: 'juno-1',
+      chainId: null,
       address: '',
       network: 'mainnet',
-      activeWallet: 'keplr',
+      activeWallet: '',
       ...defaultState,
     },
     dangerouslyAllowMutability: true,
@@ -67,18 +68,17 @@ function createWalletState<TClient = any, TState = {}>({
         }
 
         onSet((newValue, oldValue) => {
-          const isReset = !newValue.address && (oldValue as any)?.address
-          // when changed, log old and new value
+          const isReset = newValue.address !== (oldValue as any)?.address
 
-          if (isReset) {
-            localStorage.removeItem(CACHE_KEY)
-          } else {
+          // if (isReset) {
+          //   localStorage.removeItem(CACHE_KEY)
+          // } else {
             localStorage.setItem(
               CACHE_KEY,
               /* let's not store the client in the cache */
-              JSON.stringify({ ...newValue, client: null, status: null })
+              JSON.stringify({ ...newValue, client: null })
             )
-          }
+          // }
         })
       },
     ],

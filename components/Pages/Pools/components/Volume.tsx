@@ -1,21 +1,29 @@
 import React from 'react'
 
 import { Spinner, Text } from '@chakra-ui/react'
-import useTradingVolume from 'hooks/useTradingVolume'
+import useTradingHistory from 'hooks/useTradingHistory'
+import moment from 'moment'
 
 import { formatPrice } from '../../../../libs/num'
 
 type Props = {
-  pair: string
-  dateTime: string
+  pairAddr?: string
 }
 
-const Volume = ({ pair, dateTime }: Props) => {
-  const { volume, isLoading } = useTradingVolume({ pair, dateTime })
+const Volume = ({ pairAddr }: Props) => {
+  const dateTime = moment
+    .utc()
+    .subtract(24, 'hours')
+    .format('YYYY-MM-DDTHH:mm:ss')
+  const { tradingVolume, isLoading } = useTradingHistory({
+    pair: pairAddr,
+    dateTime,
+  })
 
-  if (!pair || !dateTime) return null
+  if (!pairAddr) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
-  return <Text align="right">{`$${formatPrice(volume)}`}</Text>
+
+  return <Text align="right">{`$${formatPrice(tradingVolume)}`}</Text>
 }
 
 export default Volume

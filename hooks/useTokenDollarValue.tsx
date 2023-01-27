@@ -1,5 +1,6 @@
-import { usePriceForOneToken } from 'features/swap'
 import { useQuery } from 'react-query'
+
+import { usePriceForOneToken } from 'features/swap'
 
 import { tokenDollarValueQuery } from '../queries/tokenDollarValueQuery'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
@@ -9,6 +10,39 @@ import {
   useGetMultipleTokenInfo,
   useTokenInfo,
 } from './useTokenInfo'
+
+export const useTokenDollarValueQuery = (
+  tokenSymbols?: Array<string>,
+  chainId?: string
+) => {
+  const getMultipleTokenInfo = useGetMultipleTokenInfo()
+  const getMultipleIBCAssetInfo = useGetMultipleIBCAssetInfo()
+
+  const { data, isLoading } = useQuery(
+    `tokenDollarValue/${tokenSymbols?.join('/')}`,
+    async (): Promise<Array<number>> => {
+      const tokenIds = tokenSymbols?.map(
+        (tokenSymbol) =>
+          (
+            getMultipleTokenInfo([tokenSymbol])?.[0] ||
+            getMultipleIBCAssetInfo([tokenSymbol])?.[0]
+          )?.id
+      )
+
+      if (tokenIds) {
+        return tokenDollarValueQuery(tokenIds)
+      }
+    },
+    {
+      enabled: Boolean(tokenSymbols?.length),
+      refetchOnMount: 'always',
+      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+      refetchIntervalInBackground: true,
+    }
+  )
+
+  return [data || [], isLoading] as const
+}
 
 export const useTokenDollarValue = (tokenSymbol?: string) => {
   const { symbol: baseTokenSymbol } = useBaseTokenInfo() || {}
@@ -45,37 +79,4 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
     tokenDollarPrice * oneTokenToTokenPrice,
     fetchingTokenDollarPrice || fetchingTokenToTokenPrice,
   ] as const
-}
-
-export const useTokenDollarValueQuery = (
-  tokenSymbols?: Array<string>,
-  chainId?: string
-) => {
-  const getMultipleTokenInfo = useGetMultipleTokenInfo()
-  const getMultipleIBCAssetInfo = useGetMultipleIBCAssetInfo()
-
-  const { data, isLoading } = useQuery(
-    `tokenDollarValue/${tokenSymbols?.join('/')}`,
-    async (): Promise<Array<number>> => {
-      const tokenIds = tokenSymbols?.map(
-        (tokenSymbol) =>
-          (
-            getMultipleTokenInfo([tokenSymbol])?.[0] ||
-            getMultipleIBCAssetInfo([tokenSymbol])?.[0]
-          )?.id
-      )
-
-      if (tokenIds) {
-        return tokenDollarValueQuery(tokenIds, chainId)
-      }
-    },
-    {
-      enabled: Boolean(tokenSymbols?.length),
-      refetchOnMount: 'always',
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-      refetchIntervalInBackground: true,
-    }
-  )
-
-  return [data || [], isLoading] as const
 }

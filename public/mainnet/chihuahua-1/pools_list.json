@@ -61,7 +61,7 @@
     },
     {
       "pool_id": "HUAHUA-SHIB",
-      "lpOrder": ["SHIB", "HUAHUA"],
+      "lpOrder": ["HUAHUA", "SHIB"],
       "displayName": "SHIB-HUAHUA",
       "displayLogo1": "/logos/shiba-inu-shib-logo.png",
       "displayLogo2": "/logos/huahua.png",
@@ -97,7 +97,7 @@
     },
     {
       "pool_id": "HUAHUA-WDOGE",
-      "lpOrder": ["WDOGE", "HUAHUA"],
+      "lpOrder": ["HUAHUA", "WDOGE"],
       "displayName": "WDOGE-HUAHUA",
       "displayLogo1": "/logos/dogecoin-doge-logo.png",
       "displayLogo2": "/logos/huahua.png",

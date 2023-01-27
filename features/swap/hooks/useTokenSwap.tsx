@@ -1,3 +1,6 @@
+import { toast } from 'react-hot-toast'
+import { useMutation } from 'react-query'
+
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import {
   Button,
@@ -7,8 +10,6 @@ import {
   UpRightArrow,
   Valid,
 } from 'junoblocks'
-import { toast } from 'react-hot-toast'
-import { useMutation } from 'react-query'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { directTokenSwap, passThroughTokenSwap } from 'services/swap'
 import {
@@ -88,7 +89,7 @@ export const useTokenSwap = ({
         // })
       }
 
-      return await passThroughTokenSwap({
+      return passThroughTokenSwap({
         tokenAmount,
         price,
         slippage,
