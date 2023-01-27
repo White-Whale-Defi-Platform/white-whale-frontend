@@ -78,10 +78,10 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { network, client, chainId, activeWallet, status } =
+  const { address, network, client, chainId, activeWallet, status } =
     useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()
-  const address = connectedWallet?.addresses[chainId];
+  const selectedAddr = connectedWallet?.addresses[chainId] || address;
   // TODO: Adding this fixes the issue where refresh means no client
   // const { connectKeplr } = useConnectKeplr()
   // const { connectLeap } = useConnectLeap()
@@ -99,7 +99,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
     isLoading,
     refetch,
   } = useQuery(
-    ['tokenBalance', tokenSymbol, address, network],
+    ['tokenBalance', tokenSymbol, selectedAddr, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
       return fetchTokenBalance({
@@ -110,7 +110,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: !!tokenSymbol && !!address && !!client && (!!tokenInfo || !!ibcAssetInfo),
+      enabled: !!tokenSymbol && !!selectedAddr && !!client && (!!tokenInfo || !!ibcAssetInfo),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,

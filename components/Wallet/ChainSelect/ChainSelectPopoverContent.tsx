@@ -12,7 +12,7 @@ import ChainList from './ChainList/ChainList'
 import NetworkForm from './NetworkForm/NetworkForm'
 
 function ChainSelectPopoverContent({ onChange, onClose, currentWalletState }) {
-  if (currentWalletState?.activeWallet === 'station') return null
+  
 
   return (
     <PopoverContent
