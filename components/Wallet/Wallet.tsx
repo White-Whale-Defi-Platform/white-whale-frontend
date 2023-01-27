@@ -9,16 +9,15 @@ import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
+import useConnectCosmostation from 'hooks/useConnectCosmostation'
+import useConnectKeplr from 'hooks/useConnectKeplr'
+import useConnectLeap from 'hooks/useConnectLeap'
+import { useTerraStation } from 'hooks/useTerraStation'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
-
-import useConnectLeap from 'hooks/useConnectLeap'
-import useConnectKeplr from 'hooks/useConnectKeplr'
-import useConnectCosmostation from 'hooks/useConnectCosmostation'
-import { useTerraStation } from 'hooks/useTerraStation'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [isInitialized, setInitialized] = useState(false)
@@ -35,7 +34,9 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { connectKeplr } = useConnectKeplr()
   const { connectLeap } = useConnectLeap()
   const { connectCosmostation } = useConnectCosmostation()
-  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(() => { })
+  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(
+    () => {}
+  )
   const { availableConnections, availableInstallations } = useWallet()
 
   useEffect(() => {
@@ -120,11 +121,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       connectKeplr()
     } else if (currentWalletState.activeWallet === 'cosmostation') {
       connectCosmostation()
-    }
-    else if (currentWalletState.activeWallet === 'station') {
-      const [{ type = null, identifier = null } = {}] = availableConnections.filter(filterForStation)
-      if (type && identifier)
-        connectTerraAndCloseModal(type, identifier)
+    } else if (currentWalletState.activeWallet === 'station') {
+      const [{ type = null, identifier = null } = {}] =
+        availableConnections.filter(filterForStation)
+      if (type && identifier) connectTerraAndCloseModal(type, identifier)
     }
 
     // update route
