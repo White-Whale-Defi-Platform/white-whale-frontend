@@ -218,7 +218,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-      return client.client.getTx(txHash)
+      return client.getTx(txHash)
     },
     {
       enabled: txHash != null,
