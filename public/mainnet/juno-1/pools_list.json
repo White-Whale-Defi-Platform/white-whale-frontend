@@ -26,6 +26,7 @@
     {
       "pool_id": "ATOM-JUNO",
       "lpOrder": ["ATOM", "JUNO"],
+      "assetOrder": ["ATOM", "JUNO"],
       "displayName": "JUNO-ATOM",
       "displayLogo1": "/logos/juno.svg",
       "displayLogo2": "/logos/atom.png",
@@ -63,6 +64,7 @@
     {
       "pool_id": "ATOM-axlUSDC",
       "lpOrder": ["ATOM", "axlUSDC"],
+      "assetOrder": ["ATOM", "axlUSDC"],
       "displayName": "ATOM-axlUSDC",
       "displayLogo1": "/logos/atom.png",
       "displayLogo2": "/logos/axlUSDC.png",
@@ -99,6 +101,7 @@
     {
       "pool_id": "JUNO-axlUSDC",
       "lpOrder": ["JUNO", "axlUSDC"],
+      "assetOrder": ["JUNO", "axlUSDC"],
       "displayName": "JUNO-axlUSDC",
       "displayLogo1": "/logos/juno.svg",
       "displayLogo2": "/logos/axlUSDC.png",

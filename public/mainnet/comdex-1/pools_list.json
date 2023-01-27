@@ -26,6 +26,7 @@
     {
       "pool_id": "CMDX-ATOM",
       "lpOrder": ["CMDX", "ATOM"],
+      "assetOrder": ["CMDX", "ATOM"],
       "displayName": "CMDX-ATOM",
       "displayLogo1": "/logos/comdex.png",
       "displayLogo2": "/logos/atom.png",
@@ -63,6 +64,7 @@
     {
       "pool_id": "CMDX-CMST",
       "lpOrder": ["CMDX", "CMST"],
+      "assetOrder": ["CMDX", "CMST"],
       "displayName": "CMDX-CMST",
       "displayLogo1": "/logos/comdex.png",
       "displayLogo2": "/logos/cmst.png",
