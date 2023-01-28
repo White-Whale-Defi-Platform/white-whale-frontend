@@ -26,6 +26,7 @@
     {
       "pool_id": "ATOM-LUNA",
       "lpOrder": ["ATOM", "LUNA"],
+      "assetOrder": ["ATOM", "LUNA"],
       "displayName": "LUNA-ATOM",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/atom.png",
@@ -63,6 +64,7 @@
     {
       "pool_id": "ATOM-axlUSDC",
       "lpOrder": ["ATOM", "axlUSDC"],
+      "assetOrder": ["ATOM", "axlUSDC"],
       "displayName": "ATOM-axlUSDC",
       "displayLogo1": "/logos/atom.png",
       "displayLogo2": "/logos/axlUSDC.png",
@@ -99,6 +101,7 @@
     {
       "pool_id": "LUNA-ASTRO",
       "lpOrder": ["LUNA", "ASTRO"],
+      "assetOrder": ["LUNA", "ASTRO"],
       "displayName": "ASTRO-LUNA",
       "displayLogo1": "/logos/astro.png",
       "displayLogo2": "/logos/luna.svg",
@@ -134,7 +137,8 @@
     },
     {
       "pool_id": "LUNA-axlUSDC",
-      "lpOrder": ["LUNA", "axlUSDC"],
+      "lpOrder": ["axlUSDC", "LUNA"],
+      "assetOrder": ["LUNA", "axlUSDC"],
       "displayName": "LUNA-axlUSDC",
       "displayLogo1": "/logos/luna.svg",
       "displayLogo2": "/logos/axlUSDC.png",

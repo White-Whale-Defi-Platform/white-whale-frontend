@@ -95,7 +95,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
   const {
-    data: balance,
+    data: balance = 0,
     isLoading,
     refetch,
   } = useQuery(
@@ -110,7 +110,11 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: !!tokenSymbol && !!selectedAddr && !!client && (!!tokenInfo || !!ibcAssetInfo),
+      enabled:
+        !!tokenSymbol &&
+        !!address &&
+        !!client &&
+        (!!tokenInfo || !!ibcAssetInfo),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
