@@ -148,7 +148,7 @@ const Swap: FC<SwapProps> = ({}) => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '600px' }}
+      width={{ base: '100%', md: '650px' }}
       alignItems="center"
       padding={5}
       margin="0px auto"

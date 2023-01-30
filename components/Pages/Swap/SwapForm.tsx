@@ -212,7 +212,7 @@ const SwapForm: FC<Props> = ({
       borderRadius="30px"
       alignItems="flex-start"
       minH={400}
-      maxWidth={{ base: 'full', md: 600 }}
+      maxWidth={{ base: 'full', md: 650 }}
       gap={4}
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
@@ -221,7 +221,7 @@ const SwapForm: FC<Props> = ({
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={2}>
         <HStack justifyContent="space-between" width="full">
-          <HStack>
+          {/* <HStack>
             <Text
               marginLeft={4}
               color="brand.50"
@@ -237,7 +237,7 @@ const SwapForm: FC<Props> = ({
                 {tokenABalance?.toFixed(6)}
               </Text>
             )}
-          </HStack>
+          </HStack> */}
 
           <HStack visibility={{ base: 'visible', md: 'hidden' }}>
             <Button
@@ -283,6 +283,7 @@ const SwapForm: FC<Props> = ({
               {...field}
               token={tokenA}
               balance={tokenABalance}
+              minMax={false}
               // onInputFocus={() => setIsReverse(true)}
               disabled={isInputDisabled}
               onChange={(value, isTokenChange) => {
@@ -314,7 +315,7 @@ const SwapForm: FC<Props> = ({
         style={{ margin: 'unset' }}
       >
         <HStack justifyContent="space-between" width="full">
-          <HStack>
+          {/* <HStack >
             <Text
               marginLeft={4}
               color="brand.50"
@@ -330,8 +331,8 @@ const SwapForm: FC<Props> = ({
                 {tokenBBalance?.toFixed(6)}
               </Text>
             )}
-          </HStack>
-          <HStack>
+          </HStack> */}
+          <HStack > 
             <Hide above="md">
               <Button
                 variant="outline"
@@ -375,6 +376,7 @@ const SwapForm: FC<Props> = ({
               hideToken={tokenA?.tokenSymbol}
               {...field}
               token={tokenB}
+              hideMax={true}
               minMax={false}
               balance={tokenBBalance}
               disabled={isInputDisabled}
