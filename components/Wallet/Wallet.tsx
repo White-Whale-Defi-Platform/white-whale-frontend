@@ -164,7 +164,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   return (
     <>
-      <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
+      <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4} alignItems="center">
         <ChainSelectWithBalance
           connected={connected}
           denom={denom}

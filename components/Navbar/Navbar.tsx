@@ -24,7 +24,8 @@ import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
-import NavbarLink from './NavbarLink'
+import NavbarPopper from './NavbarPopper'
+import menuLinks from './NavMenu.json'
 
 const links = [
   {
@@ -49,7 +50,9 @@ const links = [
   // },
 ]
 
-const Navbar = ({}) => {
+
+
+const Navbar = ({ }) => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network, activeWallet }, setWalletState] =
     useRecoilState(walletState)
@@ -89,14 +92,8 @@ const Navbar = ({}) => {
         <Box flex="1">
           <Logo />
         </Box>
-        <Card paddingX={10} gap={6}>
-          {links.map(({ lable, link }) => (
-            <NavbarLink
-              key={lable}
-              text={lable}
-              href={`/${currentChainName}${link}`}
-            />
-          ))}
+        <Card paddingX={10} gap={6} >
+          {menuLinks.map((menu) => (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName} />))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">
           <Wallet
