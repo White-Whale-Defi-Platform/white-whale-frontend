@@ -49,6 +49,16 @@
         "tokenSymbol": "ATOM",
         "amount": 0
       }
+    ],
+    "migaloo": [
+      {
+      "tokenSymbol": "ATOM",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "ATOM",
+        "amount": 0
+      }
     ]
   },
   "testnet": {
