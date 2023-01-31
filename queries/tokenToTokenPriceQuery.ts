@@ -48,7 +48,7 @@ export async function tokenToTokenPriceQueryWithPools({
   }
 
   if (streamlinePoolAB) {
-    return await getToken1ForToken2Price({
+    return getToken1ForToken2Price({
       nativeAmount: convertedTokenAmount,
       swapAddress: streamlinePoolAB.swap_address,
       client,
@@ -56,14 +56,14 @@ export async function tokenToTokenPriceQueryWithPools({
   }
 
   if (streamlinePoolBA) {
-    return await getToken2ForToken1Price({
+    return getToken2ForToken1Price({
       tokenAmount: convertedTokenAmount,
       swapAddress: streamlinePoolBA.swap_address,
       client,
     })
   }
 
-  return await formatPrice(
+  return formatPrice(
     getTokenForTokenPrice({
       tokenAmount: convertedTokenAmount,
       swapAddress: baseTokenAPool.swap_address,
@@ -107,14 +107,14 @@ export async function tokenToTokenPriceQuery({
 
     return formatPrice(resp)
   } else if (shouldQueryTokenBForBaseToken) {
-    return await getToken2ForToken1Price({
+    return getToken2ForToken1Price({
       tokenAmount: convertedTokenAmount,
       swapAddress: fromTokenInfo.swap_address,
       client,
     })
   }
 
-  return await getTokenForTokenPrice({
+  return getTokenForTokenPrice({
     tokenAmount: convertedTokenAmount,
     swapAddress: fromTokenInfo.swap_address,
     outputSwapAddress: toTokenInfo.swap_address,
