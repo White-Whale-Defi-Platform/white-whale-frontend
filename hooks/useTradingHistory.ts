@@ -12,7 +12,7 @@ import { getTokenDecimal } from 'util/token'
 
 const query = gql`
   query ($filter: TradingHistoryFilter) {
-    tradingHistories(first: 1000, filter: $filter, orderBy: DATETIME_ASC) {
+    tradingHistories(first: 1000, filter: $filter, orderBy: DATETIME_DESC) {
       nodes {
         id
         datetime
