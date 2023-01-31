@@ -7,7 +7,7 @@ import { fromChainAmount, num } from 'libs/num'
 import moment from 'moment'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { getTokenPrice } from 'util/coingecko'
+import { getToken24hrPrice } from 'util/coingecko'
 import { getTokenDecimal } from 'util/token'
 
 const query = gql`
@@ -53,6 +53,16 @@ export const useTradingHistory = ({ pair, dateTime }) => {
     }
   )
 
+  const getSpotPrice = (historyValues, timestamp) => {
+    let spotPrice = 0
+    historyValues.map((row, i) => {
+      if (row[0] > timestamp) {
+        spotPrice = i === 0 ? row[1] : historyValues[i - 1][1]
+      }
+    })
+    return spotPrice
+  }
+
   const calculateVolume = async (data) => {
     if (!data) return 0
     if (volume !== undefined || feeVolume !== undefined) return
@@ -60,11 +70,6 @@ export const useTradingHistory = ({ pair, dateTime }) => {
     const tradingHistories = data?.tradingHistories?.nodes
       ? data?.tradingHistories?.nodes
       : []
-
-    const historicalDatetimes = [
-      moment(tradingHistories[0]?.datetime).startOf('day').valueOf(),
-      moment(tradingHistories.slice(-1)[0]?.datetime).startOf('day').valueOf(),
-    ]
 
     const swapAssets = Array.from(
       new Set(
@@ -77,36 +82,24 @@ export const useTradingHistory = ({ pair, dateTime }) => {
     const historicalPricesArray = await Promise.all(
       swapAssets.map(async (swapAsset: string) => {
         return {
-          [swapAsset]: await Promise.all(
-            historicalDatetimes.map(async (historicalDatetime: number) => {
-              return {
-                [historicalDatetime]: await getTokenPrice(
-                  swapAsset,
-                  historicalDatetime
-                ),
-              }
-            })
-          ),
+          [swapAsset]: await getToken24hrPrice(swapAsset),
         }
       })
     )
 
-    let historicalPricesObj = {}
+    let historicalPrices = {}
     historicalPricesArray.map((row) => {
       for (const [key, value] of Object.entries(row)) {
-        historicalPricesObj = {
-          ...historicalPricesObj,
-          [key]: {
-            ...value[0],
-            ...value[1],
-          },
+        historicalPrices = {
+          ...historicalPrices,
+          [key]: [...value],
         }
       }
     })
 
     let tradingVolume = 0
     let tradingFeeVolume = 0
-    tradingHistories.map((row, i) => {
+    tradingHistories.map((row) => {
       const baseVolume = num(
         fromChainAmount(row?.baseVolume || 0, getTokenDecimal(row?.secondToken))
       )
@@ -116,8 +109,10 @@ export const useTradingHistory = ({ pair, dateTime }) => {
           getTokenDecimal(row?.secondToken)
         )
       )
-      const swapDate = moment(row?.datetime).startOf('day').valueOf()
-      const assetPrice = historicalPricesObj[row?.secondToken][swapDate] || 0
+      const assetPrice = getSpotPrice(
+        historicalPrices[row?.secondToken],
+        moment(row?.datetime).valueOf()
+      )
 
       tradingVolume += assetPrice * baseVolume.toNumber()
       tradingFeeVolume += assetPrice * swapFeeVolume.toNumber()
