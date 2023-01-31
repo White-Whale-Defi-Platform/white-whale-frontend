@@ -48,7 +48,9 @@ export const useTradingHistory = ({ pair, dateTime }) => {
   const { data: queryData, isLoading } = useQuery(
     ['swapHistories', pair, dateTime],
     () => request(activeChain?.indexerUrl, query, { filter }),
-    { enabled: !!activeChain?.indexerUrl, refetchIntervalInBackground: false }
+    {
+      enabled: !!activeChain?.indexerUrl && !volume,
+    }
   )
 
   const calculateVolume = async (data) => {

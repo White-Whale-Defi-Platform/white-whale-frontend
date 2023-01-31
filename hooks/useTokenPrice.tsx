@@ -27,14 +27,16 @@ export const useTokenPrice = () => {
     const apiIds = tokenIds.flat().join(',')
     const url = `https://api.coingecko.com/api/v3/simple/price?ids=${apiIds}&vs_currencies=usd`
 
-    const res = await axios.get(url)
-    if (res.status === 200) {
-      let _tokenPrices = {}
-      Object.entries(res.data).map((row: any) => {
-        _tokenPrices = { ..._tokenPrices, [row[0]]: row[1].usd }
-      })
-      setTokenPrices(_tokenPrices)
-    }
+    try {
+      const res = await axios.get(url)
+      if (res.status === 200) {
+        let _tokenPrices = {}
+        Object.entries(res.data).map((row: any) => {
+          _tokenPrices = { ..._tokenPrices, [row[0]]: row[1].usd }
+        })
+        setTokenPrices(_tokenPrices)
+      }
+    } catch (error) {}
   }
 
   useEffect(() => {
