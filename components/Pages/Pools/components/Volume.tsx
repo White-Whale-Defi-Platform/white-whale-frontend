@@ -11,7 +11,7 @@ type Props = {
 }
 
 const Volume = ({ pairAddr }: Props) => {
-  const dateTime = moment
+  const dateTime = moment()
     .utc()
     .subtract(24, 'hours')
     .format('YYYY-MM-DDTHH:mm:ss')

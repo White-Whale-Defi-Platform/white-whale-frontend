@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 
 const coinhallV1RootUrl = 'https://api.coinhall.org/api/v1'
+const supportedCoinhallChains = ['juno-1', 'phoenix-1']
 
 export const getPairInfos = async (pairs: string[]) => {
   if (pairs.length === 0) return []
@@ -18,10 +19,15 @@ export const getPairInfos = async (pairs: string[]) => {
   }
 }
 
-export const getPairAprAndDailyVolume = async (pools: any[]) => {
+export const getPairAprAndDailyVolume = async (
+  pools: any[],
+  chainId: string
+) => {
   const pairs = pools.map((pool: any) => pool.swap_address)
 
-  const pairInfos = await getPairInfos(pairs)
+  const pairInfos = supportedCoinhallChains.includes(chainId)
+    ? await getPairInfos(pairs)
+    : []
 
   if (pairInfos.length > 0) {
     return pairs.map((pair: any) => {

@@ -10,7 +10,7 @@ type Props = {
 }
 
 const Apr = ({ pairAddr, tvl }: Props) => {
-  const dateTime = moment
+  const dateTime = moment()
     .utc()
     .subtract(24, 'hours')
     .format('YYYY-MM-DDTHH:mm:ss')
