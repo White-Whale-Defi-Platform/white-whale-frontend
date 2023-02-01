@@ -1,22 +1,29 @@
 import React from 'react'
 
 import { Spinner, Text } from '@chakra-ui/react'
-import useFeeVolume from 'hooks/useFeeVolume'
+import useTradingHistory from 'hooks/useTradingHistory'
+import moment from 'moment'
 
 type Props = {
-  pair: string
-  dateTime: string
+  pairAddr?: string
   tvl: string | number
 }
 
-const Apr = ({ pair, tvl, dateTime }: Props) => {
-  const { volume, isLoading } = useFeeVolume({ pair, dateTime })
+const Apr = ({ pairAddr, tvl }: Props) => {
+  const dateTime = moment()
+    .utc()
+    .subtract(24, 'hours')
+    .format('YYYY-MM-DDTHH:mm:ss')
+  const { feeVolume, isLoading } = useTradingHistory({
+    pair: pairAddr,
+    dateTime,
+  })
 
-  if (!pair || !dateTime) return null
+  if (!pairAddr) return null
   if (isLoading) return <Spinner color="white" size="xs" float="right" />
 
   const apr =
-    Number(tvl) > 0 ? 100 * (Number(volume) / Number(tvl || 0)) * 365 : 0
+    Number(tvl) > 0 ? 100 * (Number(feeVolume) / Number(tvl || 0)) * 365 : 0
   return <Text align="right">{`${apr.toFixed(2)} %`}</Text>
 }
 

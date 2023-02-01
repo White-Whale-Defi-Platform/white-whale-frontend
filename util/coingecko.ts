@@ -86,3 +86,20 @@ export const getTokenPrice = async (address: string, timestamp?: number) => {
     return 1
   }
 }
+
+export const getToken24hrPrice = async (address: string) => {
+  const tokenCGCId = getTokenCGCId(address)
+  if (tokenCGCId === '') return 1
+
+  try {
+    const cgcUrl = `${coingeckoV3RootUrl}/${tokenCGCId}/market_chart?vs_currency=usd&days=1`
+    const res = await axios.get(cgcUrl)
+    if (res.status === 200) {
+      return res.data && res.data.prices
+      return []
+    }
+    return []
+  } catch {
+    return []
+  }
+}
