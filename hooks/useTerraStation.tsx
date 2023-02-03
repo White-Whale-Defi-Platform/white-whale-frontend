@@ -49,7 +49,7 @@ export const useTerraStation = (onCloseModal) => {
     // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
     let mainnet = new LCDClient({ 
       'juno-1':{
-        lcd: 'https://ww-juno-rest.polkachu.com',
+        lcd: 'https://rest.cosmos.directory/juno',
         chainID: 'juno-1',
         gasAdjustment: 1.75,
         gasPrices: { ujuno: 0.015 },
@@ -60,7 +60,7 @@ export const useTerraStation = (onCloseModal) => {
         chainID: 'phoenix-1',
         gasAdjustment: 1.75,
         gasPrices: { uluna: 0.015 },
-        prefix: 'luna',
+        prefix: 'terra',
       },
       'chihuahua-1':{
         lcd: 'https://rest.cosmos.directory/chihuahua',
@@ -68,24 +68,9 @@ export const useTerraStation = (onCloseModal) => {
         gasAdjustment: 1.75,
         gasPrices: { uhuahua: 0.015 },
         prefix: 'chihuahua',
-      },
-      'comdex-1':{
-        lcd: 'https://rest.cosmos.directory/comdex',
-        chainID: 'comdex-1',
-        gasAdjustment: 1.75,
-        gasPrices: { ucmdx: 0.015 },
-        prefix: 'comdex',
-      },
-      'injective-1':{
-        lcd: 'https://rest.cosmos.directory/injective',
-        chainID: 'injective-1',
-        gasAdjustment: 1.75,
-        gasPrices: { uinj: 0.015 },
-        prefix: 'inj',
       }
     })
-    console.log(mainnet);
-    console.log(connectedWallet)
+
     const wasmChainClient = new TerraStationWallet(
       connectedWallet,
       currentWalletState.network === 'mainnet' ? mainnet : testnet,
