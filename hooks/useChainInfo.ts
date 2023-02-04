@@ -39,11 +39,7 @@ export const useChains = () => {
   //   }
   // )
   // if currentWalletState.activeWallet is station then remove entries from mainnetChainInfo if chainId is comdex-1 or injective-1
-  if (currentWalletState.activeWallet === 'station') {
-    return mainnetChainInfo.filter(
-      (chain) => chain.chainId !== 'comdex-1' && chain.chainId !== 'injective-1'
-    );
-  }
+  
   // return data || []
   return currentWalletState.network === 'testnet'
     ? testnetChainInfo || []

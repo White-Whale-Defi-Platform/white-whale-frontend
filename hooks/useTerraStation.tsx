@@ -35,7 +35,7 @@ export const useTerraStation = (onCloseModal) => {
       return console.log('no connected wallet found')
     }
 
-    let testnet = new LCDClient({
+    const testnet = new LCDClient({
       'pisco-1':{
         lcd: 'https://pisco-lcd.terra.dev',
         chainID: 'pisco-1',
@@ -47,7 +47,7 @@ export const useTerraStation = (onCloseModal) => {
     })
     // TODO: Make this better and derived from like a config or something
     // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
-    let mainnet = new LCDClient({ 
+    const mainnet = new LCDClient({ 
       'juno-1':{
         lcd: 'https://rest.cosmos.directory/juno',
         chainID: 'juno-1',
