@@ -90,9 +90,9 @@ class Injective {
     const endpoints = getNetworkEndpoints(network)
 
     this.offlineSigner = offlineSigner
-    this.txClient = new TxRestClient(endpoints.rest)
+    this.txClient = new TxRestClient("https://ww-injective-rest.polkachu.com")
     this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
-    this.bankApi = new ChainRestBankApi(endpoints.rest)
+    this.bankApi = new ChainRestBankApi("https://ww-injective-rest.polkachu.com")
     this.chainId =
       network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
     this.network = network
@@ -104,7 +104,7 @@ class Injective {
     const key = await getKey(this.activeWallet, this.chainId)
     this.pubKey = Buffer.from(key.pubKey).toString('base64')
     const restEndpoint = getNetworkEndpoints(this.network).rest
-    const chainRestAuthApi = new ChainRestAuthApi(restEndpoint)
+    const chainRestAuthApi = new ChainRestAuthApi("https://ww-injective-rest.polkachu.com")
     const [{ address }] = await this.offlineSigner.getAccounts()
     const accountDetailsResponse = await chainRestAuthApi.fetchAccount(address)
     this.baseAccount = BaseAccount.fromRestApi(accountDetailsResponse)
@@ -172,7 +172,7 @@ class Injective {
     try {
       await this.init()
       const restEndpoint = getNetworkEndpoints(this.network).rest
-      const chainRestTendermintApi = new ChainRestTendermintApi(restEndpoint)
+      const chainRestTendermintApi = new ChainRestTendermintApi("https://ww-injective-rest.polkachu.com")
       const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
       const latestHeight = latestBlock.header.height
       const timeoutHeight = new BigNumberInBase(latestHeight).plus(
