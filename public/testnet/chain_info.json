@@ -1,5 +1,52 @@
 [
   {
+    "chainId": "narwhal-1",
+    "chainName": "Migaloo Testnet",
+    "label": "Migaloo",
+    "icon": "/logos/migaloo.png",
+    "rpc": "https://whitewhale-testnet-rpc.polkachu.com",
+    "rest": "https://whitewhale-testnet-api.polkachu.com",
+    "stakeCurrency": {
+      "coinDenom": "WHALE",
+      "coinMinimalDenom": "uwhale",
+      "coinDecimals": 6
+    },
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "migaloo",
+      "bech32PrefixAccPub": "migaloopub",
+      "bech32PrefixValAddr": "migaloovaloper",
+      "bech32PrefixValPub": "migaloovaloperpub",
+      "bech32PrefixConsAddr": "migaloovalcons",
+      "bech32PrefixConsPub": "migaloovalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "WHALE",
+        "coinMinimalDenom": "uwhale",
+        "coinDecimals": 6,
+        "coinGeckoId": "whale-network"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "WHALE",
+        "coinMinimalDenom": "uwhale",
+        "coinDecimals": 6,
+        "coinGeckoId": "whale-network"
+      }
+    ],
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 0.025,
+      "average": 0.05,
+      "high": 0.1
+    },
+    "features": ["cosmwasm"]
+  },
+  {
     "chainId": "uni-3",
     "chainName": "Juno Uni Testnet",
     "label": "Juno",
@@ -92,62 +139,6 @@
       "high": 0.75
     },
     "features": ["cosmwasm"]
-  },
-  {
-    "rpc": "https://testnet.tm.injective.dev",
-    "rest": "https://testnet.lcd.injective.dev",
-    "chainId": "injective-888",
-    "chainName": "Injective Testnet",
-    "label": "Injective",
-    "icon": "/logos/injective.png",
-    "stakeCurrency": {
-      "coinDenom": "INJ",
-      "coinMinimalDenom": "inj",
-      "coinDecimals": 18,
-      "coinGeckoId": "injective-protocol"
-    },
-    "walletUrl": "https://hub.injective.dev/",
-    "walletUrlForStaking": "https://hub.injective.dev/",
-    "bip44": {
-      "coinType": 60
-    },
-    "bech32Config": {
-      "bech32PrefixAccAddr": "inj",
-      "bech32PrefixAccPub": "injpub",
-      "bech32PrefixValAddr": "injvaloper",
-      "bech32PrefixValPub": "injvaloperpub",
-      "bech32PrefixConsAddr": "injvalcons",
-      "bech32PrefixConsPub": "injvalconspub"
-    },
-    "currencies": [
-      {
-        "coinDenom": "INJ",
-        "coinMinimalDenom": "inj",
-        "coinDecimals": 18,
-        "coinGeckoId": "injective-protocol"
-      }
-    ],
-    "feeCurrencies": [
-      {
-        "coinDenom": "INJ",
-        "coinMinimalDenom": "inj",
-        "coinDecimals": 18,
-        "coinGeckoId": "injective-protocol",
-        "gasPriceStep": {
-          "low": 9000000000,
-          "average": 50000000000,
-          "high": 80000000000
-        }
-      }
-    ],
-    "gasPriceStep": {
-      "low": 9000000000,
-      "average": 50000000000,
-      "high": 80000000000
-    },
-    "coinType": 60,
-    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
-    "beta": true
   },
   {
     "chainId": "comdex-test2",

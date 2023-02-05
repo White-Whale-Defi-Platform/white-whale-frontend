@@ -101,6 +101,16 @@
         "tokenSymbol": "ATOM",
         "amount": 0
       }
+    ],
+    "migaloo": [
+      {
+      "tokenSymbol": "WHALE",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "WILLYz",
+        "amount": 0
+      }
     ]
   }
 }
