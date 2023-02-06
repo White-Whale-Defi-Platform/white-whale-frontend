@@ -108,12 +108,12 @@ export const useTokenSwap = ({
           />
         ))
 
-        setTokenSwap(([tokenA, tokenB]) => [
+        setTokenSwap(([aToken, bToken]) => [
           {
-            ...tokenA,
+            ...aToken,
             amount: 0,
           },
-          tokenB,
+          bToken,
         ])
 
         refetchQueries()
@@ -122,8 +122,8 @@ export const useTokenSwap = ({
         const errorMessage =
           String(e).length > 300
             ? `${String(e).substring(0, 150)} ... ${String(e).substring(
-                String(e).length - 150
-              )}`
+              String(e).length - 150
+            )}`
             : String(e)
 
         toast.custom((t) => (

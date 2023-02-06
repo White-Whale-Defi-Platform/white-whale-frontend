@@ -3,17 +3,14 @@ import React, { useCallback } from 'react'
 import { Button, HStack, Text } from '@chakra-ui/react'
 import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import useConnectCosmostation from 'hooks/useConnectCosmostation'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
 
 function CosmostationConnectButton({ onCloseModal }) {
   const { setCosmostationAndConnect } = useConnectCosmostation()
-  const { chainId, activeWallet, network } = useRecoilValue(walletState)
 
   const setCosmostationMemo = useCallback(() => {
     setCosmostationAndConnect()
     onCloseModal()
-  }, [activeWallet, chainId, network])
+  }, [onCloseModal, setCosmostationAndConnect])
 
   return (
     <Button variant="wallet" onClick={() => setCosmostationMemo()} colorScheme="black">

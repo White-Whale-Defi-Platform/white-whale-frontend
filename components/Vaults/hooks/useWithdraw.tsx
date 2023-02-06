@@ -46,7 +46,7 @@ const useWithdraw = ({
         lpToken,
       }),
     }
-  }, [amount, tokenInfo])
+  }, [amount, tokenInfo, vaultAddress, address, lpToken])
 
   const tx = useTransaction({
     isNative: false,

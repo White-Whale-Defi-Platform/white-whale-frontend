@@ -1,11 +1,11 @@
 import React from 'react'
+
+import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
+import LeapWalletIcon from 'components/icons/LeapWalletIcon'
+import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
-import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
-import LeapWalletIcon from 'components/icons/LeapWalletIcon'
-
 
 function ConnectedWalletIcon({ connected }) {
   const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)

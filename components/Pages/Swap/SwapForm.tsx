@@ -336,6 +336,7 @@ const SwapForm: FC<Props> = ({
               minMax={false}
               balance={tokenBBalance}
               disabled={isInputDisabled}
+              showBalanceSlider={false}
               // onInputFocus={() => setIsReverse(true)}
               onChange={(value, isTokenChange) => {
                 if (tokenB?.tokenSymbol && !isTokenChange) setReverse(true)

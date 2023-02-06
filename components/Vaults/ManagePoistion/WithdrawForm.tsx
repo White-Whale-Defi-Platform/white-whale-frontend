@@ -54,7 +54,7 @@ const WithdrawForm = ({
         isClosable: true,
       })
     },
-    [token]
+    [refetch, chainId, toast]
   )
 
   const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
@@ -76,7 +76,7 @@ const WithdrawForm = ({
       setToken({ ...token, amount: 0 })
       tx?.reset()
     }
-  }, [tx.txStep])
+  }, [tx, token, setToken])
 
   return (
     <VStack

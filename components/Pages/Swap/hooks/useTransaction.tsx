@@ -241,7 +241,7 @@ export const useTransaction = ({
       msgs,
       fee,
     })
-  }, [msgs, fee, mutate, price])
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -277,7 +277,7 @@ export const useTransaction = ({
       error,
       reset,
     }
-  }, [txStep, txInfo, txHash, error, reset, fee])
+  }, [txStep, txInfo, txHash, error, reset, fee, buttonLabel, submit])
 }
 
 export default useTransaction

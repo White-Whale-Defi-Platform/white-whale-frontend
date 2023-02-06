@@ -12,6 +12,7 @@ const VaultName = ({ vaultId, tokenImage }: Props) => (
       <Box bg="#252525" boxShadow="lg" borderRadius="full" position="relative">
         <Image
           src={tokenImage}
+          alt="vault token"
           width="auto"
           maxW="1.7rem"
           maxH="1.7rem"

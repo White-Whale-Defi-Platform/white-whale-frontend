@@ -68,7 +68,6 @@ const ManagePosition = () => {
     tokenRefetch()
   }
 
-
   return (
     <VStack
       width={{ base: '100%', md: '700px' }}

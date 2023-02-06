@@ -5,6 +5,7 @@ import BalanceWithMax from './BalanceWithMax'
 import WhaleInput from './WhaleInput'
 import { num } from '../../libs/num'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import BalanceSlider from './BalanceSlider'
 
 interface AssetInputProps {
   image?: boolean
@@ -22,14 +23,22 @@ interface AssetInputProps {
   ignoreSlack?: boolean
   hideMax?: boolean
   hideDollarValue?: boolean
+  showBalanceSlider?: boolean
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
-  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
+  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax, hideDollarValue, showBalanceSlider} = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
 
-  const onMaxClick = useCallback(() => {
+  const onSliderChange = (value) => {
+    onChange({
+      ...token,
+      amount: num(value).toFixed(6),
+    })
+  }
+
+  const onMaxClick = () => {
     const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
     onChange({
       ...token,
@@ -37,8 +46,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
         ? num(balance - 0.1).toFixed(6)
         : num(balance).toFixed(6),
     })
-  }, [tokenInfo, baseToken, ignoreSlack, onChange])
-
+  }
   const maxDisabled = useMemo(() => {
     return disabled || (!isSingleInput && !tokenInfo?.symbol)
   }, [balance, disabled, isSingleInput, tokenInfo])
@@ -68,6 +76,12 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
         maxDisabled={maxDisabled}
         hideMax={hideMax}
         onMaxClick={onMaxClick}
+      />
+      <BalanceSlider 
+        show={showBalanceSlider}
+        balance={Number(balanceWithDecimals)} 
+        amount={token?.amount} 
+        onChange={onSliderChange} 
       />
     </VStack>
   )
