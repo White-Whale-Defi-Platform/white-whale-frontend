@@ -10,128 +10,18 @@
     },
     "timestamp": "2021-06-12T00:00:00+00:00",
     "base_token": {
-      "id": "juno-network",
-      "chain_id": "juno-1",
+      "id": "whale-network",
+      "chain_id": "migaloo-1",
       "token_address": "",
-      "symbol": "JUNO",
-      "name": "Juno",
+      "symbol": "WHALE",
+      "name": "Whale",
       "decimals": 6,
-      "logoURI": "/logos/juno.svg",
+      "logoURI": "/logos/migaloo.png",
       "tags": ["native"],
       "native": true,
-      "denom": "ujuno"
+      "denom": "uwhale"
     },
-    "routerAddress": "juno128lewlw6kv223uw4yzdffl8rnh3k9qs8vrf6kef28579w8ygccyq7m90n2",
     "pools": [
-      {
-        "pool_id": "ATOM-JUNO",
-        "lpOrder": ["ATOM", "JUNO"],
-        "displayName": "JUNO-ATOM",
-        "displayLogo1": "/logos/juno.svg",
-        "displayLogo2": "/logos/atom.png",
-        "pool_assets": [
-          {
-            "id": "cosmos",
-            "chain_id": "juno-1",
-            "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
-            "symbol": "ATOM",
-            "name": "Atom",
-            "decimals": 6,
-            "logoURI": "/logos/atom.png",
-            "tags": ["native"],
-            "native": true,
-            "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
-          },
-          {
-            "id": "juno-network",
-            "chain_id": "juno-1",
-            "token_address": "ujuno",
-            "symbol": "JUNO",
-            "name": "Juno",
-            "decimals": 6,
-            "logoURI": "/logos/juno.svg",
-            "tags": ["native"],
-            "native": true,
-            "denom": "ujuno"
-          }
-        ],
-        "lp_token": "juno1g3549wm0tffdzdpasufjr0nccu9ynzpzway5g3u6ucmhfd4ds05swswasc",
-        "swap_address": "juno1p9z8xe96fyvg3h5gtvnpjjv2u47q6l7sdhg6asmyfgc6q8l8ttgqfvxnxh",
-        "staking_address": "",
-        "rewards_tokens": []
-      },
-      {
-        "pool_id": "ATOM-axlUSDC",
-        "lpOrder": ["ATOM", "axlUSDC"],
-        "displayName": "ATOM-axlUSDC",
-        "displayLogo1": "/logos/atom.png",
-        "displayLogo2": "/logos/axlUSDC.png",
-        "pool_assets": [
-          {
-            "id": "cosmos",
-            "chain_id": "juno-1",
-            "token_address": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
-            "symbol": "ATOM",
-            "name": "Atom",
-            "decimals": 6,
-            "logoURI": "/logos/atom.png",
-            "tags": ["native"],
-            "native": true,
-            "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
-          },
-          {
-            "chain_id": "juno-1",
-            "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
-            "symbol": "axlUSDC",
-            "name": "axlUSDC",
-            "decimals": 6,
-            "logoURI": "/logos/axlUSDC.png",
-            "tags": ["native"],
-            "native": true,
-            "denom": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034"
-          }
-        ],
-        "lp_token": "juno12caca3ymhxr7a73wtdefye86djs69704ktzkv02xkf59se8hx72qwyxq72",
-        "swap_address": "juno1v6stcdrvwrthfvcwvlmmzht32ft9g9nw85tthcjqer242xg3nvdq8fjasx",
-        "staking_address": "",
-        "rewards_tokens": []
-      },
-      {
-        "pool_id": "JUNO-axlUSDC",
-        "lpOrder": ["axlUSDC", "JUNO"],
-        "displayName": "JUNO-axlUSDC",
-        "displayLogo1": "/logos/juno.svg",
-        "displayLogo2": "/logos/axlUSDC.png",
-        "pool_assets": [
-          {
-            "id": "juno-network",
-            "chain_id": "juno-1",
-            "token_address": "ujuno",
-            "symbol": "JUNO",
-            "name": "Juno",
-            "decimals": 6,
-            "logoURI": "/logos/juno.svg",
-            "tags": ["native"],
-            "native": true,
-            "denom": "ujuno"
-          },
-          {
-            "chain_id": "juno-1",
-            "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
-            "symbol": "axlUSDC",
-            "name": "axlUSDC",
-            "decimals": 6,
-            "logoURI": "/logos/axlUSDC.png",
-            "tags": ["native"],
-            "native": true,
-            "denom": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034"
-          }
-        ],
-        "lp_token": "juno19mkjyvydnq440a3ms4fccpltrzmxlvlz6nvz6qul0mgxvse42n2q9qkf72",
-        "swap_address": "juno1wkjy5wl0pd5xxvwtrx37r7ydkt3dkwvghs00tvvqyd3xnjukah7qpj0vj7",
-        "staking_address": "",
-        "rewards_tokens": []
-      }
     ],
     "version": {
       "major": 0,
