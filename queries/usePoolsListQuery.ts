@@ -68,7 +68,7 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
     Object.assign(
       {
         retry: 5,
-        enabled: true,
+        enabled: !!currentWalletState.chainId,
         refetchOnMount: false,
       },
       options || {}

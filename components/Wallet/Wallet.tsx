@@ -1,23 +1,26 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+// eslint-disable-next-line sort-imports
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 
 import { Box, Button, Divider } from '@chakra-ui/react'
-import { useConnectedWallet } from '@terra-money/wallet-provider'
+import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
 import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
+import useConnectCosmostation from 'hooks/useConnectCosmostation'
 import useConnectKeplr from 'hooks/useConnectKeplr'
+import useConnectLeap from 'hooks/useConnectLeap'
+import { useTerraStation } from 'hooks/useTerraStation'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
 
-import useConnectLeap from '../../hooks/useConnectLeap'
-
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
+  const [isInitialized, setInitialized] = useState(false)
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
 
@@ -30,9 +33,14 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const { connectKeplr } = useConnectKeplr()
   const { connectLeap } = useConnectLeap()
+  const { connectCosmostation } = useConnectCosmostation()
+  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(
+    () => {}
+  )
+  const { availableConnections, availableInstallations } = useWallet()
 
   useEffect(() => {
-    onDisconnect()
+    // onDisconnect()
 
     if (router.pathname === '/') return
 
@@ -55,6 +63,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
         chainId: defaultChainId,
       })
     }
+    setInitialized(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -97,23 +106,25 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     currentWalletState.address,
   ])
 
-  const onChainChange = useCallback(
-    (chain) => {
-      onDisconnect()
-      setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentWalletState.chainId, chains, router]
-  )
+  const onChainChange = (chain) => {
+    // onDisconnect()
+    setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+  }
 
   useEffect(() => {
+    if (!isInitialized) return
     if (!currentWalletState.chainId) return
-    if (!chains) return
 
     if (currentWalletState.activeWallet === 'leap') {
       connectLeap()
     } else if (currentWalletState.activeWallet === 'keplr') {
       connectKeplr()
+    } else if (currentWalletState.activeWallet === 'cosmostation') {
+      connectCosmostation()
+    } else if (currentWalletState.activeWallet === 'station') {
+      const [{ type = null, identifier = null } = {}] =
+        availableConnections.filter(filterForStation)
+      if (type && identifier) connectTerraAndCloseModal(type, identifier)
     }
 
     // update route
@@ -124,7 +135,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId, currentWalletState.activeWallet, chains])
+  }, [currentWalletState.chainId, isInitialized, availableConnections])
 
   if (!connected && !connectedWallet) {
     return (

@@ -71,7 +71,6 @@ const NewPosition = () => {
       tokenList.find((row) => row.symbol === from) &&
       tokenList.find((row) => row.symbol === to)
     ) {
-      return
     } else {
       newState = [
         {

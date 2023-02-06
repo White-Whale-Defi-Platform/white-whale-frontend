@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 
 const coinhallV1RootUrl = 'https://api.coinhall.org/api/v1'
+const supportedCoinhallChains = ['juno-1', 'phoenix-1']
 
 export const getPairInfos = async (pairs: string[]) => {
   if (pairs.length === 0) return []
@@ -18,25 +19,45 @@ export const getPairInfos = async (pairs: string[]) => {
   }
 }
 
-export const getPairApryAnd24HrVolume = async (pairs: string[]) => {
-  const pairInfos = await getPairInfos(pairs)
+export const getPairAprAndDailyVolume = async (
+  pools: any[],
+  chainId: string
+) => {
+  const pairs = pools.map((pool: any) => pool.swap_address)
 
-  return pairs.map((pair: any) => {
-    const pairInfo = pairInfos.find((row: any) => row.pairAddress === pair)
-    return {
-      pairAddress: pair,
-      usdVolume24h: pairInfo?.usdVolume24h || 0,
-      usdVolume7d: pairInfo?.usdVolume7d || 0,
-      apr24h: pairInfo?.apr24h || 0,
-      apr7d: pairInfo?.apr7d || 0,
-      asset0Price: pairInfo?.asset0.usdPrice,
-      asset1Price: pairInfo?.asset1.usdPrice,
-      isUSDPool:
-        pairInfo?.asset0.symbol.includes('USDC') ||
-        pairInfo?.asset1.symbol.includes('USDC'),
-      isLunaxPool:
-        pairInfo?.asset0.symbol.includes('LunaX') ||
-        pairInfo?.asset1.symbol.includes('LunaX'),
-    }
-  })
+  const pairInfos = supportedCoinhallChains.includes(chainId)
+    ? await getPairInfos(pairs)
+    : []
+
+  if (pairInfos.length > 0) {
+    return pairs.map((pair: any) => {
+      const pairInfo = pairInfos.find((row: any) => row.pairAddress === pair)
+      return {
+        pairAddress: pair,
+        usdVolume24h: pairInfo?.usdVolume24h || 0,
+        usdVolume7d: pairInfo?.usdVolume7d || 0,
+        apr24h: pairInfo?.apr24h || 0,
+        apr7d: pairInfo?.apr7d || 0,
+        asset0Price: pairInfo?.asset0.usdPrice,
+        asset1Price: pairInfo?.asset1.usdPrice,
+        isLunaxPool:
+          pairInfo?.asset0.symbol.includes('LunaX') ||
+          pairInfo?.asset1.symbol.includes('LunaX'),
+      }
+    })
+  } else {
+    return pairs.map((pair: any) => {
+      return {
+        pairAddress: pair,
+        usdVolume24h: 0,
+        usdVolume7d: 0,
+        apr24h: 0,
+        apr7d: 0,
+        asset0Price: 1,
+        asset1Price: 1,
+        isUSDPool: false,
+        isLunaxPool: false,
+      }
+    })
+  }
 }

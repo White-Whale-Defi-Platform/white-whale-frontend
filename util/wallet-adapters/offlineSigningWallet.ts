@@ -21,7 +21,7 @@ import {
   Tx,
   TxBody,
   TxInfo,
-} from '@terra-money/terra.js'
+} from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 
 import Injective from '../../services/injective'
@@ -51,8 +51,8 @@ export class OfflineSigningWallet implements Wallet {
     if (chainId.includes('injective')) {
       const injectiveClient = new Injective(
         signer,
-        chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s,
-        activeWallet
+        activeWallet,
+        chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s
       )
       return new Promise((resolve, reject) => {
         resolve(new OfflineSigningWallet(injectiveClient, network))

@@ -26,6 +26,7 @@
     {
       "pool_id": "INJ-USDT",
       "lpOrder": ["INJ", "USDT"],
+      "assetOrder": ["INJ", "USDT"],
       "displayName": "INJ-USDT",
       "displayLogo1": "/logos/injective.png",
       "displayLogo2": "/logos/usdt.png",
@@ -62,6 +63,7 @@
     {
       "pool_id": "ATOM-USDT",
       "lpOrder": ["ATOM", "USDT"],
+      "assetOrder": ["ATOM", "USDT"],
       "displayName": "ATOM-USDT",
       "displayLogo1": "/logos/atom.png",
       "displayLogo2": "/logos/usdt.png",

@@ -14,6 +14,7 @@ import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 async function fetchTokenBalance({
   client,
@@ -77,18 +78,20 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet, status } =
+  const { address, network, client, chainId, activeWallet, status } =
     useRecoilValue(walletState)
+  const connectedWallet = useConnectedWallet()
+  const selectedAddr = connectedWallet?.addresses[chainId] || address;
   // TODO: Adding this fixes the issue where refresh means no client
-  const { connectKeplr } = useConnectKeplr()
-  const { connectLeap } = useConnectLeap()
-  if (!client && status == '@wallet-state/restored') {
-    if (activeWallet === 'leap') {
-      connectLeap()
-    } else {
-      connectKeplr()
-    }
-  }
+  // const { connectKeplr } = useConnectKeplr()
+  // const { connectLeap } = useConnectLeap()
+  // if (!client && status == '@wallet-state/restored') {
+  //   if (activeWallet === 'leap') {
+  //     connectLeap()
+  //   } else {
+  //     connectKeplr()
+  //   }
+  // }
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
   const {
@@ -96,7 +99,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
     isLoading,
     refetch,
   } = useQuery(
-    ['tokenBalance', tokenSymbol, address, network],
+    ['tokenBalance', tokenSymbol, selectedAddr, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
       return fetchTokenBalance({
@@ -107,7 +110,11 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: !!tokenSymbol && !!client && (!!tokenInfo || !!ibcAssetInfo),
+      enabled:
+        !!tokenSymbol &&
+        !!address &&
+        !!client &&
+        (!!tokenInfo || !!ibcAssetInfo),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
