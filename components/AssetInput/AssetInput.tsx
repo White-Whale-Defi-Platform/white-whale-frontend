@@ -21,10 +21,11 @@ interface AssetInputProps {
   edgeTokenList?: string[]
   ignoreSlack?: boolean
   hideMax?: boolean
+  hideDollarValue?: boolean
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
-  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax } = props
+  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
 
@@ -53,7 +54,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
       .toString()
   }, [tokenPrice, token?.amount])
 
-  const balanceWithDecimals = useMemo(() => num(balance).dp(token.decimals).toString(), [balance, token.decimals]);
+  const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).toString(), [balance, token.decimals]);
 
 
   return (
@@ -61,7 +62,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
       <WhaleInput {...props} />
       <BalanceWithMax
         balance={balanceWithDecimals}
-        hideDollarValue={true}
+        hideDollarValue={hideDollarValue}
         numberOfTokens={numberOfTokens}
         dollarValue={dollarValue}
         maxDisabled={maxDisabled}

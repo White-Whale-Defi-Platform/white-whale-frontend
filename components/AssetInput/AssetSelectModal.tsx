@@ -51,8 +51,6 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
         onClick={() => !disabled && onOpen()}
         justifyContent="space-between"
         width={['full', 'fit-content']}
-        // sx={{ 'button': {margin : 'unset'} }}
-        // style={{margin : "unset"}}
       >
         {children}
       </HStack>
@@ -75,7 +73,6 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
             <SearchInput onChange={setSearch} />
             <AssetList
               amount={amount}
-              // assetList={assets}
               onChange={onAssetChange}
               search={search}
               edgeTokenList={edgeTokenList}

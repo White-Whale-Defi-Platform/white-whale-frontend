@@ -64,7 +64,10 @@ type BalanceWithMaxProps = {
 const BalanceWithMax = ({ balance, maxDisabled, numberOfTokens, dollarValue, onMaxClick, hideMax, hideDollarValue }: BalanceWithMaxProps) => {
     return (
         <HStack width="full" px={5}>
-            <TokenToPrice numberOfTokens={numberOfTokens} dollarValue={dollarValue} hide={hideDollarValue} />
+            <TokenToPrice 
+                numberOfTokens={numberOfTokens} 
+                dollarValue={dollarValue} 
+                hide={hideDollarValue} />
             <Balance balance={balance} />
             <MaxButton disabled={maxDisabled} onClick={onMaxClick} hideMax={hideMax} />
 

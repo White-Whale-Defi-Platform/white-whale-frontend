@@ -171,6 +171,7 @@ const NewPositionForm: FC<Props> = ({
               // edgeTokenList={tokenAList}
               // showList={false}
               hideToken={tokenB?.tokenSymbol}
+              hideDollarValue={true}
               // minMax={false}
               disabled={isInputDisabled}
               balance={tokenABalance}
@@ -213,6 +214,7 @@ const NewPositionForm: FC<Props> = ({
               // minMax={false}
               disabled={isInputDisabled}
               balance={tokenBBalance}
+              hideDollarValue={true}
               {...field}
               token={tokenB}
               onChange={(value, isTokenChange) => {

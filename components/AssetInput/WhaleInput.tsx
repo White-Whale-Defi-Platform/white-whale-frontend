@@ -2,23 +2,19 @@ import { FC } from 'react'
 
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
-  Button,
   forwardRef,
   HStack,
   IconButton,
   Image,
   Input,
   Stack,
-  Text,
-  VStack,
+  Text
 } from '@chakra-ui/react'
 // import { Asset } from 'types/blockchain'
 import FallbackImage from 'components/FallbackImage'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
-import { useTokenInfo } from 'hooks/useTokenInfo'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
-import { num } from 'libs/num'
 
 import AssetSelectModal from './AssetSelectModal'
 
@@ -40,8 +36,6 @@ interface AssetInputProps {
 
 
 const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
-
-  console.log({ tokenInfo, symbol, showIcon })
 
   const formatSymbol = symbol?.replace('-', '/')
 
