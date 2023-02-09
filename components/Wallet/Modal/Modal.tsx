@@ -24,7 +24,7 @@ function WalletModal({ isOpenModal, onCloseModal, chainId }) {
         <ModalCloseButton />
         <ModalBody>
           <VStack justify="center" align="center" textAlign="center">
-            {chainId === 'phoenix-1' && (
+            {(chainId !== 'comdex-1' && chainId !== 'injective-1') && (
               <TerraStationConnectButton onCloseModal={onCloseModal} />
             )}
             <KeplrConnectButton onCloseModal={onCloseModal} />

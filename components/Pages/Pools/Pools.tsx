@@ -1,17 +1,14 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { useTokenPrice } from 'hooks/useTokenPrice'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { getTokenCGCId } from 'util/coingecko'
 import { getPairAprAndDailyVolume } from 'util/coinhall'
 import { STABLE_COIN_LIST } from 'util/constants'
 
@@ -32,13 +29,11 @@ const Pools: FC<Props> = () => {
   const { address, chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
   const router = useRouter()
-  const chains = useChains()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
-  const { tokenPrices } = useTokenPrice()
   const [pools, isLoading] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
-      refetchInBackground: true,
+      refetchInBackground: false,
       pools: poolList?.pools,
       client,
     })
@@ -50,16 +45,15 @@ const Pools: FC<Props> = () => {
   )
 
   const initPools = useCallback(async () => {
-    if (Object.keys(tokenPrices).length === 0) return
-    if (!pools) return
+    if (!pools || (pools && pools.length === 0)) return
     if (allPools.length > 0) {
       return
     }
-
     setInitLoading(true)
-
-    const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(pools)
-
+    const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(
+      pools,
+      chainId
+    )
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
@@ -68,7 +62,6 @@ const Pools: FC<Props> = () => {
         ),
       }
     })
-
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
         const displayAssetOrder = pool.displayName.split('-')
@@ -78,14 +71,12 @@ const Pools: FC<Props> = () => {
         const pairInfos = pool.liquidity.reserves.total
         const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
         const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
-
         let price = 0
         if (displayAssetOrder[0] === pool.assetOrder[0]) {
           price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
         } else {
           price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
         }
-
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
@@ -98,7 +89,6 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-
           totalLiq: pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
@@ -111,12 +101,10 @@ const Pools: FC<Props> = () => {
         }
       })
     )
-
     setAllPools(_allPools)
     setTimeout(() => {
       setInitLoading(false)
     }, 500)
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools])
 

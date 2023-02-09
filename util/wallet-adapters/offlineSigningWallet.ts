@@ -21,7 +21,7 @@ import {
   Tx,
   TxBody,
   TxInfo,
-} from '@terra-money/terra.js'
+} from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 
 import Injective from '../../services/injective'

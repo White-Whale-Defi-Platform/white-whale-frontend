@@ -1,4 +1,4 @@
-import { Msg } from '@terra-money/terra.js'
+import { Msg } from '@terra-money/feather.js'
 import { PairResponse, Asset, Pair } from './terraswap'
 import { Network } from './network'
 

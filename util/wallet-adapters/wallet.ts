@@ -2,7 +2,7 @@ import { JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { ExecuteResult } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { Coin } from '@cosmjs/stargate'
-import { TxInfo } from '@terra-money/terra.js'
+import { TxInfo } from '@terra-money/feather.js'
 
 export interface Wallet {
   post: (
