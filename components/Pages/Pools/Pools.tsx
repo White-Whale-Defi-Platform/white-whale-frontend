@@ -66,8 +66,8 @@ const Pools: FC<Props> = () => {
       _pools.map(async (pool) => {
         const displayAssetOrder = pool.displayName.split('-')
         const isUSDPool =
-          STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
-          STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+          STABLE_COIN_LIST?.includes(pool?.pool_assets[0].symbol) ||
+          STABLE_COIN_LIST?.includes(pool?.pool_assets[1].symbol)
         const pairInfos = pool.liquidity.reserves.total
         const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
         const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals

@@ -27,7 +27,7 @@ interface AssetInputProps {
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
-  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax, hideDollarValue, showBalanceSlider} = props
+  const { balance, disabled, isSingleInput, value:token, onChange, ignoreSlack, hideMax, hideDollarValue, showBalanceSlider} = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
 
@@ -63,7 +63,6 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
   }, [tokenPrice, token?.amount])
 
   const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).toString(), [balance, token.decimals]);
-
 
   return (
     <VStack width="full">

@@ -124,8 +124,10 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               color="brand.500"
               placeholder="0.00"
               disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
-              onChange={({ target }) =>
+              onChange={({ target }) =>{
+                console.log({ ...token, amount: target.value })
                 onChange({ ...token, amount: target.value })
+              }
               }
             />
           </HStack>

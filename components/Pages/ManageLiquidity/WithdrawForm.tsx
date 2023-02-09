@@ -58,6 +58,8 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
       tx.reset()
 
+    console.log({value})
+
     setToken(value)
   }
 
