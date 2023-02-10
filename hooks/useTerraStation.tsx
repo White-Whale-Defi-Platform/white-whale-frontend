@@ -35,7 +35,7 @@ export const useTerraStation = (onCloseModal) => {
       return console.log('no connected wallet found')
     }
 
-    let testnet = new LCDClient({
+    const testnet = new LCDClient({
       'pisco-1':{
         lcd: 'https://pisco-lcd.terra.dev',
         chainID: 'pisco-1',
@@ -47,7 +47,7 @@ export const useTerraStation = (onCloseModal) => {
     })
     // TODO: Make this better and derived from like a config or something
     // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
-    let mainnet = new LCDClient({ 
+    const mainnet = new LCDClient({ 
       'juno-1':{
         lcd: 'https://ww-juno-rest.polkachu.com',
         chainID: 'juno-1',
@@ -56,36 +56,21 @@ export const useTerraStation = (onCloseModal) => {
         prefix: 'juno',
       },
       'phoenix-1':{
-        lcd: 'https://rest.cosmos.directory/terra2',
+        lcd: 'https://ww-terra-rest.polkachu.com',
         chainID: 'phoenix-1',
         gasAdjustment: 1.75,
         gasPrices: { uluna: 0.015 },
-        prefix: 'luna',
+        prefix: 'terra',
       },
       'chihuahua-1':{
-        lcd: 'https://rest.cosmos.directory/chihuahua',
+        lcd: 'https://ww-chihuahua-rest.polkachu.com',
         chainID: 'chihuahua-1',
         gasAdjustment: 1.75,
         gasPrices: { uhuahua: 0.015 },
         prefix: 'chihuahua',
-      },
-      'comdex-1':{
-        lcd: 'https://rest.cosmos.directory/comdex',
-        chainID: 'comdex-1',
-        gasAdjustment: 1.75,
-        gasPrices: { ucmdx: 0.015 },
-        prefix: 'comdex',
-      },
-      'injective-1':{
-        lcd: 'https://rest.cosmos.directory/injective',
-        chainID: 'injective-1',
-        gasAdjustment: 1.75,
-        gasPrices: { uinj: 0.015 },
-        prefix: 'inj',
       }
     })
-    console.log(mainnet);
-    console.log(connectedWallet)
+
     const wasmChainClient = new TerraStationWallet(
       connectedWallet,
       currentWalletState.network === 'mainnet' ? mainnet : testnet,
