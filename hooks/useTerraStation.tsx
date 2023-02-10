@@ -49,21 +49,21 @@ export const useTerraStation = (onCloseModal) => {
     // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
     const mainnet = new LCDClient({ 
       'juno-1':{
-        lcd: 'https://rest.cosmos.directory/juno',
+        lcd: 'https://ww-juno-rest.polkachu.com',
         chainID: 'juno-1',
         gasAdjustment: 1.75,
         gasPrices: { ujuno: 0.015 },
         prefix: 'juno',
       },
       'phoenix-1':{
-        lcd: 'https://rest.cosmos.directory/terra2',
+        lcd: 'https://ww-terra-rest.polkachu.com',
         chainID: 'phoenix-1',
         gasAdjustment: 1.75,
         gasPrices: { uluna: 0.015 },
         prefix: 'terra',
       },
       'chihuahua-1':{
-        lcd: 'https://rest.cosmos.directory/chihuahua',
+        lcd: 'https://ww-chihuahua-rest.polkachu.com',
         chainID: 'chihuahua-1',
         gasAdjustment: 1.75,
         gasPrices: { uhuahua: 0.015 },
