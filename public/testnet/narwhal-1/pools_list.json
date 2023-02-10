@@ -55,8 +55,8 @@
             "denom": "migaloo1j08452mqwadp8xu25kn9rleyl2gufgfjnv0sn8dvynynakkjukcq5u780c"
           }
         ],
-        "lp_token": "migaloo149ltwdnpxrhx9al42s359glcjnsuc6x3dalz28f04dsxhlu7jhmqyxvnax",
-        "swap_address": "migaloo1k8re7jwz6rnnwrktnejdwkwnncte7ek7gt29gvnl3sdrg9mtnqksdhut0u",
+        "lp_token": "migaloo1q6kpxy6ar5lkxqudjvryarrrttmakwsv32ahx8smkksp6dqq87msy582f6",
+        "swap_address": "migaloo1x4u2l2zkv5ewu7fn4g85vcddz6jtmy0kwy49wacr0vu9u37uspfsgrh2ah",
         "staking_address": "",
         "rewards_tokens": []
       },
@@ -94,6 +94,43 @@
         ],
         "lp_token": "migaloo1c2f79k5kykr5s4zhknn5w56hs5c9a8zxh4w03x07dnzwyrcj4pfsq578ez",
         "swap_address": "migaloo1qjxu65ucccpg8c5kac8ng6yxfqq85fluwd0p9nt74g2304qw8eyqwr6krj",
+        "staking_address": "",
+        "rewards_tokens": []
+      },
+      {
+        "pool_id": "WILLye-WILLyb",
+        "lpOrder": ["WILLye", "WILLyb"],
+        "displayName": "WILLye-WILLyb",
+        "displayLogo1": "/img/logo.svg",
+        "displayLogo2": "/logos/atom.png",
+        "pool_assets": [
+          {
+            "id": "whale",
+            "chain_id": "narwhal-1",
+            "token_address": "migaloo1sthrn5ep8ls5vzz8f9gp89khhmedahhdqd244dh9uqzk3hx2pzrs227l7u",
+            "symbol": "WILLyz",
+            "name": "WILLyz",
+            "decimals": 6,
+            "logoURI": "/logos/atom.png",
+            "tags": [],
+            "native": false,
+            "denom": "migaloo1sthrn5ep8ls5vzz8f9gp89khhmedahhdqd244dh9uqzk3hx2pzrs227l7u"
+          },
+          {
+            "id": "whale",
+            "chain_id": "narwhal-1",
+            "token_address": "migaloo12pwnhtv7yat2s30xuf4gdk9qm85v4j3e6p44let47pdffpklcxlq592rdm",
+            "symbol": "WILLye",
+            "name": "WILLye",
+            "decimals": 6,
+            "logoURI": "/logos/atom.png",
+            "tags": [],
+            "native": false,
+            "denom": "migaloo12pwnhtv7yat2s30xuf4gdk9qm85v4j3e6p44let47pdffpklcxlq592rdm"
+          }
+        ],
+        "lp_token": "migaloo13h9k5rsrgveg6sdtzg34qg499ns0e5kku74kapnskegtwyfspf6qmzlexw",
+        "swap_address": "migaloo10fqy0npt7djm8lg847v9rqlng88kqfdvl8tyt4ge204wf52sy68q9f8arr",
         "staking_address": "",
         "rewards_tokens": []
       }
