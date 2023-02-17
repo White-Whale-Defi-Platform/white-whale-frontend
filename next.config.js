@@ -51,7 +51,7 @@ const config = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self' https://*.netlify.app https://*.whitewhale.money; style-src 'self' https://*.netlify.app https://*.whitewhale.money; form-action 'self' https://*.netlify.app https://*.whitewhale.money; script-src 'self' https://*.netlify.app https://*.whitewhale.money; connect-src 'self' https://*.netlify.app https://*.whitewhale.money; img-src 'self' https://*.netlify.app https://*.whitewhale.money; base-uri 'self' https://*.netlify.app https://*.whitewhale.money;"
+            value: "frame-ancestors 'none'"
           },
           {
             key: 'X-Content-Type-Options',
