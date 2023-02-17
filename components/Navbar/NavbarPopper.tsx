@@ -54,7 +54,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
                                 px={10}
                                 pb={2}
                                 width="full"
-                                borderBottom={index === numberOfLinks - 1 ? 'unset' : "1px solid rgba(0, 0, 0, 0.5)" }
+                                borderBottom={index === numberOfLinks - 1 ? 'unset' : "1px solid rgba(255, 255, 255, 0.1);" }
                                 onClick={onClose}
                             >
                                 <NavbarLink

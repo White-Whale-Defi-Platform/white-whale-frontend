@@ -9,13 +9,13 @@ type Props = {
 
 const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
   <HStack alignItems="center">
-    <HStack spacing="-1" width="60px">
-      <Box bg="#252525" boxShadow="lg" borderRadius="full" position="relative">
+    <HStack spacing="-1" width="70px">
+      <Box boxShadow="lg" borderRadius="full" position="relative" p="5px" bg="black">
         <Image
           src={token1Img}
           width="auto"
-          maxW="1.7rem"
-          maxH="1.7rem"
+          maxW="1.6rem"
+          maxH="1.6rem"
           alt="token1-img"
           fallback={
             <FallbackImage
@@ -26,12 +26,12 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           }
         />
       </Box>
-      <Box borderRadius="full">
+      <Box borderRadius="full" p="4px" border="1px solid rgba(255, 255, 255, 0.1)">
         <Image
           src={token2Img}
           width="auto"
-          maxW="1.7rem"
-          maxH="1.7rem"
+          maxW="1.6rem"
+          maxH="1.6rem"
           alt="token2-img"
           fallback={
             <FallbackImage

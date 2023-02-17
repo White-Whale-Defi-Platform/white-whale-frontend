@@ -81,7 +81,7 @@
     "react-dom": "18.1.0",
     "react-hook-form": "^7.32.1",
     "react-hot-toast": "^2.2.0",
-    "react-icons": "^4.4.0",
+    "react-icons": "^4.7.1",
     "react-merge-refs": "^1.1.0",
     "react-query": "^3.39.1",
     "recoil": "^0.7.3",

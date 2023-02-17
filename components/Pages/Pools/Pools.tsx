@@ -1,20 +1,23 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Fade, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { stackViewAtom } from './stakeView'
 import { getPairAprAndDailyVolume } from 'util/coinhall'
 import { STABLE_COIN_LIST } from 'util/constants'
 
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
+import NewTable from './NewTable'
+import { CiGrid2H, CiGrid41 } from 'react-icons/ci'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -38,6 +41,9 @@ const Pools: FC<Props> = () => {
       client,
     })
   )
+  const [stackView, setStackView] = useRecoilState(stackViewAtom)
+
+  console.log('stackView', stackView)
 
   const showCommingSoon = useMemo(
     () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
@@ -140,23 +146,53 @@ const Pools: FC<Props> = () => {
     <VStack
       width={{ base: '100%', md: '1160px' }}
       alignItems="center"
-      margin="auto"
+    // margin="auto"
     >
       <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
           </Text>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
-          >
-            New Position
-          </Button>
+          <HStack>
+
+            <IconButton
+              aria-label='stak view'
+              variant="unstyled"
+              color={stackView ? "white" : '#A9A9A9'}
+              icon={<CiGrid2H size="1.6rem" />}
+              onClick={() => setStackView(!stackView)}
+            />
+            <IconButton
+              aria-label='stak view'
+              variant="unstyled"
+              color={!stackView ? "white" : '#A9A9A9'}
+              icon={<CiGrid41 size="1.6rem" />}
+              onClick={() => setStackView(!stackView)}
+            />
+
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
+            >
+              New Position
+            </Button>
+          </HStack>
         </HStack>
-        <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
-        <MobilePools pools={myPools} />
+
+        <MyPoolsTable
+          show={stackView}
+          pools={myPools}
+          isLoading={isLoading || isInitLoading}
+        />
+
+        <NewTable
+          pools={myPools}
+          show={!stackView}
+          isLoading={isLoading || isInitLoading}
+        />
+        {/* <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
+        <MobilePools pools={myPools} /> */}
       </Box>
 
       <Box>
