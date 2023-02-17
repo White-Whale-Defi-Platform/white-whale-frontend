@@ -51,7 +51,7 @@ const config = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; style-src 'self'; form-action 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'self';"
+            value: "default-src 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money; style-src 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money; form-action 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money; script-src 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money; connect-src 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money; img-src 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money; base-uri 'self' https://*exquisite-salamander-a1fe5e.netlify.app https://*.whitewhale.money;"
           },
           {
             key: 'X-Content-Type-Options',
