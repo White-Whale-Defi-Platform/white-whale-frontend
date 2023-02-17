@@ -35,6 +35,32 @@ const config = {
       },
     ]
   },
+  // Adding policies:
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; style-src 'self'; form-action 'self'; script-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'self';"
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          }
+        ],
+      },
+    ];
+  },
   reactStrictMode: false,
   target: 'serverless',
   // TODO: Needed to disabled all build error checking and eslint checking due to error with usage of Controller component, to fix that needs to be fixed
