@@ -174,7 +174,8 @@
     {
       "pool_id": "BDOG-HUAHUA",
       "lpOrder": ["BDOG", "HUAHUA"],
-      "dispalyName": "BDOG-HUAHUA",
+      "assetOrder": ["BDOG", "HUAHUA"],
+      "displayName": "BDOG-HUAHUA",
       "displayLogo1": "/logos/bdog.svg",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
@@ -210,7 +211,8 @@
     {
       "pool_id": "ASH-GDOG",
       "lpOrder": ["ASH", "GDOG"],
-      "dispalyName": "ASH-GDOG",
+      "assetOrder": ["ASH", "GDOG"],
+      "displayName": "ASH-GDOG",
       "displayLogo1": "/logos/ash.svg",
       "displayLogo2": "/logos/gdog.svg",
       "pool_assets": [
@@ -246,7 +248,8 @@
     {
       "pool_id": "ASH-BDOG",
       "lpOrder": ["ASH", "BDOG"],
-      "dispalyName": "ASH-BDOG",
+      "assetOrder": ["ASH", "BDOG"],
+      "displayName": "ASH-BDOG",
       "displayLogo1": "/logos/ash.svg",
       "displayLogo2": "/logos/bdog.svg",
       "pool_assets": [
