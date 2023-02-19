@@ -186,15 +186,15 @@
         "coinDecimals": 6,
         "gasPriceStep": {
           "low": 0.25,
-          "average": 0.50,
-          "high": 1.00
+          "average": 0.5,
+          "high": 1.0
         }
       }
     ],
     "gasPriceStep": {
       "low": 0.25,
-      "average": 0.50,
-      "high": 1.00
+      "average": 0.5,
+      "high": 1.0
     },
     "coinType": 118,
     "beta": true

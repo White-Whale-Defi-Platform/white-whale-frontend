@@ -1,58 +1,109 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+
 import { TokenItemState, tokenLpAtom } from '../ManageLiquidity/lpAtoms'
+import defaultTokens from './defaultTokens.json'
 import useProvideLP from './hooks/useProvideLP'
 import NewPositionForm from './NewPositionForm'
 
 const NewPosition = () => {
-  const router: NextRouter = useRouter()
+  const [resetForm, setResetForm] = useState(false)
+  const [reverse, setReverse] = useState<boolean>(false)
 
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
-  const { chainId, key, address, status } = useRecoilValue(walletState)
-  const [resetForm, setResetForm] = useState(false)
-  const [reverse, setReverse] = useState<boolean>(false)
-  const params = new URLSearchParams(location.search)
-  const from = params.get('from')
-  const to = params.get('to')
+  const { chainId, network, address, status } = useRecoilValue(walletState)
+  const { simulated, tx } = useProvideLP({ reverse })
+  const router: NextRouter = useRouter()
+  const chains = useChains()
   const { data: poolList } = usePoolsListQuery()
 
-  // useEffect(() => {
-  //     if (address) {
-  //         const [from, to] = defaultTokens[getChainName(address)]
-  //         const params = `?from=${from?.tokenSymbol}&to=${to?.tokenSymbol}`
-  //         setTokenSwapState([from, to])
-  //         setResetForm(true)
-  //         router.replace(params)
-  //     }
-  // }, [address])
+  const chainIdParam = router.query.chainId as string
+  const { from, to } = router.query
+  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currenChain?.label.toLowerCase()
+
+  const tokenList = useMemo(() => {
+    let listObj = {}
+    const { pools = [] } = poolList || {}
+    pools
+      .map(({ pool_assets }) => pool_assets)
+      .map(([a, b]) => {
+        listObj = { ...listObj, [a.symbol]: a, [b.symbol]: b }
+      })
+
+    return Object.keys(listObj).map((row) => {
+      return {
+        symbol: listObj[row].symbol,
+        decimals: listObj[row].decimals,
+        amount: 0,
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolList, chainId])
 
   useEffect(() => {
-    if (!!address && !!from && !!to) {
-      const [A, B] = [from, to].map((token) => ({
-        tokenSymbol: token as string,
+    if (!currentChainId) return
+
+    const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
+    let newState: TokenItemState[] = [
+      {
+        tokenSymbol: String(from),
         amount: 0,
-        decimals: poolList?.pools
-          .map(({ pool_assets }) => pool_assets)
-          .map(([a, b]) =>
-            a?.symbol == (token as string) ? a?.decimals : b?.decimals
-          )[0],
-      }))
-      setTokenSwapState([A, B])
+        decimals: 6,
+      },
+      {
+        tokenSymbol: String(to),
+        amount: 0,
+        decimals: 6,
+      },
+    ]
+
+    if (
+      tokenList.find((row) => row.symbol === from) &&
+      tokenList.find((row) => row.symbol === to)
+    ) {
+    } else {
+      newState = [
+        {
+          tokenSymbol: String(defaultFrom.tokenSymbol),
+          amount: 0,
+          decimals: 6,
+        },
+        {
+          tokenSymbol: String(defaultTo.tokenSymbol),
+          amount: 0,
+          decimals: 6,
+        },
+      ]
       setResetForm(true)
     }
-  }, [address, from, to])
+
+    setTokenSwapState(newState)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, chainId])
 
   useEffect(() => {
-    const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-    router.replace(params, undefined, { shallow: true })
+    if (!currentChainId) return
+
+    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
+      if (
+        tokenList.find((row) => row.symbol === tokenA?.tokenSymbol) &&
+        tokenList.find((row) => row.symbol === tokenB?.tokenSymbol)
+      ) {
+        const url = `/${currentChainId}/pools/new_position?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+        router.push(url)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenA, tokenB])
 
   const onInputChange = (
@@ -66,12 +117,11 @@ const NewPosition = () => {
     newState[index] = {
       tokenSymbol: tokenSymbol,
       amount: Number(amount),
+      decimals: 6,
     }
 
     setTokenSwapState(newState)
   }
-
-  const { simulated, tx } = useProvideLP({ reverse })
 
   return (
     <VStack
@@ -92,7 +142,7 @@ const NewPosition = () => {
           fontSize="28px"
           aria-label="go back"
           icon={<ArrowBackIcon />}
-          onClick={() => router.back()}
+          onClick={() => router.push(`/${chainIdParam}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">
           New Position

@@ -1,21 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, useEffect, useMemo } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
+  Box,
   Button,
   HStack,
-  Text,
-  VStack,
   Spinner,
+  Text,
   Tooltip,
-  Box,
+  VStack,
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
+import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { FC, useEffect, useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { TokenItemState } from '../ManageLiquidity/lpAtoms'
@@ -126,7 +128,7 @@ const NewPositionForm: FC<Props> = ({
   }, [tokenA.tokenSymbol, poolList])
 
   useEffect(() => {
-    if (!edgeList.includes(tokenB.tokenSymbol)) {
+    if (edgeList.length > 0 && !edgeList.includes(tokenB.tokenSymbol)) {
       setValue('token2', { ...tokenB, tokenSymbol: null })
       onInputChange({ ...tokenB, tokenSymbol: null }, 1)
     }

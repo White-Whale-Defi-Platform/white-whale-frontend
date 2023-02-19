@@ -5,7 +5,7 @@
     "label": "Juno",
     "icon": "/logos/juno.svg",
     "rpc": "https://ww-juno-rpc.polkachu.com",
-    "rest": "https://ww-juno-rest.polkachu.com",
+    "rest": "https://juno-rpc.polkachu.com",
     "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-juno-subql",
     "stakeCurrency": {
       "coinDenom": "JUNO",
@@ -146,6 +146,7 @@
     "chainName": "Injective",
     "rpc": "https://ww-injective-rpc.polkachu.com",
     "rest": "https://ww-injective-rest.polkachu.com",
+    "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
     "label": "Injective",
     "icon": "/logos/injective.png",
     "stakeCurrency": {
@@ -236,15 +237,15 @@
         "coinGeckoId": "comdex",
         "gasPriceStep": {
           "low": 0.25,
-          "average": 0.50,
-          "high": 1.00
+          "average": 0.5,
+          "high": 1.0
         }
       }
     ],
     "gasPriceStep": {
       "low": 0.25,
-      "average": 0.50,
-      "high": 1.00
+      "average": 0.5,
+      "high": 1.0
     },
     "coinType": 60,
     "features": ["ibc-transfer", "ibc-go"],

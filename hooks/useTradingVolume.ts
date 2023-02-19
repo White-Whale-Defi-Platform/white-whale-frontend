@@ -50,7 +50,7 @@ export const useTradingVolume = ({ pair, dateTime }) => {
       ? data?.tradingVolumes?.nodes[0]
       : {}
 
-    const tradingVolume = num(fromChainAmount(nodeData?.tradingVolume || 0))
+    const tradingVolume = num(fromChainAmount(nodeData?.tradingVolume || 0, 18))
     const offerAssetPrice = nodeData?.offerAsset
       ? await getTokenPrice(nodeData?.offerAsset, nodeData?.datetime)
       : 0

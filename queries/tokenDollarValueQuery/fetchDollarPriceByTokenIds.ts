@@ -4,15 +4,22 @@ export const fetchDollarPriceByTokenIds = debounce(
   async (tokenIds: Array<string>): Promise<ApiResponse> => {
     const apiIds = tokenIds.flat().join(',')
 
-    const response = await fetch(
-      // `https://api.coingecko.com/api/v3/simple/price?ids=${chainId}&vs_currencies=usd`,
-      `https://api.coingecko.com/api/v3/simple/price?ids=${apiIds}&vs_currencies=usd`,
-      {
-        method: 'GET',
+    try {
+      const response = await fetch(
+        // `https://api.coingecko.com/api/v3/simple/price?ids=${chainId}&vs_currencies=usd`,
+        `https://api.coingecko.com/api/v3/simple/price?ids=${apiIds}&vs_currencies=usd`,
+        {
+          method: 'GET',
+        }
+      )
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        return {}
       }
-    )
-
-    return response.json()
+    } catch (error) {
+      return {}
+    }
   },
   100
 )

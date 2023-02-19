@@ -19,6 +19,7 @@ const getUrl = (chainId, txHash) => {
       return `https://finder.terra.money/testnet/tx/${txHash}`
       break
     case 'juno-1':
+
       return `https://mintscan.io/juno/txs/${txHash}`
       break
     case 'phoenix-1':

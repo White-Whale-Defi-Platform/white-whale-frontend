@@ -1,48 +1,59 @@
+import { FC, useEffect, useState } from 'react'
+
+import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
-  HStack,
-  Text,
-  VStack,
-  IconButton,
   Box,
+  HStack,
+  IconButton,
   Tab,
-  Tabs,
   TabList,
   TabPanel,
   TabPanels,
+  Tabs,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
-import Page from 'components/Page'
-import { FC, useEffect, useMemo, useState } from 'react'
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import { useRouter, NextRouter } from 'next/router'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
-import { tokenLpAtom } from './lpAtoms'
-import { useBondTokens } from '../../../hooks/useBondTokens'
-import { executeAddLiquidity } from '../../../services/liquidity'
-import DepositForm from './DepositForm'
-import WithdrawForm from './WithdrawForm'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import useProvideLP from '../NewPosition/hooks/useProvideLP'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
+import { NextRouter, useRouter } from 'next/router'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+
+import useProvideLP from '../NewPosition/hooks/useProvideLP'
+import DepositForm from './DepositForm'
+import { tokenLpAtom } from './lpAtoms'
+import WithdrawForm from './WithdrawForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
-  const params = new URLSearchParams(location.search)
-  const { chainId, key } = useRecoilValue(walletState)
-  const [resetForm, setResetForm] = useState(false)
+  const chains = useChains()
+  const { address, chainId, key, status } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
-  const [isTokenSet, SetIsToken] = useState<boolean>(false)
-
-  const poolId = useMemo(() => {
-    return params.get('poolId')
-  }, [params])
-
-  // const [lpTokens, setLpTokens] = useState(null)
+  const [isTokenSet, setIsToken] = useState<boolean>(false)
+  const { data: poolList } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
-  // usePoolFromListQueryById returns PoolEntityType which includes the swap addr and lp staking addr
-  const [pool] = usePoolFromListQueryById({ poolId })
-
   const { simulated, tx } = useProvideLP({ reverse })
+
+  const poolId = router.query.poolId as string
+  const chainIdParam = router.query.chainId as string
+  const currenChain = chains.find((row) => row.chainId === chainId)
+
+  useEffect(() => {
+    if (currenChain) {
+      if (poolId) {
+        const pools = poolList?.pools
+        if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
+          router.push(`/${currenChain.label.toLowerCase()}/pools`)
+        } else {
+          router.push(
+            `/${currenChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
+          )
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId, poolId, poolList, address, chains])
 
   useEffect(() => {
     if (poolId) {
@@ -51,28 +62,33 @@ const ManageLiquidity: FC = () => {
         {
           tokenSymbol: tokenASymbol,
           amount: 0,
+          decimals: 6,
         },
         {
           tokenSymbol: tokenBSymbol,
           amount: 0,
+          decimals: 6,
         },
       ])
-      SetIsToken(true)
+      setIsToken(true)
     }
     return () => {
       setTokenLPState([
         {
           tokenSymbol: null,
           amount: 0,
+          decimals: 6,
         },
         {
           tokenSymbol: null,
           amount: 0,
+          decimals: 6,
         },
       ])
-      SetIsToken(true)
+      setIsToken(true)
     }
-  }, [poolId, setTokenLPState])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolId])
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
@@ -105,7 +121,7 @@ const ManageLiquidity: FC = () => {
           fontSize="28px"
           aria-label="go back"
           icon={<ArrowBackIcon />}
-          onClick={() => router.back()}
+          onClick={() => router.push(`/${chainIdParam}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">
           Manage Liquidity
@@ -123,10 +139,7 @@ const ManageLiquidity: FC = () => {
           border="2px"
           borderColor="whiteAlpha.200"
           borderRadius="3xl"
-          // px="4"
-          // py="8"
           pt="8"
-          // boxSize="md"
           maxW="600px"
           maxH="fit-content"
         >
@@ -141,7 +154,7 @@ const ManageLiquidity: FC = () => {
                   <DepositForm
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={Boolean(key?.name)}
+                    connected={status}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -152,10 +165,11 @@ const ManageLiquidity: FC = () => {
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  connected={Boolean(key?.name)}
+                  connected={status}
                   tokenA={{
                     tokenSymbol: poolId,
                     amount: 0,
+                    decimals: 6,
                   }}
                   poolId={poolId}
                 />

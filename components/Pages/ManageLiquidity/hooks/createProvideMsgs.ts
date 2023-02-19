@@ -1,4 +1,4 @@
-import { Coin, MsgExecuteContract } from '@terra-money/terra.js'
+import { Coin, MsgExecuteContract } from '@terra-money/feather.js'
 import { Asset, Pool } from 'types/common'
 
 import { getTokenDenom, isNativeAsset } from '../../../../services/asset'

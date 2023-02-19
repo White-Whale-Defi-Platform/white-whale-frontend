@@ -1,6 +1,7 @@
+import { useEffect, useRef } from 'react'
+
 import { useTokenList } from 'hooks/useTokenList'
 import { styled, useMedia, usePersistance } from 'junoblocks'
-import { useEffect, useRef } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   TransactionStatus,

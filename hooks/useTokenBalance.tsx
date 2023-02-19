@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
+
+import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRecoilValue } from 'recoil'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
@@ -7,11 +9,12 @@ import { CW20 } from '../services/cw20'
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
 import { Wallet } from '../util/wallet-adapters'
+import useConnectLeap from './useConnectLeap'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import useConnectKeplr from 'hooks/useConnectKeplr'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 async function fetchTokenBalance({
   client,
@@ -75,13 +78,20 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet, status } =
+  const { address, network, client, chainId, activeWallet, status } =
     useRecoilValue(walletState)
+  // const connectedWallet = useConnectedWallet()
+  // const selectedAddr = connectedWallet?.addresses[chainId] || address;
   // TODO: Adding this fixes the issue where refresh means no client
-  const { connectKeplr } = useConnectKeplr()
-  if (!client && status == '@wallet-state/restored') {
-    connectKeplr()
-  }
+  // const { connectKeplr } = useConnectKeplr()
+  // const { connectLeap } = useConnectLeap()
+  // if (!client && status == '@wallet-state/restored') {
+  //   if (activeWallet === 'leap') {
+  //     connectLeap()
+  //   } else {
+  //     connectKeplr()
+  //   }
+  // }
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
   const {
@@ -92,7 +102,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
     ['tokenBalance', tokenSymbol, address, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
-      return await fetchTokenBalance({
+      return fetchTokenBalance({
         client,
         address,
         token: tokenInfo || ibcAssetInfo,
@@ -100,7 +110,11 @@ export const useTokenBalance = (tokenSymbol: string) => {
       // }
     },
     {
-      enabled: !!tokenSymbol && !!client && (!!tokenInfo || !!ibcAssetInfo),
+      enabled:
+        !!tokenSymbol &&
+        !!address &&
+        !!client &&
+        (!!tokenInfo || !!ibcAssetInfo),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,

@@ -9,22 +9,32 @@ import {
   MsgExecuteContract,
   MsgTransfer,
   TxInfo,
-} from '@terra-money/terra.js'
-import { LCDClient } from '@terra-money/terra.js/dist/client/lcd/LCDClient'
+} from '@terra-money/feather.js'
+// import { LCDClient } from '@terra-money/terra.js/dist/client/lcd/LCDClient'
+import { LCDClient } from '@terra-money/feather.js/dist/client/lcd/LCDClient'
 import { ConnectedWallet } from '@terra-money/wallet-provider'
 import axios from 'axios'
 
 import { TxResponse, Wallet } from './wallet'
 
+const TX_MAAP = new Map([
+  ['juno-1',  'ujuno'],
+  ['phoenix-1', 'uluna'],
+  ['chihuahua-1', 'uhuahua'],  
+  ['comdex-1',  'ucmdx'],
+  ['injective-1',  'uinj']
+])
 export class TerraStationWallet implements Wallet {
   client: ConnectedWallet
   lcdClient: LCDClient
   network: string
+  chainID: string
 
-  constructor(client: ConnectedWallet, lcdClient: LCDClient, network: string) {
+  constructor(client: ConnectedWallet, lcdClient: LCDClient, network: string, chainID: string) {
     this.client = client
     this.lcdClient = lcdClient
     this.network = network
+    this.chainID = chainID
   }
 
   convertType(type: string): string {
@@ -73,12 +83,14 @@ export class TerraStationWallet implements Wallet {
   post(
     senderAddress: string,
     msgs: EncodeObject[],
-    memo: string | undefined
+    memo: string | undefined,
+    chainID: string = 'juno-1'
   ): Promise<TxResponse> {
     return this.client
       .post({
         msgs: msgs.map((msg) => this.convertMsg(msg)),
         memo: memo,
+        chainID: this.chainID,
       })
       .then((result) => {
         return {
@@ -105,6 +117,7 @@ export class TerraStationWallet implements Wallet {
     return this.client
       .post({
         msgs: [executeMsg],
+        chainID: this.chainID,
       })
       .then((result) => {
         return {
@@ -143,6 +156,8 @@ export class TerraStationWallet implements Wallet {
     messages: readonly EncodeObject[],
     memo: string | undefined
   ): Promise<number> {
+
+    console.log(this.lcdClient.config)
     let tx = {
       msgs: messages
         .map((msg) =>
@@ -161,12 +176,14 @@ export class TerraStationWallet implements Wallet {
           return msg
         }),
       memo: memo,
+      chainID: this.chainID,
     }
 
     // @ts-ignore
     return this.lcdClient.auth
       .accountInfo(signerAddress)
       .then((result) => {
+        console.log(this.lcdClient.config)
         return this.lcdClient.tx.estimateFee(
           [
             {
@@ -178,26 +195,32 @@ export class TerraStationWallet implements Wallet {
         )
       })
       .then((result) => {
-        return result.amount.get('uluna').amount.toNumber()
+        console.log(result)
+        console.log(TX_MAAP.get(this.chainID))
+        return result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
       })
       .catch((err) => {
         if (axios.isAxiosError(err)) {
-          throw new Error(err.response.data.message)
+          console.log(err)
+          throw new Error(err.response.data)
         }
         throw err
       })
   }
 
   getChainId(): Promise<String> {
-    return Promise.resolve(this.lcdClient.config.chainID)
+    return Promise.resolve(this.chainID)
   }
+
 
   getNetwork(): Promise<String> {
     return Promise.resolve(this.network)
   }
 
   getBalance(address: string, searchDenom: string): Promise<Coin> {
+
     return this.lcdClient.bank.balance(address).then(([coins]) => {
+      // console.log(coins)
       const coin = coins.get(searchDenom)
       if (coin === undefined) {
         return {
@@ -213,6 +236,7 @@ export class TerraStationWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
-    return this.lcdClient.tx.txInfo(txHash)
+    return this.lcdClient.tx.txInfo(txHash,this.chainID,
+    )
   }
 }

@@ -21,7 +21,7 @@ import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { TokenItemState } from './lpAtoms'
 
 type Props = {
-  connected: WalletStatusType
+  connected?: WalletStatusType
   tokenA: TokenItemState
   tokenB: TokenItemState
   tx: any
