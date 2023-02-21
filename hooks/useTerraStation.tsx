@@ -1,21 +1,24 @@
 import { useEffect } from 'react'
 
-import { LCDClient } from '@terra-money/terra.js'
+import { LCDClient } from '@terra-money/feather.js'
 import {
   Connection,
   ConnectType,
   useConnectedWallet,
   useWallet,
 } from '@terra-money/wallet-provider'
+
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
+import { useChainInfo } from './useChainInfo'
 
 export const useTerraStation = (onCloseModal) => {
   const { connect } = useWallet()
   const connectedWallet = useConnectedWallet()
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
+  let [chainInfo] = useChainInfo(currentWalletState.chainId)
 
   const filterForStation = (connection: Connection) => {
     return connection.identifier === 'station'
@@ -31,28 +34,62 @@ export const useTerraStation = (onCloseModal) => {
     if (!connectedWallet) {
       return console.log('no connected wallet found')
     }
+
     const testnet = new LCDClient({
-      URL: 'https://pisco-lcd.terra.dev',
-      chainID: 'pisco-1',
+      'pisco-1':{
+        lcd: 'https://pisco-lcd.terra.dev',
+        chainID: 'pisco-1',
+        gasAdjustment: 1.75,
+        gasPrices: { uluna: 0.015 },
+        prefix: 'terra',
+      }
+      
     })
-    const mainnet = new LCDClient({
-      URL: 'https://phoenix-lcd.terra.dev',
-      chainID: 'phoenix-1',
+    // TODO: Make this better and derived from like a config or something
+    // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
+    const mainnet = new LCDClient({ 
+      'juno-1':{
+        lcd: 'https://ww-juno-rest.polkachu.com',
+        chainID: 'juno-1',
+        gasAdjustment: 1.75,
+        gasPrices: { ujuno: 0.015 },
+        prefix: 'juno',
+      },
+      'phoenix-1':{
+        lcd: 'https://ww-terra-rest.polkachu.com',
+        chainID: 'phoenix-1',
+        gasAdjustment: 1.75,
+        gasPrices: { uluna: 0.015 },
+        prefix: 'terra',
+      },
+      'chihuahua-1':{
+        lcd: 'https://ww-chihuahua-rest.polkachu.com',
+        chainID: 'chihuahua-1',
+        gasAdjustment: 1.75,
+        gasPrices: { uhuahua: 0.015 },
+        prefix: 'chihuahua',
+      }
     })
+
     const wasmChainClient = new TerraStationWallet(
       connectedWallet,
       currentWalletState.network === 'mainnet' ? mainnet : testnet,
-      currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet'
+      currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
+      currentWalletState.chainId
     )
+     
     setCurrentWalletState({
       key: null,
       status: WalletStatusType.connected,
-      address: wasmChainClient.client?.terraAddress,
+      address: connectedWallet.addresses[currentWalletState.chainId],
       chainId: currentWalletState.chainId,
       network: currentWalletState.network,
       client: wasmChainClient,
       activeWallet: 'station',
     })
+
+
+   
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectedWallet, currentWalletState.network])
 
