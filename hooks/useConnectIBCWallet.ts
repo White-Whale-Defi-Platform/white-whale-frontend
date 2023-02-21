@@ -1,6 +1,7 @@
-import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useEffect } from 'react'
 import { useMutation } from 'react-query'
+
+import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useRecoilState } from 'recoil'
 
 import { ibcWalletState, WalletStatusType } from '../state/atoms/walletAtoms'

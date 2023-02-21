@@ -1,52 +1,96 @@
 {
-  "juno": [
-    {
-      "tokenSymbol": "JUNO",
-      "amount": 0
-    },
-    {
-      "tokenSymbol": "ATOM",
-      "amount": 0
-    }
-  ],
-  "terra": [
-    {
-      "tokenSymbol": "LUNA",
-      "amount": 0
-    },
-    {
-      "tokenSymbol": "ATOM",
-      "amount": 0
-    }
-  ],
-  "chihuahua": [
-    {
-      "tokenSymbol": "HUAHUA",
-      "amount": 0
-    },
-    {
-      "tokenSymbol": "PUPPY",
-      "amount": 0
-    }
-  ],
-  "inj": [
-    {
-      "tokenSymbol": "INJ",
-      "amount": 0
-    },
-    {
-      "tokenSymbol": "USDT",
-      "amount": 0
-    }
-  ],
-  "comdex": [
-    {
-      "tokenSymbol": "CMDX",
-      "amount": 0
-    },
-    {
-      "tokenSymbol": "ATOM",
-      "amount": 0
-    }
-  ]
+  "mainnet": {
+    "juno": [
+      {
+        "tokenSymbol": "JUNO",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "ATOM",
+        "amount": 0
+      }
+    ],
+    "terra": [
+      {
+        "tokenSymbol": "LUNA",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "ATOM",
+        "amount": 0
+      }
+    ],
+    "chihuahua": [
+      {
+        "tokenSymbol": "HUAHUA",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "PUPPY",
+        "amount": 0
+      }
+    ],
+    "injective": [
+      {
+        "tokenSymbol": "INJ",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "USDT",
+        "amount": 0
+      }
+    ],
+    "comdex": [
+      {
+        "tokenSymbol": "CMDX",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "ATOM",
+        "amount": 0
+      }
+    ]
+  },
+  "testnet": {
+    "juno": [
+      {
+        "tokenSymbol": "JUNO",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "JUNOONE",
+        "amount": 0
+      }
+    ],
+    "terra": [
+      {
+        "tokenSymbol": "LUNA",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "LUNAONE",
+        "amount": 0
+      }
+    ],
+    "injective": [
+      {
+        "tokenSymbol": "INJ",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "USDT",
+        "amount": 0
+      }
+    ],
+    "comdex": [
+      {
+        "tokenSymbol": "CMDX",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "ATOM",
+        "amount": 0
+      }
+    ]
+  }
 }

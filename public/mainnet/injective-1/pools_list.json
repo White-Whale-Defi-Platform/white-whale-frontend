@@ -26,9 +26,10 @@
     {
       "pool_id": "INJ-USDT",
       "lpOrder": ["INJ", "USDT"],
-      "dispalyName": "INJ-USDT",
+      "assetOrder": ["INJ", "USDT"],
+      "displayName": "INJ-USDT",
       "displayLogo1": "/logos/injective.png",
-      "displayLogo2":  "/logos/usdt.png",
+      "displayLogo2": "/logos/usdt.png",
       "pool_assets": [
         {
           "chain_id": "injective-1",
@@ -62,9 +63,10 @@
     {
       "pool_id": "ATOM-USDT",
       "lpOrder": ["ATOM", "USDT"],
-      "dispalyName": "ATOM-USDT",
+      "assetOrder": ["ATOM", "USDT"],
+      "displayName": "ATOM-USDT",
       "displayLogo1": "/logos/atom.png",
-      "displayLogo2":  "/logos/usdt.png",
+      "displayLogo2": "/logos/usdt.png",
       "pool_assets": [
         {
           "chain_id": "injective-1",

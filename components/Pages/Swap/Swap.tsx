@@ -1,10 +1,11 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
-import getChainName from 'libs/getChainName'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -23,41 +24,93 @@ const Swap: FC<SwapProps> = ({}) => {
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const [reverse, setReverse] = useState<boolean>(false)
-  const { chainId, address, key, status } = useRecoilValue(walletState)
   const [resetForm, setResetForm] = useState<boolean>(false)
+
+  const { chainId, address, network, status } = useRecoilValue(walletState)
+  const chains = useChains()
+  const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
+  const { data: poolList } = usePoolsListQuery()
   const router = useRouter()
+  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currenChain?.label.toLowerCase()
+
+  const tokenList = useMemo(() => {
+    let listObj = {}
+    const { pools = [] } = poolList || {}
+    pools
+      .map(({ pool_assets }) => pool_assets)
+      .map(([a, b]) => {
+        listObj = { ...listObj, [a.symbol]: a, [b.symbol]: b }
+      })
+
+    return Object.keys(listObj).map((row) => {
+      return {
+        symbol: listObj[row].symbol,
+        decimals: listObj[row].decimals,
+        amount: 0,
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolList, chainId])
 
   useEffect(() => {
+    if (!currentChainId) return
     const { from, to } = router.query
+    const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
 
-    if (!from && !to) {
-      if (address) {
-        const [defaultFrom, defaultTo] = defaultTokens[getChainName(address)]
-        const params = `?from=${defaultFrom?.tokenSymbol}&to=${defaultTo?.tokenSymbol}`
+    let newState: TokenItemState[] = [
+      {
+        tokenSymbol: String(from),
+        amount: 0,
+        decimals: 6,
+      },
+      {
+        tokenSymbol: String(to),
+        amount: 0,
+        decimals: 6,
+      },
+    ]
 
-        setTokenSwapState([defaultFrom, defaultTo])
-        router.replace(params)
-        setResetForm(true)
-      }
+    if (
+      tokenList.find((row) => row.symbol === from) &&
+      tokenList.find((row) => row.symbol === to)
+    ) {
+      return
     } else {
-      const newState: TokenItemState[] = [
+      newState = [
         {
-          tokenSymbol: String(from),
+          tokenSymbol: String(defaultFrom.tokenSymbol),
           amount: 0,
           decimals: 6,
         },
         {
-          tokenSymbol: String(to),
+          tokenSymbol: String(defaultTo.tokenSymbol),
           amount: 0,
           decimals: 6,
         },
       ]
-      setTokenSwapState(newState)
+      setResetForm(true)
+    }
+
+    setTokenSwapState(newState)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, currentChainId, tokenList])
+
+  useEffect(() => {
+    if (!currentChainId) return
+
+    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
+      if (
+        tokenList.find((row) => row.symbol === tokenA?.tokenSymbol) &&
+        tokenList.find((row) => row.symbol === tokenB?.tokenSymbol)
+      ) {
+        const url = `/${currentChainId}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+        router.push(url)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, chainId])
-
-  const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
+  }, [tokenA, tokenB])
 
   const clearForm = (reset) => {
     setTokenSwapState([
@@ -93,20 +146,12 @@ const Swap: FC<SwapProps> = ({}) => {
     setTokenSwapState([A, B])
   }
 
-  useEffect(() => {
-    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
-      const params = `?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
-      router.replace(params, undefined, { shallow: true })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenA, tokenB])
-
   return (
     <VStack
       width={{ base: '100%', md: '600px' }}
       alignItems="center"
       padding={5}
-      margin="auto"
+      margin="0px auto"
     >
       <HStack
         justifyContent="space-between"

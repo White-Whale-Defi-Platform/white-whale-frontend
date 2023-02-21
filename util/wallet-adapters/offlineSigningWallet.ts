@@ -9,37 +9,33 @@ import {
   OfflineDirectSigner,
   OfflineSigner,
 } from '@cosmjs/proto-signing'
-import {
-  SigningStargateClient,
-  SigningStargateClientOptions,
-} from '@cosmjs/stargate/build/signingstargateclient'
+import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
+import { Network } from '@injectivelabs/networks'
 import {
   AuthInfo,
-  Coin as StationCoin,
   Fee,
   ModeInfo,
   SignerInfo,
   SimplePublicKey,
+  Coin as StationCoin,
   Tx,
   TxBody,
   TxInfo,
 } from '@terra-money/terra.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
-import { Network, getNetworkEndpoints } from '@injectivelabs/networks'
 
-import { TxResponse, Wallet } from './wallet'
-import { cosmwasmAminoConverters, getSigningCosmwasmClient } from 'injectivejs'
-// import {SigningStargateClient} from 'injectivejs/node_modules/@cosmjs/stargate/node_modules/@cosmjs/signingstargateclient';
-import getChainName from '../../libs/getChainName'
-import { AminoTypes } from '@cosmjs/stargate'
-
-import { chain } from 'lodash'
 import Injective from '../../services/injective'
+import { TxResponse, Wallet } from './wallet'
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient | Injective
+
   network: string
 
-  constructor(client: SigningCosmWasmClient | Injective, network?: string) {
+  constructor(
+    client: SigningCosmWasmClient | Injective,
+    network?: string,
+    activeWallet?: string
+  ) {
     this.client = client
     this.network = network
   }
@@ -49,11 +45,13 @@ export class OfflineSigningWallet implements Wallet {
     endpoint: string,
     signer: OfflineSigner & OfflineDirectSigner,
     network: string,
-    options?: SigningStargateClientOptions
+    options?: SigningStargateClientOptions,
+    activeWallet?: string
   ): Promise<OfflineSigningWallet> {
     if (chainId.includes('injective')) {
       const injectiveClient = new Injective(
         signer,
+        activeWallet,
         chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s
       )
       return new Promise((resolve, reject) => {
@@ -107,11 +105,11 @@ export class OfflineSigningWallet implements Wallet {
     return this.client.simulate(signerAddress, messages, memo)
   }
 
-  getChainId(): Promise<String> {
+  getChainId(): Promise<string> {
     return this.client.getChainId()
   }
 
-  getNetwork(): Promise<String> {
+  getNetwork(): Promise<string> {
     return Promise.resolve(this.network)
   }
 

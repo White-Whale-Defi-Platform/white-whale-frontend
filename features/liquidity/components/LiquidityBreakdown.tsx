@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { useTokenToTokenPrice } from 'features/swap'
 import {
   Button,
@@ -12,7 +14,6 @@ import {
   Text,
   Tooltip,
 } from 'junoblocks'
-import React from 'react'
 import {
   __POOL_REWARDS_ENABLED__,
   __POOL_STAKING_ENABLED__,

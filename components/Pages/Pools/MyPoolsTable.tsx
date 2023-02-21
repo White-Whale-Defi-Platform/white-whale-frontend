@@ -18,14 +18,13 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { CHIHUAHUA_MAINNET_CHAIN_ID } from 'constants/chain'
 import { formatPrice } from 'libs/num'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 
 import Loader from '../../Loader'
+import Apr from './components/Apr'
 import PoolName from './components/PoolName'
+import Volume from './components/Volume'
+import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -66,7 +65,18 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
+      return (
+        <>
+          {info.row.original.isSubqueryNetwork ? (
+            <Apr
+              pairAddr={info.row.original.contract}
+              tvl={info.row.original.totalLiq}
+            />
+          ) : (
+            <Text align="right">{info.getValue()}</Text>
+          )}
+        </>
+      )
     },
   }),
   columnHelper.accessor('volume24hr', {
@@ -76,7 +86,15 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
+      return (
+        <>
+          {info.row.original.isSubqueryNetwork ? (
+            <Volume pairAddr={info.row.original.contract} />
+          ) : (
+            <Text align="right">{info.getValue()}</Text>
+          )}
+        </>
+      )
     },
   }),
   columnHelper.accessor('totalLiq', {
@@ -102,7 +120,7 @@ const columns = [
 ]
 
 const PoolsTable = ({
-  pools = [],
+  pools,
   isLoading,
 }: {
   pools: Pool[]
@@ -116,7 +134,7 @@ const PoolsTable = ({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  if (isLoading) {
+  if (isLoading || !pools) {
     return (
       <Flex
         padding={10}
@@ -131,7 +149,7 @@ const PoolsTable = ({
     )
   }
 
-  if (!pools.length) {
+  if (pools && !pools.length) {
     return (
       <Flex
         padding={10}

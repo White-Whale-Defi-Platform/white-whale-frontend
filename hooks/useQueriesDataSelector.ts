@@ -1,4 +1,3 @@
-import { usePersistance } from 'junoblocks'
 import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
@@ -7,15 +6,12 @@ export function useQueriesDataSelector<
 >(queriesResult: TQueries) {
   const [data, isLoading, isError] = useMemo(() => {
     const loading = queriesResult.some(
-      ({ isLoading, data }) => isLoading && !data
+      ({ isLoading: _isLoading, data: _data }) => _isLoading && !_data
     )
-    const error = queriesResult.some(({ isError }) => isError)
-
+    const error = queriesResult.some(({ isError: _isError }) => _isError)
     const queriesData: Array<TQueries[number]['data']> = queriesResult?.map(
-      ({ data }) => data
+      ({ data: _data }) => _data
     )
-
-    // const didFetchEveryQuery = !queriesData.includes(undefined)
     const didFetchEveryQuery = !queriesData.includes(undefined)
 
     return [
@@ -24,8 +20,6 @@ export function useQueriesDataSelector<
       error,
     ] as const
   }, [queriesResult])
-
-  // const persistData = usePersistance(data?.[0] ? data : undefined)
 
   return [data, isLoading, isError] as const
 }

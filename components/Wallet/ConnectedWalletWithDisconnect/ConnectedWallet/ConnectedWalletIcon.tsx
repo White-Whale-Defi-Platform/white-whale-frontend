@@ -1,24 +1,26 @@
 import React from 'react'
-
-import { Box, Img } from '@chakra-ui/react'
-import { useConnectedWallet } from '@terra-money/wallet-provider'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
+import { useRecoilState } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
+import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
+import LeapWalletIcon from 'components/icons/LeapWalletIcon'
+
 
 function ConnectedWalletIcon({ connected }) {
-  const connectedWallet = useConnectedWallet()
-  return (
-    <>
-      {connected ? (
-        <Box>
-          <KeplrWalletIcon />
-        </Box>
-      ) : (
-        <Box width="100">
-          <Img width="6" src={connectedWallet.connection.icon} />
-        </Box>
-      )}
-    </>
-  )
+  const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)
+  switch (currentWalletState?.activeWallet) {
+    case 'keplr':
+      return <KeplrWalletIcon />
+    case 'leap':
+      return <LeapWalletIcon />
+    case 'cosmostation':
+      return <CosmostationWalletIcon />
+    case 'station':
+      return <TerraExtensionIcon />
+    default:
+      return <></>
+  }
 }
 
 export default ConnectedWalletIcon
