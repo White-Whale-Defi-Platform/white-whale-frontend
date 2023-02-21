@@ -64,7 +64,7 @@ const Pools: FC<Props> = () => {
     })
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
-        const displayAssetOrder = pool.displayName.split('-')
+        const displayAssetOrder = pool.displayName?.split('-')
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
@@ -72,7 +72,7 @@ const Pools: FC<Props> = () => {
         const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
         const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
         let price = 0
-        if (displayAssetOrder[0] === pool.assetOrder[0]) {
+        if (displayAssetOrder?.[0] === pool.assetOrder?.[0]) {
           price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
         } else {
           price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
