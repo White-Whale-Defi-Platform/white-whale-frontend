@@ -3,11 +3,11 @@
         "label": "Trade",
         "childs": [
             {
-                "lable": "Swap",
+                "label": "Swap",
                 "link": "/swap"
             },
             {
-                "lable": "Pools",
+                "label": "Pools",
                 "link": "/pools"
             }
         ]
@@ -16,12 +16,25 @@
         "label": "Flashloan",
         "childs": [
             {
-                "lable": "Flashloan",
+                "label": "Flashloan",
                 "link": "/flashloan"
             },
             {
-                "lable": "Vaults",
+                "label": "Vaults",
                 "link": "/vaults"
+            }
+        ]
+    },
+    {
+        "label": "Governance",
+        "childs": [
+            {
+                "label": "Staking",
+                "link": "/staking"
+            },
+            {
+                "label": "Voting",
+                "link": "/voting"
             }
         ]
     }

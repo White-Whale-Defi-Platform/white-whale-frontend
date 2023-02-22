@@ -27,25 +27,33 @@ import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
 import menuLinks from './NavMenu.json'
 
-const links = [
+export const links = [
   {
-    lable: 'Swap',
+    label: 'Swap',
     link: '/swap',
   },
   {
-    lable: 'Pools',
+    label: 'Pools',
     link: '/pools',
   },
   {
-    lable: 'Flashloan',
+    label: 'Flashloan',
     link: '/flashloan',
   },
   {
-    lable: 'Vaults',
+    label: 'Vaults',
     link: '/vaults',
   },
+  {
+    label: 'Staking',
+    link: '/staking',
+  },
+  {
+    label: 'Voting',
+    link: '/voting',
+  },
   // {
-  //   lable: "Chart",
+  //   label: "Chart",
   //   link: "/chart"
   // },
 ]
@@ -77,8 +85,8 @@ const Navbar = ({ }) => {
     disconnect()
   }
 
-  const currenChain = chains.find((row) => row.chainId === chainId)
-  const currentChainName = currenChain?.label.toLowerCase()
+  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChainName = currentChain?.label.toLowerCase()
 
   return (
     <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
@@ -104,6 +112,7 @@ const Navbar = ({ }) => {
             isOpenModal={isOpenModal}
             onOpenModal={onOpenModal}
             onCloseModal={onCloseModal}
+            onPrimaryButton={false}
           />
           <WalletModal
             isOpenModal={isOpenModal}
@@ -153,10 +162,10 @@ const Navbar = ({ }) => {
           <DrawerCloseButton />
 
           <DrawerBody as={VStack} alignItems="flex-start">
-            {links.map(({ lable, link }) => (
+            {links.map(({ label, link }) => (
               <DrawerLink
-                key={lable}
-                text={lable}
+                key={label}
+                text={label}
                 href={link}
                 onClick={onClose}
               />

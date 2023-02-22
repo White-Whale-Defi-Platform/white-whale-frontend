@@ -84,6 +84,7 @@
     "react-icons": "^4.7.1",
     "react-merge-refs": "^1.1.0",
     "react-query": "^3.39.1",
+    "recharts": "^2.4.3",
     "recoil": "^0.7.3",
     "sass": "^1.45.0"
   },

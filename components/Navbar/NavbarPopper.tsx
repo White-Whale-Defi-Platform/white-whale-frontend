@@ -15,7 +15,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
     const { asPath } = useRouter()
 
     const isActiveLink = useMemo(() => {
-        const [linkInAsPath] = menu.childs.filter((item) => asPath.includes(item.link))
+        const [linkInAsPath] = menu.childs.filter((item: { link: string }) => asPath.includes(item.link))
         return !!linkInAsPath
     },[asPath, menu])
 
@@ -48,7 +48,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
                 />
                 <PopoverBody px='unset' >
                     <VStack  overflow="hidden">
-                        {menu.childs.map(({ lable, link }, index) => (
+                        {menu.childs.map(({ label, link }, index: number) => (
                             <Box
                                 key={link}
                                 px={10}
@@ -58,8 +58,8 @@ const NavbarPopper = ({ menu, currentChainName }) => {
                                 onClick={onClose}
                             >
                                 <NavbarLink
-                                    key={lable}
-                                    text={lable}
+                                    key={label}
+                                    text={label}
                                     href={`/${currentChainName}${link}`}
                                 />
                             </Box>
