@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Box, Button, Divider, HStack, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import { Cell, Pie, PieChart } from 'recharts'
-import Loader from '../../Loader'
+
+import { Box, Button, Divider, HStack, Text, useDisclosure, VStack, } from '@chakra-ui/react'
+
 import { walletState, WalletStatusType } from '../../../state/atoms/walletAtoms'
-import Wallet from '../../Wallet/Wallet'
+
 import { useWallet } from '@terra-money/wallet-provider'
+
+import { Cell, Pie, PieChart } from 'recharts'
+
 import { useRecoilState } from 'recoil'
+
 import WalletModal from '../../../components/Wallet/Modal/Modal'
+import Loader from '../../Loader'
+import Wallet from '../../Wallet/Wallet'
 
 enum TokenType {
     staked, liquid, pending, claimable
@@ -44,8 +50,7 @@ const StakingOverview = () => {
     const [pendingTokens, setPendingTokens] = useState(null);
     const [claimableTokens, setClaimableTokens] = useState(null);
 
-
-    var data = [
+    const data = [
         { tokenType: TokenType.staked, value: null, color: "#7CFB7D", label: "My staked tokens" },
         { tokenType: TokenType.liquid, value: null, color: "#244228", label: "Liquid tokens" },
         { tokenType: TokenType.pending, value: null, color: "#3273F6", label: "Pending tokens" },
@@ -54,37 +59,36 @@ const StakingOverview = () => {
 
     const [updatedData, setData] = useState(null)
 
-    const setDataValue = (tokenType: TokenType, value:number)=>{
-        data.find(e=>e.tokenType==tokenType).value = value
+    const setDataValue = (tokenType: TokenType, value: number) => {
+        data.find(e => e.tokenType == tokenType).value = value
     }
 
     const fetchStakedTokens = async function () {
         const value = 500000 // replace with result from get req
         setStakedTokens(value);
         setLoadingStakedTokens(false);
-        setDataValue(TokenType.staked,value)
+        setDataValue(TokenType.staked, value)
     }
     const fetchLiquidTokens = async function () {
         const value = 345623 // replace with result from get req
         setLiquidTokens(value);
         setLoadingLiquidTokens(false);
-        setDataValue(TokenType.liquid,value)
+        setDataValue(TokenType.liquid, value)
     }
 
     const fetchPendingTokens = async function () {
         const value = 175122 // replace with result from get req
         setPendingTokens(value);
         setLoadingPendingTokens(false);
-        setDataValue(TokenType.pending,value)
+        setDataValue(TokenType.pending, value)
     }
 
     const fetchClaimableTokens = async function () {
         const value = 123456 // replace with result from get req
         setClaimableTokens(value);
         setLoadingClaimableTokens(false);
-        setDataValue(TokenType.claimable,value)
+        setDataValue(TokenType.claimable, value)
     }
-    
 
     useEffect(() => {
         setTimeout(async () => {
@@ -99,7 +103,6 @@ const StakingOverview = () => {
     const isLoading = isLoadingStakedTokens || isLoadingLiquidTokens || isLoadingPendingTokens || isLoadingClaimableTokens
 
     const borderRadius = "30px"
-
 
     const TokenBox = ({ tokenType, value, paddingBottom }) => {
         const { color, label } = data.find(e => e.tokenType == tokenType)
@@ -177,7 +180,7 @@ const StakingOverview = () => {
                             stroke="none">
                             {data.map((_entry: any, index: number) => (<Cell
                                 key={"cell-${index}"}
-                                fill={data[index]["color"]} />
+                                fill={data[index].color} />
                             ))}
                         </Pie>
                     </PieChart>
@@ -212,52 +215,54 @@ const StakingOverview = () => {
                     </VStack>
                 </HStack>
             </VStack>
-        <VStack
-            width="full"
-            alignItems="flex-start">
-            <Divider
-                opacity="0.2"
-                marginTop={-5} />
-            <HStack
-                paddingLeft={12}
-                paddingTop={3}>
-                <Button
-                    bg="#6ACA70"
-                    borderRadius={borderRadius}
-                    mr="4"
-                    width="100%"
-                    color="white"
-                    minWidth={320}>
-                    {isWalletConnected ?
-                        "Stake" :
-                        <>
-                            <Wallet
-                                connected={Boolean(key?.name)}
-                                walletName={key?.name}
-                                onDisconnect={resetWalletConnection}
-                                disconnect={disconnect}
-                                isOpenModal={isOpenModal}
-                                onOpenModal={onOpenModal}
-                                onCloseModal={onCloseModal}
-                                onPrimaryButton={true} />
-                            <WalletModal
-                                isOpenModal={isOpenModal}
-                                onCloseModal={onCloseModal}
-                                chainId={chainId} />
-                        </>}
-                </Button>
-                <Button
-                    variant="outline"
-                    color="white"
-                    borderRadius={borderRadius}
-                    opacity="0.5"
-                    minWidth={150}
-                    disabled={!isWalletConnected}
-                >
-                    Claim
-                </Button>
-            </HStack>
-        </VStack></>}
+                <VStack
+                    width="full"
+                    alignItems="flex-start">
+                    <Divider
+                        opacity="0.2"
+                        marginTop={-5} />
+                    <HStack
+                        paddingLeft={12}
+                        paddingTop={3}>
+                        {isWalletConnected ?
+                            <Button
+                                bg="#6ACA70"
+                                borderRadius="full"
+                                mr="4"
+                                width="100%"
+                                color="white"
+                                minWidth={320}>
+                                Stake
+                            </Button> :
+                            <HStack
+                                mr="4">
+                                <Wallet
+                                    connected={Boolean(key?.name)}
+                                    walletName={key?.name}
+                                    onDisconnect={resetWalletConnection}
+                                    disconnect={disconnect}
+                                    isOpenModal={isOpenModal}
+                                    onOpenModal={onOpenModal}
+                                    onCloseModal={onCloseModal}
+                                    isPrimaryButton={true}
+                                    primaryButtonMinW={320} />
+                                <WalletModal
+                                    isOpenModal={isOpenModal}
+                                    onCloseModal={onCloseModal}
+                                    chainId={chainId} />
+                            </HStack>}
+                        <Button
+                            variant="outline"
+                            color="white"
+                            borderRadius="full"
+                            opacity="0.5"
+                            minWidth={150}
+                            disabled={!isWalletConnected}
+                        >
+                            Claim
+                        </Button>
+                    </HStack>
+                </VStack></>}
     </VStack>
 }
 export default StakingOverview

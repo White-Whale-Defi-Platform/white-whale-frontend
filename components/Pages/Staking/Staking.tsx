@@ -1,9 +1,13 @@
 import { FC, useEffect, useState } from 'react'
+
 import { Box, Button, Divider, HStack, Text, VStack } from '@chakra-ui/react'
-import StakingOverview from './StakingOverview'
-import Loader from '../../Loader'
+
 import { walletState, WalletStatusType } from '../../../state/atoms/walletAtoms'
+
 import { useRecoilValue } from 'recoil'
+
+import Loader from '../../Loader'
+import StakingOverview from './StakingOverview'
 
 const Staking: FC = () => {
   const { status } = useRecoilValue(walletState)
@@ -56,7 +60,6 @@ const Staking: FC = () => {
   const boxBg = "#1C1C1C"
   // TODO global constant ?
   const borderRadius = "30px"
-
 
   const RewardsStack = ({ label, value }) =>
     <VStack
@@ -251,7 +254,7 @@ const Staking: FC = () => {
                 <Button 
                 variant="outline"
                   color="white"
-                  borderRadius={borderRadius}
+                  borderRadius="full"
                   minW={240}
                   disabled={!isWalletConnected}
                 >

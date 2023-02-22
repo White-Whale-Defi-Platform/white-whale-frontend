@@ -19,7 +19,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
 
-const Wallet: any = ({ connected, onDisconnect, onOpenModal, onPrimaryButton }) => {
+const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, primaryButtonMinW }) => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
@@ -140,7 +140,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, onPrimaryButton }) 
   if (!connected && !connectedWallet) {
     return (
       <>
-        {!onPrimaryButton&&(<Select
+        {!isPrimaryButton&&(<Select
           connected={connected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
@@ -150,10 +150,12 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, onPrimaryButton }) 
           variant="outline"
           display="flex"
           gap="3"
+          bg={isPrimaryButton ? "#6ACA70" : "none"}
           color="white"
           borderRadius="full"
+          minW={isPrimaryButton ? primaryButtonMinW : 0}
           onClick={onOpenModal}
-          style={{borderColor: onPrimaryButton ? "transparent": "whiteAlpha.400"}}
+          style={{borderColor: isPrimaryButton ? "transparent": "whiteAlpha.400"}}
         >
           <WalletIcon />
           Connect wallet
