@@ -55,7 +55,7 @@ Access the app on `http://localhost:3000/`.
 
 [Security Policies and Procedures](./docs/SECURITY)
 
-[License](./LICENSE)
+[License](./LICENSE.md)
 
 ## Netlify Integration
 
