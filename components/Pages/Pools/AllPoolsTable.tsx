@@ -99,7 +99,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+      <Text align="right">{ info.getValue() !== 'NA' ? `$${formatPrice(info.getValue())}` : info.getValue()}</Text>
     ),
   }),
   columnHelper.accessor('cta', {
