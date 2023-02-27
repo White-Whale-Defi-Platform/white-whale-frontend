@@ -99,7 +99,15 @@ export const useTransaction = ({
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/Max spread assertion/i.test(error.toString())) {
+        } 
+        else if ( /Operation disabled, swap/i.test(error.toString())) {
+          console.error(error)
+          setTxStep(TxStep.Idle)
+          setError('Pair is disabled for swap')
+          setButtonLabel('Pair is disabled for swap')
+          throw new Error('Pair is disabled for swap')
+        } 
+        else if (/Max spread assertion/i.test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
