@@ -62,7 +62,7 @@
     },
     {
       "pool_id": "ampWHALE-WHALE",
-      "lpOrder": ["ampWHALE", "WHALE"],
+      "lpOrder": ["WHALE", "ampWHALE"],
       "assetOrder": ["ampWHALE", "WHALE"],
       "displayName": "ampWHALE-WHALE",
       "displayLogo1": "/logos/ampWhale.svg",
@@ -99,7 +99,7 @@
     },
     {
       "pool_id": "boneWHALE-WHALE",
-      "lpOrder": ["boneWHALE", "WHALE"],
+      "lpOrder": ["WHALE", "boneWHALE"],
       "assetOrder": ["boneWHALE", "WHALE"],
       "displayName": "boneWHALE-WHALE",
       "displayLogo1": "/logos/boneWHALE.jpg",
