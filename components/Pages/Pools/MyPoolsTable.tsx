@@ -22,6 +22,7 @@ import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
+import MyPosition from './components/MyPosition'
 import PoolName from './components/PoolName'
 import TotalLiq from './components/TotalLiq'
 import Volume from './components/Volume'
@@ -57,7 +58,11 @@ const columns = [
         {`My Position`}
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => <MyPosition 
+      myPositiionAmount={info.getValue()}
+      lpToken={info.row.original?.liquidity?.providedTotal?.tokenAmount}
+    />
+    // cell: (info) => <Text align="right">${info.getValue()}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (

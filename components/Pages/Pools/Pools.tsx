@@ -123,7 +123,8 @@ const Pools: FC<Props> = () => {
         .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
         .map((item) => ({
           ...item,
-          myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          // myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
           cta: () =>
             router.push(
               `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
