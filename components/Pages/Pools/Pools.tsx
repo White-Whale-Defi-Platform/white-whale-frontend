@@ -22,6 +22,7 @@ type Props = {}
 const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
 const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
+const NoPrice = ["ASH-BDOG", 'ASH-GDOG', 'WHALE-axlUSDC', 'ampWHALE-WHALE']
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
@@ -89,8 +90,9 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: pool.liquidity?.available?.total?.dollarValue,
+          totalLiq: NoPrice.includes(pool?.pool_id)? 'NA' : pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
+          poolAssets: pool.pool_assets,
           price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),

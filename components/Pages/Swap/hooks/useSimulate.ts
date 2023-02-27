@@ -54,6 +54,13 @@ const useSimulate = ({ client, msg, routerAddress }) => {
     if (!error) return null
 
     if (
+      /Operation disabled, swap/i.test(
+        error?.toString()
+      )
+    )
+      return 'Pair is disabled for swap'
+
+    if (
       /unreachable: query wasm contract failed: invalid request/i.test(
         error?.toString()
       ) ||
