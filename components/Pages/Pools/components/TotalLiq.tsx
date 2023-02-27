@@ -23,7 +23,7 @@ const TotalLiq = ({
     const [assetA, assetB] = poolAssets || []
 
     return (
-        <HStack>
+        <HStack justifyContent="end">
             {/* <Text align="right">{`$${formatPrice(totalLiq)}`}</Text> */}
             <Text align="right">{ totalLiq !== 'NA' ? `$${formatPrice(totalLiq)}` : totalLiq}</Text>
             <Tooltip label={<VStack>
