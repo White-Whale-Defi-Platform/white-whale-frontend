@@ -98,6 +98,43 @@
       "rewards_tokens": []
     },
     {
+      "pool_id": "boneWHALE-WHALE",
+      "lpOrder": ["boneWHALE", "WHALE"],
+      "assetOrder": ["boneWHALE", "WHALE"],
+      "displayName": "boneWHALE-WHALE",
+      "displayLogo1": "/logos/boneWHALE.jpg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
+          "symbol": "boneWHALE",
+          "name": "boneWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/boneWHALE.jpg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        }
+      ],
+      "lp_token": "terra1le46uu9qjk53aktjs8dev96sl9sd2ujvcpspk75pdeg0txfvhyuswm6653",
+      "swap_address": "terra1j9jmsplecj9ay2py27953p84nfmv7f6ce75ms5fleyhd0aecpc7q0hgmsa",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
       "pool_id": "ATOM-LUNA",
       "lpOrder": ["ATOM", "LUNA"],
       "assetOrder": ["ATOM", "LUNA"],
