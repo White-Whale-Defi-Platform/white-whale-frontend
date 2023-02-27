@@ -22,7 +22,9 @@ import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
+import MyPosition from './components/MyPosition'
 import PoolName from './components/PoolName'
+import TotalLiq from './components/TotalLiq'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
@@ -56,7 +58,11 @@ const columns = [
         {`My Position`}
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => <MyPosition 
+      myPositiionAmount={info.getValue()}
+      lpToken={info.row.original?.liquidity?.providedTotal?.tokenAmount}
+    />
+    // cell: (info) => <Text align="right">${info.getValue()}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
@@ -103,9 +109,12 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
-    ),
+    cell: (info) => <TotalLiq 
+      poolId={info.row.original?.poolId}
+      liquidity={info.row.original?.liquidity}
+      totalLiq={info.getValue()}
+      poolAssets={info.row.original?.poolAssets}
+    />
   }),
   columnHelper.accessor('cta', {
     header: '',

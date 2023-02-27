@@ -53,13 +53,16 @@ const useSimulate = ({ client, msg, routerAddress }) => {
   const simulatedError = useMemo(() => {
     if (!error) return null
 
-    if (
+    if (/Operation disabled, swap/i.test(error?.toString()))
+      return 'Pair is disabled for swap'
+    else if (
       /unreachable: query wasm contract failed: invalid request/i.test(
         error?.toString()
       ) ||
       /codespace: wasm, code: 9: query wasm/i.test(error?.toString())
     )
       return 'Insufficient liquidity'
+    else return null
   }, [error])
 
   return {
