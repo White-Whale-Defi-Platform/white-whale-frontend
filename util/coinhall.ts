@@ -40,6 +40,7 @@ export const getPairAprAndDailyVolume = async (
         apr7d: pairInfo?.apr7d || 0,
         asset0Price: pairInfo?.asset0.usdPrice,
         asset1Price: pairInfo?.asset1.usdPrice,
+        usdLiquidity: pairInfo?.usdLiquidity,
         isLunaxPool:
           pairInfo?.asset0.symbol.includes('LunaX') ||
           pairInfo?.asset1.symbol.includes('LunaX'),
