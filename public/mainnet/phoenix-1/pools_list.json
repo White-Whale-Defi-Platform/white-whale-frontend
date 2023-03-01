@@ -292,17 +292,6 @@
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
-          "chain_id": "phoenix-1",
-          "token_address": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
-          "symbol": "bLUNA",
-          "name": "bLuna",
-          "decimals": 6,
-          "logoURI": "/logos/bLuna.png",
-          "tags": [],
-          "native": false,
-          "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
-        },
-        {
           "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "uluna",
@@ -313,6 +302,17 @@
           "tags": ["native"],
           "native": true,
           "denom": "uluna"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+          "symbol": "bLUNA",
+          "name": "bLuna",
+          "decimals": 6,
+          "logoURI": "/logos/bLuna.png",
+          "tags": [],
+          "native": false,
+          "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
         }
       ],
       "lp_token": "terra1q475uvk9te5nxq2lzu0h96t0devmx4v8ctxqtm253ut05wrpugsq0m4e3k",
@@ -329,17 +329,6 @@
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
-          "chain_id": "phoenix-1",
-          "token_address": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
-          "symbol": "ampLUNA",
-          "name": "ampLuna",
-          "decimals": 6,
-          "logoURI": "/logos/ampLuna.png",
-          "tags": [],
-          "native": false,
-          "denom": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct"
-        },
-        {
           "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "uluna",
@@ -350,6 +339,18 @@
           "tags": ["native"],
           "native": true,
           "denom": "uluna"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
+          "symbol": "ampLUNA",
+          "name": "ampLuna",
+          "decimals": 6,
+          "logoURI": "/logos/ampLuna.png",
+          "tags": [],
+          "native": false,
+          "denom": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct"
         }
       ],
       "lp_token": "terra10un5hr6asmn7g0ggh9sz0x3v8f9evh5cvawk8xs65rghundc25mq7g5par",
