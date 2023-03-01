@@ -98,21 +98,21 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "boneWHALE-WHALE",
-      "lpOrder": ["WHALE", "boneWHALE"],
-      "assetOrder": ["boneWHALE", "WHALE"],
-      "displayName": "boneWHALE-WHALE",
-      "displayLogo1": "/logos/boneWHALE.jpg",
+      "pool_id": "bWHALE-WHALE",
+      "lpOrder": ["WHALE", "bWHALE"],
+      "assetOrder": ["bWHALE", "WHALE"],
+      "displayName": "bWHALE-WHALE",
+      "displayLogo1": "/logos/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
           "id": "terra-luna-2",
           "chain_id": "phoenix-1",
           "token_address": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
-          "symbol": "boneWHALE",
-          "name": "boneWHALE",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
           "decimals": 6,
-          "logoURI": "/logos/boneWHALE.jpg",
+          "logoURI": "/logos/bWHALE.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
