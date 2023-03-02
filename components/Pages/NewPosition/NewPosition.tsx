@@ -128,7 +128,7 @@ const NewPosition = () => {
       width={{ base: '100%', md: '600px' }}
       alignItems="center"
       padding={5}
-      margin="auto"
+      // margin="auto"
     >
       <HStack
         justifyContent="space-between"

@@ -84,7 +84,7 @@ export const useQueryMultiplePoolsLiquidity = ({
   ): Promise<PoolEntityTypeWithLiquidity> {
     if (!client) return pool
 
-    const [tokenA] = pool.pool_assets
+    const [tokenA, tokenB] = pool.pool_assets
 
     const swap = await querySwapInfo({
       context,
@@ -112,8 +112,9 @@ export const useQueryMultiplePoolsLiquidity = ({
     })
 
     const tokenADollarPrice = await getTokenDollarValue({
-      tokenInfo: tokenA,
+      tokenA,
       tokenAmountInDenom: 1,
+      tokenB
     })
 
     function getPoolTokensValue({ tokenAmountInMicroDenom }) {

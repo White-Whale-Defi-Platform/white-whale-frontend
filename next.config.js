@@ -30,7 +30,7 @@ const config = {
     return [
       {
         source: '/',
-        destination: '/swap',
+        destination: '/terra/swap',
         permanent: false,
       },
     ]

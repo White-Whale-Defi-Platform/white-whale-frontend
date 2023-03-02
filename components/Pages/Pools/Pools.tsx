@@ -3,7 +3,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { formatPrice } from 'libs/num'
+import { formatPrice, num } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -93,7 +93,8 @@ const Pools: FC<Props> = () => {
           totalLiq: NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue,
           liquidity: pool.liquidity,
           poolAssets: pool.pool_assets,
-          price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
           cta: () =>
