@@ -3,6 +3,6 @@ package = "@netlify/plugin-nextjs"
 
 [[redirects]]
   from = "/"
-  to = "/swap"
+  to = "/terra/swap"
   status = 302
   force = true # COMMENT: ensure that we always redirect

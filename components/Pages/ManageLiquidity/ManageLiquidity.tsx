@@ -107,7 +107,7 @@ const ManageLiquidity: FC = () => {
       width={{ base: '100%', md: '700px' }}
       alignItems="center"
       padding={5}
-      margin="auto"
+      // margin="auto"
     >
       <HStack
         justifyContent="space-between"
