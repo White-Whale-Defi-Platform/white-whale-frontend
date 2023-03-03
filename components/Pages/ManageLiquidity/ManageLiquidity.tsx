@@ -28,7 +28,7 @@ import WithdrawForm from './WithdrawForm'
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const chains = useChains()
-  const { address, chainId, key } = useRecoilValue(walletState)
+  const { address, chainId, status } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
@@ -154,7 +154,7 @@ const ManageLiquidity: FC = () => {
                   <DepositForm
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={key?.name as WalletStatusType}
+                    connected={status}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -165,7 +165,7 @@ const ManageLiquidity: FC = () => {
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  connected={key?.name as WalletStatusType}
+                  connected={status}
                   tokenA={{
                     tokenSymbol: poolId,
                     amount: 0,

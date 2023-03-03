@@ -115,6 +115,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
+        !!client &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,

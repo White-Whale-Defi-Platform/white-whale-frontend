@@ -21,7 +21,7 @@ import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { TokenItemState } from './lpAtoms'
 
 type Props = {
-  connected?: WalletStatusType
+  connected: WalletStatusType
   tokenA: TokenItemState
   tokenB: TokenItemState
   tx: any
@@ -68,6 +68,7 @@ const DepositForm = ({
   // const [resetForm, setResetForm] = useState(false)
 
   const isInputDisabled = tx?.txStep == TxStep.Posting
+  const isConnected = connected === `@wallet-state/connected`
 
   useEffect(() => {
     if (simulated) {
@@ -105,7 +106,7 @@ const DepositForm = ({
   const amountB = getValues('token2')
 
   const buttonLabel = useMemo(() => {
-    if (!connected) return 'Connect Wallet'
+    if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!tokenB?.tokenSymbol) return 'Select Token'
     else if (!!!amountA?.amount) return 'Enter Amount'
     else if (tx?.buttonLabel) return tx?.buttonLabel
@@ -199,7 +200,7 @@ const DepositForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || simulated == null}
+        disabled={tx.txStep != TxStep.Ready || simulated == null || !isConnected}
       >
         {buttonLabel}
       </Button>

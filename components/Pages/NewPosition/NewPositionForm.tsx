@@ -66,6 +66,7 @@ const NewPositionForm: FC<Props> = ({
 
   const amountA = getValues('token1')
   const amountB = getValues('token2')
+  const isConnected = connected === `@wallet-state/connected`
 
   const { data: poolList } = usePoolsListQuery()
 
@@ -98,7 +99,7 @@ const NewPositionForm: FC<Props> = ({
   }, [simulated, reverse])
 
   const buttonLabel = useMemo(() => {
-    if (!connected) return 'Connect Wallet'
+    if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!tokenB?.tokenSymbol) return 'Select Token'
     else if (!!!amountA?.amount) return 'Enter Amount'
     else if (tx?.buttonLabel) return tx?.buttonLabel
@@ -235,7 +236,7 @@ const NewPositionForm: FC<Props> = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || simulated == null}
+        disabled={tx.txStep != TxStep.Ready || simulated == null || !isConnected}
       >
         {buttonLabel}
       </Button>
