@@ -15,11 +15,16 @@ const getUrl = (chainId, txHash) => {
     case 'uni-3':
       return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
       break
+    case 'migaloo-1':
+      return `https://explorer.silknodes.io/migaloo/tx/${txHash}`
+      break
+    // case 'narwhal-1':
+    //   return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
+    //   break
     case 'pisco-1':
       return `https://finder.terra.money/testnet/tx/${txHash}`
       break
     case 'juno-1':
-
       return `https://mintscan.io/juno/txs/${txHash}`
       break
     case 'phoenix-1':

@@ -4,8 +4,8 @@
     "chainName": "Migaloo Mainnet",
     "label": "Migaloo",
     "icon": "/logos/migaloo.png",
-    "rpc": "https://whitewhale-rpc.polkachu.com",
-    "rest": "https://whitewhale-api.polkachu.com",
+    "rpc": "https://migaloo-rpc.polkachu.com",
+    "rest": "https://migaloo-api.polkachu.com",
     "stakeCurrency": {
       "coinDenom": "WHALE",
       "coinMinimalDenom": "uwhale",
