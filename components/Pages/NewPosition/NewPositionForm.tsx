@@ -195,11 +195,9 @@ const NewPositionForm: FC<Props> = ({
           {tokanBloading ? (
             <Spinner color="white" size="xs" />
           ) : (
-            !!tokenBBalance && (
               <Text fontSize="14" fontWeight="700">
                 {tokenBBalance}
               </Text>
-            )
           )}
         </HStack>
         <Controller

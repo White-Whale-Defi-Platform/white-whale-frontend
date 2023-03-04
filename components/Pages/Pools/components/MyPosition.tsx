@@ -4,22 +4,28 @@ import React from 'react'
 import { formatPrice, fromChainAmount } from 'libs/num'
 
 type Props = {
+    pair: string
     myPositiionAmount: string | number
-    lpToken: string | number
+    providedAssets: number[]
 }
 
 
 
 const MyPosition = ({
+    pair,
     myPositiionAmount,
-    lpToken
+    providedAssets,
 }: Props) => {
+
+    const [asset1Name, asset2Name] = pair.split('-')
+    const [asset1Amount, asset2Amount] = providedAssets || []
 
     return (
         <HStack justifyContent="end">
             <Text align="right">{myPositiionAmount !== 'NA' ? `$${formatPrice(myPositiionAmount)}` : myPositiionAmount}</Text>
             <Tooltip label={<VStack>
-                <Text>lpTokens: {fromChainAmount(lpToken, 1)}</Text>
+                <Text>{asset1Name}: {fromChainAmount(asset1Amount, 6)}</Text>
+                <Text>{asset2Name}: {fromChainAmount(asset2Amount, 6)}</Text>
             </VStack>} padding="20px" borderRadius="20px" bg="blackAlpha.900" fontSize="xs" maxW="330px">
                 <Box cursor="pointer" color="brand.50">
                     <InfoOutlineIcon width=".9rem" height=".9rem" />

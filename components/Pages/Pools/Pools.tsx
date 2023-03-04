@@ -45,6 +45,17 @@ const Pools: FC<Props> = () => {
     [chainId]
   )
 
+  const calcuateTotalLiq = (pool) => {
+   return  NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
+  }
+
+  const calculateMyPostion = (pool) => {
+    const totalLiq = calcuateTotalLiq(pool);
+    const {provided, total} = pool.liquidity?.available || {}
+    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(2).toNumber()
+
+  }
+
   const initPools = useCallback(async () => {
     if (!pools || (pools && pools.length === 0)) return
     if (allPools.length > 0) {
@@ -90,7 +101,8 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue,
+          totalLiq: calcuateTotalLiq(pool), 
+          myPosition : calculateMyPostion(pool),
           liquidity: pool.liquidity,
           poolAssets: pool.pool_assets,
           // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
@@ -125,7 +137,8 @@ const Pools: FC<Props> = () => {
         .map((item) => ({
           ...item,
           // myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          // myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          // myPosition : calculateMyPostion(item),
           cta: () =>
             router.push(
               `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`

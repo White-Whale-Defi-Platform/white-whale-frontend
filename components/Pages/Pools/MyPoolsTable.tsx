@@ -58,11 +58,13 @@ const columns = [
         {`My Position`}
       </Text>
     ),
-    cell: (info) => <MyPosition 
-      myPositiionAmount={info.getValue()}
-      lpToken={info.row.original?.liquidity?.providedTotal?.tokenAmount}
+    cell: (info) => 
+    <MyPosition 
+      myPositiionAmount={info.row.original?.myPosition}
+      pair={info.row.original?.poolId}
+      providedAssets={info.row.original?.liquidity?.reserves?.provided}
     />
-    // cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    // cell: (info) => <Text align="right">${info.row.original?.myPosition}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
