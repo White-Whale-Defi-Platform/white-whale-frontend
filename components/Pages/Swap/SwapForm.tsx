@@ -91,6 +91,7 @@ const SwapForm: FC<Props> = ({
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
+  const isConnected = connected === `@wallet-state/connected`
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
@@ -399,7 +400,7 @@ const SwapForm: FC<Props> = ({
           tx?.txStep == TxStep.Broadcasting ||
           state?.isLoading
         }
-        disabled={tx?.txStep != TxStep.Ready || simulated == null}
+        disabled={tx?.txStep != TxStep.Ready || simulated == null || !isConnected}
       >
         {buttonLabel}
       </Button>
