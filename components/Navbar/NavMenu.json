@@ -29,8 +29,8 @@
         "label": "Governance",
         "childs": [
             {
-                "label": "Staking",
-                "link": "/staking"
+                "label": "Bonding",
+                "link": "/bonding"
             },
             {
                 "label": "Voting",

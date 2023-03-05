@@ -1,5 +1,5 @@
 // eslint-disable-next-line sort-imports
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 
 import { Box, Button, Divider } from '@chakra-ui/react'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
@@ -150,14 +150,14 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, pr
           variant="outline"
           display="flex"
           gap="3"
-          bg={isPrimaryButton ? "#6ACA70" : "none"}
+          bg={isPrimaryButton ? "#6ACA70": "none"}
           color="white"
           borderRadius="full"
           minW={isPrimaryButton ? primaryButtonMinW : 0}
           onClick={onOpenModal}
           style={{borderColor: isPrimaryButton ? "transparent": "whiteAlpha.400"}}
         >
-          <WalletIcon />
+          {!isPrimaryButton&&(<WalletIcon />)}
           Connect wallet
         </Button>
       </>

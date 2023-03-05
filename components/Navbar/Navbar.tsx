@@ -45,8 +45,8 @@ export const links = [
     link: '/vaults',
   },
   {
-    label: 'Staking',
-    link: '/staking',
+    label: 'Bonding',
+    link: '/bonding',
   },
   {
     label: 'Voting',
@@ -64,7 +64,7 @@ const Navbar = ({ }) => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network, activeWallet }, setWalletState] =
     useRecoilState(walletState)
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
