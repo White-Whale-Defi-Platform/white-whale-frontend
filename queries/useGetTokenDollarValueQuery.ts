@@ -12,36 +12,36 @@ import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 
 export const useGetTokenDollarValueQuery = () => {
-  const tokenA = useBaseTokenInfo()
-  const { chainId } = useRecoilValue(walletState)
-  const client = useCosmwasmClient(chainId)
+  const baseToken = useBaseTokenInfo()
+  const { chainId, client } = useRecoilValue(walletState)
+  // const client = useCosmwasmClient(chainId)
 
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
-    tokenA?.symbol
+    baseToken?.symbol
   )
 
   const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
     useGetQueryMatchingPoolForSwap()
 
   return [
-    async function getTokenDollarValue({ tokenInfo, tokenAmountInDenom }) {
+    async function getTokenDollarValue({ tokenA, tokenB=baseToken, tokenAmountInDenom }) {
       if (!tokenAmountInDenom) return 0
 
       const priceForOneToken = await tokenToTokenPriceQueryWithPools({
-        matchingPools: getMatchingPoolForSwap({ tokenA, tokenB: tokenInfo }),
+        matchingPools: getMatchingPoolForSwap({ tokenA, tokenB }),
         tokenA,
-        tokenB: tokenInfo,
+        tokenB,
         client,
         amount: 1,
-        id: tokenInfo?.id,
+        id: tokenA?.id,
       })
 
-      if (tokenA?.id === tokenInfo?.id)
+      if (tokenA?.id === tokenB?.id && !!tokenA?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
       else return priceForOneToken
     },
     Boolean(
-      tokenA && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher
+      baseToken && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher
     ),
   ] as const
 }

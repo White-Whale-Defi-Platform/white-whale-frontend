@@ -10,6 +10,8 @@ export enum WalletStatusType {
   restored = '@wallet-state/restored',
   /* the wallet is fully connected */
   connected = '@wallet-state/connected',
+  /* the wallet is fully connected */
+  disconnected = '@wallet-state/disconnected',
   /* connecting to the wallet */
   connecting = '@wallet-state/connecting',
   /* error when tried to connect */
