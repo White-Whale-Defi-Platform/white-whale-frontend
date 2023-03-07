@@ -6,7 +6,7 @@ import {
   MobileView,
 } from 'react-device-detect'
 
-import { Flex, useMediaQuery, Text, Box } from '@chakra-ui/react'
+import { Flex, useMediaQuery, Text, Box, VStack, HStack } from '@chakra-ui/react'
 import Navbar from 'components/Navbar'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -21,26 +21,37 @@ import {
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 
-const NodeError = ({isError = false}) => {
-  if(!isError) return null
+const NodeError = ({ isError = false }) => {
+  if (!isError) return null
 
   return (
     <Flex
-      justifyContent="center"
+      justifyContent="end"
       mx="auto"
       maxWidth="container.xl"
-      marginBottom={20}
       width="full"
       flex="1 1 auto"
+      pr="10px"
     >
-      <Alert status='error' borderRadius="10px">
-        <AlertIcon />
-        <AlertTitle>Connection Error!</AlertTitle>
-        <AlertDescription>Failed to connect, please try again later.</AlertDescription>
-      </Alert>
+      <VStack 
+        alignItems="flex-start" 
+        maxW="300px" 
+        bg="#1A1A1A;"
+        border="1px solid rgba(255, 0, 0, 0.5)"
+        borderRadius="15px"
+        p="16px"
+      >
+        <HStack gap="5px">
+          {/* <AlertIcon />  */}
+          <InfoOutlineIcon color="#C60000" w="18px" h="18px" />
+          <Text color="#C60000">Connection Error!</Text>
+        </HStack>
+        <Text color="brand.50">Failed to connect, please try again later.</Text>
+      </VStack>
     </Flex>
-  
+
   )
 }
 
@@ -78,10 +89,10 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
           width="full"
           flex="1 1 auto "
           // blur="100px" 
-          filter={nodeError && 'auto' }
+          filter={nodeError && 'auto'}
           blur={nodeError && '3px'}
         >
-          {nodeError  && <Box position="absolute" width="full" height="full" zIndex={1} />}
+          {nodeError && <Box position="absolute" width="full" height="full" zIndex={1} />}
           {children}
         </Flex>
         <Flex paddingY={10} paddingX={6} alignSelf="flex-end">

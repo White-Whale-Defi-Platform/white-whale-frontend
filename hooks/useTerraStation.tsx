@@ -21,7 +21,7 @@ export const useTerraStation = (onCloseModal) => {
   let [chainInfo] = useChainInfo(currentWalletState.chainId)
 
   const filterForStation = (connection: Connection) => {
-    return connection.identifier === 'station' || connection.type === 'WALLETCONNECT'
+    return connection.identifier === 'station'
   }
   const filterForWalletConnect = (connection: Connection) => {
     return connection.type === 'WALLETCONNECT'

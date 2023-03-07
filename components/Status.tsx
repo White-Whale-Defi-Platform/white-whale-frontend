@@ -16,7 +16,7 @@ const useStatus = ({chainId, url}) => {
         const res = await fetch(`${url}/status?`)
         const resJons = await res?.json()
         return {
-          block: resJons?.result?.sync_info?.latest_block_height || status?.block,
+          block: resJons?.result?.sync_info?.latest_block_height,
           active: !!resJons?.result?.sync_info?.latest_block_height,
         }
       }catch(error){
@@ -34,12 +34,12 @@ const Status = () => {
   const chains = useChains()
   const { chainId } = useRecoilValue(walletState)
   const [nodeError, setNodeError] = useRecoilState(nodeErrorAtom)
-  const {data: status, error, isLoading} = useStatus({chainId, url: chains?.find((c) => c?.chainId === chainId)?.rpc})
 
   const url = useMemo(() => {
     return chains?.find((c) => c?.chainId === chainId)?.rpc
   }, [chainId, chains])
 
+  const {data: status, error, isLoading} = useStatus({chainId, url})
 
 
   useEffect(() => {
