@@ -109,10 +109,12 @@ const Pools: FC<Props> = () => {
           price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
-          cta: () =>
+          cta: () => {
+            const [asset1, asset2] = pool?.displayName.split('-') || []
             router.push(
-              `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
-            ),
+              `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
+            )
+          }
         }
       })
     )
