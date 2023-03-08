@@ -51,8 +51,8 @@ export const useTerraStation = (onCloseModal) => {
       'juno-1':{
         lcd: 'https://ww-juno-rest.polkachu.com',
         chainID: 'juno-1',
-        gasAdjustment: 1.75,
-        gasPrices: { ujuno: 0.015 },
+        gasAdjustment: 0.004,
+        gasPrices: { ujuno: 0.0025 },
         prefix: 'juno',
       },
       'phoenix-1':{
@@ -65,8 +65,8 @@ export const useTerraStation = (onCloseModal) => {
       'chihuahua-1':{
         lcd: 'https://ww-chihuahua-rest.polkachu.com',
         chainID: 'chihuahua-1',
-        gasAdjustment: 1.75,
-        gasPrices: { uhuahua: 0.015 },
+        gasAdjustment: 5,
+        gasPrices: { uhuahua: 1 },
         prefix: 'chihuahua',
       },
       // 'migaloo-1': {
