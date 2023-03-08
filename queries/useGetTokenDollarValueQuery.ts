@@ -13,8 +13,8 @@ import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 
 export const useGetTokenDollarValueQuery = () => {
   const baseToken = useBaseTokenInfo()
-  const { chainId, client } = useRecoilValue(walletState)
-  // const client = useCosmwasmClient(chainId)
+  const { chainId } = useRecoilValue(walletState)
+  const client = useCosmwasmClient(chainId)
 
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     baseToken?.symbol

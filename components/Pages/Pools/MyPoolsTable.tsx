@@ -160,7 +160,7 @@ const PoolsTable = ({
     )
   }
 
-  if (pools && !pools.length) {
+  if (pools && !pools.length && !isLoading) {
     return (
       <Flex
         padding={10}

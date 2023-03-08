@@ -92,9 +92,9 @@ export const useTerraStation = (onCloseModal) => {
   }, [connectedWallet, currentWalletState.network, mainnet, testnet])
 
   useEffect(() => {
-    // if (!connectedWallet) {
-    //   return 
-    // }
+    if (currentWalletState?.activeWallet !== 'station') {
+      return 
+    }
 
     setCurrentWalletState({
       key: null,

@@ -64,7 +64,7 @@ type QueryMultiplePoolsArgs = {
 }
 
 export const useQueryMultiplePoolsLiquidity = ({
-  pools,
+  pools = [],
   refetchInBackground = false,
   client,
 }: QueryMultiplePoolsArgs) => {

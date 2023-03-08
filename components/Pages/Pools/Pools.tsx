@@ -15,6 +15,7 @@ import { STABLE_COIN_LIST } from 'util/constants'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
+import { useQuery } from 'react-query'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -24,11 +25,24 @@ const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
 const NoPrice = ["ASH-BDOG", 'ASH-GDOG']
 
+const calcuateTotalLiq = (pool) => {
+  return NoPrice.includes(pool?.pool_id) ? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
+}
+
+const calculateMyPostion = (pool) => {
+  const totalLiq = calcuateTotalLiq(pool);
+  const { provided, total } = pool.liquidity?.available || {}
+  return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(2).toNumber()
+}
+
+const useAprAndVolume = (pools, chainId) => {
+  return useQuery(['apr', pools, chainId], async () => await getPairAprAndDailyVolume(pools, chainId))
+}
+
+
 const Pools: FC<Props> = () => {
-  const [allPools, setAllPools] = useState<any[]>([])
-  const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { address, chainId, client } = useRecoilValue(walletState)
-  // const client = useCosmwasmClient(chainId)
+  const { chainId, status } = useRecoilValue(walletState)
+  const client = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
@@ -45,27 +59,11 @@ const Pools: FC<Props> = () => {
     [chainId]
   )
 
-  const calcuateTotalLiq = (pool) => {
-   return  NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
-  }
-
-  const calculateMyPostion = (pool) => {
-    const totalLiq = calcuateTotalLiq(pool);
-    const {provided, total} = pool.liquidity?.available || {}
-    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(2).toNumber()
-
-  }
-
-  const initPools = useCallback(async () => {
-    if (!pools || (pools && pools.length === 0)) return
-    if (allPools.length > 0) {
-      return
-    }
-    setInitLoading(true)
-    const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(
-      pools,
-      chainId
-    )
+  
+  const { data: poosWithAprAnd24HrVolume = [], isLoading: isLoadingAprVolume } = useAprAndVolume(pools, chainId)
+  
+  const allPools = useMemo(() => {
+    if (!pools || pools.length === 0) return
     const _pools = pools.map((pool: any) => {
       return {
         ...pool,
@@ -74,73 +72,57 @@ const Pools: FC<Props> = () => {
         ),
       }
     })
-    const _allPools = await Promise.all(
-      _pools.map(async (pool) => {
-        const displayAssetOrder = pool.displayName.split('-')
-        const isUSDPool =
-          STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
-          STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
-        const pairInfos = pool.liquidity.reserves.total
-        const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
-        const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
-        let price = 0
-        if (displayAssetOrder[0] === pool.assetOrder[0]) {
-          price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
-        } else {
-          price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
+    return _pools.map((pool) => {
+      const displayAssetOrder = pool.displayName.split('-')
+      const isUSDPool =
+        STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
+        STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+      const pairInfos = pool.liquidity.reserves.total
+      const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
+      const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
+      let price = 0
+      if (displayAssetOrder[0] === pool.assetOrder[0]) {
+        price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
+      } else {
+        price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
+      }
+      return {
+        contract: pool?.swap_address,
+        pool: pool?.displayName,
+        poolId: pool?.pool_id,
+        token1Img: pool?.displayLogo1,
+        token2Img: pool?.displayLogo2,
+        apr: showCommingSoon
+          ? COMING_SOON
+          : `${Number(pool.apr24h).toFixed(2)}%`,
+        volume24hr: showCommingSoon
+          ? COMING_SOON
+          : `$${formatPrice(pool.usdVolume24h)}`,
+        totalLiq: calcuateTotalLiq(pool),
+        myPosition: calculateMyPostion(pool),
+        liquidity: pool.liquidity,
+        poolAssets: pool.pool_assets,
+        // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+        price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
+        isUSDPool: isUSDPool,
+        isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
+        cta: () => {
+          const [asset1, asset2] = pool?.displayName.split('-') || []
+          router.push(
+            `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
+          )
         }
-        return {
-          contract: pool?.swap_address,
-          pool: pool?.displayName,
-          poolId: pool?.pool_id,
-          token1Img: pool?.displayLogo1,
-          token2Img: pool?.displayLogo2,
-          apr: showCommingSoon
-            ? COMING_SOON
-            : `${Number(pool.apr24h).toFixed(2)}%`,
-          volume24hr: showCommingSoon
-            ? COMING_SOON
-            : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: calcuateTotalLiq(pool), 
-          myPosition : calculateMyPostion(pool),
-          liquidity: pool.liquidity,
-          poolAssets: pool.pool_assets,
-          // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
-          price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
-          isUSDPool: isUSDPool,
-          isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
-          cta: () => {
-            const [asset1, asset2] = pool?.displayName.split('-') || []
-            router.push(
-              `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
-            )
-          }
-        }
-      })
-    )
-    setAllPools(_allPools)
-    setTimeout(() => {
-      setInitLoading(false)
-    }, 500)
+      }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools])
-
-  useEffect(() => {
-    initPools()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
+  }, [pools, client, pools, status])
 
   // get a list of my pools
   const myPools = useMemo(() => {
     return (
-      allPools &&
-      allPools
-        .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+      allPools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
         .map((item) => ({
           ...item,
-          // myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          // myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          // myPosition : calculateMyPostion(item),
           cta: () =>
             router.push(
               `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
@@ -148,12 +130,11 @@ const Pools: FC<Props> = () => {
         }))
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allPools])
+  }, [allPools, client, status])
 
   // get a list of all pools excepting myPools
-  const myPoolsId = myPools && myPools.map(({ pool }) => pool)
-  const allPoolsForShown =
-    allPools && allPools.filter((item) => !myPoolsId.includes(item.pool))
+  const myPoolsId = myPools?.map(({ pool }) => pool)
+  const allPoolsForShown = allPools?.filter((item) => !myPoolsId.includes(item.pool))
 
   return (
     <VStack
@@ -174,7 +155,7 @@ const Pools: FC<Props> = () => {
             New Position
           </Button>
         </HStack>
-        <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
+        <MyPoolsTable pools={myPools} isLoading={isLoading || isLoadingAprVolume} />
         <MobilePools pools={myPools} />
       </Box>
 
@@ -186,7 +167,7 @@ const Pools: FC<Props> = () => {
         </HStack>
         <AllPoolsTable
           pools={allPoolsForShown}
-          isLoading={isLoading || isInitLoading}
+          isLoading={isLoading || isLoadingAprVolume }
         />
         <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
       </Box>

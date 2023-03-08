@@ -20,7 +20,7 @@ export const getPairInfos = async (pairs: string[]) => {
 }
 
 export const getPairAprAndDailyVolume = async (
-  pools: any[],
+  pools: any[] = [],
   chainId: string
 ) => {
   const pairs = pools.map((pool: any) => pool.swap_address)
