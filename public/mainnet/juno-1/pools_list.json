@@ -146,8 +146,8 @@
         {
           "chain_id": "juno-1",
           "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
-          "symbol": "JUNO",
-          "name": "Juno",
+          "symbol": "WHALE",
+          "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
           "tags": ["native"],
