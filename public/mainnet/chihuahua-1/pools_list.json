@@ -213,7 +213,7 @@
       "lpOrder": ["ampHUAHUA", "HUAHUA"],
       "assetOrder": ["ampHUAHUA", "HUAHUA"],
       "displayName": "ampHUAHUA-HUAHUA",
-      "displayLogo1": "/logos/ampHUAHUA.jpeg",
+      "displayLogo1": "/logos/ampHUAHUA.png",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
@@ -234,7 +234,7 @@
           "symbol": "ampHUAHUA",
           "name": "ampHUAHUA",
           "decimals": 6,
-          "logoURI": "/logos/ampHUAHUA.jpeg",
+          "logoURI": "/logos/ampHUAHUA.png",
           "tags": [""],
           "native": false,
           "denom": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d"
