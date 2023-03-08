@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { BsCircleFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -6,23 +6,21 @@ import { Box, HStack, Icon, Text } from '@chakra-ui/react'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { nodeError as nodeErrorAtom } from '../state/atoms/nodeError'
 
-const Status = () => {
-  const chains = useChains()
-  const { chainId } = useRecoilValue(walletState)
-
-  const url = useMemo(() => {
-    return chains?.find((c) => c?.chainId === chainId)?.rpc
-  }, [chainId, chains])
-
-  const { data: status } = useQuery(
+const useStatus = ({chainId, url}) => {
+  return useQuery(
     ['status', chainId],
     async () => {
-      const res = await fetch(`${url}/status?`)
-      const resJons = await res?.json()
-      return {
-        block: resJons?.result?.sync_info?.latest_block_height || status?.block,
-        active: !!resJons?.result?.sync_info?.latest_block_height,
+      try{
+        const res = await fetch(`${url}/status?`)
+        const resJons = await res?.json()
+        return {
+          block: resJons?.result?.sync_info?.latest_block_height,
+          active: !!resJons?.result?.sync_info?.latest_block_height,
+        }
+      }catch(error){
+        throw new Error(error)
       }
     },
     {
@@ -30,6 +28,28 @@ const Status = () => {
       enabled: !!url,
     }
   )
+}
+
+const Status = () => {
+  const chains = useChains()
+  const { chainId } = useRecoilValue(walletState)
+  const [nodeError, setNodeError] = useRecoilState(nodeErrorAtom)
+
+  const url = useMemo(() => {
+    return chains?.find((c) => c?.chainId === chainId)?.rpc
+  }, [chainId, chains])
+
+  const {data: status, error, isLoading} = useStatus({chainId, url})
+
+
+  useEffect(() => {
+    if(!!error)
+      setNodeError(true)
+    else if(!error && !isLoading)
+      setNodeError(false)
+    
+
+  },[error, nodeError])
 
   return (
     <HStack

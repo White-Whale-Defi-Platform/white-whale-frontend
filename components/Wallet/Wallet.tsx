@@ -15,7 +15,7 @@ import useConnectLeap from 'hooks/useConnectLeap'
 import { useTerraStation } from 'hooks/useTerraStation'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
 
@@ -45,7 +45,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (router.pathname === '/') return
 
     const defaultChainId =
-      currentWalletState.network === 'mainnet' ? 'juno-1' : 'uni-3'
+      currentWalletState.network === 'mainnet' ? 'phoenix-1' : 'pisco-1'
 
     if (
       validChains[currentWalletState.network][chainIdParam] !==
@@ -121,17 +121,18 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       connectKeplr()
     } else if (currentWalletState.activeWallet === 'cosmostation') {
       connectCosmostation()
-    } else if (currentWalletState.activeWallet === 'station') {
-      const [{ type = null, identifier = null } = {}] =
-        availableConnections.filter(filterForStation)
+    }
+    else if ((currentWalletState.activeWallet === 'station' || currentWalletState.activeWallet === 'walletconnect') && currentWalletState?.status !== WalletStatusType.disconnected) {
+      const [, { type = null, identifier = null } = {}] =
+        availableConnections.filter(({ type }) => type === currentWalletState.activeWallet)
       if (type && identifier) connectTerraAndCloseModal(type, identifier)
     }
 
-    // update route
+    // update routes
     const sourceChain = chains.find(
       (row) => row.chainId.toLowerCase() === currentWalletState.chainId
     )
-    if (sourceChain &&  !router.pathname.includes('/404')) {
+    if (sourceChain && !router.pathname.includes('/404')) {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

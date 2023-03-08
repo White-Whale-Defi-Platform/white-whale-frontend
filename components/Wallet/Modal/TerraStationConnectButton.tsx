@@ -16,7 +16,7 @@ function TerraStationConnectButton({ onCloseModal }) {
         .map(({ type, identifier, name, icon }) => (
           <Button
             variant="wallet"
-            key={identifier}
+            key={identifier || type}
             onClick={() => connectTerraAndCloseModal(type, identifier)}
           >
             <HStack justify="space-between" width="full">

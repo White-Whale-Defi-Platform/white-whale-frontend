@@ -26,6 +26,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
+import TotalLiq from './components/TotalLiq'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
@@ -98,9 +99,12 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
-    ),
+    cell: (info) => <TotalLiq 
+      poolId={info.row.original?.poolId}
+      liquidity={info.row.original?.liquidity}
+      totalLiq={info.getValue()}
+      poolAssets={info.row.original?.poolAssets}
+    />
   }),
   columnHelper.accessor('cta', {
     header: '',
@@ -143,7 +147,7 @@ const PoolsTable = ({
     )
   }
 
-  if (pools && !pools.length) {
+  if (pools && !pools.length && !isLoading) {
     return (
       <Flex
         padding={10}
@@ -180,9 +184,9 @@ const PoolsTable = ({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </Th>
                 ))}
               </Tr>
