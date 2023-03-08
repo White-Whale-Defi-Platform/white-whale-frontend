@@ -176,7 +176,7 @@
       "lpOrder": ["bHUAHUA", "HUAHUA"],
       "assetOrder": ["bHUAHUA", "HUAHUA"],
       "displayName": "bHUAHUA-HUAHUA",
-      "displayLogo1": "/logos/ampHUAHUA.jpeg",
+      "displayLogo1": "/logos/bHUA.png",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
@@ -185,7 +185,7 @@
           "symbol": "bHUAHUA",
           "name": "bHUAHUA",
           "decimals": 6,
-          "logoURI": "/logos/ampHUAHUA.jpeg",
+          "logoURI": "/logos/bHUA.png",
           "tags": [],
           "native": false,
           "denom": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w"
