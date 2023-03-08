@@ -40,6 +40,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
   const [token, setToken] = useState<TokenItemState>(tokenA)
   const tx = useWithdraw({ token, contract, swapAddress, poolId })
   const baseToken = useBaseTokenInfo()
+  const isConnected = connected === `@wallet-state/connected`
 
   useEffect(() => {
     if (tx.txStep === TxStep.Success)
@@ -57,7 +58,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
   }, [liquidity])
 
   const buttonLabel = useMemo(() => {
-    if (!connected) return 'Connect Wallet'
+    if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!!!token?.amount) return 'Enter Amount'
     else if (tx?.buttonLabel) return tx?.buttonLabel
     else return 'Withdraw'
@@ -117,7 +118,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready}
+        disabled={tx.txStep != TxStep.Ready || !isConnected}
       >
         {buttonLabel}
       </Button>

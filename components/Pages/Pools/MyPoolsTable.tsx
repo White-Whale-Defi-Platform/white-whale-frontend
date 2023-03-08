@@ -22,7 +22,9 @@ import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
+import MyPosition from './components/MyPosition'
 import PoolName from './components/PoolName'
+import TotalLiq from './components/TotalLiq'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
@@ -56,7 +58,13 @@ const columns = [
         {`My Position`}
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => 
+    <MyPosition 
+      myPositiionAmount={info.row.original?.myPosition}
+      pair={info.row.original?.poolId}
+      providedAssets={info.row.original?.liquidity?.reserves?.provided}
+    />
+    // cell: (info) => <Text align="right">${info.row.original?.myPosition}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
@@ -103,9 +111,12 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
-    ),
+    cell: (info) => <TotalLiq 
+      poolId={info.row.original?.poolId}
+      liquidity={info.row.original?.liquidity}
+      totalLiq={info.getValue()}
+      poolAssets={info.row.original?.poolAssets}
+    />
   }),
   columnHelper.accessor('cta', {
     header: '',
@@ -149,7 +160,7 @@ const PoolsTable = ({
     )
   }
 
-  if (pools && !pools.length) {
+  if (pools && !pools.length && !isLoading) {
     return (
       <Flex
         padding={10}

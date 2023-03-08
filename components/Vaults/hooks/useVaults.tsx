@@ -54,7 +54,7 @@ const queryVault = async (client, contract, tokenInfo, getTokenDollarValue) => {
   })
 
   const dollarValue = await getTokenDollarValue({
-    tokenInfo: tokenInfo,
+    tokenA: tokenInfo,
     tokenAmountInDenom: fromChainAmount(info?.total_supply),
   })
 
@@ -75,7 +75,7 @@ const queryBalance = async (
 
   const underlyingAsset = await queryShare(client, vault, lpBalance?.balance)
   const dollarValue = await getTokenDollarValue({
-    tokenInfo: tokenInfo,
+    tokenA: tokenInfo,
     tokenAmountInDenom: fromChainAmount(underlyingAsset),
   })
 

@@ -129,6 +129,8 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
+        !!client &&
+        !!senderAddress &&
         enabled &&
         !!swapAddress &&
         (!!tokenAAmount || !!tokenBAmount),

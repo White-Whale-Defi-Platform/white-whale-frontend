@@ -20,7 +20,7 @@ export const getPairInfos = async (pairs: string[]) => {
 }
 
 export const getPairAprAndDailyVolume = async (
-  pools: any[],
+  pools: any[] = [],
   chainId: string
 ) => {
   const pairs = pools.map((pool: any) => pool.swap_address)
@@ -40,6 +40,7 @@ export const getPairAprAndDailyVolume = async (
         apr7d: pairInfo?.apr7d || 0,
         asset0Price: pairInfo?.asset0.usdPrice,
         asset1Price: pairInfo?.asset1.usdPrice,
+        usdLiquidity: pairInfo?.usdLiquidity,
         isLunaxPool:
           pairInfo?.asset0.symbol.includes('LunaX') ||
           pairInfo?.asset1.symbol.includes('LunaX'),

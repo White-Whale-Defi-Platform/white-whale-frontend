@@ -28,7 +28,7 @@ import WithdrawForm from './WithdrawForm'
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const chains = useChains()
-  const { address, chainId, key, status } = useRecoilValue(walletState)
+  const { address, chainId, status } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
@@ -107,7 +107,7 @@ const ManageLiquidity: FC = () => {
       width={{ base: '100%', md: '700px' }}
       alignItems="center"
       padding={5}
-      margin="auto"
+      // margin="auto"
     >
       <HStack
         justifyContent="space-between"

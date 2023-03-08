@@ -63,7 +63,7 @@ const Navbar = ({}) => {
 
   const resetWalletConnection = () => {
     setWalletState({
-      status: WalletStatusType.idle,
+      status: WalletStatusType.disconnected,
       address: '',
       key: null,
       client: null,

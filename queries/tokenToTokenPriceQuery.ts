@@ -30,7 +30,7 @@ export async function tokenToTokenPriceQueryWithPools({
   client,
   id,
 }: TokenToTokenPriceQueryArgs): Promise<number | undefined> {
-  if (tokenA.symbol === tokenB.symbol) {
+  if (tokenA?.symbol === tokenB?.symbol) {
     return 1
   }
 
@@ -39,8 +39,7 @@ export async function tokenToTokenPriceQueryWithPools({
 
   const convertedTokenAmount = convertDenomToMicroDenom(amount, tokenA.decimals)
 
-  const { streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool } =
-    matchingPools
+  const { streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool } = matchingPools || {}
 
   if (id) {
     const [price] = await tokenDollarValueQuery([id])

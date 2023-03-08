@@ -21,6 +21,8 @@ import { useTokenList } from 'hooks/useTokenList'
 import { num } from 'libs/num'
 
 import AssetSelectModal from './AssetSelectModal'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 interface AssetInputProps {
   image?: boolean
@@ -58,6 +60,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
   ) => {
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
     const baseToken = useBaseTokenInfo()
+    const {  status } = useRecoilValue(walletState)
+    const isConnected = status === `@wallet-state/connected`
 
     const [tokenList] = useTokenList()
     useMultipleTokenBalance(tokenList?.tokens?.map(({ symbol }) => symbol))
@@ -97,7 +101,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
             {minMax && (
               <HStack visibility={{ base: 'hidden', md: 'visible' }}>
                 <Button
-                  disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
+                  disabled={disabled || !isConnected || (!isSingleInput && !tokenInfo?.symbol)}
                   variant="outline"
                   size="xs"
                   onClick={() =>
@@ -110,7 +114,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
                   half
                 </Button>
                 <Button
-                  disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
+                  disabled={disabled || !isConnected  || (!isSingleInput && !tokenInfo?.symbol)}
                   variant="outline"
                   size="xs"
                   onClick={() =>

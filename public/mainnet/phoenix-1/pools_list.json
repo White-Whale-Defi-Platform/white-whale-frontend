@@ -24,6 +24,114 @@
   "routerAddress": "terra1p37jrwlaqpklzlu4rwjyjrmzuezdgk3pyuyk2zclc4rda6awkm3qnj6f0a",
   "pools": [
     {
+      "pool_id": "WHALE-axlUSDC",
+      "lpOrder": ["WHALE", "axlUSDC"],
+      "assetOrder": ["WHALE", "axlUSDC"],
+      "displayName": "WHALE-axlUSDC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/axlUSDC.png",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+          "symbol": "axlUSDC",
+          "name": "axlUSDC",
+          "decimals": 6,
+          "logoURI": "/logos/axlUSDC.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
+        }
+      ],
+      "lp_token": "terra1necjy4mmes4fvsvjvne5kkl3zhszg7s3s3jayfgzudsshnpv69kss5m2k2",
+      "swap_address": "terra1qdu4g5zxxtmwsd95v8vjslq5874nkcull7ejycm0gy2v7p5qc67qenkf8t",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampWHALE-WHALE",
+      "lpOrder": ["WHALE", "ampWHALE"],
+      "assetOrder": ["ampWHALE", "WHALE"],
+      "displayName": "ampWHALE-WHALE",
+      "displayLogo1": "/logos/ampWhale.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
+          "symbol": "ampWHALE",
+          "name": "ampWhale",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        }
+      ],
+      "lp_token": "terra16z3ksy6aqjkug8l3u48q0kvdaqk3dgaytl7ykt6vg2he9d6z9rgslr4k7l",
+      "swap_address": "terra1ntx595elf3ukxcd0wy76h24rzztcv2p6n3wmfd358ks95prv42fs9mn63n",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bWHALE-WHALE",
+      "lpOrder": ["WHALE", "bWHALE"],
+      "assetOrder": ["bWHALE", "WHALE"],
+      "displayName": "bWHALE-WHALE",
+      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        }
+      ],
+      "lp_token": "terra1le46uu9qjk53aktjs8dev96sl9sd2ujvcpspk75pdeg0txfvhyuswm6653",
+      "swap_address": "terra1j9jmsplecj9ay2py27953p84nfmv7f6ce75ms5fleyhd0aecpc7q0hgmsa",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
       "pool_id": "ATOM-LUNA",
       "lpOrder": ["ATOM", "LUNA"],
       "assetOrder": ["ATOM", "LUNA"],
@@ -169,6 +277,116 @@
       ],
       "lp_token": "terra1rlmjwapg7y3p39aucq2rq5rffyns7z94twm8acl59na4d9aehu9sl2dfkc",
       "swap_address": "terra1ck8nkz35sa8mmqez3lqrm77vh36n2gd2f0dxjde4uemkwsjt22pqgk49zj",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bLUNA-LUNA",
+      "lpOrder": ["bLUNA", "LUNA"],
+      "assetOrder": ["bLUNA", "LUNA"],
+      "displayName": "bLUNA-LUNA",
+      "displayLogo1": "/logos/bLuna.png",
+      "displayLogo2": "/logos/luna.svg",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+          "symbol": "bLUNA",
+          "name": "bLuna",
+          "decimals": 6,
+          "logoURI": "/logos/bLuna.png",
+          "tags": [],
+          "native": false,
+          "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
+        }
+      ],
+      "lp_token": "terra1q475uvk9te5nxq2lzu0h96t0devmx4v8ctxqtm253ut05wrpugsq0m4e3k",
+      "swap_address": "terra1j5znhs9jeyty9u9jcagl3vefkvzwqp6u9tq9a3e5qrz4gmj2udyqp0z0xc",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampLUNA-LUNA",
+      "lpOrder": ["ampLUNA", "LUNA"],
+      "assetOrder": ["ampLUNA", "LUNA"],
+      "displayName": "ampLUNA-LUNA",
+      "displayLogo1": "/logos/ampLuna.png",
+      "displayLogo2": "/logos/luna.svg",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
+          "symbol": "ampLUNA",
+          "name": "ampLuna",
+          "decimals": 6,
+          "logoURI": "/logos/ampLuna.png",
+          "tags": [],
+          "native": false,
+          "denom": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct"
+        }
+      ],
+      "lp_token": "terra10un5hr6asmn7g0ggh9sz0x3v8f9evh5cvawk8xs65rghundc25mq7g5par",
+      "swap_address": "terra1tsx0dmasjvd45k6tdywzv77d5t9k3lpzyuleavuah77pg3lwm9cq4469pm",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bLUNA-SOLID",
+      "lpOrder": ["bLUNA", "SOLID"],
+      "assetOrder": ["bLUNA", "SOLID"],
+      "displayName": "bLUNA-SOLID",
+      "displayLogo1": "/logos/bLUNA.png",
+      "displayLogo2": "/logos/solid.svg",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+          "symbol": "bLUNA",
+          "name": "bLuna",
+          "decimals": 6,
+          "logoURI": "/logos/bLuna.png",
+          "tags": [],
+          "native": false,
+          "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra10aa3zdkrc7jwuf8ekl3zq7e7m42vmzqehcmu74e4egc7xkm5kr2s0muyst",
+          "symbol": "SOLID",
+          "name": "Solid",
+          "decimals": 6,
+          "logoURI": "/logos/solid.svg",
+          "tags": [],
+          "native": false,
+          "denom": "terra10aa3zdkrc7jwuf8ekl3zq7e7m42vmzqehcmu74e4egc7xkm5kr2s0muyst"
+        }
+      ],
+      "lp_token": "terra19sddeagdmflr7fh4tqkj37chv6zjpef2nnvfzfjlykwz0zvg6f4scvy5dr",
+      "swap_address": "terra1shd0wd8atmevjtryzcqzu6sxsmc4hjek43kxqsz08wxwk4nt0wvsav9004",
       "staking_address": "",
       "rewards_tokens": []
     }

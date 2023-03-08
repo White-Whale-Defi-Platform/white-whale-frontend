@@ -5,6 +5,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
 import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import LeapWalletIcon from 'components/icons/LeapWalletIcon'
+import WallectConnectIcon from 'components/icons/WalletConnectIcon'
 
 
 function ConnectedWalletIcon({ connected }) {
@@ -18,6 +19,8 @@ function ConnectedWalletIcon({ connected }) {
       return <CosmostationWalletIcon />
     case 'station':
       return <TerraExtensionIcon />
+    case 'walletconnect':
+      return <WallectConnectIcon />
     default:
       return <></>
   }
