@@ -39,6 +39,7 @@ const DepositForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(walletState)
+  const isConnected = connected === `@wallet-state/connected`
 
   const onSuccess = useCallback(
     (txHash) => {
@@ -113,7 +114,7 @@ const DepositForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready}
+        disabled={tx.txStep != TxStep.Ready || !isConnected}
       >
         {buttonLabel}
       </Button>

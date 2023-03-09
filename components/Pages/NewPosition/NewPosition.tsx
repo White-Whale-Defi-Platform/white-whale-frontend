@@ -1,15 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import {useEffect, useMemo, useState} from 'react'
 
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import { HStack, IconButton, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
-import { TxStep } from 'hooks/useTransaction'
-import { NextRouter, useRouter } from 'next/router'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import {ArrowBackIcon} from '@chakra-ui/icons'
+import {HStack, IconButton, Text, VStack} from '@chakra-ui/react'
+import {useChains} from 'hooks/useChainInfo'
+import {TxStep} from 'hooks/useTransaction'
+import {NextRouter, useRouter} from 'next/router'
+import {usePoolsListQuery} from 'queries/usePoolsListQuery'
+import {useRecoilState, useRecoilValue} from 'recoil'
+import {walletState} from 'state/atoms/walletAtoms'
 
-import { TokenItemState, tokenLpAtom } from '../ManageLiquidity/lpAtoms'
+import {TokenItemState, tokenLpAtom} from '../ManageLiquidity/lpAtoms'
 import defaultTokens from './defaultTokens.json'
 import useProvideLP from './hooks/useProvideLP'
 import NewPositionForm from './NewPositionForm'
@@ -20,24 +20,24 @@ const NewPosition = () => {
 
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenLpAtom)
-  const { chainId, network, address, status } = useRecoilValue(walletState)
-  const { simulated, tx } = useProvideLP({ reverse })
+  const {chainId, network, address, status} = useRecoilValue(walletState)
+  const {simulated, tx} = useProvideLP({reverse})
   const router: NextRouter = useRouter()
-  const chains = useChains()
-  const { data: poolList } = usePoolsListQuery()
+  const chains: Array<any> = useChains()
+  const {data: poolList} = usePoolsListQuery()
 
   const chainIdParam = router.query.chainId as string
-  const { from, to } = router.query
-  const currenChain = chains.find((row) => row.chainId === chainId)
-  const currentChainId = currenChain?.label.toLowerCase()
+  const {from, to} = router.query
+  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currentChain?.label.toLowerCase()
 
   const tokenList = useMemo(() => {
     let listObj = {}
-    const { pools = [] } = poolList || {}
+    const {pools = []} = poolList || {}
     pools
-      .map(({ pool_assets }) => pool_assets)
+      .map(({pool_assets}) => pool_assets)
       .map(([a, b]) => {
-        listObj = { ...listObj, [a.symbol]: a, [b.symbol]: b }
+        listObj = {...listObj, [a.symbol]: a, [b.symbol]: b}
       })
 
     return Object.keys(listObj).map((row) => {
@@ -107,7 +107,7 @@ const NewPosition = () => {
   }, [tokenA, tokenB])
 
   const onInputChange = (
-    { tokenSymbol, amount }: TokenItemState,
+    {tokenSymbol, amount}: TokenItemState,
     index: number
   ) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
@@ -125,23 +125,23 @@ const NewPosition = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '600px' }}
+      width={{base: '100%', md: '600px'}}
       alignItems="center"
       padding={5}
-      margin="auto"
+      // margin="auto"
     >
       <HStack
         justifyContent="space-between"
         width="full"
         paddingY={5}
-        paddingX={{ base: 4 }}
+        paddingX={{base: 4}}
       >
         <IconButton
           variant="unstyled"
           color="white"
           fontSize="28px"
           aria-label="go back"
-          icon={<ArrowBackIcon />}
+          icon={<ArrowBackIcon/>}
           onClick={() => router.push(`/${chainIdParam}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">

@@ -24,7 +24,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, pr
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
 
-  const chains = useChains()
+  const chains :Array<any>= useChains()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
 
@@ -37,7 +37,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, pr
   const { connectTerraAndCloseModal, filterForStation } = useTerraStation(
     () => {}
   )
-  const { availableConnections, availableInstallations } = useWallet()
+  const { availableConnections} = useWallet()
 
   useEffect(() => {
     // onDisconnect()

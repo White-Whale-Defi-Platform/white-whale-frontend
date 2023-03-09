@@ -58,6 +58,7 @@ const WithdrawForm = ({
   )
 
   const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
+  const isConnected = connected === `@wallet-state/connected`
 
   const buttonLabel = useMemo(() => {
     if (connected !== `@wallet-state/connected`) return 'Connect Wallet'
@@ -107,7 +108,7 @@ const WithdrawForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready}
+        disabled={tx.txStep != TxStep.Ready || !isConnected}
       >
         {buttonLabel}
       </Button>

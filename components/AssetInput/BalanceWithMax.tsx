@@ -19,6 +19,11 @@ type MaxButtonProps = {
     onClick: () => void;
     hideMax?: boolean;
 }
+type HalfButtonProps = {
+    disabled: boolean;
+    onClick: () => void;
+    hideHalf?: boolean;
+}
 
 const MaxButton = ({ disabled, onClick, hideMax = false }: MaxButtonProps) => {
     if (hideMax) return null;
@@ -31,6 +36,20 @@ const MaxButton = ({ disabled, onClick, hideMax = false }: MaxButtonProps) => {
             width="50px"
         >
             max
+        </Button>
+    )
+}
+const HalfButton = ({ disabled, onClick, hideHalf = false }: HalfButtonProps) => {
+    if (hideHalf) return null;
+    return (
+        <Button
+            disabled={disabled}
+            variant="outline"
+            size="xs"
+            onClick={onClick}
+            width="50px"
+        >
+            half
         </Button>
     )
 }
@@ -57,22 +76,23 @@ type BalanceWithMaxProps = {
     numberOfTokens: string;
     dollarValue: number | string;
     onMaxClick: () => void;
+    onHalfClick: () => void;
     hideMax?: boolean;
     hideDollarValue?: boolean;
 }
 
-const BalanceWithMax = ({ balance, maxDisabled, numberOfTokens, dollarValue, onMaxClick, hideMax, hideDollarValue }: BalanceWithMaxProps) => {
+const BalanceWithMaxNHalf = ({ balance, maxDisabled, numberOfTokens, dollarValue, onMaxClick,onHalfClick, hideMax, hideDollarValue }: BalanceWithMaxProps) => {
     return (
         <HStack width="full" px={5}>
-            <TokenToPrice 
-                numberOfTokens={numberOfTokens} 
-                dollarValue={dollarValue} 
+            <TokenToPrice
+                numberOfTokens={numberOfTokens}
+                dollarValue={dollarValue}
                 hide={hideDollarValue} />
             <Balance balance={balance} />
-            <MaxButton disabled={maxDisabled} onClick={onMaxClick} hideMax={hideMax} />
-
+            <HalfButton disabled={maxDisabled} onClick={onHalfClick} hideHalf={hideMax} />
+          <MaxButton disabled={maxDisabled} onClick={onMaxClick} hideMax={hideMax} />
         </HStack>
     )
 }
 
-export default BalanceWithMax
+export default BalanceWithMaxNHalf

@@ -5,6 +5,6 @@ export type BondingData = {
     actionType: ActionType
     tokenType: TokenType
     value: number
+
     label: string
   }
-  

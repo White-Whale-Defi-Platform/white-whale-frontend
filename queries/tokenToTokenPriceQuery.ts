@@ -30,7 +30,7 @@ export async function tokenToTokenPriceQueryWithPools({
   client,
   id,
 }: TokenToTokenPriceQueryArgs): Promise<number | undefined> {
-  if (tokenA.symbol === tokenB.symbol) {
+  if (tokenA?.symbol === tokenB?.symbol) {
     return 1
   }
 

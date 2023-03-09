@@ -1,11 +1,10 @@
 import { VStack, forwardRef} from '@chakra-ui/react'
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
-import BalanceWithMax from './BalanceWithMax'
 import WhaleInput from './WhaleInput'
 import { num } from '../../libs/num'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
-import BalanceSlider from './BalanceSlider'
+import BalanceWithMaxNHalf from "./BalanceWithMax";
 
 interface AssetInputProps {
   image?: boolean
@@ -27,24 +26,26 @@ interface AssetInputProps {
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
-  const { balance, disabled, isSingleInput, value:token, onChange, ignoreSlack, hideMax, hideDollarValue, showBalanceSlider} = props
+  const { balance, disabled, isSingleInput, value:token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
-
-  const onSliderChange = (value) => {
-    onChange({
-      ...token,
-      amount: num(value).toFixed(6),
-    })
-  }
 
   const onMaxClick = () => {
     const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
     onChange({
       ...token,
       amount: isTokenAndBaseTokenSame && !ignoreSlack
-        ? num(balance - 0.1).toFixed(6)
+        ? num(balance === 0 ? 0 : (balance - 0.1)).toFixed(6)
         : num(balance).toFixed(6),
+    })
+  }
+  const onHalfClick = () => {
+    const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
+    onChange({
+      ...token,
+      amount: isTokenAndBaseTokenSame && !ignoreSlack
+        ? (num(balance === 0 ? 0 : (balance/2 - 0.1))).toFixed(6)
+        : num(balance/2).toFixed(6),
     })
   }
   const maxDisabled = useMemo(() => {
@@ -67,7 +68,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
   return (
     <VStack width="full">
       <WhaleInput {...props} />
-      <BalanceWithMax
+      <BalanceWithMaxNHalf
         balance={balanceWithDecimals}
         hideDollarValue={hideDollarValue}
         numberOfTokens={numberOfTokens}
@@ -75,12 +76,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
         maxDisabled={maxDisabled}
         hideMax={hideMax}
         onMaxClick={onMaxClick}
-      />
-      <BalanceSlider 
-        show={showBalanceSlider}
-        balance={Number(balanceWithDecimals)} 
-        amount={token?.amount} 
-        onChange={onSliderChange} 
+        onHalfClick={onHalfClick}
       />
     </VStack>
   )

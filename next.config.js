@@ -30,10 +30,36 @@ const config = {
     return [
       {
         source: '/',
-        destination: '/swap',
+        destination: '/terra/swap',
         permanent: false,
       },
     ]
+  },
+  // Adding policies:
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'none'"
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          }
+        ],
+      },
+    ];
   },
   reactStrictMode: false,
   target: 'serverless',

@@ -1,6 +1,10 @@
-import { ActionType } from '../../../components/Pages/Bonding/BondingOverview'
 import BondingActions from '../../../components/Pages/BondingActions'
+import {ActionType} from "../../../components/Pages/Bonding/BondingOverview";
 
-const BondPage = () => <BondingActions globalAction={ActionType.bond} />
+const BondPage = () => {
+
+
+  return <BondingActions globalAction={ActionType.bond}/>
+}
 
 export default BondPage

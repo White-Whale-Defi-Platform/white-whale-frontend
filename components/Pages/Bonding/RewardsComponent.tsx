@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Button, HStack, Image, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, Text, useDisclosure, VStack, keyframes } from '@chakra-ui/react'
 
 import { walletState, WalletStatusType } from '../../../state/atoms/walletAtoms'
 
@@ -11,73 +11,86 @@ import WalletModal from '../../Wallet/Modal/Modal'
 import Wallet from '../../Wallet/Wallet'
 import Loader from '../../Loader'
 
- const ProgressBar = ({ percent }) => {
-    const colors = ["#E43A1C", "#EE902E", "#FAFD3C", "#7CFB7D"]
-    return (
-        <Box
-            h="7px"
-            minW={390}
-            bg="whiteAlpha.400"
-            borderRadius="10px"
-            overflow="hidden"
-        >
-            <Box h="100%" bg={colors[Math.trunc(percent / 25)]} w={`${percent}%`} borderRadius="10px" />
-        </Box>
-    );
-}
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(0.99)  translateX(0%);
+    background-color: #FAFD3C;
+  }
+  25% {
+    transform: scale(1)  translateX(0%);
+    background-color: #7CFB7D;
+  }
+  50% {
+    transform: scale(0.99) translateX(0%);
+    background-color: #FAFD3C;
+  }
+  75% {
+    transform: scale(1)  translateX(0%);
+    background-color: #7CFB7D;
+  }
+  100% {
+    transform: scale(0.99)  translateX(0%);
+    background-color: #FAFD3C;
+  }
+`;
 
-const RewardsComponent = ({isHorizontalLayout}) => {
+const ProgressBar = ({ percent }) => {
+  const [isPulsing, setIsPulsing] = useState(false);
+  const [p, setP] = useState(percent);
+  const colors = ["#E43A1C", "#EE902E", "#FAFD3C", "#7CFB7D"]
 
-    const {
-        isOpen: isOpenModal,
-        onOpen: onOpenModal,
-        onClose: onCloseModal,
-    } = useDisclosure()
+  useEffect(() => {
+    setTimeout(()=> {
+      setP(100)
+      setIsPulsing(true)
+    }, 5000)
+  }, [percent]);
 
-    const [isLoadingRewards, setLoadingRewards] = useState<boolean>(true)
-    const [{ key, chainId, network, status }, setWalletState] = useRecoilState(walletState)
-    const { disconnect } = useWallet()
+  return (
+    <Box
+      h="7px"
+      minW={390}
+      bg={isPulsing ? "transparent":"whiteAlpha.400"}
+      borderRadius="10px"
+      overflow="hidden"
+      position="relative"
+    >
+      <Box
+        h="100%"
+        bg={colors[Math.trunc(p / 25)]}
+        w={`${p}%`}
+        borderRadius="10px"
+        position="relative"
+        animation={
+          isPulsing
+            ? `${pulseAnimation} 1.8s ease-in-out infinite`
+            : undefined
+        }
+      />
+    </Box>
+  );
+};
+const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, myRewards, whalePrice}) => {
+  const {disconnect} = useWallet()
+  const [{key,chainId, network}, setWalletState] = useRecoilState(walletState)
+  const {
+    isOpen: isOpenModal,
+    onOpen: onOpenModal,
+    onClose: onCloseModal,
+  } = useDisclosure()
 
-    const isWalletConnected: boolean = status === WalletStatusType.connected
-
-    const resetWalletConnection = () => {
-        setWalletState({
-            status: WalletStatusType.idle,
-            address: '',
-            key: null,
-            client: null,
-            network,
-            chainId,
-            activeWallet: null,
-        })
-        disconnect()
-    }
-    const [price, setPrice] = useState(null);
-
-    const [isLoadingWhalePrice, setLoadingWhalePrice] = useState<boolean>(true)
-
-    const fetchPrice = async function () {
-        const value = 12.53// replace with result from get req
-        setPrice(value);
-        setLoadingWhalePrice(false);
-    }
-
-    const [myRewards, setMyRewards] = useState<number>(null);
-
-    const fetchMyRewards = async function () {
-        const value = 0// replace with result from get req
-        setMyRewards(value);
-        setLoadingRewards(false);
-    }
-    useEffect(() => {
-        setTimeout(async () => {
-            fetchPrice();
-            fetchMyRewards();
-
-        }, 2000)
-    }, [isWalletConnected]);
-    const isLoading = isLoadingRewards || isLoadingWhalePrice
-
+  const resetWalletConnection = () => {
+    setWalletState({
+      status: WalletStatusType.idle,
+      address: '',
+      key: null,
+      client: null,
+      network,
+      chainId,
+      activeWallet: null,
+    })
+    disconnect()
+  }
     // TODO global constant?
     const boxBg = "#1C1C1C"
     // TODO global constant ?
@@ -134,7 +147,7 @@ const RewardsComponent = ({isHorizontalLayout}) => {
                     </a>
                     <Text fontSize={20}>WHALE</Text>
                 </HStack>
-                <Text color="#7CFB7D" fontSize={18}>${price}</Text>
+                <Text color="#7CFB7D" fontSize={18}>${whalePrice}</Text>
             </HStack>
             <VStack
             >
@@ -144,7 +157,8 @@ const RewardsComponent = ({isHorizontalLayout}) => {
                     <Text color="whiteAlpha.600">Next rewards in</Text>
                     <Text>{24 - hours} hours</Text>
                 </HStack>
-                <ProgressBar percent={(hours / 24) * 100} />
+                <ProgressBar percent={10} />
+              {/*'{//<ProgressBar percent={(hours / 24) * 100} />}'*/}
             </VStack>
             <Box
                 border="0.5px solid"
