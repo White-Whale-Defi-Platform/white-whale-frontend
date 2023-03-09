@@ -180,17 +180,6 @@
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
-          "chain_id": "chihuahua-1",
-          "token_address": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w",
-          "symbol": "bHUAHUA",
-          "name": "bHUAHUA",
-          "decimals": 6,
-          "logoURI": "/logos/bHUA.png",
-          "tags": [],
-          "native": false,
-          "denom": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w"
-        },
-        {
           "id": "chihuahua-token",
           "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
@@ -201,6 +190,17 @@
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w",
+          "symbol": "bHUAHUA",
+          "name": "bHUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/bHUA.png",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w"
         }
       ],
       "lp_token": "chihuahua1ju5ecz9xcfly70g7fvh4yflh60d2uyf9g3hxl8xahra8szzy2jdsg6p63r",
