@@ -63,7 +63,7 @@
     {
       "pool_id": "HUAHUA-SHIB",
       "lpOrder": ["SHIB", "HUAHUA"],
-      "assetOrder": ["HUAHUA", "SHIB"],
+      "assetOrder": ["SHIB", "HUAHUA"],
       "displayName": "SHIB-HUAHUA",
       "displayLogo1": "/logos/shiba-inu-shib-logo.png",
       "displayLogo2": "/logos/huahua.png",
@@ -136,8 +136,8 @@
     },
     {
       "pool_id": "HUAHUA-rHUAHUA",
-      "lpOrder": ["HUAHUA", "rHUAHUA"],
-      "assetOrder": ["HUAHUA", "rHUAHUA"],
+      "lpOrder": ["rHUAHUA", "HUAHUA"],
+      "assetOrder": ["rHUAHUA", "HUAHUA"],
       "displayName": "rHUAHUA-HUAHUA",
       "displayLogo1": "/logos/huahua.png",
       "displayLogo2": "/logos/huahua.png",
