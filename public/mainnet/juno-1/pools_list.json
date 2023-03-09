@@ -134,6 +134,114 @@
       "swap_address": "juno1wkjy5wl0pd5xxvwtrx37r7ydkt3dkwvghs00tvvqyd3xnjukah7qpj0vj7",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALE-axlUSDC",
+      "lpOrder": ["WHALE", "axlUSDC"],
+      "assetOrder": ["WHALE", "axlUSDC"],
+      "displayName": "WHALE-axlUSDC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/axlUSDC.png",
+      "pool_assets": [
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
+        },
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
+          "symbol": "axlUSDC",
+          "name": "axlUSDC",
+          "decimals": 6,
+          "logoURI": "/logos/axlUSDC.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034"
+        }
+      ],
+      "lp_token": "juno1lqc9u7lv52jpqgewhtl4w2yjch0234ewfz2z3ykl0z2q67xyfrnsjqw95j",
+      "swap_address": "juno1g7ctm7dynjsduf597d8nvt36kwvhfutmzrczdnm00tsz48uryvzqp7p32h",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampWHALE-WHALE",
+      "lpOrder": ["ampWHALE", "WHALE"],
+      "assetOrder": ["ampWHALE", "WHALE"],
+      "displayName": "ampWHALE-WHALE",
+      "displayLogo1": "/logos/ampWhale.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
+          "symbol": "ampWHALE",
+          "name": "ampWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF"
+        },
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
+        }
+      ],
+      "lp_token": "juno1cvnwcgkhxaj70gjg7x57fh447m2wj5yx7p2puu4mqgtf62qphtds88mdsd",
+      "swap_address": "juno1dwmrkyhed4szdxxk6l0c98hseancjtdet58n77tfhv2as8cdjdlq7vps00",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "boneWHALE-WHALE",
+      "lpOrder": ["boneWHALE", "WHALE"],
+      "assetOrder": ["boneWHALE", "WHALE"],
+      "displayName": "boneWHALE-WHALE",
+      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF",
+          "symbol": "boneWHALE",
+          "name": "boneWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF"
+        },
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
+        }
+      ],
+      "lp_token": "juno1a68d46fyzyq50t3geqe5c50kmswhrezyec8hz6sfngts6k4e77nqqd3yd0",
+      "swap_address": "juno160uh2xtegzvc7ekte5x377aud0y40hw75m9l92h7pkqk3l3eg9vqltel48",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
