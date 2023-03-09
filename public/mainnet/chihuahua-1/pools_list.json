@@ -137,7 +137,7 @@
     {
       "pool_id": "HUAHUA-rHUAHUA",
       "lpOrder": ["HUAHUA", "rHUAHUA"],
-      "assetOrder": ["rHUAHUA", "HUAHUA"],
+      "assetOrder": ["HUAHUA", "rHUAHUA"],
       "displayName": "rHUAHUA-HUAHUA",
       "displayLogo1": "/logos/huahua.png",
       "displayLogo2": "/logos/huahua.png",
@@ -203,7 +203,7 @@
           "denom": "uhuahua"
         }
       ],
-      "lp_token": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w",
+      "lp_token": "chihuahua1ju5ecz9xcfly70g7fvh4yflh60d2uyf9g3hxl8xahra8szzy2jdsg6p63r",
       "swap_address": "chihuahua1py86y6946ed07g8v24thess2havjjgpg3uvjdu4v805czmge37hsvlt6qz",
       "staking_address": "",
       "rewards_tokens": []
