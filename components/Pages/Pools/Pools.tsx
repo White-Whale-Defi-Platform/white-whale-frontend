@@ -22,7 +22,7 @@ type Props = {}
 const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
 const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
-const NoPrice = ["ASH-BDOG", 'ASH-GDOG']
+const NoPrice = ["ASH-BDOG", 'ASH-GDOG', 'ampWHALE-WHALE', 'boneWHALE-WHALE']
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])

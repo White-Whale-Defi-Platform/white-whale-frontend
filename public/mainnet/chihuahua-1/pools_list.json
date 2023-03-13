@@ -320,7 +320,7 @@
     {
       "pool_id": "HUAHUA-WHALE",
       "lpOrder": ["WHALE", "HUAHUA"],
-      "assetOrder": ["WHALE", "HUAHUA"],
+      "assetOrder": [ "WHALE", "HUAHUA"],
       "displayName": "WHALE-HUAHUA",
       "displayLogo1": "/logos/whale.svg",
       "displayLogo2": "/logos/huahua.png",
