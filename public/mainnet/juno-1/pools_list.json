@@ -180,6 +180,18 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
+          "id" : "whale-token",
+          "chain_id": "juno-1",
+          "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
+        },
+        {
           "chain_id": "juno-1",
           "token_address": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
           "symbol": "ampWHALE",
@@ -189,18 +201,8 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF"
-        },
-        {
-          "chain_id": "juno-1",
-          "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
-          "symbol": "WHALE",
-          "name": "WHALE",
-          "decimals": 6,
-          "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
         }
+        
       ],
       "lp_token": "juno1cvnwcgkhxaj70gjg7x57fh447m2wj5yx7p2puu4mqgtf62qphtds88mdsd",
       "swap_address": "juno1dwmrkyhed4szdxxk6l0c98hseancjtdet58n77tfhv2as8cdjdlq7vps00",
@@ -208,25 +210,15 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "boneWHALE-WHALE",
-      "lpOrder": ["boneWHALE", "WHALE"],
-      "assetOrder": ["boneWHALE", "WHALE"],
-      "displayName": "boneWHALE-WHALE",
+      "pool_id": "bWHALE-WHALE",
+      "lpOrder": ["bWHALE", "WHALE"],
+      "assetOrder": ["bWHALE", "WHALE"],
+      "displayName": "bWHALE-WHALE",
       "displayLogo1": "/logos/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "chain_id": "juno-1",
-          "token_address": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF",
-          "symbol": "boneWHALE",
-          "name": "boneWHALE",
-          "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF"
-        },
-        {
+          "id" : "whale-token",
           "chain_id": "juno-1",
           "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
           "symbol": "WHALE",
@@ -236,7 +228,19 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
+        },
+        {
+          "chain_id": "juno-1",
+          "token_address": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF"
         }
+        
       ],
       "lp_token": "juno1a68d46fyzyq50t3geqe5c50kmswhrezyec8hz6sfngts6k4e77nqqd3yd0",
       "swap_address": "juno160uh2xtegzvc7ekte5x377aud0y40hw75m9l92h7pkqk3l3eg9vqltel48",

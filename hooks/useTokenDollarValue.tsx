@@ -10,6 +10,9 @@ import {
   useGetMultipleTokenInfo,
   useTokenInfo,
 } from './useTokenInfo'
+import request, { gql } from 'graphql-request'
+import { useMemo } from 'react'
+import { num } from '../libs/num'
 
 export const useTokenDollarValueQuery = (
   tokenSymbols?: Array<string>,

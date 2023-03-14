@@ -10,11 +10,43 @@ import { useBaseTokenInfo } from '../hooks/useTokenInfo'
 import { walletState } from '../state/atoms/walletAtoms'
 import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
+import request, { gql } from 'graphql-request'
+import { useMemo } from 'react'
+import { num } from 'libs/num'
+import { useQuery } from 'react-query'
+
+const useWhalePrice =  () => {
+
+  const GRAPHQL_URL = 'https://tfm-multi-stage.tfm.dev/graphql'
+
+  const query = gql`
+  query ($chain: String!,  $tokenList: String!) {
+    priceByTokenList(chain: $chain, tokenList: $tokenList) {
+      content {
+        priceInvertedUsd
+      }
+    }
+  }
+`;
+
+  const { data } = useQuery("whale-price", async () => {
+    return await request(GRAPHQL_URL, query, {
+      "chain": "terra2",
+      "tokenList": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB,ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
+    });
+  });
+
+  return useMemo(() => {
+    return num(data?.priceByTokenList?.content?.[1]?.priceInvertedUsd).toNumber()
+  },[data])
+
+}
 
 export const useGetTokenDollarValueQuery = () => {
   const baseToken = useBaseTokenInfo()
   const { chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
+  const whalePrice = useWhalePrice()
 
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
     baseToken?.symbol
@@ -35,6 +67,10 @@ export const useGetTokenDollarValueQuery = () => {
         amount: 1,
         id: tokenA?.id,
       })
+
+      if(tokenA?.id === 'whale-token') {
+        return whalePrice
+      }
 
       if (tokenA?.id === tokenB?.id && !!tokenA?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
