@@ -64,7 +64,7 @@ export const useGetTokenDollarValueQuery = () => {
       id: tokenA?.id,
     })
 
-    if (tokenA?.id === 'whale-token') {
+    if (tokenA?.id === 'whale-token' || tokenB?.id === 'whale-token') {
       return whalePrice
     }
 
