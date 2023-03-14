@@ -11,11 +11,11 @@ import { walletState } from '../state/atoms/walletAtoms'
 import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 import request, { gql } from 'graphql-request'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { num } from 'libs/num'
 import { useQuery } from 'react-query'
 
-const useWhalePrice =  () => {
+const useWhalePrice = () => {
 
   const GRAPHQL_URL = 'https://tfm-multi-stage.tfm.dev/graphql'
 
@@ -38,7 +38,7 @@ const useWhalePrice =  () => {
 
   return useMemo(() => {
     return num(data?.priceByTokenList?.content?.[1]?.priceInvertedUsd).toNumber()
-  },[data])
+  }, [data])
 
 }
 
@@ -52,32 +52,33 @@ export const useGetTokenDollarValueQuery = () => {
     baseToken?.symbol
   )
 
+  const getTokenDollarValue = useCallback(async ({ tokenA, tokenB = baseToken, tokenAmountInDenom }) => {
+    if (!tokenAmountInDenom) return 0
+
+    const priceForOneToken = await tokenToTokenPriceQueryWithPools({
+      matchingPools: getMatchingPoolForSwap({ tokenA, tokenB }),
+      tokenA,
+      tokenB,
+      client,
+      amount: 1,
+      id: tokenA?.id,
+    })
+
+    if (tokenA?.id === 'whale-token') {
+      return whalePrice
+    }
+
+    if (tokenA?.id === tokenB?.id && !!tokenA?.id)
+      return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
+    else return priceForOneToken
+
+  }, [tokenADollarPrice, whalePrice])
+
   const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
     useGetQueryMatchingPoolForSwap()
 
   return [
-    async function getTokenDollarValue({ tokenA, tokenB=baseToken, tokenAmountInDenom }) {
-      if (!tokenAmountInDenom) return 0
-
-      const priceForOneToken = await tokenToTokenPriceQueryWithPools({
-        matchingPools: getMatchingPoolForSwap({ tokenA, tokenB }),
-        tokenA,
-        tokenB,
-        client,
-        amount: 1,
-        id: tokenA?.id,
-      })
-
-      if(tokenA?.id === 'whale-token') {
-        return whalePrice
-      }
-
-      if (tokenA?.id === tokenB?.id && !!tokenA?.id)
-        return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
-      else return priceForOneToken
-    },
-    Boolean(
-      baseToken && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher
-    ),
+    getTokenDollarValue,
+    Boolean(baseToken && client && !fetchingDollarPrice && !isLoadingPoolForSwapMatcher),
   ] as const
 }

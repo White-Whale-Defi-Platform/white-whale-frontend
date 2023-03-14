@@ -157,7 +157,7 @@ const Pools: FC<Props> = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '1160px' }}
+      width={{ base: '100%', md: 'auto' }}
       alignItems="center"
       margin="auto"
     >
