@@ -62,7 +62,7 @@
     "focus-visible": "^5.2.0",
     "framer-motion": "^6",
     "graphql": "^16.6.0",
-    "graphql-request": "^5.0.0",
+    "graphql-request": "^5.2.0",
     "gsap": "^3.7.1",
     "injectivejs": "^1.4.0",
     "intercept-stdout": "^0.1.2",
