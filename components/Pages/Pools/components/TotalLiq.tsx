@@ -26,7 +26,14 @@ const TotalLiq = ({
         <HStack justifyContent="end">
             {/* <Text align="right">{`$${formatPrice(totalLiq)}`}</Text> */}
             <Text align="right">{ totalLiq !== 'NA' ? `$${formatPrice(totalLiq)}` : totalLiq}</Text>
-            <Tooltip label={<VStack>
+            <Tooltip label={
+            // Pool is is HUAHUA-WHALE? 
+            poolId === "HUAHUA-WHALE" ? 
+            <VStack>
+                <Text>{tokenA}: {fromChainAmount(tokenBReserve, assetB?.decimals)}</Text>
+                <Text>{tokenB}: {fromChainAmount(tokenAReserve, assetA?.decimals)}</Text>
+            </VStack>:
+            <VStack>
                 <Text>{tokenA}: {fromChainAmount(tokenAReserve, assetA?.decimals)}</Text>
                 <Text>{tokenB}: {fromChainAmount(tokenBReserve, assetB?.decimals)}</Text>
             </VStack>} padding="20px" borderRadius="20px" bg="blackAlpha.900" fontSize="xs" maxW="330px">
