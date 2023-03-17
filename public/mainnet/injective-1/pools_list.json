@@ -136,7 +136,7 @@
     },
     {
       "pool_id": "bWHALE-WHALE",
-      "lpOrder": ["bWHALE","WHALE"],
+      "lpOrder": ["WHALE", "bWHALE"],
       "assetOrder": ["bWHALE", "WHALE"],
       "displayName": "bWHALE-WHALE",
       "displayLogo1": "/logos/bWHALE.png",
