@@ -5,11 +5,6 @@ import {
   Box,
   HStack,
   IconButton,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -24,9 +19,9 @@ import DepositForm from './ManagePoistion/DepositForm'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
-  const { vaults, isLoading, refetch: vaultsRefetch } = useVault()
+  const { vaults,  refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const { chainId, key, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNOX'
 

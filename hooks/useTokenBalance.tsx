@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
-
-import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRecoilValue } from 'recoil'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
@@ -9,7 +7,6 @@ import { CW20 } from '../services/cw20'
 import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
 import { Wallet } from '../util/wallet-adapters'
-import useConnectLeap from './useConnectLeap'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
@@ -78,7 +75,7 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, chainId, activeWallet, status } =
+  const { address, network, client, chainId } =
     useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()
   const selectedAddr = connectedWallet?.addresses[chainId] || address;

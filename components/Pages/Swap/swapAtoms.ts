@@ -1,10 +1,5 @@
 import { atom } from 'recoil'
-
-export type TokenItemState = {
-  tokenSymbol: string
-  amount: number
-  decimals: number
-}
+import {TokenItemState} from "../../../types";
 
 export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
   key: 'tokenSwap',

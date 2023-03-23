@@ -1,7 +1,6 @@
 const chainInfoQueryKey = '@chain-info'
 // import chainInfo from "components/Wallet/chainInfo.json"
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 
 import { ChainInfo } from '@keplr-wallet/types'
 import mainnetChainInfo from 'public/mainnet/chain_info.json'
@@ -46,7 +45,7 @@ export const useChains = () => {
 }
 
 export const useChainInfo = (id = null) => {
-  const chainInfo = useChains()
+  const chainInfo : Array<any> = useChains()
 
   const chain = useMemo(() => {
     if (!chainInfo) return []

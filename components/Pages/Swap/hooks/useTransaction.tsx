@@ -56,19 +56,19 @@ type Params = {
 }
 
 export const useTransaction = ({
-  enabled,
-  swapAddress,
-  swapAssets,
-  client,
-  senderAddress,
-  msgs,
-  encodedMsgs,
-  amount,
-  price,
-  onBroadcasting,
-  onSuccess,
-  onError,
-}: Params) => {
+                                 enabled,
+                                 swapAddress,
+                                 swapAssets,
+                                 client,
+                                 senderAddress,
+                                 msgs,
+                                 encodedMsgs,
+                                 amount,
+                                 price,
+                                 onBroadcasting,
+                                 onSuccess,
+                                 onError,
+                               }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
@@ -99,15 +99,7 @@ export const useTransaction = ({
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } 
-        else if ( /Operation disabled, swap/i.test(error.toString())) {
-          console.error(error)
-          setTxStep(TxStep.Idle)
-          setError('Pair is disabled for swap')
-          setButtonLabel('Pair is disabled for swap')
-          throw new Error('Pair is disabled for swap')
-        } 
-        else if (/Max spread assertion/i.test(error.toString())) {
+        } else if (/Max spread assertion/i.test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -133,7 +125,6 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!client &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -250,7 +241,7 @@ export const useTransaction = ({
       msgs,
       fee,
     })
-  }, [msgs, fee, mutate])
+  }, [msgs, fee, mutate, price])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -286,7 +277,7 @@ export const useTransaction = ({
       error,
       reset,
     }
-  }, [txStep, txInfo, txHash, error, reset, fee, buttonLabel, submit])
+  }, [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

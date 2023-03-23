@@ -1,18 +1,21 @@
 import { atom } from 'recoil'
 
-export enum BondingStatus{
+export enum BondingSummaryStatus{
   uninitialized,
   available,
   loading,
   restored
 }
 
-type GeneratedBondingState<
+type GeneratedBondingSummaryState<
   TClient extends any,
   TStateExtension extends {}
 > = TStateExtension & {
-  status: BondingStatus,
+  status: BondingSummaryStatus,
+  unbondingPeriod: number,
   edgeTokenList: Array<string>,
+  liquidAmpWhale : number,
+  liquidBWhale : number,
   bondedAmpWhale : number,
   bondedBWhale : number,
   unbondingAmpWhale : number,
@@ -21,21 +24,24 @@ type GeneratedBondingState<
   withdrawableBWhale : number,
 }
 
-type CreateBondingStateArgs<TState = {}> = {
+type CreateBondingSummaryStateArgs<TState = {}> = {
   key: string
   default: TState
 }
 
-function createBondingState<TClient = any, TState = {}>({
+function createBondingSummaryState<TClient = any, TState = {}>({
                                                          key,
                                                          default: defaultState,
-                                                       }: CreateBondingStateArgs<TState>) {
+                                                       }: CreateBondingSummaryStateArgs<TState>) {
 
-  return atom<GeneratedBondingState<TClient, TState>>({
+  return atom<GeneratedBondingSummaryState<TClient, TState>>({
     key,
     default: {
-      status: BondingStatus.uninitialized,
-      edgeTokenList: ["ampWHALE", "bWHALE"],
+      status: BondingSummaryStatus.uninitialized,
+      unbondingPeriod: null,
+      edgeTokenList: null,
+      liquidAmpWhale : null,
+      liquidBWhale : null,
       bondedAmpWhale : null,
       bondedBWhale : null,
       unbondingAmpWhale : null,
@@ -56,7 +62,7 @@ function createBondingState<TClient = any, TState = {}>({
               setSelf({
                 ...parsedSavedState,
                 client: null,
-                status: BondingStatus.restored,
+                status: BondingSummaryStatus.restored,
               })
             }
           } catch (e) {}
@@ -80,7 +86,7 @@ function createBondingState<TClient = any, TState = {}>({
   })
 }
 
-export const bondingState = createBondingState({
+export const bondingSummaryState = createBondingSummaryState({
   key: 'bonding',
   default: {
   },

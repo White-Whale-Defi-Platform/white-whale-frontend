@@ -10,6 +10,8 @@ export enum WalletStatusType {
   restored = '@wallet-state/restored',
   /* the wallet is fully connected */
   connected = '@wallet-state/connected',
+  /* the wallet is fully connected */
+  disconnected = '@wallet-state/disconnected',
   /* connecting to the wallet */
   connecting = '@wallet-state/connecting',
   /* error when tried to connect */
@@ -34,9 +36,9 @@ type CreateWalletStateArgs<TState = {}> = {
 }
 
 function createWalletState<TClient = any, TState = {}>({
-  key,
-  default: defaultState,
-}: CreateWalletStateArgs<TState>) {
+                                                         key,
+                                                         default: defaultState,
+                                                       }: CreateWalletStateArgs<TState>) {
   return atom<GeneratedWalletState<TClient, TState>>({
     key,
     default: {

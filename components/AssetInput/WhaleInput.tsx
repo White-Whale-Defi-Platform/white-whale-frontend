@@ -148,7 +148,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               currentToken={[tokenInfo?.symbol || hideToken]}
               edgeTokenList={edgeTokenList}
               disabled={disabled || !showList}
-              amount={token.amount}
+              amount={token?.amount}
             >
               <AssetSelectTrigger
                 tokenInfo={tokenInfo}

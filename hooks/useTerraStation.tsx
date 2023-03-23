@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { LCDClient } from '@terra-money/feather.js'
 import {
@@ -23,90 +23,93 @@ export const useTerraStation = (onCloseModal) => {
   const filterForStation = (connection: Connection) => {
     return connection.identifier === 'station'
   }
+  const filterForWalletConnect = (connection: Connection) => {
+    return connection.type === 'WALLETCONNECT'
+  }
 
   const connectTerraAndCloseModal = (type: ConnectType, identifier: string) => {
-    setCurrentWalletState({ ...currentWalletState, activeWallet: 'station' })
+    const activeWallet = type === 'WALLETCONNECT' ? 'walletconnect' : 'station'
+    setCurrentWalletState({ ...currentWalletState, activeWallet })
     connect(type, identifier)
     onCloseModal()
   }
 
-  useEffect(() => {
-    if (!connectedWallet) {
-      return console.log('no connected wallet found')
-    }
+  const { mainnet, testnet } = useMemo(() => {
 
-    let testnet = new LCDClient({
-      'pisco-1':{
+    const testnet = new LCDClient({
+      'pisco-1': {
         lcd: 'https://pisco-lcd.terra.dev',
         chainID: 'pisco-1',
         gasAdjustment: 1.75,
         gasPrices: { uluna: 0.015 },
         prefix: 'terra',
       }
-      
     })
     // TODO: Make this better and derived from like a config or something
     // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
-    let mainnet = new LCDClient({ 
+    const mainnet = new LCDClient({
       'juno-1':{
         lcd: 'https://ww-juno-rest.polkachu.com',
         chainID: 'juno-1',
-        gasAdjustment: 1.75,
-        gasPrices: { ujuno: 0.015 },
+        gasAdjustment: 0.004,
+        gasPrices: { ujuno: 0.0025 },
         prefix: 'juno',
       },
       'phoenix-1':{
-        lcd: 'https://rest.cosmos.directory/terra2',
+        lcd: 'https://ww-terra-rest.polkachu.com',
         chainID: 'phoenix-1',
         gasAdjustment: 1.75,
         gasPrices: { uluna: 0.015 },
-        prefix: 'luna',
+        prefix: 'terra',
       },
       'chihuahua-1':{
-        lcd: 'https://rest.cosmos.directory/chihuahua',
+        lcd: 'https://ww-chihuahua-rest.polkachu.com',
         chainID: 'chihuahua-1',
-        gasAdjustment: 1.75,
-        gasPrices: { uhuahua: 0.015 },
+        gasAdjustment: 5,
+        gasPrices: { uhuahua: 1 },
         prefix: 'chihuahua',
       },
-      'comdex-1':{
-        lcd: 'https://rest.cosmos.directory/comdex',
-        chainID: 'comdex-1',
-        gasAdjustment: 1.75,
-        gasPrices: { ucmdx: 0.015 },
-        prefix: 'comdex',
-      },
-      'injective-1':{
-        lcd: 'https://rest.cosmos.directory/injective',
-        chainID: 'injective-1',
-        gasAdjustment: 1.75,
-        gasPrices: { uinj: 0.015 },
-        prefix: 'inj',
+      'migaloo-1': {
+        lcd: 'https://ww-migaloo-rest.polkachu.com/',
+        chainID: 'migaloo-1',
+        gasAdjustment: 0.1,
+        gasPrices: { uwhale: 0.05 },
+        prefix: 'migaloo',
       }
     })
-    console.log(mainnet);
-    console.log(connectedWallet)
-    const wasmChainClient = new TerraStationWallet(
+
+    return { mainnet, testnet }
+
+  }, [])
+
+  const wasmChainClient = useMemo(() => {
+    return new TerraStationWallet(
       connectedWallet,
       currentWalletState.network === 'mainnet' ? mainnet : testnet,
       currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
       currentWalletState.chainId
     )
-     
+  }, [connectedWallet, currentWalletState.network, mainnet, testnet, currentWalletState.chainId])
+
+  useEffect(() => {
+    if (currentWalletState?.activeWallet !== 'station') {
+      return
+    }
+
     setCurrentWalletState({
       key: null,
-      status: WalletStatusType.connected,
-      address: connectedWallet.addresses[currentWalletState.chainId],
+      status: connectedWallet? WalletStatusType.connected : WalletStatusType.disconnected,
+      address: connectedWallet?.addresses[currentWalletState.chainId],
       chainId: currentWalletState.chainId,
       network: currentWalletState.network,
       client: wasmChainClient,
-      activeWallet: 'station',
+      activeWallet: connectedWallet?.connectType === 'WALLETCONNECT' ? 'walletconnect' : 'station'
     })
 
 
-   
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectedWallet, currentWalletState.network])
 
-  return { connectTerraAndCloseModal, filterForStation }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectedWallet, currentWalletState.network, mainnet, testnet, wasmChainClient, currentWalletState.chainId])
+
+  return { connectTerraAndCloseModal, filterForStation, filterForWalletConnect }
 }

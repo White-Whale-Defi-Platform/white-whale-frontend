@@ -1,21 +1,41 @@
-import {useEffect, useState} from 'react'
-import {VStack} from '@chakra-ui/react'
+import React, {useEffect, useState} from 'react'
+import { VStack} from '@chakra-ui/react'
 import AssetInput from '../../AssetInput'
 import {useRecoilState} from "recoil";
-import {bondingState, BondingStatus} from "../../../state/atoms/bondingAtoms";
+import {bondingSummaryState, BondingSummaryStatus} from "../../../state/atoms/bondingAtoms";
+import {useTokenBalance} from "../../../hooks/useTokenBalance";
+import {bondingAtom} from "./bondAtoms";
+import {TokenItemState} from "../../../types";
+import {Controller, useForm} from "react-hook-form";
 import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
+import {useBondingConfig} from "../Bonding/hooks/useBondingConfig";
 
 const Bond = () => {
 
-  const [currentBondingState, setCurrentBondingState] = useRecoilState(bondingState)
-  const [currentWalletState, _] = useRecoilState(walletState)
+  const [isLoading, setLoading] = useState<boolean>(true)
+  const [currentBondingSummaryState, setCurrentBondingSummaryState] = useRecoilState(bondingSummaryState)
+  const [currentBondState, setCurrentBondState] = useRecoilState<TokenItemState>(bondingAtom)
+  const [{status, client}, _] = useRecoilState(walletState)
 
-  const isWalletConnected = currentWalletState.status === WalletStatusType.connected
+
+  const isWalletConnected = status === WalletStatusType.connected
 
   const [token, setToken] = useState({
-    amount: currentBondingState.bondedAmpWhale,
-    tokenSymbol: "ampWHALE",
+    amount: currentBondingSummaryState.bondedAmpWhale,
+    tokenSymbol: "WHALE",
+    decimals: 6,
   })
+
+  const [liquidAmpWhale, setLiquidAmpWhale] = useState<number>(null)
+
+    const {balance: liquidWhale} = useTokenBalance(
+      "WHALE")
+
+  const {bondingConfig} = useBondingConfig(client)
+
+  const unbondingPeriod = bondingConfig?.unbonding_period
+
+  const [liquidBWhale, setLiquidBWhale] = useState<number>(null)
   const [bondedAmpWhale, setBondedAmpWhale] = useState<number>(null)
   const [bondedBWhale, setBondedBWhale] = useState<number>(null)
   const [unbondingAmpWhale, setUnbondingAmpWhale] = useState<number>(null)
@@ -23,50 +43,96 @@ const Bond = () => {
   const [withdrawableAmpWhale, setWithdrawableAmpWhale] = useState<number>(null)
   const [withdrawableBWhale, setWithdrawableBWhale] = useState<number>(null)
 
-  useEffect(() => {
-    async function fetchLSDInfo() {
-      setBondedAmpWhale(345)
-      setBondedBWhale(1345)
-      setUnbondingAmpWhale(234)
-      setUnbondingBWhale(4234)
-      setWithdrawableAmpWhale(4637)
-      setWithdrawableBWhale(8383)
-    }
+  const onInputChange = ( tokenSymbol: string | null , amount: number) => {
 
-    if (currentBondingState.status === BondingStatus.uninitialized && isWalletConnected) {
-      fetchLSDInfo()
-      setCurrentBondingState({
-        status: BondingStatus.available,
-        edgeTokenList: ["ampWHALE", "bWHALE"],
-        bondedAmpWhale: bondedAmpWhale,
-        bondedBWhale: bondedBWhale,
-        unbondingAmpWhale: unbondingAmpWhale,
-        unbondingBWhale: unbondingBWhale,
-        withdrawableAmpWhale: withdrawableAmpWhale,
-        withdrawableBWhale: withdrawableBWhale,
-      })
-    } else {
-      setBondedAmpWhale(currentBondingState.bondedAmpWhale)
-      setBondedBWhale(currentBondingState.bondedBWhale)
-      setUnbondingAmpWhale(currentBondingState.unbondingAmpWhale)
-      setUnbondingBWhale(currentBondingState.unbondingBWhale)
-      setWithdrawableAmpWhale(currentBondingState.withdrawableAmpWhale)
-      setWithdrawableBWhale(currentBondingState.withdrawableBWhale)
+    const newState: TokenItemState = {
+      tokenSymbol: tokenSymbol ?? token.tokenSymbol,
+      amount: Number(amount),
+      decimals: 6,
     }
+    setCurrentBondState(newState)
+  }
+  async function fetchLSDInfo() {
+
+    // const {balance: liquidAmpWhale} = useTokenBalance(
+    //  "ampWHALE")
+    //const {balance: liquidBWhale} = useTokenBalance(
+    //"bWHALE")
+    setLiquidAmpWhale(liquidWhale)
+    setLiquidBWhale(101)
+    setBondedAmpWhale(345)
+    setBondedBWhale(1345)
+    setUnbondingAmpWhale(234)
+    setUnbondingBWhale(4234)
+    setWithdrawableAmpWhale(4637)
+    setWithdrawableBWhale(8383)
+  }
+  useEffect(() => {
+    if (currentBondingSummaryState.status === BondingSummaryStatus.uninitialized && isWalletConnected) {
+      fetchLSDInfo().then(_=>{
+        setCurrentBondingSummaryState({
+          status: BondingSummaryStatus.available,
+          edgeTokenList: ["WHALE", "bWHALE"],
+          unbondingPeriod: unbondingPeriod,
+          liquidAmpWhale:liquidAmpWhale,
+          liquidBWhale:liquidBWhale,
+          bondedAmpWhale: bondedAmpWhale,
+          bondedBWhale: bondedBWhale,
+          unbondingAmpWhale: unbondingAmpWhale,
+          unbondingBWhale: unbondingBWhale,
+          withdrawableAmpWhale: withdrawableAmpWhale,
+          withdrawableBWhale: withdrawableBWhale,
+        })
+      })
+
+    } else {
+
+      setBondedAmpWhale(currentBondingSummaryState.bondedAmpWhale)
+      setBondedBWhale(currentBondingSummaryState.bondedBWhale)
+      setUnbondingAmpWhale(currentBondingSummaryState.unbondingAmpWhale)
+      setUnbondingBWhale(currentBondingSummaryState.unbondingBWhale)
+      setWithdrawableAmpWhale(currentBondingSummaryState.withdrawableAmpWhale)
+      setWithdrawableBWhale(currentBondingSummaryState.withdrawableBWhale)
+    }
+      const newState: TokenItemState = {
+        tokenSymbol: token.tokenSymbol,
+        amount: 0,
+        decimals: 6,
+      }
+      setCurrentBondState(newState)
+      setLoading(false)
   }, [isWalletConnected])
+
+  const { control } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      currentBondState
+    },
+  })
 
   return <VStack
     px={7}
     width="full">
-    <AssetInput
-      value={token}
-      token={token}
-      disabled={false}
-      minMax={true}
-      balance={token.amount}
-      showList={true}
-      edgeTokenList={currentBondingState.edgeTokenList}
-      onChange={(value) => setToken(value)}
+    <Controller
+      name="currentBondState"
+      control={control}
+      rules={{ required: true }}
+      render={({ field }) => (
+        <AssetInput
+          hideToken={token?.tokenSymbol}
+          {...field}
+          token={currentBondState}
+          balance={liquidWhale}
+          minMax={false}
+          // onInputFocus={() => setIsReverse(true)}
+          disabled={false}
+          onChange={(value, isTokenChange) => {
+            onInputChange(value, 0)
+            field.onChange(value)
+            setCurrentBondState({...token, amount: value.amount})
+          }}
+        />
+      )}
     />
   </VStack>
 }

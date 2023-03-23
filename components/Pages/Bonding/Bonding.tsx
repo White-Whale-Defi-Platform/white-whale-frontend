@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 
 import {Flex, HStack, Text, VStack} from '@chakra-ui/react'
 
@@ -7,32 +7,35 @@ import RewardsComponent from './RewardsComponent';
 import {useRecoilState} from "recoil";
 import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
 import {BondingData} from "./types/BondingData";
-import {usePoolsListQuery} from "../../../queries/usePoolsListQuery";
 import {useTokenBalance} from "../../../hooks/useTokenBalance";
 import {useChains} from "../../../hooks/useChainInfo";
-import {bondingState, BondingStatus} from "../../../state/atoms/bondingAtoms";
+import {bondingSummaryState, BondingSummaryStatus} from "../../../state/atoms/bondingAtoms";
+import {useBonded} from "./hooks/useBonded";
+import {useUnbonding} from "./hooks/useUnbonding";
+import {useWithdrawable} from "./hooks/useWithdrawable";
+import {useBondingConfig} from "./hooks/useBondingConfig";
 
 const Bonding: FC = () => {
-  const [screenWidth, setScreenWidth] = useState(0);
+  const [ _,setScreenWidth] = useState(0);
   const [isHorizontalLayout, setIsHorizontalLayout] = useState(true);
-  const [{chainId, status}] = useRecoilState(walletState)
+  const [{chainId, status,client, address}] = useRecoilState(walletState)
 
-  const [currentBondingState, setCurrentBondingState] = useRecoilState(bondingState)
+
+  const [currentBondingState, setCurrentBondingState] = useRecoilState(bondingSummaryState)
 
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
   const currentChain = chains.find((row: { chainId: string }) => row.chainId === chainId)
   const currentChainName = currentChain?.label.toLowerCase()
 
-  const [isLoadingBondedTokens, setLoadingBondedTokens] = useState<boolean>(true)
-  const [isLoadingLiquidTokens, setLoadingLiquidTokens] = useState<boolean>(true)
-  const [isLoadingTokensToUnbond, setLoadingTokensToUnbond] = useState<boolean>(true)
-  const [isLoadingWithdrawableTokens, setLoadingWithdrawableTokens] = useState<boolean>(true)
 
   const data: BondingData[] = [
     {
       tokenType: TokenType.liquid,
       value: null,
+      whale: null,
+      ampWhale: null,
+      bWhale: null,
       color: "#244228",
       label: "Liquid",
       actionType: ActionType.buy
@@ -40,6 +43,9 @@ const Bonding: FC = () => {
     {
       tokenType: TokenType.bonded,
       value: null,
+      whale: null,
+      ampWhale: null,
+      bWhale: null,
       color: "#7CFB7D",
       label: "Bonded",
       actionType: ActionType.bond
@@ -47,6 +53,9 @@ const Bonding: FC = () => {
     {
       tokenType: TokenType.unbonding,
       value: null,
+      whale: null,
+      ampWhale: null,
+      bWhale: null,
       color: "#3273F6",
       label: "Unbonding",
       actionType: ActionType.unbond
@@ -54,6 +63,9 @@ const Bonding: FC = () => {
     {
       tokenType: TokenType.withdrawable,
       value: null,
+      whale: null,
+      ampWhale: null,
+      bWhale: null,
       color: "#173E84",
       label: "Withdrawable",
       actionType: ActionType.withdraw
@@ -62,62 +74,51 @@ const Bonding: FC = () => {
 
   const [updatedData, setData] = useState(null)
 
-  const setValue = (tokenType: TokenType, value: number) => {
-    data.find(e => e.tokenType == tokenType).value = value
+  const setValues = (tokenType: TokenType, value: number, whale: number, ampWhale: number, bWhale: number) => {
+    const specificBondingData = data.find(e => e.tokenType == tokenType)
+    specificBondingData.value = value
+    specificBondingData.whale = whale
+    specificBondingData.ampWhale = ampWhale
+    specificBondingData.bWhale = bWhale
   }
 
-  const setBondedTokens = async function (ampWhale, bWhale) {
-    setLoadingBondedTokens(false);
-    setValue(TokenType.bonded, (ampWhale + bWhale))
+  const setBondedTokens = function (ampWhale, bWhale) {
+    setValues(TokenType.bonded, (ampWhale + bWhale), null, ampWhale, bWhale)
   }
-  const setLiquidTokens = async function (whale, ampWhale, bWhale) {
-
-    setLoadingLiquidTokens(false);
-    setValue(TokenType.liquid, (whale + ampWhale + bWhale))
+  const setLiquidTokens = function (whale, ampWhale, bWhale) {
+    setValues(TokenType.liquid, (whale + ampWhale + bWhale),whale, ampWhale, bWhale)
   }
 
-  const setUnbondingTokens = async function (ampWhale, bWhale) {
-    setLoadingTokensToUnbond(false);
-    setValue(TokenType.unbonding, (ampWhale + bWhale))
+  const setUnbondingTokens = function (ampWhale, bWhale) {
+    setValues(TokenType.unbonding, (ampWhale + bWhale), null, ampWhale, bWhale)
   }
 
-  const setWithdrawableTokens = async function (ampWhale, bWhale) {
-    setLoadingWithdrawableTokens(false);
-    setValue(TokenType.withdrawable, (ampWhale + bWhale))
+  const setWithdrawableTokens = function (ampWhale, bWhale) {
+    setValues(TokenType.withdrawable, (ampWhale + bWhale),null, ampWhale, bWhale)
   }
-  const {data: poolList} = usePoolsListQuery()
-  const whaleTokenList = useMemo(() => {
-    let listObj = {}
-    const {pools = []} = poolList || {}
-    pools
-      .map(({pool_assets}) => pool_assets)
-      .map(([a, b]) => {
-        listObj = {...listObj, [a.symbol]: a, [b.symbol]: b}
-      })
 
-    return Object.keys(listObj).map((row) => {
-      return {
-        symbol: listObj[row].symbol,
-        decimals: listObj[row].decimals,
-        amount: 0,
-      }
-    }).filter(token => ["ampWHALE", "bWHALE", "WHALE"].includes(token.symbol))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolList, chainId])
-
-  const {balance: liquidWhale} = useTokenBalance(
+  const {balance: liquidWhale,isLoading: liquidWhaleLoading} = useTokenBalance(
     "WHALE")
-  const {balance: liquidAmpWhale} = useTokenBalance(
+  const {balance: liquidAmpWhale, isLoading: liquidAmpLoading} = useTokenBalance(
     "ampWHALE")
-  const {balance: liquidBWhale} = useTokenBalance(
+  const {balance: liquidBWhale,isLoading: liquidBLoading} = useTokenBalance(
     "bWHALE")
 
-  const bondedAmpWhale = isWalletConnected ? 2345 : null
-  const bondedBWhale = isWalletConnected ? 2345 : null
-  const unbondingAmpWhale = isWalletConnected ? 535 : null
-  const unbondingBWhale = isWalletConnected ? 5345 : null
-  const withdrawableAmpWhale = isWalletConnected ? 9845 : null
-  const withdrawableBWhale = isWalletConnected ? 8365 : null
+  const { bondingConfig} = useBondingConfig(client);
+
+  const unbondingPeriod = bondingConfig?.unbonding_period
+
+  const { bondedAmpWhale, bondedBWhale ,isLoading: bondedInfoLoading,refetch: refetchBonding } = useBonded(client, address);
+  const { unbondingAmpWhale ,unbondingBWhale ,isLoading: unbondingLoading,refetch: refetchUnbonding } = useUnbonding(client, address,["uwhale", "ibc"]);
+  const { withdrawableAmpWhale ,withdrawableBWhale ,isLoading: withdrawableLoading,refetch: refetchWithdrawable } = useWithdrawable(client, address,["uwhale", "ibc"]);
+
+  const summaryLoading : boolean = liquidWhaleLoading || liquidAmpLoading || liquidBLoading || bondedInfoLoading || unbondingLoading || withdrawableLoading
+
+  console.log("BONDEDAMP: "+ bondedAmpWhale)
+  console.log("BONDEDB: "+ bondedBWhale)
+  console.log("LIQUID: "+ liquidWhale)
+
+  console.log("LOADING: "+ summaryLoading)
 
 
   useEffect(() => {
@@ -133,41 +134,27 @@ const Bonding: FC = () => {
     };
   }, []);
 
-
-  const [isLoadingRewards, setLoadingRewards] = useState<boolean>(true)
-
-  const [price, setPrice] = useState(null);
-
-  const [isLoadingWhalePrice, setLoadingWhalePrice] = useState<boolean>(true)
-
-  const fetchPrice = async function () {
-    const value = 12.53// replace with result from get req
-    setPrice(value);
-    setLoadingWhalePrice(false);
-  }
-
-  const [myRewards, setMyRewards] = useState<number>(null);
-
-  const fetchMyRewards = async function () {
-    const value = 0// replace with result from get req
-    setMyRewards(value);
-    setLoadingRewards(false);
-  }
+useEffect(()=>{
+  refetchBonding()
+  refetchUnbonding()
+  refetchWithdrawable()
+}, [address, client])
 
   useEffect(() => {
     setTimeout(async () => {
-      await setBondedTokens(bondedAmpWhale, bondedBWhale);
-      await setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale);
-      await setUnbondingTokens(unbondingAmpWhale, unbondingBWhale);
-      await setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale);
+      setBondedTokens(bondedAmpWhale, bondedBWhale);
+      setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale);
+      setUnbondingTokens(unbondingAmpWhale, unbondingBWhale);
+      setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale);
       setData(data)
-      await fetchPrice();
-      await fetchMyRewards();
 
-      if(currentBondingState.status === BondingStatus.uninitialized ){
+      if(currentBondingState.status === BondingSummaryStatus.uninitialized ){
         setCurrentBondingState({
-          status: BondingStatus.available,
-          edgeTokenList: ["ampWHALE", "bWHALE"],
+          status: BondingSummaryStatus.available,
+          unbondingPeriod: unbondingPeriod,
+          edgeTokenList: ["WHALE", "bWHALE"],
+          liquidAmpWhale: liquidAmpWhale,
+          liquidBWhale: liquidBWhale,
           bondedAmpWhale: bondedAmpWhale,
           bondedBWhale: bondedBWhale,
           unbondingAmpWhale: unbondingAmpWhale,
@@ -176,11 +163,9 @@ const Bonding: FC = () => {
           withdrawableBWhale: withdrawableBWhale,
         })
       }
-    }, 2000)
+    }, 100)
 
-  }, [isWalletConnected]);
-
-  const isLoading = isLoadingRewards || isLoadingWhalePrice || isLoadingBondedTokens || isLoadingLiquidTokens || isLoadingTokensToUnbond || isLoadingWithdrawableTokens
+  }, [isWalletConnected, bondedBWhale, bondedAmpWhale, unbondingBWhale, unbondingAmpWhale, withdrawableAmpWhale,withdrawableBWhale]);
 
   return <VStack
     alignSelf="center">
@@ -192,8 +177,7 @@ const Bonding: FC = () => {
       <VStack>
         <HStack
           width="full"
-          paddingY={5}
-        >
+          paddingY={5}>
           <Text
             as="h2"
             fontSize="24"
@@ -203,21 +187,12 @@ const Bonding: FC = () => {
         </HStack>
         <BondingOverview
           isWalletConnected={isWalletConnected}
-          isLoading={isLoading}
+          isLoading={summaryLoading}
           data={updatedData}
-          liquidWhale={liquidWhale}
-          liquidAmpWhale={liquidAmpWhale}
-          liquidBWhale={liquidBWhale}
-          bondedAmpWhale={bondedAmpWhale}
-          bondedBWhale={bondedBWhale}
-          unbondingAmpWhale={unbondingAmpWhale}
-          unbondingBWhale={unbondingBWhale}
-          withdrawableAmpWhale={withdrawableAmpWhale}
-          withdrawableBWhale={withdrawableBWhale}
           currentChainName={currentChainName}/>
       </VStack>
-      <RewardsComponent isWalletConnected={isWalletConnected} isLoading={isLoading}
-                        isHorizontalLayout={isHorizontalLayout} myRewards={myRewards} whalePrice={price}/>
+      <RewardsComponent isWalletConnected={isWalletConnected} isLoading={summaryLoading}
+                        isHorizontalLayout={isHorizontalLayout}/>
     </Flex>
   </VStack>
 }

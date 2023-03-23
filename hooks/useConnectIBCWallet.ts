@@ -62,18 +62,20 @@ export const useConnectIBCWallet = (
 
       /* successfully update the wallet state */
       setWalletState({
+        activeWallet: "", chainId: "", network: undefined,
         tokenSymbol,
         address,
         client: wasmChainClient,
-        status: WalletStatusType.connected,
+        status: WalletStatusType.connected
       })
     } catch (e) {
       /* set the error state */
       setWalletState({
+        activeWallet: "", chainId: "", network: undefined,
         tokenSymbol: null,
         address: '',
         client: null,
-        status: WalletStatusType.error,
+        status: WalletStatusType.error
       })
 
       throw e

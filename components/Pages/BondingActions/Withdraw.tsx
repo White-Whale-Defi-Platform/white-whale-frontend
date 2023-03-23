@@ -1,80 +1,82 @@
 import {Box, HStack, Text, VStack} from '@chakra-ui/react'
-import { WhaleTokenType} from './BondingActions'
+import {WhaleTokenType} from './BondingActions'
 import {WhaleTooltip} from '../Bonding/BondingOverview'
-import { useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import {useRecoilState} from "recoil";
-import {bondingState, BondingStatus} from "../../../state/atoms/bondingAtoms";
+import {bondingSummaryState, BondingSummaryStatus} from "../../../state/atoms/bondingAtoms";
 import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
+import {useWithdrawable} from "../Bonding/hooks/useWithdrawable";
+import {useUnbonding} from "../Bonding/hooks/useUnbonding";
+import {useBondingConfig} from "../Bonding/hooks/useBondingConfig";
+import {convertMicroDenomToDenom} from "../../../util/conversion";
+
+const Withdraw = () => {
+
+  const [currentBondingSummaryState, setCurrentBondingSummaryState] = useRecoilState(bondingSummaryState)
+  const [{status, client, address}, _] = useRecoilState(walletState)
+
+  const isWalletConnected = status === WalletStatusType.connected
 
 
-const Withdraw  = () => {
+  const {bondingConfig, refetch: refetchConfig} = useBondingConfig(client)
 
-
-  const [currentBondingState, setCurrentBondingState] = useRecoilState(bondingState)
-  const [currentWalletState, _] = useRecoilState(walletState)
-
-  const isWalletConnected = currentWalletState.status === WalletStatusType.connected
-
-  const [formattedDurationString, setDurationString] = useState<string>(null)
-
-  const startTime = new Date("2023-03-04T17:51").getTime();
-  const currentTime = new Date().getTime()
-  const duration = (currentTime - startTime) / 1000;
-
-  const setDuration = () => {
-    if (duration >= 86400) {
-      setDurationString(`${Math.floor(duration / 86400)} days`);
-    } else if (duration >= 3600) {
-      setDurationString(`${Math.floor(duration / 3600)} hours`);
-    } else if (duration >= 60) {
-      setDurationString(`${Math.floor(duration / 60)} minutes`);
+  const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period) * 1_000_000_000 ?? 60 * 1_000_000_000
+  console.log(unbondingPeriodInNano)
+  const calculateDurationString = (durationInSec: number): string => {
+    if (durationInSec >= 86400) {
+      return `${Math.floor(durationInSec / 86400)} days`;
+    } else if (durationInSec >= 3600) {
+      return `${Math.floor(durationInSec / 3600)} hours`;
+    } else if (durationInSec >= 60) {
+      return `${Math.floor(durationInSec / 60)} minutes`;
+    } else if (durationInSec > 0) {
+      return `${Math.floor(durationInSec)} seconds`;
     } else {
-      setDurationString(`${Math.floor(duration)} seconds`);
+      return `imminent`;
     }
-  }
+  };
+
+
+  const {
+    unbondingAmpWhale,
+    unbondingBWhale,
+    filteredUnbondingRequests,
+    refetch: refetchUnbonding
+  } = useUnbonding(client, address, ["uwhale", "ibc"])
+  console.log("UNBONDING")
+  console.log(unbondingAmpWhale)
+  console.log(unbondingBWhale)
+  console.log(filteredUnbondingRequests)
+
+  const {
+    withdrawableAmpWhale,
+    withdrawableBWhale,
+    isLoading,
+    refetch: refetchWithdrawable
+  } = useWithdrawable(client, address, ["uwhale", "ibc"])
 
   useEffect(() => {
-    setDuration()
-  }, [])
+    refetchConfig()
+    refetchUnbonding()
+    refetchWithdrawable()
 
-  const [bondedAmpWhale, setBondedAmpWhale] = useState<number>(null)
-  const [bondedBWhale, setBondedBWhale] = useState<number>(null)
-  const [unbondingAmpWhale, setUnbondingAmpWhale] = useState<number>(null)
-  const [unbondingBWhale, setUnbondingBWhale] = useState<number>(null)
-  const [withdrawableAmpWhale, setWithdrawableAmpWhale] = useState<number>(null)
-  const [withdrawableBWhale, setWithdrawableBWhale] = useState<number>(null)
-
+  }, [address, client])
   useEffect(() => {
-    async function fetchLSDInfo() {
-      setBondedAmpWhale(345)
-      setBondedBWhale(1345)
-      setUnbondingAmpWhale(234)
-      setUnbondingBWhale(4234)
-      setWithdrawableAmpWhale(4637)
-      setWithdrawableBWhale(8383)
-    }
 
-    if (currentBondingState.status === BondingStatus.uninitialized && isWalletConnected) {
-      fetchLSDInfo()
-      setCurrentBondingState({
-        status: BondingStatus.available,
-        edgeTokenList: ["ampWHALE", "bWHALE"],
-        bondedAmpWhale: bondedAmpWhale,
-        bondedBWhale: bondedBWhale,
+    if (currentBondingSummaryState.status === BondingSummaryStatus.uninitialized && isWalletConnected) {
+      setCurrentBondingSummaryState({
+        ...currentBondingSummaryState,
+        status: BondingSummaryStatus.available,
+        edgeTokenList: ["WHALE", "bWHALE"],
+        unbondingPeriod: unbondingPeriodInNano,
         unbondingAmpWhale: unbondingAmpWhale,
         unbondingBWhale: unbondingBWhale,
         withdrawableAmpWhale: withdrawableAmpWhale,
         withdrawableBWhale: withdrawableBWhale,
       })
-    } else {
-      setBondedAmpWhale(currentBondingState.bondedAmpWhale)
-      setBondedBWhale(currentBondingState.bondedBWhale)
-      setUnbondingAmpWhale(currentBondingState.unbondingAmpWhale)
-      setUnbondingBWhale(currentBondingState.unbondingBWhale)
-      setWithdrawableAmpWhale(currentBondingState.withdrawableAmpWhale)
-      setWithdrawableBWhale(currentBondingState.withdrawableBWhale)
+
     }
-  }, [isWalletConnected])
+  }, [isWalletConnected, unbondingBWhale, unbondingPeriodInNano, unbondingAmpWhale, withdrawableBWhale, withdrawableAmpWhale])
 
   const ProgressBar = ({percent}) => {
     return (
@@ -100,7 +102,8 @@ const Withdraw  = () => {
       borderRadius="10px"
       p={4}
       minW={240}>
-      <WhaleTooltip label={label} whale={null} ampWhale={ampWhale} bWhale={bWhale} isWalletConnected={isWalletConnected}
+      <WhaleTooltip label={label} data={null} withdrawableAmpWhale={ampWhale} withdrawableBWhale={bWhale}
+                    isWalletConnected={isWalletConnected}
                     tokenType={null}/>
       <Text
         mb="-0.2rem"
@@ -111,7 +114,10 @@ const Withdraw  = () => {
     </Box>
   }
 
-  const BoxComponent = ({block, whaleTokenType, value, durationString}) => {
+  const BoxComponent = ({whaleTokenType, value, durationInSeconds}) => {
+    const durationString = calculateDurationString(durationInSeconds);
+    console.log("progress:")
+    console.log(durationInSeconds / (unbondingPeriodInNano / 1_000_000_000))
     return <VStack justifyContent="center" alignItems="center" mb={30}>
       <HStack justifyContent="space-between" alignItems="flex-start" w="100%" px={4}>
         <Text>
@@ -122,27 +128,24 @@ const Withdraw  = () => {
           <Text>
             ~ {durationString}
           </Text>
-          <Text
-            color="grey"
-            fontSize={12}>
-            block {block.toLocaleString()}
-          </Text>
         </HStack>
       </HStack>
       <ProgressBar
-        percent={50}/>
+        percent={(1 - durationInSeconds / (unbondingPeriodInNano / 1_000_000_000)) * 100}/>
     </VStack>
   }
+  console.log(filteredUnbondingRequests)
+
   return <VStack
     spacing={5}
-    mb={70}>
+    mb={35}>
     <HStack
       spacing={7}>
-      <TokenBox label="Unbonding" ampWhale={currentBondingState.unbondingAmpWhale} bWhale={currentBondingState.unbondingBWhale}/>
-      <TokenBox label="Withdrawable" ampWhale={currentBondingState.withdrawableAmpWhale}
-                bWhale={currentBondingState.withdrawableBWhale}/>
+      <TokenBox label="Unbonding" ampWhale={unbondingAmpWhale} bWhale={unbondingBWhale}/>
+      <TokenBox label="Withdrawable" ampWhale={withdrawableAmpWhale}
+                bWhale={withdrawableBWhale}/>
     </HStack>
-    {isWalletConnected && <Box
+    {(isWalletConnected && filteredUnbondingRequests !== null && filteredUnbondingRequests.length > 0) && <Box
       overflowY="scroll"
       maxHeight={340}
       minW={510}
@@ -150,12 +153,18 @@ const Withdraw  = () => {
       padding="4"
       borderRadius="10px"
       mt={10}>
-      {[0, 1, 0, 1, 0, 1, 1, 0, 1].map(type => {
+      {filteredUnbondingRequests.map(type => {
+        console.log("HERE ")
+        const currentTimeInNano = Date.now() * 1_000_000;
+        const durationInSeconds =
+          (Number(type.timestamp) +
+            unbondingPeriodInNano -
+            currentTimeInNano) /
+          1_000_000_000;
         return <BoxComponent
-          block={13563224}
-          whaleTokenType={type}
-          value={3532}
-          durationString={formattedDurationString}/>
+          whaleTokenType={type.asset.info.native_token.denom == "uwhale" ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
+          value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
+          durationInSeconds={durationInSeconds}/>
       })}
     </Box>}
   </VStack>

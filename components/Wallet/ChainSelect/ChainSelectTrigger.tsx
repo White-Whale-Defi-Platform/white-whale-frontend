@@ -5,7 +5,7 @@ import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 import ChevronDownIcon from '../../icons/ChevronDownIcon'
 
-function ChainSelectTrigger({ connected, denom, currentWalletState }) {
+function ChainSelectTrigger({ connected, denom}) {
   const connectedWallet = useConnectedWallet()
   return (
     <PopoverTrigger>

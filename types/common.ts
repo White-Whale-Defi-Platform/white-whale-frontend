@@ -94,3 +94,9 @@ export type Data = {
   mainnet: DataNetwork
   testnet: DataNetwork
 } & { [key: string]: DataNetwork }
+
+export type TokenItemState = {
+  tokenSymbol: string
+  amount: number
+  decimals: number
+}

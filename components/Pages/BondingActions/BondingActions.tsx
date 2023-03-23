@@ -1,55 +1,84 @@
 import {ArrowBackIcon} from "@chakra-ui/icons"
-import {HStack, IconButton, VStack, Text, Button, Box, useDisclosure} from "@chakra-ui/react"
+import {Box, Button, HStack, IconButton, Text, useDisclosure, VStack} from "@chakra-ui/react"
 import {useRecoilState} from "recoil"
 import {useChains} from "../../../hooks/useChainInfo"
 import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms"
-import Wallet from "../../Wallet/Wallet"
 import {ActionType} from "../Bonding/BondingOverview"
 import Bond from "./Bond"
 import Unbond from "./Unbond"
 import Withdraw from "./Withdraw"
 import {useRouter} from 'next/router'
 
-import {useWallet} from '@terra-money/wallet-provider'
-
-import WalletModal from '../../Wallet/Modal/Modal'
+import {TokenItemState} from "../../../types";
+import {bondingAtom} from "./bondAtoms";
+import {useBondTokens} from "./hooks/useBondTokens";
+import {useWithdrawTokens} from "./hooks/useWithdrawTokens";
+import {useUnbondTokens} from "./hooks/useUnbondTokens";
+import {convertDenomToMicroDenom} from "../../../util/conversion";
+import {TransactionStatus, transactionStatusState} from "../../../state/atoms/transactionAtoms";
+import {setTimeout} from "@wry/context";
+import { useMemo} from "react";
 
 export enum WhaleTokenType {
   ampWHALE, bWHALE
 }
 
-const BondingActions= ({globalAction}) => {
+const BondingActions = ({globalAction}) => {
 
-  const [{key, chainId, status, network}, setWalletState] = useRecoilState(walletState)
+  const [{chainId, status, address, client},_] = useRecoilState(walletState)
+  const [transActionStatus, setTransactionStatus] = useRecoilState(transactionStatusState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
   const currentChain = chains.find((row: { chainId: string }) => row.chainId === chainId)
   const currentChainName = currentChain?.label.toLowerCase()
+
   const {
-    isOpen: isOpenModal,
     onOpen: onOpenModal,
-    onClose: onCloseModal,
   } = useDisclosure()
-  const {disconnect} = useWallet()
   const router = useRouter()
-  const resetWalletConnection = () => {
-    setWalletState({
-      status: WalletStatusType.idle,
-      address: '',
-      key: null,
-      client: null,
-      network,
-      chainId,
-      activeWallet: null,
-    })
-    disconnect()
+  const bondTokens = useBondTokens(client, address);
+  const unbondTokens = useUnbondTokens(client, address);
+  const withdrawTokens = useWithdrawTokens(client, address);
+
+
+  const onClick = (tokenItemState: TokenItemState) => {
+    const adjustedAmount = convertDenomToMicroDenom(tokenItemState.amount, 6)
+    const denom = "uwhale"
+    console.log("AMOUNT: " + adjustedAmount)
+    setTransactionStatus(TransactionStatus.EXECUTING)
+    if (globalAction == ActionType.bond) {
+      bondTokens(denom, adjustedAmount).then((value: TransactionStatus) => {
+        setTransactionStatus(value)
+        setTimeout(() => {
+          setTransactionStatus(TransactionStatus.IDLE)
+        }, 1000)
+      })
+    } else if (globalAction == ActionType.unbond) {
+      unbondTokens(denom, adjustedAmount).then((value: TransactionStatus) => {
+        setTransactionStatus(value)
+        setTimeout(() => {
+          setTransactionStatus(TransactionStatus.IDLE)
+        }, 1000)
+      })
+    } else if (globalAction == ActionType.withdraw) {
+      withdrawTokens(denom).then((value: TransactionStatus) => {
+        setTransactionStatus(value)
+        setTimeout(() => {
+          setTransactionStatus(TransactionStatus.IDLE)
+        }, 1000)
+      })
+    }
   }
+  const [currentBondState, setCurrentBondState] = useRecoilState<TokenItemState>(bondingAtom)
+
 
   const BondingActionButton = ({action}) => {
 
     const actionString = ActionType[action].toString()
     const onClick = async () => {
+      setCurrentBondState({...currentBondState, amount:0})
       await router.push(`/${currentChainName}/bonding/${actionString}`)
+
     }
 
     return <Button
@@ -69,7 +98,11 @@ const BondingActions= ({globalAction}) => {
       {actionString}
     </Button>
   }
-
+  const buttonLabel = useMemo(() => {
+    if (!isWalletConnected) return 'Connect Wallet'
+    else if (currentBondState?.amount === 0 && globalAction !== ActionType.withdraw) return 'Enter Amount'
+    else return ActionType[globalAction]
+  }, [isWalletConnected, currentBondState, globalAction])
   return (
     <VStack
       width={{base: '100%', md: '650px'}}
@@ -131,38 +164,31 @@ const BondingActions= ({globalAction}) => {
               case ActionType.bond:
                 return <Bond/>;
               case ActionType.unbond:
-                return <Unbond />;
+                return <Unbond/>;
               case ActionType.withdraw:
-                return <Withdraw />;
+                return <Withdraw/>;
             }
           })()}
         </Box>
-        {isWalletConnected ? <Button
+        <Button
           alignSelf="center"
           bg="#6ACA70"
           borderRadius="full"
           width="100%"
-          color="white"
+          variant="primary"
+          disabled={transActionStatus === TransactionStatus.EXECUTING || (currentBondState.amount <= 0 && globalAction !== ActionType.withdraw)}
           maxWidth={570}
+          isLoading={transActionStatus === TransactionStatus.EXECUTING}
+          onClick={() => {
+            if (isWalletConnected) {
+              onClick(currentBondState)
+            } else {
+              onOpenModal()
+            }
+          }}
           style={{textTransform: "capitalize"}}>
-          {ActionType[globalAction]}
-        </Button> :
-          <HStack alignSelf="center">
-          <Wallet
-            connected={Boolean(key?.name)}
-            walletName={key?.name}
-            onDisconnect={resetWalletConnection}
-            disconnect={disconnect}
-            isOpenModal={isOpenModal}
-            onOpenModal={onOpenModal}
-            onCloseModal={onCloseModal}
-            isPrimaryButton={true}
-            primaryButtonMinW={570}/>
-          <WalletModal
-            isOpenModal={isOpenModal}
-            onCloseModal={onCloseModal}
-            chainId={chainId}/>
-        </HStack>}
+          {buttonLabel}
+        </Button>
       </VStack>
     </VStack>)
 }

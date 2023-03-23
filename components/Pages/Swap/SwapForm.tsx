@@ -19,7 +19,7 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
 import { Simulated } from './hooks/useSimulate'
-import { TokenItemState } from './swapAtoms'
+import {TokenItemState} from "../../../types";
 
 type Props = {
   connected: WalletStatusType
@@ -288,8 +288,8 @@ const SwapForm: FC<Props> = ({
         style={{ margin: 'unset' }}
       >
         <HStack justifyContent="space-between" width="full">
-      
-          <HStack > 
+
+          <HStack >
             <Hide above="md">
               <Button
                 variant="outline"

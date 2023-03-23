@@ -19,12 +19,12 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
 
-const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, primaryButtonMinW }) => {
+const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
 
-  const chains :Array<any>= useChains()
+  const chains : Array<any> = useChains()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
 
@@ -45,7 +45,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, pr
     if (router.pathname === '/') return
 
     const defaultChainId =
-      currentWalletState.network === 'mainnet' ? 'juno-1' : 'uni-3'
+      currentWalletState.network === 'mainnet' ? 'migaloo-1' : 'narwhal-1'
 
     if (
       validChains[currentWalletState.network][chainIdParam] !==
@@ -140,24 +140,22 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, pr
   if (!connected && !connectedWallet) {
     return (
       <>
-        {!isPrimaryButton&&(<Select
+        <Select
           connected={connected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
           currentWalletState={currentWalletState}
-        />)}
+        />
         <Button
           variant="outline"
           display="flex"
           gap="3"
-          bg={isPrimaryButton ? "#6ACA70": "none"}
           color="white"
+          borderColor="whiteAlpha.400"
           borderRadius="full"
-          minW={isPrimaryButton ? primaryButtonMinW : 0}
           onClick={onOpenModal}
-          style={{borderColor: isPrimaryButton ? "transparent": "whiteAlpha.400"}}
         >
-          {!isPrimaryButton&&(<WalletIcon />)}
+          <WalletIcon />
           Connect wallet
         </Button>
       </>
@@ -166,7 +164,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal, isPrimaryButton, pr
 
   return (
     <>
-      <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4} alignItems="center">
+      <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
         <ChainSelectWithBalance
           connected={connected}
           denom={denom}

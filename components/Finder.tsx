@@ -14,17 +14,17 @@ const getUrl = (chainId, txHash) => {
   switch (chainId) {
     case 'uni-3':
       return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
-      break
+    case 'migaloo-1':
+      return `https://explorer.silknodes.io/migaloo/tx/${txHash}`
+    // case 'narwhal-1':
+    //   return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
+    //   break
     case 'pisco-1':
       return `https://finder.terra.money/testnet/tx/${txHash}`
-      break
     case 'juno-1':
-
       return `https://mintscan.io/juno/txs/${txHash}`
-      break
     case 'phoenix-1':
       return `https://finder.terra.money/mainnet/tx/${txHash}`
-      break
     case 'chihuahua-1':
       return `https://www.mintscan.io/chihuahua/txs/${txHash}`
     case 'injective-888':
@@ -35,7 +35,6 @@ const getUrl = (chainId, txHash) => {
       return `https://mintscan.io/comdex/txs/${txHash}`
     default:
       return null
-      break
   }
 }
 

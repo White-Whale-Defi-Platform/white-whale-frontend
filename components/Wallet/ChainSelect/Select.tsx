@@ -20,7 +20,6 @@ const Select = ({ denom, onChange, connected, currentWalletState }) => {
       <ChainSelectTrigger
         connected={connected}
         denom={denom}
-        currentWalletState={currentWalletState}
       />
       <ChainSelectPopoverContent
         onChange={onChange}

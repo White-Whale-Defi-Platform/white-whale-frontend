@@ -17,7 +17,7 @@ import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
-import {bondingState, BondingStatus} from 'state/atoms/bondingAtoms'
+import {bondingSummaryState, BondingSummaryStatus} from 'state/atoms/bondingAtoms'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 
@@ -66,7 +66,7 @@ const Navbar = ({ }) => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network }, setWalletState] = useRecoilState(walletState)
 
-  const [_, setCurrentBondingState] = useRecoilState(bondingState)
+  const [_, setCurrentBondingState] = useRecoilState(bondingSummaryState)
 
   const chains: Array<any> = useChains()
   const {
@@ -87,8 +87,11 @@ const Navbar = ({ }) => {
       activeWallet: null,
     })
     setCurrentBondingState({
-      status: BondingStatus.uninitialized,
+      status: BondingSummaryStatus.uninitialized,
       edgeTokenList: null,
+      unbondingPeriod: null,
+      liquidAmpWhale: null,
+      liquidBWhale: null,
       bondedAmpWhale: null,
       bondedBWhale: null,
       unbondingAmpWhale: null,

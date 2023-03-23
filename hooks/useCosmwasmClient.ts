@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChains } from 'hooks/useChainInfo'
 
-export const useCosmwasmClient = (chainId?: string) => {
+export const useCosmwasmClient = (chainId?: string) : CosmWasmClient => {
   const chainInfo = useChains()
   const [clients, setClients] = useState<any>({})
 

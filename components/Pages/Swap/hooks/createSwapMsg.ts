@@ -1,6 +1,5 @@
 // import { toBase64 } from "@arthuryeti/terra";
 // import { Coin } from 'hooks/useCosmWasmClient'
-import { Coin } from '@cosmjs/launchpad'
 import { coin } from '@cosmjs/proto-signing'
 import { LCDClient } from '@terra-money/feather.js'
 import { createAsset, isNativeAsset, toAsset } from 'services/asset'

@@ -26,7 +26,7 @@ interface AssetInputProps {
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
-  const { balance, disabled, isSingleInput, value:token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
+  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
 
@@ -40,19 +40,16 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
     })
   }
   const onHalfClick = () => {
-    const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
     onChange({
       ...token,
-      amount: isTokenAndBaseTokenSame && !ignoreSlack
-        ? (num(balance === 0 ? 0 : (balance/2 - 0.1))).toFixed(6)
-        : num(balance/2).toFixed(6),
+      amount: (num(balance === 0 ? 0 : (balance/2))).toFixed(6)
     })
   }
   const maxDisabled = useMemo(() => {
     return disabled || (!isSingleInput && !tokenInfo?.symbol)
   }, [balance, disabled, isSingleInput, tokenInfo])
 
-  const numberOfTokens = useMemo(() => `${token?.amount} ${token.tokenSymbol}`, [token])
+  const numberOfTokens = useMemo(() => `${token?.amount} ${token?.tokenSymbol}`, [token])
 
   const [tokenPrice] = useTokenDollarValue(token?.tokenSymbol)
 
@@ -63,7 +60,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
       .toString()
   }, [tokenPrice, token?.amount])
 
-  const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).toString(), [balance, token.decimals]);
+  const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).toString(), [balance, token?.decimals]);
 
   return (
     <VStack width="full">
