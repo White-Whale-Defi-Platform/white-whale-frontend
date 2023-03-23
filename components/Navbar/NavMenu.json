@@ -1,0 +1,32 @@
+[
+  {
+    "label": "Trade",
+    "childs": [
+      {
+        "label": "Swap",
+        "link": "/swap"
+      },
+      {
+        "label": "Pools",
+        "link": "/pools"
+      }
+    ]
+  },
+  {
+    "label": "Flashloan",
+    "childs": [
+      {
+        "label": "Flashloan",
+        "link": "/flashloan"
+      },
+      {
+        "label": "Vaults",
+        "link": "/vaults"
+      }
+    ]
+  },
+  {
+    "label":  "Bridge",
+    "link": "https://tfm.com/bridge"
+  }
+]
