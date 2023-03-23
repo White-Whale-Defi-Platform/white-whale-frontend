@@ -198,7 +198,7 @@
     "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
   },
   {
-    "rpc": "https://ww-comdex-rpc.polkachu.com",
+    "rpc": "https://rpc.comdex.one",
     "rest": "https://ww-comdex-rest.polkachu.com",
     "chainId": "comdex-1",
     "chainName": "Comdex",
