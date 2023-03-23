@@ -19,41 +19,47 @@ import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
+
 import Card from '../Card'
 import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
-import NavbarLink from './NavbarLink'
+import NavbarPopper from './NavbarPopper'
+import menuLinks from './NavMenu.json'
 
-const links = [
+export const links = [
   {
-    lable: 'Swap',
+    label: 'Swap',
     link: '/swap',
   },
   {
-    lable: 'Pools',
+    label: 'Pools',
     link: '/pools',
   },
   {
-    lable: 'Flashloan',
+    label: 'Flashloan',
     link: '/flashloan',
   },
   {
-    lable: 'Vaults',
+    label: 'Vaults',
     link: '/vaults',
   },
+  {
+    label: 'Bridge',
+    link: 'https://tfm.com/bridge'
+  },
   // {
-  //   lable: "Chart",
+  //   label: "Chart",
   //   link: "/chart"
   // },
 ]
 
-const Navbar = ({}) => {
+const Navbar = ({ }) => {
   const { disconnect } = useWallet()
-  const [{ key, chainId, network, activeWallet }, setWalletState] =
-    useRecoilState(walletState)
-  const chains = useChains()
+  const [{ key, chainId, network }, setWalletState] = useRecoilState(walletState)
+
+  const chains: Array<any> = useChains()
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -89,13 +95,8 @@ const Navbar = ({}) => {
         <Box flex="1">
           <Logo />
         </Box>
-        <Card paddingX={10} gap={6}>
-          {links.map(({ lable, link }) => (
-            <NavbarLink
-              key={lable}
-              text={lable}
-              href={`/${currentChainName}${link}`}
-            />
+        <Card paddingX={10} gap={6} >
+          {menuLinks.map((menu)=> (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName}/>
           ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">
@@ -156,10 +157,10 @@ const Navbar = ({}) => {
           <DrawerCloseButton />
 
           <DrawerBody as={VStack} alignItems="flex-start">
-            {links.map(({ lable, link }) => (
+            {links.map(({ label, link }) => (
               <DrawerLink
-                key={lable}
-                text={lable}
+                key={label}
+                text={label}
                 href={link}
                 onClick={onClose}
               />
