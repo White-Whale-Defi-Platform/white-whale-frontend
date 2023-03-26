@@ -166,13 +166,13 @@ const Pools: FC<Props> = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
           </Text>
-          <Button
+          {/* <Button
             variant="primary"
             size="sm"
             onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
           >
             New Position
-          </Button>
+          </Button> */}
         </HStack>
         <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
         <MobilePools pools={myPools} />
