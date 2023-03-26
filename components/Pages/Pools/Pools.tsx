@@ -52,7 +52,7 @@ const Pools: FC<Props> = () => {
   const calculateMyPostion = (pool) => {
     const totalLiq = calcuateTotalLiq(pool);
     const {provided, total} = pool.liquidity?.available || {}
-    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(2).toNumber()
+    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(6).toNumber()
 
   }
 
@@ -154,6 +154,8 @@ const Pools: FC<Props> = () => {
   const myPoolsId = myPools && myPools.map(({ pool }) => pool)
   const allPoolsForShown =
     allPools && allPools.filter((item) => !myPoolsId.includes(item.pool))
+
+  console.log({myPools})
 
   return (
     <VStack
