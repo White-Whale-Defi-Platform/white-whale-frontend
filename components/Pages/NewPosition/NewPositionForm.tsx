@@ -170,7 +170,7 @@ const NewPositionForm: FC<Props> = ({
           render={({ field }) => (
             <AssetInput
               // edgeTokenList={tokenAList}
-              // showList={false}
+              showList={false}
               hideToken={tokenB?.tokenSymbol}
               // minMax={false}
               disabled={isInputDisabled}
@@ -206,7 +206,7 @@ const NewPositionForm: FC<Props> = ({
           rules={{ required: true }}
           render={({ field }) => (
             <AssetInput
-              // showList={false}
+              showList={false}
               edgeTokenList={edgeList}
               hideToken={tokenA?.tokenSymbol}
               // minMax={false}

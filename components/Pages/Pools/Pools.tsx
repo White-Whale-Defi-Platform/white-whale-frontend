@@ -52,7 +52,7 @@ const Pools: FC<Props> = () => {
   const calculateMyPostion = (pool) => {
     const totalLiq = calcuateTotalLiq(pool);
     const {provided, total} = pool.liquidity?.available || {}
-    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(2).toNumber()
+    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(6).toNumber()
 
   }
 
@@ -155,6 +155,8 @@ const Pools: FC<Props> = () => {
   const allPoolsForShown =
     allPools && allPools.filter((item) => !myPoolsId.includes(item.pool))
 
+  console.log({myPools})
+
   return (
     <VStack
       width={{ base: '100%', md: 'auto' }}
@@ -166,13 +168,13 @@ const Pools: FC<Props> = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
           </Text>
-          <Button
+          {/* <Button
             variant="primary"
             size="sm"
             onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
           >
             New Position
-          </Button>
+          </Button> */}
         </HStack>
         <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
         <MobilePools pools={myPools} />
