@@ -1,27 +1,17 @@
 import {Box, HStack, Text, VStack} from '@chakra-ui/react'
 import {WhaleTokenType} from './BondingActions'
-import {WhaleTooltip} from '../Bonding/BondingOverview'
-import {useEffect} from 'react'
 import {useRecoilState} from "recoil";
-import {bondingSummaryState, BondingSummaryStatus} from "../../../state/atoms/bondingAtoms";
 import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
-import {useWithdrawable} from "../Bonding/hooks/useWithdrawable";
-import {useUnbonding} from "../Bonding/hooks/useUnbonding";
-import {useBondingConfig} from "../Bonding/hooks/useBondingConfig";
 import {convertMicroDenomToDenom} from "../../../util/conversion";
+import {WhaleTooltip} from "../Bonding/WhaleTooltip";
+import {AMP_WHALE_DENOM} from "../../../constants/bonding_contract";
 
-const Withdraw = () => {
+const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, withdrawableBWhale, filteredUnbondingRequests, unbondingPeriodInNano}) => {
 
-  const [currentBondingSummaryState, setCurrentBondingSummaryState] = useRecoilState(bondingSummaryState)
-  const [{status, client, address}, _] = useRecoilState(walletState)
+  const [{status}, _] = useRecoilState(walletState)
 
   const isWalletConnected = status === WalletStatusType.connected
 
-
-  const {bondingConfig, refetch: refetchConfig} = useBondingConfig(client)
-
-  const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period) * 1_000_000_000 ?? 60 * 1_000_000_000
-  console.log(unbondingPeriodInNano)
   const calculateDurationString = (durationInSec: number): string => {
     if (durationInSec >= 86400) {
       return `${Math.floor(durationInSec / 86400)} days`;
@@ -35,48 +25,6 @@ const Withdraw = () => {
       return `imminent`;
     }
   };
-
-
-  const {
-    unbondingAmpWhale,
-    unbondingBWhale,
-    filteredUnbondingRequests,
-    refetch: refetchUnbonding
-  } = useUnbonding(client, address, ["uwhale", "ibc"])
-  console.log("UNBONDING")
-  console.log(unbondingAmpWhale)
-  console.log(unbondingBWhale)
-  console.log(filteredUnbondingRequests)
-
-  const {
-    withdrawableAmpWhale,
-    withdrawableBWhale,
-    isLoading,
-    refetch: refetchWithdrawable
-  } = useWithdrawable(client, address, ["uwhale", "ibc"])
-
-  useEffect(() => {
-    refetchConfig()
-    refetchUnbonding()
-    refetchWithdrawable()
-
-  }, [address, client])
-  useEffect(() => {
-
-    if (currentBondingSummaryState.status === BondingSummaryStatus.uninitialized && isWalletConnected) {
-      setCurrentBondingSummaryState({
-        ...currentBondingSummaryState,
-        status: BondingSummaryStatus.available,
-        edgeTokenList: ["WHALE", "bWHALE"],
-        unbondingPeriod: unbondingPeriodInNano,
-        unbondingAmpWhale: unbondingAmpWhale,
-        unbondingBWhale: unbondingBWhale,
-        withdrawableAmpWhale: withdrawableAmpWhale,
-        withdrawableBWhale: withdrawableBWhale,
-      })
-
-    }
-  }, [isWalletConnected, unbondingBWhale, unbondingPeriodInNano, unbondingAmpWhale, withdrawableBWhale, withdrawableAmpWhale])
 
   const ProgressBar = ({percent}) => {
     return (
@@ -116,8 +64,6 @@ const Withdraw = () => {
 
   const BoxComponent = ({whaleTokenType, value, durationInSeconds}) => {
     const durationString = calculateDurationString(durationInSeconds);
-    console.log("progress:")
-    console.log(durationInSeconds / (unbondingPeriodInNano / 1_000_000_000))
     return <VStack justifyContent="center" alignItems="center" mb={30}>
       <HStack justifyContent="space-between" alignItems="flex-start" w="100%" px={4}>
         <Text>
@@ -134,7 +80,6 @@ const Withdraw = () => {
         percent={(1 - durationInSeconds / (unbondingPeriodInNano / 1_000_000_000)) * 100}/>
     </VStack>
   }
-  console.log(filteredUnbondingRequests)
 
   return <VStack
     spacing={5}
@@ -154,7 +99,6 @@ const Withdraw = () => {
       borderRadius="10px"
       mt={10}>
       {filteredUnbondingRequests.map(type => {
-        console.log("HERE ")
         const currentTimeInNano = Date.now() * 1_000_000;
         const durationInSeconds =
           (Number(type.timestamp) +
@@ -162,7 +106,7 @@ const Withdraw = () => {
             currentTimeInNano) /
           1_000_000_000;
         return <BoxComponent
-          whaleTokenType={type.asset.info.native_token.denom == "uwhale" ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
+          whaleTokenType={type.asset.info.native_token.denom == AMP_WHALE_DENOM ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
           value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
           durationInSeconds={durationInSeconds}/>
       })}
