@@ -24,6 +24,8 @@ import useProvideLP from '../NewPosition/hooks/useProvideLP'
 import DepositForm from './DepositForm'
 import { tokenLpAtom } from './lpAtoms'
 import WithdrawForm from './WithdrawForm'
+import Overview from './Overview'
+import Claim from './Claim'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -104,10 +106,10 @@ const ManageLiquidity: FC = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '700px' }}
+      width={{ base: '100%', md: '800px' }}
       alignItems="center"
       padding={5}
-      margin="auto"
+      // margin="auto"
     >
       <HStack
         justifyContent="space-between"
@@ -140,15 +142,20 @@ const ManageLiquidity: FC = () => {
           borderColor="whiteAlpha.200"
           borderRadius="3xl"
           pt="8"
-          maxW="600px"
+          // maxW="600px"
           maxH="fit-content"
         >
           <Tabs variant="brand">
             <TabList justifyContent="center" background="#1C1C1C">
+              <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
+              <Tab>Claim</Tab>
             </TabList>
-            <TabPanels>
+            <TabPanels p={4}>
+              <TabPanel padding={4}>
+                <Overview />
+              </TabPanel>
               <TabPanel padding={4}>
                 {isTokenSet && (
                   <DepositForm
@@ -173,6 +180,9 @@ const ManageLiquidity: FC = () => {
                   }}
                   poolId={poolId}
                 />
+              </TabPanel>
+              <TabPanel padding={4}>
+                <Claim />
               </TabPanel>
             </TabPanels>
           </Tabs>

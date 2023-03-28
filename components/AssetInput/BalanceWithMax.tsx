@@ -65,7 +65,7 @@ const TokenToPrice = ({ numberOfTokens, dollarValue, hide = false }: TokenToPric
     return (
         <HStack spacing={0} gap={0} flex={1}>
             <Text color="brand.50" fontWeight={400} fontSize="14px">{numberOfTokens}=</Text>
-            <Text fontWeight={700} fontSize="14px">${dollarValue}</Text>
+            <Text fontWeight={700} fontSize="14px">${dollarValue === 'NaN' ? 0 : Number(dollarValue).toFixed(2)}</Text>
         </HStack>
     )
 }
