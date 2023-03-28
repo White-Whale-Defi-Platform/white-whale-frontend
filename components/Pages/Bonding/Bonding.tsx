@@ -9,7 +9,6 @@ import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
 import {BondingData} from "./types/BondingData";
 import {useTokenBalance} from "../../../hooks/useTokenBalance";
 import {useChains} from "../../../hooks/useChainInfo";
-import {bondingSummaryState, BondingSummaryStatus} from "../../../state/atoms/bondingAtoms";
 import {useBonded} from "./hooks/useBonded";
 import {useUnbonding} from "./hooks/useUnbonding";
 import {useWithdrawable} from "./hooks/useWithdrawable";
@@ -19,9 +18,6 @@ const Bonding: FC = () => {
   const [ _,setScreenWidth] = useState(0);
   const [isHorizontalLayout, setIsHorizontalLayout] = useState(true);
   const [{chainId, status,client, address}] = useRecoilState(walletState)
-
-
-  const [currentBondingState, setCurrentBondingState] = useRecoilState(bondingSummaryState)
 
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
@@ -109,16 +105,21 @@ const Bonding: FC = () => {
   const unbondingPeriod = bondingConfig?.unbonding_period
 
   const { bondedAmpWhale, bondedBWhale ,isLoading: bondedInfoLoading,refetch: refetchBonding } = useBonded(client, address);
-  const { unbondingAmpWhale ,unbondingBWhale ,isLoading: unbondingLoading,refetch: refetchUnbonding } = useUnbonding(client, address,["uwhale", "ibc"]);
-  const { withdrawableAmpWhale ,withdrawableBWhale ,isLoading: withdrawableLoading,refetch: refetchWithdrawable } = useWithdrawable(client, address,["uwhale", "ibc"]);
+  const { unbondingAmpWhale ,unbondingBWhale ,isLoading: unbondingLoading,refetch: refetchUnbonding } = useUnbonding(client, address);
+  const { withdrawableAmpWhale ,withdrawableBWhale ,isLoading: withdrawableLoading,refetch: refetchWithdrawable } = useWithdrawable(client, address);
 
   const summaryLoading : boolean = liquidWhaleLoading || liquidAmpLoading || liquidBLoading || bondedInfoLoading || unbondingLoading || withdrawableLoading
 
-  console.log("BONDEDAMP: "+ bondedAmpWhale)
-  console.log("BONDEDB: "+ bondedBWhale)
-  console.log("LIQUID: "+ liquidWhale)
-
-  console.log("LOADING: "+ summaryLoading)
+  // const { data: poolList } = useQueryWhalePriceFromWhaleAxlUsdcPool()
+  // const [pools, isLoading] = useQueriesDataSelector(
+  //   useQueryMultiplePoolsLiquidity({
+  //     refetchInBackground: false,
+  //     pools: poolList?.pools,
+  //     client,
+  //   })
+  // )
+  // console.log("POOLS")
+  // pools?.map(e=>console.log(e))
 
 
   useEffect(() => {
@@ -141,29 +142,12 @@ useEffect(()=>{
 }, [address, client])
 
   useEffect(() => {
-    setTimeout(async () => {
+
       setBondedTokens(bondedAmpWhale, bondedBWhale);
       setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale);
       setUnbondingTokens(unbondingAmpWhale, unbondingBWhale);
       setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale);
       setData(data)
-
-      if(currentBondingState.status === BondingSummaryStatus.uninitialized ){
-        setCurrentBondingState({
-          status: BondingSummaryStatus.available,
-          unbondingPeriod: unbondingPeriod,
-          edgeTokenList: ["WHALE", "bWHALE"],
-          liquidAmpWhale: liquidAmpWhale,
-          liquidBWhale: liquidBWhale,
-          bondedAmpWhale: bondedAmpWhale,
-          bondedBWhale: bondedBWhale,
-          unbondingAmpWhale: unbondingAmpWhale,
-          unbondingBWhale: unbondingBWhale,
-          withdrawableAmpWhale: withdrawableAmpWhale,
-          withdrawableBWhale: withdrawableBWhale,
-        })
-      }
-    }, 100)
 
   }, [isWalletConnected, bondedBWhale, bondedAmpWhale, unbondingBWhale, unbondingAmpWhale, withdrawableAmpWhale,withdrawableBWhale]);
 
@@ -191,8 +175,10 @@ useEffect(()=>{
           data={updatedData}
           currentChainName={currentChainName}/>
       </VStack>
-      <RewardsComponent isWalletConnected={isWalletConnected} isLoading={summaryLoading}
-                        isHorizontalLayout={isHorizontalLayout}/>
+      <RewardsComponent
+        isWalletConnected={isWalletConnected}
+        isLoading={summaryLoading}
+        isHorizontalLayout={isHorizontalLayout}/>
     </Flex>
   </VStack>
 }

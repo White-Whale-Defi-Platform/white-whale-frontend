@@ -10,10 +10,9 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react'
-// import { Asset } from 'types/blockchain'
 import FallbackImage from 'components/FallbackImage'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
-import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import { useTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
 
 import AssetSelectModal from './AssetSelectModal'
@@ -94,7 +93,6 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
     ref
   ) => {
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
-    const baseToken = useBaseTokenInfo()
 
     const [tokenList] = useTokenList()
     useMultipleTokenBalance(tokenList?.tokens?.map(({ symbol }) => symbol))

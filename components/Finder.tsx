@@ -16,9 +16,8 @@ const getUrl = (chainId, txHash) => {
       return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
     case 'migaloo-1':
       return `https://explorer.silknodes.io/migaloo/tx/${txHash}`
-    // case 'narwhal-1':
-    //   return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
-    //   break
+    case 'narwhal-1':
+      return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
     case 'pisco-1':
       return `https://finder.terra.money/testnet/tx/${txHash}`
     case 'juno-1':

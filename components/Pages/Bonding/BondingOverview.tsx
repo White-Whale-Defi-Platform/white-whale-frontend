@@ -1,138 +1,22 @@
-import {Box, Button, Divider, HStack, Text, Tooltip as ChakraTooltip, VStack,} from '@chakra-ui/react'
+import {Box, Button, HStack, Text, VStack,} from '@chakra-ui/react'
 
 import {Cell, Pie, PieChart} from 'recharts'
 
 import Loader from '../../Loader'
 import {useRouter} from 'next/router'
-import {useEffect, useRef, useState} from "react";
-import {BondingData} from "./types/BondingData";
-
-interface WhaleTooltipProps {
-  data: BondingData[];
-  withdrawableAmpWhale?: number;
-  withdrawableBWhale?: number;
-  label: string;
-  isWalletConnected: boolean;
-  tokenType: TokenType;
-}
+import {WhaleTooltip} from "./WhaleTooltip";
+import {useTokenDollarValue} from "../../../hooks/useTokenDollarValue";
 
 export enum TokenType {
   bonded, liquid, unbonding, withdrawable
 }
 
 export enum ActionType {
-  buy, bond, unbond, withdraw
+  buy, bond, unbond, withdraw, claim
 }
 
 export enum WhaleType {
   ampWHALE, bWHALE, WHALE
-}
-
-export const WhaleTooltip = ({
-                               data, label, isWalletConnected, tokenType,
-                               withdrawableAmpWhale, withdrawableBWhale
-}: WhaleTooltipProps) => {
-  const { whale = null, ampWhale = null, bWhale = null} = data?.find(e => e.tokenType == tokenType) || {}
-
-  const lsdTokenDetails = [{
-    type: WhaleType.bWHALE,
-    value:withdrawableBWhale ?? bWhale}, {
-    type: WhaleType.ampWHALE,
-    value:withdrawableAmpWhale ?? ampWhale
-  }].sort((a, b) => b.value - a.value);
-
-  const TokenDetail = ({whaleType, value}) => {
-    return <HStack
-      justify="space-between"
-      direction="row"
-      width="full"
-      px={2}>
-      <Text
-        color="whiteAlpha.600"
-        fontSize={14}>
-        {WhaleType[whaleType]}
-      </Text>
-      <Text
-        fontSize={14}>
-        {isWalletConnected ? value : "n/a"}
-      </Text>
-    </HStack>
-  }
-  const textRef = useRef(null);
-  const [textWidth, setTextWidth] = useState(0);
-
-  useEffect(() => {
-    setTextWidth(textRef.current.offsetWidth);
-  }, [whale, ampWhale, bWhale]);
-
-  return <ChakraTooltip
-    sx={{boxShadow: "none"}}
-    label={
-      <VStack
-        minW="250px"
-        minH="90px"
-        borderRadius="10px"
-        bg="blackAlpha.900"
-        px="4"
-        py="4"
-        position="relative"
-        border="none"
-        justifyContent="center"
-        alignItems="center">
-        {ampWhale === null && withdrawableAmpWhale == null ?
-          <Text>
-            {tokenType === TokenType.liquid ? "Liquid Tokens" :
-              tokenType === TokenType.bonded ? "Current amount of bonded LSD Whale token":
-                tokenType === TokenType.unbonding ? "Current amount of unbonding LSD Whale token" :
-                  tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD Whale token": null}
-          </Text> :
-          <>{tokenType === TokenType.liquid ?
-            <> <TokenDetail
-              whaleType={WhaleType.WHALE}
-              value={whale}/>
-              <Divider
-                width="93%"
-                borderWidth="0.1px"
-                color="whiteAlpha.300"/>
-            </> : null
-          }
-            {lsdTokenDetails.map((e, index) => {
-              return <>
-                <TokenDetail
-                  whaleType={e.type}
-                  value={e.value}/>
-                {index === 0 && <Divider width="93%" borderWidth="0.1px" color="whiteAlpha.300"/>}
-              </>
-            })
-            }
-          </>
-        }
-      </VStack>}
-    bg="transparent">
-    <VStack alignItems="flex-start" minW={100}>
-      <Text
-        ref={textRef}
-        mb="-0.3rem"
-        color="white">
-        {label}
-      </Text>
-      <Box pb={1}>
-        {label !== "n/a" && <div
-          style={{
-            width: `${textWidth}px`,
-            height: '1px',
-            background: `repeating-linear-gradient(
-            to right,
-            white,
-            white 1px,
-            transparent 1px,
-            transparent 5px
-          )`,
-          }}
-        />}
-      </Box>
-    </VStack>
-  </ChakraTooltip>
 }
 
 const BondingOverview = ({
@@ -158,12 +42,18 @@ const BondingOverview = ({
           borderRadius="50%"
           mr="2">
         </Box>
-        <WhaleTooltip label={label} data={null}
-                      isWalletConnected={isWalletConnected}
-                      tokenType={tokenType}/>
+        <WhaleTooltip
+          label={label}
+          data={null}
+          isWalletConnected={isWalletConnected}
+          tokenType={tokenType}/>
       </HStack>
     );
   };
+  const [tokenPrice] = useTokenDollarValue("WHALE")
+
+  let aggregatedAssets = data?.reduce((acc, e) =>  acc + (e?.value??0), 0);
+
   return <VStack
     width="full"
     background={"#1C1C1C"}
@@ -207,11 +97,10 @@ const BondingOverview = ({
             dataKey="value"
             stroke="none">
             {isWalletConnected ?
-              data?.map((_entry: any, index: number) => (<Cell
+              data?.map((_entry: any, index: number) =>
+                (<Cell
                   key={`cell-${index}`}
-                  fill={data[index].color}
-
-                />
+                  fill={data[index].color}/>
               )) :
               <Cell
                 key={"cell-${index}"}
@@ -238,10 +127,10 @@ const BondingOverview = ({
             marginBottom={-2}
             paddingEnd={10}
             color="whiteAlpha.600">
-            Amount
+            {`Value($${(aggregatedAssets*Number(tokenPrice)).toFixed(2)})`}
           </Text>
           {data?.map((e: { value: number | string, actionType: ActionType, tokenType: TokenType }) => {
-              return <WhaleTooltip label={e?.value !== null && isWalletConnected ? e.value.toLocaleString() : "n/a"}
+              return <WhaleTooltip label={e?.value !== null && isWalletConnected ? `$${(Number(e.value) * Number(tokenPrice)).toFixed(2)}`: "n/a"}
                                    tokenType={e.tokenType} data={data} isWalletConnected={isWalletConnected}/>
             }
           )}

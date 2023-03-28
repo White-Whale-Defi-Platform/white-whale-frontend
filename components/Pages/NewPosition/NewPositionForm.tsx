@@ -2,25 +2,21 @@
 import { FC, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
-  Box,
   Button,
   HStack,
   Spinner,
   Text,
-  Tooltip,
   VStack,
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
-import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 import { WalletStatusType } from '../../../state/atoms/walletAtoms'
-import { TokenItemState } from '../ManageLiquidity/lpAtoms'
+import {TokenItemState} from "../../../types";
 
 type Props = {
   connected: WalletStatusType
@@ -170,7 +166,7 @@ const NewPositionForm: FC<Props> = ({
           render={({ field }) => (
             <AssetInput
               // edgeTokenList={tokenAList}
-              // showList={false}
+              showList={false}
               hideToken={tokenB?.tokenSymbol}
               hideDollarValue={true}
               // minMax={false}
@@ -207,7 +203,7 @@ const NewPositionForm: FC<Props> = ({
           rules={{ required: true }}
           render={({ field }) => (
             <AssetInput
-              // showList={false}
+              showList={false}
               edgeTokenList={edgeList}
               hideToken={tokenA?.tokenSymbol}
               // minMax={false}

@@ -9,9 +9,7 @@ import { truncate } from 'util/truncate'
 function TruncatedAddress({ connected }) {
   const { address, chainId } = useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()
-  // TODO: review, is this okay 
-  console.log("connectedWallet", connectedWallet)
-  console.log("address", address)
+  // TODO: review, is this okay
   const truncatWalletAddress = (addr: string) => {
     const chainName = addr?.substring(0, addr.indexOf('1'))
     return connected

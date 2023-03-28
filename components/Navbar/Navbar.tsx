@@ -17,7 +17,6 @@ import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
-import {bondingSummaryState, BondingSummaryStatus} from 'state/atoms/bondingAtoms'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 
@@ -51,22 +50,13 @@ export const links = [
     link: '/bonding',
   },
   {
-    label: 'Voting',
-    link: '/voting',
-  },
-  // {
-  //   label: "Chart",
-  //   link: "/chart"
-  // },
+    label: 'Bridge',
+    link: 'https://tfm.com/bridge'
+  }
 ]
-
-
-
 const Navbar = ({ }) => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network }, setWalletState] = useRecoilState(walletState)
-
-  const [_, setCurrentBondingState] = useRecoilState(bondingSummaryState)
 
   const chains: Array<any> = useChains()
   const {
@@ -85,19 +75,6 @@ const Navbar = ({ }) => {
       network,
       chainId,
       activeWallet: null,
-    })
-    setCurrentBondingState({
-      status: BondingSummaryStatus.uninitialized,
-      edgeTokenList: null,
-      unbondingPeriod: null,
-      liquidAmpWhale: null,
-      liquidBWhale: null,
-      bondedAmpWhale: null,
-      bondedBWhale: null,
-      unbondingAmpWhale: null,
-      unbondingBWhale: null,
-      withdrawableAmpWhale: null,
-      withdrawableBWhale: null,
     })
     disconnect()
   }
@@ -118,7 +95,8 @@ const Navbar = ({ }) => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6} >
-          {menuLinks.map((menu) => (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName} />))}
+          {menuLinks.map((menu)=> (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName}/>
+          ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">
           <Wallet

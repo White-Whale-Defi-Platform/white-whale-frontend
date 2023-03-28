@@ -1,10 +1,12 @@
 import {Wallet} from '../../../../util/wallet-adapters';
-import {BONDING_CONTRACT_ADDRESS} from '../../../../constants/bonding_contract';
+import {
+  AMP_WHALE_DENOM, B_WHALE_DENOM,
+  BONDING_CONTRACT_ADDRESS,
+} from '../../../../constants/bonding_contract';
 import {JsonObject} from '@cosmjs/cosmwasm-stargate';
 import {useQuery} from 'react-query';
 import {convertMicroDenomToDenom} from "../../../../util/conversion";
-import {useRecoilState} from "recoil";
-import {bondingSummaryState} from "../../../../state/atoms/bondingAtoms";
+import {DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL} from "../../../../util/constants";
 
 interface UnbondingInfo {
   total_amount: string;
@@ -30,26 +32,24 @@ interface NativeToken {
   denom: string;
 }
 
-export const useUnbonding = (client: Wallet, address: string, denoms: string[]) => {
+export const useUnbonding = (client: Wallet, address: string) => {
+
   const {data: unbondingInfos, isLoading, refetch} = useQuery(
-    ['unbonding', address, denoms],
+    ['unbonding', address],
     () => {
       if (client && address) {
-        return fetchUnbonding(client, address, denoms);
+        return fetchUnbonding(client, address);
       } else {
         return Promise.resolve(null);
       }
     },
     {
+      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
     }
   );
-
-  const [currentBondingSummaryState, _] = useRecoilState(bondingSummaryState)
-  //const unbondingPeriod = currentBondingSummaryState.unbondingPeriod ?? 60 * 1_000_000_000
   const unbondingPeriod = 60 * 1_000_000_000
 
-  console.log(currentBondingSummaryState.unbondingPeriod)
   const currentTimeInNanoseconds = Date.now() * 1_000_000;
 
   const filteredAmpWhaleUnbondingRequests = unbondingInfos?.[0]?.unbonding_requests.filter(req=>((Number(req.timestamp)+unbondingPeriod) > currentTimeInNanoseconds))
@@ -71,17 +71,13 @@ export const useUnbonding = (client: Wallet, address: string, denoms: string[]) 
 export const fetchUnbonding = async (
   client: Wallet,
   address: string,
-  denoms: string[]
 ): Promise<UnbondingInfo[]> => {
   const resultAmp: JsonObject = await client.queryContractSmart(BONDING_CONTRACT_ADDRESS, {
-    unbonding: {address: address, denom: denoms[0]},
+    unbonding: {address: address, denom: AMP_WHALE_DENOM},
   });
   const resultB: JsonObject = await client.queryContractSmart(BONDING_CONTRACT_ADDRESS, {
-    unbonding: {address: address, denom: denoms[1]},
+    unbonding: {address: address, denom: B_WHALE_DENOM},
   });
-
-  console.log("UNBONDING:")
-  console.log(resultAmp)
 
   return [resultAmp, resultB] as UnbondingInfo[];
 };
