@@ -1,41 +1,41 @@
 [
-    {
-        "label": "Trade",
-        "childs": [
-            {
-                "label": "Swap",
-                "link": "/swap"
-            },
-            {
-                "label": "Pools",
-                "link": "/pools"
-            }
-        ]
-    },
-    {
+  {
+    "label": "Trade",
+    "childs": [
+      {
+        "label": "Swap",
+        "link": "/swap"
+      },
+      {
+        "label": "Pools",
+        "link": "/pools"
+      }
+    ]
+  },
+  {
+    "label": "Flashloan",
+    "childs": [
+      {
         "label": "Flashloan",
-        "childs": [
-            {
-                "label": "Flashloan",
-                "link": "/flashloan"
-            },
-            {
-                "label": "Vaults",
-                "link": "/vaults"
-            }
-        ]
-    },
-    {
-        "label": "Governance",
-        "childs": [
-            {
-                "label": "Bonding",
-                "link": "/bonding"
-            },
-            {
-                "label": "Voting",
-                "link": "/voting"
-            }
-        ]
-    }
+        "link": "/flashloan"
+      },
+      {
+        "label": "Vaults",
+        "link": "/vaults"
+      }
+    ]
+  },
+  {
+    "label": "Governance",
+    "childs": [
+      {
+        "label": "Bonding",
+        "link": "/bonding"
+      }
+    ]
+  },
+  {
+    "label": "Bridge",
+    "link": "https://tfm.com/bridge"
+  }
 ]

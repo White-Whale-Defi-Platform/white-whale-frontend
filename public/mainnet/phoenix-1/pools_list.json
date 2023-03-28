@@ -353,6 +353,42 @@
       "swap_address": "terra1tsx0dmasjvd45k6tdywzv77d5t9k3lpzyuleavuah77pg3lwm9cq4469pm",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "bLUNA-SOLID",
+      "lpOrder": ["bLUNA", "SOLID"],
+      "assetOrder": ["bLUNA", "SOLID"],
+      "displayName": "bLUNA-SOLID",
+      "displayLogo1": "/logos/bLUNA.png",
+      "displayLogo2": "/logos/solid.svg",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+          "symbol": "bLUNA",
+          "name": "bLuna",
+          "decimals": 6,
+          "logoURI": "/logos/bLuna.png",
+          "tags": [],
+          "native": false,
+          "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "terra10aa3zdkrc7jwuf8ekl3zq7e7m42vmzqehcmu74e4egc7xkm5kr2s0muyst",
+          "symbol": "SOLID",
+          "name": "Solid",
+          "decimals": 6,
+          "logoURI": "/logos/solid.svg",
+          "tags": [],
+          "native": false,
+          "denom": "terra10aa3zdkrc7jwuf8ekl3zq7e7m42vmzqehcmu74e4egc7xkm5kr2s0muyst"
+        }
+      ],
+      "lp_token": "terra19sddeagdmflr7fh4tqkj37chv6zjpef2nnvfzfjlykwz0zvg6f4scvy5dr",
+      "swap_address": "terra1shd0wd8atmevjtryzcqzu6sxsmc4hjek43kxqsz08wxwk4nt0wvsav9004",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

@@ -97,6 +97,80 @@
       "swap_address": "comdex13s9jpl2cqy8g3ggxhps40up3cys7ru6rgek5ad06zraf6xacsg3swcwmey",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampWHALE-WHALE",
+      "lpOrder": ["WHALE", "ampWHALE"],
+      "assetOrder": ["ampWHALE", "WHALE"],
+      "displayName": "ampWHALE-WHALE",
+      "displayLogo1": "/logos/ampWhale.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "whale-token",
+          "chain_id": "comdex-1",
+          "token_address": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2"
+        },
+        {
+          "chain_id": "comdex-1",
+          "token_address": "ibc/412DE088BAD7A3AB5BF299E1AEEDDBA88E6F3E1BCFEC5EC0BDDEC2A5A062F278",
+          "symbol": "ampWHALE",
+          "name": "ampWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/412DE088BAD7A3AB5BF299E1AEEDDBA88E6F3E1BCFEC5EC0BDDEC2A5A062F278"
+        }
+      ],
+      "lp_token": "comdex1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s9q82rn",
+      "swap_address": "comdex10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaq4j6rgw",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bWHALE-WHALE",
+      "lpOrder": ["WHALE", "bWHALE"],
+      "assetOrder": ["bWHALE", "WHALE"],
+      "displayName": "bWHALE-WHALE",
+      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "whale-token",
+          "chain_id": "comdex-1",
+          "token_address": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2"
+        },
+        {
+          "chain_id": "comdex-1",
+          "token_address": "ibc/BED9212E5BA494E6EA522D82D55972A3C148BB0232FE2B4366FF5356FB3E522C",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/BED9212E5BA494E6EA522D82D55972A3C148BB0232FE2B4366FF5356FB3E522C"
+        }
+      ],
+      "lp_token": "comdex1ts83c0ldh0jjmdmqtv33k74pljr0jsm5t3csyndrsealujwtsfwsskrdvj",
+      "swap_address": "comdex177yh38g3ctu7cemxpa3c2kvwh2yslfxfeej4ze7rpghrwmh30ukqfqrvng",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

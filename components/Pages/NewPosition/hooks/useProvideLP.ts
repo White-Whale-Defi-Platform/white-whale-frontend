@@ -76,7 +76,7 @@ const useProvideLP = ({ reverse = false }) => {
       .div(10 ** tokenInfoB?.decimals)
       .toNumber()
     const ratio =
-      reverse || matchingPools?.streamlinePoolBA
+      reverse 
         ? num(tokenA).div(tokenB)
         : num(tokenB).div(tokenA)
     const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)

@@ -1,9 +1,9 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { formatPrice } from 'libs/num'
+import { formatPrice, num } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
@@ -22,6 +22,7 @@ type Props = {}
 const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
 const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
+const NoPrice = ["ASH-BDOG", 'ASH-GDOG']
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
@@ -44,11 +45,19 @@ const Pools: FC<Props> = () => {
     [chainId]
   )
 
+  const calcuateTotalLiq = (pool) => {
+    return  NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
+  }
+
+  const calculateMyPostion = (pool) => {
+    const totalLiq = calcuateTotalLiq(pool);
+    const {provided, total} = pool.liquidity?.available || {}
+    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(6).toNumber()
+
+  }
+
   const initPools = useCallback(async () => {
-    if (!pools || (pools && pools.length === 0)) {
-      setInitLoading(false)
-      return
-    }
+    if (!pools || (pools && pools.length === 0)) return
     if (allPools.length > 0) {
       return
     }
@@ -67,7 +76,7 @@ const Pools: FC<Props> = () => {
     })
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
-        const displayAssetOrder = pool.displayName.split('-')
+        const displayAssetOrder = pool.displayName?.split('-')
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
@@ -75,7 +84,7 @@ const Pools: FC<Props> = () => {
         const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
         const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
         let price = 0
-        if (displayAssetOrder?.[0] === pool?.assetOrder?.[0]) {
+        if (displayAssetOrder?.[0] === pool.assetOrder?.[0]) {
           price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
         } else {
           price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
@@ -92,15 +101,20 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: pool.liquidity?.available?.total?.dollarValue,
+          totalLiq: calcuateTotalLiq(pool),
+          myPosition : calculateMyPostion(pool),
           liquidity: pool.liquidity,
-          price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          poolAssets: pool.pool_assets,
+          // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
+          price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
-          cta: () =>
+          cta: () => {
+            const [asset1, asset2] = pool?.displayName.split('-') || []
             router.push(
-              `/${chainIdParam}/pools/new_position?from=${pool.pool_assets?.[0].symbol}&to=${pool.pool_assets?.[1].symbol}`
-            ),
+              `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
+            )
+          }
         }
       })
     )
@@ -124,7 +138,9 @@ const Pools: FC<Props> = () => {
         .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
         .map((item) => ({
           ...item,
-          myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          // myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          // myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
+          // myPosition : calculateMyPostion(item),
           cta: () =>
             router.push(
               `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
@@ -141,7 +157,7 @@ const Pools: FC<Props> = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '1160px' }}
+      width={{ base: '100%', md: 'auto' }}
       alignItems="center"
       margin="auto"
     >
@@ -150,13 +166,13 @@ const Pools: FC<Props> = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
           </Text>
-          <Button
+          {/* <Button
             variant="primary"
             size="sm"
             onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
           >
             New Position
-          </Button>
+          </Button> */}
         </HStack>
         <MyPoolsTable show={true} pools={myPools} isLoading={isLoading || isInitLoading} />
         <MobilePools pools={myPools} />
