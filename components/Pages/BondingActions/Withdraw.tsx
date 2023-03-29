@@ -2,8 +2,8 @@ import {Box, HStack, Text, VStack} from '@chakra-ui/react'
 import {WhaleTokenType} from './BondingActions'
 import {useRecoilState} from "recoil";
 import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
-import {convertMicroDenomToDenom} from "../../../util/conversion";
-import {WhaleTooltip} from "../Bonding/WhaleTooltip";
+import {calculateDurationString, convertMicroDenomToDenom} from "../../../util/conversion";
+import {WhaleTooltip} from "../Dashboard/WhaleTooltip";
 import {AMP_WHALE_DENOM} from "../../../constants/bonding_contract";
 
 const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, withdrawableBWhale, filteredUnbondingRequests, unbondingPeriodInNano}) => {
@@ -11,20 +11,6 @@ const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, wit
   const [{status}, _] = useRecoilState(walletState)
 
   const isWalletConnected = status === WalletStatusType.connected
-
-  const calculateDurationString = (durationInSec: number): string => {
-    if (durationInSec >= 86400) {
-      return `${Math.floor(durationInSec / 86400)} days`;
-    } else if (durationInSec >= 3600) {
-      return `${Math.floor(durationInSec / 3600)} hours`;
-    } else if (durationInSec >= 60) {
-      return `${Math.floor(durationInSec / 60)} minutes`;
-    } else if (durationInSec > 0) {
-      return `${Math.floor(durationInSec)} seconds`;
-    } else {
-      return `imminent`;
-    }
-  };
 
   const ProgressBar = ({percent}) => {
     return (
@@ -62,8 +48,8 @@ const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, wit
     </Box>
   }
 
-  const BoxComponent = ({whaleTokenType, value, durationInSeconds}) => {
-    const durationString = calculateDurationString(durationInSeconds);
+  const BoxComponent = ({whaleTokenType, value, durationInMillis}) => {
+    const durationString = calculateDurationString(durationInMillis);
     return <VStack justifyContent="center" alignItems="center" mb={30}>
       <HStack justifyContent="space-between" alignItems="flex-start" w="100%" px={4}>
         <Text>
@@ -77,7 +63,7 @@ const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, wit
         </HStack>
       </HStack>
       <ProgressBar
-        percent={(1 - durationInSeconds / (unbondingPeriodInNano / 1_000_000_000)) * 100}/>
+        percent={(1 - durationInMillis / (unbondingPeriodInNano / 1_000_000)) * 100}/>
     </VStack>
   }
 
@@ -99,16 +85,15 @@ const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, wit
       borderRadius="10px"
       mt={10}>
       {filteredUnbondingRequests.map(type => {
-        const currentTimeInNano = Date.now() * 1_000_000;
-        const durationInSeconds =
-          (Number(type.timestamp) +
-            unbondingPeriodInNano -
-            currentTimeInNano) /
-          1_000_000_000;
+        const currentTimeInMillis = Date.now();
+        const durationInMillis =
+          ((Number(type.timestamp) +
+            unbondingPeriodInNano)/1_000_000) -
+            currentTimeInMillis;
         return <BoxComponent
           whaleTokenType={type.asset.info.native_token.denom == AMP_WHALE_DENOM ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
           value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
-          durationInSeconds={durationInSeconds}/>
+          durationInMillis={durationInMillis}/>
       })}
     </Box>}
   </VStack>

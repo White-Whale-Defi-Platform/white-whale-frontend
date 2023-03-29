@@ -20,7 +20,7 @@ interface FeeDistributionConfig {
 }
 
 export const useFeeDistributorConfig = (client: Wallet | null) => {
-  const { data: bondingConfig, isLoading, refetch } = useQuery(
+  const { data: feeDistributionConfig, isLoading, refetch } = useQuery(
     'feeDistributionConfig',
     () => {
       if (client) {
@@ -30,12 +30,12 @@ export const useFeeDistributorConfig = (client: Wallet | null) => {
       }
     },
     {
-      retryOnMount:true,
+      refetchOnMount: 'always',
       refetchIntervalInBackground: true,
     }
   );
-
-  return { bondingConfig, isLoading, refetch };
+  const isLoadingExtended = feeDistributionConfig === null
+  return { feeDistributionConfig, isLoading: isLoadingExtended, refetch };
 };
 
 export const fetchConfig = async (client: Wallet): Promise<FeeDistributionConfig> => {
@@ -43,8 +43,6 @@ export const fetchConfig = async (client: Wallet): Promise<FeeDistributionConfig
     config: {},
   });
 
-  console.log("FEE DISTR RESULT:")
-  console.log(result)
 
   return result as FeeDistributionConfig;
 };

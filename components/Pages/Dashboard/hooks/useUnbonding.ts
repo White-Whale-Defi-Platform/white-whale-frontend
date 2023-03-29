@@ -6,7 +6,6 @@ import {
 import {JsonObject} from '@cosmjs/cosmwasm-stargate';
 import {useQuery} from 'react-query';
 import {convertMicroDenomToDenom} from "../../../../util/conversion";
-import {DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL} from "../../../../util/constants";
 
 interface UnbondingInfo {
   total_amount: string;
@@ -44,7 +43,7 @@ export const useUnbonding = (client: Wallet, address: string) => {
       }
     },
     {
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+      refetchOnMount:true,
       refetchIntervalInBackground: true,
     }
   );
@@ -64,8 +63,9 @@ export const useUnbonding = (client: Wallet, address: string) => {
     return accumulator + parseFloat(currentValue)
   }, 0) || 0, 6);
 
+  const isLoadingExtended = unbondingInfos === null
 
-  return {unbondingAmpWhale, unbondingBWhale,filteredUnbondingRequests, isLoading, refetch};
+  return {unbondingAmpWhale, unbondingBWhale,filteredUnbondingRequests, isLoading: isLoadingExtended, refetch};
 };
 
 export const fetchUnbonding = async (

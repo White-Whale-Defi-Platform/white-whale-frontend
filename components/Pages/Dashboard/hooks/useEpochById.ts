@@ -51,6 +51,8 @@ export const useEpochById = (client: Wallet | null, id: string ) => {
       }
     },
     {
+      refetchOnMount:true,
+
       refetchIntervalInBackground: true,
     }
   )

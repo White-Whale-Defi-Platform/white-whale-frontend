@@ -12,10 +12,15 @@ import {useChains} from "../../../hooks/useChainInfo";
 import {useBonded} from "./hooks/useBonded";
 import {useUnbonding} from "./hooks/useUnbonding";
 import {useWithdrawable} from "./hooks/useWithdrawable";
-import {useBondingConfig} from "./hooks/useBondingConfig";
 import {useWhalePrice} from "../../../queries/useGetTokenDollarValueQuery";
+import {useTotalBonded} from "./hooks/useTotalBonded";
+import {useFeeDistributorConfig} from "./hooks/useFeeDistributorConfig";
+import {useCurrentEpoch} from "./hooks/useCurrentEpoch";
+import {useClaimableEpochs} from "./hooks/useClaimableEpochs";
+import {useClaimable} from "./hooks/useClaimable";
+import {useWeight} from "./hooks/useWeight";
 
-const Bonding: FC = () => {
+const Dashboard: FC = () => {
   const [ _,setScreenWidth] = useState(0);
   const [isHorizontalLayout, setIsHorizontalLayout] = useState(true);
   const [{chainId, status,client, address}] = useRecoilState(walletState)
@@ -103,24 +108,33 @@ const Bonding: FC = () => {
   const {balance: liquidBWhale,isLoading: liquidBLoading} = useTokenBalance(
     "bWHALE")
 
-  const { bondingConfig} = useBondingConfig(client);
-
-  const { bondedAmpWhale, bondedBWhale ,isLoading: bondedInfoLoading,refetch: refetchBonding } = useBonded(client, address);
+  const { bondedAmpWhale, bondedBWhale,localTotalBonded, isLoading: bondedInfoLoading,refetch: refetchBonding } = useBonded(client, address);
+  const { globalTotalBonded,isLoading: totalBondedLoading } = useTotalBonded(client);
   const { unbondingAmpWhale ,unbondingBWhale ,isLoading: unbondingLoading,refetch: refetchUnbonding } = useUnbonding(client, address);
   const { withdrawableAmpWhale ,withdrawableBWhale ,isLoading: withdrawableLoading,refetch: refetchWithdrawable } = useWithdrawable(client, address);
+  // takes ages
+  const {feeDistributionConfig, isLoading: feeDistributionConfigLoading } = useFeeDistributorConfig(client);
+  // takes ages
+  const {currentEpoch, isLoading: currentEpochLoading} = useCurrentEpoch(client);
+  const {globalAvailableRewards ,annualRewards, isLoading: globalAvailableRewardsLoading } = useClaimableEpochs(client);
+  const {claimable: claimableRewards, isLoading: claimableRewardsLoading} = useClaimable(client, address);
+  // takes ages
+  const {weightInfo, isLoading: weightInfoLoading} = useWeight(client, address)
 
-  const summaryLoading : boolean = liquidWhaleLoading || liquidAmpLoading || liquidBLoading || bondedInfoLoading || unbondingLoading || withdrawableLoading
-
-  // const { data: poolList } = useQueryWhalePriceFromWhaleAxlUsdcPool()
-  // const [pools, isLoading] = useQueriesDataSelector(
-  //   useQueryMultiplePoolsLiquidity({
-  //     refetchInBackground: false,
-  //     pools: poolList?.pools,
-  //     client,
-  //   })
-  // )
-  // console.log("POOLS")
-  // pools?.map(e=>console.log(e))
+  // for debugging
+  // console.log("====")
+  // console.log(liquidWhaleLoading)
+  // console.log(liquidAmpLoading)
+  // console.log(liquidBLoading)
+  // console.log(bondedInfoLoading)
+  // console.log(totalBondedLoading)
+  // console.log(unbondingLoading)
+  // console.log(withdrawableLoading)
+  // console.log(claimableRewardsLoading)
+  // console.log(currentEpochLoading)
+  // console.log(feeDistributionConfigLoading)
+  // console.log(weightInfoLoading)
+  // console.log("====")
 
 
   useEffect(() => {
@@ -142,13 +156,21 @@ useEffect(()=>{
   refetchWithdrawable()
 }, [address, client])
 
+  const [isLoadingSummary, setLoading] = useState<boolean>(true)
+
+  useEffect(()=>{
+    setLoading( liquidWhaleLoading || liquidAmpLoading || liquidBLoading || bondedInfoLoading ||totalBondedLoading || unbondingLoading || withdrawableLoading || globalAvailableRewardsLoading || claimableRewardsLoading || weightInfoLoading || feeDistributionConfigLoading )
+
+  },[ liquidWhaleLoading ,feeDistributionConfigLoading, weightInfoLoading,liquidAmpLoading, liquidBLoading ,bondedInfoLoading,totalBondedLoading,unbondingLoading,withdrawableLoading,currentEpochLoading, globalAvailableRewardsLoading,claimableRewardsLoading])
+
+
   useEffect(() => {
       setBondedTokens(bondedAmpWhale, bondedBWhale);
       setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale);
       setUnbondingTokens(unbondingAmpWhale, unbondingBWhale);
       setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale);
       setData(data)
-  }, [isWalletConnected, bondedBWhale, bondedAmpWhale, unbondingBWhale, unbondingAmpWhale, withdrawableAmpWhale,withdrawableBWhale]);
+  }, [isWalletConnected, isLoadingSummary]);
 
   return <VStack
     alignSelf="center">
@@ -170,7 +192,7 @@ useEffect(()=>{
         </HStack>
         <BondingOverview
           isWalletConnected={isWalletConnected}
-          isLoading={summaryLoading}
+          isLoading={isLoadingSummary}
           data={updatedData}
           whalePrice={whalePrice}
           currentChainName={currentChainName}/>
@@ -178,9 +200,17 @@ useEffect(()=>{
       <RewardsComponent
         isWalletConnected={isWalletConnected}
         whalePrice={whalePrice}
-        isLoading={summaryLoading}
+        isLoading={isLoadingSummary}
+        localTotalBonded={localTotalBonded}
+        globalTotalBonded={globalTotalBonded}
+        feeDistributionConfig={feeDistributionConfig}
+        currentEpoch={currentEpoch}
+        annualRewards={annualRewards}
+        globalAvailableRewards={globalAvailableRewards}
+        claimableRewards={claimableRewards}
+        weightInfo={weightInfo}
         isHorizontalLayout={isHorizontalLayout}/>
     </Flex>
   </VStack>
 }
-export default Bonding
+export default Dashboard

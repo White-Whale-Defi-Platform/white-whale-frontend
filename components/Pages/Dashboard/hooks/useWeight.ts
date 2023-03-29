@@ -22,12 +22,12 @@ export const useWeight = (client: Wallet, address: string) => {
       }
     },
     {
-      refetchOnMount: 'always',
+      refetchOnMount:true,
       refetchIntervalInBackground: true,
     }
   );
-
-  return { weightInfo, isLoading, refetch };
+  const isLoadingExtended = weightInfo === null
+  return { weightInfo, isLoading: isLoadingExtended, refetch };
 };
 
 export const fetchWeight = async (

@@ -51,11 +51,12 @@ export const useCurrentEpoch = (client: Wallet | null) => {
       }
     },
     {
+      refetchOnMount: 'always',
       refetchIntervalInBackground: true,
     }
   )
-
-  return {currentEpoch, isLoading, refetch}
+const isLoadingExtended = currentEpoch !== null
+  return {currentEpoch, isLoading: isLoadingExtended, refetch}
 
 }
 

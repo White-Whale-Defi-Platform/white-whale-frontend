@@ -6,7 +6,6 @@ import {
 import {JsonObject} from '@cosmjs/cosmwasm-stargate';
 import {useQuery} from 'react-query';
 import {convertMicroDenomToDenom} from "../../../../util/conversion";
-import {DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL} from "../../../../util/constants";
 
 interface WithdrawableInfo {
   withdrawable_amount: number;
@@ -24,14 +23,17 @@ export const useWithdrawable = (client: Wallet | null, address: string | null) =
     },
     {
       refetchIntervalInBackground: true,
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+      refetchOnMount:true,
 
     }
   );
   const withdrawableAmpWhale = convertMicroDenomToDenom(withdrawableInfos?.[0]?.withdrawable_amount, 6)
 
   const withdrawableBWhale = convertMicroDenomToDenom(withdrawableInfos?.[1]?.withdrawable_amount, 6)
-  return {withdrawableAmpWhale, withdrawableBWhale, isLoading, refetch};
+
+  const isLoadingExtended = withdrawableInfos === null
+
+  return {withdrawableAmpWhale, withdrawableBWhale, isLoading: isLoadingExtended, refetch};
 };
 
 export const fetchWithdrawable = async (

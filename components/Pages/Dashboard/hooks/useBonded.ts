@@ -6,8 +6,6 @@ import {
 import {JsonObject} from "@cosmjs/cosmwasm-stargate";
 import {useQuery} from "react-query";
 import {convertMicroDenomToDenom} from 'util/conversion'
-import {DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL} from "../../../../util/constants";
-
 
 interface NativeTokenInfo {
   native_token: {
@@ -40,16 +38,16 @@ export const useBonded = (client: Wallet | null, address: string | null) => {
       }
     },
     {
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+      refetchOnMount:true,
       refetchIntervalInBackground: true,
     }
   )
 
-  const totalBonded = convertMicroDenomToDenom(bondedInfo?.total_bonded || 0, 6)
+  const localTotalBonded= convertMicroDenomToDenom(bondedInfo?.total_bonded || 0, 6)
   const bondedAmpWhale = bondedInfo ? convertMicroDenomToDenom(bondedInfo?.bonded_assets.find(asset => asset.info.native_token.denom === AMP_WHALE_DENOM)?.amount, 6) : null
   const bondedBWhale = bondedInfo ?  convertMicroDenomToDenom(bondedInfo?.bonded_assets.find(asset => asset.info.native_token.denom === B_WHALE_DENOM)?.amount, 6): null;
-
-  return {bondedAmpWhale, bondedBWhale,totalBonded, isLoading, refetch}
+  const isLoadingExtended = bondedInfo === null
+  return {bondedAmpWhale, bondedBWhale,localTotalBonded, isLoading: isLoadingExtended, refetch}
 
 }
 
@@ -57,7 +55,6 @@ export const fetchBonded = async (client: Wallet, address: string): Promise<Bond
   const result: JsonObject = await client.queryContractSmart(BONDING_CONTRACT_ADDRESS, {
     bonded: {address: address},
   });
-
   return result as BondedInfo;
 };
 

@@ -35,3 +35,17 @@ export const formatTokenName = (name: string) => {
   }
   return ''
 }
+
+export const calculateDurationString = (durationInMillis: number): string => {
+  if (durationInMillis >= 86400000) {
+    return `${Math.floor(durationInMillis / 86400000)} days`;
+  } else if (durationInMillis >= 3600000) {
+    return `${Math.floor(durationInMillis / 3600000)} hours`;
+  } else if (durationInMillis >= 60000) {
+    return `${Math.floor(durationInMillis / 60000)} minutes`;
+  } else if (durationInMillis > 1000) {
+    return `${Math.floor(durationInMillis / 1000)} seconds`;
+  } else {
+    return `imminent`;
+  }
+};

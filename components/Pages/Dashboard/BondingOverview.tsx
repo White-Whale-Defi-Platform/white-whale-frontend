@@ -151,7 +151,7 @@ const BondingOverview = ({
                 if (e.actionType === ActionType.buy) {
                   await router.push(`/${currentChainName}/swap`)
                 } else {
-                  await router.push(`/${currentChainName}/bonding/${ActionType[e.actionType]}`)
+                  await router.push(`/${currentChainName}/dashboard/${ActionType[e.actionType]}`)
                 }
               }}>
               {ActionType[e.actionType]}

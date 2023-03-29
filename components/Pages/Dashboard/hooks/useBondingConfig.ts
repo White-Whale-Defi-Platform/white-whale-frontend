@@ -29,11 +29,12 @@ export const useBondingConfig = (client: Wallet | null) => {
       }
     },
     {
+      refetchOnMount:true,
       refetchIntervalInBackground: true,
     }
   );
-
-  return { bondingConfig, isLoading, refetch };
+  const isLoadingExtended = bondingConfig === null
+  return { bondingConfig, isLoading: isLoadingExtended, refetch };
 };
 
 export const fetchConfig = async (client: Wallet): Promise<BondingConfig> => {

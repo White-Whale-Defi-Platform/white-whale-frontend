@@ -7,15 +7,10 @@ import {walletState} from '../../../state/atoms/walletAtoms'
 import {useRecoilState} from 'recoil'
 import WalletModal from '../../Wallet/Modal/Modal'
 import Loader from '../../Loader'
-import {useFeeDistributorConfig} from "./hooks/useFeeDistributorConfig";
-import {useCurrentEpoch} from "./hooks/useCurrentEpoch";
-import {useClaimableEpochs} from "./hooks/useClaimableEpochs";
 import {useQuery} from "react-query";
 import {useChains} from "../../../hooks/useChainInfo";
-import {convertMicroDenomToDenom} from "../../../util/conversion";
-import {useWeight} from "./hooks/useWeight";
+import {calculateDurationString, convertMicroDenomToDenom} from "../../../util/conversion";
 import {ActionType} from "./BondingOverview";
-import {useBonded} from "./hooks/useBonded";
 import useTransaction, {TxStep} from "../BondingActions/hooks/useTransaction";
 
 const pulseAnimation = keyframes`
@@ -67,57 +62,25 @@ const ProgressBar = ({percent}) => {
     </Box>
   );
 };
-const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, whalePrice}) => {
-  const [{chainId, client, address}, _] = useRecoilState(walletState)
+const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, whalePrice, localTotalBonded, globalTotalBonded, feeDistributionConfig, currentEpoch,annualRewards,globalAvailableRewards,claimableRewards, weightInfo}) => {
+  const [{chainId}, _] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure()
 
-  // const tokenADollarPrice = await getTokenDollarValue({
-  //   tokenA,
-  //   tokenAmountInDenom: 1,
-  //   tokenB
-  // })
+  const epochDurationInMillis = Number(feeDistributionConfig?.epoch_config?.duration) / 1_000_000;
 
-  const {bondingConfig} = useFeeDistributorConfig(client);
+  const epochStartTimeInNanoSeconds = Number(currentEpoch?.epoch?.start_time ?? 0)
 
-  const epochDurationInSeconds = bondingConfig?.epoch_config.duration;
+  const date = new Date(Math.floor(epochStartTimeInNanoSeconds / 1_000_000));
+  const epochStartHour = date.getUTCHours();
 
-  const {currentEpoch, isLoading: currentEpochLoading} = useCurrentEpoch(client);
-  const startTimeInNanoSeconds = Number(currentEpoch?.epoch?.start_time ?? 0)
-  const availableAmount = convertMicroDenomToDenom(Number(currentEpoch?.epoch?.available?.[0].amount), 6)
-  const date = new Date(Math.floor(startTimeInNanoSeconds / 1000000));
-  const startHour = date.getUTCHours();
-
-  const totalRewards = convertMicroDenomToDenom(Number(currentEpoch?.epoch?.total?.[0].amount), 6)
-
-  const {claimableEpochs, isLoading: loading} = useClaimableEpochs(client);
-
-  const {weightInfo} = useWeight(client, address)
-
-  const {totalBonded} = useBonded(client, address)
-
-  const globalWeight = convertMicroDenomToDenom(Number(weightInfo?.global_weight), 6)
   const localWeight = convertMicroDenomToDenom(Number(weightInfo?.weight), 6)
 
-  const myShare = Number(weightInfo?.share)
-
   const {txStep,submit} = useTransaction({})
-  const calculateDurationString = (durationInSec: number): string => {
-    if (durationInSec >= 86400) {
-      return `${Math.floor(durationInSec / 86400)} days`;
-    } else if (durationInSec >= 3600) {
-      return `${Math.floor(durationInSec / 3600)} hours`;
-    } else if (durationInSec >= 60) {
-      return `${Math.floor(durationInSec / 60)} minutes`;
-    } else if (durationInSec > 0) {
-      return `${Math.floor(durationInSec)} seconds`;
-    } else {
-      return `imminent`;
-    }
-  };
+
   const chains: Array<any> = useChains()
 
   const url = useMemo(() => {
@@ -146,23 +109,22 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
   const referenceDate = new Date()
   let currentEpochStartDate: Date
 
-  if (referenceDate.getHours() < startHour) {
+  if (referenceDate.getUTCHours() < epochStartHour) {
     currentEpochStartDate = new Date();
     currentEpochStartDate.setUTCDate(referenceDate.getUTCDate() - 1)
-    currentEpochStartDate.setUTCHours(startHour, 0, 0, 0);
+    currentEpochStartDate.setUTCHours(epochStartHour, 0, 0, 0);
   } else {
     currentEpochStartDate = new Date();
     currentEpochStartDate.setUTCDate(referenceDate.getUTCDate())
-    currentEpochStartDate.setUTCHours(startHour, 0, 0, 0);
+    currentEpochStartDate.setUTCHours(epochStartHour, 0, 0, 0);
   }
-
-  const durationInSeconds = (Date.now() - currentEpochStartDate.getTime()) / 1_000
+  const durationInMillis = (Date.now() - currentEpochStartDate.getTime())
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
-    else if (totalRewards === 0) return 'No rewards to claim'
+    else if (claimableRewards === 0) return 'No Rewards'
     else return 'Claim'
-  }, [isWalletConnected, totalRewards])
+  }, [isWalletConnected, globalAvailableRewards])
 
   return (<>{isLoading ?
     <VStack
@@ -230,10 +192,10 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
             Next rewards in
           </Text>
           <Text>
-            {calculateDurationString(86400 - durationInSeconds)}
+            {calculateDurationString(epochDurationInMillis - durationInMillis)}
           </Text>
         </HStack>
-        <ProgressBar percent={(durationInSeconds / epochDurationInSeconds) * 100}/>
+        <ProgressBar percent={(durationInMillis / epochDurationInMillis) * 100}/>
       </VStack>
       <Box
         border="0.5px solid"
@@ -248,7 +210,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
             Rewards
           </Text>
           <Text>
-            {isWalletConnected ? `${(totalRewards).toLocaleString()} WHALE ` : "n/a"}
+            {isWalletConnected ? `${(claimableRewards).toLocaleString()} WHALE ` : "n/a"}
           </Text>
         </HStack>
         <HStack>
@@ -260,7 +222,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
           <Text
             fontSize={11}>
             {isWalletConnected ?
-              `${((totalRewards / totalBonded) * 100).toFixed(2)}%`:
+              `${((annualRewards / globalTotalBonded) * 100).toFixed(2)}%`:
               "n/a"}
           </Text>
         </HStack>
@@ -273,7 +235,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
           <Text
             fontSize={11}>
             {isWalletConnected ?
-              `${((localWeight/ totalBonded) * 100).toFixed(2)}%` :
+              `${((localWeight/ localTotalBonded) * 100).toFixed(2)}%` :
               "n/a"}
           </Text>
         </HStack>
@@ -288,7 +250,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
         disabled={txStep == TxStep.Estimating ||
           txStep == TxStep.Posting ||
           txStep == TxStep.Broadcasting ||
-          (isWalletConnected && totalRewards === 0)}
+          (isWalletConnected && claimableRewards === 0)}
         maxWidth={570}
         isLoading={
           txStep == TxStep.Estimating ||

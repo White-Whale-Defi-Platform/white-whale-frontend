@@ -5,12 +5,12 @@ import {useToast} from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import {useRecoilValue} from "recoil";
 import {walletState} from "../../../../state/atoms/walletAtoms";
-import {ActionType} from "../../Bonding/BondingOverview";
+import {ActionType} from "../../Dashboard/BondingOverview";
 import {useBondTokens} from "./useBondTokens";
 import {useUnbondTokens} from "./useUnbondTokens";
 import {useWithdrawTokens} from "./useWithdrawTokens";
 import {convertDenomToMicroDenom} from "../../../../util/conversion";
-import {useClaimRewards} from "../../Bonding/hooks/useClaimRewards";
+import {useClaimRewards} from "../../Dashboard/hooks/useClaimRewards";
 
 export enum TxStep {
   /**
@@ -170,7 +170,7 @@ export const useTransaction = ({
           title:  (() => {
             switch (bondingAction) {
               case ActionType.bond:
-                return "Bonding Failed.";
+                return "Dashboard Failed.";
               case ActionType.unbond:
                 return "Unbonding Failed";
               case ActionType.withdraw:
@@ -195,7 +195,7 @@ export const useTransaction = ({
           title:  (() => {
             switch (bondingAction) {
               case ActionType.bond:
-                return "Bonding Successful.";
+                return "Dashboard Successful.";
               case ActionType.unbond:
                 return "Unbonding Successful.";
               case ActionType.withdraw:
