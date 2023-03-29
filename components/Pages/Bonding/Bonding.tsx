@@ -13,6 +13,7 @@ import {useBonded} from "./hooks/useBonded";
 import {useUnbonding} from "./hooks/useUnbonding";
 import {useWithdrawable} from "./hooks/useWithdrawable";
 import {useBondingConfig} from "./hooks/useBondingConfig";
+import {useWhalePrice} from "../../../queries/useGetTokenDollarValueQuery";
 
 const Bonding: FC = () => {
   const [ _,setScreenWidth] = useState(0);
@@ -93,6 +94,8 @@ const Bonding: FC = () => {
     setValues(TokenType.withdrawable, (ampWhale + bWhale),null, ampWhale, bWhale)
   }
 
+  const whalePrice = useWhalePrice()
+
   const {balance: liquidWhale,isLoading: liquidWhaleLoading} = useTokenBalance(
     "WHALE")
   const {balance: liquidAmpWhale, isLoading: liquidAmpLoading} = useTokenBalance(
@@ -101,8 +104,6 @@ const Bonding: FC = () => {
     "bWHALE")
 
   const { bondingConfig} = useBondingConfig(client);
-
-  const unbondingPeriod = bondingConfig?.unbonding_period
 
   const { bondedAmpWhale, bondedBWhale ,isLoading: bondedInfoLoading,refetch: refetchBonding } = useBonded(client, address);
   const { unbondingAmpWhale ,unbondingBWhale ,isLoading: unbondingLoading,refetch: refetchUnbonding } = useUnbonding(client, address);
@@ -142,13 +143,11 @@ useEffect(()=>{
 }, [address, client])
 
   useEffect(() => {
-
       setBondedTokens(bondedAmpWhale, bondedBWhale);
       setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale);
       setUnbondingTokens(unbondingAmpWhale, unbondingBWhale);
       setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale);
       setData(data)
-
   }, [isWalletConnected, bondedBWhale, bondedAmpWhale, unbondingBWhale, unbondingAmpWhale, withdrawableAmpWhale,withdrawableBWhale]);
 
   return <VStack
@@ -173,10 +172,12 @@ useEffect(()=>{
           isWalletConnected={isWalletConnected}
           isLoading={summaryLoading}
           data={updatedData}
+          whalePrice={whalePrice}
           currentChainName={currentChainName}/>
       </VStack>
       <RewardsComponent
         isWalletConnected={isWalletConnected}
+        whalePrice={whalePrice}
         isLoading={summaryLoading}
         isHorizontalLayout={isHorizontalLayout}/>
     </Flex>

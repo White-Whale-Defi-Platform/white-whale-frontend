@@ -5,7 +5,6 @@ import {Cell, Pie, PieChart} from 'recharts'
 import Loader from '../../Loader'
 import {useRouter} from 'next/router'
 import {WhaleTooltip} from "./WhaleTooltip";
-import {useTokenDollarValue} from "../../../hooks/useTokenDollarValue";
 
 export enum TokenType {
   bonded, liquid, unbonding, withdrawable
@@ -23,6 +22,7 @@ const BondingOverview = ({
                            isWalletConnected,
                            isLoading,
                            data,
+                           whalePrice,
                            currentChainName,
                          }) => {
 
@@ -50,7 +50,6 @@ const BondingOverview = ({
       </HStack>
     );
   };
-  const [tokenPrice] = useTokenDollarValue("WHALE")
 
   let aggregatedAssets = data?.reduce((acc, e) =>  acc + (e?.value??0), 0);
 
@@ -127,10 +126,10 @@ const BondingOverview = ({
             marginBottom={-2}
             paddingEnd={10}
             color="whiteAlpha.600">
-            {`Value($${(aggregatedAssets*Number(tokenPrice)).toFixed(2)})`}
+            {`Value($${(aggregatedAssets*Number(whalePrice)).toFixed(2)})`}
           </Text>
           {data?.map((e: { value: number | string, actionType: ActionType, tokenType: TokenType }) => {
-              return <WhaleTooltip label={e?.value !== null && isWalletConnected ? `$${(Number(e.value) * Number(tokenPrice)).toFixed(2)}`: "n/a"}
+              return <WhaleTooltip label={e?.value !== null && isWalletConnected ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`: "n/a"}
                                    tokenType={e.tokenType} data={data} isWalletConnected={isWalletConnected}/>
             }
           )}

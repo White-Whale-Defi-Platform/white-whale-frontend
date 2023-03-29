@@ -24,6 +24,7 @@ import {useTokenBalance} from "../../../hooks/useTokenBalance";
 import {useWithdrawable} from "../Bonding/hooks/useWithdrawable";
 import {useUnbonding} from "../Bonding/hooks/useUnbonding";
 import {useBondingConfig} from "../Bonding/hooks/useBondingConfig";
+import {useWhalePrice} from "../../../queries/useGetTokenDollarValueQuery";
 
 export enum WhaleTokenType {
   ampWHALE, bWHALE
@@ -43,7 +44,7 @@ const BondingActions = ({globalAction}) => {
   } = useDisclosure()
 
   const router = useRouter()
-const {txStep,submit} = useTransaction({})
+  const {txStep,submit} = useTransaction({})
 
 
   const [currentBondState, setCurrentBondState] = useRecoilState<LSDTokenItemState>(bondingAtom)
@@ -52,6 +53,8 @@ const {txStep,submit} = useTransaction({})
   const {balance: liquidBWhale, isLoading: bWhaleLoading} = useTokenBalance(
     B_WHALE_TOKEN_SYMBOL)
   const { bondedAmpWhale, bondedBWhale, isLoading: bondedAssetsLoading } = useBonded(client, address)
+
+  const whalePrice = useWhalePrice()
 
   const {
     unbondingAmpWhale,
@@ -136,8 +139,8 @@ const {txStep,submit} = useTransaction({})
           aria-label="go back"
           icon={<ArrowBackIcon/>}
           onClick={async () => {
-            setCurrentBondState({...currentBondState, amount:0})
            await router.push(`/${currentChainName}/bonding`)
+            setCurrentBondState({...currentBondState, amount:0})
           }}
         />
         <Text
@@ -208,11 +211,14 @@ const {txStep,submit} = useTransaction({})
                 return <Bond
                   liquidAmpWhale={liquidAmpWhale}
                   liquidBWhale={liquidBWhale}
+                  whalePrice={whalePrice}
                 />;
               case ActionType.unbond:
                 return <Unbond
                   bondedAmpWhale={bondedAmpWhale}
                   bondedBWhale={bondedBWhale}
+                  whalePrice={whalePrice}
+
                 />;
               case ActionType.withdraw:
                 return <Withdraw withdrawableAmpWhale={withdrawableAmpWhale}

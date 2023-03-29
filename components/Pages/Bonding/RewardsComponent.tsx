@@ -13,7 +13,6 @@ import {useClaimableEpochs} from "./hooks/useClaimableEpochs";
 import {useQuery} from "react-query";
 import {useChains} from "../../../hooks/useChainInfo";
 import {convertMicroDenomToDenom} from "../../../util/conversion";
-import {useTokenDollarValue} from "../../../hooks/useTokenDollarValue";
 import {useWeight} from "./hooks/useWeight";
 import {ActionType} from "./BondingOverview";
 import {useBonded} from "./hooks/useBonded";
@@ -68,15 +67,13 @@ const ProgressBar = ({percent}) => {
     </Box>
   );
 };
-const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout}) => {
+const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, whalePrice}) => {
   const [{chainId, client, address}, _] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure()
-
-  const [tokenPrice] = useTokenDollarValue("WHALE")
 
   // const tokenADollarPrice = await getTokenDollarValue({
   //   tokenA,
@@ -221,7 +218,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout}) =>
         <Text
           color="#7CFB7D"
           fontSize={18}>
-          ${tokenPrice}
+          ${whalePrice.toFixed(6)}
         </Text>
       </HStack>
       <VStack>
@@ -237,7 +234,6 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout}) =>
           </Text>
         </HStack>
         <ProgressBar percent={(durationInSeconds / epochDurationInSeconds) * 100}/>
-        {/*'{//<ProgressBar percent={(hours / 24) * 100} />}'*/}
       </VStack>
       <Box
         border="0.5px solid"

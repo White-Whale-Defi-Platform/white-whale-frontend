@@ -15,7 +15,7 @@ import { useCallback, useMemo } from 'react'
 import { num } from 'libs/num'
 import { useQuery } from 'react-query'
 
-const useWhalePrice = () => {
+export const useWhalePrice = () => {
 
   const GRAPHQL_URL = 'https://tfm-multi-stage.tfm.dev/graphql'
 
