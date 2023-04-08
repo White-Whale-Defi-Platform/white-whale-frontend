@@ -172,7 +172,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-bHUAHUA",
+      "pool_id": "bHUAHUA-HUAHUA",
       "lpOrder": ["bHUAHUA", "HUAHUA"],
       "assetOrder": ["bHUAHUA", "HUAHUA"],
       "displayName": "bHUAHUA-HUAHUA",
@@ -209,7 +209,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-ampHUAHUA",
+      "pool_id": "ampHUAHUA-HUAHUA",
       "lpOrder": ["ampHUAHUA", "HUAHUA"],
       "assetOrder": ["ampHUAHUA", "HUAHUA"],
       "displayName": "ampHUAHUA-HUAHUA",
@@ -321,7 +321,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-WHALE",
+      "pool_id": "WHALE-HUAHUA",
       "lpOrder": ["WHALE", "HUAHUA"],
       "assetOrder": ["HUAHUA", "WHALE"],
       "displayName": "WHALE-HUAHUA",
