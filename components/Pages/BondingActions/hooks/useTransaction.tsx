@@ -163,7 +163,7 @@ export const useTransaction = () => {
           title:  (() => {
             switch (bondingAction) {
               case ActionType.bond:
-                return "Dashboard Failed.";
+                return "Bonding Failed.";
               case ActionType.unbond:
                 return "Unbonding Failed";
               case ActionType.withdraw:
@@ -188,7 +188,7 @@ export const useTransaction = () => {
           title:  (() => {
             switch (bondingAction) {
               case ActionType.bond:
-                return "Dashboard Successful.";
+                return "Bonding Successful.";
               case ActionType.unbond:
                 return "Unbonding Successful.";
               case ActionType.withdraw:

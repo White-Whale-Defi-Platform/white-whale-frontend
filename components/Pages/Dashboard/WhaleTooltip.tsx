@@ -71,10 +71,10 @@ export const WhaleTooltip = ({
         alignItems="center">
         {ampWhale === null && withdrawableAmpWhale == null ?
           <Text>
-            {tokenType === TokenType.liquid ? "Liquid Tokens" :
-              tokenType === TokenType.bonded ? "Current amount of bonded LSD Whale token" :
-                tokenType === TokenType.unbonding ? "Current amount of unbonding LSD Whale token" :
-                  tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD Whale token" : null}
+            {tokenType === TokenType.liquid ? "Liquid WHALE Token Balance" :
+              tokenType === TokenType.bonded ? "Current amount of bonded LSD-WHALE token" :
+                tokenType === TokenType.unbonding ? "Current amount of unbonding LSD-WHALE token" :
+                  tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD-WHALE token" : null}
           </Text> :
           <>{tokenType === TokenType.liquid ?
             <> <TokenDetail
