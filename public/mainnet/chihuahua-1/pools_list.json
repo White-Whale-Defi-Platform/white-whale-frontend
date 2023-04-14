@@ -172,7 +172,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-bHUAHUA",
+      "pool_id": "bHUAHUA-HUAHUA",
       "lpOrder": ["bHUAHUA", "HUAHUA"],
       "assetOrder": ["bHUAHUA", "HUAHUA"],
       "displayName": "bHUAHUA-HUAHUA",
@@ -209,7 +209,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-ampHUAHUA",
+      "pool_id": "ampHUAHUA-HUAHUA",
       "lpOrder": ["ampHUAHUA", "HUAHUA"],
       "assetOrder": ["ampHUAHUA", "HUAHUA"],
       "displayName": "ampHUAHUA-HUAHUA",
@@ -321,25 +321,14 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "HUAHUA-WHALE",
+      "pool_id": "WHALE-HUAHUA",
       "lpOrder": ["WHALE", "HUAHUA"],
       "assetOrder": ["HUAHUA", "WHALE"],
       "displayName": "WHALE-HUAHUA",
       "displayLogo1": "/logos/whale.svg",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
-        {
-          "id": "chihuahua-token",
-          "chain_id": "chihuahua-1",
-          "token_address": "uhuahua",
-          "symbol": "HUAHUA",
-          "name": "Huahua",
-          "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "uhuahua"
-        },
+       
         {
           "id": "whale-token",
           "chain_id": "chihuahua-1",
@@ -351,6 +340,17 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.jpeg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
         }
       ],
       "lp_token": "chihuahua1hv3yeyapzwnpc0jm0zn49pnulm8pa70qflxzwm0jw4k2zreyujmq2cx65e",

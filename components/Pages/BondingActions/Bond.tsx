@@ -4,8 +4,8 @@ import AssetInput from '../../AssetInput'
 import {useRecoilState} from "recoil";
 import {bondingAtom} from "./bondAtoms";
 import {Controller, useForm} from "react-hook-form";
-import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
-import {AMP_WHALE_TOKEN_SYMBOL} from "../../../constants/bonding_contract";
+import {walletState, WalletStatusType} from "state/atoms/walletAtoms";
+import {AMP_WHALE_TOKEN_SYMBOL} from "constants/bonding_contract";
 
 export interface LSDTokenBalances {
   ampWHALE: number,
@@ -18,7 +18,7 @@ export interface LSDTokenItemState {
   lsdToken : LSDToken
 }
 export enum LSDToken { ampWHALE,bWHALE}
-const Bond = ({liquidAmpWhale, liquidBWhale}) => {
+const Bond = ({liquidAmpWhale, liquidBWhale, whalePrice}) => {
 
   const [currentBondState, setCurrentBondState] = useRecoilState<LSDTokenItemState>(bondingAtom)
   const [{status}, _] = useRecoilState(walletState)
@@ -44,13 +44,12 @@ const Bond = ({liquidAmpWhale, liquidBWhale}) => {
   }
 
   useEffect(() => {
-      const newState: LSDTokenItemState = {
+      setCurrentBondState({
         tokenSymbol: AMP_WHALE_TOKEN_SYMBOL,
         amount: 0,
         decimals: 6,
         lsdToken: LSDToken.ampWHALE
-      }
-      setCurrentBondState(newState)
+      })
   }, [isWalletConnected])
 
   const { control } = useForm({
@@ -72,6 +71,7 @@ const Bond = ({liquidAmpWhale, liquidBWhale}) => {
           hideToken={currentBondState.tokenSymbol}
           {...field}
           token={currentBondState}
+          whalePrice={whalePrice}
           balance={ (() => {
             switch (currentBondState.lsdToken) {
               case LSDToken.ampWHALE:
@@ -79,7 +79,7 @@ const Bond = ({liquidAmpWhale, liquidBWhale}) => {
               case LSDToken.bWHALE:
                 return tokenBalances?.bWHALE ?? 0;
               default:
-                return 0; // or any other default value
+                return 0;
             }
           })()
           }

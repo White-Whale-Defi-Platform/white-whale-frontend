@@ -10,7 +10,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
   const { asPath } = useRouter()
 
   const isActiveLink = useMemo(() => {
-    const [linkInAsPath] = (menu.childs ?? []).filter((item: { link: string }) => asPath.includes(item.link))
+    const [linkInAsPath] = menu?.childs === undefined ? [asPath.includes(menu.link)] : (menu.childs ?? []).filter((item: { link: string }) => asPath.includes(item.link))
     return !!linkInAsPath
   },[asPath, menu])
 
@@ -25,7 +25,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       placement="bottom"
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      onOpen={menu.label === "Bridge" ? openLink(menu.link): onOpen}
+      onOpen={menu.isExternal ? openLink(menu.link): menu?.childs === undefined ? () => window.location.assign(`/${currentChainName}${menu.link}`) : onOpen}
       onClose={onClose}
     >
       <PopoverTrigger>

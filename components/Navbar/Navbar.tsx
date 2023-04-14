@@ -46,8 +46,8 @@ export const links = [
     link: '/vaults',
   },
   {
-    label: 'Bonding',
-    link: '/bonding',
+    label: 'Dashboard',
+    link: '/dashboard',
   },
   {
     label: 'Bridge',

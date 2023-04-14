@@ -110,7 +110,7 @@ const Pools: FC<Props> = () => {
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
           cta: () => {
-            const [asset1, asset2] = pool?.displayName.split('-') || []
+            const [asset1, asset2] = pool?.pool_id.split('-') || []
             router.push(
               `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
             )

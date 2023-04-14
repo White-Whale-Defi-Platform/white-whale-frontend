@@ -55,7 +55,6 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
     ],
     async () => {
       const url = `/${currentWalletState.network}/${currentWalletState.chainId}${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`
-      console.log(url)
       const response = await fetch(url)
       const tokenList = await response.json()
       return {

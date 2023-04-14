@@ -1,9 +1,9 @@
 import {ArrowBackIcon} from "@chakra-ui/icons"
 import {Box, Button, HStack, IconButton, Text, useDisclosure, VStack} from "@chakra-ui/react"
 import {useRecoilState} from "recoil"
-import {useChains} from "../../../hooks/useChainInfo"
-import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms"
-import {ActionType} from "../Bonding/BondingOverview"
+import {useChains} from "hooks/useChainInfo"
+import {walletState, WalletStatusType} from "state/atoms/walletAtoms"
+import {ActionType} from "../Dashboard/BondingOverview"
 import Bond, {LSDTokenItemState} from "./Bond"
 import Unbond from "./Unbond"
 import Withdraw from "./Withdraw"
@@ -17,13 +17,11 @@ import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   BONDING_TOKEN_SYMBOL_DENOM_MAP
-} from "../../../constants/bonding_contract";
-import {useBonded} from "../Bonding/hooks/useBonded";
+} from "constants/bonding_contract";
 import Loader from "../../Loader";
-import {useTokenBalance} from "../../../hooks/useTokenBalance";
-import {useWithdrawable} from "../Bonding/hooks/useWithdrawable";
-import {useUnbonding} from "../Bonding/hooks/useUnbonding";
-import {useBondingConfig} from "../Bonding/hooks/useBondingConfig";
+import {useTokenBalance} from "hooks/useTokenBalance";
+import {useWhalePrice} from "queries/useGetTokenDollarValueQuery";
+import {useDashboardData} from "../Dashboard/hooks/useDashboardData";
 
 export enum WhaleTokenType {
   ampWHALE, bWHALE
@@ -31,7 +29,7 @@ export enum WhaleTokenType {
 
 const BondingActions = ({globalAction}) => {
 
-  const [{chainId,client, address, status },_] = useRecoilState(walletState)
+  const [{chainId,client, address, status, network },_] = useRecoilState(walletState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
   const currentChain = chains.find((row: { chainId: string }) => row.chainId === chainId)
@@ -43,61 +41,56 @@ const BondingActions = ({globalAction}) => {
   } = useDisclosure()
 
   const router = useRouter()
-const {txStep,submit} = useTransaction({})
+
+  const {txStep,submit} = useTransaction()
 
 
   const [currentBondState, setCurrentBondState] = useRecoilState<LSDTokenItemState>(bondingAtom)
-  const {balance: liquidAmpWhale, isLoading: ampWhaleLoading} = useTokenBalance(
+
+  const {balance: liquidAmpWhale} = useTokenBalance(
     AMP_WHALE_TOKEN_SYMBOL)
-  const {balance: liquidBWhale, isLoading: bWhaleLoading} = useTokenBalance(
+
+  const {balance: liquidBWhale} = useTokenBalance(
     B_WHALE_TOKEN_SYMBOL)
-  const { bondedAmpWhale, bondedBWhale, isLoading: bondedAssetsLoading } = useBonded(client, address)
+
+
+  const whalePrice = useWhalePrice()
 
   const {
+    bondedAmpWhale,
+    bondedBWhale,
     unbondingAmpWhale,
     unbondingBWhale,
-    filteredUnbondingRequests,
-    isLoading: isUnbondingLoading,
-    refetch: refetchUnbonding
-  } = useUnbonding(client, address)
-
-  const {
     withdrawableAmpWhale,
     withdrawableBWhale,
-    isLoading: isWithdrawLoading,
-    refetch: refetchWithdrawable
-  } = useWithdrawable(client, address)
+    bondingConfig,
+    filteredUnbondingRequests,
+    isLoading,
+  } = useDashboardData(client, address, network, chainId)
 
-  const {bondingConfig,isLoading: isBondingConfigLoading, refetch: refetchConfig} = useBondingConfig(client)
+  const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)
+  const totalWithdrawable = withdrawableAmpWhale + withdrawableBWhale
 
-  const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period) * 1_000_000_000 ?? 60 * 1_000_000_000
-
-  useEffect(() => {
-    refetchConfig()
-    refetchUnbonding()
-    refetchWithdrawable()
-
-  }, [address, client])
 
   const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) return 'Connect Wallet'
-    else if (currentBondState?.amount === 0 && globalAction !== ActionType.withdraw) return 'Enter Amount'
+    if (!isWalletConnected) return "Connect Wallet"
+    else if (currentBondState?.amount === 0 && globalAction !== ActionType.withdraw) return "Enter Amount"
+    else if(totalWithdrawable === 0 && globalAction === ActionType.withdraw) return "No Withdraws"
     else return ActionType[globalAction]
-  }, [isWalletConnected, currentBondState, globalAction])
+  }, [isWalletConnected, currentBondState, globalAction, totalWithdrawable])
 
 
-  const [isLoading , setIsLoading]= useState<boolean>(true)
+  const [isLoadingSummary , setIsLoadingSummary]= useState<boolean>(false)
 
-  useEffect(()=>{
-    setIsLoading(bondedAssetsLoading || ampWhaleLoading || bWhaleLoading || isWithdrawLoading || isUnbondingLoading || isBondingConfigLoading)
-  }, [bondedAssetsLoading, ampWhaleLoading, bWhaleLoading, isWithdrawLoading, isUnbondingLoading, isBondingConfigLoading])
-
+  useEffect(()=> {
+    setIsLoadingSummary(isLoading)
+  },[isLoading])
   const BondingActionButton = ({action}) => {
 
     const actionString = ActionType[action].toString()
     const onClick = async () => {
       setCurrentBondState({...currentBondState, amount:0})
-      await router.push(`/${currentChainName}/bonding/${actionString}`)
+      await router.push(`/${currentChainName}/dashboard/${actionString}`)
     }
 
     return <Button
@@ -136,8 +129,8 @@ const {txStep,submit} = useTransaction({})
           aria-label="go back"
           icon={<ArrowBackIcon/>}
           onClick={async () => {
+           await router.push(`/${currentChainName}/dashboard`)
             setCurrentBondState({...currentBondState, amount:0})
-           await router.push(`/${currentChainName}/bonding`)
           }}
         />
         <Text
@@ -148,7 +141,7 @@ const {txStep,submit} = useTransaction({})
           {ActionType[globalAction]}
         </Text>
       </HStack>
-      ({isLoading ?
+      ({isLoadingSummary && isWalletConnected ?
       <VStack
         width="full"
         background={"#1C1C1C"}
@@ -208,11 +201,14 @@ const {txStep,submit} = useTransaction({})
                 return <Bond
                   liquidAmpWhale={liquidAmpWhale}
                   liquidBWhale={liquidBWhale}
+                  whalePrice={whalePrice}
                 />;
               case ActionType.unbond:
                 return <Unbond
                   bondedAmpWhale={bondedAmpWhale}
                   bondedBWhale={bondedBWhale}
+                  whalePrice={whalePrice}
+
                 />;
               case ActionType.withdraw:
                 return <Withdraw withdrawableAmpWhale={withdrawableAmpWhale}

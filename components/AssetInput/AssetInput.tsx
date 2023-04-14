@@ -14,6 +14,7 @@ interface AssetInputProps {
   showList?: boolean
   onInputFocus?: () => void
   balance?: number
+  whalePrice?: number
   disabled?: boolean
   minMax?: boolean
   isSingleInput?: boolean
@@ -26,7 +27,7 @@ interface AssetInputProps {
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
-  const { balance, disabled, isSingleInput, token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
+  const { balance, disabled, isSingleInput, whalePrice, token, onChange, ignoreSlack, hideMax, hideDollarValue} = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
 
@@ -51,7 +52,7 @@ const AssetInput = forwardRef(( props : AssetInputProps, ref) => {
 
   const numberOfTokens = useMemo(() => `${token?.amount} ${token?.tokenSymbol}`, [token])
 
-  const [tokenPrice] = useTokenDollarValue(token?.tokenSymbol)
+  const [tokenPrice] = whalePrice !== null ? [whalePrice] : useTokenDollarValue(token?.tokenSymbol)
 
   const dollarValue = useMemo(() => {
     return num(tokenPrice)

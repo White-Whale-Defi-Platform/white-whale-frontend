@@ -2,31 +2,26 @@ import React, {useEffect, useState} from 'react'
 import {VStack} from '@chakra-ui/react'
 import AssetInput from '../../AssetInput'
 import {useRecoilState} from "recoil";
-import {walletState, WalletStatusType} from "../../../state/atoms/walletAtoms";
+import {walletState, WalletStatusType} from "state/atoms/walletAtoms";
 import {Controller, useForm} from "react-hook-form";
-import {AMP_WHALE_TOKEN_SYMBOL} from "../../../constants/bonding_contract";
+import {AMP_WHALE_TOKEN_SYMBOL} from "constants/bonding_contract";
 import {LSDToken, LSDTokenBalances, LSDTokenItemState} from "./Bond";
 import {bondingAtom} from "./bondAtoms";
 
-const Unbond = ({bondedAmpWhale, bondedBWhale})  => {
+const Unbond = ({bondedAmpWhale, bondedBWhale, whalePrice})  => {
 
   const [{status}, _] = useRecoilState(walletState)
   const [currentBondState, setCurrentBondState] = useRecoilState<LSDTokenItemState>(bondingAtom)
 
   const isWalletConnected = status === WalletStatusType.connected
 
-  //const {bondingConfig} = useBondingConfig(client)
- // const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)*1_000_000_000 ?? 60*1_000_000_000
-
-  //const {unbondingAmpWhale, unbondingBWhale} = useUnbonding(client, address)
   const [tokenBalances, setLSDTokenBalances] = useState<LSDTokenBalances>(null)
 
   useEffect(()=>{
-    const newBalances : LSDTokenBalances = {
+    setLSDTokenBalances({
       ampWHALE: bondedAmpWhale,
       bWHALE: bondedBWhale,
-    }
-    setLSDTokenBalances(newBalances)
+    })
   },[bondedAmpWhale, bondedBWhale])
 
   const onInputChange = ( tokenSymbol: string | null , amount: number) => {
@@ -38,13 +33,12 @@ const Unbond = ({bondedAmpWhale, bondedBWhale})  => {
   }
 
   useEffect(() => {
-    const newState: LSDTokenItemState = {
+    setCurrentBondState({
       tokenSymbol: AMP_WHALE_TOKEN_SYMBOL,
       amount: 0,
       decimals: 6,
       lsdToken: LSDToken.ampWHALE
-    }
-    setCurrentBondState(newState)
+    })
   }, [isWalletConnected])
 
 
@@ -67,6 +61,7 @@ const Unbond = ({bondedAmpWhale, bondedBWhale})  => {
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
+            whalePrice={whalePrice}
             balance={ (() => {
               switch (currentBondState.lsdToken) {
                 case LSDToken.ampWHALE:

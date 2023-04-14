@@ -15,7 +15,7 @@ import { useCallback, useMemo } from 'react'
 import { num } from 'libs/num'
 import { useQuery } from 'react-query'
 
-const useWhalePrice = () => {
+export const useWhalePrice = () => {
 
   const GRAPHQL_URL = 'https://tfm-multi-stage.tfm.dev/graphql'
 
@@ -37,7 +37,7 @@ const useWhalePrice = () => {
   });
 
   return useMemo(() => {
-    return num(data?.priceByTokenList?.content?.[1]?.priceInvertedUsd).toNumber()
+    return num(data?.priceByTokenList?.content?.[0]?.priceInvertedUsd).toNumber() || 0
   }, [data])
 
 }

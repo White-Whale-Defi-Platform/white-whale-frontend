@@ -3,8 +3,7 @@ import React, { FC, useMemo } from 'react'
 import { Box } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 
-// import { activeChain } from 'state/atoms/activeChain';
-import { walletState } from '../../state/atoms/walletAtoms'
+import { walletState } from 'state/atoms/walletAtoms'
 
 const backgrounds = {
   'pisco-1':

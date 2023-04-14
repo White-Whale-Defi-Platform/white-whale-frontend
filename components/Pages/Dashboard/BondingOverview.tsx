@@ -5,7 +5,6 @@ import {Cell, Pie, PieChart} from 'recharts'
 import Loader from '../../Loader'
 import {useRouter} from 'next/router'
 import {WhaleTooltip} from "./WhaleTooltip";
-import {useTokenDollarValue} from "../../../hooks/useTokenDollarValue";
 
 export enum TokenType {
   bonded, liquid, unbonding, withdrawable
@@ -23,6 +22,7 @@ const BondingOverview = ({
                            isWalletConnected,
                            isLoading,
                            data,
+                           whalePrice,
                            currentChainName,
                          }) => {
 
@@ -43,6 +43,7 @@ const BondingOverview = ({
           mr="2">
         </Box>
         <WhaleTooltip
+          key={`${tokenType}${color}`}
           label={label}
           data={null}
           isWalletConnected={isWalletConnected}
@@ -50,9 +51,8 @@ const BondingOverview = ({
       </HStack>
     );
   };
-  const [tokenPrice] = useTokenDollarValue("WHALE")
 
-  let aggregatedAssets = data?.reduce((acc, e) =>  acc + (e?.value??0), 0);
+  let aggregatedAssets = data?.reduce((acc, e) =>  acc + (e?.value ?? 0), 0);
 
   return <VStack
     width="full"
@@ -67,7 +67,7 @@ const BondingOverview = ({
     position="relative"
     display="flex"
     justifyContent="center">
-    {isLoading && data ?
+    {isLoading ?
       <HStack
         minW={100}
         minH={100}
@@ -116,7 +116,7 @@ const BondingOverview = ({
             Tokens
           </Text>
           {data?.map(e =>
-            (<TokenBox tokenType={e.tokenType}/>)
+            (<TokenBox key={`tokenBox-${e.actionType}`} tokenType={e.tokenType}/>)
           )}
         </VStack>
         <VStack
@@ -127,10 +127,10 @@ const BondingOverview = ({
             marginBottom={-2}
             paddingEnd={10}
             color="whiteAlpha.600">
-            {`Value($${(aggregatedAssets*Number(tokenPrice)).toFixed(2)})`}
+            {`Value($${(aggregatedAssets*Number(whalePrice)).toFixed(2)})`}
           </Text>
           {data?.map((e: { value: number | string, actionType: ActionType, tokenType: TokenType }) => {
-              return <WhaleTooltip label={e?.value !== null && isWalletConnected ? `$${(Number(e.value) * Number(tokenPrice)).toFixed(2)}`: "n/a"}
+              return <WhaleTooltip key={`${e.tokenType}${e.actionType}`} label={e?.value !== null && isWalletConnected ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`: "n/a"}
                                    tokenType={e.tokenType} data={data} isWalletConnected={isWalletConnected}/>
             }
           )}
@@ -143,6 +143,7 @@ const BondingOverview = ({
           </Text>
           {data?.map((e: { actionType: ActionType }) =>
             <Button
+              key={`button-${e.actionType}`}
               alignSelf="flex-start"
               variant="outline"
               size="sm"
@@ -152,7 +153,7 @@ const BondingOverview = ({
                 if (e.actionType === ActionType.buy) {
                   await router.push(`/${currentChainName}/swap`)
                 } else {
-                  await router.push(`/${currentChainName}/bonding/${ActionType[e.actionType]}`)
+                  await router.push(`/${currentChainName}/dashboard/${ActionType[e.actionType]}`)
                 }
               }}>
               {ActionType[e.actionType]}

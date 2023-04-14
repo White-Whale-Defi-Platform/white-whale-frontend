@@ -1,4 +1,5 @@
 import {Box, Divider, HStack, Text, VStack, Tooltip} from "@chakra-ui/react";
+import React from "react";
 import {useEffect, useRef, useState} from "react";
 import {TokenType, WhaleType} from "./BondingOverview";
 import {BondingData} from "./types/BondingData";
@@ -13,16 +14,21 @@ export interface WhaleTooltipProps {
 }
 
 export const WhaleTooltip = ({
-                               data, label, isWalletConnected, tokenType,
-                               withdrawableAmpWhale, withdrawableBWhale
+                               data,
+                               label,
+                               isWalletConnected,
+                               tokenType,
+                               withdrawableAmpWhale,
+                               withdrawableBWhale
                              }: WhaleTooltipProps) => {
-  const { whale = null, ampWhale = null, bWhale = null} = data?.find(e => e.tokenType == tokenType) || {}
+  const {whale = null, ampWhale = null, bWhale = null} = data?.find(e => e.tokenType == tokenType) || {}
 
   const lsdTokenDetails = [{
     type: WhaleType.bWHALE,
-    value:withdrawableBWhale ?? bWhale}, {
+    value: withdrawableBWhale ?? bWhale
+  }, {
     type: WhaleType.ampWHALE,
-    value:withdrawableAmpWhale ?? ampWhale
+    value: withdrawableAmpWhale ?? ampWhale
   }].sort((a, b) => b.value - a.value);
 
   const TokenDetail = ({whaleType, value}) => {
@@ -65,10 +71,10 @@ export const WhaleTooltip = ({
         alignItems="center">
         {ampWhale === null && withdrawableAmpWhale == null ?
           <Text>
-            {tokenType === TokenType.liquid ? "Liquid Tokens" :
-              tokenType === TokenType.bonded ? "Current amount of bonded LSD Whale token":
-                tokenType === TokenType.unbonding ? "Current amount of unbonding LSD Whale token" :
-                  tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD Whale token": null}
+            {tokenType === TokenType.liquid ? "Liquid WHALE Token Balance" :
+              tokenType === TokenType.bonded ? "Current amount of bonded LSD-WHALE token" :
+                tokenType === TokenType.unbonding ? "Current amount of unbonding LSD-WHALE token" :
+                  tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD-WHALE token" : null}
           </Text> :
           <>{tokenType === TokenType.liquid ?
             <> <TokenDetail
@@ -81,7 +87,7 @@ export const WhaleTooltip = ({
             </> : null
           }
             {lsdTokenDetails.map((e, index) => {
-              return <>
+              return <React.Fragment key={e.type}>
                 <TokenDetail
                   whaleType={e.type}
                   value={e.value}/>
@@ -91,7 +97,7 @@ export const WhaleTooltip = ({
                     borderWidth="0.1px"
                     color="whiteAlpha.300"/>
                 }
-              </>
+              </React.Fragment>
             })
             }
           </>
