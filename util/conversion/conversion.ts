@@ -1,3 +1,5 @@
+import {useEffect, useState} from "react";
+
 export const protectAgainstNaN = (value: number) => (isNaN(value) ? 0 : value)
 
 export function convertMicroDenomToDenom(
@@ -35,6 +37,37 @@ export const formatTokenName = (name: string) => {
   }
   return ''
 }
+export const calculateRewardDurationString = (durationInMillis: number, statusBlock: number): string => {
+  const [isImminent, setImminent] = useState<boolean>(false)
+  const [block, setBlock] = useState<number>(null)
+
+  useEffect(() => {
+    if (block !== null && statusBlock > block && isImminent) {
+      setImminent(false)
+    }
+
+    setBlock(statusBlock)
+  }, [statusBlock])
+
+  useEffect(() => {
+    if (durationInMillis <= 1000) {
+      setImminent(true)
+    }
+
+  }, [durationInMillis])
+
+  if (isImminent) {
+    return `imminent`;
+  } else if (durationInMillis >= 86400000) {
+    return `${Math.floor(durationInMillis / 86400000)} days`;
+  } else if (durationInMillis >= 3600000) {
+    return `${Math.floor(durationInMillis / 3600000)} hours`;
+  } else if (durationInMillis >= 60000) {
+    return `${Math.floor(durationInMillis / 60000)} minutes`;
+  } else if (durationInMillis > 1000) {
+    return `${Math.floor(durationInMillis / 1000)} seconds`;
+  }
+};
 
 export const calculateDurationString = (durationInMillis: number): string => {
   if (durationInMillis >= 86400000) {

@@ -9,12 +9,11 @@ import {
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
-import { TokenItemState } from './lpAtoms'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
+import {TokenItemState} from "types/index";
 
 type Props = {
   connected: WalletStatusType
@@ -45,7 +44,7 @@ const DepositForm = ({
     tokenB?.tokenSymbol
   )
 
-  const { control, handleSubmit, formState, setValue, getValues } = useForm({
+  const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
       token1: tokenA,

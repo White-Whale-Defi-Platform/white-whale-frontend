@@ -25,7 +25,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       placement="bottom"
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      onOpen={menu.label === "Bridge" ? openLink(menu.link): menu.label === "Dashboard" ?() => window.location.assign(`/${currentChainName}${menu.link}`) : onOpen}
+      onOpen={menu.isExternal ? openLink(menu.link): menu?.childs === undefined ? () => window.location.assign(`/${currentChainName}${menu.link}`) : onOpen}
       onClose={onClose}
     >
       <PopoverTrigger>

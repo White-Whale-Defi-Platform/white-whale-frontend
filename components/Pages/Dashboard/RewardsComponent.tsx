@@ -1,15 +1,15 @@
-import React, {useMemo} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 
 import {Box, Button, HStack, Image, keyframes, Text, useDisclosure, VStack} from '@chakra-ui/react'
 
-import {walletState} from '../../../state/atoms/walletAtoms'
+import {walletState} from 'state/atoms/walletAtoms'
 
 import {useRecoilState} from 'recoil'
 import WalletModal from '../../Wallet/Modal/Modal'
 import Loader from '../../Loader'
 import {useQuery} from "react-query";
-import {useChains} from "../../../hooks/useChainInfo";
-import {calculateDurationString, convertMicroDenomToDenom} from "../../../util/conversion";
+import {useChains} from "hooks/useChainInfo";
+import { calculateRewardDurationString, convertMicroDenomToDenom} from "util/conversion";
 import {ActionType} from "./BondingOverview";
 import useTransaction, {TxStep} from "../BondingActions/hooks/useTransaction";
 
@@ -36,8 +36,29 @@ const pulseAnimation = keyframes`
   }
 `;
 
-const ProgressBar = ({percent}) => {
+const ProgressBar = ({p, statusBlock}) => {
   const colors = ["#E43A1C", "#EE902E", "#FAFD3C", "#7CFB7D"]
+  const [block, setBlock] = useState<number>(null)
+  const [isImminent, setImminent] = useState<boolean>(false)
+  const [percent, setPercent] = useState<number>(0)
+
+
+  useEffect(() => {
+    if (block !== null && Number(statusBlock) > block && isImminent) {
+      setImminent(false)
+    }
+    setBlock(Number(statusBlock))
+  }, [statusBlock])
+
+  useEffect(() => {
+    if(!isImminent) {
+      if(p === 100){
+      setImminent(true)
+      }
+      setPercent(p)
+    }
+  }, [p])
+
   return (
     <Box
       h="7px"
@@ -54,15 +75,29 @@ const ProgressBar = ({percent}) => {
         borderRadius="10px"
         position="relative"
         animation={
-          percent === 100
+          isImminent
             ? `${pulseAnimation} 1.8s ease-in-out infinite`
             : undefined
         }
       />
     </Box>
-  );
-};
-const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, whalePrice, localTotalBonded, globalTotalBonded, feeDistributionConfig, currentEpoch,annualRewards,globalAvailableRewards,claimableRewards, weightInfo}) => {
+  )
+}
+
+const RewardsComponent = ({
+                            isWalletConnected,
+                            isLoading,
+                            whalePrice,
+                            localTotalBonded,
+                            globalTotalBonded,
+                            feeDistributionConfig,
+                            currentEpoch,
+                            annualRewards,
+                            globalAvailableRewards,
+                            claimableRewards,
+                            weightInfo
+                          }) => {
+
   const [{chainId}, _] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
@@ -76,11 +111,6 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
 
   const date = new Date(Math.floor(epochStartTimeInNanoSeconds / 1_000_000));
   const epochStartHour = date.getUTCHours();
-
-  const localWeight = convertMicroDenomToDenom(Number(weightInfo?.weight), 6)
-
-  const {txStep,submit} = useTransaction({})
-
   const chains: Array<any> = useChains()
 
   const url = useMemo(() => {
@@ -102,6 +132,15 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
       enabled: !!url,
     }
   )
+
+  // console.log("weightInfo?.weight")
+  // console.log(weightInfo?.weight)
+  // console.log(weightInfo?.global_weight)
+
+  const localWeight = convertMicroDenomToDenom(Number(weightInfo?.weight), 6)
+
+  const {txStep, submit} = useTransaction()
+
   // TODO global constant?
   const boxBg = "#1C1C1C"
   // TODO global constant ?
@@ -126,6 +165,16 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
     else return 'Claim'
   }, [isWalletConnected, globalAvailableRewards])
 
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((count) => (count + 1) % 11);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+  const durationString = calculateRewardDurationString(epochDurationInMillis - durationInMillis, Number(status?.block))
   return (<>{isLoading ?
     <VStack
       width="full"
@@ -137,9 +186,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
       overflow="hidden"
       position="relative"
       display="flex"
-      justifyContent="center"
-      alignSelf={isHorizontalLayout ?
-        "none" : "center"}>
+      justifyContent="center">
       <HStack
         minW={100}
         minH={100}
@@ -161,8 +208,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
       overflow="hidden"
       position="relative"
       display="flex"
-      justifyContent="flex-start"
-      alignSelf={isHorizontalLayout ? "none" : "center"}>
+      justifyContent="flex-start">
       <HStack
         justifyContent="space-between"
         align="stretch"
@@ -192,10 +238,10 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
             Next rewards in
           </Text>
           <Text>
-            {calculateDurationString(epochDurationInMillis - durationInMillis)}
+            {isWalletConnected ? durationString : ""}
           </Text>
         </HStack>
-        <ProgressBar percent={(durationInMillis / epochDurationInMillis) * 100}/>
+        <ProgressBar p={(durationInMillis / epochDurationInMillis) * 100} statusBlock={(status?.block)}/>
       </VStack>
       <Box
         border="0.5px solid"
@@ -222,7 +268,7 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
           <Text
             fontSize={11}>
             {isWalletConnected ?
-              `${((annualRewards / globalTotalBonded) * 100).toFixed(2)}%`:
+              `${((annualRewards / globalTotalBonded) * 100).toFixed(2)}%` :
               "n/a"}
           </Text>
         </HStack>
@@ -256,14 +302,14 @@ const RewardsComponent = ({isWalletConnected, isLoading, isHorizontalLayout, wha
           txStep == TxStep.Estimating ||
           txStep == TxStep.Posting ||
           txStep == TxStep.Broadcasting}
-        onClick={async ()=>{
-          if(isWalletConnected){
-           await submit(ActionType.claim,null,null)}
-          else{
+        onClick={async () => {
+          if (isWalletConnected) {
+            await submit(ActionType.claim, null, null)
+          } else {
             onOpenModal()
           }
         }
-      }
+        }
         style={{textTransform: "capitalize"}}>
         {buttonLabel}
       </Button>

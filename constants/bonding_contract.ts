@@ -6,4 +6,5 @@ export const B_WHALE_DENOM = "ibc"
 
 export const B_WHALE_TOKEN_SYMBOL = "bWHALE"
 export const AMP_WHALE_TOKEN_SYMBOL = "WHALE"
+export const WHALE_TOKEN_SYMBOL = "WHALE"
 export const BONDING_TOKEN_SYMBOL_DENOM_MAP = {"WHALE": "uwhale", "ampWHALE": "ibc", "bWHALE": "ibc"}

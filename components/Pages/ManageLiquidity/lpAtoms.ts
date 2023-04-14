@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import {TokenItemState} from "../../../types";
+import {TokenItemState} from "types";
 
 
 export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({

@@ -4,13 +4,14 @@ import {useMutation, useQuery} from 'react-query'
 import {useToast} from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import {useRecoilValue} from "recoil";
-import {walletState} from "../../../../state/atoms/walletAtoms";
+import {walletState} from "state/atoms/walletAtoms";
 import {ActionType} from "../../Dashboard/BondingOverview";
-import {useBondTokens} from "./useBondTokens";
-import {useUnbondTokens} from "./useUnbondTokens";
-import {useWithdrawTokens} from "./useWithdrawTokens";
-import {convertDenomToMicroDenom} from "../../../../util/conversion";
-import {useClaimRewards} from "../../Dashboard/hooks/useClaimRewards";
+import {bondTokens} from "./bondTokens";
+import {unbondTokens} from "./unbondTokens";
+import {withdrawTokens} from "./withdrawTokens";
+import {convertDenomToMicroDenom} from "util/conversion";
+import {claimRewards} from "../../Dashboard/hooks/claimRewards";
+import {Config, useConfig} from "components/Pages/Dashboard/hooks/useDashboardData";
 
 export enum TxStep {
   /**
@@ -42,23 +43,15 @@ export enum TxStep {
    */
   Failed = 6,
 }
-
-type Params = {
-  price?: number
-  gasAdjustment?: number
-  estimateEnabled?: boolean
-}
-
-export const useTransaction = ({
-                                 price,
-                               }: Params) => {
+export const useTransaction = () => {
   const toast = useToast()
-  const { chainId, client, address: senderAddress } = useRecoilValue(walletState)
+  const { chainId, client, address: senderAddress, network } = useRecoilValue(walletState)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
+  const config : Config = useConfig(network, chainId)
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', error],
@@ -117,14 +110,14 @@ export const useTransaction = ({
     (data: any) => {
       const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
       if(data.bondingAction===ActionType.bond){
-       return useBondTokens(client, senderAddress,adjustedAmount, data.denom)
+       return bondTokens(client, senderAddress,adjustedAmount, data.denom, config)
       }else if (data.bondingAction===ActionType.unbond){
-       return useUnbondTokens(client, senderAddress,adjustedAmount, data.denom)
+       return unbondTokens(client, senderAddress,adjustedAmount, data.denom, config)
       }else if (data.bondingAction===ActionType.withdraw){
-        return useWithdrawTokens(client, senderAddress, data.denom)
+        return withdrawTokens(client, senderAddress, data.denom, config)
       }
       else{
-        return useClaimRewards(client, senderAddress)
+        return claimRewards(client, senderAddress, config)
       }
     },
     {
@@ -255,7 +248,7 @@ export const useTransaction = ({
       denom,
       amount,
     })
-  }, [fee, mutate, price])
+  }, [fee, mutate ])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {

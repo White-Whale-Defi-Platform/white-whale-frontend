@@ -1,10 +1,7 @@
-import {Wallet} from "../../../../util/wallet-adapters";
-import {
-  FEE_DISTRIBUTOR_CONTRACT_ADDRESS
-} from "../../../../constants/bonding_contract";
+import {Wallet} from "util/wallet-adapters";
 import {JsonObject} from "@cosmjs/cosmwasm-stargate";
-import {useQuery} from "react-query";
-import {convertMicroDenomToDenom} from "../../../../util/conversion";
+import {convertMicroDenomToDenom} from "util/conversion";
+import {Config} from "./useDashboardData";
 
 interface Epoch {
   id: string;
@@ -37,26 +34,13 @@ interface Epoch {
 interface Data {
   epochs: Epoch[];
 }
-export const useClaimableEpochs= (client: Wallet | null) => {
-  const {
-    data: data,
-    isLoading,
-    refetch,
-  } = useQuery(
-    ['claimableEpochs', client],
-    () => {
-      if (client) {
-        return fetchCurrentEpoch(client);
-      } else {
-        return Promise.resolve(null);
-      }
-    },
-    {
-      refetchOnMount:true,
+export const getClaimableEpochs= async(client: Wallet, config: Config) => {
 
-      refetchIntervalInBackground: true,
-    }
-  )
+  if (!client) {
+    return null;
+  }
+
+  const data = await fetchClaimableEpoch(client, config);
 
   const globalAvailableRewards = convertMicroDenomToDenom(data?.epochs
     .flatMap(e => e.total.map(a => a.amount))
@@ -77,12 +61,12 @@ export const useClaimableEpochs= (client: Wallet | null) => {
 
   const dailyAverageRewards = data?.epochs ? getLastSevenEpochsAverage(data.epochs) : 0;
   const annualRewards = extrapolateAnnualRewards(dailyAverageRewards);
-  const isLoadingExtended = data === null
-  return {globalAvailableRewards,annualRewards, isLoading: isLoadingExtended, refetch}
+
+  return {globalAvailableRewards,annualRewards}
 }
 
-export const fetchCurrentEpoch = async (client: Wallet): Promise<Data> => {
-  const result: JsonObject = await client.queryContractSmart(FEE_DISTRIBUTOR_CONTRACT_ADDRESS, {
+export const fetchClaimableEpoch = async (client: Wallet, config: Config): Promise<Data> => {
+  const result: JsonObject = await client.queryContractSmart(config.fee_distributor_address, {
     claimable_epochs: {},
   });
   return result as Data;
