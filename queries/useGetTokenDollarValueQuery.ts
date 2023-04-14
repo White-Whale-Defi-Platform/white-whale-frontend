@@ -37,7 +37,7 @@ const useWhalePrice = () => {
   });
 
   return useMemo(() => {
-    return num(data?.priceByTokenList?.content?.[1]?.priceInvertedUsd).toNumber()
+    return num(data?.priceByTokenList?.content?.[0]?.priceInvertedUsd).toNumber() || 0
   }, [data])
 
 }
