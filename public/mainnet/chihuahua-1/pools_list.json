@@ -357,6 +357,45 @@
       "swap_address": "chihuahua1l4735tn25cr0tjyjtdlcla020843hgjvtmvwrdtazfp9ut0a9arsd5w4ys",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "ROAR-HUAHUA",
+      "lpOrder": ["ROAR", "HUAHUA"],
+      "assetOrder": ["ROAR", "WHALE"],
+      "displayName": "ROAR-HUAHUA",
+      "displayLogo1": "/logos/lion.png",
+      "displayLogo2": "/logos/huahua.png",
+      "pool_assets": [
+       
+        {
+          "id": "lion-dao",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/6BB4ADB45B1903AE497710FBC24E73C2C578A79D25EF923BD2E784A7FD0FC59F",
+          "symbol": "ROAR",
+          "name": "ROAR",
+          "decimals": 6,
+          "logoURI": "/logos/lion.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/6BB4ADB45B1903AE497710FBC24E73C2C578A79D25EF923BD2E784A7FD0FC59F"
+        },
+        {
+          "id": "chihuahua-chain",
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.jpeg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        }
+      ],
+      "lp_token": "chihuahua1r2un7qsaqfmurm8ytcwqtylhrufhkkfwvrqdxa90c74ghgcpa9ps5tqn9n",
+      "swap_address": "chihuahua1qekdpx5su9hhsswr0w4qq2szss0rwywl7y9gp4dawmp7jnm98mgss84zgv",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
