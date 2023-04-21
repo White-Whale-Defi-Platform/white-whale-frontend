@@ -10,7 +10,7 @@ export interface BondingAsset {
   native_token: NativeToken;
 }
 
-export interface BondingConfig {
+export interface BondingContractConfig {
   owner: string;
   unbonding_period: number;
   growth_rate: string;
@@ -18,18 +18,17 @@ export interface BondingConfig {
 }
 
 export const getBondingConfig =async (client: Wallet | null, config: Config) => {
-  if (!client ) {
+  if (!client && !config ) {
     return null;
   }
-
   const bondingConfig = await fetchConfig(client, config)
-  return { bondingConfig};
+  return {bondingConfig};
 };
 
-const fetchConfig = async (client: Wallet, config: Config): Promise<BondingConfig> => {
+export const fetchConfig = async (client: Wallet, config: Config): Promise<BondingContractConfig> => {
   const result: JsonObject = await client.queryContractSmart(config.whale_lair_address, {
     config: {},
   });
 
-  return result as BondingConfig;
+  return result as BondingContractConfig;
 };

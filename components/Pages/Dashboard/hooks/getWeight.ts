@@ -14,10 +14,13 @@ export const getWeight = async (client: Wallet, address: string, config: Config)
   if (!client || !address) {
     return null;
   }
-
+try{
   const weightInfo = await fetchWeight(client, address,config);
 
   return { weightInfo };
+  } catch(e){
+    return 0
+}
 };
 
 const fetchWeight = async (

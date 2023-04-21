@@ -40,26 +40,16 @@ export const getBonded = async (client: Wallet | null, address: string | null, c
 
   const bondedInfo = await fetchBonded(client, address, config);
 
-  const localTotalBonded = convertMicroDenomToDenom(
-    bondedInfo?.total_bonded || 0,
-    6
-  );
-  const bondedAmpWhale = bondedInfo
-    ? convertMicroDenomToDenom(
-      bondedInfo?.bonded_assets.find(
-        (asset) => asset.info.native_token.denom === config.lsd_token.ampWHALE.denom
-      )?.amount,
-      config.lsd_token.ampWHALE.decimals
-    )
-    : null;
-  const bondedBWhale = bondedInfo
-    ? convertMicroDenomToDenom(
-      bondedInfo?.bonded_assets.find(
-        (asset) => asset.info.native_token.denom === config.lsd_token.bWHALE.denom
-      )?.amount,
-      config.lsd_token.bWHALE.decimals
-    )
-    : null;
+  const totalBonded = bondedInfo?.total_bonded ?? 0
+
+  const localTotalBonded = convertMicroDenomToDenom(totalBonded, 6);
+
+  const bondedAmpWhale = bondedInfo ? convertMicroDenomToDenom(bondedInfo?.bonded_assets.find((asset) =>
+        asset.info.native_token.denom === config.lsd_token.ampWHALE.denom)?.amount,
+        config.lsd_token.ampWHALE.decimals) : null;
+
+  const bondedBWhale = bondedInfo ? convertMicroDenomToDenom(bondedInfo?.bonded_assets.find((asset) =>
+        asset.info.native_token.denom === config.lsd_token.bWHALE.denom)?.amount, config.lsd_token.bWHALE.decimals) : null;
 
   return { bondedAmpWhale, bondedBWhale, localTotalBonded };
 };

@@ -20,7 +20,7 @@ import { TxResponse, Wallet } from './wallet'
 const TX_MAAP = new Map([
   ['juno-1',  'ujuno'],
   ['phoenix-1', 'uluna'],
-  ['chihuahua-1', 'uhuahua'],  
+  ['chihuahua-1', 'uhuahua'],
   ['comdex-1',  'ucmdx'],
   ['injective-1',  'uinj']
 ])
@@ -112,7 +112,7 @@ export class TerraStationWallet implements Wallet {
       senderAddress,
       contractAddress,
       msg,
-      funds.map((coin) => new StationCoin(coin.denom, coin.amount))
+      funds?.map((coin) => new StationCoin(coin.denom, coin.amount))
     )
     return this.client
       .post({

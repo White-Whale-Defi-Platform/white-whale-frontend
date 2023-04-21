@@ -23,6 +23,7 @@ interface AssetSelectModalProps {
   onChange: (asset: Asset, isTokenChange?: boolean) => void
   disabled: boolean
   amount?: number
+  isBonding?: boolean
 }
 
 const AssetSelectModal: FC<AssetSelectModalProps> = ({
@@ -32,6 +33,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
   edgeTokenList = [],
   disabled,
   amount,
+  isBonding= false
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [search, setSearch] = useState<string>('')
@@ -77,7 +79,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
               search={search}
               edgeTokenList={edgeTokenList}
               currentToken={currentToken}
-            />
+              isBonding={isBonding} />
           </ModalBody>
         </ModalContent>
       </Modal>

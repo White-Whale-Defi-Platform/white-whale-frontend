@@ -1,6 +1,7 @@
 import {Wallet} from 'util/wallet-adapters';
 import {convertMicroDenomToDenom} from "util/conversion";
 import {Config} from "./useDashboardData";
+import {fetchConfig} from "components/Pages/Dashboard/hooks/getBondingConfig";
 
 export interface UnbondingInfo {
   total_amount: string;
@@ -32,13 +33,15 @@ export const getUnbonding = async (client: Wallet, address: string, config: Conf
   }
 
   const unbondingInfos = await fetchUnbonding(client, address, config);
+  const bondingContractConfig = await fetchConfig(client, config);
 
-  const unbondingPeriod = 60 * 1_000_000_000;
-  const currentTimeInNanoseconds = Date.now() * 1_000_000;
+  const unbondingPeriodInNano = Number(bondingContractConfig?.unbonding_period);
+  const currentTimeInNano = Date.now() * 1_000_000;
 
+  // filtering out unbonding requests which have already finished, so they won't get shown
   const filterUnbondingRequests = (unbondingRequests) => {
     return unbondingRequests.filter(
-      (req) => Number(req.timestamp) + unbondingPeriod > currentTimeInNanoseconds
+      (req) => Number(req.timestamp) + unbondingPeriodInNano > currentTimeInNano
     );
   };
   const filteredAmpWhaleUnbondingRequests = filterUnbondingRequests(unbondingInfos?.[0]?.unbonding_requests);
@@ -48,11 +51,11 @@ export const getUnbonding = async (client: Wallet, address: string, config: Conf
 
   const unbondingAmpWhale = convertMicroDenomToDenom(filteredAmpWhaleUnbondingRequests?.map(req => req.asset.amount).reduce((accumulator: number, currentValue: string) => {
     return accumulator + parseFloat(currentValue);
-  }, 0) || 0, 6);
+  }, 0) || 0, config.lsd_token.ampWHALE.decimals);
 
   const unbondingBWhale = convertMicroDenomToDenom(filteredBWhaleUnbondingRequests?.map(req => req.asset.amount).reduce((accumulator: number, currentValue: string) => {
     return accumulator + parseFloat(currentValue);
-  }, 0) || 0, 6);
+  }, 0) || 0, config.lsd_token.bWHALE.decimals);
 
   return {unbondingAmpWhale, unbondingBWhale, filteredUnbondingRequests};
 };

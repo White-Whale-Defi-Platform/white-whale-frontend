@@ -31,6 +31,7 @@ interface AssetInputProps {
   hideToken?: string
   edgeTokenList?: string[]
   ignoreSlack?: boolean
+  isBonding?: boolean
 }
 
 
@@ -89,6 +90,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
       hideToken,
       edgeTokenList,
       ignoreSlack = false,
+      isBonding=false
     },
     ref
   ) => {
@@ -147,13 +149,11 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               edgeTokenList={edgeTokenList}
               disabled={disabled || !showList}
               amount={token?.amount}
-            >
+              isBonding={isBonding}>
               <AssetSelectTrigger
                 tokenInfo={tokenInfo}
                 showIcon={image}
-                symbol={token?.tokenSymbol}
-              />
-
+                symbol={token?.tokenSymbol} />
               {showList && (
                 <IconButton
                   disabled={disabled}

@@ -129,9 +129,15 @@ const BondingOverview = ({
             color="whiteAlpha.600">
             {`Value($${(aggregatedAssets*Number(whalePrice)).toFixed(2)})`}
           </Text>
+          {/*value equals the amount of the specific token type (liquid, bonded, unbonding, withdrawable)*/}
           {data?.map((e: { value: number | string, actionType: ActionType, tokenType: TokenType }) => {
-              return <WhaleTooltip key={`${e.tokenType}${e.actionType}`} label={e?.value !== null && isWalletConnected ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`: "n/a"}
-                                   tokenType={e.tokenType} data={data} isWalletConnected={isWalletConnected}/>
+              return <WhaleTooltip
+                key={`${e.tokenType}${e.actionType}`}
+                label={e?.value !== null && isWalletConnected ?
+                  `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`: "n/a"}
+                tokenType={e.tokenType}
+                data={data}
+                isWalletConnected={isWalletConnected}/>
             }
           )}
         </VStack>

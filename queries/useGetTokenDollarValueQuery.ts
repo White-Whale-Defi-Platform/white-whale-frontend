@@ -5,9 +5,9 @@
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useRecoilValue } from 'recoil'
 
-import { useTokenDollarValue } from '../hooks/useTokenDollarValue'
-import { useBaseTokenInfo } from '../hooks/useTokenInfo'
-import { walletState } from '../state/atoms/walletAtoms'
+import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+import { walletState } from 'state/atoms/walletAtoms'
 import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 import request, { gql } from 'graphql-request'
@@ -37,7 +37,7 @@ export const useWhalePrice = () => {
   });
 
   return useMemo(() => {
-    return num(data?.priceByTokenList?.content?.[0]?.priceInvertedUsd).toNumber() || 0
+    return num(data?.priceByTokenList?.content?.[1]?.priceInvertedUsd).toNumber() || 0
   }, [data])
 
 }

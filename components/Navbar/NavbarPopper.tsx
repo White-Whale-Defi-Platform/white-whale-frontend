@@ -5,12 +5,13 @@ import NavbarLink from './NavbarLink'
 const NavbarPopper = ({ menu, currentChainName }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
-  const numberOfLinks = menu.childs?.length
+  const numberOfLinks = menu.children?.length
 
   const { asPath } = useRouter()
 
   const isActiveLink = useMemo(() => {
-    const [linkInAsPath] = menu?.childs === undefined ? [asPath.includes(menu.link)] : (menu.childs ?? []).filter((item: { link: string }) => asPath.includes(item.link))
+    // children defining sub menu items
+    const [linkInAsPath] = menu?.children === undefined ? [asPath.includes(menu.link)] : (menu.children ?? []).filter((item: { link: string }) => asPath.includes(item.link))
     return !!linkInAsPath
   },[asPath, menu])
 
@@ -25,7 +26,8 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       placement="bottom"
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      onOpen={menu.isExternal ? openLink(menu.link): menu?.childs === undefined ? () => window.location.assign(`/${currentChainName}${menu.link}`) : onOpen}
+      // children defining sub menu items
+      onOpen={menu.isExternal ? openLink(menu.link): menu?.children === undefined ? () => window.location.assign(`/${currentChainName}${menu.link}`) : onOpen}
       onClose={onClose}
     >
       <PopoverTrigger>
@@ -49,7 +51,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
         />
         <PopoverBody px='unset' >
           <VStack  overflow="hidden">
-            {menu.childs?.map(({ label, link }, index: number) => (
+            {menu.children?.map(({ label, link }, index: number) => (
               <Box
                 key={link}
                 px={10}

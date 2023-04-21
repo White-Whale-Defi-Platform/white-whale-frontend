@@ -41,9 +41,10 @@ export const getClaimable = async(client: Wallet | null, address: string, config
 
   const data = await fetchClaimableData(client,address, config)
 
-  const claimable = convertMicroDenomToDenom(data?.epochs
-    .flatMap(e => e.available.map(a => a.amount))
-    .reduce((acc, amount) => acc + parseFloat(amount), 0), 6);
+  const claimableAmounts = data?.epochs.flatMap(e => e.available.map(a => a.amount))
+        .reduce((acc, amount) => acc + parseFloat(amount), 0)
+
+  const claimable = convertMicroDenomToDenom(claimableAmounts, 6);
   return {claimable}
 }
 const fetchClaimableData = async (client: Wallet, address: string, config: Config): Promise<Data> => {

@@ -18,6 +18,7 @@ import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
+import {BONDING_ENABLED_CHAIN_IDS} from "constants/bonding_contract";
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [isInitialized, setInitialized] = useState(false)
@@ -106,9 +107,12 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     currentWalletState.address,
   ])
 
-  const onChainChange = (chain) => {
+  const onChainChange = async (chain) => {
     // onDisconnect()
+    if(!BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId))
+      await router.push("/swap")
     setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+
   }
 
   useEffect(() => {

@@ -9,7 +9,12 @@ import WalletModal from '../../Wallet/Modal/Modal'
 import Loader from '../../Loader'
 import {useQuery} from "react-query";
 import {useChains} from "hooks/useChainInfo";
-import { calculateRewardDurationString, convertMicroDenomToDenom} from "util/conversion";
+import {
+  calculateRewardDurationString,
+  convertDenomToMicroDenom,
+  convertMicroDenomToDenom,
+  nanoToMilli
+} from "util/conversion";
 import {ActionType} from "./BondingOverview";
 import useTransaction, {TxStep} from "../BondingActions/hooks/useTransaction";
 
@@ -36,13 +41,13 @@ const pulseAnimation = keyframes`
   }
 `;
 
-const ProgressBar = ({p, statusBlock}) => {
+const ProgressBar = ({progress, statusBlock}) => {
   const colors = ["#E43A1C", "#EE902E", "#FAFD3C", "#7CFB7D"]
   const [block, setBlock] = useState<number>(null)
   const [isImminent, setImminent] = useState<boolean>(false)
   const [percent, setPercent] = useState<number>(0)
 
-
+// progress equals percent, just different naming necessary
   useEffect(() => {
     if (block !== null && Number(statusBlock) > block && isImminent) {
       setImminent(false)
@@ -51,13 +56,13 @@ const ProgressBar = ({p, statusBlock}) => {
   }, [statusBlock])
 
   useEffect(() => {
-    if(!isImminent) {
-      if(p === 100){
-      setImminent(true)
+    if (!isImminent) {
+      if (progress === 100) {
+        setImminent(true)
       }
-      setPercent(p)
+      setPercent(progress)
     }
-  }, [p])
+  }, [progress])
 
   return (
     <Box
@@ -105,12 +110,12 @@ const RewardsComponent = ({
     onClose: onCloseModal,
   } = useDisclosure()
 
-  const epochDurationInMillis = Number(feeDistributionConfig?.epoch_config?.duration) / 1_000_000;
+  const epochDurationInMilli = nanoToMilli(Number(feeDistributionConfig?.epoch_config?.duration))
 
-  const epochStartTimeInNanoSeconds = Number(currentEpoch?.epoch?.start_time ?? 0)
+  const epochStartTimeInNano = Number(currentEpoch?.epoch?.start_time ?? 0)
 
-  const date = new Date(Math.floor(epochStartTimeInNanoSeconds / 1_000_000));
-  const epochStartHour = date.getUTCHours();
+  const epochStartDate = new Date(Math.floor((nanoToMilli(epochStartTimeInNano))))
+  const epochStartHour = epochStartDate.getUTCHours();
   const chains: Array<any> = useChains()
 
   const url = useMemo(() => {
@@ -133,11 +138,12 @@ const RewardsComponent = ({
     }
   )
 
-  // console.log("weightInfo?.weight")
-  // console.log(weightInfo?.weight)
-  // console.log(weightInfo?.global_weight)
-
   const localWeight = convertMicroDenomToDenom(Number(weightInfo?.weight), 6)
+  const localBonded = convertDenomToMicroDenom(localTotalBonded, 6)
+
+  const multiplierRatio = Math.max((localWeight || 0) / (localBonded || 1), 1)
+
+  const apr = ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio
 
   const {txStep, submit} = useTransaction()
 
@@ -157,7 +163,7 @@ const RewardsComponent = ({
     currentEpochStartDate.setUTCDate(referenceDate.getUTCDate())
     currentEpochStartDate.setUTCHours(epochStartHour, 0, 0, 0);
   }
-  const durationInMillis = (Date.now() - currentEpochStartDate.getTime())
+  const durationInMilli = (Date.now() - currentEpochStartDate.getTime())
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
@@ -165,16 +171,8 @@ const RewardsComponent = ({
     else return 'Claim'
   }, [isWalletConnected, globalAvailableRewards])
 
-  const [count, setCount] = useState(0);
+  const durationString = calculateRewardDurationString(epochDurationInMilli - durationInMilli, Number(status?.block))
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((count) => (count + 1) % 11);
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
-  const durationString = calculateRewardDurationString(epochDurationInMillis - durationInMillis, Number(status?.block))
   return (<>{isLoading ?
     <VStack
       width="full"
@@ -241,7 +239,7 @@ const RewardsComponent = ({
             {isWalletConnected ? durationString : ""}
           </Text>
         </HStack>
-        <ProgressBar p={(durationInMillis / epochDurationInMillis) * 100} statusBlock={(status?.block)}/>
+        <ProgressBar progress={(durationInMilli / epochDurationInMilli) * 100} statusBlock={(status?.block)}/>
       </VStack>
       <Box
         border="0.5px solid"
@@ -256,7 +254,7 @@ const RewardsComponent = ({
             Rewards
           </Text>
           <Text>
-            {isWalletConnected ? `${(claimableRewards).toLocaleString()} WHALE ` : "n/a"}
+            {isWalletConnected ? `$${(claimableRewards * whalePrice).toFixed(2)}` : "n/a"}
           </Text>
         </HStack>
         <HStack>
@@ -268,7 +266,7 @@ const RewardsComponent = ({
           <Text
             fontSize={11}>
             {isWalletConnected ?
-              `${((annualRewards / globalTotalBonded) * 100).toFixed(2)}%` :
+              `${(apr).toFixed(2)}%` :
               "n/a"}
           </Text>
         </HStack>
@@ -281,7 +279,7 @@ const RewardsComponent = ({
           <Text
             fontSize={11}>
             {isWalletConnected ?
-              `${((localWeight/ localTotalBonded) * 100).toFixed(2)}%` :
+              `${((multiplierRatio - 1) * 100).toFixed(2)}%` :
               "n/a"}
           </Text>
         </HStack>

@@ -88,17 +88,11 @@ const Dashboard: FC = () => {
 
   const whalePrice = useWhalePrice()
 
-  // const [balances, balancesLoading] =  useMultipleTokenBalance(["WHALE", "ampWHALE", "bWHALE"])
-  //
-  // const liquidWhale = balances?.[0]
-  // const liquidAmpWhale = balances?.[1]
-  // const liquidBWhale = balances?.[2]
-
-  const {balance: liquidWhale,isLoading: liquidWhaleLoading} = useTokenBalance(
+  const {balance: liquidWhale} = useTokenBalance(
     WHALE_TOKEN_SYMBOL)
-  const {balance: liquidAmpWhale, isLoading: liquidAmpLoading} = useTokenBalance(
+  const {balance: liquidAmpWhale} = useTokenBalance(
     AMP_WHALE_TOKEN_SYMBOL)
-  const {balance: liquidBWhale,isLoading: liquidBLoading} = useTokenBalance(
+  const {balance: liquidBWhale} = useTokenBalance(
     B_WHALE_TOKEN_SYMBOL)
 
   const {
@@ -119,19 +113,13 @@ const Dashboard: FC = () => {
     isLoading,
   } = useDashboardData(client, address, network, chainId)
 
-  const [isLoadingSummary, setLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    setLoading(isLoading)
-  }, [isLoading])
-
   useEffect(() => {
     setBondedTokens(bondedAmpWhale, bondedBWhale);
     setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale);
     setUnbondingTokens(unbondingAmpWhale, unbondingBWhale);
     setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale);
     setData(data)
-  }, [isWalletConnected, isLoadingSummary]);
+  }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale]);
 
   return (
     <VStack alignSelf="center">
@@ -139,8 +127,7 @@ const Dashboard: FC = () => {
         direction={{ base: 'column', xl: 'row' }}
         gap={10}
         justifyContent="space-between"
-        alignItems="flex-end"
-      >
+        alignItems="flex-end">
         <VStack>
           <HStack width="full" paddingY={5}>
             <Text as="h2" fontSize="24" fontWeight="900">
@@ -149,7 +136,7 @@ const Dashboard: FC = () => {
           </HStack>
           <BondingOverview
             isWalletConnected={isWalletConnected}
-            isLoading={isLoadingSummary && isWalletConnected}
+            isLoading={isLoading && isWalletConnected}
             data={updatedData}
             whalePrice={whalePrice}
             currentChainName={currentChainName}
@@ -159,7 +146,7 @@ const Dashboard: FC = () => {
         <RewardsComponent
           isWalletConnected={isWalletConnected}
           whalePrice={whalePrice}
-          isLoading={isLoadingSummary && isWalletConnected}
+          isLoading={isLoading && isWalletConnected}
           localTotalBonded={localTotalBonded}
           globalTotalBonded={globalTotalBonded}
           feeDistributionConfig={feeDistributionConfig}

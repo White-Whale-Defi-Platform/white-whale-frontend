@@ -57,52 +57,52 @@ export const WhaleTooltip = ({
 
   return <Tooltip
     sx={{boxShadow: "none"}}
-    label={
+    label={isWalletConnected ?
       <VStack
-        minW="250px"
-        minH="50px"
-        borderRadius="10px"
-        bg="blackAlpha.900"
-        px="4"
-        py="4"
-        position="relative"
-        border="none"
-        justifyContent="center"
-        alignItems="center">
-        {ampWhale === null && withdrawableAmpWhale == null ?
-          <Text>
-            {tokenType === TokenType.liquid ? "Liquid WHALE Token Balance" :
-              tokenType === TokenType.bonded ? "Current amount of bonded LSD-WHALE token" :
-                tokenType === TokenType.unbonding ? "Current amount of unbonding LSD-WHALE token" :
-                  tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD-WHALE token" : null}
-          </Text> :
-          <>{tokenType === TokenType.liquid ?
-            <> <TokenDetail
-              whaleType={WhaleType.WHALE}
-              value={whale}/>
-              <Divider
-                width="93%"
-                borderWidth="0.1px"
-                color="whiteAlpha.300"/>
-            </> : null
-          }
-            {lsdTokenDetails.map((e, index) => {
-              return <React.Fragment key={e.type}>
-                <TokenDetail
-                  whaleType={e.type}
-                  value={e.value}/>
-                {index === 0 &&
-                  <Divider
-                    width="93%"
-                    borderWidth="0.1px"
-                    color="whiteAlpha.300"/>
-                }
-              </React.Fragment>
-            })
-            }
-          </>
-        }
-      </VStack>}
+      minW="250px"
+      minH="50px"
+      borderRadius="10px"
+      bg="blackAlpha.900"
+      px="4"
+      py="4"
+      position="relative"
+      border="none"
+      justifyContent="center"
+      alignItems="center">
+    {ampWhale === null && withdrawableAmpWhale == null ?
+      <Text>
+    {tokenType === TokenType.liquid ? "Liquid WHALE Token Balance" :
+      tokenType === TokenType.bonded ? "Current amount of bonded LSD-WHALE token" :
+      tokenType === TokenType.unbonding ? "Current amount of unbonding LSD-WHALE token" :
+      tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD-WHALE token" : null}
+      </Text> :
+      <>{tokenType === TokenType.liquid ?
+      <> <TokenDetail
+      whaleType={WhaleType.WHALE}
+      value={whale}/>
+      <Divider
+      width="93%"
+      borderWidth="0.1px"
+      color="whiteAlpha.300"/>
+      </> : null
+    }
+    {lsdTokenDetails.map((e, index) => {
+      return <React.Fragment key={e.type}>
+      <TokenDetail
+      whaleType={e.type}
+      value={e.value}/>
+    {index === 0 &&
+      <Divider
+      width="93%"
+      borderWidth="0.1px"
+      color="whiteAlpha.300"/>
+    }
+      </React.Fragment>
+    })
+    }
+      </>
+    }
+      </VStack>: null} //displaying nothing when wallet disconnected
     bg="transparent">
     <VStack alignItems="flex-start" minW={100}>
       <Text
@@ -112,8 +112,9 @@ export const WhaleTooltip = ({
         {label}
       </Text>
       <Box pb={1}>
-        {label !== "n/a" && <div
-          style={{
+        {label !== "n/a" &&
+          <div
+            style={{
             width: `${textWidth}px`,
             height: '1px',
             background: `repeating-linear-gradient(

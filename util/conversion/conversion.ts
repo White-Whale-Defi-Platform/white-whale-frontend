@@ -37,7 +37,7 @@ export const formatTokenName = (name: string) => {
   }
   return ''
 }
-export const calculateRewardDurationString = (durationInMillis: number, statusBlock: number): string => {
+export const calculateRewardDurationString = (durationInMilli: number, statusBlock: number): string => {
   const [isImminent, setImminent] = useState<boolean>(false)
   const [block, setBlock] = useState<number>(null)
 
@@ -50,35 +50,36 @@ export const calculateRewardDurationString = (durationInMillis: number, statusBl
   }, [statusBlock])
 
   useEffect(() => {
-    if (durationInMillis <= 1000) {
+    if (durationInMilli <= 1000) {
       setImminent(true)
     }
 
-  }, [durationInMillis])
+  }, [durationInMilli])
 
   if (isImminent) {
     return `imminent`;
-  } else if (durationInMillis >= 86400000) {
-    return `${Math.floor(durationInMillis / 86400000)} days`;
-  } else if (durationInMillis >= 3600000) {
-    return `${Math.floor(durationInMillis / 3600000)} hours`;
-  } else if (durationInMillis >= 60000) {
-    return `${Math.floor(durationInMillis / 60000)} minutes`;
-  } else if (durationInMillis > 1000) {
-    return `${Math.floor(durationInMillis / 1000)} seconds`;
+  } else if (durationInMilli >= 86400_000) {
+    return `${Math.floor(durationInMilli / 86400_000)} days`;
+  } else if (durationInMilli >= 3600_000) {
+    return `${Math.floor(durationInMilli / 3600_000)} hours`;
+  } else if (durationInMilli >= 60_000) {
+    return `${Math.floor(durationInMilli / 60_000)} minutes`;
+  } else if (durationInMilli > 1_000) {
+    return `${Math.floor(durationInMilli / 1_000)} seconds`;
   }
 };
 
-export const calculateDurationString = (durationInMillis: number): string => {
-  if (durationInMillis >= 86400000) {
-    return `${Math.floor(durationInMillis / 86400000)} days`;
-  } else if (durationInMillis >= 3600000) {
-    return `${Math.floor(durationInMillis / 3600000)} hours`;
-  } else if (durationInMillis >= 60000) {
-    return `${Math.floor(durationInMillis / 60000)} minutes`;
-  } else if (durationInMillis > 1000) {
-    return `${Math.floor(durationInMillis / 1000)} seconds`;
+export const calculateDurationString = (durationInMilli: number): string => {
+  if (durationInMilli >= 86400000) {
+    return `${Math.floor(durationInMilli / 86400_000)} days`;
+  } else if (durationInMilli >= 3600_000) {
+    return `${Math.floor(durationInMilli / 3600_000)} hours`;
+  } else if (durationInMilli >= 60_000) {
+    return `${Math.floor(durationInMilli / 60_000)} minutes`;
+  } else if (durationInMilli > 1_000) {
+    return `${Math.floor(durationInMilli / 1_000)} seconds`;
   } else {
     return `imminent`;
   }
 };
+export const nanoToMilli = (nano: number) => nano/1_000_000;

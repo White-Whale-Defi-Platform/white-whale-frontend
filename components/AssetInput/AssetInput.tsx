@@ -2,7 +2,7 @@ import { VStack, forwardRef} from '@chakra-ui/react'
 import React, { useMemo } from 'react'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
 import WhaleInput from './WhaleInput'
-import { num } from '../../libs/num'
+import { num } from 'libs/num'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import BalanceWithMaxNHalf from "./BalanceWithMax";
 
@@ -24,6 +24,7 @@ interface AssetInputProps {
   hideMax?: boolean
   hideDollarValue?: boolean
   showBalanceSlider?: boolean
+  isBonding?: boolean
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {

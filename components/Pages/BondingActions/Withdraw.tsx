@@ -1,63 +1,72 @@
-import {Box, HStack, Text, VStack} from '@chakra-ui/react'
-import {WhaleTokenType} from './BondingActions'
-import {useRecoilState} from "recoil";
-import {walletState, WalletStatusType} from "state/atoms/walletAtoms";
-import {calculateDurationString, convertMicroDenomToDenom} from "util/conversion";
-import {WhaleTooltip} from "../Dashboard/WhaleTooltip";
-import {AMP_WHALE_DENOM} from "constants/bonding_contract";
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { WhaleTokenType } from './BondingActions'
+import { useRecoilState } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { calculateDurationString, convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
+import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
+import { Config, useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
-const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, withdrawableBWhale, filteredUnbondingRequests, unbondingPeriodInNano}) => {
+const Withdraw = ({
+                    unbondingAmpWhale,
+                    unbondingBWhale,
+                    withdrawableAmpWhale,
+                    withdrawableBWhale,
+                    filteredUnbondingRequests,
+                    unbondingPeriodInNano,
+                    whalePrice
+                  }) => {
 
-  const [{status}, _] = useRecoilState(walletState)
+  const [{ status, chainId, network }, _] = useRecoilState(walletState)
 
   const isWalletConnected = status === WalletStatusType.connected
-
-  const ProgressBar = ({percent}) => {
+  const config: Config = useConfig(network, chainId)
+  const ProgressBar = ({ percent }) => {
     return (
       <Box
-        h="3px"
+        h='3px'
         minW={450}
-        bg="whiteAlpha.400"
-        borderRadius="10px"
-        overflow="hidden">
+        bg='whiteAlpha.400'
+        borderRadius='10px'
+        overflow='hidden'>
         <Box
-          h="100%"
-          bg="#7CFB7D"
+          h='100%'
+          bg='#7CFB7D'
           w={`${percent}%`}
-          borderRadius="10px"/>
+          borderRadius='10px' />
       </Box>
-    );
+    )
   }
 
-  const TokenBox = ({label, ampWhale, bWhale}) => {
+  const TokenBox = ({ label, ampWhale, bWhale }) => {
+    const dollarValue = ((ampWhale + bWhale) * whalePrice).toLocaleString()
     return <Box
-      border="0.5px solid"
-      borderColor="whiteAlpha.400"
-      borderRadius="10px"
+      border='0.5px solid'
+      borderColor='whiteAlpha.400'
+      borderRadius='10px'
       p={4}
       minW={240}>
       <WhaleTooltip label={label} data={null} withdrawableAmpWhale={ampWhale} withdrawableBWhale={bWhale}
                     isWalletConnected={isWalletConnected}
-                    tokenType={null}/>
+                    tokenType={null} />
       <Text
-        mb="-0.2rem"
+        mb='-0.2rem'
         fontSize={23}
-        fontWeight="bold">
-        {isWalletConnected ? `${(ampWhale + bWhale).toLocaleString()}` : "n/a"}
+        fontWeight='bold'>
+        {isWalletConnected ? `$${dollarValue}` : 'n/a'}
       </Text>
     </Box>
   }
 
-  const BoxComponent = ({whaleTokenType, value, durationInMillis}) => {
-    const durationString = calculateDurationString(durationInMillis);
+  const BoxComponent = ({ whaleTokenType, value, durationInMilli }) => {
+    const durationString = calculateDurationString(durationInMilli)
     return <VStack
-      justifyContent="center"
-      alignItems="center"
+      justifyContent='center'
+      alignItems='center'
       mb={30}>
       <HStack
-        justifyContent="space-between"
-        alignItems="flex-start"
-        w="100%"
+        justifyContent='space-between'
+        alignItems='flex-start'
+        w='100%'
         px={4}>
         <Text>
           {value.toLocaleString()} {WhaleTokenType[whaleTokenType]}
@@ -70,7 +79,7 @@ const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, wit
         </HStack>
       </HStack>
       <ProgressBar
-        percent={(1 - durationInMillis / (unbondingPeriodInNano / 1_000_000)) * 100}/>
+        percent={(1 - durationInMilli / nanoToMilli(unbondingPeriodInNano)) * 100} />
     </VStack>
   }
 
@@ -80,36 +89,36 @@ const Withdraw = ({unbondingAmpWhale, unbondingBWhale, withdrawableAmpWhale, wit
     <HStack
       spacing={7}>
       <TokenBox
-        label="Unbonding"
+        label='Unbonding'
         ampWhale={unbondingAmpWhale}
-        bWhale={unbondingBWhale}/>
+        bWhale={unbondingBWhale} />
       <TokenBox
-        label="Withdrawable"
+        label='Withdrawable'
         ampWhale={withdrawableAmpWhale}
-        bWhale={withdrawableBWhale}/>
+        bWhale={withdrawableBWhale} />
     </HStack>
     {(isWalletConnected && filteredUnbondingRequests !== null && filteredUnbondingRequests?.length > 0) &&
       <Box
-      overflowY="scroll"
-      maxHeight={340}
-      minW={510}
-      backgroundColor="black"
-      padding="4"
-      borderRadius="10px"
-      mt={10}>
-      {filteredUnbondingRequests.map((type, index) => {
-        const currentTimeInMillis = Date.now();
-        const durationInMillis =
-          ((Number(type.timestamp) +
-            unbondingPeriodInNano)/1_000_000) -
-            currentTimeInMillis;
-        return <BoxComponent
-          key={index}
-          whaleTokenType={type.asset.info.native_token.denom == AMP_WHALE_DENOM ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
-          value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
-          durationInMillis={durationInMillis}/>
-      })}
-    </Box>}
+        overflowY='scroll'
+        maxHeight={340}
+        minW={510}
+        backgroundColor='black'
+        padding='4'
+        borderRadius='10px'
+        mt={10}>
+        {filteredUnbondingRequests.map((type, index) => {
+          const currentTimeInMilli = Date.now()
+          const durationInMilli =
+            (nanoToMilli((Number(type.timestamp) +
+              unbondingPeriodInNano))) -
+            currentTimeInMilli
+          return <BoxComponent
+            key={index}
+            whaleTokenType={type.asset.info.native_token.denom === config?.lsd_token.ampWHALE.denom ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
+            value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
+            durationInMilli={durationInMilli} />
+        })}
+      </Box>}
   </VStack>
 }
 

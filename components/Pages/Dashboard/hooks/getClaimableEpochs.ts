@@ -42,9 +42,9 @@ export const getClaimableEpochs= async(client: Wallet, config: Config) => {
 
   const data = await fetchClaimableEpoch(client, config);
 
-  const globalAvailableRewards = convertMicroDenomToDenom(data?.epochs
-    .flatMap(e => e.total.map(a => a.amount))
-    .reduce((acc, amount) => acc + parseFloat(amount), 0), 6);
+  const rewardData = data?.epochs.flatMap(e => e.total.map(a => a.amount))
+    .reduce((acc, amount) => acc + parseFloat(amount),0)
+  const globalAvailableRewards = convertMicroDenomToDenom(rewardData, 6);
 
   const getLastSevenEpochsAverage = (epochs: Epoch[]): number => {
     const lastSevenEpochs = epochs.slice(-7);

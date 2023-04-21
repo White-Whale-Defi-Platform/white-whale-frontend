@@ -27,6 +27,8 @@ import DrawerLink from './DrawerLink'
 import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
 import menuLinks from './NavMenu.json'
+import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
+import {BONDING_ENABLED_CHAIN_IDS} from "constants/bonding_contract";
 
 export const links = [
   {
@@ -95,7 +97,7 @@ const Navbar = ({ }) => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6} >
-          {menuLinks.map((menu)=> (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName}/>
+          {(BONDING_ENABLED_CHAIN_IDS.includes(chainId) ? menuLinks : bondingDisabledMenuLinks).map((menu)=> (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName}/>
           ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">

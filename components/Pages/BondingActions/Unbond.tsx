@@ -58,6 +58,7 @@ const Unbond = ({bondedAmpWhale, bondedBWhale, whalePrice})  => {
         rules={{ required: true }}
         render={({ field }) => (
           <AssetInput
+            isBonding={true}
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}

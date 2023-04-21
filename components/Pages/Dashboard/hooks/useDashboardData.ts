@@ -1,4 +1,4 @@
-import { useQueries } from 'react-query';
+import {useQueries} from 'react-query';
 import {useEffect, useMemo, useState} from 'react';
 import { debounce } from 'lodash';
 import { getBonded } from 'components/Pages/Dashboard/hooks/getBonded';
@@ -34,17 +34,19 @@ export const useConfig = (network: string, chainId: string) => {
   const [config, setConfig] = useState<Config | null>(null);
 
   useEffect(() => {
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch(`/${network}/${chainId}/bonding_config.json`);
-        const json: Config = await response.json();
-        setConfig(json);
-      } catch (error) {
-        console.error('Failed to load config:', error);
-      }
-    };
-    fetchConfig();
-  }, []);
+    if (network && chainId) { // Only execute if network and chainId are defined
+      const fetchConfig = async () => {
+        try {
+          const response = await fetch(`/${network}/${chainId}/bonding_config.json`);
+          const json: Config = await response.json();
+          setConfig(json);
+        } catch (error) {
+          console.error('Failed to load config:', error);
+        }
+      };
+      fetchConfig();
+    }
+  }, [network, chainId]);
 
   return config;
 };
