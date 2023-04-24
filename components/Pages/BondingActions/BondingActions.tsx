@@ -19,8 +19,8 @@ import {
 } from 'constants/bonding_contract'
 import Loader from '../../Loader'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useWhalePrice } from 'queries/useGetTokenDollarValueQuery'
 import { Config, useConfig, useDashboardData } from '../Dashboard/hooks/useDashboardData'
+import { usePriceForOneToken } from 'features/swap/index'
 
 export enum WhaleTokenType {
   ampWHALE, bWHALE
@@ -52,7 +52,8 @@ const BondingActions = ({ globalAction }) => {
   const { balance: liquidBWhale } = useTokenBalance(
     B_WHALE_TOKEN_SYMBOL)
 
-  const whalePrice = useWhalePrice()
+  const whalePrice = usePriceForOneToken(
+    { tokenASymbol: "WHALE", tokenBSymbol: "axlUSDC"})[0] || 0
 
   const {
     bondedAmpWhale,

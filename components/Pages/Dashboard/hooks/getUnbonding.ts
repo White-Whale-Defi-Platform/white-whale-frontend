@@ -1,5 +1,5 @@
 import {Wallet} from 'util/wallet-adapters';
-import {convertMicroDenomToDenom} from "util/conversion";
+import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
 import {Config} from "./useDashboardData";
 import {fetchConfig} from "components/Pages/Dashboard/hooks/getBondingConfig";
 
@@ -47,7 +47,7 @@ export const getUnbonding = async (client: Wallet, address: string, config: Conf
   const filteredAmpWhaleUnbondingRequests = filterUnbondingRequests(unbondingInfos?.[0]?.unbonding_requests);
   const filteredBWhaleUnbondingRequests = filterUnbondingRequests(unbondingInfos?.[1]?.unbonding_requests);
 
-  const filteredUnbondingRequests: UnbondingRequest[] = [...(filteredAmpWhaleUnbondingRequests || []), ...(filteredBWhaleUnbondingRequests || [])];
+  const filteredUnbondingRequests: UnbondingRequest[] = [...(filteredAmpWhaleUnbondingRequests || []), ...(filteredBWhaleUnbondingRequests || [])].sort((a, b) => new Date(nanoToMilli(Number(a.timestamp))).getTime() - new Date(nanoToMilli(Number(b.timestamp))).getTime())
 
   const unbondingAmpWhale = convertMicroDenomToDenom(filteredAmpWhaleUnbondingRequests?.map(req => req.asset.amount).reduce((accumulator: number, currentValue: string) => {
     return accumulator + parseFloat(currentValue);

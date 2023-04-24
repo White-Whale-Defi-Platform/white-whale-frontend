@@ -45,9 +45,13 @@ const Withdraw = ({
       borderRadius='10px'
       p={4}
       minW={240}>
-      <WhaleTooltip label={label} data={null} withdrawableAmpWhale={ampWhale} withdrawableBWhale={bWhale}
-                    isWalletConnected={isWalletConnected}
-                    tokenType={null} />
+      <WhaleTooltip
+        label={label}
+        data={null}
+        withdrawableAmpWhale={ampWhale}
+        withdrawableBWhale={bWhale}
+        isWalletConnected={isWalletConnected}
+        tokenType={null} />
       <Text
         mb='-0.2rem'
         fontSize={23}

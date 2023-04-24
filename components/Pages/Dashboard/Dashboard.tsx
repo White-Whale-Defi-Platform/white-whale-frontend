@@ -7,9 +7,9 @@ import {walletState, WalletStatusType} from "state/atoms/walletAtoms";
 import {BondingData} from "./types/BondingData";
 import { useTokenBalance} from "hooks/useTokenBalance";
 import {useChains} from "hooks/useChainInfo";
-import {useWhalePrice} from "queries/useGetTokenDollarValueQuery";
 import {useDashboardData} from "./hooks/useDashboardData";
 import {AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL, WHALE_TOKEN_SYMBOL} from "constants/bonding_contract";
+import { usePriceForOneToken } from 'features/swap/index'
 
 const Dashboard: FC = () => {
   const [{chainId, status, client, address, network}] = useRecoilState(walletState)
@@ -86,7 +86,8 @@ const Dashboard: FC = () => {
     setValues(TokenType.withdrawable, (ampWhale + bWhale), null, ampWhale, bWhale)
   }
 
-  const whalePrice = useWhalePrice()
+  const whalePrice = usePriceForOneToken(
+    { tokenASymbol: "WHALE", tokenBSymbol: "axlUSDC"})[0] || 0
 
   const {balance: liquidWhale} = useTokenBalance(
     WHALE_TOKEN_SYMBOL)

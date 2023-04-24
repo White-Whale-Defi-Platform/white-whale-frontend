@@ -25,6 +25,8 @@ interface AssetInputProps {
   hideDollarValue?: boolean
   showBalanceSlider?: boolean
   isBonding?: boolean
+  unbondingBalances?: {[key: string]: number}
+
 }
 
 const AssetInput = forwardRef(( props : AssetInputProps, ref) => {

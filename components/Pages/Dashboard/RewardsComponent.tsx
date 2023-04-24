@@ -111,7 +111,7 @@ const RewardsComponent = ({
 
   const epochDurationInMilli = nanoToMilli(Number(feeDistributionConfig?.epoch_config?.duration))
 
-  const epochStartTimeInNano = Number(feeDistributionConfig?.epoch_config?.genesis_epoch * 1_000_000_000 ?? 0)
+  const epochStartTimeInNano = Number(feeDistributionConfig?.epoch_config?.genesis_epoch ?? 0)
 
   const epochStartDate = new Date(Math.floor((nanoToMilli(epochStartTimeInNano))))
   const epochStartHour = epochStartDate.getUTCHours();
