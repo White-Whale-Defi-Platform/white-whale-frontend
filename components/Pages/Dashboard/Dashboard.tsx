@@ -106,7 +106,6 @@ const Dashboard: FC = () => {
     withdrawableAmpWhale,
     withdrawableBWhale,
     weightInfo,
-    currentEpoch,
     annualRewards,
     claimable: claimableRewards,
     globalAvailableRewards,
@@ -150,7 +149,6 @@ const Dashboard: FC = () => {
           localTotalBonded={localTotalBonded}
           globalTotalBonded={globalTotalBonded}
           feeDistributionConfig={feeDistributionConfig}
-          currentEpoch={currentEpoch}
           annualRewards={annualRewards}
           globalAvailableRewards={globalAvailableRewards}
           claimableRewards={claimableRewards}
