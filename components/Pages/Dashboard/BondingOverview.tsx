@@ -61,7 +61,7 @@ const BondingOverview = ({
     alignItems="flex-start"
     verticalAlign="center"
     minH={320}
-    minW={840}
+    minW={860}
     as="form"
     overflow="hidden"
     position="relative"
@@ -83,7 +83,7 @@ const BondingOverview = ({
         justifyContent="flex-start"
         pl={8}
         pt={5}
-        spacing={12}>
+        spacing={10}>
         <PieChart
           style={{pointerEvents: 'none'}}
           width={250}
@@ -153,7 +153,7 @@ const BondingOverview = ({
               alignSelf="flex-start"
               variant="outline"
               size="sm"
-              minW={110}
+              w={110}
               style={{textTransform: "capitalize"}}
               onClick={async () => {
                 if (e.actionType === ActionType.buy) {
