@@ -42,7 +42,7 @@ export const getBonded = async (client: Wallet | null, address: string | null, c
 
   const totalBonded = bondedInfo?.total_bonded ?? 0
 
-  const localTotalBonded = convertMicroDenomToDenom(totalBonded, 6);
+  const localTotalBonded = Number(totalBonded);
 
   const bondedAmpWhale = bondedInfo ? convertMicroDenomToDenom(bondedInfo?.bonded_assets.find((asset) =>
         asset.info.native_token.denom === config.lsd_token.ampWHALE.denom)?.amount,

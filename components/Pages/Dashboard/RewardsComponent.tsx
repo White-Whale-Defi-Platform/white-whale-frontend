@@ -7,12 +7,8 @@ import {walletState} from 'state/atoms/walletAtoms'
 import {useRecoilState} from 'recoil'
 import WalletModal from '../../Wallet/Modal/Modal'
 import Loader from '../../Loader'
-import {useQuery} from "react-query";
-import {useChains} from "hooks/useChainInfo";
 import {
   calculateRewardDurationString,
-  convertDenomToMicroDenom,
-  convertMicroDenomToDenom,
   nanoToMilli
 } from "util/conversion";
 import {ActionType} from "./BondingOverview";
@@ -41,19 +37,15 @@ const pulseAnimation = keyframes`
   }
 `;
 
-const ProgressBar = ({progress, statusBlock}) => {
+const ProgressBar = ({progress, currentEpochStartTimeInNano}) => {
   const colors = ["#E43A1C", "#EE902E", "#FAFD3C", "#7CFB7D"]
-  const [block, setBlock] = useState<number>(null)
   const [isImminent, setImminent] = useState<boolean>(false)
   const [percent, setPercent] = useState<number>(0)
 
-// progress equals percent, just different naming necessary
-  useEffect(() => {
-    if (block !== null && Number(statusBlock) > block && isImminent) {
-      setImminent(false)
-    }
-    setBlock(Number(statusBlock))
-  }, [statusBlock])
+  const currentDate: Date = new Date();
+  currentDate.setDate(currentDate.getDate() - 1);
+  const currentDateTimeMinusOneDay = currentDate.getTime()
+  const epochStartDateTime = new Date(nanoToMilli(currentEpochStartTimeInNano)).getTime()
 
   useEffect(() => {
     if (!isImminent) {
@@ -62,13 +54,16 @@ const ProgressBar = ({progress, statusBlock}) => {
       }
       setPercent(progress)
     }
-  }, [progress])
+    if(isImminent && currentDateTimeMinusOneDay < epochStartDateTime || currentEpochStartTimeInNano === 0){
+      setImminent(false)
+    }
+  }, [progress, currentDateTimeMinusOneDay])
 
   return (
     <Box
       h="7px"
       minW={390}
-      bg={percent === 100 ? "transparent" : "whiteAlpha.400"}
+      bg={percent === 100 && currentEpochStartTimeInNano > 0 ? "transparent" : "whiteAlpha.400"}
       borderRadius="10px"
       overflow="hidden"
       position="relative"
@@ -93,6 +88,7 @@ const RewardsComponent = ({
                             isWalletConnected,
                             isLoading,
                             whalePrice,
+                            currentEpoch,
                             localTotalBonded,
                             globalTotalBonded,
                             feeDistributionConfig,
@@ -111,36 +107,11 @@ const RewardsComponent = ({
 
   const epochDurationInMilli = nanoToMilli(Number(feeDistributionConfig?.epoch_config?.duration))
 
-  const epochStartTimeInNano = Number(feeDistributionConfig?.epoch_config?.genesis_epoch ?? 0)
+  const genesisStartTimeInNano = Number(feeDistributionConfig?.epoch_config?.genesis_epoch ?? 0)
 
-  const epochStartDate = new Date(Math.floor((nanoToMilli(epochStartTimeInNano))))
-  const epochStartHour = epochStartDate.getUTCHours();
-  const chains: Array<any> = useChains()
+  const localWeight = Number(weightInfo?.weight)
 
-  const url = useMemo(() => {
-    return chains?.find((c) => c?.chainId === chainId)?.rpc
-  }, [chainId, chains])
-
-  const {data: status} = useQuery(
-    ['status', chainId],
-    async () => {
-      const res = await fetch(`${url}/status?`)
-      const resJons = await res?.json()
-      return {
-        block: resJons?.result?.sync_info?.latest_block_height || status?.block,
-        active: !!resJons?.result?.sync_info?.latest_block_height,
-      }
-    },
-    {
-      refetchInterval: 6000,
-      enabled: !!url,
-    }
-  )
-
-  const localWeight = convertMicroDenomToDenom(Number(weightInfo?.weight), 6)
-  const localBonded = convertDenomToMicroDenom(localTotalBonded, 6)
-
-  const multiplierRatio = Math.max((localWeight || 0) / (localBonded || 1), 1)
+  const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1), 1)
 
   const apr = ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio
 
@@ -150,19 +121,9 @@ const RewardsComponent = ({
   const boxBg = "#1C1C1C"
   // TODO global constant ?
   const borderRadius = "30px"
-  const referenceDate = new Date()
-  let currentEpochStartDate: Date
+  const currentEpochStartDateTime = new Date(nanoToMilli(Number(currentEpoch?.epoch?.start_time))).getTime()
 
-  if (referenceDate.getUTCHours() < epochStartHour) {
-    currentEpochStartDate = new Date();
-    currentEpochStartDate.setUTCDate(referenceDate.getUTCDate() - 1)
-    currentEpochStartDate.setUTCHours(epochStartHour, 0, 0, 0);
-  } else {
-    currentEpochStartDate = new Date();
-    currentEpochStartDate.setUTCDate(referenceDate.getUTCDate())
-    currentEpochStartDate.setUTCHours(epochStartHour, 0, 0, 0);
-  }
-  const durationInMilli = (Date.now() - currentEpochStartDate.getTime())
+  const passedTimeSinceCurrentEpochStartedInMilli = (Date.now() - currentEpochStartDateTime)
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
@@ -170,7 +131,9 @@ const RewardsComponent = ({
     else return 'Claim'
   }, [isWalletConnected, globalAvailableRewards])
 
-  const durationString = calculateRewardDurationString(epochDurationInMilli - durationInMilli, Number(status?.block))
+  const durationString = calculateRewardDurationString(epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,genesisStartTimeInNano)
+
+  const progress = Math.min((passedTimeSinceCurrentEpochStartedInMilli / epochDurationInMilli) * 100, 100)
 
   return (<>{isLoading ?
     <VStack
@@ -238,7 +201,7 @@ const RewardsComponent = ({
             {isWalletConnected ? durationString : ""}
           </Text>
         </HStack>
-        <ProgressBar progress={(durationInMilli / epochDurationInMilli) * 100} statusBlock={(status?.block)}/>
+        <ProgressBar progress={progress} currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)} />
       </VStack>
       <Box
         border="0.5px solid"

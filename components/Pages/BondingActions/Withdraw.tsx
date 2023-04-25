@@ -61,8 +61,8 @@ const Withdraw = ({
     </Box>
   }
 
-  const BoxComponent = ({ whaleTokenType, value, durationInMilli }) => {
-    const durationString = calculateDurationString(durationInMilli)
+  const BoxComponent = ({ whaleTokenType, value,  timeUntilUnbondingInMilli }) => {
+    const durationString = calculateDurationString(timeUntilUnbondingInMilli)
     return <VStack
       justifyContent='center'
       alignItems='center'
@@ -83,7 +83,7 @@ const Withdraw = ({
         </HStack>
       </HStack>
       <ProgressBar
-        percent={(1 - durationInMilli / nanoToMilli(unbondingPeriodInNano)) * 100} />
+        percent={(1 - timeUntilUnbondingInMilli / nanoToMilli(unbondingPeriodInNano)) * 100} />
     </VStack>
   }
 
@@ -112,7 +112,7 @@ const Withdraw = ({
         mt={10}>
         {filteredUnbondingRequests.map((type, index) => {
           const currentTimeInMilli = Date.now()
-          const durationInMilli =
+          const timeUntilUnbondingInMilli =
             (nanoToMilli((Number(type.timestamp) +
               unbondingPeriodInNano))) -
             currentTimeInMilli
@@ -120,7 +120,7 @@ const Withdraw = ({
             key={index}
             whaleTokenType={type.asset.info.native_token.denom === config?.lsd_token.ampWHALE.denom ? WhaleTokenType.ampWHALE : WhaleTokenType.bWHALE}
             value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
-            durationInMilli={durationInMilli} />
+            timeUntilUnbondingInMilli={timeUntilUnbondingInMilli} />
         })}
       </Box>}
   </VStack>

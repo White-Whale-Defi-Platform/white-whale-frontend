@@ -37,35 +37,30 @@ export const formatTokenName = (name: string) => {
   }
   return ''
 }
-export const calculateRewardDurationString = (durationInMilli: number, statusBlock: number): string => {
+export const calculateRewardDurationString = (durationInMilli: number, genesisStartTimeInNano: number): string => {
   const [isImminent, setImminent] = useState<boolean>(false)
-  const [block, setBlock] = useState<number>(null)
+  const nowInMilli = Date.now()
+  const adjustedDurationInMilli = nanoToMilli(genesisStartTimeInNano) > nowInMilli ?
+    nanoToMilli(genesisStartTimeInNano) + 86_000_000 - nowInMilli : durationInMilli
 
   useEffect(() => {
-    if (block !== null && statusBlock > block && isImminent) {
+    if (adjustedDurationInMilli <= 1000) {
+      setImminent(true)
+    }else{
       setImminent(false)
     }
-
-    setBlock(statusBlock)
-  }, [statusBlock])
-
-  useEffect(() => {
-    if (durationInMilli <= 1000) {
-      setImminent(true)
-    }
-
-  }, [durationInMilli])
+  }, [adjustedDurationInMilli])
 
   if (isImminent) {
     return `imminent`;
-  } else if (durationInMilli >= 86400_000) {
-    return `${Math.floor(durationInMilli / 86400_000)} days`;
-  } else if (durationInMilli >= 3600_000) {
-    return `${Math.floor(durationInMilli / 3600_000)} hours`;
-  } else if (durationInMilli >= 60_000) {
-    return `${Math.floor(durationInMilli / 60_000)} minutes`;
-  } else if (durationInMilli > 1_000) {
-    return `${Math.floor(durationInMilli / 1_000)} seconds`;
+  } else if (adjustedDurationInMilli >= 86400_000) {
+    return `${Math.floor(adjustedDurationInMilli / 86400_000)} days`;
+  } else if (adjustedDurationInMilli >= 3600_000) {
+    return `${Math.floor(adjustedDurationInMilli / 3600_000)} hours`;
+  } else if (adjustedDurationInMilli >= 60_000) {
+    return `${Math.floor(adjustedDurationInMilli / 60_000)} minutes`;
+  } else if (adjustedDurationInMilli > 1_000) {
+    return `${Math.floor(adjustedDurationInMilli / 1_000)} seconds`;
   }
 };
 

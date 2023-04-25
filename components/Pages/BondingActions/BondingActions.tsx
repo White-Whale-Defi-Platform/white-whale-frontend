@@ -74,7 +74,7 @@ const BondingActions = ({ globalAction }) => {
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
     else if (currentBondState?.amount === 0 && globalAction !== ActionType.withdraw) return 'Enter Amount'
-    else if (totalWithdrawable === 0 && globalAction === ActionType.withdraw) return 'No Withdraws'
+    else if (totalWithdrawable === 0 && globalAction === ActionType.withdraw) return 'No Withdrawals'
     else return ActionType[globalAction]
   }, [isWalletConnected, currentBondState, globalAction, totalWithdrawable])
 

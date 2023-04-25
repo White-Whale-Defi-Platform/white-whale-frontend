@@ -108,6 +108,7 @@ const Dashboard: FC = () => {
     withdrawableBWhale,
     weightInfo,
     annualRewards,
+    currentEpoch,
     claimable: claimableRewards,
     globalAvailableRewards,
     isLoading,
@@ -146,6 +147,7 @@ const Dashboard: FC = () => {
         <RewardsComponent
           isWalletConnected={isWalletConnected}
           whalePrice={whalePrice}
+          currentEpoch={currentEpoch}
           isLoading={isLoading && isWalletConnected}
           localTotalBonded={localTotalBonded}
           globalTotalBonded={globalTotalBonded}

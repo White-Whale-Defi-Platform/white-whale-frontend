@@ -57,7 +57,7 @@ const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
     )
 
   return (
-    <HStack gap={[1]} px={2}>
+    <HStack gap={[1]} pl={3}>
       {showIcon && (
         <Image
           width="auto"
@@ -137,7 +137,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
         </HStack>
 
         <HStack
-          width={['full', '180px']}
+          width={['full', '185px']}
           border="1px solid rgba(255, 255, 255, 0.1)"
           borderRightRadius="30px"
           borderLeftRadius={['30px', 'unset']}
