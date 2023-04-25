@@ -236,7 +236,11 @@ const BondingActions = ({ globalAction }) => {
           }
           onClick={async () => {
             if (isWalletConnected) {
-              await submit(globalAction, currentBondState.amount, config.lsd_token[currentBondState.tokenSymbol].denom)
+              let denom = config.lsd_token[currentBondState.tokenSymbol].denom
+              if(globalAction === ActionType.withdraw){
+                denom = withdrawableAmpWhale > 0 ? config.lsd_token.ampWHALE.denom : config.lsd_token.bWHALE.denom
+              }
+              await submit(globalAction, currentBondState.amount, denom)
             } else {
               onOpenModal()
             }
