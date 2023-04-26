@@ -1,6 +1,6 @@
-import { Wallet } from 'util/wallet-adapters';
-import { JsonObject } from '@cosmjs/cosmwasm-stargate';
-import {Config} from "./useDashboardData";
+import { Wallet } from 'util/wallet-adapters'
+import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { Config } from './useDashboardData'
 
 export interface WeightInfo {
   address: string;
@@ -12,25 +12,25 @@ export interface WeightInfo {
 
 export const getWeight = async (client: Wallet, address: string, config: Config) => {
   if (!client || !address) {
-    return null;
+    return null
   }
-try{
-  const weightInfo = await fetchWeight(client, address,config);
+  try {
+    const weightInfo = await fetchWeight(client, address, config)
 
-  return { weightInfo };
-  } catch(e){
+    return { weightInfo }
+  } catch (e) {
     return 0
+  }
 }
-};
 
 const fetchWeight = async (
   client: Wallet,
   address: string,
-  config: Config,
+  config: Config
 ): Promise<WeightInfo> => {
   const result: JsonObject = await client.queryContractSmart(config.whale_lair_address, {
-    weight: { address: address },
-  });
+    weight: { address: address }
+  })
 
-  return result as WeightInfo;
-};
+  return result as WeightInfo
+}

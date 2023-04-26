@@ -37,7 +37,7 @@ type CreateWalletStateArgs<TState = {}> = {
 
 function createWalletState<TClient = any, TState = {}>({
                                                          key,
-                                                         default: defaultState,
+                                                         default: defaultState
                                                        }: CreateWalletStateArgs<TState>) {
   return atom<GeneratedWalletState<TClient, TState>>({
     key,
@@ -49,7 +49,7 @@ function createWalletState<TClient = any, TState = {}>({
       address: '',
       network: 'mainnet',
       activeWallet: '',
-      ...defaultState,
+      ...defaultState
     },
     dangerouslyAllowMutability: true,
     effects_UNSTABLE: [
@@ -63,10 +63,11 @@ function createWalletState<TClient = any, TState = {}>({
               setSelf({
                 ...parsedSavedState,
                 client: null,
-                status: WalletStatusType.restored,
+                status: WalletStatusType.restored
               })
             }
-          } catch (e) {}
+          } catch (e) {
+          }
         }
 
         onSet((newValue, oldValue) => {
@@ -82,16 +83,16 @@ function createWalletState<TClient = any, TState = {}>({
           )
           // }
         })
-      },
-    ],
+      }
+    ]
   })
 }
 
 export const walletState = createWalletState<Wallet, { key?: Key }>({
   key: 'internal-wallet',
   default: {
-    key: null,
-  },
+    key: null
+  }
 })
 
 export const ibcWalletState = createWalletState<
@@ -103,8 +104,8 @@ export const ibcWalletState = createWalletState<
 >({
   key: 'ibc-wallet',
   default: {
-    tokenSymbol: null,
-  },
+    tokenSymbol: null
+  }
 })
 
 type Network = 'testnet' | 'mainnet'

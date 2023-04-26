@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import {LSDTokenItemState} from "./Bond";
+import { LSDTokenItemState } from './Bond'
 
 export const bondingAtom = atom<LSDTokenItemState>({
   key: 'bondingToken',
@@ -10,7 +10,6 @@ export const bondingAtom = atom<LSDTokenItemState>({
       decimals: 6,
       lsdToken: null
     },
-  effects_UNSTABLE: [
-  ],
+  effects_UNSTABLE: []
 })
 

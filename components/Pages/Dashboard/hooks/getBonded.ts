@@ -1,7 +1,7 @@
-import { Wallet } from "util/wallet-adapters";
-import { JsonObject } from "@cosmjs/cosmwasm-stargate";
-import { convertMicroDenomToDenom } from "util/conversion";
-import {Config} from "./useDashboardData";
+import { Wallet } from 'util/wallet-adapters'
+import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { convertMicroDenomToDenom } from 'util/conversion'
+import { Config } from './useDashboardData'
 
 interface NativeTokenInfo {
   native_token: {
@@ -27,29 +27,29 @@ const fetchBonded = async (
   const result: JsonObject = await client.queryContractSmart(
     config.whale_lair_address,
     {
-      bonded: { address: address },
+      bonded: { address: address }
     }
-  );
-  return result as BondedInfo;
-};
+  )
+  return result as BondedInfo
+}
 
 export const getBonded = async (client: Wallet | null, address: string | null, config: Config) => {
   if (!client || !address) {
-    return null;
+    return null
   }
 
-  const bondedInfo = await fetchBonded(client, address, config);
+  const bondedInfo = await fetchBonded(client, address, config)
 
   const totalBonded = bondedInfo?.total_bonded ?? 0
 
-  const localTotalBonded = Number(totalBonded);
+  const localTotalBonded = Number(totalBonded)
 
   const bondedAmpWhale = bondedInfo ? convertMicroDenomToDenom(bondedInfo?.bonded_assets.find((asset) =>
-        asset.info.native_token.denom === config.lsd_token.ampWHALE.denom)?.amount,
-        config.lsd_token.ampWHALE.decimals) : null;
+      asset.info.native_token.denom === config.lsd_token.ampWHALE.denom)?.amount,
+    config.lsd_token.ampWHALE.decimals) : null
 
   const bondedBWhale = bondedInfo ? convertMicroDenomToDenom(bondedInfo?.bonded_assets.find((asset) =>
-        asset.info.native_token.denom === config.lsd_token.bWHALE.denom)?.amount, config.lsd_token.bWHALE.decimals) : null;
+    asset.info.native_token.denom === config.lsd_token.bWHALE.denom)?.amount, config.lsd_token.bWHALE.decimals) : null
 
-  return { bondedAmpWhale, bondedBWhale, localTotalBonded };
-};
+  return { bondedAmpWhale, bondedBWhale, localTotalBonded }
+}

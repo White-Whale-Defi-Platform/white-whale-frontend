@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import {TokenItemState} from "types";
+import { TokenItemState } from 'types'
 
 
 export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
@@ -8,13 +8,13 @@ export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
     {
       tokenSymbol: null,
       amount: 0,
-      decimals: 6,
+      decimals: 6
     },
     {
       tokenSymbol: null,
       amount: 0,
-      decimals: 6,
-    },
+      decimals: 6
+    }
   ],
   effects_UNSTABLE: [
     function validateIfTokensAreSame({ onSet, setSelf }) {
@@ -28,8 +28,8 @@ export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
           })
         }
       })
-    },
-  ],
+    }
+  ]
 })
 
 // export const slippageAtom = atom<number>({

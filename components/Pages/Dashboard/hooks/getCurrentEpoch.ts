@@ -1,6 +1,6 @@
-import {Wallet} from "util/wallet-adapters";
-import {JsonObject} from "@cosmjs/cosmwasm-stargate";
-import {Config} from "./useDashboardData";
+import { Wallet } from 'util/wallet-adapters'
+import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { Config } from './useDashboardData'
 
 export interface EpochData {
   id: string;
@@ -30,24 +30,26 @@ export interface EpochData {
     };
   }[];
 }
+
 export interface Epoch {
   epoch: EpochData;
 }
+
 export const getCurrentEpoch = async (client: Wallet, config: Config) => {
   if (!client) {
-    return null;
+    return null
   }
 
-  const currentEpoch = await fetchCurrentEpoch(client, config);
+  const currentEpoch = await fetchCurrentEpoch(client, config)
 
-  return { currentEpoch };
-};
+  return { currentEpoch }
+}
 
 
 export const fetchCurrentEpoch = async (client: Wallet, config: Config): Promise<Epoch> => {
   const result: JsonObject = await client.queryContractSmart(config.fee_distributor_address, {
-    current_epoch: {},
-  });
+    current_epoch: {}
+  })
 
-  return result as Epoch;
-};
+  return result as Epoch
+}
