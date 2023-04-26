@@ -13,6 +13,7 @@ import {
 } from "util/conversion";
 import {ActionType} from "./BondingOverview";
 import useTransaction, {TxStep} from "../BondingActions/hooks/useTransaction";
+import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 
 const pulseAnimation = keyframes`
   0% {
@@ -211,10 +212,13 @@ const RewardsComponent = ({
         minW={390}>
         <HStack
           justifyContent="space-between">
+          <HStack>
           <Text
             color="whiteAlpha.600">
             Rewards
           </Text>
+          <BondingActionTooltip action={ActionType.claim}/>
+          </HStack>
           <Text>
             {isWalletConnected ? `$${(claimableRewards * whalePrice).toFixed(2)}` : "n/a"}
           </Text>

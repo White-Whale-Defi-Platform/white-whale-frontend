@@ -1,4 +1,4 @@
-import { ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon} from '@chakra-ui/icons'
 import { Box, Button, HStack, IconButton, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
 import { useChains } from 'hooks/useChainInfo'
@@ -21,6 +21,7 @@ import Loader from '../../Loader'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { Config, useConfig, useDashboardData } from '../Dashboard/hooks/useDashboardData'
 import { usePriceForOneToken } from 'features/swap/index'
+import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 
 export enum WhaleTokenType {
   ampWHALE, bWHALE
@@ -127,13 +128,16 @@ const BondingActions = ({ globalAction }) => {
             setCurrentBondState({ ...currentBondState, amount: 0 })
           }}
         />
-        <Text
-          as='h2'
-          fontSize='24'
-          fontWeight='900'
-          style={{ textTransform: 'capitalize' }}>
-          {ActionType[globalAction]}
-        </Text>
+        <HStack>
+            <BondingActionTooltip action={globalAction}/>
+          <Text
+            as='h2'
+            fontSize='24'
+            fontWeight='900'
+            style={{ textTransform: 'capitalize', position: 'relative' }}>
+            {ActionType[globalAction]}
+          </Text>
+        </HStack>
       </HStack>
       ({isLoading && isWalletConnected ?
       <VStack

@@ -60,7 +60,7 @@ export const WhaleTooltip = ({
     label={isWalletConnected ?
       <VStack
       minW="250px"
-      minH="50px"
+      minH="fit-content"
       borderRadius="10px"
       bg="blackAlpha.900"
       px="4"
@@ -71,7 +71,7 @@ export const WhaleTooltip = ({
       alignItems="center">
     {ampWhale === null && withdrawableAmpWhale == null ?
       <Text>
-    {tokenType === TokenType.liquid ? "Liquid WHALE Token Balance" :
+    {tokenType === TokenType.liquid ? "Liquid WHALE and LSD-WHALE Token Balances" :
       tokenType === TokenType.bonded ? "Current amount of bonded LSD-WHALE token" :
       tokenType === TokenType.unbonding ? "Current amount of unbonding LSD-WHALE token" :
       tokenType === TokenType.withdrawable ? "Current amount of withdrawable LSD-WHALE token" : null}
