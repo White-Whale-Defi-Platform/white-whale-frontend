@@ -8,7 +8,7 @@ import testnetChainInfo from 'public/testnet/chain_info.json'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-import { queryClient } from '../services/queryClient'
+import { queryClient } from 'services/queryClient'
 
 interface CustomChainType extends ChainInfo {
   label: string
@@ -45,7 +45,7 @@ export const useChains = () => {
 }
 
 export const useChainInfo = (id = null) => {
-  const chainInfo : Array<any> = useChains()
+  const chainInfo: Array<any> = useChains()
 
   const chain = useMemo(() => {
     if (!chainInfo) return []

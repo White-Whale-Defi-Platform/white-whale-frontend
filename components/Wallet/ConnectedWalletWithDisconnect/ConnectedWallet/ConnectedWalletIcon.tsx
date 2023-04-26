@@ -8,7 +8,8 @@ import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 function ConnectedWalletIcon({ connected }) {
-  const [currentWalletState, setCurrentWalletState] = useRecoilState(walletState)
+  const [currentWalletState, setCurrentWalletState] =
+    useRecoilState(walletState)
   switch (currentWalletState?.activeWallet) {
     case 'keplr':
       return <KeplrWalletIcon />

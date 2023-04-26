@@ -14,30 +14,32 @@ import { getWeight } from 'components/Pages/Dashboard/hooks/getWeight'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
 
 export interface TokenDetails {
-  name: string;
-  denom: string;
-  decimals: number;
+  name: string
+  denom: string
+  decimals: number
 }
 
 export interface Config {
-  whale_lair_address: string;
-  fee_distributor_address: string;
-  whale_base_token: TokenDetails;
+  whale_lair_address: string
+  fee_distributor_address: string
+  whale_base_token: TokenDetails
   lsd_token: {
-    ampWHALE: TokenDetails;
-    bWHALE: TokenDetails;
-  };
+    ampWHALE: TokenDetails
+    bWHALE: TokenDetails
+  }
 }
-
 
 export const useConfig = (network: string, chainId: string) => {
   const [config, setConfig] = useState<Config | null>(null)
 
   useEffect(() => {
-    if (network && chainId) { // Only execute if network and chainId are defined
+    if (network && chainId) {
+      // Only execute if network and chainId are defined
       const fetchConfig = async () => {
         try {
-          const response = await fetch(`/${network}/${chainId}/bonding_config.json`)
+          const response = await fetch(
+            `/${network}/${chainId}/bonding_config.json`
+          )
           const json: Config = await response.json()
           setConfig(json)
         } catch (error) {
@@ -52,7 +54,10 @@ export const useConfig = (network: string, chainId: string) => {
 }
 
 export const useDashboardData = (client, address, network, chainId) => {
-  const debouncedRefetch = useMemo(() => debounce((refetchFunc) => refetchFunc(), 500), [])
+  const debouncedRefetch = useMemo(
+    () => debounce((refetchFunc) => refetchFunc(), 500),
+    []
+  )
   const config: Config = useConfig(network, chainId)
 
   const queries = useQueries([
@@ -61,61 +66,65 @@ export const useDashboardData = (client, address, network, chainId) => {
       queryFn: () => getBonded(client, address, config),
       enabled: !!client && !!address && !!config,
       refetchOnMount: 'always',
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
+      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['unbonding', address, network, chainId],
       queryFn: () => getUnbonding(client, address, config),
       enabled: !!client && !!address && !!config,
       refetchOnMount: 'always',
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
+      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['withdrawable', address, network, chainId],
       queryFn: () => getWithdrawable(client, address, config),
       enabled: !!client && !!address && !!config,
       refetchOnMount: 'always',
-      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
+      refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['totalBonded', address, network, chainId],
       queryFn: () => getTotalBonded(client, config),
-      enabled: !!client && !!config
+      enabled: !!client && !!config,
     },
     {
       queryKey: ['weightInfo', address, network, chainId],
       queryFn: () => getWeight(client, address, config),
-      enabled: !!client && !!address && !!config
+      enabled: !!client && !!address && !!config,
     },
     {
       queryKey: ['feeDistributionConfig', address, network, chainId],
       queryFn: () => getFeeDistributorConfig(client, config),
-      enabled: !!client && !!config
+      enabled: !!client && !!config,
     },
     {
       queryKey: ['currentEpoch', address, network, chainId],
       queryFn: () => getCurrentEpoch(client, config),
-      enabled: !!client && !!config
+      enabled: !!client && !!config,
     },
     {
       queryKey: ['claimableEpochs', address, network, chainId],
       queryFn: () => getClaimableEpochs(client, config),
-      enabled: !!client && !!config
+      enabled: !!client && !!config,
     },
     {
       queryKey: ['claimableRewards', address, network, chainId],
       queryFn: () => getClaimable(client, address, config),
-      enabled: !!client && !!address && !!config
+      enabled: !!client && !!address && !!config,
     },
     {
       queryKey: ['bondingConfig', address, network, chainId],
       queryFn: () => getBondingConfig(client, config),
-      enabled: !!client && !!config
-    }
+      enabled: !!client && !!config,
+    },
   ])
 
   const isLoading = useMemo(
-    () => queries.some((query) => query.isLoading || query.data === null || query.data === undefined),
+    () =>
+      queries.some(
+        (query) =>
+          query.isLoading || query.data === null || query.data === undefined
+      ),
     [queries]
   )
 
@@ -147,7 +156,7 @@ export const useDashboardData = (client, address, network, chainId) => {
       ...currentEpochData,
       ...claimableEpochsData,
       ...claimableRewardsData,
-      ...bondingConfigData
+      ...bondingConfigData,
     }
   }, [queries])
 

@@ -7,7 +7,10 @@ import {
   Button,
   Hide,
   HStack,
-  IconButton, Text, Tooltip, VStack
+  IconButton,
+  Text,
+  Tooltip,
+  VStack,
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import DoubleArrowsIcon from 'components/icons/DoubleArrowsIcon'
@@ -17,9 +20,9 @@ import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
 import { Simulated } from './hooks/useSimulate'
-import {TokenItemState} from "../../../types";
+import { TokenItemState } from 'types'
 
 type Props = {
   connected: WalletStatusType
@@ -74,12 +77,8 @@ const SwapForm: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetForm, tx?.txStep])
 
-  const { balance: tokenABalance } = useTokenBalance(
-    tokenA?.tokenSymbol
-  )
-  const { balance: tokenBBalance } = useTokenBalance(
-    tokenB?.tokenSymbol
-  )
+  const { balance: tokenABalance } = useTokenBalance(tokenA?.tokenSymbol)
+  const { balance: tokenBBalance } = useTokenBalance(tokenB?.tokenSymbol)
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
@@ -211,7 +210,6 @@ const SwapForm: FC<Props> = ({
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={2}>
         <HStack justifyContent="space-between" width="full">
-
           <HStack visibility={{ base: 'visible', md: 'hidden' }}>
             <Button
               variant="outline"
@@ -288,8 +286,7 @@ const SwapForm: FC<Props> = ({
         style={{ margin: 'unset' }}
       >
         <HStack justifyContent="space-between" width="full">
-
-          <HStack >
+          <HStack>
             <Hide above="md">
               <Button
                 variant="outline"
@@ -359,7 +356,9 @@ const SwapForm: FC<Props> = ({
           tx?.txStep == TxStep.Broadcasting ||
           state?.isLoading
         }
-        disabled={tx?.txStep != TxStep.Ready || simulated == null || !isConnected}
+        disabled={
+          tx?.txStep != TxStep.Ready || simulated == null || !isConnected
+        }
       >
         {buttonLabel}
       </Button>

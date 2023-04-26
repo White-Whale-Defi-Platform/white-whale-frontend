@@ -1,19 +1,14 @@
 import { useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import {
-  Button,
-  HStack,
-  Spinner,
-  Text, VStack
-} from '@chakra-ui/react'
+import { Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 
 import { WalletStatusType } from 'state/atoms/walletAtoms'
-import {TokenItemState} from "types/index";
+import { TokenItemState } from 'types/index'
 
 type Props = {
   connected: WalletStatusType
@@ -36,10 +31,7 @@ const DepositForm = ({
   setReverse,
   reverse,
 }: Props) => {
-
-  const { balance: tokenABalance } = useTokenBalance(
-    tokenA?.tokenSymbol
-  )
+  const { balance: tokenABalance } = useTokenBalance(tokenA?.tokenSymbol)
   const { balance: tokenBBalance, isLoading: tokanBloading } = useTokenBalance(
     tokenB?.tokenSymbol
   )
@@ -48,7 +40,7 @@ const DepositForm = ({
     mode: 'onChange',
     defaultValues: {
       token1: tokenA,
-      token2: tokenB
+      token2: tokenB,
     },
   })
 
@@ -171,7 +163,9 @@ const DepositForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || simulated == null || !isConnected}
+        disabled={
+          tx.txStep != TxStep.Ready || simulated == null || !isConnected
+        }
       >
         {buttonLabel}
       </Button>

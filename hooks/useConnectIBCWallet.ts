@@ -41,7 +41,7 @@ export const useConnectIBCWallet = (
       ...value,
       tokenSymbol,
       client: null,
-      state: WalletStatusType.connecting
+      state: WalletStatusType.connecting,
     }))
 
     try {
@@ -54,7 +54,7 @@ export const useConnectIBCWallet = (
         rpc,
         offlineSigner,
         {
-          gasPrice: GasPrice.fromString(GAS_PRICE)
+          gasPrice: GasPrice.fromString(GAS_PRICE),
         }
       )
 
@@ -62,20 +62,24 @@ export const useConnectIBCWallet = (
 
       /* successfully update the wallet state */
       setWalletState({
-        activeWallet: '', chainId: '', network: undefined,
+        activeWallet: '',
+        chainId: '',
+        network: undefined,
         tokenSymbol,
         address,
         client: wasmChainClient,
-        status: WalletStatusType.connected
+        status: WalletStatusType.connected,
       })
     } catch (e) {
       /* set the error state */
       setWalletState({
-        activeWallet: '', chainId: '', network: undefined,
+        activeWallet: '',
+        chainId: '',
+        network: undefined,
         tokenSymbol: null,
         address: '',
         client: null,
-        status: WalletStatusType.error
+        status: WalletStatusType.error,
       })
 
       throw e

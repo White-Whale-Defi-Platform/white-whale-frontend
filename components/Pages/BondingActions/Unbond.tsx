@@ -10,7 +10,8 @@ import { bondingAtom } from './bondAtoms'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
   const [{ status }] = useRecoilState(walletState)
-  const [currentBondState, setCurrentBondState] = useRecoilState<LSDTokenItemState>(bondingAtom)
+  const [currentBondState, setCurrentBondState] =
+    useRecoilState<LSDTokenItemState>(bondingAtom)
 
   const isWalletConnected = status === WalletStatusType.connected
 
@@ -19,14 +20,18 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
   useEffect(() => {
     setLSDTokenBalances({
       ampWHALE: bondedAmpWhale,
-      bWHALE: bondedBWhale
+      bWHALE: bondedBWhale,
     })
   }, [bondedAmpWhale, bondedBWhale])
 
   const onInputChange = useCallback(
     (tokenSymbol: string | null, amount: number) => {
       if (tokenSymbol) {
-        setCurrentBondState({ ...currentBondState, tokenSymbol: tokenSymbol, amount: Number(amount) })
+        setCurrentBondState({
+          ...currentBondState,
+          tokenSymbol: tokenSymbol,
+          amount: Number(amount),
+        })
       } else {
         setCurrentBondState({ ...currentBondState, amount: Number(amount) })
       }
@@ -39,24 +44,24 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
       tokenSymbol: AMP_WHALE_TOKEN_SYMBOL,
       amount: 0,
       decimals: 6,
-      lsdToken: LSDToken.ampWHALE
+      lsdToken: LSDToken.ampWHALE,
     })
   }, [isWalletConnected])
 
   const { control } = useForm({
     mode: 'onChange',
     defaultValues: {
-      currentBondState
-    }
+      currentBondState,
+    },
   })
 
-  const unbondingBalances = useMemo(() => ({ ampWHALE: bondedAmpWhale, bWHALE: bondedBWhale }), [
-    bondedAmpWhale,
-    bondedBWhale
-  ])
+  const unbondingBalances = useMemo(
+    () => ({ ampWHALE: bondedAmpWhale, bWHALE: bondedBWhale }),
+    [bondedAmpWhale, bondedBWhale]
+  )
 
   return (
-    <VStack px={7} width='full'>
+    <VStack px={7} width="full">
       <Controller
         name="currentBondState"
         control={control}
@@ -69,33 +74,37 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
             {...field}
             token={currentBondState}
             whalePrice={whalePrice}
-            balance={
-              (() => {
-                switch (currentBondState.lsdToken) {
-                  case LSDToken.ampWHALE:
-                    return tokenBalances?.ampWHALE ?? 0
-                  case LSDToken.bWHALE:
-                    return tokenBalances?.bWHALE ?? 0
-                  default:
-                    return 0 // or any other default value
-                }
-              })()
-            }
+            balance={(() => {
+              switch (currentBondState.lsdToken) {
+                case LSDToken.ampWHALE:
+                  return tokenBalances?.ampWHALE ?? 0
+                case LSDToken.bWHALE:
+                  return tokenBalances?.bWHALE ?? 0
+                default:
+                  return 0 // or any other default value
+              }
+            })()}
             minMax={false}
             disabled={false}
             onChange={(value, isTokenChange) => {
               onInputChange(value, 0)
               field.onChange(value)
               if (isTokenChange) {
-                let lsdToken = value.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ? LSDToken.ampWHALE : LSDToken.bWHALE
+                let lsdToken =
+                  value.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL
+                    ? LSDToken.ampWHALE
+                    : LSDToken.bWHALE
                 setCurrentBondState({
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken: lsdToken
+                  lsdToken: lsdToken,
                 })
               } else {
-                setCurrentBondState({ ...currentBondState, amount: value.amount })
+                setCurrentBondState({
+                  ...currentBondState,
+                  amount: value.amount,
+                })
               }
             }}
           />

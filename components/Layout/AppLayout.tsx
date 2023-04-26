@@ -1,7 +1,5 @@
 import { FC, ReactNode } from 'react'
-import {
-  isMobile,
-} from 'react-device-detect'
+import { isMobile } from 'react-device-detect'
 
 import { Flex, useMediaQuery } from '@chakra-ui/react'
 import Navbar from 'components/Navbar'
@@ -19,10 +17,7 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
   return (
     <>
       {(isMobile || isMobileView) && <MobileNotSupportedModal />}
-      <Flex
-        direction="column"
-        backgroundColor="transparent"
-        height="100vh">
+      <Flex direction="column" backgroundColor="transparent" height="100vh">
         <RadialGradient />
         <Navbar />
         <Flex

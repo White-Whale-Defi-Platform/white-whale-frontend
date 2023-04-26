@@ -13,7 +13,7 @@ import {
 } from 'junoblocks'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { directTokenSwap, passThroughTokenSwap } from 'services/swap'
+import { passThroughTokenSwap } from 'services/swap'
 import {
   TransactionStatus,
   transactionStatusState,
@@ -122,8 +122,8 @@ export const useTokenSwap = ({
         const errorMessage =
           String(e).length > 300
             ? `${String(e).substring(0, 150)} ... ${String(e).substring(
-              String(e).length - 150
-            )}`
+                String(e).length - 150
+              )}`
             : String(e)
 
         toast.custom((t) => (

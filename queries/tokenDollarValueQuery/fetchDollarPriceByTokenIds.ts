@@ -2,7 +2,7 @@ type ApiResponse = Record<string, { usd: number }>
 
 export const fetchDollarPriceByTokenIds = debounce(
   async (tokenIds: Array<string>): Promise<ApiResponse> => {
-    const apiIds = tokenIds.flat().filter(token => token !== 'whale-token')
+    const apiIds = tokenIds.flat().filter((token) => token !== 'whale-token')
     const newApiIds = [...new Set(apiIds)].join(',')
 
     try {
@@ -11,7 +11,7 @@ export const fetchDollarPriceByTokenIds = debounce(
         `https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds}&vs_currencies=usd`,
         {
           method: 'GET',
-          cache: "force-cache"
+          cache: 'force-cache',
         }
       )
       if (response.status === 200) {

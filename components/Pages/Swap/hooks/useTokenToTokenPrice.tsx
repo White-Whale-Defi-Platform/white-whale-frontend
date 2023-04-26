@@ -5,8 +5,8 @@ import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
-import {TokenInfo} from "../../../../queries/usePoolsListQuery";
-import {tokenToTokenPriceQueryWithPools} from "../../../../queries/tokenToTokenPriceQuery";
+import { TokenInfo } from 'queries/usePoolsListQuery'
+import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 
 type UseTokenPairsPricesArgs = {
   tokenASymbol: TokenInfo['symbol']
@@ -17,12 +17,12 @@ type UseTokenPairsPricesArgs = {
 }
 
 export const useTokenToTokenPriceQuery = ({
-                                            tokenAmount,
-                                            tokenASymbol,
-                                            tokenBSymbol,
-                                            enabled = true,
-                                            refetchInBackground,
-                                          }: UseTokenPairsPricesArgs) => {
+  tokenAmount,
+  tokenASymbol,
+  tokenBSymbol,
+  enabled = true,
+  refetchInBackground,
+}: UseTokenPairsPricesArgs) => {
   const { client } = useRecoilValue(walletState)
 
   const tokenA = useTokenInfo(tokenASymbol)
@@ -48,12 +48,12 @@ export const useTokenToTokenPriceQuery = ({
     },
     enabled: Boolean(
       enabled &&
-      client &&
-      matchingPools &&
-      tokenA &&
-      tokenB &&
-      tokenAmount > 0 &&
-      tokenBSymbol !== tokenASymbol
+        client &&
+        matchingPools &&
+        tokenA &&
+        tokenB &&
+        tokenAmount > 0 &&
+        tokenBSymbol !== tokenASymbol
     ),
     refetchOnMount: 'always' as const,
     refetchInterval: refetchInBackground

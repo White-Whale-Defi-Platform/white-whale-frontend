@@ -22,7 +22,7 @@ type Props = {}
 const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
 const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
-const NoPrice = ["ASH-BDOG", 'ASH-GDOG']
+const NoPrice = ['ASH-BDOG', 'ASH-GDOG']
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
@@ -46,14 +46,19 @@ const Pools: FC<Props> = () => {
   )
 
   const calcuateTotalLiq = (pool) => {
-    return  NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
+    return NoPrice.includes(pool?.pool_id)
+      ? 'NA'
+      : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
   }
 
   const calculateMyPostion = (pool) => {
-    const totalLiq = calcuateTotalLiq(pool);
-    const {provided, total} = pool.liquidity?.available || {}
-    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(6).toNumber()
-
+    const totalLiq = calcuateTotalLiq(pool)
+    const { provided, total } = pool.liquidity?.available || {}
+    return num(provided?.tokenAmount)
+      .times(totalLiq)
+      .div(total?.tokenAmount)
+      .dp(6)
+      .toNumber()
   }
 
   const initPools = useCallback(async () => {
@@ -102,7 +107,7 @@ const Pools: FC<Props> = () => {
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
           totalLiq: calcuateTotalLiq(pool),
-          myPosition : calculateMyPostion(pool),
+          myPosition: calculateMyPostion(pool),
           liquidity: pool.liquidity,
           poolAssets: pool.pool_assets,
           // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
@@ -114,7 +119,7 @@ const Pools: FC<Props> = () => {
             router.push(
               `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
             )
-          }
+          },
         }
       })
     )
@@ -174,7 +179,11 @@ const Pools: FC<Props> = () => {
             New Position
           </Button> */}
         </HStack>
-        <MyPoolsTable show={true} pools={myPools} isLoading={isLoading || isInitLoading} />
+        <MyPoolsTable
+          show={true}
+          pools={myPools}
+          isLoading={isLoading || isInitLoading}
+        />
         <MobilePools pools={myPools} />
       </Box>
 

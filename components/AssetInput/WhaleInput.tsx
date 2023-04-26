@@ -8,7 +8,7 @@ import {
   Image,
   Input,
   Stack,
-  Text
+  Text,
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
@@ -32,13 +32,10 @@ interface AssetInputProps {
   edgeTokenList?: string[]
   ignoreSlack?: boolean
   isBonding?: boolean
-  unbondingBalances?: {[key: string]: number}
-
+  unbondingBalances?: { [key: string]: number }
 }
 
-
 const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
-
   const formatSymbol = symbol?.replace('-', '/')
 
   // if (!tokenInfo && !symbol) return null
@@ -92,8 +89,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
       hideToken,
       edgeTokenList,
       ignoreSlack = false,
-      isBonding= false,
-      unbondingBalances = null
+      isBonding = false,
+      unbondingBalances = null,
     },
     ref
   ) => {
@@ -127,11 +124,10 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               color="brand.500"
               placeholder="0.00"
               disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 console.log({ ...token, amount: target.value })
                 onChange({ ...token, amount: target.value })
-              }
-              }
+              }}
             />
           </HStack>
         </HStack>
@@ -158,7 +154,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               <AssetSelectTrigger
                 tokenInfo={tokenInfo}
                 showIcon={image}
-                symbol={token?.tokenSymbol} />
+                symbol={token?.tokenSymbol}
+              />
               {showList && (
                 <IconButton
                   disabled={disabled}
@@ -168,11 +165,12 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
                   aria-label="go back"
                   icon={<ChevronDownIcon />}
                   style={{ margin: 'unset' }}
-                />)}
+                />
+              )}
             </AssetSelectModal>
           </HStack>
         </HStack>
-      </Stack >
+      </Stack>
     )
   }
 )

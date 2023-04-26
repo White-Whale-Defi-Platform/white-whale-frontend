@@ -1,11 +1,14 @@
-import {FC, useMemo} from 'react'
+import { FC, useMemo } from 'react'
 
 import { Box, Button, HStack, Image, Text } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
 import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
-import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
+} from 'constants/bonding_contract'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -14,7 +17,7 @@ type AssetListProps = {
   edgeTokenList: string[]
   amount?: number
   isBonding?: boolean
-  unbondingBalances?: {[key: string]: number}
+  unbondingBalances?: { [key: string]: number }
 }
 
 const AssetList: FC<AssetListProps> = ({
@@ -24,15 +27,20 @@ const AssetList: FC<AssetListProps> = ({
   amount,
   edgeTokenList = [],
   isBonding = false,
-  unbondingBalances = null
+  unbondingBalances = null,
 }) => {
   const [tokenList] = useTokenList()
 
-  const tokens = isBonding ? tokenList.tokens.filter(t=>[AMP_WHALE_TOKEN_SYMBOL,B_WHALE_TOKEN_SYMBOL].includes(t.symbol)):
-    tokenList.tokens
+  const tokens = isBonding
+    ? tokenList.tokens.filter((t) =>
+        [AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL].includes(t.symbol)
+      )
+    : tokenList.tokens
 
-  const [tokenBalance = []] = unbondingBalances !== null ? [tokens?.map(({ symbol }) => unbondingBalances[symbol])]:
-    useMultipleTokenBalance(tokens?.map(({ symbol }) => symbol))
+  const [tokenBalance = []] =
+    unbondingBalances !== null
+      ? [tokens?.map(({ symbol }) => unbondingBalances[symbol])]
+      : useMultipleTokenBalance(tokens?.map(({ symbol }) => symbol))
 
   const tokensWithBalance = useMemo(() => {
     if (tokenBalance.length == 0) return tokens

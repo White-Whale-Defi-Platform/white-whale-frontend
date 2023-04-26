@@ -14,7 +14,7 @@ import useSwap from './hooks/useSwap'
 import { tokenSwapAtom } from './swapAtoms'
 import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
-import {TokenItemState} from "../../../types";
+import { TokenItemState } from 'types'
 
 type SwapProps = {
   /* will be used if provided on first render instead of internal state */

@@ -1,13 +1,7 @@
 import { useEffect, useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  HStack,
-  IconButton,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
@@ -19,7 +13,7 @@ import DepositForm from './ManagePoistion/DepositForm'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
-  const { vaults,  refetch: vaultsRefetch } = useVault()
+  const { vaults, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
   const chains: Array<any> = useChains()
   const { chainId, key, address, status } = useRecoilValue(walletState)

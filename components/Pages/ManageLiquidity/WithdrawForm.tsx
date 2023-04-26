@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import {
-  Button, Text, VStack
-} from '@chakra-ui/react'
+import { Button, Text, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
 import useWithdraw from './hooks/useWithdraw'
 import { TokenItemState } from './lpAtoms'
 
@@ -25,7 +23,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
       swap_address: swapAddress = null,
       lp_token: contract = null,
       liquidity = {},
-    } = {}
+    } = {},
   ] = useQueryPoolLiquidity({ poolId })
 
   const [token, setToken] = useState<TokenItemState>(tokenA)
@@ -59,7 +57,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
       tx.reset()
 
-    console.log({value})
+    console.log({ value })
 
     setToken(value)
   }

@@ -6,7 +6,7 @@ import { useChains } from 'hooks/useChainInfo'
 import ChainItem from './ChainItem'
 
 function ChainList({ onChange, onClose, currentWalletState }) {
-  const chains = useChains();
+  const chains = useChains()
 
   // if (currentWalletState.activeWallet === 'station') {
   //   return chains.filter(
