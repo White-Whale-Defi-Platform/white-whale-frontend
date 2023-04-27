@@ -23,13 +23,13 @@ const NewPosition = () => {
   const { chainId, network, address, status } = useRecoilValue(walletState)
   const { simulated, tx } = useProvideLP({ reverse })
   const router: NextRouter = useRouter()
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const { data: poolList } = usePoolsListQuery()
 
   const chainIdParam = router.query.chainId as string
   const { from, to } = router.query
-  const currenChain = chains.find((row) => row.chainId === chainId)
-  const currentChainId = currenChain?.label.toLowerCase()
+  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currentChain?.label.toLowerCase()
 
   const tokenList = useMemo(() => {
     let listObj = {}

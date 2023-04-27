@@ -1,5 +1,5 @@
 // eslint-disable-next-line sort-imports
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 
 import { Box, Button, Divider } from '@chakra-ui/react'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
@@ -18,13 +18,14 @@ import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { validChains } from 'util/chain'
 import { getPathName } from 'util/route'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
 
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
 
@@ -37,7 +38,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { connectTerraAndCloseModal, filterForStation } = useTerraStation(
     () => {}
   )
-  const { availableConnections, availableInstallations } = useWallet()
+  const { availableConnections } = useWallet()
 
   useEffect(() => {
     // onDisconnect()
@@ -45,7 +46,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (router.pathname === '/') return
 
     const defaultChainId =
-      currentWalletState.network === 'mainnet' ? 'phoenix-1' : 'pisco-1'
+      currentWalletState.network === 'mainnet' ? 'migaloo-1' : 'narwhal-1'
 
     if (
       validChains[currentWalletState.network][chainIdParam] !==
@@ -106,8 +107,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     currentWalletState.address,
   ])
 
-  const onChainChange = (chain) => {
+  const onChainChange = async (chain) => {
     // onDisconnect()
+    if (!BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId))
+      await router.push('/swap')
     setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
   }
 
@@ -131,7 +134,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     const sourceChain = chains.find(
       (row) => row.chainId.toLowerCase() === currentWalletState.chainId
     )
-    if (sourceChain &&  !router.pathname.includes('/404')) {
+    if (sourceChain) {
       router.push(getPathName(router, sourceChain.label))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

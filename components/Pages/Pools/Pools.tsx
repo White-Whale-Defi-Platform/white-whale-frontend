@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice, num } from 'libs/num'
@@ -22,7 +22,7 @@ type Props = {}
 const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
 const subqueryNetorks = ['injective']
 const COMING_SOON = 'coming soon'
-const NoPrice = ["ASH-BDOG", 'ASH-GDOG']
+const NoPrice = ['ASH-BDOG', 'ASH-GDOG']
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
@@ -46,14 +46,19 @@ const Pools: FC<Props> = () => {
   )
 
   const calcuateTotalLiq = (pool) => {
-   return  NoPrice.includes(pool?.pool_id)? 'NA' : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
+    return NoPrice.includes(pool?.pool_id)
+      ? 'NA'
+      : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
   }
 
   const calculateMyPostion = (pool) => {
-    const totalLiq = calcuateTotalLiq(pool);
-    const {provided, total} = pool.liquidity?.available || {}
-    return num(provided?.tokenAmount).times(totalLiq).div(total?.tokenAmount).dp(6).toNumber()
-
+    const totalLiq = calcuateTotalLiq(pool)
+    const { provided, total } = pool.liquidity?.available || {}
+    return num(provided?.tokenAmount)
+      .times(totalLiq)
+      .div(total?.tokenAmount)
+      .dp(6)
+      .toNumber()
   }
 
   const initPools = useCallback(async () => {
@@ -76,7 +81,7 @@ const Pools: FC<Props> = () => {
     })
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
-        const displayAssetOrder = pool.displayName.split('-')
+        const displayAssetOrder = pool.displayName?.split('-')
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
@@ -84,7 +89,7 @@ const Pools: FC<Props> = () => {
         const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
         const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
         let price = 0
-        if (displayAssetOrder[0] === pool.assetOrder[0]) {
+        if (displayAssetOrder?.[0] === pool.assetOrder?.[0]) {
           price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
         } else {
           price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
@@ -101,8 +106,8 @@ const Pools: FC<Props> = () => {
           volume24hr: showCommingSoon
             ? COMING_SOON
             : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: calcuateTotalLiq(pool), 
-          myPosition : calculateMyPostion(pool),
+          totalLiq: calcuateTotalLiq(pool),
+          myPosition: calculateMyPostion(pool),
           liquidity: pool.liquidity,
           poolAssets: pool.pool_assets,
           // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
@@ -114,7 +119,7 @@ const Pools: FC<Props> = () => {
             router.push(
               `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
             )
-          }
+          },
         }
       })
     )
@@ -155,8 +160,6 @@ const Pools: FC<Props> = () => {
   const allPoolsForShown =
     allPools && allPools.filter((item) => !myPoolsId.includes(item.pool))
 
-  console.log({myPools})
-
   return (
     <VStack
       width={{ base: '100%', md: 'auto' }}
@@ -176,7 +179,11 @@ const Pools: FC<Props> = () => {
             New Position
           </Button> */}
         </HStack>
-        <MyPoolsTable pools={myPools} isLoading={isLoading || isInitLoading} />
+        <MyPoolsTable
+          show={true}
+          pools={myPools}
+          isLoading={isLoading || isInitLoading}
+        />
         <MobilePools pools={myPools} />
       </Box>
 

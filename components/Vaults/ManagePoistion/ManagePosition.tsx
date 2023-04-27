@@ -25,8 +25,8 @@ import WithdrawForm from './WithdrawForm'
 
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
-  const { vaults, isLoading, refetch: vaultsRefetch } = useVault()
-  const chains = useChains()
+  const { vaults, refetch: vaultsRefetch } = useVault()
+  const chains: Array<any> = useChains()
   const params = new URLSearchParams(location.search)
   const { chainId, key, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNO'

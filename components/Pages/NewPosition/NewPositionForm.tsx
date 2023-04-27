@@ -2,25 +2,15 @@
 import { FC, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { InfoOutlineIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Button,
-  HStack,
-  Spinner,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
-import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
-import { TokenItemState } from '../ManageLiquidity/lpAtoms'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { TokenItemState } from 'types'
 
 type Props = {
   connected: WalletStatusType
@@ -172,6 +162,7 @@ const NewPositionForm: FC<Props> = ({
               // edgeTokenList={tokenAList}
               showList={false}
               hideToken={tokenB?.tokenSymbol}
+              hideDollarValue={true}
               // minMax={false}
               disabled={isInputDisabled}
               balance={tokenABalance}
@@ -195,9 +186,9 @@ const NewPositionForm: FC<Props> = ({
           {tokanBloading ? (
             <Spinner color="white" size="xs" />
           ) : (
-              <Text fontSize="14" fontWeight="700">
-                {tokenBBalance}
-              </Text>
+            <Text fontSize="14" fontWeight="700">
+              {tokenBBalance}
+            </Text>
           )}
         </HStack>
         <Controller
@@ -212,6 +203,7 @@ const NewPositionForm: FC<Props> = ({
               // minMax={false}
               disabled={isInputDisabled}
               balance={tokenBBalance}
+              hideDollarValue={true}
               {...field}
               token={tokenB}
               onChange={(value, isTokenChange) => {
@@ -234,7 +226,9 @@ const NewPositionForm: FC<Props> = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || simulated == null || !isConnected}
+        disabled={
+          tx.txStep != TxStep.Ready || simulated == null || !isConnected
+        }
       >
         {buttonLabel}
       </Button>

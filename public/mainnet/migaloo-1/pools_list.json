@@ -1,0 +1,68 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "whale-network",
+    "chain_id": "migaloo-1",
+    "token_address": "",
+    "symbol": "WHALE",
+    "name": "Whale",
+    "decimals": 6,
+    "logoURI": "/logos/migaloo.png",
+    "tags": ["native"],
+    "native": true,
+    "denom": "uwhale"
+  },
+  "pools": [
+    {
+      "pool_id": "WHALE-axlUSDC",
+      "lpOrder": ["WHALE", "axlUSDC"],
+      "assetOrder": ["WHALE", "axlUSDC"],
+      "displayName": "WHALE-axlUSDC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/axlUSDC.png",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uwhale"
+        },
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+          "symbol": "axlUSDC",
+          "name": "axlUSDC",
+          "decimals": 6,
+          "logoURI": "/logos/axlUSDC.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
+        }
+      ],
+      "lp_token": "terra1necjy4mmes4fvsvjvne5kkl3zhszg7s3s3jayfgzudsshnpv69kss5m2k2",
+      "swap_address": "terra1qdu4g5zxxtmwsd95v8vjslq5874nkcull7ejycm0gy2v7p5qc67qenkf8t",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}

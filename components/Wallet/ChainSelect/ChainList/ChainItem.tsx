@@ -4,8 +4,21 @@ import { useQueryClient } from 'react-query'
 
 import { HStack, Image, ListIcon, ListItem, Text } from '@chakra-ui/react'
 
-function ChainItem({ chain, index, onChange, onClose, chainList, active }) {
+function ChainItem({
+  chain,
+  index,
+  onChange,
+  onClose,
+  chainList,
+  active,
+  walletState,
+}) {
   const queryClient = useQueryClient()
+  if (
+    walletState?.activeWallet == 'station' &&
+    (chain?.chainId == 'injective-1' || chain?.chainId == 'comdex-1')
+  )
+    return null
   return (
     <ListItem
       justifyContent="space-between"

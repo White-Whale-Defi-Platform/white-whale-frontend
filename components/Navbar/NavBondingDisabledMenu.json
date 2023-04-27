@@ -1,0 +1,35 @@
+[
+  {
+    "label": "Trade",
+    "isExternal" : false,
+    "children": [
+      {
+        "label": "Swap",
+        "link": "/swap"
+      },
+      {
+        "label": "Pools",
+        "link": "/pools"
+      }
+    ]
+  },
+  {
+    "label": "Flashloan",
+    "isExternal" : false,
+    "children": [
+      {
+        "label": "Flashloan",
+        "link": "/flashloan"
+      },
+      {
+        "label": "Vaults",
+        "link": "/vaults"
+      }
+    ]
+  },
+  {
+    "label": "Bridge",
+    "isExternal" : true,
+    "link": "https://tfm.com/bridge"
+  }
+]

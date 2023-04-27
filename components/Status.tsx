@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react'
 import { BsCircleFill } from 'react-icons/bs'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 
-import { Box, HStack, Icon, Text } from '@chakra-ui/react'
-import { useChainInfo, useChains } from 'hooks/useChainInfo'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { HStack, Icon, Text } from '@chakra-ui/react'
+import { useChains } from 'hooks/useChainInfo'
+import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 const Status = () => {
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const { chainId } = useRecoilValue(walletState)
 
   const url = useMemo(() => {

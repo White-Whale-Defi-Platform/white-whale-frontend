@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
+import useDebounceValue from 'hooks/useDebounceValue'
 
-import { Wallet } from '../../../../util/wallet-adapters'
+import { Wallet } from 'util/wallet-adapters'
 
 type QuerySimulate = {
   client: Wallet
@@ -35,15 +36,17 @@ const simulate = ({ client, msg, routerAddress }): Promise<any> => {
 }
 
 const useSimulate = ({ client, msg, routerAddress }) => {
+  const debounseMsg = useDebounceValue(msg, 300)
+
   const { data, isLoading, error } = useQuery<any>(
-    ['simulation', msg],
+    ['simulation', debounseMsg],
     () => {
       if (msg == null) return
 
-      return simulate({ client, msg, routerAddress })
+      return simulate({ client, msg: debounseMsg, routerAddress })
     },
     {
-      enabled: !!client && !!msg,
+      enabled: !!client && !!msg && !!debounseMsg,
       // onError: (err) => {
       //     console.log({err : (err as any)?.code})
       // }

@@ -2,14 +2,14 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
-import { protectAgainstNaN, usePersistance } from 'junoblocks'
+import { protectAgainstNaN } from 'junoblocks'
 import { useRecoilValue } from 'recoil'
 
-import { walletState } from '../state/atoms/walletAtoms'
+import { walletState } from 'state/atoms/walletAtoms'
 import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-} from '../util/constants'
+} from 'util/constants'
 import { calcPoolTokenDollarValue } from '../util/conversion'
 import { queryMyLiquidity } from './queryMyLiquidity'
 import {
@@ -114,7 +114,7 @@ export const useQueryMultiplePoolsLiquidity = ({
     const tokenADollarPrice = await getTokenDollarValue({
       tokenA,
       tokenAmountInDenom: 1,
-      tokenB
+      tokenB,
     })
 
     function getPoolTokensValue({ tokenAmountInMicroDenom }) {

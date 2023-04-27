@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query'
 
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
-import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
+import { TokenInfo } from 'queries/usePoolsListQuery'
+import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 
 type UseTokenPairsPricesArgs = {
   tokenASymbol: TokenInfo['symbol']

@@ -1,19 +1,17 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
-
-import useConnectKeplr from 'hooks/useConnectKeplr'
 import { useRecoilValue } from 'recoil'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
-import { CW20 } from '../services/cw20'
-import { walletState, WalletStatusType } from '../state/atoms/walletAtoms'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
+import { CW20 } from 'services/cw20'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
 import { Wallet } from '../util/wallet-adapters'
-import useConnectLeap from './useConnectLeap'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 async function fetchTokenBalance({
   client,
@@ -77,8 +75,9 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { address, network, client, activeWallet, status } =
-    useRecoilValue(walletState)
+  const { address, network, client, chainId } = useRecoilValue(walletState)
+  const connectedWallet = useConnectedWallet()
+  const selectedAddr = connectedWallet?.addresses[chainId] || address
   // TODO: Adding this fixes the issue where refresh means no client
   // const { connectKeplr } = useConnectKeplr()
   // const { connectLeap } = useConnectLeap()
@@ -96,7 +95,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
     isLoading,
     refetch,
   } = useQuery(
-    ['tokenBalance', tokenSymbol, address, network],
+    ['tokenBalance', tokenSymbol, selectedAddr, network],
     async ({ queryKey: [, symbol] }) => {
       // if (tokenSymbol && client && (tokenInfo || ibcAssetInfo)) {
       return fetchTokenBalance({

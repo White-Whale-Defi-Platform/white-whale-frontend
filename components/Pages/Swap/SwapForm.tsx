@@ -8,24 +8,21 @@ import {
   Hide,
   HStack,
   IconButton,
-  Show,
-  Spinner,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { Tooltip } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import DoubleArrowsIcon from 'components/icons/DoubleArrowsIcon'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
-import { fromChainAmount } from 'libs/num'
-import { num } from 'libs/num'
+import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
 import { Simulated } from './hooks/useSimulate'
-import { TokenItemState } from './swapAtoms'
+import { TokenItemState } from 'types'
 
 type Props = {
   connected: WalletStatusType
@@ -80,14 +77,8 @@ const SwapForm: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetForm, tx?.txStep])
 
-  // const [[_, tokenBBalance] = [], isLoading] = useMultipleTokenBalance([tokenA?.tokenSymbol, tokenB?.tokenSymbol])
-
-  const { balance: tokenABalance, isLoading: tokanAloading } = useTokenBalance(
-    tokenA?.tokenSymbol
-  )
-  const { balance: tokenBBalance, isLoading: tokanBloading } = useTokenBalance(
-    tokenB?.tokenSymbol
-  )
+  const { balance: tokenABalance } = useTokenBalance(tokenA?.tokenSymbol)
+  const { balance: tokenBBalance } = useTokenBalance(tokenB?.tokenSymbol)
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
@@ -107,9 +98,6 @@ const SwapForm: FC<Props> = ({
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
   const onReverse = () => {
-    // setValue("tokenA", tokenB?.amount === 0 ? {...tokenB, amount : parseFloat(fromChainAmount(simulated?.amount))} : tokenB, { shouldValidate: true })
-    // setValue("tokenB", tokenA, { shouldValidate: true })
-
     const A = {
       ...tokenB,
       amount:
@@ -213,7 +201,7 @@ const SwapForm: FC<Props> = ({
       borderRadius="30px"
       alignItems="flex-start"
       minH={400}
-      maxWidth={{ base: 'full', md: 600 }}
+      maxWidth={{ base: 'full', md: 650 }}
       gap={4}
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
@@ -222,24 +210,6 @@ const SwapForm: FC<Props> = ({
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={2}>
         <HStack justifyContent="space-between" width="full">
-          <HStack>
-            <Text
-              marginLeft={4}
-              color="brand.50"
-              fontSize="14"
-              fontWeight="500"
-            >
-              Balance:{' '}
-            </Text>
-            {tokanAloading ? (
-              <Spinner color="white" size="xs" />
-            ) : (
-              <Text fontSize="14" fontWeight="700">
-                {tokenABalance?.toFixed(6)}
-              </Text>
-            )}
-          </HStack>
-
           <HStack visibility={{ base: 'visible', md: 'hidden' }}>
             <Button
               variant="outline"
@@ -284,6 +254,7 @@ const SwapForm: FC<Props> = ({
               {...field}
               token={tokenA}
               balance={tokenABalance}
+              minMax={false}
               // onInputFocus={() => setIsReverse(true)}
               disabled={isInputDisabled}
               onChange={(value, isTokenChange) => {
@@ -315,23 +286,6 @@ const SwapForm: FC<Props> = ({
         style={{ margin: 'unset' }}
       >
         <HStack justifyContent="space-between" width="full">
-          <HStack>
-            <Text
-              marginLeft={4}
-              color="brand.50"
-              fontSize="14"
-              fontWeight="500"
-            >
-              Balance:{' '}
-            </Text>
-            {tokanBloading ? (
-              <Spinner color="white" size="xs" />
-            ) : (
-              <Text fontSize="14" fontWeight="700">
-                {tokenBBalance?.toFixed(6)}
-              </Text>
-            )}
-          </HStack>
           <HStack>
             <Hide above="md">
               <Button
@@ -376,9 +330,11 @@ const SwapForm: FC<Props> = ({
               hideToken={tokenA?.tokenSymbol}
               {...field}
               token={tokenB}
+              hideMax={true}
               minMax={false}
               balance={tokenBBalance}
               disabled={isInputDisabled}
+              showBalanceSlider={false}
               // onInputFocus={() => setIsReverse(true)}
               onChange={(value, isTokenChange) => {
                 if (tokenB?.tokenSymbol && !isTokenChange) setReverse(true)
@@ -400,7 +356,9 @@ const SwapForm: FC<Props> = ({
           tx?.txStep == TxStep.Broadcasting ||
           state?.isLoading
         }
-        disabled={tx?.txStep != TxStep.Ready || simulated == null || !isConnected}
+        disabled={
+          tx?.txStep != TxStep.Ready || simulated == null || !isConnected
+        }
       >
         {buttonLabel}
       </Button>
@@ -434,18 +392,6 @@ const SwapForm: FC<Props> = ({
                 {/* {rate} {tokenA?.tokenSymbol} per {tokenB?.tokenSymbol} */}
               </Text>
             </HStack>
-
-            {/* <HStack justifyContent="space-between" width="full" style={{ marginTop: 'unset' }}>
-                        <HStack >
-                            <Text color="brand.500" fontSize={12}> Fee</Text>
-                            <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                <Box cursor="pointer" color="brand.50">
-                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
-                                </Box>
-                            </Tooltip>
-                        </HStack>
-                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol} </Text>
-                    </HStack> */}
 
             {minReceive && (
               <HStack
@@ -525,9 +471,6 @@ const SwapForm: FC<Props> = ({
           </HStack>
         )}
       </VStack>
-      {/* {
-                (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
-            } */}
     </VStack>
   )
 }

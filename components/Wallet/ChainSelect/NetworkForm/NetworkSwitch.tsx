@@ -17,9 +17,17 @@ function NetworkSwitch() {
       'tokenBalance',
       '@pools-list',
     ])
+    console.log('network change triggered' + target.checked)
+    const updatedChainId =
+      currentWalletState.chainId === 'migaloo-1' && target.checked
+        ? 'narwhal-1'
+        : currentWalletState.chainId === 'narwhal-1' && !target.checked
+        ? 'migaloo-1'
+        : currentWalletState.chainId
     setWalletState({
       ...currentWalletState,
       network: target.checked ? 'testnet' : 'mainnet',
+      chainId: updatedChainId,
     })
     disconnect()
   }

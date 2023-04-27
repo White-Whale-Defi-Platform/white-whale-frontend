@@ -4,8 +4,8 @@ import { useMutation } from 'react-query'
 import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useRecoilState } from 'recoil'
 
-import { ibcWalletState, WalletStatusType } from '../state/atoms/walletAtoms'
-import { GAS_PRICE } from '../util/constants'
+import { ibcWalletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { GAS_PRICE } from 'util/constants'
 import { useIBCAssetInfo } from './useIBCAssetInfo'
 
 /* shares very similar logic with `useConnectWallet` and is a subject to refactor */
@@ -62,6 +62,9 @@ export const useConnectIBCWallet = (
 
       /* successfully update the wallet state */
       setWalletState({
+        activeWallet: '',
+        chainId: '',
+        network: undefined,
         tokenSymbol,
         address,
         client: wasmChainClient,
@@ -70,6 +73,9 @@ export const useConnectIBCWallet = (
     } catch (e) {
       /* set the error state */
       setWalletState({
+        activeWallet: '',
+        chainId: '',
+        network: undefined,
         tokenSymbol: null,
         address: '',
         client: null,

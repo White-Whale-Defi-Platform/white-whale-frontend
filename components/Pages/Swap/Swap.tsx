@@ -11,9 +11,10 @@ import { walletState } from 'state/atoms/walletAtoms'
 
 import defaultTokens from './defaultTokens.json'
 import useSwap from './hooks/useSwap'
-import { TokenItemState, tokenSwapAtom } from './swapAtoms'
+import { tokenSwapAtom } from './swapAtoms'
 import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
+import { TokenItemState } from 'types'
 
 type SwapProps = {
   /* will be used if provided on first render instead of internal state */
@@ -27,7 +28,7 @@ const Swap: FC<SwapProps> = ({}) => {
   const [resetForm, setResetForm] = useState<boolean>(false)
 
   const { chainId, address, network, status } = useRecoilValue(walletState)
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
   const router = useRouter()
@@ -148,7 +149,7 @@ const Swap: FC<SwapProps> = ({}) => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '600px' }}
+      width={{ base: '100%', md: '650px' }}
       alignItems="center"
       padding={5}
       margin="0px auto"

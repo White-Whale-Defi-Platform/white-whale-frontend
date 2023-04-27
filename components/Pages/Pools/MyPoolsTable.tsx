@@ -8,6 +8,7 @@ import {
   Tbody,
   Td,
   Text,
+  Tfoot,
   Th,
   Thead,
   Tr,
@@ -22,9 +23,7 @@ import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
-import MyPosition from './components/MyPosition'
 import PoolName from './components/PoolName'
-import TotalLiq from './components/TotalLiq'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
@@ -51,20 +50,6 @@ const columns = [
     cell: (info) => {
       return <Text align="right">{info.getValue()}</Text>
     },
-  }),
-  columnHelper.accessor('myPosition', {
-    header: () => (
-      <Text align="right" color="brand.50">
-        {`My Position`}
-      </Text>
-    ),
-    cell: (info) => 
-    <MyPosition 
-      myPositiionAmount={info.row.original?.myPosition}
-      pair={info.row.original?.poolId}
-      providedAssets={info.row.original?.liquidity?.reserves?.provided}
-    />
-    // cell: (info) => <Text align="right">${info.row.original?.myPosition}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
@@ -111,12 +96,17 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => <TotalLiq 
-      poolId={info.row.original?.poolId}
-      liquidity={info.row.original?.liquidity}
-      totalLiq={info.getValue()}
-      poolAssets={info.row.original?.poolAssets}
-    />
+    cell: (info) => (
+      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+    ),
+  }),
+  columnHelper.accessor('myPosition', {
+    header: () => (
+      <Text align="right" color="brand.50">
+        {`My Position`}
+      </Text>
+    ),
+    cell: (info) => <Text align="right">${info.getValue()}</Text>,
   }),
   columnHelper.accessor('cta', {
     header: '',
@@ -131,12 +121,16 @@ const columns = [
 ]
 
 const PoolsTable = ({
+  show,
   pools,
   isLoading,
 }: {
+  show: boolean
   pools: Pool[]
   isLoading: boolean
 }) => {
+  if (!show) return null
+
   const datProvidedByCoinhall = useIgnoreCoinhall()
 
   const table = useReactTable({
@@ -179,9 +173,10 @@ const PoolsTable = ({
 
   return (
     <Flex
-      padding={10}
+      px="30px"
+      // padding={10}
       // width={['full', '1170px']}
-      background="#1C1C1C"
+      background="#212121"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}
@@ -190,10 +185,29 @@ const PoolsTable = ({
       <TableContainer width="full" overflowX="hidden">
         <Table variant="unstyled">
           <Thead>
+            <Tr>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th
+                bg="rgba(255, 255, 255, 0.05)"
+                p="2px"
+                borderTopRadius="10px"
+              ></Th>
+              <Th isNumeric></Th>
+            </Tr>
             {table.getHeaderGroups().map((headerGroup, index) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <Th key={header.id} color="brand.50">
+                  <Th
+                    key={header.id}
+                    color="brand.50"
+                    bg={
+                      header.id === 'myPosition' && 'rgba(255, 255, 255, 0.05)'
+                    }
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -207,18 +221,64 @@ const PoolsTable = ({
           </Thead>
           <Tbody>
             {table.getRowModel().rows.map((row, index) => (
-              <Tr key={row.id}>
+              <Tr
+                key={row.id}
+                borderBottom={
+                  index !== table.getRowModel().rows.length - 1 &&
+                  '1px solid rgba(255, 255, 255, 0.1)'
+                }
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <Td key={cell.id}>
+                  <Td
+                    key={cell.id}
+                    bg={
+                      cell?.column?.id === 'myPosition' &&
+                      'rgba(255, 255, 255, 0.05)'
+                    }
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 ))}
               </Tr>
             ))}
           </Tbody>
+          <Tfoot>
+            <Tr>
+              <Td></Td>
+              <Td></Td>
+              <Td></Td>
+              <Td></Td>
+              <Td></Td>
+              <Td
+                bg="rgba(255, 255, 255, 0.05)"
+                p="2px"
+                borderBottomRadius="10px"
+              ></Td>
+              <Td p="unset">
+                {datProvidedByCoinhall && (
+                  <Flex
+                    justifyContent="center"
+                    alignItems="center"
+                    gap="5px"
+                    pb="8px"
+                  >
+                    <Text
+                      color="white"
+                      fontSize="12px"
+                    >{`data provided by`}</Text>
+                    <Image
+                      src="/logos/coinhall.png"
+                      alt="coinhall"
+                      height="14px"
+                    />
+                  </Flex>
+                )}
+              </Td>
+            </Tr>
+          </Tfoot>
         </Table>
       </TableContainer>
-      {datProvidedByCoinhall && (
+      {/* {datProvidedByCoinhall && (
         <Flex justifyContent="end" alignItems="center" mt="16px">
           <Text
             color="white"
@@ -227,7 +287,7 @@ const PoolsTable = ({
           >{`data provided by`}</Text>
           <Image src="/logos/coinhall.png" alt="coinhall" height="14px" />
         </Flex>
-      )}
+      )} */}
     </Flex>
   )
 }

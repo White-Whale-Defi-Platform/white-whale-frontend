@@ -5,7 +5,6 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { fromChainAmount } from 'libs/num'
 
 import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg'
@@ -75,10 +74,7 @@ const useProvideLP = ({ reverse = false }) => {
     const tokenB = num(tokenBReserve)
       .div(10 ** tokenInfoB?.decimals)
       .toNumber()
-    const ratio =
-      reverse 
-        ? num(tokenA).div(tokenB)
-        : num(tokenB).div(tokenA)
+    const ratio = reverse ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA)
     const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
 
     return sim

@@ -1,4 +1,4 @@
-import { Msg } from '@terra-money/terra.js'
+import { Msg } from '@terra-money/feather.js'
 import { PairResponse, Asset, Pair } from './terraswap'
 import { Network } from './network'
 
@@ -94,3 +94,9 @@ export type Data = {
   mainnet: DataNetwork
   testnet: DataNetwork
 } & { [key: string]: DataNetwork }
+
+export type TokenItemState = {
+  tokenSymbol: string
+  amount: number
+  decimals: number
+}

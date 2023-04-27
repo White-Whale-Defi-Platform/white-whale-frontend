@@ -84,6 +84,21 @@ export const useTransaction = ({
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
 
+  const { data: txInfo } = useQuery(
+    ['txInfo', txHash],
+    () => {
+      if (txHash == null) {
+        return
+      }
+
+      return client.getTx(txHash)
+    },
+    {
+      enabled: txHash != null,
+      retry: true,
+    }
+  )
+
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', amount, debouncedMsgs, error],
     async () => {
@@ -222,21 +237,6 @@ export const useTransaction = ({
     }
   )
 
-  const { data: txInfo } = useQuery(
-    ['txInfo', txHash],
-    () => {
-      if (txHash == null) {
-        return
-      }
-
-      return client.getTx(txHash)
-    },
-    {
-      enabled: txHash != null,
-      retry: true,
-    }
-  )
-
   const reset = () => {
     setError(null)
     setTxHash(undefined)
@@ -288,7 +288,7 @@ export const useTransaction = ({
       error,
       reset,
     }
-  }, [txStep, txInfo, txHash, error, reset, fee])
+  }, [txStep, txInfo, txHash, error, reset, fee, buttonLabel, submit])
 }
 
 export default useTransaction

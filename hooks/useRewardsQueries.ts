@@ -67,7 +67,7 @@ export const usePendingRewards = ({ pool }: UsePendingRewardsArgs) => {
               tokenAmount,
               tokenInfo,
               dollarValue: await getTokenDollarValue({
-                tokenInfo,
+                tokenA: tokenInfo,
                 tokenAmountInDenom: tokenAmount,
               }),
             }

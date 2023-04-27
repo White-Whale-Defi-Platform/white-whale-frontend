@@ -1,0 +1,43 @@
+{
+  "factory": "migaloo1466nf3zuxpya8q9emxukd7vftaf6h4psr0a07srl5zw74zh84yjqzmqjxp",
+  "vaults": [
+    {
+      "pool_id": "WHALE",
+      "vault_assets": {
+        "id": "whale",
+        "chain_id": "narwhal-1",
+        "token_address": "uwhale",
+        "symbol": "WHALE",
+        "name": "WHALE",
+        "decimals": 6,
+        "logoURI": "/img/logo.svg",
+        "tags": ["native"],
+        "native": true,
+        "denom": "uwhale"
+      },
+      "lp_token": "migaloo16t6tucgcqdmegye6c9ltlkr237z8yfndmasrhvh7ucrfuqaev6xqy3czcl",
+      "vault_address": "migaloo10sfpr8ykh9xn93u8xec4ed3990nmvh86e0vaegkauqhlkxspysyqeegrms",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "willyz",
+      "vault_assets": {
+        "id": "willy",
+        "chain_id": "narwhal-1",
+        "token_address": "migaloo1j08452mqwadp8xu25kn9rleyl2gufgfjnv0sn8dvynynakkjukcq5u780c",
+        "symbol": "willyz",
+        "name": "willyz",
+        "decimals": 6,
+        "logoURI": "/logos/atom.png",
+        "tags": [],
+        "native": false,
+        "denom": "migaloo1j08452mqwadp8xu25kn9rleyl2gufgfjnv0sn8dvynynakkjukcq5u780c"
+      },
+      "lp_token": "migaloo172v738ut05le2272gm6akv9hw2jqfwfkm7ej7ndy53skxq757s5s8ekcgr",
+      "vault_address": "migaloo1ced9v4plkf25q8c6k9gz0guq6l4xyjujpjlvxfg8lpaqywkmamasq52qrh",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

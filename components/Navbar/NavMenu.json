@@ -1,7 +1,13 @@
 [
   {
+    "label": "Dashboard",
+    "isExternal" : false,
+    "link": "/dashboard"
+  },
+  {
     "label": "Trade",
-    "childs": [
+    "isExternal" : false,
+    "children": [
       {
         "label": "Swap",
         "link": "/swap"
@@ -14,7 +20,8 @@
   },
   {
     "label": "Flashloan",
-    "childs": [
+    "isExternal" : false,
+    "children": [
       {
         "label": "Flashloan",
         "link": "/flashloan"
@@ -26,7 +33,8 @@
     ]
   },
   {
-    "label":  "Bridge",
+    "label": "Bridge",
+    "isExternal" : true,
     "link": "https://tfm.com/bridge"
   }
 ]

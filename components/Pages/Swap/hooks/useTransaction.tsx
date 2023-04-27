@@ -99,15 +99,7 @@ export const useTransaction = ({
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } 
-        else if ( /Operation disabled, swap/i.test(error.toString())) {
-          console.error(error)
-          setTxStep(TxStep.Idle)
-          setError('Pair is disabled for swap')
-          setButtonLabel('Pair is disabled for swap')
-          throw new Error('Pair is disabled for swap')
-        } 
-        else if (/Max spread assertion/i.test(error.toString())) {
+        } else if (/Max spread assertion/i.test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -133,7 +125,6 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!client &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -206,7 +197,7 @@ export const useTransaction = ({
           description: (
             <Finder
               txHash={data.transactionHash || data?.txHash}
-              chainId={client?.client?.chainId}
+              chainId={client?.client?.chainId || client?.chainID}
             >
               {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
@@ -227,7 +218,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-      return client.client.getTx(txHash)
+      return client.getTx(txHash)
     },
     {
       enabled: txHash != null,

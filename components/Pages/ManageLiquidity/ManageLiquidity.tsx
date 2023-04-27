@@ -18,7 +18,7 @@ import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { walletState } from 'state/atoms/walletAtoms'
 
 import useProvideLP from '../NewPosition/hooks/useProvideLP'
 import DepositForm from './DepositForm'
@@ -27,7 +27,7 @@ import WithdrawForm from './WithdrawForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
-  const chains = useChains()
+  const chains: Array<any> = useChains()
   const { address, chainId, status } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
@@ -37,17 +37,17 @@ const ManageLiquidity: FC = () => {
 
   const poolId = router.query.poolId as string
   const chainIdParam = router.query.chainId as string
-  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChain = chains.find((row) => row.chainId === chainId)
 
   useEffect(() => {
-    if (currenChain) {
+    if (currentChain) {
       if (poolId) {
         const pools = poolList?.pools
         if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
-          router.push(`/${currenChain.label.toLowerCase()}/pools`)
+          router.push(`/${currentChain.label.toLowerCase()}/pools`)
         } else {
           router.push(
-            `/${currenChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
+            `/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
           )
         }
       }
@@ -107,7 +107,7 @@ const ManageLiquidity: FC = () => {
       width={{ base: '100%', md: '700px' }}
       alignItems="center"
       padding={5}
-      // margin="auto"
+      margin="auto"
     >
       <HStack
         justifyContent="space-between"

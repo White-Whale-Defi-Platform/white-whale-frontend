@@ -40,7 +40,7 @@ export async function tokenToTokenPriceQueryWithPools({
   const convertedTokenAmount = convertDenomToMicroDenom(amount, tokenA.decimals)
 
   const { streamlinePoolAB, streamlinePoolBA, baseTokenAPool, baseTokenBPool } =
-    matchingPools
+    matchingPools || {}
 
   if (id) {
     const [price] = await tokenDollarValueQuery([id])

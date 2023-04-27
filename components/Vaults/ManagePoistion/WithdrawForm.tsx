@@ -1,17 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import {
-  Button,
-  HStack,
-  Spinner,
-  Text,
-  useToast,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { fromChainAmount } from 'libs/num'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 import { TxStep } from '../hooks/useTransaction'
@@ -30,12 +23,10 @@ type Props = {
 
 const WithdrawForm = ({
   connected,
-  isLoading,
   balance,
   defaultToken,
   vaultAddress,
   lpToken,
-  assetBlance,
   refetch,
 }: Props) => {
   const [token, setToken] = useState({
@@ -60,7 +51,7 @@ const WithdrawForm = ({
         isClosable: true,
       })
     },
-    [token]
+    [refetch, chainId, toast]
   )
 
   const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
@@ -83,7 +74,7 @@ const WithdrawForm = ({
       setToken({ ...token, amount: 0 })
       tx?.reset()
     }
-  }, [tx.txStep])
+  }, [tx, token, setToken])
 
   return (
     <VStack
@@ -94,30 +85,11 @@ const WithdrawForm = ({
       onSubmit={onSubmit}
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={8}>
-        <HStack>
-          <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">
-            LP Balance:{' '}
-          </Text>
-          {isLoading ? (
-            <Spinner color="white" size="xs" />
-          ) : (
-            <HStack>
-              <Text fontSize="14" fontWeight="700">
-                {Number(fromChainAmount(balance))?.toFixed(6)}
-              </Text>
-              <Text color="gray" fontSize="14">
-                ( {token?.tokenSymbol}:{' '}
-                {Number(fromChainAmount(assetBlance))?.toFixed(6)} )
-              </Text>
-            </HStack>
-          )}
-        </HStack>
         <AssetInput
           value={token}
           token={token}
           disabled={false}
           ignoreSlack={true}
-          // minMax={false}
           balance={Number(fromChainAmount(balance))}
           showList={false}
           onChange={(value) => setToken(value)}
@@ -137,17 +109,6 @@ const WithdrawForm = ({
       >
         {buttonLabel}
       </Button>
-
-      {/* <VStack alignItems="flex-start" width="full" p={3}>
-                <HStack justifyContent="space-between" width="full">
-                    <Text color="brand.500" fontSize={12}> Fees </Text>
-                    <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} </Text>
-                </HStack>
-            </VStack> */}
-
-      {/* {
-                (tx?.error && !!!tx.buttonLabel) && (<Text color="red" fontSize={12}> {tx?.error} </Text>)
-            } */}
     </VStack>
   )
 }

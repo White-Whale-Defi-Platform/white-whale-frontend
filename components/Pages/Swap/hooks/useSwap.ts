@@ -54,7 +54,7 @@ const useSwap = ({ reverse }) => {
       num(simulated.amount).times(rate1).times(rate2).toFixed(tokenB?.decimals),
       tokenB?.decimals
     )
-  }, [simulated, slippageToDecimal])
+  }, [simulated, slippageToDecimal, tokenB?.decimals])
 
   const tx = useTransaction({
     enabled: !!executeMsg,
@@ -77,7 +77,7 @@ const useSwap = ({ reverse }) => {
       minReceive,
       state: { error, isLoading },
     }),
-    [tx, simulated, error, isLoading]
+    [tx, simulated, error, isLoading, minReceive, path]
   )
 }
 

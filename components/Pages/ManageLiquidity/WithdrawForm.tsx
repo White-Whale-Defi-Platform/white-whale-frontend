@@ -1,22 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { InfoOutlineIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Button,
-  HStack,
-  Spinner,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, Text, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 
-import { WalletStatusType } from '../../../state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
 import useWithdraw from './hooks/useWithdraw'
 import { TokenItemState } from './lpAtoms'
 
@@ -31,10 +22,8 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     {
       swap_address: swapAddress = null,
       lp_token: contract = null,
-      pool_assets = [],
       liquidity = {},
     } = {},
-    isLoading,
   ] = useQueryPoolLiquidity({ poolId })
 
   const [token, setToken] = useState<TokenItemState>(tokenA)
@@ -68,6 +57,8 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
       tx.reset()
 
+    console.log({ value })
+
     setToken(value)
   }
 
@@ -83,20 +74,6 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
       }}
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={8}>
-        <HStack>
-          <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">
-            Balance:{' '}
-          </Text>
-          {/* <Text fontSize="14" fontWeight="700">{tokenBalance}</Text> */}
-          {isLoading ? (
-            <Spinner color="white" size="xs" />
-          ) : (
-            <Text fontSize="14" fontWeight="700">
-              {Number(tokenBalance)?.toFixed(6)}
-            </Text>
-          )}
-        </HStack>
-
         <AssetInput
           isSingleInput={true}
           disabled={isInputDisabled}
@@ -105,6 +82,7 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
           image={false}
           token={tokenA}
           showList={false}
+          hideDollarValue={true}
           onChange={onInputChange}
         />
       </VStack>
@@ -122,22 +100,6 @@ const WithdrawForm = ({ poolId, tokenA, connected }: Props) => {
       >
         {buttonLabel}
       </Button>
-
-      {/* {(Number(tx?.fee) > 0) && (
-                <VStack alignItems="flex-start" width="full" p={3}>
-                    <HStack justifyContent="space-between" width="full">
-                        <HStack >
-                            <Text color="brand.500" fontSize={12}> Fee</Text>
-                            <Tooltip label="Fee paid to execute this transaction" padding="1rem" bg="blackAlpha.900" fontSize="xs" maxW="330px">
-                                <Box cursor="pointer" color="brand.50">
-                                    <InfoOutlineIcon width=".7rem" height=".7rem" />
-                                </Box>
-                            </Tooltip>
-                        </HStack>
-                        <Text color="brand.500" fontSize={12}> {fromChainAmount(tx?.fee)} {baseToken?.symbol}</Text>
-                    </HStack>
-                </VStack>
-            )} */}
 
       {tx?.error && !!!tx.buttonLabel && (
         <Text color="red" fontSize={12}>

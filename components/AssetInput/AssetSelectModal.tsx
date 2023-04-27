@@ -23,6 +23,8 @@ interface AssetSelectModalProps {
   onChange: (asset: Asset, isTokenChange?: boolean) => void
   disabled: boolean
   amount?: number
+  isBonding?: boolean
+  unbondingBalances?: { [key: string]: number }
 }
 
 const AssetSelectModal: FC<AssetSelectModalProps> = ({
@@ -32,6 +34,8 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
   edgeTokenList = [],
   disabled,
   amount,
+  isBonding = false,
+  unbondingBalances = null,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [search, setSearch] = useState<string>('')
@@ -50,9 +54,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
         role="button"
         onClick={() => !disabled && onOpen()}
         justifyContent="space-between"
-        width={['full', '160px']}
-        // sx={{ 'button': {margin : 'unset'} }}
-        // style={{margin : "unset"}}
+        width={['full', 'fit-content']}
       >
         {children}
       </HStack>
@@ -75,11 +77,12 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
             <SearchInput onChange={setSearch} />
             <AssetList
               amount={amount}
-              // assetList={assets}
               onChange={onAssetChange}
               search={search}
               edgeTokenList={edgeTokenList}
               currentToken={currentToken}
+              isBonding={isBonding}
+              unbondingBalances={unbondingBalances}
             />
           </ModalBody>
         </ModalContent>
