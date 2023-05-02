@@ -134,7 +134,7 @@ const DepositForm = ({
         setBondingDays={setBondingDays}
       />
 
-      <Multiplicator multiplicator={multiplicator} />
+      <Multiplicator multiplicator={String(multiplicator)} />
 
       <SubmitButton 
         label={buttonLabel}

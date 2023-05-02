@@ -38,6 +38,7 @@ const Multiplicator = ({multiplicator}: Props) => {
             <TooltipWithChildren
                 label={multiplicator}
                 fontSize="16"
+                showTooltip={false}
             >
                 <Text fontSize="16">3,111</Text>
             </TooltipWithChildren>

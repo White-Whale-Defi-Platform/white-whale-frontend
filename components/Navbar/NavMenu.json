@@ -19,11 +19,6 @@
     ]
   },
   {
-    "label": "Dashboard",
-    "isExternal" : false,
-    "link": "/dashboard"
-  },
-  {
     "label": "Flashloan",
     "isExternal" : false,
     "children": [
