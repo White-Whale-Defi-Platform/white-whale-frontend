@@ -52,6 +52,16 @@
     ]
   },
   "testnet": {
+    "migaloo" : [
+      {
+        "tokenSymbol": "WHALE",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "WILLyz",
+        "amount": 0
+      }
+    ],
     "juno": [
       {
         "tokenSymbol": "JUNO",

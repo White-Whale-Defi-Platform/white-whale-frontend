@@ -17,7 +17,7 @@ const getUrl = (chainId, txHash) => {
     case 'migaloo-1':
       return `https://explorer.silknodes.io/migaloo/tx/${txHash}`
     case 'narwhal-1':
-      return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
+      return `https://testnet.migaloo.explorers.guru/transaction/${txHash}`
     case 'pisco-1':
       return `https://finder.terra.money/testnet/tx/${txHash}`
     case 'juno-1':
@@ -38,6 +38,7 @@ const getUrl = (chainId, txHash) => {
 }
 
 const Finder = ({ children, txHash, chainId }: Props) => {
+  console.log({ chainId, txHash })
   return (
     <Link isExternal href={getUrl(chainId, txHash)}>
       {children} TxHash: {truncate(txHash, [4, 4])}

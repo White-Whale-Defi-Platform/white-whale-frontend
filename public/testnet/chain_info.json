@@ -103,7 +103,7 @@
     "stakeCurrency": {
       "coinDenom": "LUNA",
       "coinMinimalDenom": "uluna",
-      "coinDecimals": 18
+      "coinDecimals": 6
     },
     "bip44": {
       "coinType": 118
@@ -120,7 +120,7 @@
       {
         "coinDenom": "LUNA",
         "coinMinimalDenom": "uluna",
-        "coinDecimals": 18,
+        "coinDecimals": 6,
         "coinGeckoId": "terra"
       }
     ],

@@ -112,7 +112,7 @@ const Pools: FC<Props> = () => {
           cta: () => {
             const [asset1, asset2] = pool?.pool_id.split('-') || []
             router.push(
-              `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
+              `/${chainIdParam}/pools/manage_liquidity?poolId=${pool?.pool_id}`
             )
           }
         }

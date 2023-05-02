@@ -17,7 +17,7 @@ type UsePendingRewardsArgs = {
   pool: PoolEntityTypeWithLiquidity
 }
 
-const useGetTokenInfoByDenom = () => {
+export const useGetTokenInfoByDenom = () => {
   const [tokenList] = useTokenList()
   return [
     function getTokenInfoByDenom({ denom: tokenDenom }) {

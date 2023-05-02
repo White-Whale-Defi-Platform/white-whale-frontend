@@ -1,9 +1,54 @@
 import { HStack, VStack, Text, Image, Button } from "@chakra-ui/react"
 import { TooltipWithChildren } from "components/TooltipWithChildren"
+import { useTokenList } from "hooks/useTokenList"
+import { useMemo } from "react"
+import { useClaim } from "../NewPosition/hooks/useClaim"
 
-type Props = {}
+type Props = {
+  poolId: string
+}
 
-const Claim = (props: Props) => {
+
+const rewards = [{
+  "amount": "1009563",
+  "info": {
+    "token": {
+      "contract_addr": "migaloo1j08452mqwadp8xu25kn9rleyl2gufgfjnv0sn8dvynynakkjukcq5u780c"
+    }
+  },
+},
+{
+  "amount": "15259735712",
+  "info": {
+    "native_token": {
+      "denom": "uwhale"
+    }
+  }
+}]
+
+
+const Claim = ({poolId}: Props) => {
+  const [tokenList] = useTokenList()
+
+  const claim = useClaim({poolId})
+
+  const tokens = useMemo(() => {
+
+    return rewards.map((reward) => {
+      if (reward.info.token) {
+        const t = tokenList?.tokens.find((token) => token.denom === reward.info.token.contract_addr)
+        return {...t, amount: reward.amount}
+      }
+      if (reward.info.native_token) {
+        const t= tokenList?.tokens.find((token) => token.denom === reward.info.native_token.denom)
+        return {...t, amount: reward.amount}
+      }
+      return false
+    }).filter(Boolean)
+
+
+  }, [rewards, tokenList])
+
   return (
     <VStack>
 
@@ -53,9 +98,9 @@ const Claim = (props: Props) => {
       >
 
         {
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
+          tokens.map((item, index) => (
             <HStack
-              key={item}
+              key={item?.denom}
               width="full"
               justifyContent="space-between"
               borderBottom="1px solid rgba(255, 255, 255, 0.1)"
@@ -72,17 +117,17 @@ const Claim = (props: Props) => {
                   maxW="1.5rem"
                   maxH="1.5rem"
                   style={{ margin: 'unset' }}
-                  src="/logos/axlUSDC.png"
+                  src={item?.logoURI}
                   alt="logo-small"
                 // fallback={<FallbackImage />}
                 />
                 <Text fontSize="16px" fontWeight="400">
-                  USDC
+                  {item?.symbol}
                 </Text>
               </HStack>
 
-              <VStack >
-                <Text >6534</Text>
+              <VStack alignItems="flex-end" >
+                <Text >{item?.amount}</Text>
                 <Text color="brand.50" style={{ margin: 'unset' }}>=$34</Text>
               </VStack>
 
@@ -99,6 +144,9 @@ const Claim = (props: Props) => {
         type="submit"
         width="full"
         variant="primary"
+        onClick={() => claim.submit()}
+        isDisabled={rewards.length === 0}
+        isLoading={claim.isLoading}
       >
         Claim
       </Button>

@@ -103,13 +103,19 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalStakedAmountInMicroDenom,
       totalStakedReserve,
       providedStakedReserve,
-    } = await queryStakedLiquidity({
-      context,
-      address,
-      stakingAddress: pool.staking_address,
-      totalReserve,
-      swap,
-    })
+    } = {
+    providedStakedAmountInMicroDenom: 0,
+    totalStakedAmountInMicroDenom: 0,
+    totalStakedReserve: [],
+    providedStakedReserve: []
+    }
+    // await queryStakedLiquidity({
+    //   context,
+    //   address,
+    //   stakingAddress: pool.staking_address,
+    //   totalReserve,
+    //   swap,
+    // })
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenA,

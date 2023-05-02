@@ -11,11 +11,20 @@ import {
     TableContainer,
 } from "@chakra-ui/react"
 import { createColumnHelper, getCoreRowModel, useReactTable, flexRender, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import { TooltipWithChildren } from "components/TooltipWithChildren"
+import useWtihdrawIncentive from "./hooks/useWithdrawIncentive"
+import { useRecoilValue } from "recoil"
+import { walletState } from "../../../state/atoms/walletAtoms"
+import usePositions from "../NewPosition/hooks/usePositions"
+import { usePoolFromListQueryById } from "../../../queries/usePoolsListQuery"
+import { useClosePosition } from "../NewPosition/hooks/useClosePosition"
+import { useWithdrawPosition } from "../NewPosition/hooks/useWithdrawPosition"
 
-type Props = {}
+type Props = {
+    poolId: string;
+}
 
 const AvailableRewards = ({ data = [] }) => (
     <VStack minWidth="150px" alignItems="flex-start">
@@ -79,21 +88,21 @@ const tableData = [
         duration: "0 days",
         value: "$43,454",
         weight: "5",
-        state : "active",
+        state: "active",
         action: null,
     },
     {
         duration: "4 days",
         value: "$5656454",
         weight: "6",
-        state : "active",
+        state: "active",
         action: <Button width="full" variant="outline" size="sm" >Unbund</Button>,
     },
     {
         duration: "9 days",
         value: "$121454",
         weight: "7",
-        state : "unbounding",
+        state: "unbounding",
         action: <Button width="full" variant="outline" size="sm" disabled={true}>Unbounding</Button>
     }
 ]
@@ -137,26 +146,33 @@ const columns = [
         )
     }),
     columnHelper.accessor('action', {
-        header: '',
-        cell: (info) => info.getValue(),
+        header: () => (<Text
+            as="span"
+            color="brand.50"
+            fontSize="sm"
+            textTransform="capitalize"
+        >
+            Action
+        </Text>),
+        cell: (info) => info.getValue() || <Box w="full"></Box>,
         enableSorting: false
     }),
     columnHelper.accessor('state', {}),
 ]
 
 
-const AllTable = ({columnFilters}) => {
+const AllTable = ({ columnFilters, positions }) => {
     const [sorting, setSorting] = useState<any>([{
         desc: false,
         id: "duration"
     }])
     const table = useReactTable({
-        data: tableData,
+        data: positions || [],
         columns,
         state: {
             sorting,
             columnFilters,
-            columnVisibility : {
+            columnVisibility: {
                 duration: true,
                 value: true,
                 weight: true,
@@ -172,10 +188,11 @@ const AllTable = ({columnFilters}) => {
 
     return (
         <TableContainer color="white" width="full">
-            <Table size='md' variant="unstyled" margin="auto" width="fit-content">
+            <Table size='md' variant="unstyled" margin="auto" width="fit-content" width="full">
                 <Thead
                     borderBottom="1px solid rgba(255, 255, 255, 0.1)"
                     color="gray"
+
                 >
                     {table.getHeaderGroups().map((headerGroup, index) => (
                         <Tr key={headerGroup.id} >
@@ -219,7 +236,7 @@ const AllTable = ({columnFilters}) => {
     )
 }
 
-const TableTabs = () => {
+const TableTabs = ({ positions }) => {
 
     const [activeButton, setActiveButton] = useState("all")
     const [columnFilters, setColumnFilters] = useState([])
@@ -261,7 +278,7 @@ const TableTabs = () => {
                 }
             </HStack>
             <Divider opacity="0.2" />
-            <AllTable columnFilters={columnFilters} />
+            <AllTable columnFilters={columnFilters} positions={positions} />
         </Box >
     )
 }
@@ -307,15 +324,82 @@ const TableTabs = () => {
 //     </Tabs>
 // )
 
+const Action = ({ item, poolId }) => {
+    const close = useClosePosition({ poolId })
+    const withdraw = useWithdrawPosition({ poolId })
 
-const Overview = (props: Props) => {
+
+    if (item?.state === 'active')
+        return (
+            < Button
+                width="full"
+                variant="outline"
+                size="sm"
+                onClick={() => close?.submit()}
+            >
+                Close
+            </Button >
+        )
+
+    else if (item?.state === 'unbounding')
+        return (
+            <Button
+                width="full"
+                variant="outline"
+                size="sm"
+                isDisabled={true}
+            >
+                Unbounding
+            </Button>
+        )
+    else if (item?.state === 'unbound')
+        return (
+            <Button
+                width="full"
+                variant="outline"
+                size="sm"
+                onClick={() => withdraw?.submit()}
+            >
+                Unbound
+            </Button>
+        )
+    else
+        <Box w="full" />
+}
+
+
+const Overview = ({ poolId }: Props) => {
+
+    const { address, chainId, status, client } = useRecoilValue(walletState)
+
+
+    const withdraw = useWtihdrawIncentive()
+    const [pool] = usePoolFromListQueryById({ poolId })
+    const positions = usePositions(pool?.staking_address)
+
+
+
+    const tableData = useMemo(() => {
+        return positions?.data?.map((item) => ({
+            ...item,
+            action: <Action item={item} poolId={poolId} />
+        }))
+    }, [positions.data])
+
+    console.log({ positions })
+
+
+
     return (
 
         <VStack alignItems="flex-start" gap="16px">
+            <Button onClick={() => {
+                withdraw.mutate({ client })
+            }}>Withdraw</Button>
             <Rewards />
 
             <Box backgroundColor="#151515" width="full" borderRadius="15px">
-                <TableTabs />
+                <TableTabs positions={tableData} />
             </Box>
 
 

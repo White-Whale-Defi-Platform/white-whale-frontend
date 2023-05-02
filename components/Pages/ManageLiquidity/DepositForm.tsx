@@ -18,9 +18,10 @@ import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 
-import { TooltipWithChildren } from '../../TooltipWithChildren'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
 import {TokenItemState} from "types/index";
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 
 type Props = {
   connected: WalletStatusType
@@ -30,7 +31,8 @@ type Props = {
   simulated: string | null
   onInputChange: (asset: TokenItemState, index: number) => void
   setReverse: (value: boolean) => void
-  reverse: boolean
+  reverse: boolean,
+  poolId: string
 }
 
 const DepositForm = ({
@@ -42,9 +44,20 @@ const DepositForm = ({
   simulated,
   setReverse,
   reverse,
+  poolId
 }: Props) => {
 
   const [bondingDays, setBondingDays] = useState(0)
+
+  // const [
+  //   {
+  //     lp_token: contract = null,
+  //     pool_id,
+  //     liquidity
+  //   } = {}
+  // ] = useQueryPoolLiquidity({ poolId })
+
+  
 
   const { balance: tokenABalance } = useTokenBalance(
     tokenA?.tokenSymbol
@@ -63,6 +76,8 @@ const DepositForm = ({
 
   const isInputDisabled = tx?.txStep == TxStep.Posting
   const isConnected = connected === `@wallet-state/connected`
+
+  // console.log({tx})
 
   useEffect(() => {
     if (simulated) {
@@ -234,10 +249,15 @@ const DepositForm = ({
         {buttonLabel}
       </Button>
 
+      <Button onClick={() => tx?.mutate()}>Stake</Button>
+
+
+
       {tx?.error && !!!tx.buttonLabel && (
         <Text color="red" fontSize={12}>
-          {' '}
-          {tx?.error}{' '}
+          {/* {' '}
+          {tx?.error}{' '} */}
+          {JSON.stringify(tx, null, 2)}
         </Text>
       )}
     </VStack>

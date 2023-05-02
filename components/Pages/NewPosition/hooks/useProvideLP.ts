@@ -1,5 +1,6 @@
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import useTransaction from './useTransaction'
+// import useTransaction from './useTransactionBond'
 import { num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
@@ -10,6 +11,7 @@ import { fromChainAmount } from 'libs/num'
 import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
+import { createBondExecuteMsgs, createBondtMsg } from '../createBondMsg'
 
 const useProvideLP = ({ reverse = false }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
@@ -23,12 +25,17 @@ const useProvideLP = ({ reverse = false }) => {
   const poolId =
     matchingPools?.streamlinePoolAB?.pool_id ||
     matchingPools?.streamlinePoolBA?.pool_id
+  const staking_address =
+    matchingPools?.streamlinePoolAB?.staking_address ||
+    matchingPools?.streamlinePoolBA?.staking_address
   const lpOrder =
     matchingPools?.streamlinePoolAB?.lpOrder ||
     matchingPools?.streamlinePoolBA?.lpOrder
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
+
+  const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
 
   const [tokenA, tokenB, flipped] = useMemo(() => {
     if (!lpOrder) return [tokenInfoA, tokenInfoB, false]
@@ -76,7 +83,7 @@ const useProvideLP = ({ reverse = false }) => {
       .div(10 ** tokenInfoB?.decimals)
       .toNumber()
     const ratio =
-      reverse 
+      reverse
         ? num(tokenA).div(tokenB)
         : num(tokenB).div(tokenA)
     const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
@@ -91,6 +98,18 @@ const useProvideLP = ({ reverse = false }) => {
     reverse,
     matchingPools,
   ])
+
+  const { bondMsg, encodedBondMsg } = useMemo(() => {
+    const msg = createBondtMsg({
+      amount : String(lpBalance),
+    })
+    const encodedMsg = createBondExecuteMsgs({
+      amount : String(lpBalance),
+      senderAddress: address,
+      stakingAddress: staking_address,
+    })
+    return { bondMsg: msg, encodedBondMsg: encodedMsg }
+  }, [liquidity, staking_address])
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (
@@ -113,8 +132,8 @@ const useProvideLP = ({ reverse = false }) => {
         amountB: reverse
           ? tokenBAmount
           : flipped
-          ? tokenBAmount
-          : toChainAmount(simulated, tokenInfoB?.decimals),
+            ? tokenBAmount
+            : toChainAmount(simulated, tokenInfoB?.decimals),
       }),
       encodedMsgs: createLPExecuteMsgs(
         {
@@ -124,22 +143,33 @@ const useProvideLP = ({ reverse = false }) => {
               ? tokenAAmount
               : toChainAmount(simulated, tokenInfoA?.decimals)
             : flipped
-            ? tokenAAmount
-            : tokenAAmount,
+              ? tokenAAmount
+              : tokenAAmount,
           tokenB,
           amountB: reverse
             ? flipped
               ? tokenBAmount
               : tokenBAmount
             : flipped
-            ? tokenBAmount
-            : toChainAmount(simulated, tokenInfoB?.decimals),
+              ? tokenBAmount
+              : toChainAmount(simulated, tokenInfoB?.decimals),
           swapAddress,
         },
         address
       ),
     }
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse])
+
+  // msgs, client, stakingAddress, senderAddress, amount, lpAddress
+  // const tx = useTransaction({
+  //   msgs: bondMsg,
+  //   client,
+  //   stakingAddress: staking_address,
+  //   senderAddress: address,
+  //   amount: lpBalance,
+  //   lpAddress: "migaloo1ff55scggwlgulr8tjmmtg0wyvd4xssyu6kjz84t4602gzt22nf8q6ztfr4",
+  // })
+
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,
@@ -165,8 +195,8 @@ const useProvideLP = ({ reverse = false }) => {
   const noMatchingPool =
     swapAddress === null && !isLoading
       ? {
-          buttonLabel: 'No Matching Pool',
-        }
+        buttonLabel: 'No Matching Pool',
+      }
       : {}
 
   return useMemo(

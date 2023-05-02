@@ -26,6 +26,7 @@ import { tokenLpAtom } from './lpAtoms'
 import WithdrawForm from './WithdrawForm'
 import Overview from './Overview'
 import Claim from './Claim'
+import OpenPositionForm from './OpenPositionForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -149,12 +150,15 @@ const ManageLiquidity: FC = () => {
             <TabList justifyContent="center" background="#1C1C1C">
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
+              <Tab>Bond</Tab>
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview />
+                <Overview 
+                  poolId={poolId}
+                />
               </TabPanel>
               <TabPanel padding={4}>
                 {isTokenSet && (
@@ -166,7 +170,18 @@ const ManageLiquidity: FC = () => {
                     tokenB={tokenB}
                     onInputChange={onInputChange}
                     simulated={simulated}
+                    poolId={poolId}
                     tx={tx}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel padding={4}>
+                {isTokenSet && (
+                  <OpenPositionForm
+                    connected={status}
+                    // onInputChange={onInputChange}
+                    poolId={poolId}
+                    // tx={tx}
                   />
                 )}
               </TabPanel>
@@ -182,7 +197,7 @@ const ManageLiquidity: FC = () => {
                 />
               </TabPanel>
               <TabPanel padding={4}>
-                <Claim />
+                <Claim poolId={poolId} />
               </TabPanel>
             </TabPanels>
           </Tabs>
