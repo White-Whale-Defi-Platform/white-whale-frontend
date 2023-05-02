@@ -1,10 +1,5 @@
 [
   {
-    "label": "Dashboard",
-    "isExternal" : false,
-    "link": "/dashboard"
-  },
-  {
     "label": "Trade",
     "isExternal" : false,
     "children": [
@@ -17,11 +12,6 @@
         "link": "/pools"
       }
     ]
-  },
-  {
-    "label": "Dashboard",
-    "isExternal" : false,
-    "link": "/dashboard"
   },
   {
     "label": "Flashloan",

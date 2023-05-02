@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import {
-  Button, useToast,
-  VStack
-} from '@chakra-ui/react'
+import { Button, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { useRecoilValue } from 'recoil'
@@ -32,7 +29,6 @@ const DepositForm = ({
   vaultAddress,
   refetch,
 }: Props) => {
-
   const [token, setToken] = useState({
     amount: 0,
     tokenSymbol: defaultToken,

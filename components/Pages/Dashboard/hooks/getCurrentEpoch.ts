@@ -1,53 +1,60 @@
-import {Wallet} from "util/wallet-adapters";
-import {JsonObject} from "@cosmjs/cosmwasm-stargate";
-import {Config} from "./useDashboardData";
+import { Wallet } from 'util/wallet-adapters'
+import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { Config } from './useDashboardData'
 
 export interface EpochData {
-  id: string;
-  start_time: string;
+  id: string
+  start_time: string
   total: {
-    amount: string;
+    amount: string
     info: {
       native_token: {
-        denom: string;
-      };
-    };
-  }[];
+        denom: string
+      }
+    }
+  }[]
   available: {
-    amount: string;
+    amount: string
     info: {
       native_token: {
-        denom: string;
-      };
-    };
-  }[];
+        denom: string
+      }
+    }
+  }[]
   claimed: {
-    amount: string;
+    amount: string
     info: {
       native_token: {
-        denom: string;
-      };
-    };
-  }[];
+        denom: string
+      }
+    }
+  }[]
 }
+
 export interface Epoch {
-  epoch: EpochData;
+  epoch: EpochData
 }
+
 export const getCurrentEpoch = async (client: Wallet, config: Config) => {
   if (!client) {
-    return null;
+    return null
   }
 
-  const currentEpoch = await fetchCurrentEpoch(client, config);
+  const currentEpoch = await fetchCurrentEpoch(client, config)
 
-  return { currentEpoch };
-};
+  return { currentEpoch }
+}
 
+export const fetchCurrentEpoch = async (
+  client: Wallet,
+  config: Config
+): Promise<Epoch> => {
+  const result: JsonObject = await client.queryContractSmart(
+    config.fee_distributor_address,
+    {
+      current_epoch: {},
+    }
+  )
 
-export const fetchCurrentEpoch = async (client: Wallet, config: Config): Promise<Epoch> => {
-  const result: JsonObject = await client.queryContractSmart(config.fee_distributor_address, {
-    current_epoch: {},
-  });
-
-  return result as Epoch;
-};
+  return result as Epoch
+}

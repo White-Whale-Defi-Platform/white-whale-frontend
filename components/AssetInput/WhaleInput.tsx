@@ -8,7 +8,7 @@ import {
   Image,
   Input,
   Stack,
-  Text
+  Text,
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
@@ -31,11 +31,11 @@ interface AssetInputProps {
   hideToken?: string
   edgeTokenList?: string[]
   ignoreSlack?: boolean
+  isBonding?: boolean
+  unbondingBalances?: { [key: string]: number }
 }
 
-
 const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
-
   const formatSymbol = symbol?.replace('-', '/')
 
   // if (!tokenInfo && !symbol) return null
@@ -54,7 +54,7 @@ const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
     )
 
   return (
-    <HStack gap={[1]} px={2}>
+    <HStack gap={[1]} pl={3}>
       {showIcon && (
         <Image
           width="auto"
@@ -89,6 +89,8 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
       hideToken,
       edgeTokenList,
       ignoreSlack = false,
+      isBonding = false,
+      unbondingBalances = null,
     },
     ref
   ) => {
@@ -122,17 +124,16 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               color="brand.500"
               placeholder="0.00"
               disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 console.log({ ...token, amount: target.value })
                 onChange({ ...token, amount: target.value })
-              }
-              }
+              }}
             />
           </HStack>
         </HStack>
 
         <HStack
-          width={['full', '180px']}
+          width={['full', '185px']}
           border="1px solid rgba(255, 255, 255, 0.1)"
           borderRightRadius="30px"
           borderLeftRadius={['30px', 'unset']}
@@ -147,13 +148,14 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               edgeTokenList={edgeTokenList}
               disabled={disabled || !showList}
               amount={token?.amount}
+              isBonding={isBonding}
+              unbondingBalances={unbondingBalances}
             >
               <AssetSelectTrigger
                 tokenInfo={tokenInfo}
                 showIcon={image}
                 symbol={token?.tokenSymbol}
               />
-
               {showList && (
                 <IconButton
                   disabled={disabled}
@@ -163,11 +165,12 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
                   aria-label="go back"
                   icon={<ChevronDownIcon />}
                   style={{ margin: 'unset' }}
-                />)}
+                />
+              )}
             </AssetSelectModal>
           </HStack>
         </HStack>
-      </Stack >
+      </Stack>
     )
   }
 )

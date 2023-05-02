@@ -13,7 +13,11 @@ function CosmostationConnectButton({ onCloseModal }) {
   }, [onCloseModal, setCosmostationAndConnect])
 
   return (
-    <Button variant="wallet" onClick={() => setCosmostationMemo()} colorScheme="black">
+    <Button
+      variant="wallet"
+      onClick={() => setCosmostationMemo()}
+      colorScheme="black"
+    >
       <HStack justify="space-between" width="full">
         <Text>Cosmostation Wallet</Text>
         <CosmostationWalletIcon />

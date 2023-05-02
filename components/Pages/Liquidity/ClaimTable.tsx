@@ -39,7 +39,7 @@ const TokenRow = ({ item, isLast }: { item: any, isLast: boolean }) => {
 
             <VStack alignItems="flex-end" >
                 <Text >{item?.assetAmount}</Text>
-                <Text color="brand.50" style={{ margin: 'unset' }}>=${item?.dollarValue}</Text>
+                <Text color="brand.50" style={{ margin: 'unset' }}>=${Number(item?.dollarValue).toFixed(2)}</Text>
             </VStack>
 
         </HStack>

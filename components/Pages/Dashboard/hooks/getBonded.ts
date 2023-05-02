@@ -1,22 +1,22 @@
-import { Wallet } from "util/wallet-adapters";
-import { JsonObject } from "@cosmjs/cosmwasm-stargate";
-import { convertMicroDenomToDenom } from "util/conversion";
-import {Config} from "./useDashboardData";
+import { Wallet } from 'util/wallet-adapters'
+import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { convertMicroDenomToDenom } from 'util/conversion'
+import { Config } from './useDashboardData'
 
 interface NativeTokenInfo {
   native_token: {
-    denom: string;
-  };
+    denom: string
+  }
 }
 
 interface Asset {
-  amount: string;
-  info: NativeTokenInfo;
+  amount: string
+  info: NativeTokenInfo
 }
 
 interface BondedInfo {
-  bonded_assets: Asset[];
-  total_bonded: string;
+  bonded_assets: Asset[]
+  total_bonded: string
 }
 
 const fetchBonded = async (
@@ -29,37 +29,44 @@ const fetchBonded = async (
     {
       bonded: { address: address },
     }
-  );
-  return result as BondedInfo;
-};
+  )
+  return result as BondedInfo
+}
 
-export const getBonded = async (client: Wallet | null, address: string | null, config: Config) => {
+export const getBonded = async (
+  client: Wallet | null,
+  address: string | null,
+  config: Config
+) => {
   if (!client || !address) {
-    return null;
+    return null
   }
 
-  const bondedInfo = await fetchBonded(client, address, config);
+  const bondedInfo = await fetchBonded(client, address, config)
 
-  const localTotalBonded = convertMicroDenomToDenom(
-    bondedInfo?.total_bonded || 0,
-    6
-  );
+  const totalBonded = bondedInfo?.total_bonded ?? 0
+
+  const localTotalBonded = Number(totalBonded)
+
   const bondedAmpWhale = bondedInfo
     ? convertMicroDenomToDenom(
-      bondedInfo?.bonded_assets.find(
-        (asset) => asset.info.native_token.denom === config.lsd_token.ampWHALE.denom
-      )?.amount,
-      config.lsd_token.ampWHALE.decimals
-    )
-    : null;
+        bondedInfo?.bonded_assets.find(
+          (asset) =>
+            asset.info.native_token.denom === config.lsd_token.ampWHALE.denom
+        )?.amount,
+        config.lsd_token.ampWHALE.decimals
+      )
+    : null
+
   const bondedBWhale = bondedInfo
     ? convertMicroDenomToDenom(
-      bondedInfo?.bonded_assets.find(
-        (asset) => asset.info.native_token.denom === config.lsd_token.bWHALE.denom
-      )?.amount,
-      config.lsd_token.bWHALE.decimals
-    )
-    : null;
+        bondedInfo?.bonded_assets.find(
+          (asset) =>
+            asset.info.native_token.denom === config.lsd_token.bWHALE.denom
+        )?.amount,
+        config.lsd_token.bWHALE.decimals
+      )
+    : null
 
-  return { bondedAmpWhale, bondedBWhale, localTotalBonded };
-};
+  return { bondedAmpWhale, bondedBWhale, localTotalBonded }
+}

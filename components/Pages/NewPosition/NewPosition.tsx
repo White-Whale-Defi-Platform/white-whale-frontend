@@ -24,11 +24,10 @@ const NewPosition = () => {
   const {simulated, tx} = useProvideLP({reverse})
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
-  const {data: poolList} = usePoolsListQuery()
-
+  const { data: poolList } = usePoolsListQuery()
 
   const chainIdParam = router.query.chainId as string
-  const {from, to} = router.query
+  const { from, to } = router.query
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 

@@ -1,17 +1,14 @@
-import { VStack } from '@chakra-ui/react'
+import { useEffect, useMemo } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+
+import { Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
+import AssetInput from 'components/AssetInput'
+import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
-import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+
 import { WalletStatusType } from 'state/atoms/walletAtoms'
-import { TokenItemState } from "types/index"
-import Input from 'components/AssetInput/Input'
-import ShowError from 'components/ShowError'
-import SubmitButton from 'components/SubmitButton'
-import BondingDaysSlider from "./BondingDaysSlider"
-import Multiplicator from "./Multiplicator"
-
-
+import { TokenItemState } from 'types/index'
 
 type Props = {
   connected: WalletStatusType
@@ -40,16 +37,19 @@ const DepositForm = ({
   setBondingDays,
   poolId
 }: Props) => {
+  const { balance: tokenABalance } = useTokenBalance(tokenA?.tokenSymbol)
+  const { balance: tokenBBalance, isLoading: tokanBloading } = useTokenBalance(
+    tokenB?.tokenSymbol
+  )
 
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
       token1: tokenA,
-      token2: tokenB
+      token2: tokenB,
     },
   })
 
-  // const [bondingDays, setBondingDays] = useState(0)
   const isInputDisabled = tx?.txStep == TxStep.Posting
   const isConnected = connected === WalletStatusType.connected
   const amountA = getValues('token1')
@@ -104,47 +104,84 @@ const DepositForm = ({
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
     >
-      <Input 
-        name="token1"
-        control={control}
-        token={tokenA}
-        isDisabled={isInputDisabled}
-        onChange={(value) => {
-          setReverse(false)
-          onInputChange(value, 0)
-        }}
-      />
+      <VStack width="full" alignItems="flex-start" paddingBottom={8}>
+        <Controller
+          name="token1"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <AssetInput
+              {...field}
+              token={tokenA}
+              disabled={isInputDisabled}
+              balance={tokenABalance}
+              showList={false}
+              onChange={(value) => {
+                setReverse(false)
+                onInputChange(value, 0)
+                field.onChange(value)
+              }}
+            />
+          )}
+        />
+      </VStack>
 
-      <Input
-        name="token2"
-        control={control}
-        token={tokenB}
-        isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
-        onChange={(value) => {
-          setReverse(true)
-          onInputChange(value, 1)
-        }}
-      />
+      <VStack width="full" alignItems="flex-start" paddingBottom={8}>
+        <HStack>
+          <Text marginLeft={4} color="brand.50" fontSize="14" fontWeight="500">
+            Balance:{' '}
+          </Text>
+          {tokanBloading ? (
+            <Spinner color="white" size="xs" />
+          ) : (
+            <Text fontSize="14" fontWeight="700">
+              {tokenBBalance?.toFixed(6)}
+            </Text>
+          )}
+        </HStack>
+        <Controller
+          name="token2"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <AssetInput
+              {...field}
+              disabled={isInputDisabled || !tokenB?.tokenSymbol}
+              token={tokenB}
+              balance={tokenBBalance}
+              showList={false}
+              onChange={(value) => {
+                setReverse(true)
+                onInputChange(value, 1)
+                field.onChange(value)
+              }}
+            />
+          )}
+        />
+      </VStack>
 
-      <BondingDaysSlider
-        bondingDays={bondingDays}
-        setBondingDays={setBondingDays}
-      />
+      <Button
+        type="submit"
+        width="full"
+        variant="primary"
+        isLoading={
+          tx?.txStep == TxStep.Estimating ||
+          tx?.txStep == TxStep.Posting ||
+          tx?.txStep == TxStep.Broadcasting
+        }
+        disabled={
+          tx.txStep != TxStep.Ready || simulated == null || !isConnected
+        }
+      >
+        {buttonLabel}
+      </Button>
 
-      <Multiplicator />
-
-      <SubmitButton 
-        label={buttonLabel}
-        isConnected={isConnected}
-        txStep={tx?.txStep}
-        isDisabled={tx.txStep != TxStep.Ready || simulated == null || !isConnected}
-      />
-
-      <ShowError 
-        show={tx?.error && !!!tx.buttonLabel }
-        message = {tx?.error }
-      />
-
+      {tx?.error && !!!tx.buttonLabel && (
+        <Text color="red" fontSize={12}>
+          {' '}
+          {tx?.error}{' '}
+        </Text>
+      )}
     </VStack>
   )
 }

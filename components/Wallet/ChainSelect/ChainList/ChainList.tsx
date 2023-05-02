@@ -14,6 +14,12 @@ function ChainList({ onChange, onClose, currentWalletState }) {
   //   );
   // }
 
+  // if (currentWalletState.activeWallet === 'station') {
+  //   return chains.filter(
+  //     (chain) => chain.chainId !== 'comdex-1' && chain.chainId !== 'injective-1'
+  //   );
+  // }
+
   return (
     <List spacing={1} color="white" width="full">
       {chains.map((chain, index) => (

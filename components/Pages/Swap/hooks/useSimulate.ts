@@ -36,7 +36,6 @@ const simulate = ({ client, msg, routerAddress }): Promise<any> => {
 }
 
 const useSimulate = ({ client, msg, routerAddress }) => {
-  
   const debounseMsg = useDebounceValue(msg, 300)
 
   const { data, isLoading, error } = useQuery<any>(
@@ -44,10 +43,10 @@ const useSimulate = ({ client, msg, routerAddress }) => {
     () => {
       if (msg == null) return
 
-      return simulate({ client, msg : debounseMsg, routerAddress })
+      return simulate({ client, msg: debounseMsg, routerAddress })
     },
     {
-      enabled: !!client && !!msg && !!debounseMsg
+      enabled: !!client && !!msg && !!debounseMsg,
       // onError: (err) => {
       //     console.log({err : (err as any)?.code})
       // }

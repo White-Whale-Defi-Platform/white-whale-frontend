@@ -18,7 +18,7 @@ import { TxStep } from 'hooks/useTransaction'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { walletState } from 'state/atoms/walletAtoms'
 
 import useProvideLP from '../NewPosition/hooks/useProvideLP'
 import DepositForm from './DepositForm'
@@ -30,7 +30,7 @@ import OpenPositionForm from './OpenPositionForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
-  const chains : Array<any>= useChains()
+  const chains: Array<any> = useChains()
   const { address, chainId, status } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
@@ -111,7 +111,7 @@ const ManageLiquidity: FC = () => {
       width={{ base: '100%', md: '800px' }}
       alignItems="center"
       padding={5}
-      // margin="auto"
+      margin="auto"
     >
       <HStack
         justifyContent="space-between"

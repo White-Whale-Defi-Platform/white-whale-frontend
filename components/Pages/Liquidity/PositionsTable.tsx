@@ -47,7 +47,7 @@ const columns = (totlaValue, totalDollarValue) => {
             cell: (info) => {
                 const assets = info?.row?.original?.assets || []
                 return (
-                    <TooltipWithChildren label={`$${info.getValue()}`}>
+                    <TooltipWithChildren label={`$${Number(info.getValue()).toFixed(2)}`}>
                         <AvailableRewards data={assets} />
                     </TooltipWithChildren>
                 )
@@ -84,7 +84,7 @@ export const PositionsTable = ({ columnFilters, positions }) => {
         id: "duration"
     }]);
 
-    const newValue = useMemo(() => positions.reduce((acc, curr) => {
+    const totalDollarValue = useMemo(() => positions.reduce((acc, curr) => {
         return acc + curr.value
     }, 0), [positions])
 
@@ -106,8 +106,8 @@ export const PositionsTable = ({ columnFilters, positions }) => {
 
 
     const customColumns = useMemo(() => {
-        return columns(totalValue, newValue)
-    }, [totalValue, newValue])
+        return columns(totalValue, totalDollarValue.toFixed(2))
+    }, [totalValue, totalDollarValue])
 
     const table = useReactTable({
         data: positions || [],

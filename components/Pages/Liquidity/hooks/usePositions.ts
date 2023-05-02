@@ -37,15 +37,8 @@ const usePositions = (poolId: string) => {
 
     const { address, client } = useRecoilValue(walletState)
     const tokens = useTokenList()
-    // console.log({ tokens, pool_assets })
-
-    // const dollarValue = useTokenDollarValue("WHALE")
-    // const priceList = usePriceList()
-
-    // console.log({priceList})
 
     const prices = usePrices()
-    console.log({prices})
 
     return useQuery({
         queryKey: ['positions', address, staking_address, poolId, tokens, pool_assets, prices],
@@ -55,10 +48,6 @@ const usePositions = (poolId: string) => {
             })
                 .then(data => data.positions.map(p => {
                     const positiosns = []
-
-                    
-
-                    console.log({originalPosition : p })
 
                     const open = {...p?.open_position || {}}
                     open.formatedTime = formatSeconds(open.unbonding_duration)
@@ -76,14 +65,11 @@ const usePositions = (poolId: string) => {
                     // close.isReadyToClaim = diff <= 0
                     if (p?.closed_position) positiosns.push(close)
 
-                    console.log({open, close, positiosns, today, unbounding, diff })
-
-
                     return positiosns.map((position) => {
                         const lpAssets = lpToAssets({ totalReserve, totalLpSuppy, providedLp: position.amount })
                         const assets = pool_assets.map((asset, i) => {
                             const assetAmount = fromChainAmount(lpAssets[i], asset.decimals)
-                            const dollarValue = num(assetAmount).times(prices?.[asset.symbol] || 0).toFixed(2)
+                            const dollarValue = num(assetAmount).times(prices?.[asset.symbol] || 0).toFixed(4)
                             return {
                                 ...asset,
                                 assetAmount : parseFloat(assetAmount),

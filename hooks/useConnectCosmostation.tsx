@@ -5,8 +5,6 @@ import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
 import { useChainInfo } from 'hooks/useChainInfo'
-import getChainName from '../libs/getChainName'
-import { getSigningInjectiveClient } from 'injectivejs'
 
 export default function useConnectCosmostation() {
   const [currentWalletState, setCurrentWalletState] =
@@ -26,11 +24,16 @@ export default function useConnectCosmostation() {
 
     try {
       if (chainInfo !== undefined) {
-        await window.cosmostation.providers.keplr?.experimentalSuggestChain(chainInfo)
-        await window.cosmostation.providers.keplr.enable(currentWalletState.chainId)
-        const offlineSigner = await window.cosmostation.providers.keplr.getOfflineSigner(
+        await window.cosmostation.providers.keplr?.experimentalSuggestChain(
+          chainInfo
+        )
+        await window.cosmostation.providers.keplr.enable(
           currentWalletState.chainId
         )
+        const offlineSigner =
+          await window.cosmostation.providers.keplr.getOfflineSigner(
+            currentWalletState.chainId
+          )
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           currentWalletState.chainId,
           chainInfo.rpc,
@@ -44,7 +47,9 @@ export default function useConnectCosmostation() {
           'cosmostation'
         )
         const [{ address }] = await offlineSigner.getAccounts()
-        const key = await window.cosmostation.providers.keplr.getKey(currentWalletState.chainId)
+        const key = await window.cosmostation.providers.keplr.getKey(
+          currentWalletState.chainId
+        )
         /* successfully update the wallet state */
         setCurrentWalletState({
           key,
@@ -62,7 +67,10 @@ export default function useConnectCosmostation() {
   }
 
   const setCosmostationAndConnect = () => {
-    setCurrentWalletState({ ...currentWalletState, activeWallet: 'cosmostation' })
+    setCurrentWalletState({
+      ...currentWalletState,
+      activeWallet: 'cosmostation',
+    })
     localStorage.removeItem('__terra_extension_router_session__')
     connectCosmostation()
   }

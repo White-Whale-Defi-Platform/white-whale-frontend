@@ -19,7 +19,6 @@ import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
-
 import Card from '../Card'
 import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
@@ -27,6 +26,8 @@ import DrawerLink from './DrawerLink'
 import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
 import menuLinks from './NavMenu.json'
+import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 
 export const links = [
   {
@@ -51,12 +52,13 @@ export const links = [
   },
   {
     label: 'Bridge',
-    link: 'https://tfm.com/bridge'
-  }
+    link: 'https://tfm.com/bridge',
+  },
 ]
-const Navbar = ({ }) => {
+const Navbar = ({}) => {
   const { disconnect } = useWallet()
-  const [{ key, chainId, network }, setWalletState] = useRecoilState(walletState)
+  const [{ key, chainId, network }, setWalletState] =
+    useRecoilState(walletState)
 
   const chains: Array<any> = useChains()
   const {
@@ -94,8 +96,16 @@ const Navbar = ({ }) => {
         <Box flex="1">
           <Logo />
         </Box>
-        <Card paddingX={10} gap={6} >
-          {menuLinks.map((menu)=> (<NavbarPopper key={menu.label} menu={menu} currentChainName={currentChainName}/>
+        <Card paddingX={10} gap={6}>
+          {(BONDING_ENABLED_CHAIN_IDS.includes(chainId)
+            ? menuLinks
+            : bondingDisabledMenuLinks
+          ).map((menu) => (
+            <NavbarPopper
+              key={menu.label}
+              menu={menu}
+              currentChainName={currentChainName}
+            />
           ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">

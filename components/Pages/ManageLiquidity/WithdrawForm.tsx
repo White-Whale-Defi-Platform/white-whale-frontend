@@ -1,14 +1,15 @@
-import { VStack } from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
+
+import { Button, Text, VStack } from '@chakra-ui/react'
+import AssetInput from 'components/AssetInput'
+import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
-import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+
 import { WalletStatusType } from 'state/atoms/walletAtoms'
-import Input from 'components/AssetInput/Input'
-import ShowError from 'components/ShowError'
-import SubmitButton from 'components/SubmitButton'
-import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
+import useWithdraw from './hooks/useWithdraw'
+import { TokenItemState } from './lpAtoms'
 
 type Props = {
   poolId: string
@@ -20,8 +21,8 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     {
       swap_address: swapAddress = null,
       lp_token: contract = null,
-      liquidity
-    } = {}
+      liquidity = {},
+    } = {},
   ] = useQueryPoolLiquidity({ poolId })
 
   const [reverse, setReverse] = useState(false)
@@ -95,10 +96,9 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
       tx.reset()
 
-    if (asset == 1)
-      setValue('token1', value)
-    else
-      setValue('token2', value)
+    console.log({ value })
+
+    setToken(value)
   }
 
   // reset form on success
@@ -124,48 +124,28 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
     >
-
-      <Input
-        control={control}
-        name="token1"
-        token={tokenA}
-        isDisabled={isInputDisabled}
-        balance={num(tokenABalance).toNumber()}
-        fetchBalance={false}
-        onChange={(value) => {
-          if (reverse)
-            setReverse(false)
-          onInputChange(value, 1)
-        }}
+      <VStack width="full" alignItems="flex-start" paddingBottom={8}>
+        <AssetInput
+          isSingleInput={true}
+          disabled={isInputDisabled}
+          value={token}
+          balance={Number(tokenBalance)}
+          image={false}
+          token={tokenA}
+          showList={false}
+          hideDollarValue={true}
+          onChange={onInputChange}
+        />
+      </VStack>
 
       />
 
-      <Input
-        control={control}
-        name="token2"
-        token={tokenB}
-        isDisabled={isInputDisabled}
-        balance={num(tokenBBalance).toNumber()}
-        fetchBalance={false}
-        onChange={(value) => {
-          if (!reverse)
-            setReverse(true)
-          onInputChange(value, 2)
-        }}
-      />
-
-      <SubmitButton
-        label={buttonLabel as string}
-        isConnected={isConnected}
-        txStep={tx?.txStep}
-        isDisabled={tx.txStep != TxStep.Ready || !isConnected}
-      />
-
-      <ShowError
-        show={tx?.error && !!!tx.buttonLabel}
-        message={tx?.error as string}
-      />
-
+      {tx?.error && !!!tx.buttonLabel && (
+        <Text color="red" fontSize={12}>
+          {' '}
+          {tx?.error}{' '}
+        </Text>
+      )}
     </VStack>
   )
 }

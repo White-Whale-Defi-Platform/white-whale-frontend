@@ -13,7 +13,7 @@ import {
 } from 'junoblocks'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { directTokenSwap, passThroughTokenSwap } from 'services/swap'
+import { passThroughTokenSwap } from 'services/swap'
 import {
   TransactionStatus,
   transactionStatusState,

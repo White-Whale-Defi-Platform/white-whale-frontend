@@ -50,7 +50,7 @@ const useRewards = () => {
             if (reward.info.native_token) {
                 const t = tokenList?.tokens.find((token) => token.denom === reward.info.native_token.denom)
                 const amount = fromChainAmount(reward.amount, t?.decimals)
-                const dollarValue = num(amount).times(prices?.[t?.symbol] || 0).dp(2).toNumber()
+                const dollarValue = num(amount).times(prices?.[t?.symbol] || 0).dp(4).toNumber()
                 return {
                     ...t,
                     assetAmount: parseFloat(amount),
