@@ -10,6 +10,7 @@ export async function queryMyLiquidity({ swap, address, context: { client } }) {
       })
     : 0
 
+  console.log({providedLiquidityInMicroDenom,swap })
   /* provide dollar value for reserves as well */
   const totalReserve: [number, number] = [
     protectAgainstNaN(swap.token1_reserve),

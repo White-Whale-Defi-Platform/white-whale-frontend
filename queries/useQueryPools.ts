@@ -109,6 +109,7 @@ export const useQueryMultiplePoolsLiquidity = ({
     totalStakedReserve: [],
     providedStakedReserve: []
     }
+    
     // await queryStakedLiquidity({
     //   context,
     //   address,
@@ -189,10 +190,7 @@ export const useQueryMultiplePoolsLiquidity = ({
         provided: providedReserve,
         totalStaked: totalStakedReserve,
         providedStaked: providedStakedReserve,
-        totalProvided: [
-          providedReserve[0] + providedStakedReserve[0],
-          providedReserve[1] + providedStakedReserve[1],
-        ] as ReserveType,
+        totalProvided: providedReserve as ReserveType,
       },
       rewards: {
         annualYieldPercentageReturn,

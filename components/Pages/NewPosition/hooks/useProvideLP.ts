@@ -12,8 +12,10 @@ import { tokenLpAtom } from '../../ManageLiquidity/lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from '../createLPMsg'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { createBondExecuteMsgs, createBondtMsg } from '../createBondMsg'
+import { usePoolFromListQueryById } from '../../../../queries/usePoolsListQuery'
+import { fromUtf8 } from '@cosmjs/encoding'
 
-const useProvideLP = ({ reverse = false }) => {
+const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
   const { address, client } = useRecoilValue(walletState)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
@@ -31,6 +33,8 @@ const useProvideLP = ({ reverse = false }) => {
   const lpOrder =
     matchingPools?.streamlinePoolAB?.lpOrder ||
     matchingPools?.streamlinePoolBA?.lpOrder
+
+  const [pool] = usePoolFromListQueryById({ poolId })
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
@@ -99,17 +103,17 @@ const useProvideLP = ({ reverse = false }) => {
     matchingPools,
   ])
 
-  const { bondMsg, encodedBondMsg } = useMemo(() => {
-    const msg = createBondtMsg({
-      amount : String(lpBalance),
-    })
-    const encodedMsg = createBondExecuteMsgs({
-      amount : String(lpBalance),
-      senderAddress: address,
-      stakingAddress: staking_address,
-    })
-    return { bondMsg: msg, encodedBondMsg: encodedMsg }
-  }, [liquidity, staking_address])
+  // const { bondMsg, encodedBondMsg } = useMemo(() => {
+  //   const msg = createBondtMsg({
+  //     amount : String(lpBalance),
+  //   })
+  //   const encodedMsg = createBondExecuteMsgs({
+  //     amount : String(lpBalance),
+  //     senderAddress: address,
+  //     stakingAddress: staking_address,
+  //   })
+  //   return { bondMsg: msg, encodedBondMsg: encodedMsg }
+  // }, [liquidity, staking_address])
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (
@@ -122,6 +126,7 @@ const useProvideLP = ({ reverse = false }) => {
 
     return {
       msgs: createLpMsg({
+        bondingDays,
         tokenA,
         amountA: reverse
           ? flipped
@@ -138,6 +143,7 @@ const useProvideLP = ({ reverse = false }) => {
       encodedMsgs: createLPExecuteMsgs(
         {
           tokenA,
+          bondingDays,
           amountA: reverse
             ? flipped
               ? tokenAAmount
@@ -153,12 +159,26 @@ const useProvideLP = ({ reverse = false }) => {
             : flipped
               ? tokenBAmount
               : toChainAmount(simulated, tokenInfoB?.decimals),
-          swapAddress,
+          swapAddress : pool?.staking_proxy,
         },
         address
       ),
     }
-  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse])
+  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse, pool?.staking_proxy, bondingDays])
+
+  console.log({encodedMsgs, msgs})
+
+  // if(encodedMsgs?.length > 0){
+  //   console.log({newmsgs: encodedMsgs?.map(msg => {
+  //     const value = msg?.value
+  //     const m = JSON.parse(fromUtf8(value?.msg || ""))
+  //     value.msg = m
+  //     return  {
+  //       ...msg,
+  //       value
+  //     }   
+  //   })})
+  // }
 
   // msgs, client, stakingAddress, senderAddress, amount, lpAddress
   // const tx = useTransaction({
@@ -173,7 +193,7 @@ const useProvideLP = ({ reverse = false }) => {
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,
-    swapAddress,
+    swapAddress : pool?.staking_proxy,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     client,

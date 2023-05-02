@@ -27,7 +27,7 @@
         "coinDenom": "WHALE",
         "coinMinimalDenom": "uwhale",
         "coinDecimals": 6,
-        "coinGeckoId": "whale-network"
+        "coinGeckoId": "white-whale"
       }
     ],
     "feeCurrencies": [
@@ -35,14 +35,14 @@
         "coinDenom": "WHALE",
         "coinMinimalDenom": "uwhale",
         "coinDecimals": 6,
-        "coinGeckoId": "whale-network"
+        "coinGeckoId": "white-whale"
       }
     ],
     "coinType": 118,
     "gasPriceStep": {
-      "low": 0.0,
-      "average": 0.0,
-      "high": 0.0
+      "low": 0.5,
+      "average": 1,
+      "high": 2
     },
     "features": ["cosmwasm"]
   },

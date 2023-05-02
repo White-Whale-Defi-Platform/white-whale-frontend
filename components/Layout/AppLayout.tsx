@@ -11,10 +11,12 @@ import { walletState } from 'state/atoms/walletAtoms'
 import Status from '../Status'
 import MobileNotSupportedModal from '../Wallet/Modal/MobileNotSupportedModal'
 import RadialGradient from './RadialGradient'
+import usePrices from 'hooks/usePrices'
 
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
+  usePrices()
 
   return (
     <>

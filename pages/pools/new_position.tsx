@@ -1,4 +1,4 @@
-import NewPosition from 'components/Pages/NewPosition'
+import NewPosition from 'components/Pages/Liquidity'
 
 const NewPositionPage = () => <NewPosition />
 

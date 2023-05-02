@@ -36,7 +36,8 @@ const ManageLiquidity: FC = () => {
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
-  const { simulated, tx } = useProvideLP({ reverse })
+  const [bondingDays, setBondingDays] = useState(0)
+  const { simulated, tx } = useProvideLP({ reverse , bondingDays})
 
   const poolId = router.query.poolId as string
   const chainIdParam = router.query.chainId as string
@@ -150,7 +151,7 @@ const ManageLiquidity: FC = () => {
             <TabList justifyContent="center" background="#1C1C1C">
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
-              <Tab>Bond</Tab>
+              {/* <Tab>Bond</Tab> */}
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
             </TabList>
@@ -163,6 +164,8 @@ const ManageLiquidity: FC = () => {
               <TabPanel padding={4}>
                 {isTokenSet && (
                   <DepositForm
+                    setBondingDays={setBondingDays}
+                    bondingDays={bondingDays}
                     setReverse={setReverse}
                     reverse={reverse}
                     connected={status}
@@ -175,7 +178,7 @@ const ManageLiquidity: FC = () => {
                   />
                 )}
               </TabPanel>
-              <TabPanel padding={4}>
+              {/* <TabPanel padding={4}>
                 {isTokenSet && (
                   <OpenPositionForm
                     connected={status}
@@ -184,7 +187,7 @@ const ManageLiquidity: FC = () => {
                     // tx={tx}
                   />
                 )}
-              </TabPanel>
+              </TabPanel> */}
               <TabPanel padding={4}>
                 <WithdrawForm
                   connected={status}
