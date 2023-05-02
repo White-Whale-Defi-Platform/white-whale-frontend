@@ -8,7 +8,7 @@ import { createAsset, isNativeAsset } from 'services/asset'
 
 const NUMBER_OF_SECONDS_IN_DAY = 86400
 
-const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress }) => {
+const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress}) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
   const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native)
 

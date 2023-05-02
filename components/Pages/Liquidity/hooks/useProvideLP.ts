@@ -14,6 +14,7 @@ import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap
 // import { createBondExecuteMsgs, createBondtMsg } from '../createBondMsg'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { fromUtf8 } from '@cosmjs/encoding'
+import useIsNewPosition from '../../Liquidity/hooks/useIsNewPosition'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
@@ -35,6 +36,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     matchingPools?.streamlinePoolBA?.lpOrder
 
   const [pool] = usePoolFromListQueryById({ poolId })
+  // const isNewPosition = useIsNewPosition({ bondingDays , poolId })
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })

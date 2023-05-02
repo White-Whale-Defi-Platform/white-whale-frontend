@@ -1,0 +1,1 @@
+export const NUMBER_OF_SECONDS_IN_DAY = 86400

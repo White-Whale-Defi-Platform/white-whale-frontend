@@ -37,30 +37,32 @@ const getMatchingPool = ({ token, poolsList, baseToken }: GetMatchingPoolArgs): 
 
     return findPoolForSwap({
         baseToken,
-        tokenA: baseToken,
-        tokenB: token,
+        tokenA: token,
+        tokenB:  baseToken,
         poolsList
     })
 }
 
 const getPrices = async ({ baseToken, tokens, client, poolsList, coingecko }: GetPrices): Promise<Prices> => {
     const prices = {}
-    const baseTokenPrice = coingecko?.[baseToken?.id].usd || 0
+    const baseTokenPrice = coingecko?.[baseToken?.id]?.usd || 0
 
     await asyncForEach(tokens, async (token) => {
         const symbol = token?.symbol
 
         if (token?.id)
-            prices[symbol] = coingecko?.[token?.id].usd || 0
+            prices[symbol] = coingecko?.[token?.id]?.usd || 0
 
         else {
             const matchingPools = getMatchingPool({ token, poolsList, baseToken })
 
+            const { streamlinePoolBA, streamlinePoolAB } = matchingPools
+
             if (Object.keys(matchingPools).length > 0) {
                 const value = await tokenToTokenPriceQueryWithPools({
                     matchingPools,
-                    tokenA: baseToken,
-                    tokenB: token,
+                    tokenA: !!streamlinePoolAB ? token : baseToken,
+                    tokenB: !!streamlinePoolBA ? token : baseToken,
                     client: client as Wallet,
                     amount: 1,
                 })
