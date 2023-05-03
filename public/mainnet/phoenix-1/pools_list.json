@@ -389,6 +389,44 @@
       "swap_address": "terra1shd0wd8atmevjtryzcqzu6sxsmc4hjek43kxqsz08wxwk4nt0wvsav9004",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALE-ROAR",
+      "lpOrder": ["WHALE", "ROAR"],
+      "assetOrder": ["ROAR", "WHALE"],
+      "displayName": "ROAR-WHALE",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/lion.png",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "id": "white-whale",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        },
+        {
+          "id": "lion-dao",
+          "chain_id": "chihuahua-1",
+          "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
+          "symbol": "ROAR",
+          "name": "ROAR",
+          "decimals": 6,
+          "logoURI": "/logos/lion.png",
+          "tags": [""],
+          "native": false,
+          "denom": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv"
+        }
+      ],
+      "lp_token": "terra1j7zej67gl6kjmgc2tl2hggp4xcvchnrn5reffc489u6ffsvm7aeq5k4sas",
+      "swap_address": "terra1g8clplgv3ah405qjrf9yhkgur9zqlqayt8ftrvkuzsm5am7pr9ls7s26rx",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
