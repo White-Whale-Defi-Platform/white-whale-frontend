@@ -218,7 +218,7 @@ export const useTransaction = ({
         setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash || data?.txHash)
         const queryPath = `@pool-liquidity/${poolId}/${senderAddress}`
-        queryClient.invalidateQueries([queryPath])
+        queryClient.invalidateQueries([queryPath, "positions", "@pool-liquidity"])
         toast({
           title: 'Add Liquidity Success.',
           description: (

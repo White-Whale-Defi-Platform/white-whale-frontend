@@ -148,7 +148,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
           tokenA,
           bondingDays,
           pairAddress: swapAddress,
-          stakingProxy: pool?.staking_proxy,
+          stakingProxy: bondingDays === 0 ? swapAddress : pool?.staking_proxy,
           amountA: reverse
             ? flipped
               ? tokenAAmount
@@ -197,7 +197,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const tx = useTransaction({
     poolId,
     enabled: !!encodedMsgs,
-    swapAddress : pool?.staking_proxy,
+    swapAddress : bondingDays === 0 ? swapAddress : pool?.staking_proxy,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     client,

@@ -8,9 +8,17 @@ import { createAsset, isNativeAsset } from 'services/asset'
 
 const NUMBER_OF_SECONDS_IN_DAY = 86400
 
-const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress}) => {
+const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress }) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
   const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native)
+
+  if (bondingDays === 0) {
+    return {
+      provide_liquidity: {
+        assets: [asset1, asset2],
+      }
+    }
+  }
 
   return {
     deposit: {
@@ -34,7 +42,7 @@ export const createLPExecuteMsgs = (
         tokenAmount: amountA,
         tokenAddress: tokenA?.token_address,
         senderAddress: sender,
-        swapAddress : stakingProxy,
+        swapAddress: stakingProxy,
       })
     )
   }
@@ -44,7 +52,7 @@ export const createLPExecuteMsgs = (
         tokenAmount: amountB,
         tokenAddress: tokenB?.token_address,
         senderAddress: sender,
-        swapAddress : stakingProxy,
+        swapAddress: stakingProxy,
       })
     )
   }

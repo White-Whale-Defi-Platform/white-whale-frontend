@@ -116,6 +116,7 @@ export const useTransaction = ({
         txStep == TxStep.Idle &&
         error == null &&
         !!client &&
+        Number(amount)  > 0 &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
