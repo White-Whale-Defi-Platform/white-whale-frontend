@@ -142,12 +142,13 @@ const RewardsComponent = ({
   const boxBg = '#1C1C1C'
   // TODO global constant ?
   const borderRadius = '30px'
-  const currentEpochStartDateTime = new Date(
+
+  const currentEpochStartDateTimeInMilli = new Date(
     nanoToMilli(Number(currentEpoch?.epoch?.start_time))
   ).getTime()
 
   const passedTimeSinceCurrentEpochStartedInMilli =
-    Date.now() - currentEpochStartDateTime
+    Date.now() - currentEpochStartDateTimeInMilli
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
