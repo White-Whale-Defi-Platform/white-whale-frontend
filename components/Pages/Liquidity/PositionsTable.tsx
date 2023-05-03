@@ -90,17 +90,17 @@ export const PositionsTable = ({ columnFilters, positions }) => {
 
     // loop through positions and get total value
     const totalValue = useMemo(() => {
-        const initialValue = { amount: 0 };
+        const initialValue = { assetAmount: 0, dollarValue: 0 };
 
-        return positions?.reduce((acc, { assets = [] }) => {
+        return positions?.map(p => p?.assets || []).reduce((acc, curr) => {
             const [a1 = initialValue, a2 = initialValue] = acc;
-            const [c1 = initialValue, c2 = initialValue] = assets;
+            const [c1 = initialValue, c2 = initialValue] = curr;
 
             return [
-                { ...c1, amount: (a1.amount + c1.amount) || 0 },
-                { ...c2, amount: (a2.amount + c2.amount) || 0 }
+                { ...c1, dollarValue: (a1.dollarValue + c1.dollarValue) || 0, assetAmount: (a1.assetAmount + c1.assetAmount) || 0 },
+                { ...c2, dollarValue: (a2.dollarValue + c2.dollarValue) || 0, assetAmount: (a2.assetAmount + c2.assetAmount) || 0 }
             ];
-        }, [initialValue]);
+        }, []);
     }, [positions]);
 
 

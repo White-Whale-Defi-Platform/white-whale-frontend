@@ -69,7 +69,7 @@ const usePositions = (poolId: string) => {
                         const lpAssets = lpToAssets({ totalReserve, totalLpSuppy, providedLp: position.amount })
                         const assets = pool_assets.map((asset, i) => {
                             const assetAmount = fromChainAmount(lpAssets[i], asset.decimals)
-                            const dollarValue = num(assetAmount).times(prices?.[asset.symbol] || 0).toFixed(4)
+                            const dollarValue = num(assetAmount).times(prices?.[asset.symbol] || 0).toNumber()
                             return {
                                 ...asset,
                                 assetAmount : parseFloat(assetAmount),
