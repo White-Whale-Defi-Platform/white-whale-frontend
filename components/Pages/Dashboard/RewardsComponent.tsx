@@ -20,6 +20,7 @@ import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 import { ActionType } from './BondingOverview'
 import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
+import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 
 const pulseAnimation = keyframes`
   0% {
@@ -108,7 +109,7 @@ const RewardsComponent = ({
   feeDistributionConfig,
   annualRewards,
   globalAvailableRewards,
-  claimableRewards,
+  totalGlobalClaimable,
   weightInfo,
 }) => {
   const [{ chainId }, _] = useRecoilState(walletState)
@@ -117,6 +118,11 @@ const RewardsComponent = ({
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure()
+
+  const claimableRewards = useMemo(
+    () => totalGlobalClaimable * Number(weightInfo?.share),
+    [totalGlobalClaimable, weightInfo]
+  )
 
   const epochDurationInMilli = nanoToMilli(
     Number(feeDistributionConfig?.epoch_config?.duration)
@@ -154,7 +160,7 @@ const RewardsComponent = ({
     if (!isWalletConnected) return 'Connect Wallet'
     else if (claimableRewards === 0) return 'No Rewards'
     else return 'Claim'
-  }, [isWalletConnected, globalAvailableRewards])
+  }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
   const durationString = calculateRewardDurationString(
     epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
@@ -250,11 +256,15 @@ const RewardsComponent = ({
                 <Text color="whiteAlpha.600">Rewards</Text>
                 <BondingActionTooltip action={ActionType.claim} />
               </HStack>
-              <Text>
-                {isWalletConnected
-                  ? `$${(claimableRewards * whalePrice).toFixed(2)}`
-                  : 'n/a'}
-              </Text>
+              <RewardsTooltip
+                value={
+                  isWalletConnected
+                    ? `$${(claimableRewards * whalePrice).toFixed(2)}`
+                    : 'n/a'
+                }
+                isWalletConnected={isWalletConnected}
+                whale={claimableRewards}
+              />
             </HStack>
             <HStack>
               <Text color="whiteAlpha.600" fontSize={11}>
