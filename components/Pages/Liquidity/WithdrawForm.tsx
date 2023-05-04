@@ -27,8 +27,6 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
 
   // const claimableLP = useClaimableLP({ poolId})
 
-  console.log({ liquidity })
-
   const [reverse, setReverse] = useState(false)
   const [assetA, assetB] = poolId?.split('-') || []
 
