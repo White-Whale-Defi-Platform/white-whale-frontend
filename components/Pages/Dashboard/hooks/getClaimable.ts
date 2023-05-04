@@ -51,8 +51,8 @@ export const getClaimable = async (
     .flatMap((e) => e.available.map((a) => a.amount))
     .reduce((acc, amount) => acc + parseFloat(amount), 0)
 
-  const claimable = convertMicroDenomToDenom(claimableAmounts, 6)
-  return { claimable }
+  const totalGlobalClaimable = convertMicroDenomToDenom(claimableAmounts, 6)
+  return { totalGlobalClaimable }
 }
 const fetchClaimableData = async (
   client: Wallet,
