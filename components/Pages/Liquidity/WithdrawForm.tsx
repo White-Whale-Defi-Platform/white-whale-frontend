@@ -9,6 +9,7 @@ import Input from 'components/AssetInput/Input'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
+// import useClaimableLP from './hooks/useClaimableLP'
 
 type Props = {
   poolId: string
@@ -23,6 +24,10 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
       liquidity
     } = {}
   ] = useQueryPoolLiquidity({ poolId })
+
+  // const claimableLP = useClaimableLP({ poolId})
+
+  // console.log({ claimableLP })
 
   const [reverse, setReverse] = useState(false)
   const [assetA, assetB] = poolId?.split('-') || []

@@ -53,8 +53,10 @@ const Pools: FC<Props> = () => {
 
   const calculateMyPostion = (pool) => {
     const totalLiq = calcuateTotalLiq(pool)
-    const { provided, total } = pool.liquidity?.available || {}
-    return num(provided?.tokenAmount)
+    const { provided, total, staked } = pool.liquidity?.available || {}
+    const { provided : stakedProvided } = pool.liquidity?.staked || {}
+    const totalLP = Number(provided?.tokenAmount) + Number(stakedProvided?.tokenAmount || 0)
+    return num(totalLP)
       .times(totalLiq)
       .div(total?.tokenAmount)
       .dp(6)

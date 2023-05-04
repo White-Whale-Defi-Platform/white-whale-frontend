@@ -84,9 +84,13 @@ export const PositionsTable = ({ columnFilters, positions }) => {
         id: "duration"
     }]);
 
-    const totalDollarValue = useMemo(() => positions.reduce((acc, curr) => {
-        return acc + curr.value
-    }, 0), [positions])
+    const totalDollarValue = useMemo(() => {
+        const filter = columnFilters?.[0]?.value
+        const filteredPositions =  positions.filter(p => filter ? p.state === filter : true)
+        return filteredPositions.reduce((acc, curr) => {
+            return acc + curr.value
+        }, 0)
+    }, [positions, columnFilters])
 
     // loop through positions and get total value
     const totalValue = useMemo(() => {

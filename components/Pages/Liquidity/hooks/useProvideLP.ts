@@ -14,7 +14,7 @@ import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap
 // import { createBondExecuteMsgs, createBondtMsg } from '../createBondMsg'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { fromUtf8 } from '@cosmjs/encoding'
-import useIsNewPosition from '../../Liquidity/hooks/useIsNewPosition'
+// import useIsNewPosition from './useIsNewPosition'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)

@@ -16,7 +16,6 @@ import {
   queryRewardsContracts,
   SerializedRewardsContract,
 } from './queryRewardsContracts'
-import { queryStakedLiquidity } from './queryStakedLiquidity'
 import { querySwapInfo } from './querySwapInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
@@ -63,6 +62,20 @@ type QueryMultiplePoolsArgs = {
   client: any
 }
 
+
+const queryStakedLiquidity = async ({ pool, client, address }) => {
+  if(!address || !client || !pool.staking_address) return
+
+  const {positions = []} =  await client?.queryContractSmart(pool.staking_address, {
+    positions: { address }
+  }) || []
+
+  return positions?.map((p = {}) => {
+    const { open_position = {}, closed_position = {}} = p
+    return {...open_position, ...closed_position}
+  }).reduce((acc, p) => acc + Number(p.amount), 0) || 0
+}
+
 export const useQueryMultiplePoolsLiquidity = ({
   pools,
   refetchInBackground = false,
@@ -91,6 +104,8 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
+    const stakedLP = await queryStakedLiquidity({pool, client, address})
+
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
         context,
@@ -104,12 +119,12 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalStakedReserve,
       providedStakedReserve,
     } = {
-    providedStakedAmountInMicroDenom: 0,
-    totalStakedAmountInMicroDenom: 0,
-    totalStakedReserve: [],
-    providedStakedReserve: []
+      providedStakedAmountInMicroDenom: stakedLP || 0,
+      totalStakedAmountInMicroDenom: 0,
+      totalStakedReserve: [],
+      providedStakedReserve: []
     }
-    
+
     // await queryStakedLiquidity({
     //   context,
     //   address,
@@ -227,7 +242,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     usePoolsListQuery()
   const { chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
-
+ 
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]
     return pool ? [pool] : undefined
