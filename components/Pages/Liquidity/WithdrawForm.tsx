@@ -87,7 +87,7 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!!!tokenA?.amount) return 'Enter Amount'
-    // else if (!isFinite(Number(lp))) return 'Insufficient Balance'
+    else if (!isFinite(Number(lp))) return 'Insufficient funds'
     else if (tx?.buttonLabel) return tx?.buttonLabel
     else return 'Withdraw'
   }, [tx?.buttonLabel, connected, tokenA, tokenB, lp])
