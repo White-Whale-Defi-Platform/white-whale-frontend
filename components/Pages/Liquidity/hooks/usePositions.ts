@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
 import { walletState } from "state/atoms/walletAtoms";
 import { formatSeconds } from "util/formatSeconds";
-import { TokenInfo } from "../../../../queries/usePoolsListQuery";
+import { TokenInfo } from "queries/usePoolsListQuery";
 
 export type Position = {
     amount: number

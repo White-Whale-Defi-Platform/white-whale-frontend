@@ -23,6 +23,7 @@ const columns = (totlaValue, totalDollarValue) => {
     return [
         columnHelper.accessor('duration', {
             header: () => <Text as="span" color="brand.50" fontSize="sm" textTransform="capitalize">Duration</Text>,
+            cell: (info) => (<Text>{`${info.getValue()} days`}</Text>),
             enableSorting: true,
         }),
         columnHelper.accessor('value', {

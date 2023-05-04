@@ -25,7 +25,6 @@ const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddres
       assets: [asset1, asset2],
       pair_address: pairAddress,
       unbonding_duration: bondingDays * NUMBER_OF_SECONDS_IN_DAY
-      // unbonding_duration: num(bondingDays).times(NUMBER_OF_SECONDS_IN_DAY).toNumber()
     },
   }
 }

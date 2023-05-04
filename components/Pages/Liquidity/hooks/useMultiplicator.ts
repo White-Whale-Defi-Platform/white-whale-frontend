@@ -17,7 +17,7 @@ const useMultiplicator = (poolId) => {
             weight: 0,
         })
 
-        return parseFloat((amount / weight).toFixed(2)) || 0
+        return parseFloat((weight/amount).toFixed(2)) || 0
     }, [positions])
 
 
