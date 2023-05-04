@@ -1,20 +1,15 @@
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import useTransaction from '../../NewPosition/hooks/useTransaction'
-// import useTransaction from './useTransactionBond'
 import { num, toChainAmount } from 'libs/num'
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
+import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { fromChainAmount } from 'libs/num'
-
 import { tokenLpAtom } from '../lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-// import { createBondExecuteMsgs, createBondtMsg } from '../createBondMsg'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
-import { fromUtf8 } from '@cosmjs/encoding'
-// import useIsNewPosition from './useIsNewPosition'
+import useTransaction from './useDepositTransaction'
+
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
@@ -28,9 +23,6 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const poolId =
     matchingPools?.streamlinePoolAB?.pool_id ||
     matchingPools?.streamlinePoolBA?.pool_id
-  const staking_address =
-    matchingPools?.streamlinePoolAB?.staking_address ||
-    matchingPools?.streamlinePoolBA?.staking_address
   const lpOrder =
     matchingPools?.streamlinePoolAB?.lpOrder ||
     matchingPools?.streamlinePoolBA?.lpOrder
@@ -105,18 +97,6 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     matchingPools,
   ])
 
-  // const { bondMsg, encodedBondMsg } = useMemo(() => {
-  //   const msg = createBondtMsg({
-  //     amount : String(lpBalance),
-  //   })
-  //   const encodedMsg = createBondExecuteMsgs({
-  //     amount : String(lpBalance),
-  //     senderAddress: address,
-  //     stakingAddress: staking_address,
-  //   })
-  //   return { bondMsg: msg, encodedBondMsg: encodedMsg }
-  // }, [liquidity, staking_address])
-
   const { msgs, encodedMsgs } = useMemo(() => {
     if (
       simulated == null ||
@@ -169,30 +149,6 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       ),
     }
   }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse, pool?.staking_proxy, bondingDays])
-
-  console.log({encodedMsgs, msgs})
-
-  // if(encodedMsgs?.length > 0){
-  //   console.log({newmsgs: encodedMsgs?.map(msg => {
-  //     const value = msg?.value
-  //     const m = JSON.parse(fromUtf8(value?.msg || ""))
-  //     value.msg = m
-  //     return  {
-  //       ...msg,
-  //       value
-  //     }   
-  //   })})
-  // }
-
-  // msgs, client, stakingAddress, senderAddress, amount, lpAddress
-  // const tx = useTransaction({
-  //   msgs: bondMsg,
-  //   client,
-  //   stakingAddress: staking_address,
-  //   senderAddress: address,
-  //   amount: lpBalance,
-  //   lpAddress: "migaloo1ff55scggwlgulr8tjmmtg0wyvd4xssyu6kjz84t4602gzt22nf8q6ztfr4",
-  // })
 
   const tx = useTransaction({
     poolId,

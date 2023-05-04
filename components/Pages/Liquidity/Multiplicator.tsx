@@ -1,22 +1,17 @@
 import {
-    Box,
-    Button,
-    HStack,
-    Slider,
-    SliderFilledTrack,
-    SliderThumb,
-    SliderTrack,
-    Spacer,
-    Spinner,
-    Text, VStack
-  } from '@chakra-ui/react'
+    HStack, Text
+} from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 
 type Props = {
     multiplicator: string;
+    show: boolean;
 }
 
-const Multiplicator = ({multiplicator}: Props) => {
+const Multiplicator = ({ multiplicator, show }: Props) => {
+
+    if (!show) return null
+    
     return (
         <HStack
             justifyContent="space-between"

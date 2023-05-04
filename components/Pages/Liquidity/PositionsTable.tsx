@@ -1,22 +1,11 @@
-import {
-    Table,
-    Thead,
-    Tbody, Tr,
-    Th,
-    Td, TableContainer,
-    Text,
-    Box,
-    VStack,
-    HStack
-} from "@chakra-ui/react";
-import { getCoreRowModel, useReactTable, flexRender, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table";
-import { useState, useMemo, useEffect } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { createColumnHelper } from "@tanstack/react-table"
-import { TooltipWithChildren } from "components/TooltipWithChildren"
-import { AvailableRewards } from "./AvailableRewards"
-import { useTokenDollarValue } from "../../../hooks/useTokenDollarValue";
-import { num } from "../../../libs/num";
+import {
+    Box, HStack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack
+} from "@chakra-ui/react";
+import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { TooltipWithChildren } from "components/TooltipWithChildren";
+import { useMemo, useState } from "react";
+import { AvailableRewards } from "./AvailableRewards";
 
 
 type TableProps = {
@@ -93,10 +82,12 @@ export const PositionsTable = ({ columnFilters, positions }) => {
     }, [positions, columnFilters])
 
     // loop through positions and get total value
-    const totalValue = useMemo(() => {
+    const assetsWithValue = useMemo(() => {
         const initialValue = { assetAmount: 0, dollarValue: 0 };
+        const filter = columnFilters?.[0]?.value
+        const filteredPositions =  positions.filter(p => filter ? p.state === filter : true)
 
-        return positions?.map(p => p?.assets || []).reduce((acc, curr) => {
+        return filteredPositions?.map(p => p?.assets || []).reduce((acc, curr) => {
             const [a1 = initialValue, a2 = initialValue] = acc;
             const [c1 = initialValue, c2 = initialValue] = curr;
 
@@ -105,13 +96,13 @@ export const PositionsTable = ({ columnFilters, positions }) => {
                 { ...c2, dollarValue: (a2.dollarValue + c2.dollarValue) || 0, assetAmount: (a2.assetAmount + c2.assetAmount) || 0 }
             ];
         }, []);
-    }, [positions]);
+    }, [positions, columnFilters]);
 
 
 
     const customColumns = useMemo(() => {
-        return columns(totalValue, totalDollarValue.toFixed(2))
-    }, [totalValue, totalDollarValue])
+        return columns(assetsWithValue, totalDollarValue.toFixed(2))
+    }, [assetsWithValue, totalDollarValue])
 
     const table = useReactTable({
         data: positions || [],

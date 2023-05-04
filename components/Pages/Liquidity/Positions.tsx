@@ -1,8 +1,15 @@
 import { HStack, Divider, Button, Box } from "@chakra-ui/react";
 import { useState } from "react";
+import { Position } from "./hooks/usePositions";
 import { PositionsTable } from "./PositionsTable";
 
-export const Positions = ({ positions }) => {
+const STATES = ["all", "active", "unbounding"]
+
+type Props = Position & {
+    positions: any[]
+}
+
+export const Positions = ({ positions }: Props) => {
 
     const [activeButton, setActiveButton] = useState("all");
     const [columnFilters, setColumnFilters] = useState([]);
@@ -18,7 +25,7 @@ export const Positions = ({ positions }) => {
                 borderRadius="75px"
                 gap="20px"
             >
-                {["all", "active", "unbounding"].map((item) => (
+                {STATES.map((item) => (
                     <Button
                         key={item}
                         minW="120px"
@@ -41,9 +48,9 @@ export const Positions = ({ positions }) => {
 
             <Divider opacity="0.2" />
 
-            <PositionsTable 
-                columnFilters={columnFilters} 
-                positions={positions} 
+            <PositionsTable
+                columnFilters={columnFilters}
+                positions={positions}
             />
         </Box>
     );

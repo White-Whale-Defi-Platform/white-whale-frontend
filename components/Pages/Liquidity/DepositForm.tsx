@@ -11,6 +11,7 @@ import SubmitButton from 'components/SubmitButton'
 import BondingDaysSlider from "./BondingDaysSlider"
 import Multiplicator from "./Multiplicator"
 import useMultiplicator from "./hooks/useMultiplicator"
+import { usePoolFromListQueryById } from '../../../queries/usePoolsListQuery'
 
 
 
@@ -49,6 +50,10 @@ const DepositForm = ({
       token2: tokenB
     },
   })
+
+  const [pool] = usePoolFromListQueryById({ poolId })
+
+  const isStakingEnabled = useMemo(() => !!pool?.staking_address, [pool])
 
   const multiplicator = useMultiplicator(poolId )
 
@@ -132,9 +137,10 @@ const DepositForm = ({
       <BondingDaysSlider
         bondingDays={bondingDays}
         setBondingDays={setBondingDays}
+        show={isStakingEnabled}
       />
 
-      <Multiplicator multiplicator={String(multiplicator)} />
+      <Multiplicator multiplicator={String(multiplicator)} show={isStakingEnabled}/>
 
       <SubmitButton 
         label={buttonLabel}

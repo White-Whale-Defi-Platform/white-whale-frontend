@@ -27,14 +27,13 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
 
   // const claimableLP = useClaimableLP({ poolId})
 
-  // console.log({ claimableLP })
+  console.log({ liquidity })
 
   const [reverse, setReverse] = useState(false)
   const [assetA, assetB] = poolId?.split('-') || []
 
   const { tokenABalance, tokenBBalance } = useMemo(() => {
     const [reserveA, reserveB] = liquidity?.reserves?.totalProvided || []
-    // console.log({ reserveA, reserveB, liquidity })
     return {
       tokenABalance: fromChainAmount(reserveA),
       tokenBBalance: fromChainAmount(reserveB)
@@ -61,7 +60,7 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
   const tokenB = watch('token2')
 
   const { lp, simulated } = useSimulateWithdraw({
-    lp: liquidity?.providedTotal?.tokenAmount,
+    lp: liquidity?.available?.provided?.tokenAmount,
     tokenA: liquidity?.reserves?.totalProvided?.[0],
     tokenB: liquidity?.reserves?.totalProvided?.[1],
     amount: reverse ? toChainAmount(tokenB.amount) : toChainAmount(tokenA.amount),
@@ -82,7 +81,7 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     }
   }, [simulated])
 
-  const tx = useWithdraw({ amount: lp, contract, swapAddress, poolId })
+  const tx = useWithdraw({ amount: isFinite(Number(lp)) ? lp : "0", contract, swapAddress, poolId })
 
   const isConnected = connected === WalletStatusType.connected
   const isInputDisabled = tx?.txStep == TxStep.Posting
@@ -90,9 +89,10 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!!!tokenA?.amount) return 'Enter Amount'
+    // else if (!isFinite(Number(lp))) return 'Insufficient Balance'
     else if (tx?.buttonLabel) return tx?.buttonLabel
     else return 'Withdraw'
-  }, [tx?.buttonLabel, connected, tokenA, tokenB])
+  }, [tx?.buttonLabel, connected, tokenA, tokenB, lp])
 
 
   // on input change reset input or update value

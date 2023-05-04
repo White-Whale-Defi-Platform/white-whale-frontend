@@ -1,55 +1,10 @@
 
 import { useToast } from '@chakra-ui/react'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { isTxError, TxError } from '@terra-money/feather.js'
 import { useEffect, useState } from 'react'
 import { TxStep } from 'types/common'
-import Finder from '../../../Finder'
+import Finder from 'components/Finder'
 import useTxInfo from './useTxInfo'
-
-type Tx = {
-    transcationType: string;
-    client: CosmWasmClient;
-}
-
-// function parseError(error) {
-//     if (error?.code) {
-//         switch (error.code) {
-//             case 0:
-//                 return "Unknown error";
-//             case 1:
-//                 return "Internal error";
-//             case 2:
-//                 return "User denied transaction signature";
-//             case 3:
-//                 return "Invalid request";
-//             case 4:
-//                 if (error.rawLog.includes("revert")) {
-//                     return "Contract error";
-//                 } else if (error.rawLog.includes("insufficient liquidity")) {
-//                     return "Low liquidity error";
-//                 } else {
-//                     return "Transaction failed";
-//                 }
-//             default:
-//                 return "Unknown error code: " + error.code;
-//         }
-//     } else {
-//         if (
-//             /insufficient funds/i.test(error?.message) ||
-//             /Overflow: Cannot Sub with/i.test(error?.message)
-//         )
-//             return 'Insufficient funds'
-//         else if (/Max spread assertion/i.test(error?.message))
-//             return 'Try increasing slippage'
-//         else if (/Request rejected/i.test(error?.message))
-//             return 'User denied'
-//         else
-//             return 'Failed to execute transaction.'
-
-//     }
-
-// }
 
 const parseError = (error: Error) => {
     const customErrors = [

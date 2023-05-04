@@ -1,27 +1,14 @@
-import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
-import { fromUtf8 } from '@cosmjs/encoding'
-import { coin } from '@cosmjs/stargate'
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 import { useRecoilValue } from 'recoil'
-
-// import { TokenInfo } from '../../queries/usePoolsListQuery'
-import {
-    createExecuteMessage,
-    createIncreaseAllowanceMessage,
-    validateTransactionSuccess,
-} from 'util/messages'
-import { Wallet } from 'util/wallet-adapters'
-import { toChainAmount } from 'libs/num'
-import { usePoolFromListQueryById, usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { walletState } from 'state/atoms/walletAtoms'
-import { AssetInfo } from 'types/terraswap'
+import { createExecuteMessage } from 'util/messages'
 import useTxStatus from './useTx'
 
 interface Props {
     poolId: string
 }
-
 
 export const useClaim = ({poolId}:Props) => {
 
@@ -29,7 +16,7 @@ export const useClaim = ({poolId}:Props) => {
     const [pool] = usePoolFromListQueryById({ poolId })
     const { onError, onSuccess, ...tx } = useTxStatus({ transcationType: 'Claim', client })
 
-    const executeAddLiquidityMessage = createExecuteMessage({
+    const msg = createExecuteMessage({
         message: {
             claim: {}
         },
@@ -38,12 +25,8 @@ export const useClaim = ({poolId}:Props) => {
         funds: [],
     })
 
-    const msgs = [
-        executeAddLiquidityMessage,
-    ]
-
     const { mutate: submit, ...state } = useMutation({
-        mutationFn: () => client.post(address, msgs),
+        mutationFn: () => client.post(address, [msg]),
         onError,
         onSuccess,
     })

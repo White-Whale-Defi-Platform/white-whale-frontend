@@ -1,4 +1,4 @@
-import { HStack, VStack, Text} from "@chakra-ui/react"
+import { HStack, VStack, Text } from "@chakra-ui/react"
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from "components/TooltipWithChildren"
 import { TxStep } from "types/common"
@@ -7,7 +7,7 @@ import { useClaim } from "./hooks/useClaim"
 import useRewards from "./hooks/useRewards"
 
 
-const AvailableRewards = ({ totalValue }) => (
+const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
   <HStack
     justifyContent="space-between"
     width="full"
@@ -15,7 +15,6 @@ const AvailableRewards = ({ totalValue }) => (
     borderRadius="15px"
     p={4}
     pt={3.5}
-  // style={{ marginBottom: 30 }}
   >
     <TooltipWithChildren
       label="Available Rewards"

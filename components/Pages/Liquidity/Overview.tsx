@@ -1,12 +1,10 @@
-import { Box, VStack, Text } from "@chakra-ui/react"
+import { Box, Text, VStack } from "@chakra-ui/react"
 import { useMemo } from "react"
-import { usePoolFromListQueryById } from "queries/usePoolsListQuery"
-import usePositions from "./hooks/usePositions"
 import { Action } from "./Action"
+import usePositions from "./hooks/usePositions"
+import useRewards from "./hooks/useRewards"
 import { Positions } from "./Positions"
 import { Rewards } from "./Rewards"
-import usePriceList from "../../../hooks/usePrices"
-import useRewards from "./hooks/useRewards"
 
 type Props = {
     poolId: string;
@@ -15,9 +13,7 @@ type Props = {
 
 const Overview = ({ poolId }: Props) => {
 
-    const {rewards, totalValue} = useRewards()
-
-    // const [pool] = usePoolFromListQueryById({ poolId })
+    const { rewards, totalValue } = useRewards()
     const { data: positions = [] } = usePositions(poolId)
 
     const tableData = useMemo(() => {
@@ -27,11 +23,9 @@ const Overview = ({ poolId }: Props) => {
         }))
     }, [positions])
 
-    console.log({positions, rewards})
-
     return (
         <VStack alignItems="flex-start" gap="16px" py={5}>
-            <Rewards   
+            <Rewards
                 rewards={rewards}
                 totalValue={totalValue}
             />

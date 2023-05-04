@@ -1,10 +1,5 @@
 import { useMemo } from "react"
-import { usePoolsListQuery } from "queries/usePoolsListQuery"
 import usePositions from "./usePositions"
-import { useCosmwasmClient } from "hooks/useCosmwasmClient"
-import { useRecoilValue } from "recoil"
-import { walletState } from "state/atoms/walletAtoms"
-import { useQuery } from "react-query"
 
 
 const useClaimableLP = ({ poolId }) => {

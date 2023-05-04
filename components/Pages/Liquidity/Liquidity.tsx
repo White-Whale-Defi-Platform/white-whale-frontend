@@ -1,5 +1,3 @@
-import { FC, useEffect, useState } from 'react'
-
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -11,22 +9,21 @@ import {
   TabPanels,
   Tabs,
   Text,
-  VStack,
+  VStack
 } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
-import { TxStep } from 'hooks/useTransaction'
+import { TxStep } from 'types/common'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { FC, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-
-import useProvideLP from './hooks/useProvideLP'
-import DepositForm from './DepositForm'
-import { tokenLpAtom } from './lpAtoms'
-import WithdrawForm from './WithdrawForm'
-import Overview from './Overview'
+import { walletState } from 'state/atoms/walletAtoms'
 import Claim from './Claim'
-import OpenPositionForm from './OpenPositionForm'
+import DepositForm from './DepositForm'
+import useProvideLP from './hooks/useProvideLP'
+import { tokenLpAtom } from './lpAtoms'
+import Overview from './Overview'
+import WithdrawForm from './WithdrawForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -111,7 +108,6 @@ const ManageLiquidity: FC = () => {
       width={{ base: '100%', md: '800px' }}
       alignItems="center"
       padding={5}
-      // margin="auto"
     >
       <HStack
         justifyContent="space-between"
@@ -144,14 +140,12 @@ const ManageLiquidity: FC = () => {
           borderColor="whiteAlpha.200"
           borderRadius="3xl"
           pt="8"
-          // maxW="600px"
           maxH="fit-content"
         >
           <Tabs variant="brand">
             <TabList justifyContent="center" background="#1C1C1C">
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
-              {/* <Tab>Bond</Tab> */}
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
             </TabList>
@@ -178,16 +172,6 @@ const ManageLiquidity: FC = () => {
                   />
                 )}
               </TabPanel>
-              {/* <TabPanel padding={4}>
-                {isTokenSet && (
-                  <OpenPositionForm
-                    connected={status}
-                    // onInputChange={onInputChange}
-                    poolId={poolId}
-                    // tx={tx}
-                  />
-                )}
-              </TabPanel> */}
               <TabPanel padding={4}>
                 <WithdrawForm
                   connected={status}

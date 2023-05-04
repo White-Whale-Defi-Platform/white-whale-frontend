@@ -5,37 +5,7 @@ import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { executeAddLiquidity } from 'services/liquidity'
-
-export enum TxStep {
-  /**
-   * Idle
-   */
-  Idle = 0,
-  /**
-   * Estimating fees
-   */
-  Estimating = 1,
-  /**
-   * Ready to post transaction
-   */
-  Ready = 2,
-  /**
-   * Signing transaction in Terra Station
-   */
-  Posting = 3,
-  /**
-   * Broadcasting
-   */
-  Broadcasting = 4,
-  /**
-   * Succesful
-   */
-  Success = 5,
-  /**
-   * Failed
-   */
-  Failed = 6,
-}
+import { TxStep } from 'types/common'
 
 type Params = {
   enabled: boolean

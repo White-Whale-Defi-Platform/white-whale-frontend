@@ -1,22 +1,24 @@
-import { VStack, Text, Box, Slider, SliderTrack, SliderThumb, SliderFilledTrack, HStack } from '@chakra-ui/react'
+import { Box, HStack, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text, VStack } from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
-import { useState, useEffect } from 'react'
-import useDebounceValue from '../../../hooks/useDebounceValue'
+import { useEffect, useState } from 'react'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 type Props = {
     bondingDays: number
     setBondingDays: (value: number) => void
+    show: boolean
 }
 
-const BondingDaysSlider = ({ bondingDays, setBondingDays }: Props) => {
+const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
 
     const [value, setValue] = useState(0)
-
     const days = useDebounceValue(value, 500)
 
     useEffect(() => {
         setBondingDays(days)
-    },[days])
+    }, [days])
+
+    if (!show) return null
 
 
     return (

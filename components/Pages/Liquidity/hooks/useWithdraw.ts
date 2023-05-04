@@ -1,15 +1,12 @@
+import { num } from 'libs/num'
 import { useMemo } from 'react'
-
-import { num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import { TokenItemState } from '../lpAtoms'
 import {
   createWithdrawExecuteMsgs,
-  createWithdrawMsg,
+  createWithdrawMsg
 } from './createWithdrawMsgs'
-import { useTransaction } from './useTransaction'
+import { useTransaction } from './useWithdrawTransaction'
 
 type Props = {
   amount: string
@@ -20,7 +17,6 @@ type Props = {
 
 const useWithdraw = ({ amount, contract, swapAddress, poolId }: Props) => {
   const { address, client } = useRecoilValue(walletState)
-
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (parseFloat(amount) === 0 || contract === null) return {}
@@ -74,7 +70,6 @@ const simulate = ({
   else {
     const lpTokensForPartialA = lp * (amount / tokenA);
     const tokenBForLP = lpTokensForPartialA === lp ? tokenB : (tokenB * (lp - lpTokensForPartialA) / lp);
-    // console.log({ amount, lp, tokenA, tokenB, lable: "simulatesdfd", lpTokensForPartialA, tokenBForLP })
     return {
       lp: num(lpTokensForPartialA).dp(0).toString(),
       simulated: lpTokensForPartialA === lp ? num(tokenBForLP).dp(0).toString() : num(tokenB).minus(tokenBForLP).dp(0).toString()

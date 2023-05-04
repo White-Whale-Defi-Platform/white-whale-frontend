@@ -3,6 +3,7 @@ import usePrices from "hooks/usePrices"
 import { useTokenList } from "hooks/useTokenList"
 import { useMemo } from "react"
 import { fromChainAmount, num } from "libs/num"
+import { TokenInfo } from "../../../../queries/usePoolsListQuery"
 
 
 const rewardsMock = [{
@@ -22,6 +23,28 @@ const rewardsMock = [{
     }
 }]
 
+type RewardData = {
+    amount: string;
+    info: {
+        token?: {
+            contract_addr: string;
+        };
+        native_token?: {
+            denom: string;
+        };
+    };
+}
+
+export type Reward = TokenInfo & {
+    assetAmount: number;
+    dollarValue: number;
+}
+
+export type RewardsResult = {
+    rewards: Reward[];
+    totalValue: number;
+}
+
 const useRewards = () => {
 
     const [tokenList] = useTokenList()
@@ -29,41 +52,43 @@ const useRewards = () => {
 
     const { data: rewards = [] } = useQuery({
         queryKey: 'rewards',
-        queryFn: async () => {
-            return rewardsMock
+        queryFn: async (): Promise<RewardData[]> => {
+            return Promise.resolve(rewardsMock)
         }
     })
 
     return useMemo(() => {
+        const rewardsWithToken = []
 
-        const rewardsWithToken = rewards?.map((reward) => {
+        rewards?.forEach((reward) => {
+            //cw20 token
             if (reward.info.token) {
                 const t = tokenList?.tokens.find((token) => token.denom === reward.info.token.contract_addr)
                 const amount = fromChainAmount(reward.amount, t?.decimals)
                 const dollarValue = num(amount).times(prices?.[t?.symbol] || 0).dp(2).toNumber()
-                return {
+                rewardsWithToken.push({
                     ...t,
                     assetAmount: parseFloat(amount),
                     dollarValue
-                }
+                })
             }
+            //native token
             if (reward.info.native_token) {
                 const t = tokenList?.tokens.find((token) => token.denom === reward.info.native_token.denom)
                 const amount = fromChainAmount(reward.amount, t?.decimals)
                 const dollarValue = num(amount).times(prices?.[t?.symbol] || 0).dp(4).toNumber()
-                return {
+                rewardsWithToken.push({
                     ...t,
                     assetAmount: parseFloat(amount),
                     dollarValue
-                }
+                })
             }
-            return false
-        }).filter(Boolean)
+        })
 
         return {
             rewards: rewardsWithToken,
             totalValue: rewardsWithToken?.reduce((acc, reward) => acc + reward.dollarValue, 0)?.toFixed(2)
-        }
+        } as RewardsResult
 
 
     }, [rewards, tokenList, prices])

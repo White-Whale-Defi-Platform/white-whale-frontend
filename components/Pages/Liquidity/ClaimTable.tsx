@@ -1,16 +1,11 @@
-import { HStack, VStack, Text, Image, Button } from "@chakra-ui/react"
-import { TooltipWithChildren } from "components/TooltipWithChildren"
-import { useTokenList } from "hooks/useTokenList"
-import { useMemo, useState, useEffect } from "react"
-import { useTokenDollarValue } from "hooks/useTokenDollarValue"
-import { useClaim } from "./hooks/useClaim"
-import { num } from "libs/num"
+import { HStack, Image, Text, VStack } from "@chakra-ui/react"
+import { Reward } from "./hooks/useRewards"
 
 type Props = {
-    tokens: any[]
+    tokens: Reward[]
 }
 
-const TokenRow = ({ item, isLast }: { item: any, isLast: boolean }) => {
+const TokenRow = ({ item, isLast }: { item: Reward, isLast: boolean }) => {
     return (
         <HStack
             width="full"
