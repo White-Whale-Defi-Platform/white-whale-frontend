@@ -120,7 +120,7 @@ const RewardsComponent = ({
   } = useDisclosure()
 
   const claimableRewards = useMemo(
-    () => totalGlobalClaimable * Number(weightInfo?.share),
+    () => totalGlobalClaimable * Number(weightInfo?.share || 0),
     [totalGlobalClaimable, weightInfo]
   )
 
@@ -206,7 +206,7 @@ const RewardsComponent = ({
           alignItems="center"
           minH={320}
           w={450}
-          gap={4}
+          gap={3}
           overflow="hidden"
           position="relative"
           display="flex"
@@ -229,7 +229,7 @@ const RewardsComponent = ({
               <Text fontSize={20}>WHALE</Text>
             </HStack>
             <Text color="#7CFB7D" fontSize={18}>
-              ${whalePrice.toFixed(6)}
+              ${whalePrice?.toFixed(6)}
             </Text>
           </HStack>
           <VStack>
@@ -263,7 +263,7 @@ const RewardsComponent = ({
                     : 'n/a'
                 }
                 isWalletConnected={isWalletConnected}
-                whale={claimableRewards}
+                whale={claimableRewards.toFixed(6)}
               />
             </HStack>
             <HStack>

@@ -13,7 +13,7 @@ import {
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/bonding_contract'
-import { usePriceForOneToken } from 'features/swap/index'
+import { useTerraWhaleUSDCPrice } from 'hooks/useTerraWhaleUSDCPrice'
 
 const Dashboard: FC = () => {
   const [{ chainId, status, client, address, network }] =
@@ -104,12 +104,7 @@ const Dashboard: FC = () => {
   const setWithdrawableTokens = function (ampWhale, bWhale) {
     setValues(TokenType.withdrawable, ampWhale + bWhale, null, ampWhale, bWhale)
   }
-
-  const whalePrice =
-    usePriceForOneToken({
-      tokenASymbol: 'WHALE',
-      tokenBSymbol: 'axlUSDC',
-    })[0] || 0
+  const whalePrice = useTerraWhaleUSDCPrice()
 
   const { balance: liquidWhale } = useTokenBalance(WHALE_TOKEN_SYMBOL)
   const { balance: liquidAmpWhale } = useTokenBalance(AMP_WHALE_TOKEN_SYMBOL)
