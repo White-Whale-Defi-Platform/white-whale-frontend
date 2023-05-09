@@ -19,6 +19,7 @@ export enum ActionType {
   unbond,
   withdraw,
   claim,
+  createNewEpoch,
 }
 
 export enum WhaleType {
