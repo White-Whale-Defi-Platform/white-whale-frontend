@@ -7,6 +7,7 @@ import {
   Image,
   keyframes,
   Text,
+  Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -20,6 +21,7 @@ import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 import { ActionType } from './BondingOverview'
 import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
+import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 
 const pulseAnimation = keyframes`
   0% {
@@ -108,7 +110,7 @@ const RewardsComponent = ({
   feeDistributionConfig,
   annualRewards,
   globalAvailableRewards,
-  claimableRewards,
+  totalGlobalClaimable,
   weightInfo,
 }) => {
   const [{ chainId }, _] = useRecoilState(walletState)
@@ -117,6 +119,11 @@ const RewardsComponent = ({
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure()
+
+  const claimableRewards = useMemo(
+    () => totalGlobalClaimable * Number(weightInfo?.share),
+    [totalGlobalClaimable, weightInfo]
+  )
 
   const epochDurationInMilli = nanoToMilli(
     Number(feeDistributionConfig?.epoch_config?.duration)
@@ -142,18 +149,19 @@ const RewardsComponent = ({
   const boxBg = '#1C1C1C'
   // TODO global constant ?
   const borderRadius = '30px'
-  const currentEpochStartDateTime = new Date(
+
+  const currentEpochStartDateTimeInMilli = new Date(
     nanoToMilli(Number(currentEpoch?.epoch?.start_time))
   ).getTime()
 
   const passedTimeSinceCurrentEpochStartedInMilli =
-    Date.now() - currentEpochStartDateTime
+    Date.now() - currentEpochStartDateTimeInMilli
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return 'Connect Wallet'
     else if (claimableRewards === 0) return 'No Rewards'
     else return 'Claim'
-  }, [isWalletConnected, globalAvailableRewards])
+  }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
   const durationString = calculateRewardDurationString(
     epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
@@ -249,11 +257,15 @@ const RewardsComponent = ({
                 <Text color="whiteAlpha.600">Rewards</Text>
                 <BondingActionTooltip action={ActionType.claim} />
               </HStack>
-              <Text>
-                {isWalletConnected
-                  ? `$${(claimableRewards * whalePrice).toFixed(2)}`
-                  : 'n/a'}
-              </Text>
+              <RewardsTooltip
+                value={
+                  isWalletConnected
+                    ? `$${(claimableRewards * whalePrice).toFixed(2)}`
+                    : 'n/a'
+                }
+                isWalletConnected={isWalletConnected}
+                whale={claimableRewards}
+              />
             </HStack>
             <HStack>
               <Text color="whiteAlpha.600" fontSize={11}>
@@ -274,36 +286,62 @@ const RewardsComponent = ({
               </Text>
             </HStack>
           </Box>
-          <Button
-            alignSelf="center"
-            bg="#6ACA70"
-            borderRadius="full"
-            width="100%"
-            variant="primary"
-            w={390}
-            disabled={
-              txStep == TxStep.Estimating ||
-              txStep == TxStep.Posting ||
-              txStep == TxStep.Broadcasting ||
-              (isWalletConnected && claimableRewards === 0)
-            }
-            maxWidth={570}
-            isLoading={
-              txStep == TxStep.Estimating ||
-              txStep == TxStep.Posting ||
-              txStep == TxStep.Broadcasting
-            }
-            onClick={async () => {
-              if (isWalletConnected) {
-                await submit(ActionType.claim, null, null)
-              } else {
-                onOpenModal()
+          <HStack w={390}>
+            <Button
+              alignSelf="center"
+              bg="#6ACA70"
+              borderRadius="full"
+              variant="primary"
+              width={'100%'}
+              disabled={
+                txStep == TxStep.Estimating ||
+                txStep == TxStep.Posting ||
+                txStep == TxStep.Broadcasting ||
+                (isWalletConnected && claimableRewards === 0)
               }
-            }}
-            style={{ textTransform: 'capitalize' }}
-          >
-            {buttonLabel}
-          </Button>
+              maxWidth={570}
+              isLoading={
+                txStep == TxStep.Estimating ||
+                txStep == TxStep.Posting ||
+                txStep == TxStep.Broadcasting
+              }
+              onClick={async () => {
+                if (isWalletConnected) {
+                  await submit(ActionType.claim, null, null)
+                } else {
+                  onOpenModal()
+                }
+              }}
+              style={{ textTransform: 'capitalize' }}
+            >
+              {buttonLabel}
+            </Button>
+            {progress === 100 && isWalletConnected && (
+              <Tooltip
+                label="Community driven enforcement of the next epoch."
+                borderRadius={10}
+                bg="black"
+              >
+                <Button
+                  alignSelf="center"
+                  bg="transparent"
+                  borderRadius="full"
+                  border="1px solid white"
+                  width="50%"
+                  variant="primary"
+                  _hover={{
+                    border: '1px solid #6ACA70',
+                    color: '#6ACA70',
+                  }}
+                  onClick={async () => {
+                    await submit(ActionType.createNewEpoch, null, null)
+                  }}
+                >
+                  {'Force Epoch'}
+                </Button>
+              </Tooltip>
+            )}
+          </HStack>
           <WalletModal
             isOpenModal={isOpenModal}
             onCloseModal={onCloseModal}
