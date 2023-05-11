@@ -11,7 +11,7 @@ import {
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
 } from 'util/constants'
 import { calcPoolTokenDollarValue } from '../util/conversion'
-import { queryMyLiquidity } from './queryMyLiquidity'
+import { lpToAssets, queryMyLiquidity } from './queryMyLiquidity'
 import {
   queryRewardsContracts,
   SerializedRewardsContract,
@@ -105,6 +105,7 @@ export const useQueryMultiplePoolsLiquidity = ({
     })
 
     const stakedLP = await queryStakedLiquidity({pool, client, address})
+    const stakedReserved = lpToAssets({swap, providedLiquidityInMicroDenom: stakedLP})
 
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
@@ -122,7 +123,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       providedStakedAmountInMicroDenom: stakedLP || 0,
       totalStakedAmountInMicroDenom: 0,
       totalStakedReserve: [],
-      providedStakedReserve: []
+      providedStakedReserve: stakedReserved?.providedReserve || []
     }
 
     // await queryStakedLiquidity({

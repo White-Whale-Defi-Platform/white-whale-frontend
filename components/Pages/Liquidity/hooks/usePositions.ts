@@ -54,8 +54,8 @@ const usePositions = (poolId: string) => {
                     // closed position
                     const close = { ...p?.closed_position || {} }
                     const today = dayjs(new Date())
-                    const unbounding = dayjs.unix(close.unbonding_timestamp)
-                    const diff = unbounding.diff(today, 'second')
+                    const unbonding = dayjs.unix(close.unbonding_timestamp)
+                    const diff = unbonding.diff(today, 'second')
                     close.formatedTime = formatSeconds(diff)
                     close.isOpen = false
                     if (p?.closed_position) positiosns.push(close)
@@ -79,7 +79,7 @@ const usePositions = (poolId: string) => {
                             value: assets.reduce((acc, asset) => {
                                 return acc + Number(asset.dollarValue)
                             }, 0),
-                            state: position.isOpen ? 'active' : diff <= 0 ? 'unbound' : 'unbounding',
+                            state: position.isOpen ? 'active' : diff <= 0 ? 'unbound' : 'unbonding',
                             action: null,
                         }
                     })

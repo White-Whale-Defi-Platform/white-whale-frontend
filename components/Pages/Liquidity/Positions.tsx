@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Position } from "./hooks/usePositions";
 import { PositionsTable } from "./PositionsTable";
 
-const STATES = ["all", "active", "unbounding"]
+const STATES = ["all", "active", "unbonding"]
 
 type Props = Position & {
     positions: any[]

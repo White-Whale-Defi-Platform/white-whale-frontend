@@ -14,7 +14,7 @@ import usePrices from 'hooks/usePrices'
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
-  usePrices()
+  const prices = usePrices()
 
   return (
     <>

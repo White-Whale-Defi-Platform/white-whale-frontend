@@ -31,3 +31,25 @@ export async function queryMyLiquidity({ swap, address, context: { client } }) {
     providedLiquidityInMicroDenom,
   }
 }
+
+export const lpToAssets = ({swap, providedLiquidityInMicroDenom}) => {
+  const totalReserve: [number, number] = [
+    protectAgainstNaN(swap.token1_reserve),
+    protectAgainstNaN(swap.token2_reserve),
+  ]
+
+  const providedReserve: [number, number] = [
+    protectAgainstNaN(
+      totalReserve[0] * (providedLiquidityInMicroDenom / swap.lp_token_supply)
+    ),
+    protectAgainstNaN(
+      totalReserve[1] * (providedLiquidityInMicroDenom / swap.lp_token_supply)
+    ),
+  ]
+
+  return {
+    totalReserve,
+    providedReserve,
+    providedLiquidityInMicroDenom,
+  }
+}

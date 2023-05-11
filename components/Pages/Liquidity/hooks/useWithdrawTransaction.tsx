@@ -5,6 +5,8 @@ import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { executeRemoveLiquidity } from 'services/liquidity'
+import { fromBase64 } from '@cosmjs/encoding'
+import { fromUtf8 } from '@injectivelabs/sdk-ts'
 
 export enum TxStep {
   /**
@@ -121,7 +123,7 @@ export const useTransaction = ({
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
-      onSuccess: () => {
+      onSuccess: (data) => {
         setTxStep(TxStep.Ready)
       },
       onError: () => {
@@ -132,14 +134,15 @@ export const useTransaction = ({
 
   const { mutate } = useMutation(
     (data: any) => {
-      return executeRemoveLiquidity({
-        msgs,
-        tokenAmount: Number(amount),
-        swapAddress,
-        senderAddress,
-        lpTokenAddress,
-        client,
-      })
+     return client.post(senderAddress, encodedMsgs)
+      // return executeRemoveLiquidity({
+      //   msgs,
+      //   tokenAmount: Number(amount),
+      //   swapAddress,
+      //   senderAddress,
+      //   lpTokenAddress,
+      //   client,
+      // })
     },
     {
       onMutate: () => {
@@ -181,11 +184,12 @@ export const useTransaction = ({
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash || data?.txHash)
-        queryClient.invalidateQueries([
-          '@pool-liquidity',
-          'multipleTokenBalances',
-          'tokenBalance',
-        ])
+
+        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
+        queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
+        queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
+        queryClient.invalidateQueries({ queryKey: ['positions'] })
+        
         onBroadcasting?.(data.transactionHash || data?.txHash)
         toast({
           title: 'Withdraw Liquidity Success.',

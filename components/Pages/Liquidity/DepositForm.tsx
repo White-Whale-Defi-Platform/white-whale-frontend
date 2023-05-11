@@ -26,7 +26,8 @@ type Props = {
   reverse: boolean
   poolId: string
   setBondingDays: (value: number) => void
-  bondingDays: number
+  bondingDays: number,
+  clearForm: () => void
 }
 
 const DepositForm = ({
@@ -40,7 +41,8 @@ const DepositForm = ({
   reverse,
   bondingDays,
   setBondingDays,
-  poolId
+  poolId,
+  clearForm
 }: Props) => {
 
   const { control, handleSubmit, setValue, getValues } = useForm({
@@ -93,6 +95,16 @@ const DepositForm = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, reverse])
+
+  useEffect(() => {
+    if (tx?.txStep === TxStep.Success) {
+      setValue('token1', { ...tokenA, amount: 0 })
+      setValue('token2', { ...tokenB, amount: 0 })
+      clearForm()
+      // tx?.reset()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx?.txStep])
 
   
 

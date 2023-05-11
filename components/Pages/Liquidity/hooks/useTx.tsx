@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { TxStep } from 'types/common'
 import Finder from 'components/Finder'
 import useTxInfo from './useTxInfo'
+import { useQueryClient } from 'react-query'
 
 const parseError = (error: Error) => {
     const customErrors = [
@@ -29,6 +30,8 @@ const useTx = ({ client, transcationType }) => {
     const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
     const toast = useToast()
     const txInfo = useTxInfo({ txHash, client })
+    const queryClient = useQueryClient()
+
 
     useEffect(() => {
         if (txInfo != null && txHash != null) {
@@ -69,9 +72,9 @@ const useTx = ({ client, transcationType }) => {
         setError(null)
         setTxHash(undefined)
         setTxStep(TxStep.Idle)
-      }
+    }
 
-    const onSuccess = (data: any) => {
+    const onSuccess = async (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
 
@@ -83,6 +86,11 @@ const useTx = ({ client, transcationType }) => {
             position: 'top-right',
             isClosable: true,
         })
+
+        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
+        queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
+        queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
+        queryClient.invalidateQueries({ queryKey: ['positions'] })
 
     }
 

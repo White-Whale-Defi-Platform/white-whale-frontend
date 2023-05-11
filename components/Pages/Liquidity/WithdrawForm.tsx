@@ -9,7 +9,8 @@ import Input from 'components/AssetInput/Input'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
-// import useClaimableLP from './hooks/useClaimableLP'
+import useClaimableLP from './hooks/useClaimableLP'
+import { protectAgainstNaN } from '../../../util/conversion'
 
 type Props = {
   poolId: string
@@ -21,22 +22,42 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     {
       swap_address: swapAddress = null,
       lp_token: contract = null,
-      liquidity
+      liquidity,
+      staking_address
     } = {}
   ] = useQueryPoolLiquidity({ poolId })
 
-  // const claimableLP = useClaimableLP({ poolId})
+  const claimableLP = useClaimableLP({ poolId})
 
   const [reverse, setReverse] = useState(false)
   const [assetA, assetB] = poolId?.split('-') || []
+  const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
 
   const { tokenABalance, tokenBBalance } = useMemo(() => {
     const [reserveA, reserveB] = liquidity?.reserves?.totalProvided || []
+    const totalReserve = liquidity?.reserves?.total || []
+    const totalLiquidity = liquidity?.available?.total?.tokenAmount || 0
+      // const totalReserve: [number, number] = [
+      //   protectAgainstNaN(swap.token1_reserve),
+      //   protectAgainstNaN(swap.token2_reserve),
+      // ]
+    
+      // const providedReserve: [number, number] = [
+      //   protectAgainstNaN(
+      //     totalReserve[0] * (claimableLP / totalLiquidity)
+      //   ),
+      //   protectAgainstNaN(
+      //     totalReserve[1] * (claimableLP / totalLiquidity)
+      //   ),
+      // ]
+
+      // console.log({providedReserve, totalLiquidity, totalReserve, claimableLP, liquidity})
+
     return {
       tokenABalance: fromChainAmount(reserveA),
       tokenBBalance: fromChainAmount(reserveB)
     }
-  }, [liquidity?.reserves?.totalProvided])
+  }, [liquidity])
 
   const { control, handleSubmit, formState, setValue, getValues, watch } = useForm({
     mode: 'onChange',
@@ -79,7 +100,14 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     }
   }, [simulated])
 
-  const tx = useWithdraw({ amount: isFinite(Number(lp)) ? lp : "0", contract, swapAddress, poolId })
+  const tx = useWithdraw({ 
+      amount: lp || "0", 
+      contract, 
+      swapAddress, 
+      poolId, 
+      claimIncentive: claimableLP > 0, 
+      stakingAddress: staking_address
+    })
 
   const isConnected = connected === WalletStatusType.connected
   const isInputDisabled = tx?.txStep == TxStep.Posting
@@ -87,10 +115,10 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!!!tokenA?.amount) return 'Enter Amount'
-    else if (!isFinite(Number(lp))) return 'Insufficient funds'
+    // else if (!isFinite(Number(lp)) || Number(lp) > lpBalance) return 'Insufficient funds'
     else if (tx?.buttonLabel) return tx?.buttonLabel
     else return 'Withdraw'
-  }, [tx?.buttonLabel, connected, tokenA, tokenB, lp])
+  }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
 
 
   // on input change reset input or update value

@@ -13,6 +13,7 @@ type Props = {
     balance?: number
     onChange: (value: TokenItemState) => void
     fetchBalance?: boolean
+    ignoreSlack?: boolean
 }
 
 const Input = ({
@@ -22,7 +23,8 @@ const Input = ({
     isDisabled,
     onChange,
     balance,
-    fetchBalance = true
+    fetchBalance = true,
+    ignoreSlack = false
 
 }: Props) => {
 
@@ -40,6 +42,7 @@ const Input = ({
                         token={token}
                         disabled={isDisabled}
                         balance={fetchBalance ? tokenBalance : balance}
+                        ignoreSlack={ignoreSlack}
                         showList={false}
                         onChange={(value) => {
                             onChange(value)

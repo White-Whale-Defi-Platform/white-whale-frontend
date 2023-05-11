@@ -10,7 +10,7 @@ const useClaimableLP = ({ poolId }) => {
 
         //filter out positions that are not open and are not unbound and add total of amount
         return positions?.filter(p => !p.isOpen && p.state === "unbound")
-            .reduce((acc, p) => acc + p.amount, 0)
+            .reduce((acc, p) => acc + Number(p.amount), 0)
 
     }, [positions, poolId])
 }

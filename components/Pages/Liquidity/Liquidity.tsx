@@ -27,14 +27,14 @@ import WithdrawForm from './WithdrawForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
-  const chains : Array<any>= useChains()
+  const chains: Array<any> = useChains()
   const { address, chainId, status } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
   const [bondingDays, setBondingDays] = useState(0)
-  const { simulated, tx } = useProvideLP({ reverse , bondingDays})
+  const { simulated, tx } = useProvideLP({ reverse, bondingDays })
 
   const poolId = router.query.poolId as string
   const chainIdParam = router.query.chainId as string
@@ -90,6 +90,18 @@ const ManageLiquidity: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolId])
+
+  const clearForm = () => {
+    setTokenLPState([{
+      ...tokenA,
+      amount: 0
+    }, {
+      ...tokenB,
+      amount: 0
+    }
+    ])
+    tx.reset()
+  }
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
@@ -151,7 +163,7 @@ const ManageLiquidity: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview 
+                <Overview
                   poolId={poolId}
                 />
               </TabPanel>
@@ -169,6 +181,7 @@ const ManageLiquidity: FC = () => {
                     simulated={simulated}
                     poolId={poolId}
                     tx={tx}
+                    clearForm={clearForm}
                   />
                 )}
               </TabPanel>

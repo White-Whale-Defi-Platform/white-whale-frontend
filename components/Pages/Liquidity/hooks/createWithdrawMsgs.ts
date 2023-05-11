@@ -19,9 +19,10 @@ export const createWithdrawMsg = ({ contract, amount, swapAddress }) => {
 }
 
 export const createWithdrawExecuteMsgs = (
-  { contract, amount, swapAddress },
+  { contract, amount, swapAddress, claimIncentive, stakingAddress },
   senderAddress
 ) => {
+  const msgs = []
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
   increaseAllowanceMessages.push(
@@ -33,7 +34,23 @@ export const createWithdrawExecuteMsgs = (
     })
   )
 
+  const inventiveMsg = createExecuteMessage({
+    message: {
+      withdraw: {}
+    },
+    senderAddress,
+    contractAddress: stakingAddress,
+    funds: [],
+  })
+
+  
+  if(claimIncentive)
+    msgs.push(inventiveMsg)
+
+
+
   return [
+    ...msgs,
     ...increaseAllowanceMessages,
     createExecuteMessage({
       senderAddress,

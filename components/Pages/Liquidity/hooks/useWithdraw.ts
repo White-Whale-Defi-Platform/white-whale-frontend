@@ -1,3 +1,4 @@
+import { fromUtf8 } from '@injectivelabs/sdk-ts'
 import { num } from 'libs/num'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -13,10 +14,13 @@ type Props = {
   contract: string
   swapAddress: string
   poolId: string
+  claimIncentive?: boolean
+  stakingAddress: string
 }
 
-const useWithdraw = ({ amount, contract, swapAddress, poolId }: Props) => {
+const useWithdraw = ({ amount, contract, swapAddress, poolId, claimIncentive, stakingAddress }: Props) => {
   const { address, client } = useRecoilValue(walletState)
+  
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (parseFloat(amount) === 0 || contract === null) return {}
@@ -32,12 +36,14 @@ const useWithdraw = ({ amount, contract, swapAddress, poolId }: Props) => {
           swapAddress,
           contract,
           amount,
+          claimIncentive,
+          stakingAddress
         },
         address
       ),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amount, contract])
+  }, [amount, contract, swapAddress, stakingAddress, claimIncentive, address])
 
   return useTransaction({
     poolId,

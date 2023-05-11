@@ -8,7 +8,7 @@ import { createAsset, isNativeAsset } from 'services/asset'
 
 const NUMBER_OF_SECONDS_IN_DAY = 86400
 
-const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress }) => {
+const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress, isNewPosition }) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
   const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native)
 
@@ -20,6 +20,15 @@ const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddres
     }
   }
 
+  // if (!isNewPosition) {
+  //   return {
+  //     expandPosition: {
+  //       assets: [asset1, asset2],
+  //       pair_address: pairAddress,
+  //       unbonding_duration: bondingDays * NUMBER_OF_SECONDS_IN_DAY
+  //     },
+  //   }
+  // }
   return {
     deposit: {
       assets: [asset1, asset2],
@@ -30,7 +39,7 @@ const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddres
 }
 
 export const createLPExecuteMsgs = (
-  { stakingProxy, tokenA, tokenB, amountA, amountB, bondingDays, pairAddress },
+  { stakingProxy, tokenA, tokenB, amountA, amountB, bondingDays, pairAddress , isNewPosition},
   sender: string
 ) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
@@ -61,7 +70,7 @@ export const createLPExecuteMsgs = (
     createExecuteMessage({
       senderAddress: sender,
       contractAddress: stakingProxy,
-      message: createLpMsg({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress }),
+      message: createLpMsg({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress, isNewPosition }),
       funds: [
         tokenA?.native && coin(amountA, tokenA?.denom),
         tokenB?.native && coin(amountB, tokenB?.denom),

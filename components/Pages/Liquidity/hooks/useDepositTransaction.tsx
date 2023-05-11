@@ -55,7 +55,7 @@ export const useTransaction = ({
   const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', amount, debouncedMsgs, error],
+    ['fee', tokenAAmount, tokenBAmount, debouncedMsgs, error],
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
@@ -103,7 +103,8 @@ export const useTransaction = ({
         !!senderAddress &&
         enabled &&
         !!swapAddress &&
-        (!!tokenAAmount || !!tokenBAmount),
+        Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
+
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -124,9 +125,9 @@ export const useTransaction = ({
         tokenAAmount: tokenAAmount,
         maxTokenBAmount: tokenBAmount,
         client,
-        swapAddress : "migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa",
+        swapAddress: "migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa",
         senderAddress,
-        msgs : encodedMsgs,
+        msgs: encodedMsgs,
       })
     },
     {
@@ -187,8 +188,12 @@ export const useTransaction = ({
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash || data?.txHash)
-        const queryPath = `@pool-liquidity/${poolId}/${senderAddress}`
-        queryClient.invalidateQueries([queryPath, "positions", "@pool-liquidity"])
+
+        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
+        queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
+        queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
+        queryClient.invalidateQueries({ queryKey: ['positions'] })
+
         toast({
           title: 'Add Liquidity Success.',
           description: (

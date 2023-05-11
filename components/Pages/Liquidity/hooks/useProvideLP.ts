@@ -9,6 +9,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { tokenLpAtom } from '../lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
+import useIsNewPosition from './useIsNewPosition'
 
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
@@ -28,7 +29,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     matchingPools?.streamlinePoolBA?.lpOrder
 
   const [pool] = usePoolFromListQueryById({ poolId })
-  // const isNewPosition = useIsNewPosition({ bondingDays , poolId })
+  const isNewPosition = useIsNewPosition({ bondingDays , poolId })
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
@@ -108,6 +109,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
 
     return {
       msgs: createLpMsg({
+        isNewPosition,
         bondingDays,
         tokenA,
         pairAddress: swapAddress,
@@ -125,6 +127,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       }),
       encodedMsgs: createLPExecuteMsgs(
         {
+          isNewPosition,
           tokenA,
           bondingDays,
           pairAddress: swapAddress,
@@ -148,11 +151,11 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
         address
       ),
     }
-  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse, pool?.staking_proxy, bondingDays])
+  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse, pool?.staking_proxy, bondingDays, isNewPosition])
 
   const tx = useTransaction({
     poolId,
-    enabled: !!encodedMsgs,
+    enabled: !!encodedMsgs && Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
     swapAddress : bondingDays === 0 ? swapAddress : pool?.staking_proxy,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,

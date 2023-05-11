@@ -18,7 +18,7 @@ export const Action = ({ item, poolId }) => {
                 Close
             </Button>
         );
-    else if (item?.state === 'unbounding')
+    else if (item?.state === 'unbonding')
         return (
             <Button
                 width="full"
@@ -26,7 +26,7 @@ export const Action = ({ item, poolId }) => {
                 size="sm"
                 isDisabled={true}
             >
-                Unbounding
+                Unbonding
             </Button>
         );
     else if (item?.state === 'unbound')

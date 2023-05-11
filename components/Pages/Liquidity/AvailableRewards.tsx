@@ -3,7 +3,7 @@ import { HStack, Text, VStack } from "@chakra-ui/react";
 const LineItem = ({ token, isLast }) => (
     <HStack justifyContent="space-between" width="full" borderBottom={!isLast && "1px solid rgba(255, 255, 255, 0.1)"} gap={4} pb={2}>
         <Text>{token?.symbol}</Text>
-        <Text> {token?.assetAmount}(${Number(token?.dollarValue)?.toFixed(2)})</Text>
+        <Text> {token?.assetAmount?.toFixed(6)}</Text>
     </HStack>
 )
 
