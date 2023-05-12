@@ -254,7 +254,7 @@ const RewardsComponent = ({
           >
             <HStack justifyContent="space-between">
               <HStack>
-                <Text color="whiteAlpha.600">Rewards</Text>
+                <Text color="whiteAlpha.600">Estimated Rewards</Text>
                 <BondingActionTooltip action={ActionType.claim} />
               </HStack>
               <RewardsTooltip
