@@ -38,7 +38,7 @@ export const useWhalePrice = () => {
 
   return useMemo(() => {
     return (
-      num(data?.priceByTokenList?.content?.[1]?.priceInvertedUsd).toNumber() ||
+      num(data?.priceByTokenList?.content?.[0]?.priceInvertedUsd).toNumber() ||
       0
     )
   }, [data])
@@ -67,9 +67,9 @@ export const useGetTokenDollarValueQuery = () => {
         id: tokenA?.id,
       })
 
-      if (tokenA?.id === 'whale-token' || tokenB?.id === 'whale-token') {
-        return whalePrice
-      }
+      // if (tokenA?.id === 'white-whale' || tokenB?.id === 'white-whale') {
+      //   return whalePrice
+      // }
 
       if (tokenA?.id === tokenB?.id && !!tokenA?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
