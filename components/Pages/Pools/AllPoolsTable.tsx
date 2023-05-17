@@ -2,7 +2,6 @@ import {
   Button,
   Flex,
   HStack,
-  Image,
   Table,
   TableContainer,
   Tbody,
@@ -18,16 +17,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { CHIHUAHUA_MAINNET_CHAIN_ID } from 'constants/chain'
 import { formatPrice } from 'libs/num'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
-import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -121,7 +116,6 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  const datProvidedByCoinhall = useIgnoreCoinhall()
   const table = useReactTable({
     data: pools,
     columns,
@@ -201,16 +195,6 @@ const PoolsTable = ({
           </Tbody>
         </Table>
       </TableContainer>
-      {datProvidedByCoinhall && (
-        <Flex justifyContent="end" alignItems="center" mt="16px">
-          <Text
-            color="white"
-            fontSize="12px"
-            mr="4px"
-          >{`data provided by`}</Text>
-          <Image src="/logos/coinhall.png" alt="coinhall" height="14px" />
-        </Flex>
-      )}
     </Flex>
   )
 }

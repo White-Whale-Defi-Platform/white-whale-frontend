@@ -6,23 +6,31 @@ import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { formatPrice, num } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import {
+  PoolEntityTypeWithLiquidity,
+  useQueryMultiplePoolsLiquidity,
+} from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { getPairAprAndDailyVolume } from 'util/coinhall'
+import { getPairAprAndDailyVolume, EnigmaPoolData } from 'util/enigma'
 import { STABLE_COIN_LIST } from 'util/constants'
 
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
+import { useChains } from 'hooks/useChainInfo'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
 
-const commingSoonNetworks = ['chihuahua', 'injective', 'comdex']
-const subqueryNetorks = ['injective']
-const COMING_SOON = 'coming soon'
 const NoPrice = ['ASH-BDOG', 'ASH-GDOG']
+
+type PoolData = PoolEntityTypeWithLiquidity &
+  EnigmaPoolData & {
+    displayName: string
+    displayLogo1: string
+    displayLogo2: string
+  }
 
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
@@ -32,27 +40,34 @@ const Pools: FC<Props> = () => {
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
-  const [pools, isLoading] = useQueriesDataSelector(
+  const [pools, isLoading]: readonly [
+    PoolEntityTypeWithLiquidity[],
+    boolean,
+    boolean
+  ] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client,
     })
   )
+  const chains: any = useChains()
 
-  const showCommingSoon = useMemo(
-    () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
-    [chainId]
+  const currentChain = useMemo(
+    () =>
+      chains.find((row) => row.chainId === chainId)?.bech32Config
+        ?.bech32PrefixAccAddr,
+    [chains, chainId]
   )
 
-  const calcuateTotalLiq = (pool) => {
+  const calculateTotalLiq = (pool) => {
     return NoPrice.includes(pool?.pool_id)
       ? 'NA'
       : pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
   }
 
-  const calculateMyPostion = (pool) => {
-    const totalLiq = calcuateTotalLiq(pool)
+  const calculateMyPosition = (pool) => {
+    const totalLiq = calculateTotalLiq(pool)
     const { provided, total } = pool.liquidity?.available || {}
     return num(provided?.tokenAmount)
       .times(totalLiq)
@@ -67,53 +82,37 @@ const Pools: FC<Props> = () => {
       return
     }
     setInitLoading(true)
-    const poosWithAprAnd24HrVolume = await getPairAprAndDailyVolume(
-      pools,
-      chainId
-    )
-    const _pools = pools.map((pool: any) => {
+    const poolsWithAprAnd24HrVolume: EnigmaPoolData[] =
+      await getPairAprAndDailyVolume(pools, currentChain)
+
+    const _pools: PoolData[] = pools.map((pool: any) => {
       return {
         ...pool,
-        ...poosWithAprAnd24HrVolume.find(
-          (row: any) => row.pairAddress === pool.swap_address
+        ...poolsWithAprAnd24HrVolume.find(
+          (row: any) => row.pool_id === pool.pool_id
         ),
       }
     })
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
-        const displayAssetOrder = pool.displayName?.split('-')
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
-        const pairInfos = pool.liquidity.reserves.total
-        const asset0Balance = pairInfos[0] / 10 ** pool.pool_assets[0].decimals
-        const asset1Balance = pairInfos[1] / 10 ** pool.pool_assets[1].decimals
-        let price = 0
-        if (displayAssetOrder?.[0] === pool.assetOrder?.[0]) {
-          price = asset0Balance === 0 ? 0 : asset1Balance / asset0Balance
-        } else {
-          price = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
-        }
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
           poolId: pool?.pool_id,
           token1Img: pool?.displayLogo1,
           token2Img: pool?.displayLogo2,
-          apr: showCommingSoon
-            ? COMING_SOON
-            : `${Number(pool.apr24h).toFixed(2)}%`,
-          volume24hr: showCommingSoon
-            ? COMING_SOON
-            : `$${formatPrice(pool.usdVolume24h)}`,
-          totalLiq: calcuateTotalLiq(pool),
-          myPosition: calculateMyPostion(pool),
+          apr: `${Number(pool.apr7d).toFixed(2)}%`,
+          volume24hr: `$${formatPrice(pool.usdVolume24h)}`,
+          totalLiq: pool.TVL,
+          myPosition: calculateMyPosition(pool),
           liquidity: pool.liquidity,
           poolAssets: pool.pool_assets,
-          // price: `${isUSDPool ? '$' : ''}${Number(price).toFixed(3)}`,
-          price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
+          price: `${Number(pool.ratio).toFixed(3)}`,
           isUSDPool: isUSDPool,
-          isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
+          isSubqueryNetwork: false,
           cta: () => {
             const [asset1, asset2] = pool?.pool_id.split('-') || []
             router.push(

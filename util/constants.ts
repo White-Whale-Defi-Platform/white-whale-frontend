@@ -31,3 +31,5 @@ export const __DARK_MODE_ENABLED_BY_DEFAULT__ = JSON.parse(
 
 // stable coins
 export const STABLE_COIN_LIST = ['CMST', 'USDT', 'axlUSDC']
+
+export const POOL_INFO_BASE_URL = 'https://info.whitewhale.money/summary'
