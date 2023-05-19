@@ -65,11 +65,11 @@ export const getPairAprAndDailyVolume = async (
     return poolIds.map((poolId: any) => {
       return {
         pool_id: poolId,
-        TVL: "N/A",
-        usdVolume24h: "N/A",
-        usdVolume7d: "N/A",
-        apr7d: "N/A",
-        ratio: "N/A",
+        TVL: "n/a",
+        usdVolume24h: "n/a",
+        usdVolume7d: "n/a",
+        apr7d: "n/a",
+        ratio: "n/a",
       }
     })
   }
