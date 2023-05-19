@@ -17,7 +17,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { formatPrice } from 'libs/num'
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
@@ -94,7 +93,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+      <Text align="right">{info.getValue()}</Text>
     ),
   }),
   columnHelper.accessor('cta', {

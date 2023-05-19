@@ -95,7 +95,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
+      <Text align="right">{info.getValue()}</Text>
     ),
   }),
   columnHelper.accessor('myPosition', {

@@ -62,7 +62,6 @@ const config = {
     ];
   },
   reactStrictMode: false,
-  target: 'serverless',
   // TODO: Needed to disabled all build error checking and eslint checking due to error with usage of Controller component, to fix that needs to be fixed
   typescript: {
     // !! WARN !!
