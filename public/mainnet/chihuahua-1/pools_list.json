@@ -223,7 +223,7 @@
           "symbol": "HUAHUA",
           "name": "Huahua",
           "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
+          "logoURI": "/logos/huahua.png",
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
@@ -347,7 +347,7 @@
           "symbol": "HUAHUA",
           "name": "Huahua",
           "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
+          "logoURI": "/logos/huahua.png",
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
@@ -386,7 +386,7 @@
           "symbol": "HUAHUA",
           "name": "Huahua",
           "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
+          "logoURI": "/logos/huahua.png",
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
