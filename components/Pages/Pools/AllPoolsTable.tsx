@@ -102,16 +102,28 @@ const columns = [
       <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
     ),
   }),
-  columnHelper.accessor('cta', {
+  columnHelper.accessor('incentives', {
     header: '',
-    cell: (info) => (
-      <HStack justifyContent="flex-end">
-        <Button variant="outline" size="sm" onClick={() => info.getValue()()}>
-          {`Add Liquidity`}
-        </Button>
-      </HStack>
-    ),
+    cell: (info) => {
+      return info.getValue()
+    },
   }),
+  columnHelper.accessor('action', {
+    header: '',
+    cell: (info) => {
+      return info.getValue()
+    },
+  }),
+  // columnHelper.accessor('cta', {
+  //   header: '',
+  //   cell: (info) => (
+  //     <HStack justifyContent="flex-end">
+  //       <Button variant="outline" size="sm" onClick={() => info.getValue()()}>
+  //         {`Add Liquidity`}
+  //       </Button>
+  //     </HStack>
+  //   ),
+  // }),
 ]
 
 const PoolsTable = ({
@@ -163,7 +175,7 @@ const PoolsTable = ({
   return (
     <Flex
       padding={10}
-      width={['full', '1170px']}
+      width={['full', 'auto']}
       background="#1C1C1C"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"

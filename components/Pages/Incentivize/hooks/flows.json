@@ -1,0 +1,18 @@
+[
+    {
+      "flow_id": 1,
+      "flow_creator": "/x2mAXMxi6g8tV0vi/NGMVcUuKg=",
+      "flow_asset": {
+        "info": {
+          "token": {
+            "contract_addr": "migaloo1j08452mqwadp8xu25kn9rleyl2gufgfjnv0sn8dvynynakkjukcq5u780c"
+          }
+        },
+        "amount": "100000000"
+      },
+      "claimed_amount": "0",
+      "curve": "linear",
+      "start_timestamp": 1684880640,
+      "end_timestamp": 1684967040
+    }
+  ]

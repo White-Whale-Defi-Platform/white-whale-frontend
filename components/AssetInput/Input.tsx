@@ -9,11 +9,12 @@ type Props = {
     name: string
     control: any
     token: any
-    isDisabled: boolean
+    isDisabled?: boolean
     balance?: number
-    onChange: (value: TokenItemState) => void
+    onChange?: (value: TokenItemState) => void
     fetchBalance?: boolean
     ignoreSlack?: boolean
+    showList?: boolean
 }
 
 const Input = ({
@@ -24,7 +25,8 @@ const Input = ({
     onChange,
     balance,
     fetchBalance = true,
-    ignoreSlack = false
+    ignoreSlack = false,
+    showList = false
 
 }: Props) => {
 
@@ -43,7 +45,7 @@ const Input = ({
                         disabled={isDisabled}
                         balance={fetchBalance ? tokenBalance : balance}
                         ignoreSlack={ignoreSlack}
-                        showList={false}
+                        showList={showList}
                         onChange={(value) => {
                             onChange(value)
                             field.onChange(value)

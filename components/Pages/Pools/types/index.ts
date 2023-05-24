@@ -10,5 +10,7 @@ export type Pool = {
   price?: number
   isUSDPool?: boolean
   isSubqueryNetwork?: boolean
-  cta?: () => void
+  cta?: () => void,
+  incentives: React.ReactNode
+  action: React.ReactNode
 }
