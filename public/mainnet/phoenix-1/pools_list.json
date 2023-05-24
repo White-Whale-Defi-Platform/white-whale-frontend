@@ -415,7 +415,7 @@
         },
         {
           "id": "lion-dao",
-          "chain_id": "chihuahua-1",
+          "chain_id": "phoenix-1",
           "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
           "symbol": "ROAR",
           "name": "ROAR",
