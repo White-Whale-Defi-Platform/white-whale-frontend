@@ -1,7 +1,7 @@
 import { num } from 'libs/num'
 import { Pool } from 'types'
 
-import { Wallet } from '../../util/wallet-adapters'
+import { Wallet } from 'util/wallet-adapters'
 
 export interface GetToken1ForToken2PriceInput {
   nativeAmount: number | string
@@ -14,6 +14,7 @@ export const getToken1ForToken2Price = async ({
   swapAddress,
   client,
 }: GetToken1ForToken2PriceInput) => {
+  //TODO make sure client is initialized to avoid type error in console
   try {
     const { assets } = await client.queryContractSmart(swapAddress, {
       pool: {},
