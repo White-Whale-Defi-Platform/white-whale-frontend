@@ -398,8 +398,8 @@
       "lpOrder": ["WHALE", "ROAR"],
       "assetOrder": ["ROAR", "WHALE"],
       "displayName": "ROAR-WHALE",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/lion.png",
+      "displayLogo1": "/logos/lion.png",
+      "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
           "chain_id": "phoenix-1",

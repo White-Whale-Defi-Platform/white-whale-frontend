@@ -57,8 +57,8 @@ export type PoolEntityTypeWithLiquidity = PoolEntityType & {
   liquidity?: PoolLiquidityState
 }
 
-type QueryMultiplePoolsArgs = {
-  pools: Array<PoolEntityType>
+export type QueryMultiplePoolsArgs = {
+  pools: Array<PoolEntityTypeWithLiquidity>
   refetchInBackground?: boolean
   client: any
 }
