@@ -29,9 +29,16 @@ export const getPairInfos = async (
 ): Promise<EnigmaPoolResponse[]> => {
   if (chain === null || chain === undefined) return []
   if (chain === 'inj') chain = 'injective'
-  const chainDataResponse = await fetch(
+  let chainDataResponse = await fetch(
     `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
   )
+  // sometimes throws 400 error for unknown reason
+  while (chainDataResponse.status === 400) {
+    console.log('Retrying...')
+    chainDataResponse = await fetch(
+      `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
+    )
+  }
   const data = await chainDataResponse.text()
   if (chainDataResponse.status === 200 && data) {
     return JSON.parse(data)
