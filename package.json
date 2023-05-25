@@ -72,7 +72,7 @@
     "junoblocks": "^0.2.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "12.3.4",
+    "next": "12.1.6",
     "normalize.css": "^8.0.1",
     "numeral": "^2.0.6",
     "ramda": "^0.28.0",

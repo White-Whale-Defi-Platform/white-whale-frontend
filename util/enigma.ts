@@ -9,7 +9,7 @@ export interface EnigmaPoolResponse {
   displayLogo1: string
   displayLogo2: string
   volume_24h: number | string
-  volume_7d: number  | string
+  volume_7d: number | string
   TVL: number | string
   Price: string
   APR: number | string
@@ -53,11 +53,11 @@ export const getPairAprAndDailyVolume = async (
       const pairInfo = pairInfos.find((row: any) => row.pool_id === poolId)
       return {
         pool_id: poolId,
-        usdVolume24h:`$${formatPrice(pairInfo?.volume_24h)}`,
-        usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}` ,
-        TVL:`$${formatPrice(pairInfo?.TVL)}`,
+        usdVolume24h: `$${formatPrice(pairInfo?.volume_24h)}`,
+        usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
+        TVL: `$${formatPrice(pairInfo?.TVL)}`,
         apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
-        ratio:`${Number(pairInfo?.Price).toFixed(3)}`
+        ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
       } as EnigmaPoolData
     })
   } else {
@@ -65,11 +65,11 @@ export const getPairAprAndDailyVolume = async (
     return poolIds.map((poolId: any) => {
       return {
         pool_id: poolId,
-        TVL: "n/a",
-        usdVolume24h: "n/a",
-        usdVolume7d: "n/a",
-        apr7d: "n/a",
-        ratio: "n/a",
+        TVL: 'n/a',
+        usdVolume24h: 'n/a',
+        usdVolume7d: 'n/a',
+        apr7d: 'n/a',
+        ratio: 'n/a',
       }
     })
   }

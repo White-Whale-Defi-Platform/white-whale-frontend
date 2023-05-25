@@ -3,7 +3,7 @@ export const getPathName = (router, newChainLabel) => {
 
   return pathname.includes('[chainId')
     ? pathname.replace('[chainId]', newChainLabel.toLowerCase())
-    : `/${newChainLabel.toLowerCase()}/${pathname}`
+    : `/${newChainLabel.toLowerCase()}${pathname}`
 
   // const paths = router.asPath.split('/')
   // return !paths[2]

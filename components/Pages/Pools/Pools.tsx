@@ -3,7 +3,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { formatPrice, num } from 'libs/num'
+import { num } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {

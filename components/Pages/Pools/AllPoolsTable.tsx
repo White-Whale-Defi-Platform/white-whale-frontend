@@ -40,7 +40,7 @@ const columns = [
   columnHelper.accessor('price', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`price`}
+        {`RATIO`}
       </Text>
     ),
     cell: (info) => {
@@ -92,9 +92,7 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => (
-      <Text align="right">{info.getValue()}</Text>
-    ),
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('cta', {
     header: '',
