@@ -49,7 +49,7 @@ export const getClaimableEpochs = async (client: Wallet, config: Config) => {
   const globalAvailableRewards = convertMicroDenomToDenom(rewardData, 6)
 
   const getLastSevenEpochsAverage = (epochs: Epoch[]): number => {
-    const lastSevenEpochs = epochs.slice(0, 7)
+    const lastSevenEpochs = epochs.slice(0, 21)
     const totalAmount = lastSevenEpochs
       .flatMap((e) => e.total.map((a) => a.amount))
       .reduce((acc, amount) => acc + parseFloat(amount), 0)
