@@ -12,7 +12,11 @@ import {
 } from 'queries/useQueryPools'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { getPairAprAndDailyVolume, EnigmaPoolData, getPairAprAndDailyVolumeTerra } from 'util/enigma'
+import {
+  getPairAprAndDailyVolume,
+  EnigmaPoolData,
+  getPairAprAndDailyVolumeTerra,
+} from 'util/enigma'
 import { STABLE_COIN_LIST } from 'util/constants'
 
 import AllPoolsTable from './AllPoolsTable'
@@ -82,8 +86,10 @@ const Pools: FC<Props> = () => {
       return
     }
     setInitLoading(true)
-    const poolsWithAprAnd24HrVolume: EnigmaPoolData[] = currentChain === 'terra' ? await getPairAprAndDailyVolumeTerra(pools) :
-      await getPairAprAndDailyVolume(pools, currentChain)
+    const poolsWithAprAnd24HrVolume: EnigmaPoolData[] =
+      currentChain === 'terra'
+        ? await getPairAprAndDailyVolumeTerra(pools)
+        : await getPairAprAndDailyVolume(pools, currentChain)
 
     const _pools: PoolData[] = pools.map((pool: any) => {
       return {

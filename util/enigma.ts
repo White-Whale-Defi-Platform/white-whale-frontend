@@ -47,8 +47,9 @@ export const getPairInfos = async (
   }
 }
 export const getPairInfosTerra = async (): Promise<any> => {
-
-  const swapAddresses = terraPoolConfig.pools.map((pool: any) => pool.swap_address).join(',')
+  const swapAddresses = terraPoolConfig.pools
+    .map((pool: any) => pool.swap_address)
+    .join(',')
   const url = `/api/cors?url=https://api.coinhall.org/api/v1/pairs?addresses=${swapAddresses}`
   let chainDataResponse = await fetch(url)
 
@@ -77,7 +78,7 @@ export const getPairAprAndDailyVolume = async (
         usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
         TVL: `$${formatPrice(pairInfo?.TVL)}`,
         apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
-        ratio: `${Number(pairInfo?.Price).toFixed(3)}`
+        ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
       } as EnigmaPoolData
     })
   } else {
@@ -89,7 +90,7 @@ export const getPairAprAndDailyVolume = async (
         usdVolume24h: 'n/a',
         usdVolume7d: 'n/a',
         apr7d: 'n/a',
-        ratio: 'n/a'
+        ratio: 'n/a',
       }
     })
   }
@@ -102,16 +103,25 @@ export const getPairAprAndDailyVolumeTerra = async (
 
   if (!!pairInfos && pairInfos.pairs.length > 0) {
     return swapAddresses.map((swapAddress: string) => {
-      const pairInfo = pairInfos.pairs.find((row: any) => row.pairAddress === swapAddress)
-      const poolId = terraPoolConfig.pools.find((pool: any) => pool.swap_address === swapAddress)?.pool_id
+      const pairInfo = pairInfos.pairs.find(
+        (row: any) => row.pairAddress === swapAddress
+      )
+      const poolId = terraPoolConfig.pools.find(
+        (pool: any) => pool.swap_address === swapAddress
+      )?.pool_id
       const asset0Symbol = poolId.split('-')[0]
-      const chRatio = pairInfo.asset0.symbol === asset0Symbol ? pairInfo.asset0.usdPrice/pairInfo.asset1.usdPrice : pairInfo.asset1.usdPrice/pairInfo.asset0.usdPrice
+      const chRatio =
+        pairInfo.asset0.symbol === asset0Symbol
+          ? pairInfo.asset0.usdPrice / pairInfo.asset1.usdPrice
+          : pairInfo.asset1.usdPrice / pairInfo.asset0.usdPrice
 
       const pool = pools.find((pool: any) => pool.swap_address === swapAddress)
       const displayAssetOrder = pool.displayName?.split('-')
       const totalPoolLiquidity = pool.liquidity.reserves.total
-      const asset0Balance = totalPoolLiquidity[0] / 10 ** pool.pool_assets[0].decimals
-      const asset1Balance = totalPoolLiquidity[1] / 10 ** pool.pool_assets[1].decimals
+      const asset0Balance =
+        totalPoolLiquidity[0] / 10 ** pool.pool_assets[0].decimals
+      const asset1Balance =
+        totalPoolLiquidity[1] / 10 ** pool.pool_assets[1].decimals
 
       let poolRatio = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
       if (displayAssetOrder?.[0] === pool.assetOrder?.[0]) {
@@ -124,20 +134,22 @@ export const getPairAprAndDailyVolumeTerra = async (
         usdVolume7d: `$${formatPrice(pairInfo?.usdVolume7d)}`,
         TVL: `$${formatPrice(pool.liquidity?.available?.total?.dollarValue)}`,
         apr7d: `${Number(pairInfo?.apr7d).toFixed(2)}%`,
-        ratio: `${ratio.toFixed(3)}`
+        ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData
     })
   } else {
     console.log('No pair infos found')
     return swapAddresses.map((swapAddress: any) => {
-      const poolId = terraPoolConfig.pools.find((pool: any) => pool.swap_address === swapAddress).pool_id
+      const poolId = terraPoolConfig.pools.find(
+        (pool: any) => pool.swap_address === swapAddress
+      ).pool_id
       return {
         pool_id: poolId,
         TVL: 'n/a',
         usdVolume24h: 'n/a',
         usdVolume7d: 'n/a',
         apr7d: 'n/a',
-        ratio: 'n/a'
+        ratio: 'n/a',
       }
     })
   }
