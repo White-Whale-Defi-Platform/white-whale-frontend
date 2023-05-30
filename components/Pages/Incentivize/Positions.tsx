@@ -1,46 +1,67 @@
-import { Box, Button, Divider, HStack } from '@chakra-ui/react';
+import { Box, Button, Divider, HStack, Image } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { num } from '../../../libs/num';
 import PositionsTable from './PositionsTable';
+import { useClosePosition } from './hooks/useClosePosition';
 
-type Props = {}
+type Props = {
+    flows: any[]
+    poolId: string
+}
 
 const STATES = ["all", "active", "upcoming", "over"]
 
-const Positions = (props: Props) => {
+const CloseAction = ({ poolId, flowId }) => {
+
+    const close = useClosePosition({ poolId })
+
+    return (
+        <Button
+            variant="outline"
+            size="sm"
+            isLoading={close?.isLoading}
+            onClick={() => close?.submit({ flowId })}
+        >
+            Close
+        </Button>
+    )
+
+}
+
+const Token = ({ imgUrl }) => (
+    <Box>
+        <Image
+            src={imgUrl}
+            width="auto"
+            maxW="1.6rem"
+            maxH="1.6rem"
+            alt="token1-img"
+        />
+    </Box>
+)
+
+const Positions = ({ flows, poolId }: Props) => {
 
     const [activeButton, setActiveButton] = useState("all");
     const [columnFilters, setColumnFilters] = useState([]);
 
-    const positions = [
-        {
-            id: 1,
-            state: "active",
-            startDate: dayjs.unix(1684304073).format("YYYY/MM/DD") ,
-            endDate: dayjs.unix(1684304073).format("YYYY/MM/DD") ,
-            value: "1000",
-            action: <Button variant="outline" size="sm">Close</Button>
-        },
-        {
-            id: 2,
-            state: "upcoming",
-            startDate: dayjs.unix(1684304073).format("YYYY/MM/DD") ,
-            endDate: dayjs.unix(1684304073).format("YYYY/MM/DD") ,
-            value: "2000",
-            action: <Button variant="outline" size="sm">Close</Button>
-        },
-        {
-            id: 3,
-            state: "over",
-            startDate: dayjs.unix(1684304073).format("YYYY/MM/DD") ,
-            endDate: dayjs.unix(1684304073).format("YYYY/MM/DD") ,
-            value: "3000",
-            action: <Button variant="outline" size="sm">Close</Button>
-        }
-    ]
-    
-  return (
-    <Box width="full" >
+    const positions = useMemo(() => {
+
+        return flows.map((flow) => ({
+            token: <Token imgUrl={flow.token.logoURI} />,
+            id: flow.flowId,
+            state: flow.state,
+            startDate: dayjs.unix(flow.startTime).format("YYYY/MM/DD"),
+            endDate: dayjs.unix(flow.endTime).format("YYYY/MM/DD"),
+            value: num(flow.amount).div(10 ** 6).toNumber(),
+            action: <CloseAction poolId={poolId} flowId={flow.flowId} />
+        }))
+
+    }, [flows])
+
+    return (
+        <Box width="full" >
             <HStack
                 margin="20px"
                 backgroundColor="rgba(0, 0, 0, 0.25)"
@@ -78,7 +99,7 @@ const Positions = (props: Props) => {
                 positions={positions}
             />
         </Box>
-  )
+    )
 }
 
 export default Positions

@@ -11,50 +11,42 @@ import {
     Text,
     VStack
 } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
-import { TxStep } from 'types/common'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { FC, useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { FC, useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import Overview from './Overview'
+import { useCosmwasmClient } from '../../../hooks/useCosmwasmClient'
+import { useQueriesDataSelector } from '../../../hooks/useQueriesDataSelector'
+import { useQueryMultiplePoolsLiquidity } from '../../../queries/useQueryPools'
 import Create from './Create'
-
+import Overview from './Overview'
 
 const Incentivize: FC = () => {
     const router: NextRouter = useRouter()
-    const chains: Array<any> = useChains()
-    const { address, chainId, status } = useRecoilValue(walletState)
-    const [reverse, setReverse] = useState<boolean>(false)
-    const [isTokenSet, setIsToken] = useState<boolean>(false)
-    const { data: poolList } = usePoolsListQuery()
-    const [bondingDays, setBondingDays] = useState(0)
-
     const poolId = router.query.poolId as string
+
+    const {  chainId,  } = useRecoilValue(walletState)
+    const { data: poolList } = usePoolsListQuery()
     const chainIdParam = router.query.chainId as string
-    const currentChain = chains.find((row) => row.chainId === chainId)
+    const client = useCosmwasmClient(chainId)
 
-    useEffect(() => {
-        if (currentChain) {
-            if (poolId) {
-                const pools = poolList?.pools
-                if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
-                    router.push(`/${currentChain.label.toLowerCase()}/pools`)
-                } else {
-                    router.push(
-                        `/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
-                    )
-                }
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chainId, poolId, poolList, address, chains])
+    const [pools] = useQueriesDataSelector(
+        useQueryMultiplePoolsLiquidity({
+            refetchInBackground: false,
+            pools: poolList?.pools,
+            client,
+        })
+    )
 
+    const myFlows = useMemo(() => {
 
+        if(!pools || !poolId) return []
 
+        const flows = pools.find(p => p.pool_id === poolId)
+        return flows?.liquidity?.myFlows || []
 
-
+    },[pools, poolId])
 
     return (
         <VStack
@@ -102,10 +94,10 @@ const Incentivize: FC = () => {
                         </TabList>
                         <TabPanels p={4}>
                             <TabPanel padding={4}>
-                                <Overview />
+                                <Overview flows={myFlows} poolId={poolId} />
                             </TabPanel>
                             <TabPanel padding={4}>
-                                <Create />
+                                <Create poolId={poolId} />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

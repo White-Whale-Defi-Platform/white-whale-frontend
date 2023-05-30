@@ -1,8 +1,5 @@
 import {
-  Button,
-  Flex,
-  HStack,
-  Image,
+  Flex, Image,
   Table,
   TableContainer,
   Tbody,
@@ -10,25 +7,22 @@ import {
   Text,
   Th,
   Thead,
-  Tr,
+  Tr
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table'
-import { CHIHUAHUA_MAINNET_CHAIN_ID } from 'constants/chain'
 import { formatPrice } from 'libs/num'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
+
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -103,27 +97,17 @@ const columns = [
     ),
   }),
   columnHelper.accessor('incentives', {
-    header: '',
+    header: () => <Text align="right" color="brand.50">Incentives</Text>,
     cell: (info) => {
       return info.getValue()
     },
   }),
   columnHelper.accessor('action', {
-    header: '',
+    header: () => <Text align="left" color="brand.50">Action</Text>,
     cell: (info) => {
       return info.getValue()
     },
   }),
-  // columnHelper.accessor('cta', {
-  //   header: '',
-  //   cell: (info) => (
-  //     <HStack justifyContent="flex-end">
-  //       <Button variant="outline" size="sm" onClick={() => info.getValue()()}>
-  //         {`Add Liquidity`}
-  //       </Button>
-  //     </HStack>
-  //   ),
-  // }),
 ]
 
 const PoolsTable = ({

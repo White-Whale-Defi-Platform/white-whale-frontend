@@ -1,43 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { executeRemoveLiquidity } from 'services/liquidity'
-import { fromBase64 } from '@cosmjs/encoding'
-import { fromUtf8 } from '@injectivelabs/sdk-ts'
-
-export enum TxStep {
-  /**
-   * Idle
-   */
-  Idle = 0,
-  /**
-   * Estimating fees
-   */
-  Estimating = 1,
-  /**
-   * Ready to post transaction
-   */
-  Ready = 2,
-  /**
-   * Signing transaction in Terra Station
-   */
-  Posting = 3,
-  /**
-   * Broadcasting
-   */
-  Broadcasting = 4,
-  /**
-   * Succesful
-   */
-  Success = 5,
-  /**
-   * Failed
-   */
-  Failed = 6,
-}
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { TxStep } from '../../../../types/common'
 
 type Params = {
   lpTokenAddress: string

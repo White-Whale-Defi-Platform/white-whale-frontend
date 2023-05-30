@@ -1,8 +1,7 @@
-import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
-import { HStack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack, Text } from '@chakra-ui/react';
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { HStack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
-import React, { useState } from 'react'
-import dayjs from "dayjs"
+import React, { useState } from 'react';
 
 
 type Props = {
@@ -18,41 +17,22 @@ type TableProps = {
 }
 const columnHelper = createColumnHelper<TableProps>()
 
-const formatDate = (date) => {
-    const newDate = new Date(date * 1000)
-    return newDate.toLocaleDateString()
-}
-
 const columns = [
+    columnHelper.accessor('token', {
+        header: () => <Text as="span" color="brand.50" fontSize="sm" textTransform="capitalize">Token</Text>,
+        cell: (info) => info.getValue(),
+        enableSorting: false,
+    }),
     columnHelper.accessor('startDate', {
         header: () => <Text as="span" color="brand.50" fontSize="sm" textTransform="capitalize">Start Date</Text>,
         enableSorting: true,
     }),
     columnHelper.accessor('endDate', {
         header: () => <Text as="span" color="brand.50" fontSize="sm" textTransform="capitalize">End Date</Text>,
-
-        // header: (info) => {
-        //     return (
-        //         <TooltipWithChildren label={`Value($${totalDollarValue})`} isHeading={true}>
-        //             <AvailableRewards data={totlaValue} />
-        //         </TooltipWithChildren>
-        //     )
-        // },
-        // cell: (info) => {
-        //     const assets = info?.row?.original?.assets || []
-        //     return (
-        //         <TooltipWithChildren label={`$${Number(info.getValue()).toFixed(2)}`}>
-        //             <AvailableRewards data={assets} />
-        //         </TooltipWithChildren>
-        //     )
-        // },
         enableSorting: true,
 
     }),
     columnHelper.accessor('value', {
-        // header: () => (
-        //     <TooltipWithChildren label="Weight" isHeading={true} showTooltip={false} />
-        // ),
         enableSorting: true,
     }),
     columnHelper.accessor('action', {

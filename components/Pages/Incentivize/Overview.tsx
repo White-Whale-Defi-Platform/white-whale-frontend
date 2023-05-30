@@ -1,8 +1,8 @@
 import Positions from "./Positions"
 
-const Overview = () => {
+const Overview = ({flows, poolId}) => {
   return (
-    <Positions />
+    <Positions  flows={flows} poolId={poolId} />
   )
 }
 

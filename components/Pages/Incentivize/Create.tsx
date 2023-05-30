@@ -1,26 +1,25 @@
-import { HStack, Stack, Text, InputGroup, Button, Input as ChakraInput, InputRightElement, Box } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Box, HStack, Input as ChakraInput, InputGroup, Stack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
-import { Controller, useForm } from 'react-hook-form'
-import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import SubmitButton from 'components/SubmitButton'
-import { TokenItemState, TxStep } from 'types/common'
-import { createAsset, isNativeAsset } from 'services/asset'
-import { useOpenFlow } from './hooks/useOpenFlow'
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { useRecoilValue } from 'recoil'
+import { txAtom } from 'state/atoms/tx'
+import { TxStep } from 'types/common'
 import { walletState, WalletStatusType } from '../../../state/atoms/walletAtoms'
-
-
-type Props = {}
+import { useOpenFlow } from './hooks/useOpenFlow'
 
 const defaultToken = {
   tokenSymbol: "WHALE",
   amount: ""
 }
 
-const Create = (props: Props) => {
+type Props = {
+  poolId: string
+}
 
-
+const Create = ({poolId}:Props) => {
 
   const [token, setToken] = useState(defaultToken)
   const { control, handleSubmit, setValue, getValues, formState: { isValid }, watch } = useForm({
@@ -35,21 +34,14 @@ const Create = (props: Props) => {
 
   const { status } = useRecoilValue(walletState)
   const isConnected = status === WalletStatusType.connected
-
-  const {simulate, submit, tx, isLoading} = useOpenFlow({ poolId: "WILLyz-WHALE", ...formData })
-
-  console.log({ tx, simulate, submit })
-
-  const onSubmit = (data) => {
-    console.log({ data })
-  }
-
+  const { txStep } = useRecoilValue(txAtom)
+  const { simulate, submit, tx } = useOpenFlow({ poolId, ...formData })
 
   return (
     <Stack
       as="form"
       gap="5"
-      onSubmit={handleSubmit(submit)}
+      onSubmit={handleSubmit(() => submit())}
     >
 
       <Input
@@ -59,12 +51,9 @@ const Create = (props: Props) => {
         showList={true}
         // isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
-          // setReverse(true)
-          // onInputChange(value, 1)
-          console.log({ value })
           setToken({
             ...value,
-            amount: Number(value.amount)
+            amount: String(value.amount)
           })
           return value
         }}
@@ -80,15 +69,6 @@ const Create = (props: Props) => {
             Start Date
           </TooltipWithChildren>
         </Box>
-
-        {/* <InputGroup >
-          <ChakraInput placeholder='Enter amount' h="50px" type="datetime-local" />
-          <InputRightElement w="fit-content" h="full" pr="3">
-            <Button variant="outline" size="sm">
-              Current time
-            </Button>
-          </InputRightElement>
-        </InputGroup> */}
 
         <Controller
           name="startDate"
@@ -135,17 +115,15 @@ const Create = (props: Props) => {
             </InputGroup>
           )}
         />
-        {/* <ChakraInput placeholder='Enter amount' h="50px" type="datetime-local" /> */}
 
       </HStack>
 
       <SubmitButton
-        label="Submit"
+        label={simulate.buttonLabel || "Submit"}
         isConnected={true}
         txStep={TxStep?.Ready}
-        isLoading={isLoading}
-        isDisabled={!isValid || simulate.data == null || !isConnected}
-      // isDisabled={!isValid}
+        isLoading={txStep === TxStep.Estimating || txStep === TxStep.Posting || txStep === TxStep.Broadcasting}
+        isDisabled={!isValid || txStep !== TxStep.Ready || !isConnected}
       />
 
     </Stack>

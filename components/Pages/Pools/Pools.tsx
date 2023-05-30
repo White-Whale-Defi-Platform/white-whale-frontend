@@ -1,16 +1,5 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
-
 import {
-  Box, Button, HStack, Text, VStack, Image, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
+  Box, HStack, Text, VStack
 } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -18,146 +7,18 @@ import { formatPrice, num } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { getPairAprAndDailyVolume } from 'util/coinhall'
 import { STABLE_COIN_LIST } from 'util/constants'
-
+import { ActionCTAs } from './ActionCTAs'
 import AllPoolsTable from './AllPoolsTable'
+import { Incentives } from './Incentives'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 
-const ActionCTAs = ({chainIdParam}) => {
-  const router = useRouter()
 
-  const onClick = () => {
-    router.push(`/${chainIdParam}/pools/incentivize`)
-  }
-  return (
-    <HStack spacing={2} >
-      <Button variant="outline" size="sm"> Manage Liquidity</Button>
-      <Button variant="outline" size="sm" onClick={onClick}> Incentivize</Button>
-    </HStack>
-  )
-}
-
-const IncentivesLogos = () => (
-  <HStack spacing={1} borderBottom="1px dashed rgba(255, 255, 255, 0.5)" pb="2">
-    <HStack spacing="-23" >
-      <Box
-        boxShadow="lg"
-        borderRadius="full"
-        position="relative"
-        p="5px"
-        bg="black"
-        zIndex={1}
-      >
-        <Image
-          src="/logos/atom.png"
-          width="auto"
-          maxW="1.6rem"
-          maxH="1.6rem"
-          alt="token1-img"
-        />
-      </Box>
-      <Box
-        borderRadius="full"
-        p="4px"
-        border="1px solid rgba(255, 255, 255, 0.1)"
-        m="-10"
-        zIndex={2}
-      // style={{ marginLeft: '-25px' }}
-      >
-        <Image
-          src="/logos/axlUSDC.png"
-          width="auto"
-          maxW="1.6rem"
-          maxH="1.6rem"
-          alt="token2-img"
-        />
-      </Box>
-      <Box
-        borderRadius="full"
-        p="4px"
-        border="1px solid rgba(255, 255, 255, 0.1)"
-        zIndex={3}
-      // style={{ marginLeft: '-25px' }}
-      >
-        <Image
-          src="/logos/astro.png"
-          width="auto"
-          maxW="1.6rem"
-          maxH="1.6rem"
-          alt="token2-img"
-        />
-      </Box>
-    </HStack>
-    <Text fontSize="sm" >+ 5</Text>
-  </HStack>
-)
-
-const Incentives = () => {
-  return (
-    <Popover trigger="hover">
-      <PopoverTrigger>
-        <Button variant="unstyled">
-          <IncentivesLogos />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        background="black"
-        boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-        borderRadius="15px"
-        border="unset"
-        width="auto"
-      >
-        <PopoverArrow
-          bg="black"
-          boxShadow="unset"
-          style={{ boxShadow: 'unset' }}
-          sx={{ '--popper-arrow-shadow-color': 'black' }}
-        />
-        <PopoverBody
-
-        >
-          <TableContainer>
-            <Table size='sm' variant="unstyled">
-              <Thead >
-                <Tr border="0">
-                  <Td color="gray.500">Token</Td>
-                  <Td color="gray.500">Estimate Daily Reward</Td>
-                  <Td color="gray.500" isNumeric>APR</Td>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td>ATOM</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
-                </Tr>
-                <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td>JUNO</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
-                </Tr>
-                <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td>WHALE</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
-                </Tr>
-                <Tr>
-                  <Td>USDC</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
-}
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -182,6 +43,8 @@ const Pools: FC<Props> = () => {
       client,
     })
   )
+
+  // console.log({ pools })
 
   const showCommingSoon = useMemo(
     () => commingSoonNetworks.includes(chainId?.split('-')?.[0]),
@@ -259,14 +122,8 @@ const Pools: FC<Props> = () => {
           price: `${isUSDPool ? '$' : ''}${num(price).dp(3).toNumber()}`,
           isUSDPool: isUSDPool,
           isSubqueryNetwork: subqueryNetorks.includes(chainId?.split('-')?.[0]),
-          incentives: <Incentives />,
-          action: <ActionCTAs chainIdParam={chainIdParam} />,
-          cta: () => {
-            const [asset1, asset2] = pool?.pool_id.split('-') || []
-            router.push(
-              `/${chainIdParam}/pools/manage_liquidity?poolId=${pool?.pool_id}`
-            )
-          },
+          incentives: <Incentives flows={pool.flows} />,
+          action: <ActionCTAs chainIdParam={chainIdParam} poolId={pool?.pool_id} />
         }
       })
     )
@@ -288,16 +145,6 @@ const Pools: FC<Props> = () => {
       allPools &&
       allPools
         .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-        .map((item) => ({
-          ...item,
-          // myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          // myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          // myPosition : calculateMyPostion(item),
-          cta: () =>
-            router.push(
-              `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
-            ),
-        }))
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPools])
@@ -318,13 +165,6 @@ const Pools: FC<Props> = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
           </Text>
-          {/* <Button
-            variant="primary"
-            size="sm"
-            onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
-          >
-            New Position
-          </Button> */}
         </HStack>
         <MyPoolsTable
           show={true}

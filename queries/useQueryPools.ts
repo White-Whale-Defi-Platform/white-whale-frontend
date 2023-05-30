@@ -19,6 +19,9 @@ import {
 import { querySwapInfo } from './querySwapInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+import { useTokenList } from '../hooks/useTokenList'
+import dayjs from 'dayjs'
+import { TokenInfo } from '../types'
 
 export type ReserveType = [number, number]
 
@@ -30,6 +33,15 @@ export type PoolTokenValue = {
 export type PoolState = {
   total: PoolTokenValue
   provided: PoolTokenValue
+}
+
+export type Flow = {
+  token : TokenInfo
+  endTime: number
+  startTime: number
+  flowId: number
+  amount: string
+  state : "active" | "over"
 }
 
 export type PoolLiquidityState = {
@@ -50,6 +62,8 @@ export type PoolLiquidityState = {
     annualYieldPercentageReturn: number
     contracts?: Array<SerializedRewardsContract>
   }
+
+  myFlows: Flow[]
 }
 
 export type PoolEntityTypeWithLiquidity = PoolEntityType & {
@@ -64,15 +78,15 @@ type QueryMultiplePoolsArgs = {
 
 
 const queryStakedLiquidity = async ({ pool, client, address }) => {
-  if(!address || !client || !pool.staking_address) return
+  if (!address || !client || !pool.staking_address) return
 
-  const {positions = []} =  await client?.queryContractSmart(pool.staking_address, {
+  const { positions = [] } = await client?.queryContractSmart(pool.staking_address, {
     positions: { address }
   }) || []
 
   return positions?.map((p = {}) => {
-    const { open_position = {}, closed_position = {}} = p
-    return {...open_position, ...closed_position}
+    const { open_position = {}, closed_position = {} } = p
+    return { ...open_position, ...closed_position }
   }).reduce((acc, p) => acc + Number(p.amount), 0) || 0
 }
 
@@ -84,6 +98,8 @@ export const useQueryMultiplePoolsLiquidity = ({
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
   const { address } = useRecoilValue(walletState)
+
+  const [tokenList] = useTokenList()
 
   const context = {
     // client: signingClient,
@@ -104,8 +120,49 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-    const stakedLP = await queryStakedLiquidity({pool, client, address})
-    const stakedReserved = lpToAssets({swap, providedLiquidityInMicroDenom: stakedLP})
+    const getFlows = ({ client }) => {
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) return []
+      return client?.queryContractSmart(pool.staking_address, {
+        flows: {},
+      })
+        .then(data => {
+          return data?.map((f = {}) => {
+            const denom = f?.flow_asset?.info?.token?.contract_addr || f?.flow_asset?.native_token?.denom || null
+            return tokenList?.tokens?.find(t => t?.denom === denom)
+          })
+        })
+    }
+    const getMyFlows = ({ client, address }) => {
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) return []
+      return client?.queryContractSmart(pool.staking_address, {
+        flows: {},
+      })
+        .then(data => {
+          const flowTokens = data?.map((f = {}) => {
+            if (f.flow_creator !== address) return null
+
+            // check if end time is in the past
+            const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+            const denom = f?.flow_asset?.info?.token?.contract_addr || f?.flow_asset?.native_token?.denom || null
+            const token = tokenList?.tokens?.find(t => t?.denom === denom)
+
+            return {
+              token,
+              endTime: f.end_timestamp,
+              startTime: f.start_timestamp,
+              flowId: f.flow_id,
+              amount: f.flow_asset.amount,
+              state
+            }
+
+          })
+          return flowTokens.filter(Boolean)
+        })
+    }
+
+    const flows = await getFlows({ client })
+    const stakedLP = await queryStakedLiquidity({ pool, client, address })
+    const stakedReserved = lpToAssets({ swap, providedLiquidityInMicroDenom: stakedLP })
 
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
@@ -125,14 +182,6 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalStakedReserve: [],
       providedStakedReserve: stakedReserved?.providedReserve || []
     }
-
-    // await queryStakedLiquidity({
-    //   context,
-    //   address,
-    //   stakingAddress: pool.staking_address,
-    //   totalReserve,
-    //   swap,
-    // })
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenA,
@@ -188,6 +237,8 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
     }
 
+    const myFlows = await getMyFlows({ client, address: "/x2mAXMxi6g8tV0vi/NGMVcUuKg=" })
+
     const liquidity = {
       available: {
         total: totalLiquidity,
@@ -201,6 +252,7 @@ export const useQueryMultiplePoolsLiquidity = ({
         tokenAmount: providedLiquidity.tokenAmount + providedStaked.tokenAmount,
         dollarValue: providedLiquidity.dollarValue + providedStaked.dollarValue,
       },
+      myFlows,
       reserves: {
         total: totalReserve,
         provided: providedReserve,
@@ -216,6 +268,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
     return {
       ...pool,
+      flows,
       liquidity,
     }
   }
@@ -223,7 +276,7 @@ export const useQueryMultiplePoolsLiquidity = ({
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled: Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue),
+      enabled: Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue) && tokenList.tokens.length > 0,
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
@@ -243,7 +296,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     usePoolsListQuery()
   const { chainId } = useRecoilValue(walletState)
   const client = useCosmwasmClient(chainId)
- 
+
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]
     return pool ? [pool] : undefined
@@ -256,6 +309,8 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   })
 
   // const persistedData = usePersistance(poolResponse?.data)
+
+  console.log({ poolResponse })
 
   return [
     poolResponse?.data,

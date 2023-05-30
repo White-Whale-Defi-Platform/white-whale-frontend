@@ -2,14 +2,19 @@ import { useMemo } from "react"
 import { useQuery } from "react-query"
 import { useRecoilValue } from "recoil"
 import { walletState } from "state/atoms/walletAtoms"
-import { num } from "libs/num"
 
+type FactoryConfig = {
+    createFlowFee: {
+        amount: string
+        denom: string
+    }
+}
 
-const useFactoryConfig = (incentiveFactory) => {
+const useFactoryConfig = (incentiveFactory:string) => {
 
     const { address, client } = useRecoilValue(walletState)
 
-    const { data: config = [] } = useQuery({
+    const { data: config } = useQuery<FactoryConfig>({
         queryKey: ['factoryConfig', incentiveFactory],
         queryFn: () => client?.queryContractSmart(incentiveFactory, {
             config: {}

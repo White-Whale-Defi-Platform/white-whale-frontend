@@ -4,7 +4,7 @@ import { useMutation } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { createExecuteMessage } from 'util/messages'
-import useTxStatus from './useTx'
+import useTxStatus from 'hooks/useTxStatus'
 
 interface Props {
     poolId: string

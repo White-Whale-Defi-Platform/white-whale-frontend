@@ -1,8 +1,5 @@
 import {
-  Button,
-  Flex,
-  HStack,
-  Image,
+  Flex, Image,
   Table,
   TableContainer,
   Tbody,
@@ -11,22 +8,22 @@ import {
   Tfoot,
   Th,
   Thead,
-  Tr,
+  Tr
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table'
 import { formatPrice } from 'libs/num'
-
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
+
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -108,15 +105,17 @@ const columns = [
     ),
     cell: (info) => <Text align="right">${info.getValue()}</Text>,
   }),
-  columnHelper.accessor('cta', {
-    header: '',
-    cell: (info) => (
-      <HStack justifyContent="flex-end">
-        <Button variant="outline" size="sm" onClick={() => info.getValue()()}>
-          {`Manage Liquidity`}
-        </Button>
-      </HStack>
-    ),
+  columnHelper.accessor('incentives', {
+    header: () => <Text align="left" color="brand.50">Incentives</Text>,
+    cell: (info) => {
+      return info.getValue()
+    },
+  }),
+  columnHelper.accessor('action', {
+    header: () => <Text align="left" color="brand.50">Action</Text>,
+    cell: (info) => {
+      return info.getValue()
+    },
   }),
 ]
 
@@ -196,6 +195,7 @@ const PoolsTable = ({
                 p="2px"
                 borderTopRadius="10px"
               ></Th>
+              <Th></Th>
               <Th isNumeric></Th>
             </Tr>
             {table.getHeaderGroups().map((headerGroup, index) => (
@@ -254,6 +254,7 @@ const PoolsTable = ({
                 p="2px"
                 borderBottomRadius="10px"
               ></Td>
+              <Td></Td>
               <Td p="unset">
                 {datProvidedByCoinhall && (
                   <Flex
