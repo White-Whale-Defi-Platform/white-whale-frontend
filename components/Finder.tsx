@@ -12,7 +12,7 @@ type Props = {
 
 const getUrl = (chainId, txHash) => {
   switch (chainId) {
-    case 'uni-3':
+    case 'uni-6':
       return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
     case 'migaloo-1':
       return `https://explorer.silknodes.io/migaloo/tx/${txHash}`

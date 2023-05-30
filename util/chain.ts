@@ -7,7 +7,7 @@ export const validChains = {
     comdex: 'comdex-1',
   },
   testnet: {
-    juno: 'uni-3',
+    juno: 'uni-6',
     terra: 'pisco-1',
     injective: 'injective-888',
     comdex: 'comdex-test2',

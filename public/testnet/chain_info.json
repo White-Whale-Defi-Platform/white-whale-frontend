@@ -47,11 +47,11 @@
     "features": ["cosmwasm"]
   },
   {
-    "chainId": "uni-3",
+    "chainId": "uni-6",
     "chainName": "Juno Uni Testnet",
     "label": "Juno",
     "icon": "/logos/juno.svg",
-    "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
+    "rpc": "https://juno-testnet-rpc.polkachu.com:443/",
     "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
     "stakeCurrency": {
       "coinDenom": "JUNO",

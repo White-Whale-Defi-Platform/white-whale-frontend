@@ -11,7 +11,7 @@
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
     "id": "juno-testnet",
-    "chain_id": "uni-3",
+    "chain_id": "uni-6",
     "token_address": "",
     "symbol": "JUNOX",
     "name": "Junox",
@@ -27,7 +27,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "ujunox",
           "symbol": "JUNOX",
           "name": "Junox",
@@ -39,7 +39,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
           "name": "Junoone",
@@ -60,7 +60,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "",
           "symbol": "JUNOX",
           "name": "Junox",
@@ -72,7 +72,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
           "symbol": "JUNOTWO",
           "name": "Junotwo",
@@ -93,7 +93,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
           "name": "Junoone",
@@ -105,7 +105,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
           "symbol": "JUNOTWO",
           "name": "Junotwo",
