@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   HStack,
   Wrap,
   WrapItem,
@@ -125,7 +124,7 @@ const NewTable = ({ pools, show, isLoading }: Props) => {
                 p="16px"
                 borderRadius="10px"
               >
-                <Text color="gray">My Positiion</Text>
+                <Text color="gray">My Position</Text>
                 <Text>${pool?.myPosition}</Text>
               </HStack>
 

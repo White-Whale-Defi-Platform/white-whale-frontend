@@ -12,8 +12,8 @@ const bondingActionText = (action: ActionType) => {
       return 'Withdrawing of tokens once unbonded.'
     case ActionType.claim:
       return (
-        'Unstable APR (depending on share, trading/flashloan volume, amp/bWHALE relation to WHALE etc.).\n' +
-        'Fee passed forward after 21 days of not claiming, i.e. others can claim it.\nTime dependent multiplier, i.e. the longer you bond the more you get.'
+        'Rewards fluctuate due to bonding activity.\nUnstable APR (depending on share, trading/flashloan volume, amp/bWHALE relation to WHALE etc.).\n' +
+        'Time dependent multiplier, i.e. the longer you bond the more you get.'
       )
   }
 }

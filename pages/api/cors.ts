@@ -5,7 +5,7 @@ const Cors = async (req, res) => {
 
   try {
     const _res = await axios.get(url)
-    res.status(200).send(_res.data.pairs)
+    res.status(200).send(_res.data)
   } catch (error) {
     res.status(400).send(error.toString())
   }

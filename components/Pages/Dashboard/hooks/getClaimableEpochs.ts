@@ -48,13 +48,13 @@ export const getClaimableEpochs = async (client: Wallet, config: Config) => {
     .reduce((acc, amount) => acc + parseFloat(amount), 0)
   const globalAvailableRewards = convertMicroDenomToDenom(rewardData, 6)
 
-  const getLastSevenEpochsAverage = (epochs: Epoch[]): number => {
-    const lastSevenEpochs = epochs.slice(-7)
-    const totalAmount = lastSevenEpochs
+  const getLastEpochsAverage = (epochs: Epoch[]): number => {
+    const lastEpochs = epochs.slice(0, 21)
+    const totalAmount = lastEpochs
       .flatMap((e) => e.total.map((a) => a.amount))
       .reduce((acc, amount) => acc + parseFloat(amount), 0)
 
-    return totalAmount / lastSevenEpochs.length
+    return totalAmount / lastEpochs.length
   }
 
   const extrapolateAnnualRewards = (dailyAverage: number): number => {
@@ -62,7 +62,7 @@ export const getClaimableEpochs = async (client: Wallet, config: Config) => {
   }
 
   const dailyAverageRewards = data?.epochs
-    ? getLastSevenEpochsAverage(data.epochs)
+    ? getLastEpochsAverage(data.epochs)
     : 0
   const annualRewards = extrapolateAnnualRewards(dailyAverageRewards)
 

@@ -32,6 +32,7 @@
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
         {
+          
           "chain_id": "phoenix-1",
           "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
           "symbol": "WHALE",
@@ -68,17 +69,7 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
-          "symbol": "ampWHALE",
-          "name": "ampWhale",
-          "decimals": 6,
-          "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36"
-        },
-        {
+          "id": "white-whale",
           "chain_id": "phoenix-1",
           "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
           "symbol": "WHALE",
@@ -88,6 +79,17 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
+          "symbol": "ampWHALE",
+          "name": "ampWhale",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36"
         }
       ],
       "lp_token": "terra16z3ksy6aqjkug8l3u48q0kvdaqk3dgaytl7ykt6vg2he9d6z9rgslr4k7l",
@@ -104,17 +106,7 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
-          "symbol": "bWHALE",
-          "name": "bWHALE",
-          "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
-        },
-        {
+          "id": "white-whale",
           "chain_id": "phoenix-1",
           "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
           "symbol": "WHALE",
@@ -124,6 +116,17 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
         }
       ],
       "lp_token": "terra1le46uu9qjk53aktjs8dev96sl9sd2ujvcpspk75pdeg0txfvhyuswm6653",
@@ -395,8 +398,8 @@
       "lpOrder": ["WHALE", "ROAR"],
       "assetOrder": ["ROAR", "WHALE"],
       "displayName": "ROAR-WHALE",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/lion.png",
+      "displayLogo1": "/logos/lion.png",
+      "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
           "chain_id": "phoenix-1",
@@ -412,7 +415,7 @@
         },
         {
           "id": "lion-dao",
-          "chain_id": "chihuahua-1",
+          "chain_id": "phoenix-1",
           "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
           "symbol": "ROAR",
           "name": "ROAR",

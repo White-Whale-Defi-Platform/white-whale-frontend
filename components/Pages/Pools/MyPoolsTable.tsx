@@ -1,6 +1,5 @@
 import {
-  Flex, Image,
-  Table,
+  Flex, Table,
   TableContainer,
   Tbody,
   Td,
@@ -16,13 +15,12 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { formatPrice } from 'libs/num'
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
-import useIgnoreCoinhall from './hooks/useIgnoreCoinhall'
 import { Pool } from './types'
+
 
 
 const columnHelper = createColumnHelper<Pool>()
@@ -41,7 +39,7 @@ const columns = [
   columnHelper.accessor('price', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`price`}
+        {`RATIO`}
       </Text>
     ),
     cell: (info) => {
@@ -93,9 +91,7 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) => (
-      <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>
-    ),
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('myPosition', {
     header: () => (
@@ -103,7 +99,9 @@ const columns = [
         {`My Position`}
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => (
+      <Text align="right">${info.getValue().toLocaleString()}</Text>
+    ),
   }),
   columnHelper.accessor('incentives', {
     header: () => <Text align="left" color="brand.50">Incentives</Text>,
@@ -129,8 +127,6 @@ const PoolsTable = ({
   isLoading: boolean
 }) => {
   if (!show) return null
-
-  const datProvidedByCoinhall = useIgnoreCoinhall()
 
   const table = useReactTable({
     data: pools,
@@ -254,27 +250,6 @@ const PoolsTable = ({
                 p="2px"
                 borderBottomRadius="10px"
               ></Td>
-              <Td></Td>
-              <Td p="unset">
-                {datProvidedByCoinhall && (
-                  <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    gap="5px"
-                    pb="8px"
-                  >
-                    <Text
-                      color="white"
-                      fontSize="12px"
-                    >{`data provided by`}</Text>
-                    <Image
-                      src="/logos/coinhall.png"
-                      alt="coinhall"
-                      height="14px"
-                    />
-                  </Flex>
-                )}
-              </Td>
             </Tr>
           </Tfoot>
         </Table>

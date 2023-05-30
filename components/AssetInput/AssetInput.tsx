@@ -67,8 +67,9 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     () => `${token?.amount} ${token?.tokenSymbol}`,
     [token]
   )
-
-  const [tokenPrice] = useTokenDollarValue(token?.tokenSymbol)
+  //TODO reason no price in swap form, resolve by !!whalePrice ? ...
+  const [tokenPrice] =
+    whalePrice !== null ? [whalePrice] : useTokenDollarValue(token?.tokenSymbol)
 
   const dollarValue = useMemo(() => {
     return num(tokenPrice).times(token?.amount).dp(6).toString()
