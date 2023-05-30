@@ -52,24 +52,24 @@ export const Incentives = ({ flows }) => {
               </Thead>
               <Tbody>
                 <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td>ATOM</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
+                  <Td color="white">ATOM</Td>
+                  <Td color="white">109</Td>
+                  <Td color="white" isNumeric>0.04%</Td>
                 </Tr>
                 <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td>JUNO</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
+                  <Td color="white">JUNO</Td>
+                  <Td color="white">109</Td>
+                  <Td color="white" isNumeric>0.04%</Td>
                 </Tr>
                 <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td>WHALE</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
+                  <Td color="white">WHALE</Td>
+                  <Td color="white">109</Td>
+                  <Td color="white" isNumeric>0.04%</Td>
                 </Tr>
                 <Tr>
-                  <Td>USDC</Td>
-                  <Td>109</Td>
-                  <Td isNumeric>0.04%</Td>
+                  <Td color="white">USDC</Td>
+                  <Td color="white">109</Td>
+                  <Td color="white" isNumeric>0.04%</Td>
                 </Tr>
               </Tbody>
             </Table>

@@ -78,6 +78,7 @@ const Create = ({poolId}:Props) => {
             <InputGroup >
               <ChakraInput
                 {...field}
+                color="white"
                 placeholder='Enter amount'
                 h="50px"
                 type="datetime-local"
@@ -108,6 +109,7 @@ const Create = ({poolId}:Props) => {
             <InputGroup >
               <ChakraInput
                 {...field}
+                color="white"
                 placeholder='Enter amount'
                 h="50px"
                 type="datetime-local"
