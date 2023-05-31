@@ -1,5 +1,11 @@
-import { ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, CloseIcon } from '@chakra-ui/icons'
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
   Button,
   HStack,
@@ -18,7 +24,7 @@ import Withdraw from './Withdraw'
 import { useRouter } from 'next/router'
 
 import { bondingAtom } from './bondAtoms'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import WalletModal from '../../Wallet/Modal/Modal'
 import useTransaction, { TxStep } from './hooks/useTransaction'
 import {
@@ -48,6 +54,12 @@ const BondingActions = ({ globalAction }) => {
   const currentChain = chains.find(
     (row: { chainId: string }) => row.chainId === chainId
   )
+  const [isOpen, setIsOpen] = useState(false)
+  const onClose = () => setIsOpen(false)
+  const cancelRef = useRef()
+
+  const openAlertDialog = () => setIsOpen(true)
+
   const currentChainName = currentChain?.label.toLowerCase()
   const {
     isOpen: isOpenModal,
@@ -79,6 +91,7 @@ const BondingActions = ({ globalAction }) => {
     unbondingBWhale,
     withdrawableAmpWhale,
     withdrawableBWhale,
+    totalGlobalClaimable,
     bondingConfig,
     filteredUnbondingRequests,
     isLoading,
@@ -274,7 +287,11 @@ const BondingActions = ({ globalAction }) => {
               txStep == TxStep.Broadcasting
             }
             onClick={async () => {
-              if (isWalletConnected) {
+              if (
+                isWalletConnected &&
+                (totalGlobalClaimable === 0 ||
+                  globalAction === ActionType.withdraw)
+              ) {
                 let denom =
                   config.lsd_token[currentBondState.tokenSymbol]?.denom
                 if (globalAction === ActionType.withdraw) {
@@ -284,6 +301,11 @@ const BondingActions = ({ globalAction }) => {
                       : config.lsd_token.bWHALE.denom
                 }
                 await submit(globalAction, currentBondState.amount, denom)
+              } else if (
+                globalAction !== ActionType.withdraw &&
+                totalGlobalClaimable > 0
+              ) {
+                openAlertDialog()
               } else {
                 onOpenModal()
               }
@@ -292,6 +314,50 @@ const BondingActions = ({ globalAction }) => {
           >
             {buttonLabel}
           </Button>
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+            isCentered
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader mt={-7} fontSize="lg" fontWeight="bold">
+                  Attention
+                  <IconButton
+                    mt={-4}
+                    mr={-5}
+                    icon={<CloseIcon />}
+                    aria-label="Close dialog"
+                    variant="unstyled"
+                    float="right"
+                    onClick={onClose}
+                  />
+                </AlertDialogHeader>
+
+                <AlertDialogBody>
+                  Please claim your rewards first before{' '}
+                  {ActionType[globalAction]}ing.
+                </AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Box w="100%">
+                    <Button
+                      ref={cancelRef}
+                      onClick={onClose}
+                      alignSelf="center"
+                      bg="#6ACA70"
+                      borderRadius="full"
+                      width="100%"
+                      variant="primary"
+                    >
+                      Okay
+                    </Button>
+                  </Box>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
           <WalletModal
             isOpenModal={isOpenModal}
             onCloseModal={onCloseModal}
