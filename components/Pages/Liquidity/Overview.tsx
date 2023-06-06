@@ -5,6 +5,7 @@ import usePositions from "./hooks/usePositions"
 import useRewards from "./hooks/useRewards"
 import { Positions } from "./Positions"
 import { Rewards } from "./Rewards"
+import ForceEpoch from "./ForceEpoch"
 
 type Props = {
     poolId: string;
@@ -29,6 +30,8 @@ const Overview = ({ poolId }: Props) => {
                 rewards={rewards}
                 totalValue={totalValue}
             />
+
+            <ForceEpoch />
 
             {
                 positions.length > 0 ? (

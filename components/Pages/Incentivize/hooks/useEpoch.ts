@@ -13,10 +13,18 @@ const useEpoch = () => {
 
     const { address, client } = useRecoilValue(walletState)
 
-    const contract = "migaloo1pl02gs047p84auvavwcawgfkehawv9vhgyndpyqyee796txelefq4np7kc"
+    const contract = "migaloo1l9lnd2qrtkejhj30lkjwfknkvtswgf7hrtzfwkse760wnajt78mq9skwjn"
+
+    const { data: config } = useQuery<number>({
+        queryKey: ['incentive', 'config', contract],
+        queryFn: () => client?.queryContractSmart(contract, {
+            config: {}
+        }),
+        enabled: !!contract && !!client,
+    })
 
     const { data } = useQuery<number>({
-        queryKey: ['epoch', contract],
+        queryKey: ['incentive', 'epoch', contract],
         queryFn: () => client?.queryContractSmart(contract, {
             current_epoch: {}
         }),
@@ -41,44 +49,71 @@ const useEpoch = () => {
 
     }
 
-    const dateToEpoch = (date: string) => {
+    const dateToEpoch = (givenDate,) => {
 
-        // Check if the current epoch is available or return null
-        if (!data?.epoch?.id) return null
-
-        // Get the current epoch number
+        const epochStartTime = Number(data?.epoch?.start_time) / 1000000
+        const epochDuration = Number(config?.epoch_config?.duration) / 1000000
         const currentEpoch = Number(data?.epoch?.id)
 
-        // Get the current local date
-        const today = checkLocalAndUTC()
+        const now = dayjs().utc()
 
-        // Set the start time of the current epoch to 15:00:00 UTC
-        const startTime = dayjs(today).utc().set('hour', 15).set('minute', 0).set('second', 0).set('millisecond', 0);
+        // Convert the epoch start time to a dayjs instance in UTC
+        const startTime = dayjs.utc(epochStartTime);
 
-        // Convert the given date to UTC
-        const endTime = dayjs(date).utc();
+        // Convert the given date to a dayjs instance in local time
+        const givenDateTime = dayjs(givenDate).utc()
 
-        // Convert current epoch start time to UTC
-        const currentEpochStart = dayjs.utc(startTime);
+        // const timestampDiffNew = givenDateTime.valueOf() - now.valueOf();
+        const timestampDiffNew = givenDateTime.diff(now, 'millisecond')
 
-        // Calculate the difference between the current epoch start time and the future epoch end time
-        const diff = endTime.diff(currentEpochStart, 'day')
+        // Calculate the timestamp difference between the given date and epoch start time
+        const timestampDiff = givenDateTime.valueOf() - startTime.valueOf();
 
-        // Calculate the duration of each epoch in milliseconds
-        const epochDuration = 86400000;
+        // Calculate the epoch number based on the current epoch and timestamp difference
+        const epochNumber = currentEpoch + Math.floor(timestampDiffNew / epochDuration);
 
-        // Calculate the start time of the future epoch based on the current epoch number and duration
-        const futureEpochStartUTC = currentEpochStart.add((currentEpoch + diff) * epochDuration, 'millisecond');
-
-        // Calculate the future epoch number based on the future epoch start time
-        const epochNumber = Math.floor(futureEpochStartUTC.diff(currentEpochStart, 'millisecond') / epochDuration);
+        console.log({ currentEpoch, diff: Math.floor(timestampDiff / epochDuration), timestampDiffNew, timestampDiffNewdiv: Math.floor(timestampDiffNew / epochDuration) })
 
         return epochNumber;
     }
 
+    // // const dateToEpoch = (date: string) => {
+
+    // if (!data?.epoch?.id) return null
+
+    // // Get the current epoch number
+    // const currentEpoch = Number(data?.epoch?.id)
+
+    // // Get the current local date
+    // const today = checkLocalAndUTC()
+
+    // // Set the start time of the current epoch to 15:00:00 UTC
+    // const startTime = dayjs(today).utc().set('hour', 15).set('minute', 0).set('second', 0).set('millisecond', 0);
+
+    // // Convert the given date to UTC
+    // const endTime = dayjs(date).utc();
+
+    // // Convert current epoch start time to UTC
+    // const currentEpochStart = dayjs.utc(startTime);
+
+    // // Calculate the difference between the current epoch start time and the future epoch end time
+    // const diff = endTime.diff(currentEpochStart, 'day')
+
+    // // Calculate the duration of each epoch in milliseconds
+    // const epochDuration = 86400000;
+
+    // // Calculate the start time of the future epoch based on the current epoch number and duration
+    // const futureEpochStartUTC = currentEpochStart.add((currentEpoch + diff) * epochDuration, 'millisecond');
+
+    // // Calculate the future epoch number based on the future epoch start time
+    // const epochNumber = Math.floor(futureEpochStartUTC.diff(currentEpochStart, 'millisecond') / epochDuration);
+    
+    // return epochNumber;
+    // }
+
     const epochToDate = (givenEpoch) => {
         // Check if the current epoch is available or return null
-        if (!data?.epoch?.id) return null
+        if (!data?.epoch?.id || !config?.epoch_config?.duration) return null
 
         // Get the current epoch number
         const currentEpoch = Number(data?.epoch?.id)
@@ -88,7 +123,7 @@ const useEpoch = () => {
         const startTime = dayjs().utc().set('hour', 15).set('minute', 0).set('second', 0).set('millisecond', 0);
 
         // Calculate the duration of each epoch in milliseconds
-        const epochDuration = 86400000; 
+        const epochDuration = Number(config?.epoch_config?.duration) / 1000000;
 
         // Calculate the timestamp of the given epoch
         const givenTimestamp = startTime.valueOf() + (givenEpoch - currentEpoch) * epochDuration;
@@ -100,26 +135,14 @@ const useEpoch = () => {
         return givenEpochDate.format('YYYY/MM/DD');
     }
 
-    //   // Example usage
-    //   const currentEpoch = 27;
-    //   const givenEpoch = 30;
-
-    //   const epochDate = getEpochDate(currentEpoch, givenEpoch);
-    //   console.log({epochDate});
-
-
-
-
-
     const currentEpoch = useMemo(() => {
 
-        if(!data?.epoch?.id) return null
+        if (!data?.epoch?.id) return null
 
         return Number(data?.epoch?.id)
 
     }, [data])
     return {
-        // currentEpoch,
         dateToEpoch,
         epochToDate,
         currentEpoch

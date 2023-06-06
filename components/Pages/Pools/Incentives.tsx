@@ -53,7 +53,7 @@ export const Incentives = ({ flows }) => {
               <Tbody>
                 {
                   flows.map((flow, index) => (
-                    <Tr borderBottom={index < flows.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "unset"}>
+                    <Tr key={flow?.symbol} borderBottom={index < flows.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "unset"}>
                       <Td color="white">{flow?.symbol}</Td>
                       <Td color="white">-</Td>
                       <Td color="white" isNumeric>-</Td>
