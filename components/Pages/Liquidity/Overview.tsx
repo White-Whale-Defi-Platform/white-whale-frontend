@@ -13,7 +13,7 @@ type Props = {
 
 const Overview = ({ poolId }: Props) => {
 
-    const { rewards, totalValue } = useRewards()
+    const { rewards, totalValue } = useRewards(poolId)
     const { data: positions = [] } = usePositions(poolId)
 
     const tableData = useMemo(() => {
@@ -37,7 +37,7 @@ const Overview = ({ poolId }: Props) => {
                     </Box>
                 ) : (
                     <Box width="full" textAlign="center" >
-                        <Text>No open positions</Text>
+                        <Text color="whiteAlpha.700">No open positions</Text>
                     </Box>
                 )
 

@@ -6,6 +6,7 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import useFactoryConfig from '../../Incentivize/hooks/useFactoryConfig'
 import { tokenLpAtom } from '../lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
@@ -30,11 +31,12 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
 
   const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays , poolId })
+  const {minUnbondingDuration, maxUnbondingDuration} = useFactoryConfig(pool?.incentiveFactory)
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
 
-  const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
+  // const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
 
   const [tokenA, tokenB, flipped] = useMemo(() => {
     if (!lpOrder) return [tokenInfoA, tokenInfoB, false]
@@ -109,7 +111,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
 
     return {
       msgs: createLpMsg({
-        isNewPosition,
+        minUnbondingDuration,
         bondingDays,
         tokenA,
         pairAddress: swapAddress,
@@ -127,7 +129,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       }),
       encodedMsgs: createLPExecuteMsgs(
         {
-          isNewPosition,
+          minUnbondingDuration,
           tokenA,
           bondingDays,
           pairAddress: swapAddress,

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, HStack, Image } from '@chakra-ui/react';
+import { Box, Button, Divider, HStack, Image, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import React, { useMemo, useState } from 'react'
 import { num } from '../../../libs/num';
@@ -49,16 +49,25 @@ const Positions = ({ flows, poolId }: Props) => {
     const positions = useMemo(() => {
 
         return flows.map((flow) => ({
-            token: <Token imgUrl={flow.token.logoURI} />,
+            token: <Token imgUrl={flow?.token?.logoURI} />,
             id: flow.flowId,
             state: flow.state,
-            startDate: dayjs.unix(flow.startTime).format("YYYY/MM/DD"),
-            endDate: dayjs.unix(flow.endTime).format("YYYY/MM/DD"),
+            // startDate: dayjs.unix(flow.startTime).format("YYYY/MM/DD"),
+            // endDate: dayjs.unix(flow.endTime).format("YYYY/MM/DD"),
+            startDate: flow.startTime,
+            endDate: flow.endTime,
             value: num(flow.amount).div(10 ** 6).toNumber(),
             action: <CloseAction poolId={poolId} flowId={flow.flowId} />
         }))
 
     }, [flows])
+
+
+    if (positions.length === 0) return (
+        <Box width="full" textAlign="center" >
+            <Text color="whiteAlpha.700">No open positions</Text>
+        </Box>
+    )
 
     return (
         <Box width="full" >

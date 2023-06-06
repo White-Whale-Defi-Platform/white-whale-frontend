@@ -10,15 +10,17 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import useTxStatus from 'hooks/useTxStatus'
-import { toChainAmount } from 'libs/num'
+import { num, toChainAmount } from 'libs/num'
 import { createAsset } from 'services/asset'
 import useFactoryConfig from './useFactoryConfig'
+import { fromUtf8, toUtf8 } from '@cosmjs/encoding'
+import useEpoch from './useEpoch'
 
 interface Props {
     poolId: string
     token: any
-    startDate: number | string
-    endDate: number | string
+    startDate:  string
+    endDate:  string
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
@@ -29,17 +31,22 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
     const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
     const config = useFactoryConfig(pool?.incentiveFactory)
+    const { dateToEpoch } = useEpoch()
+
 
     const msgs = useMemo(() => {
         if (!poolId || !tokenInfo?.denom || !startDate || !endDate || Number(token?.amount || 0) <= 0) return null
 
         const flow_asset = createAsset(amount, tokenInfo.denom, tokenInfo?.native)
-        const start_timestamp = dayjs(startDate).unix()
-        const end_timestamp = dayjs(endDate).unix()
+        const start_epoch = dateToEpoch(startDate)
+        const end_epoch = dateToEpoch(endDate)
+
+
+        const nativeAmount = tokenInfo?.denom === 'uwhale' ? num(amount).plus(config?.createFlowFee?.amount).toString() : amount
 
         const funds = [
-            tokenInfo?.native && coin(amount, tokenInfo?.denom),
-            config && coin(config?.createFlowFee?.amount, config?.createFlowFee?.denom),
+            tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
+            config && tokenInfo?.denom !== 'uwhale' && coin(config?.createFlowFee?.amount, config?.createFlowFee?.denom),
         ].filter(Boolean)
 
         const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
@@ -54,7 +61,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
                 })
             )
         }
-        
+
         return [
             ...increaseAllowanceMessages,
             createExecuteMessage({
@@ -62,8 +69,8 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
                     open_flow: {
                         curve: "linear",
                         flow_asset,
-                        start_timestamp,
-                        end_timestamp,
+                        start_epoch,
+                        end_epoch,
                     }
                 },
                 senderAddress: address,

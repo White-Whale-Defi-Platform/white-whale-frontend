@@ -22,6 +22,7 @@ import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
 import { useTokenList } from '../hooks/useTokenList'
 import dayjs from 'dayjs'
 import { TokenInfo } from '../types'
+import useEpoch from '../components/Pages/Incentivize/hooks/useEpoch'
 
 export type ReserveType = [number, number]
 
@@ -100,6 +101,8 @@ export const useQueryMultiplePoolsLiquidity = ({
   const { address } = useRecoilValue(walletState)
 
   const [tokenList] = useTokenList()
+  const { epochToDate, currentEpoch } = useEpoch()
+
 
   const context = {
     // client: signingClient,
@@ -127,7 +130,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
         .then(data => {
           return data?.map((f = {}) => {
-            const denom = f?.flow_asset?.info?.token?.contract_addr || f?.flow_asset?.native_token?.denom || null
+            const denom = f?.flow_asset?.info?.token?.contract_addr || f?.flow_asset?.info.native_token?.denom || null
             return tokenList?.tokens?.find(t => t?.denom === denom)
           })
         })
@@ -141,15 +144,32 @@ export const useQueryMultiplePoolsLiquidity = ({
           const flowTokens = data?.map((f = {}) => {
             if (f.flow_creator !== address) return null
 
+            const startEpoch = f.start_epoch
+            const endEpoch = f.end_epoch
+
+            const getState = () => {
+              switch (true) {
+                case currentEpoch < startEpoch:
+                  return "upcoming"
+                case currentEpoch >= startEpoch && currentEpoch < endEpoch:
+                  return "active"
+                case currentEpoch >= endEpoch:
+                  return "over"
+                default:
+                  return ""
+              }
+            }
+
             // check if end time is in the past
-            const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
-            const denom = f?.flow_asset?.info?.token?.contract_addr || f?.flow_asset?.native_token?.denom || null
+            // const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+            const state = getState()
+            const denom = f?.flow_asset?.info?.token?.contract_addr || f?.flow_asset?.info?.native_token?.denom || null
             const token = tokenList?.tokens?.find(t => t?.denom === denom)
 
             return {
               token,
-              endTime: f.end_timestamp,
-              startTime: f.start_timestamp,
+              endTime: epochToDate(endEpoch),
+              startTime: epochToDate(startEpoch),
               flowId: f.flow_id,
               amount: f.flow_asset.amount,
               state
@@ -237,7 +257,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
     }
 
-    const myFlows = await getMyFlows({ client, address: "/x2mAXMxi6g8tV0vi/NGMVcUuKg=" })
+    const myFlows = await getMyFlows({ client, address })
 
     const liquidity = {
       available: {
@@ -307,10 +327,6 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     refetchInBackground: true,
     client,
   })
-
-  // const persistedData = usePersistance(poolResponse?.data)
-
-  console.log({ poolResponse })
 
   return [
     poolResponse?.data,

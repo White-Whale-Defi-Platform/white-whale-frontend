@@ -33,7 +33,7 @@ type GetPrices = {
 }
 
 const getMatchingPool = ({ token, poolsList, baseToken }: GetMatchingPoolArgs): PoolMatchForSwap => {
-    if (!poolsList || !token || !baseToken) return undefined
+    if (!poolsList || !token || !baseToken) return []
 
     return findPoolForSwap({
         baseToken,
@@ -58,7 +58,7 @@ const getPrices = async ({ baseToken, tokens, client, poolsList, coingecko }: Ge
 
             const { streamlinePoolBA, streamlinePoolAB } = matchingPools
 
-            if (Object.keys(matchingPools).length > 0) {
+            if (Object.keys(matchingPools)?.length > 0) {
                 const value = await tokenToTokenPriceQueryWithPools({
                     matchingPools,
                     tokenA: !!streamlinePoolAB ? token : baseToken,

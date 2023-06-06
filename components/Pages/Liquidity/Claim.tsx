@@ -38,7 +38,7 @@ type Props = {
 const Claim = ({ poolId }: Props) => {
 
   const claim = useClaim({ poolId })
-  const { rewards = [], totalValue } = useRewards()
+  const { rewards = [], totalValue } = useRewards(poolId)
 
   return (
     <VStack gap={10} py={5}>
@@ -51,7 +51,7 @@ const Claim = ({ poolId }: Props) => {
         label="Claim"
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={rewards.length === 0}
+        isDisabled={Number(totalValue) === 0}
         isLoading={claim.isLoading}
         onClick={() => claim.submit()}
       />

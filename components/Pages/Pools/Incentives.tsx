@@ -51,26 +51,15 @@ export const Incentives = ({ flows }) => {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td color="white">ATOM</Td>
-                  <Td color="white">109</Td>
-                  <Td color="white" isNumeric>0.04%</Td>
-                </Tr>
-                <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td color="white">JUNO</Td>
-                  <Td color="white">109</Td>
-                  <Td color="white" isNumeric>0.04%</Td>
-                </Tr>
-                <Tr borderBottom={"1px solid rgba(255, 255, 255, 0.1)"}>
-                  <Td color="white">WHALE</Td>
-                  <Td color="white">109</Td>
-                  <Td color="white" isNumeric>0.04%</Td>
-                </Tr>
-                <Tr>
-                  <Td color="white">USDC</Td>
-                  <Td color="white">109</Td>
-                  <Td color="white" isNumeric>0.04%</Td>
-                </Tr>
+                {
+                  flows.map((flow, index) => (
+                    <Tr borderBottom={index < flows.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "unset"}>
+                      <Td color="white">{flow?.symbol}</Td>
+                      <Td color="white">-</Td>
+                      <Td color="white" isNumeric>-</Td>
+                    </Tr>
+                  ))
+                }
               </Tbody>
             </Table>
           </TableContainer>

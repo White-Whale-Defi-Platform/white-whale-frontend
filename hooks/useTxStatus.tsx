@@ -91,10 +91,13 @@ const useTx = ({ client, transcationType }) => {
             isClosable: true,
         })
 
-        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
+        
+        queryClient.invalidateQueries({ queryKey: '@pool-liquidity'})
         queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
         queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
         queryClient.invalidateQueries({ queryKey: ['positions'] })
+        queryClient.invalidateQueries({ queryKey: ['rewards'] })
+        queryClient.refetchQueries()
 
     }
 

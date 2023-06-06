@@ -14,7 +14,7 @@ export const Rewards = ({ rewards = [], totalValue }) => (
 
         <HStack width="full" justifyContent="space-between">
             <Text fontSize="14px" color="whiteAlpha.700">Available Rewards</Text>
-            <TooltipWithChildren label={`$${totalValue}`}>
+            <TooltipWithChildren label={`$${totalValue}`} showTooltip={rewards.length > 0}>
                 <AvailableRewards data={rewards} />
             </TooltipWithChildren>
         </HStack>

@@ -43,6 +43,8 @@ const TokenRow = ({ item, isLast }: { item: Reward, isLast: boolean }) => {
 
 const ClaimTable = ({ tokens = []}: Props) => {
 
+    if(tokens.length === 0) return <Text color="whiteAlpha.700">No rewards available</Text>
+
     return (
         <VStack
             width="full"
@@ -62,7 +64,7 @@ const ClaimTable = ({ tokens = []}: Props) => {
             px="5"
             py="4"
         >
-            <Text color="red">Note: It's mock data, rewards are not implemented yet. </Text>
+            {/* <Text color="red">Note: It's mock data, rewards are not implemented yet. </Text> */}
 
             {
                 tokens?.map((item, index) => <TokenRow key={item?.denom + index} item={item}  isLast={index === tokens.length - 1} />)

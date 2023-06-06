@@ -14,7 +14,7 @@ const useFactoryConfig = (incentiveFactory:string) => {
 
     const { address, client } = useRecoilValue(walletState)
 
-    const { data: config } = useQuery<FactoryConfig>({
+    const { data: config = {} } = useQuery<FactoryConfig>({
         queryKey: ['factoryConfig', incentiveFactory],
         queryFn: () => client?.queryContractSmart(incentiveFactory, {
             config: {}
@@ -23,7 +23,9 @@ const useFactoryConfig = (incentiveFactory:string) => {
             createFlowFee : {
                 amount: data?.create_flow_fee?.amount,
                 denom : data?.create_flow_fee?.info?.native_token?.denom,
-            }
+            },
+            minUnbondingDuration : data?.min_unbonding_duration,
+            maxUnbondingDuration : data?.max_unbonding_duration,
         })),
         enabled: !!incentiveFactory && !!client,
     })

@@ -56,9 +56,9 @@
       ],
       "lp_token": "migaloo1etnc03lm4n5u689xv6yq6h9se2fm5cu7h46fruzk78amc8mqqytsaa3wza",
       "swap_address": "migaloo1c9fkszt5lq34vvvlat3fxj6yv7ejtqapz04e97vtc9m5z9cwnamqsr4n3w",
-      "staking_address": "migaloo1sm4ncf6qj2qhukw5mhj35xtlxex4e6svse8gk6zf7v73k763xejqg9gzx4",
-      "staking_proxy": "migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa",
-      "incentiveFactory" : "migaloo1gczg73zfp4cpusfcejp8dnwyhprmvh5vufvczva4yjy98u7hes0qj980js",
+      "staking_address": "migaloo1aj2nax29c4l5lma8vk49v93lhu0g0ek7sfxw96antpersw6zk0ysqzzhs9",
+      "staking_proxy": "migaloo1ldn4f4ycnq9sd9uncfemqqr58a6fpv8924wxs4w9zf6uz8hql2wsf2wwes",
+      "incentiveFactory" : "migaloo1wqsyztz9qw2ert8n2zypq5pp5evyqtrj7pzagrj40rwkypgghm3qeqj2jg",
       "rewards_tokens": []
     }, {
       "pool_id": "WHALE-LUNA",

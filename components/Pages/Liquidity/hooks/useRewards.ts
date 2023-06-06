@@ -3,7 +3,10 @@ import usePrices from "hooks/usePrices"
 import { useTokenList } from "hooks/useTokenList"
 import { useMemo } from "react"
 import { fromChainAmount, num } from "libs/num"
-import { TokenInfo } from "../../../../queries/usePoolsListQuery"
+import { TokenInfo } from "queries/usePoolsListQuery"
+import { useRecoilValue } from "recoil"
+import { walletState } from "state/atoms/walletAtoms"
+import { useQueryPoolLiquidity } from "queries/useQueryPools"
 
 
 const rewardsMock = [{
@@ -45,16 +48,25 @@ export type RewardsResult = {
     totalValue: number;
 }
 
-const useRewards = () => {
+const useRewards = (poolId) => {
 
     const [tokenList] = useTokenList()
     const prices = usePrices()
+    const [{ staking_address } = {}] = useQueryPoolLiquidity({ poolId })
+
+    const { address, client } = useRecoilValue(walletState)
+
 
     const { data: rewards = [] } = useQuery({
-        queryKey: 'rewards',
+        queryKey: ['rewards'],
         queryFn: async (): Promise<RewardData[]> => {
-            return Promise.resolve(rewardsMock)
-        }
+            // return Promise.resolve(rewardsMock)
+            return client?.queryContractSmart(staking_address, {
+                rewards: { address }
+            })
+        },
+        select : (data) => data?.rewards || [],
+        enabled: !!staking_address && !!address
     })
 
     return useMemo(() => {
