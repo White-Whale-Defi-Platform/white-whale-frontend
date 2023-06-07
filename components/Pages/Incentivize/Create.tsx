@@ -87,7 +87,8 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="datetime-local"
                 min={new Date().toISOString().slice(0, 16)}
-              // max="2017-06-30T16:30"
+                // max="2017-06-30T16:30"
+                focusBorderColor='brand.500'
               />
             </InputGroup>
           )}
@@ -120,6 +121,7 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="datetime-local"
                 min={new Date().toISOString().slice(0, 16)}
+                focusBorderColor='brand.500'
               />
             </InputGroup>
           )}

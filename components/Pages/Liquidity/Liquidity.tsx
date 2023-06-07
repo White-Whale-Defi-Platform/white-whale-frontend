@@ -117,7 +117,7 @@ const ManageLiquidity: FC = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '800px' }}
+      width={{ base: '100%', md: 'auto' }}
       alignItems="center"
       padding={5}
     >
