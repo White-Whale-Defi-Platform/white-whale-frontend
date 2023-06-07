@@ -30,6 +30,7 @@ export type PoolEntityType = {
   staking_address: string
   rewards_tokens: Array<TokenInfoWithReward>
   incentiveFactory: string
+  feeDistributor: string
   liquidity?: PoolLiquidityState
 }
 

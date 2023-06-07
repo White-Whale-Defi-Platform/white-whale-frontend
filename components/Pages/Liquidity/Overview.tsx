@@ -31,7 +31,9 @@ const Overview = ({ poolId }: Props) => {
                 totalValue={totalValue}
             />
 
-            <ForceEpoch />
+            <ForceEpoch 
+                poolId={poolId}
+            />
 
             {
                 positions.length > 0 ? (

@@ -5,30 +5,36 @@ import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import utc from "dayjs/plugin/utc";
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 dayjs.extend(utc);
 
 
-const useEpoch = () => {
+const useEpoch = (poolId) => {
 
+    const [pool] = usePoolFromListQueryById({ poolId })
+
+    // const {feeDistributor} = pool || {}
+    const feeDistributor = "migaloo1l9lnd2qrtkejhj30lkjwfknkvtswgf7hrtzfwkse760wnajt78mq9skwjn"
+
+    // console.log({feeDistributor, pool})
 
     const { address, client } = useRecoilValue(walletState)
 
-    const contract = "migaloo1l9lnd2qrtkejhj30lkjwfknkvtswgf7hrtzfwkse760wnajt78mq9skwjn"
 
     const { data: config } = useQuery<number>({
-        queryKey: ['incentive', 'config', contract],
-        queryFn: () => client?.queryContractSmart(contract, {
+        queryKey: ['incentive', 'config', feeDistributor],
+        queryFn: () => client?.queryContractSmart(feeDistributor, {
             config: {}
         }),
-        enabled: !!contract && !!client,
+        enabled: !!feeDistributor && !!client,
     })
 
     const { data } = useQuery<number>({
-        queryKey: ['incentive', 'epoch', contract],
-        queryFn: () => client?.queryContractSmart(contract, {
+        queryKey: ['incentive', 'epoch', feeDistributor],
+        queryFn: () => client?.queryContractSmart(feeDistributor, {
             current_epoch: {}
         }),
-        enabled: !!contract && !!client,
+        enabled: !!feeDistributor && !!client,
     })
 
     const checkLocalAndUTC = () => {
@@ -50,6 +56,7 @@ const useEpoch = () => {
     }
 
     const dateToEpoch = (givenDate,) => {
+        if (!data?.epoch?.id || !config?.epoch_config?.duration || !givenDate) return null
 
         const epochStartTime = Number(data?.epoch?.start_time) / 1000000
         const epochDuration = Number(config?.epoch_config?.duration) / 1000000
@@ -69,10 +76,12 @@ const useEpoch = () => {
         // Calculate the timestamp difference between the given date and epoch start time
         const timestampDiff = givenDateTime.valueOf() - startTime.valueOf();
 
-        // Calculate the epoch number based on the current epoch and timestamp difference
-        const epochNumber = currentEpoch + Math.floor(timestampDiffNew / epochDuration);
+        const diff = Math.floor(timestampDiffNew / epochDuration)
 
-        console.log({ currentEpoch, diff: Math.floor(timestampDiff / epochDuration), timestampDiffNew, timestampDiffNewdiv: Math.floor(timestampDiffNew / epochDuration) })
+        // Calculate the epoch number based on the current epoch and timestamp difference
+        const epochNumber =  diff < 0 ? currentEpoch : currentEpoch + diff ;
+
+        // console.log({ currentEpoch, diff: Math.floor(timestampDiff / epochDuration), timestampDiffNew, timestampDiffNewdiv: +Math.floor(timestampDiffNew / epochDuration) })
 
         return epochNumber;
     }

@@ -31,7 +31,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
     const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
     const config = useFactoryConfig(pool?.incentiveFactory)
-    const { dateToEpoch } = useEpoch()
+    const { dateToEpoch } = useEpoch(poolId)
 
 
     const msgs = useMemo(() => {

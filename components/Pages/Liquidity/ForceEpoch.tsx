@@ -1,11 +1,13 @@
 import { Button, HStack } from '@chakra-ui/react'
 import useForeceEpoch from './hooks/useForeceEpoch'
 
-type Props = {}
+type Props = {
+    poolId: string;
+}
 
-const ForceEpoch = (props: Props) => {
+const ForceEpoch = ({poolId}: Props) => {
 
-    const forceEpoch = useForeceEpoch()
+    const forceEpoch = useForeceEpoch(poolId)
 
 
 
@@ -16,6 +18,7 @@ const ForceEpoch = (props: Props) => {
                 size="sm"
                 onClick={() => forceEpoch.submit()}
                 isLoading={forceEpoch.isLoading}
+                isDisabled={!forceEpoch.isSupported}
             >
                 Force Epoch
             </Button>

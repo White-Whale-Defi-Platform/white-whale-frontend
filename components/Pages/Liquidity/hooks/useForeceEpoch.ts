@@ -4,15 +4,20 @@ import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { createExecuteMessage } from 'util/messages'
 import useTxStatus from 'hooks/useTxStatus'
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 
 interface Props {
     poolId: string
 }
 
-const useForeceEpoch = () => {
+const useForeceEpoch = (poolId) => {
 
-    const fee = "migaloo1l9lnd2qrtkejhj30lkjwfknkvtswgf7hrtzfwkse760wnajt78mq9skwjn"
-    const incentive = "migaloo1aj2nax29c4l5lma8vk49v93lhu0g0ek7sfxw96antpersw6zk0ysqzzhs9"
+    const [pool] = usePoolFromListQueryById({ poolId })
+
+    const {feeDistributor, staking_address} = pool
+
+    // const fee = "migaloo1l9lnd2qrtkejhj30lkjwfknkvtswgf7hrtzfwkse760wnajt78mq9skwjn"
+    // const incentive = "migaloo1aj2nax29c4l5lma8vk49v93lhu0g0ek7sfxw96antpersw6zk0ysqzzhs9"
 
 
     const { address, client } = useRecoilValue(walletState)
@@ -24,7 +29,7 @@ const useForeceEpoch = () => {
             new_epoch: {}
         },
         senderAddress: address,
-        contractAddress: fee,
+        contractAddress: feeDistributor,
         funds: [],
     })
 
@@ -34,7 +39,7 @@ const useForeceEpoch = () => {
             take_global_weight_snapshot: {}
         },
         senderAddress: address,
-        contractAddress: incentive,
+        contractAddress: staking_address,
         funds: [],
     })
 
@@ -46,11 +51,12 @@ const useForeceEpoch = () => {
 
     return useMemo(() => {
         return {
+            isSupported: !!feeDistributor && !!staking_address,
             submit,
             ...state,
             ...tx
         }
-    }, [tx, state, submit])
+    }, [tx, state, submit, feeDistributor, staking_address])
 }
 
 export default useForeceEpoch

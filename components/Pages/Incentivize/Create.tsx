@@ -1,4 +1,4 @@
-import { Box, HStack, Input as ChakraInput, InputGroup, Stack } from '@chakra-ui/react'
+import { Box, HStack, Input as ChakraInput, InputGroup, Stack, Text } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
 import { walletState, WalletStatusType } from '../../../state/atoms/walletAtoms'
+import useEpoch from './hooks/useEpoch'
 import { useOpenFlow } from './hooks/useOpenFlow'
 
 const defaultToken = {
@@ -19,7 +20,7 @@ type Props = {
   poolId: string
 }
 
-const Create = ({poolId}:Props) => {
+const Create = ({ poolId }: Props) => {
 
   const [token, setToken] = useState(defaultToken)
   const { control, handleSubmit, setValue, getValues, formState: { isValid }, watch } = useForm({
@@ -36,6 +37,8 @@ const Create = ({poolId}:Props) => {
   const isConnected = status === WalletStatusType.connected
   const { txStep } = useRecoilValue(txAtom)
   const { simulate, submit, tx } = useOpenFlow({ poolId, ...formData })
+
+  const { dateToEpoch, currentEpoch } = useEpoch(poolId)
 
   return (
     <Stack
@@ -117,7 +120,12 @@ const Create = ({poolId}:Props) => {
             </InputGroup>
           )}
         />
+      </HStack>
 
+      <HStack justifyContent="space-between" w="full">
+        <Text>Current epoch : { currentEpoch }</Text>
+        <Text>Start epoch : {dateToEpoch(formData.startDate) }</Text>
+        <Text>End epoch : { dateToEpoch(formData.endDate)  }</Text>
       </HStack>
 
       <SubmitButton
