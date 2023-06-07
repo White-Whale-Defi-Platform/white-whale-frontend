@@ -188,11 +188,7 @@ const ManageLiquidity: FC = () => {
               <TabPanel padding={4}>
                 <WithdrawForm
                   connected={status}
-                  tokenA={{
-                    tokenSymbol: poolId,
-                    amount: 0,
-                    decimals: 6,
-                  }}
+                  clearForm={clearForm}
                   poolId={poolId}
                 />
               </TabPanel>

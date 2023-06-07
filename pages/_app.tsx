@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
+import '../theme/global.css'
+
 import { ChakraProvider, CSSReset } from '@chakra-ui/react'
 import {
   getChainOptions,

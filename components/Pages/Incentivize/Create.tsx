@@ -1,4 +1,5 @@
-import { Box, HStack, Input as ChakraInput, InputGroup, Stack, Text } from '@chakra-ui/react'
+import { CalendarIcon } from '@chakra-ui/icons'
+import { Box, HStack, Input as ChakraInput, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
@@ -85,6 +86,8 @@ const Create = ({ poolId }: Props) => {
                 placeholder='Enter amount'
                 h="50px"
                 type="datetime-local"
+                min={new Date().toISOString().slice(0, 16)}
+              // max="2017-06-30T16:30"
               />
             </InputGroup>
           )}
@@ -116,17 +119,18 @@ const Create = ({ poolId }: Props) => {
                 placeholder='Enter amount'
                 h="50px"
                 type="datetime-local"
+                min={new Date().toISOString().slice(0, 16)}
               />
             </InputGroup>
           )}
         />
       </HStack>
 
-      <HStack justifyContent="space-between" w="full">
+      {/* <HStack justifyContent="space-between" w="full">
         <Text>Current epoch : { currentEpoch }</Text>
         <Text>Start epoch : {dateToEpoch(formData.startDate) }</Text>
         <Text>End epoch : { dateToEpoch(formData.endDate)  }</Text>
-      </HStack>
+      </HStack> */}
 
       <SubmitButton
         label={simulate.buttonLabel || "Submit"}

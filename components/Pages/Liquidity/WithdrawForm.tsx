@@ -15,9 +15,10 @@ import { protectAgainstNaN } from '../../../util/conversion'
 type Props = {
   poolId: string
   connected: WalletStatusType
+  clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, connected }: Props) => {
+const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -35,23 +36,6 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
 
   const { tokenABalance, tokenBBalance } = useMemo(() => {
     const [reserveA, reserveB] = liquidity?.reserves?.totalProvided || []
-    const totalReserve = liquidity?.reserves?.total || []
-    const totalLiquidity = liquidity?.available?.total?.tokenAmount || 0
-      // const totalReserve: [number, number] = [
-      //   protectAgainstNaN(swap.token1_reserve),
-      //   protectAgainstNaN(swap.token2_reserve),
-      // ]
-    
-      // const providedReserve: [number, number] = [
-      //   protectAgainstNaN(
-      //     totalReserve[0] * (claimableLP / totalLiquidity)
-      //   ),
-      //   protectAgainstNaN(
-      //     totalReserve[1] * (claimableLP / totalLiquidity)
-      //   ),
-      // ]
-
-      // console.log({providedReserve, totalLiquidity, totalReserve, claimableLP, liquidity})
 
     return {
       tokenABalance: fromChainAmount(reserveA),
@@ -120,6 +104,17 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     else return 'Withdraw'
   }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
 
+
+
+  useEffect(() => {
+    if (tx?.txStep === TxStep.Success) {
+      setValue('token1', { ...tokenA, amount: 0 })
+      setValue('token2', { ...tokenB, amount: 0 })
+      clearForm()
+      // tx?.reset()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx?.txStep])
 
   // on input change reset input or update value
   const onInputChange = (value, asset) => {

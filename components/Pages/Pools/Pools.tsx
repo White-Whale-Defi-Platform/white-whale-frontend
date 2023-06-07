@@ -25,7 +25,7 @@ import { Incentives } from './Incentives'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 import { useChains } from 'hooks/useChainInfo'
-
+import ForceEpoch from "../Liquidity/ForceEpoch"
 
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -108,6 +108,7 @@ const Pools: FC<Props> = () => {
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+          console.log({pool})
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
@@ -123,7 +124,7 @@ const Pools: FC<Props> = () => {
           price: pool?.ratio,
           isUSDPool: isUSDPool,
           incentives: <Incentives flows={pool.flows} />,
-          action: <ActionCTAs chainIdParam={chainIdParam} poolId={pool?.pool_id} />,
+          action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
           isSubqueryNetwork: false,
         }
       })
@@ -166,6 +167,8 @@ const Pools: FC<Props> = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             My Pools
           </Text>
+          <ForceEpoch  />
+          
         </HStack>
         <MyPoolsTable
           show={true}
