@@ -1,12 +1,10 @@
 import { useQuery } from 'react-query'
-import { useEffect, useState } from 'react'
-import { parseError } from '../util/parseError'
-import { Wallet } from '../util/wallet-adapters'
+import { parseError } from 'util/parseError'
+import { Wallet } from 'util/wallet-adapters'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { useRecoilState } from 'recoil'
-import { txAtom } from '../state/atoms/tx'
+import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
-
 
 type Simulate = {
   msgs: EncodeObject[]
@@ -18,14 +16,28 @@ type Simulate = {
   onSuccess?: (data: any) => void
 }
 
-const useSimulate = ({ msgs, signingClient, address, connected, amount, onError, onSuccess }: Simulate) => {
-
+const useSimulate = ({
+  msgs,
+  signingClient,
+  address,
+  connected,
+  amount,
+  onError,
+  onSuccess,
+}: Simulate) => {
   const [txState, setTxState] = useRecoilState(txAtom)
 
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],
     queryFn: () => {
-      if (!connected || Number(amount) <= 0 || !address || !signingClient || !msgs) return
+      if (
+        !connected ||
+        Number(amount) <= 0 ||
+        !address ||
+        !signingClient ||
+        !msgs
+      )
+        return
 
       setTxState({
         txStep: TxStep.Estimating,
@@ -40,7 +52,7 @@ const useSimulate = ({ msgs, signingClient, address, connected, amount, onError,
       onSuccess?.(data)
       setTxState({
         ...txState,
-        txStep: TxStep.Ready
+        txStep: TxStep.Ready,
       })
     },
     onError: (error: Error) => {

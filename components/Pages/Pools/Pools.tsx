@@ -1,6 +1,4 @@
-import {
-  Box, HStack, Text, VStack
-} from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { num } from 'libs/num'
@@ -25,8 +23,10 @@ import { Incentives } from './Incentives'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 import { useChains } from 'hooks/useChainInfo'
-
-
+import {
+  IncentivePoolInfo,
+  useIncentivePoolInfo,
+} from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -43,8 +43,8 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { address, chainId } = useRecoilValue(walletState)
-  const client = useCosmwasmClient(chainId)
+  const { address, chainId, client } = useRecoilValue(walletState)
+  const cosmWasmClient = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
@@ -56,10 +56,11 @@ const Pools: FC<Props> = () => {
     useQueryMultiplePoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
-      client,
+      client: cosmWasmClient,
     })
   )
   const chains: any = useChains()
+  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(client)
 
   const currentChain = useMemo(
     () =>
@@ -122,8 +123,17 @@ const Pools: FC<Props> = () => {
           poolAssets: pool?.pool_assets,
           price: pool?.ratio,
           isUSDPool: isUSDPool,
-          incentives: <Incentives flows={pool.flows} />,
-          action: <ActionCTAs chainIdParam={chainIdParam} poolId={pool?.pool_id} />,
+          incentives: (
+            <Incentives
+              flows={
+                incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
+                  ?.flowData ?? []
+              }
+            />
+          ),
+          action: (
+            <ActionCTAs chainIdParam={chainIdParam} poolId={pool?.pool_id} />
+          ),
           isSubqueryNetwork: false,
         }
       })
@@ -138,14 +148,15 @@ const Pools: FC<Props> = () => {
   useEffect(() => {
     initPools()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
+  }, [address, cosmWasmClient, pools])
 
   // get a list of my pools
   const myPools = useMemo(() => {
     return (
       allPools &&
-      allPools
-        .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+      allPools.filter(
+        ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
+      )
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPools])

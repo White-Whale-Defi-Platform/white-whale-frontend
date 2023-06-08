@@ -1,24 +1,39 @@
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react'
 import {
-  Button, Text, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody,
+  Button,
+  Text,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
   Table,
   Thead,
-  Tbody, Tr, Td, TableContainer
-} from '@chakra-ui/react';
-import { IncentivesLogos } from './IncentivesLogos';
+  Tbody,
+  Tr,
+  Td,
+  TableContainer,
+} from '@chakra-ui/react'
+import { IncentivesLogos } from './IncentivesLogos'
+import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 
-export const Incentives = ({ flows }) => {
-  const { logos = [], more = [], hasIncentives = false } = useMemo(() => {
-    const logos = flows.slice(0, 2).map((flow) => flow?.logoURI);
-    const more = flows.slice(3).length;
-    const hasIncentives = flows.length > 0;
-    return { logos, more, hasIncentives };
-
-  }, [flows]);
+type IncentiveProps = {
+  flows: FlowData[]
+}
+export const Incentives: FC<IncentiveProps> = ({ flows }) => {
+  const {
+    logos = [],
+    more = [],
+    hasIncentives = false,
+  } = useMemo(() => {
+    const logos = flows.slice(0, 2).map((flow) => flow?.logoURI)
+    const more = flows.slice(3).length
+    const hasIncentives = flows.length > 0
+    return { logos, more, hasIncentives }
+  }, [flows])
 
   //show dash if no incentives
-  if (!hasIncentives)
-    return <Text>-</Text>;
+  if (!hasIncentives) return <Text>-</Text>
 
   return (
     <Popover trigger="hover">
@@ -28,8 +43,8 @@ export const Incentives = ({ flows }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        background="black"
-        boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
+        background={'black'}
+        boxShadow={'0px 0px 50px rgba(0, 0, 0, 0.25)'}
         borderRadius="15px"
         border="unset"
         width="auto"
@@ -38,33 +53,42 @@ export const Incentives = ({ flows }) => {
           bg="black"
           boxShadow="unset"
           style={{ boxShadow: 'unset' }}
-          sx={{ '--popper-arrow-shadow-color': 'black' }} />
+          sx={{ '--popper-arrow-shadow-color': 'black' }}
+        />
         <PopoverBody>
           {/* TODO: add incentives table */}
           <TableContainer>
-            <Table size='sm' variant="unstyled">
+            <Table size="sm" variant="unstyled">
               <Thead>
                 <Tr border="0">
                   <Td color="gray.500">Token</Td>
-                  <Td color="gray.500">Estimate Daily Reward</Td>
-                  <Td color="gray.500" isNumeric>APR</Td>
+                  <Td color="gray.500">Estimated Daily Reward</Td>
+                  <Td color="gray.500" isNumeric>
+                    APR
+                  </Td>
                 </Tr>
               </Thead>
               <Tbody>
-                {
-                  flows.map((flow, index) => (
-                    <Tr borderBottom={index < flows.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "unset"}>
-                      <Td color="white">{flow?.symbol}</Td>
-                      <Td color="white">-</Td>
-                      <Td color="white" isNumeric>-</Td>
-                    </Tr>
-                  ))
-                }
+                {flows?.map((flowInfo, index) => (
+                  <Tr
+                    borderBottom={
+                      index < flows.length - 1
+                        ? '1px solid rgba(255, 255, 255, 0.1)'
+                        : 'unset'
+                    }
+                  >
+                    <Td color="white">{flowInfo?.tokenSymbol}</Td>
+                    <Td color="white">{flowInfo?.dailyEmission.toFixed(2)}</Td>
+                    <Td color="white" isNumeric>
+                      {flowInfo?.apr.toFixed(2)}%
+                    </Td>
+                  </Tr>
+                ))}
               </Tbody>
             </Table>
           </TableContainer>
         </PopoverBody>
       </PopoverContent>
     </Popover>
-  );
-};
+  )
+}

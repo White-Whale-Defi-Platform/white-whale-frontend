@@ -36,18 +36,14 @@ export const createWithdrawExecuteMsgs = (
 
   const inventiveMsg = createExecuteMessage({
     message: {
-      withdraw: {}
+      withdraw: {},
     },
     senderAddress,
     contractAddress: stakingAddress,
     funds: [],
   })
 
-  
-  if(claimIncentive)
-    msgs.push(inventiveMsg)
-
-
+  if (claimIncentive) msgs.push(inventiveMsg)
 
   return [
     ...msgs,

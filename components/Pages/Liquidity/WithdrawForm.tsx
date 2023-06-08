@@ -10,7 +10,6 @@ import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
 import useClaimableLP from './hooks/useClaimableLP'
-import { protectAgainstNaN } from '../../../util/conversion'
 
 type Props = {
   poolId: string
@@ -23,11 +22,11 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
       swap_address: swapAddress = null,
       lp_token: contract = null,
       liquidity,
-      staking_address
-    } = {}
+      staking_address,
+    } = {},
   ] = useQueryPoolLiquidity({ poolId })
 
-  const claimableLP = useClaimableLP({ poolId})
+  const claimableLP = useClaimableLP({ poolId })
 
   const [reverse, setReverse] = useState(false)
   const [assetA, assetB] = poolId?.split('-') || []
@@ -37,43 +36,44 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     const [reserveA, reserveB] = liquidity?.reserves?.totalProvided || []
     const totalReserve = liquidity?.reserves?.total || []
     const totalLiquidity = liquidity?.available?.total?.tokenAmount || 0
-      // const totalReserve: [number, number] = [
-      //   protectAgainstNaN(swap.token1_reserve),
-      //   protectAgainstNaN(swap.token2_reserve),
-      // ]
-    
-      // const providedReserve: [number, number] = [
-      //   protectAgainstNaN(
-      //     totalReserve[0] * (claimableLP / totalLiquidity)
-      //   ),
-      //   protectAgainstNaN(
-      //     totalReserve[1] * (claimableLP / totalLiquidity)
-      //   ),
-      // ]
+    // const totalReserve: [number, number] = [
+    //   protectAgainstNaN(swap.token1_reserve),
+    //   protectAgainstNaN(swap.token2_reserve),
+    // ]
 
-      // console.log({providedReserve, totalLiquidity, totalReserve, claimableLP, liquidity})
+    // const providedReserve: [number, number] = [
+    //   protectAgainstNaN(
+    //     totalReserve[0] * (claimableLP / totalLiquidity)
+    //   ),
+    //   protectAgainstNaN(
+    //     totalReserve[1] * (claimableLP / totalLiquidity)
+    //   ),
+    // ]
+
+    // console.log({providedReserve, totalLiquidity, totalReserve, claimableLP, liquidity})
 
     return {
       tokenABalance: fromChainAmount(reserveA),
-      tokenBBalance: fromChainAmount(reserveB)
+      tokenBBalance: fromChainAmount(reserveB),
     }
   }, [liquidity])
 
-  const { control, handleSubmit, formState, setValue, getValues, watch } = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      token1: {
-        tokenSymbol: assetA,
-        amount: 0,
-        decimals: 6,
+  const { control, handleSubmit, formState, setValue, getValues, watch } =
+    useForm({
+      mode: 'onChange',
+      defaultValues: {
+        token1: {
+          tokenSymbol: assetA,
+          amount: 0,
+          decimals: 6,
+        },
+        token2: {
+          tokenSymbol: assetB,
+          amount: 0,
+          decimals: 6,
+        },
       },
-      token2: {
-        tokenSymbol: assetB,
-        amount: 0,
-        decimals: 6,
-      },
-    },
-  })
+    })
 
   const tokenA = watch('token1')
   const tokenB = watch('token2')
@@ -82,32 +82,34 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     lp: liquidity?.available?.provided?.tokenAmount,
     tokenA: liquidity?.reserves?.totalProvided?.[0],
     tokenB: liquidity?.reserves?.totalProvided?.[1],
-    amount: reverse ? toChainAmount(tokenB.amount) : toChainAmount(tokenA.amount),
-    reverse
+    amount: reverse
+      ? toChainAmount(tokenB.amount)
+      : toChainAmount(tokenA.amount),
+    reverse,
   })
 
   useEffect(() => {
     if (reverse) {
       setValue('token1', {
         ...tokenA,
-        amount: num(fromChainAmount(simulated)).toNumber()
+        amount: num(fromChainAmount(simulated)).toNumber(),
       })
     } else {
       setValue('token2', {
         ...tokenB,
-        amount: num(fromChainAmount(simulated)).toNumber()
+        amount: num(fromChainAmount(simulated)).toNumber(),
       })
     }
   }, [simulated])
 
-  const tx = useWithdraw({ 
-      amount: lp || "0", 
-      contract, 
-      swapAddress, 
-      poolId, 
-      claimIncentive: claimableLP > 0, 
-      stakingAddress: staking_address
-    })
+  const tx = useWithdraw({
+    amount: lp || '0',
+    contract,
+    swapAddress,
+    poolId,
+    claimIncentive: claimableLP > 0,
+    stakingAddress: staking_address,
+  })
 
   const isConnected = connected === WalletStatusType.connected
   const isInputDisabled = tx?.txStep == TxStep.Posting
@@ -120,16 +122,13 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     else return 'Withdraw'
   }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
 
-
   // on input change reset input or update value
   const onInputChange = (value, asset) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
       tx.reset()
 
-    if (asset == 1)
-      setValue('token1', value)
-    else
-      setValue('token2', value)
+    if (asset == 1) setValue('token1', value)
+    else setValue('token2', value)
   }
 
   // reset form on success
@@ -137,14 +136,13 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
     if (tx.txStep === TxStep.Success) {
       setValue('token1', {
         ...tokenA,
-        amount: 0
+        amount: 0,
       })
       setValue('token2', {
         ...tokenB,
-        amount: 0
+        amount: 0,
       })
     }
-
   }, [tx?.txStep])
 
   return (
@@ -155,7 +153,6 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
     >
-
       <Input
         control={control}
         name="token1"
@@ -164,11 +161,9 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
         balance={num(tokenABalance).toNumber()}
         fetchBalance={false}
         onChange={(value) => {
-          if (reverse)
-            setReverse(false)
+          if (reverse) setReverse(false)
           onInputChange(value, 1)
         }}
-
       />
 
       <Input
@@ -179,8 +174,7 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
         balance={num(tokenBBalance).toNumber()}
         fetchBalance={false}
         onChange={(value) => {
-          if (!reverse)
-            setReverse(true)
+          if (!reverse) setReverse(true)
           onInputChange(value, 2)
         }}
       />
@@ -196,7 +190,6 @@ const WithdrawForm = ({ poolId, connected }: Props) => {
         show={tx?.error && !!!tx.buttonLabel}
         message={tx?.error as string}
       />
-
     </VStack>
   )
 }

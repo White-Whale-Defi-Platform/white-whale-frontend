@@ -1,1 +1,1 @@
-export { default } from './Liquidity'
+export { default } from 'components/Pages/Liquidity/ManageLiquidity'

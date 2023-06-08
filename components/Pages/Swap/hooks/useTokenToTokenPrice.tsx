@@ -17,12 +17,12 @@ type UseTokenPairsPricesArgs = {
 }
 
 export const useTokenToTokenPriceQuery = ({
-                                            tokenAmount,
-                                            tokenASymbol,
-                                            tokenBSymbol,
-                                            enabled = true,
-                                            refetchInBackground,
-                                          }: UseTokenPairsPricesArgs) => {
+  tokenAmount,
+  tokenASymbol,
+  tokenBSymbol,
+  enabled = true,
+  refetchInBackground,
+}: UseTokenPairsPricesArgs) => {
   const { client } = useRecoilValue(walletState)
 
   const tokenA = useTokenInfo(tokenASymbol)
@@ -48,12 +48,12 @@ export const useTokenToTokenPriceQuery = ({
     },
     enabled: Boolean(
       enabled &&
-      client &&
-      matchingPools &&
-      tokenA &&
-      tokenB &&
-      tokenAmount > 0 &&
-      tokenBSymbol !== tokenASymbol
+        client &&
+        matchingPools &&
+        tokenA &&
+        tokenB &&
+        tokenAmount > 0 &&
+        tokenBSymbol !== tokenASymbol
     ),
     refetchOnMount: 'always' as const,
     refetchInterval: refetchInBackground

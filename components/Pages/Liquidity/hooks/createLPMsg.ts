@@ -2,13 +2,20 @@ import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
-import { num } from 'libs/num'
 
-import { createAsset, isNativeAsset } from 'services/asset'
+import { createAsset } from 'services/asset'
 
 const NUMBER_OF_SECONDS_IN_DAY = 86400
 
-const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress, minUnbondingDuration }) => {
+const createLpMsg = ({
+  tokenA,
+  tokenB,
+  amountA,
+  amountB,
+  bondingDays,
+  pairAddress,
+  minUnbondingDuration,
+}) => {
   const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
   const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native)
 
@@ -16,7 +23,7 @@ const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddres
     return {
       provide_liquidity: {
         assets: [asset1, asset2],
-      }
+      },
     }
   }
 
@@ -33,13 +40,22 @@ const createLpMsg = ({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddres
     deposit: {
       assets: [asset1, asset2],
       pair_address: pairAddress,
-      unbonding_duration: bondingDays * NUMBER_OF_SECONDS_IN_DAY
+      unbonding_duration: bondingDays * NUMBER_OF_SECONDS_IN_DAY,
     },
   }
 }
 
 export const createLPExecuteMsgs = (
-  { stakingProxy, tokenA, tokenB, amountA, amountB, bondingDays, pairAddress , minUnbondingDuration},
+  {
+    stakingProxy,
+    tokenA,
+    tokenB,
+    amountA,
+    amountB,
+    bondingDays,
+    pairAddress,
+    minUnbondingDuration,
+  },
   sender: string
 ) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
@@ -70,7 +86,15 @@ export const createLPExecuteMsgs = (
     createExecuteMessage({
       senderAddress: sender,
       contractAddress: stakingProxy,
-      message: createLpMsg({ tokenA, tokenB, amountA, amountB, bondingDays, pairAddress, minUnbondingDuration }),
+      message: createLpMsg({
+        tokenA,
+        tokenB,
+        amountA,
+        amountB,
+        bondingDays,
+        pairAddress,
+        minUnbondingDuration,
+      }),
       funds: [
         tokenA?.native && coin(amountA, tokenA?.denom),
         tokenB?.native && coin(amountB, tokenB?.denom),

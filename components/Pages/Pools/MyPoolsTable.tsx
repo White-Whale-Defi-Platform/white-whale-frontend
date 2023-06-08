@@ -1,5 +1,6 @@
 import {
-  Flex, Table,
+  Flex,
+  Table,
   TableContainer,
   Tbody,
   Td,
@@ -7,21 +8,19 @@ import {
   Tfoot,
   Th,
   Thead,
-  Tr
+  Tr,
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import { Pool } from './types'
-
-
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -104,13 +103,21 @@ const columns = [
     ),
   }),
   columnHelper.accessor('incentives', {
-    header: () => <Text align="left" color="brand.50">Incentives</Text>,
+    header: () => (
+      <Text align="left" color="brand.50">
+        Incentives
+      </Text>
+    ),
     cell: (info) => {
       return info.getValue()
     },
   }),
   columnHelper.accessor('action', {
-    header: () => <Text align="left" color="brand.50">Action</Text>,
+    header: () => (
+      <Text align="left" color="brand.50">
+        Action
+      </Text>
+    ),
     cell: (info) => {
       return info.getValue()
     },
@@ -195,7 +202,7 @@ const PoolsTable = ({
               <Th isNumeric></Th>
             </Tr>
             {table.getHeaderGroups().map((headerGroup, index) => (
-              <Tr key={headerGroup.id} >
+              <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th
                     key={header.id}
@@ -207,9 +214,9 @@ const PoolsTable = ({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </Th>
                 ))}
               </Tr>

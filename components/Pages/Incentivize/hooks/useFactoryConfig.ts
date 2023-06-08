@@ -1,36 +1,37 @@
-import { useMemo } from "react"
-import { useQuery } from "react-query"
-import { useRecoilValue } from "recoil"
-import { walletState } from "state/atoms/walletAtoms"
+import { useMemo } from 'react'
+import { useQuery } from 'react-query'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 type FactoryConfig = {
-    createFlowFee: {
-        amount: string
-        denom: string
-    }
+  createFlowFee: {
+    amount: string
+    denom: string
+  }
 }
 
-const useFactoryConfig = (incentiveFactory:string) => {
+const useFactoryConfig = (incentiveFactory: string) => {
+  const { address, client } = useRecoilValue(walletState)
 
-    const { address, client } = useRecoilValue(walletState)
-
-    const { data: config = {} } = useQuery<FactoryConfig>({
-        queryKey: ['factoryConfig', incentiveFactory],
-        queryFn: () => client?.queryContractSmart(incentiveFactory, {
-            config: {}
+  const { data: config = {} } = useQuery<FactoryConfig>({
+    queryKey: ['factoryConfig', incentiveFactory],
+    queryFn: () =>
+      client
+        ?.queryContractSmart(incentiveFactory, {
+          config: {},
         })
-        .then(data => ({
-            createFlowFee : {
-                amount: data?.create_flow_fee?.amount,
-                denom : data?.create_flow_fee?.info?.native_token?.denom,
-            },
-            minUnbondingDuration : data?.min_unbonding_duration,
-            maxUnbondingDuration : data?.max_unbonding_duration,
+        .then((data) => ({
+          createFlowFee: {
+            amount: data?.create_flow_fee?.amount,
+            denom: data?.create_flow_fee?.info?.native_token?.denom,
+          },
+          minUnbondingDuration: data?.min_unbonding_duration,
+          maxUnbondingDuration: data?.max_unbonding_duration,
         })),
-        enabled: !!incentiveFactory && !!client,
-    })
+    enabled: !!incentiveFactory && !!client,
+  })
 
-    return useMemo(() => config, [config])
+  return useMemo(() => config, [config])
 }
 
 export default useFactoryConfig

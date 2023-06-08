@@ -1,1 +1,1 @@
-export {default} from './Incentivize';
+export { default } from './Incentivize'

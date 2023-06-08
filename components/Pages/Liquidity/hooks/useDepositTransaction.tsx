@@ -103,7 +103,8 @@ export const useTransaction = ({
         !!senderAddress &&
         enabled &&
         !!swapAddress &&
-        Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
+        Number(tokenAAmount) > 0 &&
+        Number(tokenBAmount) > 0,
 
       refetchOnWindowFocus: false,
       retry: false,
@@ -125,7 +126,8 @@ export const useTransaction = ({
         tokenAAmount: tokenAAmount,
         maxTokenBAmount: tokenBAmount,
         client,
-        swapAddress: "migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa",
+        swapAddress:
+          'migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa',
         senderAddress,
         msgs: encodedMsgs,
       })

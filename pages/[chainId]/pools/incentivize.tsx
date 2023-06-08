@@ -1,4 +1,4 @@
-import Incentivize from "components/Pages/Incentivize"
+import Incentivize from 'components/Pages/Incentivize'
 
 const IncentivizePage = () => {
   return <Incentivize />

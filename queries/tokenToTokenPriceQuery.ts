@@ -1,4 +1,3 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
 
 import {
@@ -65,12 +64,12 @@ export async function tokenToTokenPriceQueryWithPools({
   }
 
   // return formatPrice(
-   return getTokenForTokenPrice({
-      tokenAmount: convertedTokenAmount,
-      swapAddress: baseTokenAPool.swap_address,
-      outputSwapAddress: baseTokenBPool.swap_address,
-      client,
-    })
+  return getTokenForTokenPrice({
+    tokenAmount: convertedTokenAmount,
+    swapAddress: baseTokenAPool.swap_address,
+    outputSwapAddress: baseTokenBPool.swap_address,
+    client,
+  })
   // )
 }
 

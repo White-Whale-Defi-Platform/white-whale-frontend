@@ -1,4 +1,10 @@
-import { Box, HStack, Input as ChakraInput, InputGroup, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Input as ChakraInput,
+  InputGroup,
+  Stack,
+} from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
@@ -7,27 +13,33 @@ import { Controller, useForm } from 'react-hook-form'
 import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
-import { walletState, WalletStatusType } from '../../../state/atoms/walletAtoms'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { useOpenFlow } from './hooks/useOpenFlow'
 
 const defaultToken = {
-  tokenSymbol: "WHALE",
-  amount: ""
+  tokenSymbol: 'WHALE',
+  amount: '',
 }
 
 type Props = {
   poolId: string
 }
 
-const Create = ({poolId}:Props) => {
-
+const Create = ({ poolId }: Props) => {
   const [token, setToken] = useState(defaultToken)
-  const { control, handleSubmit, setValue, getValues, formState: { isValid }, watch } = useForm({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { isValid },
+    watch,
+  } = useForm({
     mode: 'onChange',
     defaultValues: {
       token,
-      startDate: "",
-      endDate: ""
+      startDate: '',
+      endDate: '',
     },
   })
   const formData = watch()
@@ -38,12 +50,7 @@ const Create = ({poolId}:Props) => {
   const { simulate, submit, tx } = useOpenFlow({ poolId, ...formData })
 
   return (
-    <Stack
-      as="form"
-      gap="5"
-      onSubmit={handleSubmit(() => submit())}
-    >
-
+    <Stack as="form" gap="5" onSubmit={handleSubmit(() => submit())}>
       <Input
         name="token"
         control={control}
@@ -53,19 +60,15 @@ const Create = ({poolId}:Props) => {
         onChange={(value) => {
           setToken({
             ...value,
-            amount: String(value.amount)
+            amount: String(value.amount),
           })
           return value
         }}
       />
 
       <HStack w="full" gap="10">
-
-        <Box w="100px" >
-          <TooltipWithChildren
-            label="Start Date"
-            fontSize="16"
-          >
+        <Box w="100px">
+          <TooltipWithChildren label="Start Date" fontSize="16">
             Start Date
           </TooltipWithChildren>
         </Box>
@@ -75,59 +78,55 @@ const Create = ({poolId}:Props) => {
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
-            <InputGroup >
+            <InputGroup>
               <ChakraInput
                 {...field}
                 color="white"
-                placeholder='Enter amount'
+                placeholder="Enter amount"
                 h="50px"
                 type="datetime-local"
               />
             </InputGroup>
           )}
         />
-
       </HStack>
 
       <HStack w="full" gap="10">
-
-        <Box w="100px" >
-          <TooltipWithChildren
-            label="End Date"
-            fontSize="16"
-          >
+        <Box w="100px">
+          <TooltipWithChildren label="End Date" fontSize="16">
             End Date
           </TooltipWithChildren>
         </Box>
-
 
         <Controller
           name="endDate"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
-            <InputGroup >
+            <InputGroup>
               <ChakraInput
                 {...field}
                 color="white"
-                placeholder='Enter amount'
+                placeholder="Enter amount"
                 h="50px"
                 type="datetime-local"
               />
             </InputGroup>
           )}
         />
-
       </HStack>
 
       <SubmitButton
-        label={simulate.buttonLabel || "Submit"}
+        label={simulate.buttonLabel || 'Submit'}
         isConnected={true}
         txStep={TxStep?.Ready}
-        isLoading={txStep === TxStep.Estimating || txStep === TxStep.Posting || txStep === TxStep.Broadcasting}
+        isLoading={
+          txStep === TxStep.Estimating ||
+          txStep === TxStep.Posting ||
+          txStep === TxStep.Broadcasting
+        }
         isDisabled={!isValid || txStep !== TxStep.Ready || !isConnected}
       />
-
     </Stack>
   )
 }

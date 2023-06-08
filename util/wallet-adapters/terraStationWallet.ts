@@ -216,13 +216,11 @@ export class TerraStationWallet implements Wallet {
     return Promise.resolve(this.chainID)
   }
 
-
   getNetwork(): Promise<String> {
     return Promise.resolve(this.network)
   }
 
   getBalance(address: string, searchDenom: string): Promise<Coin> {
-
     return this.lcdClient.bank.balance(address).then(([coins]) => {
       // console.log(coins)
       const coin = coins.get(searchDenom)

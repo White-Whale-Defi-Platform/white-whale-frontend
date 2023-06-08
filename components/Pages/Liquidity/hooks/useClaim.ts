@@ -7,35 +7,37 @@ import { createExecuteMessage } from 'util/messages'
 import useTxStatus from 'hooks/useTxStatus'
 
 interface Props {
-    poolId: string
+  poolId: string
 }
 
-export const useClaim = ({poolId}:Props) => {
+export const useClaim = ({ poolId }: Props) => {
+  const { address, client } = useRecoilValue(walletState)
+  const [pool] = usePoolFromListQueryById({ poolId })
+  const { onError, onSuccess, ...tx } = useTxStatus({
+    transcationType: 'Claim',
+    client,
+  })
 
-    const { address, client } = useRecoilValue(walletState)
-    const [pool] = usePoolFromListQueryById({ poolId })
-    const { onError, onSuccess, ...tx } = useTxStatus({ transcationType: 'Claim', client })
+  const msg = createExecuteMessage({
+    message: {
+      claim: {},
+    },
+    senderAddress: address,
+    contractAddress: pool?.staking_address,
+    funds: [],
+  })
 
-    const msg = createExecuteMessage({
-        message: {
-            claim: {}
-        },
-        senderAddress: address,
-        contractAddress: pool?.staking_address,
-        funds: [],
-    })
+  const { mutate: submit, ...state } = useMutation({
+    mutationFn: () => client.post(address, [msg]),
+    onError,
+    onSuccess,
+  })
 
-    const { mutate: submit, ...state } = useMutation({
-        mutationFn: () => client.post(address, [msg]),
-        onError,
-        onSuccess,
-    })
-
-    return useMemo(() => {
-        return {
-            submit,
-            ...state,
-            ...tx
-        }
-    }, [tx, state, submit])
+  return useMemo(() => {
+    return {
+      submit,
+      ...state,
+      ...tx,
+    }
+  }, [tx, state, submit])
 }

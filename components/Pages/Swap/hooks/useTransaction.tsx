@@ -56,19 +56,19 @@ type Params = {
 }
 
 export const useTransaction = ({
-                                 enabled,
-                                 swapAddress,
-                                 swapAssets,
-                                 client,
-                                 senderAddress,
-                                 msgs,
-                                 encodedMsgs,
-                                 amount,
-                                 price,
-                                 onBroadcasting,
-                                 onSuccess,
-                                 onError,
-                               }: Params) => {
+  enabled,
+  swapAddress,
+  swapAssets,
+  client,
+  senderAddress,
+  msgs,
+  encodedMsgs,
+  amount,
+  price,
+  onBroadcasting,
+  onSuccess,
+  onError,
+}: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()

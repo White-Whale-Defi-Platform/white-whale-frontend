@@ -12,7 +12,6 @@ import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
 import useIsNewPosition from './useIsNewPosition'
 
-
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
   const { address, client } = useRecoilValue(walletState)
@@ -30,8 +29,10 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     matchingPools?.streamlinePoolBA?.lpOrder
 
   const [pool] = usePoolFromListQueryById({ poolId })
-  const isNewPosition = useIsNewPosition({ bondingDays , poolId })
-  const {minUnbondingDuration, maxUnbondingDuration} = useFactoryConfig(pool?.incentiveFactory)
+  const isNewPosition = useIsNewPosition({ bondingDays, poolId })
+  const { minUnbondingDuration, maxUnbondingDuration } = useFactoryConfig(
+    pool?.incentiveFactory
+  )
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
@@ -83,10 +84,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     const tokenB = num(tokenBReserve)
       .div(10 ** tokenInfoB?.decimals)
       .toNumber()
-    const ratio =
-      reverse
-        ? num(tokenA).div(tokenB)
-        : num(tokenB).div(tokenA)
+    const ratio = reverse ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA)
     const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
 
     return sim
@@ -124,8 +122,8 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
         amountB: reverse
           ? tokenBAmount
           : flipped
-            ? tokenBAmount
-            : toChainAmount(simulated, tokenInfoB?.decimals),
+          ? tokenBAmount
+          : toChainAmount(simulated, tokenInfoB?.decimals),
       }),
       encodedMsgs: createLPExecuteMsgs(
         {
@@ -139,26 +137,37 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
               ? tokenAAmount
               : toChainAmount(simulated, tokenInfoA?.decimals)
             : flipped
-              ? tokenAAmount
-              : tokenAAmount,
+            ? tokenAAmount
+            : tokenAAmount,
           tokenB,
           amountB: reverse
             ? flipped
               ? tokenBAmount
               : tokenBAmount
             : flipped
-              ? tokenBAmount
-              : toChainAmount(simulated, tokenInfoB?.decimals)
+            ? tokenBAmount
+            : toChainAmount(simulated, tokenInfoB?.decimals),
         },
         address
       ),
     }
-  }, [simulated, tokenA, tokenAAmount, tokenB, tokenBAmount, reverse, pool?.staking_proxy, bondingDays, isNewPosition])
+  }, [
+    simulated,
+    tokenA,
+    tokenAAmount,
+    tokenB,
+    tokenBAmount,
+    reverse,
+    pool?.staking_proxy,
+    bondingDays,
+    isNewPosition,
+  ])
 
   const tx = useTransaction({
     poolId,
-    enabled: !!encodedMsgs && Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
-    swapAddress : bondingDays === 0 ? swapAddress : pool?.staking_proxy,
+    enabled:
+      !!encodedMsgs && Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
+    swapAddress: bondingDays === 0 ? swapAddress : pool?.staking_proxy,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     client,
@@ -180,8 +189,8 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const noMatchingPool =
     swapAddress === null && !isLoading
       ? {
-        buttonLabel: 'No Matching Pool',
-      }
+          buttonLabel: 'No Matching Pool',
+        }
       : {}
 
   return useMemo(

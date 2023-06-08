@@ -1,11 +1,10 @@
-import { HStack, VStack, Text } from "@chakra-ui/react"
+import { HStack, VStack } from '@chakra-ui/react'
 import SubmitButton from 'components/SubmitButton'
-import { TooltipWithChildren } from "components/TooltipWithChildren"
-import { TxStep } from "types/common"
-import ClaimTable from "./ClaimTable"
-import { useClaim } from "./hooks/useClaim"
-import useRewards from "./hooks/useRewards"
-
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { TxStep } from 'types/common'
+import ClaimTable from './ClaimTable'
+import { useClaim } from './hooks/useClaim'
+import useRewards from './hooks/useRewards'
 
 const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
   <HStack
@@ -36,13 +35,11 @@ type Props = {
 }
 
 const Claim = ({ poolId }: Props) => {
-
   const claim = useClaim({ poolId })
   const { rewards = [], totalValue } = useRewards(poolId)
 
   return (
     <VStack gap={10} py={5}>
-
       <AvailableRewards totalValue={totalValue} />
 
       <ClaimTable tokens={rewards} />
@@ -55,7 +52,6 @@ const Claim = ({ poolId }: Props) => {
         isLoading={claim.isLoading}
         onClick={() => claim.submit()}
       />
-
     </VStack>
   )
 }

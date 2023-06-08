@@ -1,131 +1,134 @@
-
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
-
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 const useEpoch = () => {
+  const { address, client } = useRecoilValue(walletState)
 
+  const contract =
+    'migaloo1pl02gs047p84auvavwcawgfkehawv9vhgyndpyqyee796txelefq4np7kc'
 
-    const { address, client } = useRecoilValue(walletState)
+  const { data } = useQuery<number>({
+    queryKey: ['epoch', contract],
+    queryFn: () =>
+      client?.queryContractSmart(contract, {
+        current_epoch: {},
+      }),
+    enabled: !!contract && !!client,
+  })
 
-    const contract = "migaloo1pl02gs047p84auvavwcawgfkehawv9vhgyndpyqyee796txelefq4np7kc"
+  const checkLocalAndUTC = () => {
+    // Get the current local date
+    const currentLocalDate = dayjs()
 
-    const { data } = useQuery<number>({
-        queryKey: ['epoch', contract],
-        queryFn: () => client?.queryContractSmart(contract, {
-            current_epoch: {}
-        }),
-        enabled: !!contract && !!client,
-    })
+    // Get the current UTC date
+    const currentUTCDate = dayjs().utc()
 
-    const checkLocalAndUTC = () => {
-        // Get the current local date
-        const currentLocalDate = dayjs();
+    // Check if local date is still the same and UTC date is one day forward
+    const isSameLocalDate = currentUTCDate.isSame(dayjs(), 'day')
+    // const isUTCOneDayForward = currentUTCDate.isAfter(currentLocalDate.add(1, 'day'), 'day');
 
-        // Get the current UTC date
-        const currentUTCDate = dayjs().utc();
+    // Get yesterday's date
+    const yesterday = currentUTCDate.subtract(1, 'day')
 
-        // Check if local date is still the same and UTC date is one day forward
-        const isSameLocalDate = currentUTCDate.isSame(dayjs(), 'day');
-        // const isUTCOneDayForward = currentUTCDate.isAfter(currentLocalDate.add(1, 'day'), 'day');
+    return isSameLocalDate ? yesterday : currentLocalDate
+  }
 
-        // Get yesterday's date
-        const yesterday = currentUTCDate.subtract(1, 'day');
+  const dateToEpoch = (date: string) => {
+    // Check if the current epoch is available or return null
+    if (!data?.epoch?.id) return null
 
-        return isSameLocalDate ? yesterday : currentLocalDate
+    // Get the current epoch number
+    const currentEpoch = Number(data?.epoch?.id)
 
-    }
+    // Get the current local date
+    const today = checkLocalAndUTC()
 
-    const dateToEpoch = (date: string) => {
+    // Set the start time of the current epoch to 15:00:00 UTC
+    const startTime = dayjs(today)
+      .utc()
+      .set('hour', 15)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
 
-        // Check if the current epoch is available or return null
-        if (!data?.epoch?.id) return null
+    // Convert the given date to UTC
+    const endTime = dayjs(date).utc()
 
-        // Get the current epoch number
-        const currentEpoch = Number(data?.epoch?.id)
+    // Convert current epoch start time to UTC
+    const currentEpochStart = dayjs.utc(startTime)
 
-        // Get the current local date
-        const today = checkLocalAndUTC()
+    // Calculate the difference between the current epoch start time and the future epoch end time
+    const diff = endTime.diff(currentEpochStart, 'day')
 
-        // Set the start time of the current epoch to 15:00:00 UTC
-        const startTime = dayjs(today).utc().set('hour', 15).set('minute', 0).set('second', 0).set('millisecond', 0);
+    // Calculate the duration of each epoch in milliseconds
+    const epochDuration = 86400000
 
-        // Convert the given date to UTC
-        const endTime = dayjs(date).utc();
+    // Calculate the start time of the future epoch based on the current epoch number and duration
+    const futureEpochStartUTC = currentEpochStart.add(
+      (currentEpoch + diff) * epochDuration,
+      'millisecond'
+    )
 
-        // Convert current epoch start time to UTC
-        const currentEpochStart = dayjs.utc(startTime);
+    // Calculate the future epoch number based on the future epoch start time
+    const epochNumber = Math.floor(
+      futureEpochStartUTC.diff(currentEpochStart, 'millisecond') / epochDuration
+    )
 
-        // Calculate the difference between the current epoch start time and the future epoch end time
-        const diff = endTime.diff(currentEpochStart, 'day')
+    return epochNumber
+  }
 
-        // Calculate the duration of each epoch in milliseconds
-        const epochDuration = 86400000;
+  const epochToDate = (givenEpoch) => {
+    // Check if the current epoch is available or return null
+    if (!data?.epoch?.id) return null
 
-        // Calculate the start time of the future epoch based on the current epoch number and duration
-        const futureEpochStartUTC = currentEpochStart.add((currentEpoch + diff) * epochDuration, 'millisecond');
+    // Get the current epoch number
+    const currentEpoch = Number(data?.epoch?.id)
 
-        // Calculate the future epoch number based on the future epoch start time
-        const epochNumber = Math.floor(futureEpochStartUTC.diff(currentEpochStart, 'millisecond') / epochDuration);
+    // Set the start time of the epoch to 15:00:00 UTC
+    const startTime = dayjs()
+      .utc()
+      .set('hour', 15)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
 
-        return epochNumber;
-    }
+    // Calculate the duration of each epoch in milliseconds
+    const epochDuration = 86400000
 
-    const epochToDate = (givenEpoch) => {
-        // Check if the current epoch is available or return null
-        if (!data?.epoch?.id) return null
+    // Calculate the timestamp of the given epoch
+    const givenTimestamp =
+      startTime.valueOf() + (givenEpoch - currentEpoch) * epochDuration
 
-        // Get the current epoch number
-        const currentEpoch = Number(data?.epoch?.id)
+    // Convert the timestamp to a dayjs instance in local time
+    const givenEpochDate = dayjs(givenTimestamp).local()
 
+    // Return the formatted date for the given epoch
+    return givenEpochDate.format('YYYY/MM/DD')
+  }
 
-        // Set the start time of the epoch to 15:00:00 UTC
-        const startTime = dayjs().utc().set('hour', 15).set('minute', 0).set('second', 0).set('millisecond', 0);
+  //   // Example usage
+  //   const currentEpoch = 27;
+  //   const givenEpoch = 30;
 
-        // Calculate the duration of each epoch in milliseconds
-        const epochDuration = 86400000; 
+  //   const epochDate = getEpochDate(currentEpoch, givenEpoch);
+  //   console.log({epochDate});
 
-        // Calculate the timestamp of the given epoch
-        const givenTimestamp = startTime.valueOf() + (givenEpoch - currentEpoch) * epochDuration;
+  const currentEpoch = useMemo(() => {
+    if (!data?.epoch?.id) return null
 
-        // Convert the timestamp to a dayjs instance in local time
-        const givenEpochDate = dayjs(givenTimestamp).local();
-
-        // Return the formatted date for the given epoch
-        return givenEpochDate.format('YYYY/MM/DD');
-    }
-
-    //   // Example usage
-    //   const currentEpoch = 27;
-    //   const givenEpoch = 30;
-
-    //   const epochDate = getEpochDate(currentEpoch, givenEpoch);
-    //   console.log({epochDate});
-
-
-
-
-
-    const currentEpoch = useMemo(() => {
-
-        if(!data?.epoch?.id) return null
-
-        return Number(data?.epoch?.id)
-
-    }, [data])
-    return {
-        // currentEpoch,
-        dateToEpoch,
-        epochToDate,
-        currentEpoch
-    }
-
-
+    return Number(data?.epoch?.id)
+  }, [data])
+  return {
+    // currentEpoch,
+    dateToEpoch,
+    epochToDate,
+    currentEpoch,
+  }
 }
 
 export default useEpoch

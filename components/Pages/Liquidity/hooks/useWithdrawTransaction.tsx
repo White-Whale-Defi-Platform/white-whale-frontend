@@ -3,7 +3,7 @@ import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { TxStep } from '../../../../types/common'
+import { TxStep } from 'types/common'
 
 type Params = {
   lpTokenAddress: string
@@ -84,7 +84,7 @@ export const useTransaction = ({
         txStep == TxStep.Idle &&
         error == null &&
         !!client &&
-        Number(amount)  > 0 &&
+        Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -100,7 +100,7 @@ export const useTransaction = ({
 
   const { mutate } = useMutation(
     (data: any) => {
-     return client.post(senderAddress, encodedMsgs)
+      return client.post(senderAddress, encodedMsgs)
       // return executeRemoveLiquidity({
       //   msgs,
       //   tokenAmount: Number(amount),
@@ -155,7 +155,7 @@ export const useTransaction = ({
         queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
         queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
         queryClient.invalidateQueries({ queryKey: ['positions'] })
-        
+
         onBroadcasting?.(data.transactionHash || data?.txHash)
         toast({
           title: 'Withdraw Liquidity Success.',

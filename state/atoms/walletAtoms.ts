@@ -1,7 +1,7 @@
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
 
-import { Wallet } from '../../util/wallet-adapters'
+import { Wallet } from 'util/wallet-adapters'
 
 export enum WalletStatusType {
   /* nothing happens to the wallet */
@@ -36,9 +36,9 @@ type CreateWalletStateArgs<TState = {}> = {
 }
 
 function createWalletState<TClient = any, TState = {}>({
-                                                         key,
-                                                         default: defaultState,
-                                                       }: CreateWalletStateArgs<TState>) {
+  key,
+  default: defaultState,
+}: CreateWalletStateArgs<TState>) {
   return atom<GeneratedWalletState<TClient, TState>>({
     key,
     default: {

@@ -1,19 +1,17 @@
 import { VStack } from '@chakra-ui/react'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
-import { TokenItemState } from "types/index"
+import { TokenItemState } from 'types/index'
 import Input from 'components/AssetInput/Input'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import BondingDaysSlider from "./BondingDaysSlider"
-import Multiplicator from "./Multiplicator"
-import useMultiplicator from "./hooks/useMultiplicator"
-import { usePoolFromListQueryById } from '../../../queries/usePoolsListQuery'
-
-
+import BondingDaysSlider from './BondingDaysSlider'
+import Multiplicator from './Multiplicator'
+import useMultiplicator from './hooks/useMultiplicator'
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 
 type Props = {
   connected: WalletStatusType
@@ -26,7 +24,7 @@ type Props = {
   reverse: boolean
   poolId: string
   setBondingDays: (value: number) => void
-  bondingDays: number,
+  bondingDays: number
   clearForm: () => void
 }
 
@@ -42,14 +40,13 @@ const DepositForm = ({
   bondingDays,
   setBondingDays,
   poolId,
-  clearForm
+  clearForm,
 }: Props) => {
-
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
       token1: tokenA,
-      token2: tokenB
+      token2: tokenB,
     },
   })
 
@@ -57,7 +54,7 @@ const DepositForm = ({
 
   const isStakingEnabled = useMemo(() => !!pool?.staking_address, [pool])
 
-  const multiplicator = useMultiplicator(poolId )
+  const multiplicator = useMultiplicator(poolId)
 
   // const [bondingDays, setBondingDays] = useState(0)
   const isInputDisabled = tx?.txStep == TxStep.Posting
@@ -106,8 +103,6 @@ const DepositForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.txStep])
 
-  
-
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) return 'Connect Wallet'
     else if (!tokenB?.tokenSymbol) return 'Select Token'
@@ -124,7 +119,7 @@ const DepositForm = ({
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
     >
-      <Input 
+      <Input
         name="token1"
         control={control}
         token={tokenA}
@@ -152,20 +147,21 @@ const DepositForm = ({
         show={isStakingEnabled}
       />
 
-      <Multiplicator multiplicator={String(multiplicator)} show={isStakingEnabled}/>
+      <Multiplicator
+        multiplicator={String(multiplicator)}
+        show={isStakingEnabled}
+      />
 
-      <SubmitButton 
+      <SubmitButton
         label={buttonLabel}
         isConnected={isConnected}
         txStep={tx?.txStep}
-        isDisabled={tx.txStep != TxStep.Ready || simulated == null || !isConnected}
+        isDisabled={
+          tx.txStep != TxStep.Ready || simulated == null || !isConnected
+        }
       />
 
-      <ShowError 
-        show={tx?.error && !!!tx.buttonLabel }
-        message = {tx?.error }
-      />
-
+      <ShowError show={tx?.error && !!!tx.buttonLabel} message={tx?.error} />
     </VStack>
   )
 }

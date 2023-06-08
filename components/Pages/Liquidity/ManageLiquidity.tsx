@@ -9,7 +9,7 @@ import {
   TabPanels,
   Tabs,
   Text,
-  VStack
+  VStack,
 } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'types/common'
@@ -24,11 +24,15 @@ import useProvideLP from './hooks/useProvideLP'
 import { tokenLpAtom } from './lpAtoms'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
+import {
+  IncentivePoolInfo,
+  useIncentivePoolInfo,
+} from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
-  const { address, chainId, status } = useRecoilValue(walletState)
+  const { address, chainId, status, client } = useRecoilValue(walletState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
@@ -37,6 +41,18 @@ const ManageLiquidity: FC = () => {
   const { simulated, tx } = useProvideLP({ reverse, bondingDays })
 
   const poolId = router.query.poolId as string
+
+  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(client)
+  const dailyEmissionData =
+    incentivePoolInfos
+      ?.find((info) => info.poolId === poolId)
+      ?.flowData.map((data) => {
+        return {
+          symbol: data.tokenSymbol,
+          dailyEmission: data.dailyEmission,
+          denom: data.denom,
+        }
+      }) ?? []
   const chainIdParam = router.query.chainId as string
   const currentChain = chains.find((row) => row.chainId === chainId)
 
@@ -92,13 +108,15 @@ const ManageLiquidity: FC = () => {
   }, [poolId])
 
   const clearForm = () => {
-    setTokenLPState([{
-      ...tokenA,
-      amount: 0
-    }, {
-      ...tokenB,
-      amount: 0
-    }
+    setTokenLPState([
+      {
+        ...tokenA,
+        amount: 0,
+      },
+      {
+        ...tokenB,
+        amount: 0,
+      },
     ])
     tx.reset()
   }
@@ -163,9 +181,7 @@ const ManageLiquidity: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview
-                  poolId={poolId}
-                />
+                <Overview poolId={poolId} rewards={dailyEmissionData} />
               </TabPanel>
               <TabPanel padding={4}>
                 {isTokenSet && (

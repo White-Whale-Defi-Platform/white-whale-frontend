@@ -1,26 +1,29 @@
 import {
-  Flex, Table,
+  Box,
+  Flex,
+  HStack,
+  Table,
   TableContainer,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
-  Tr
+  Tooltip,
+  Tr,
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import { Pool } from './types'
-
-
+import InfoIcon from 'components/icons/InfoIcon'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -47,9 +50,34 @@ const columns = [
   }),
   columnHelper.accessor('apr', {
     header: () => (
-      <Text align="right" color="brand.50">
-        {`APR`}
-      </Text>
+      <HStack>
+        <Tooltip
+          label={
+            <Box
+              width="230px"
+              borderRadius="10px"
+              bg="black"
+              color="white"
+              fontSize={14}
+              p={4}
+            >
+              {'Pool APR plus incentive APR'}
+            </Box>
+          }
+          bg="transparent"
+          hasArrow={false}
+          placement="bottom"
+          closeOnClick={false}
+          arrowSize={0}
+        >
+          <Box>
+            <InfoIcon color={'white'} cursor="pointer" />
+          </Box>
+        </Tooltip>
+        <Text align="right" color="brand.50">
+          {`APR`}
+        </Text>
+      </HStack>
     ),
     cell: (info) => {
       return (
@@ -93,13 +121,21 @@ const columns = [
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('incentives', {
-    header: () => <Text align="right" color="brand.50">Incentives</Text>,
+    header: () => (
+      <Text align="right" color="brand.50">
+        Incentives
+      </Text>
+    ),
     cell: (info) => {
       return info.getValue()
     },
   }),
   columnHelper.accessor('action', {
-    header: () => <Text align="left" color="brand.50">Action</Text>,
+    header: () => (
+      <Text align="left" color="brand.50">
+        Action
+      </Text>
+    ),
     cell: (info) => {
       return info.getValue()
     },
