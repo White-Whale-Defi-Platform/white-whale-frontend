@@ -1,6 +1,7 @@
 import { HStack, VStack, Text } from "@chakra-ui/react"
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from "components/TooltipWithChildren"
+import { useMemo } from "react"
 import { TxStep } from "types/common"
 import ClaimTable from "./ClaimTable"
 import { useClaim } from "./hooks/useClaim"
@@ -40,6 +41,15 @@ const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
   const { rewards = [], totalValue } = useRewards(poolId)
 
+  // check if there are rewards to claim
+  const isClaimable = useMemo(() => {
+    const rewardsSum = rewards.reduce((acc, reward) => {
+      return acc + Number(reward.assetAmount)
+    }, 0)
+
+    return rewardsSum > 0
+  }, [rewards])
+
   return (
     <VStack gap={10} py={5}>
 
@@ -51,7 +61,7 @@ const Claim = ({ poolId }: Props) => {
         label="Claim"
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={Number(totalValue) === 0}
+        isDisabled={!isClaimable}
         isLoading={claim.isLoading}
         onClick={() => claim.submit()}
       />

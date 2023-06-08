@@ -18,6 +18,10 @@ export default extendTheme({
       body: {
         background: '#191919',
       },
+      config: {
+        initialColorMode: 'dark',
+        useSystemColorMode: false,
+      }
       // "#chakra-toast-manager-bottom-right": {
       //   right: "32px!important",
       //   bottom: "32px!important",

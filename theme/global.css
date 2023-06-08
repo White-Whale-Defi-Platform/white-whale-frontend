@@ -3,7 +3,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     border-radius: 4px;
     margin-right: 2px;
     opacity: 0.7;
-    filter: invert(1);
+    /* filter: invert(1); */
+    color-scheme: dark;
   }
   
   input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
