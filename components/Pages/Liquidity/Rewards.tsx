@@ -36,7 +36,10 @@ export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
         <Text fontSize="14px" color="whiteAlpha.700">
           Estimated Daily Rewards
         </Text>
-        <TooltipWithChildren label={`$${totalUsdValue.toFixed(2)}`} showTooltip={dailyEmissions.length > 0}>
+        <TooltipWithChildren
+          label={`$${totalUsdValue.toFixed(2)}`}
+          showTooltip={dailyEmissions.length > 0}
+        >
           <AvailableRewards data={dailyEmissions} />
         </TooltipWithChildren>
       </HStack>

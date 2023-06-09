@@ -29,7 +29,6 @@ const fetchPoolUserShare = async (
   contractAddr: string,
   userAddr: string
 ): Promise<AddressInfo> => {
-
   return await client.queryContractSmart(contractAddr, {
     current_epoch_rewards_share: { address: userAddr },
   })

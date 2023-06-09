@@ -31,10 +31,9 @@ const useForceEpochAndTakingSnapshots = ({
     mode === Force.snapshotsOnly
       ? noSnapshotTakenAddresses
       : useMemo(
-          () => poolList.pools.map((pool) => pool.staking_address),
+          () => poolList?.pools.map((pool) => pool.staking_address) ?? [],
           [poolList]
         )
-
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType:
       mode === Force.epochAndSnapshots
