@@ -44,7 +44,7 @@ const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
   const { client, network, chainId } = useRecoilValue(walletState)
-  const config = useIncentiveConfig(network, chainId)
+  const { config } = useIncentiveConfig(network, chainId)
   // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
   const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
   const allSnapshotsTaken = useMemo(() => {

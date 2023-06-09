@@ -9,7 +9,7 @@ dayjs.extend(utc)
 
 const useEpoch = () => {
   const { client, network, chainId } = useRecoilValue(walletState)
-  const incentiveConfig = useIncentiveConfig(network, chainId)
+  const { config: incentiveConfig } = useIncentiveConfig(network, chainId)
 
   const { data: config } = useQuery<number>({
     queryKey: ['incentive', 'config', incentiveConfig?.fee_distributor_address],

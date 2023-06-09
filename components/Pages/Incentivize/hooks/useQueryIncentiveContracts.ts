@@ -9,7 +9,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 
 export const useQueryIncentiveContracts = (client: Wallet): Array<string> => {
   const { chainId, network } = useRecoilValue(walletState)
-  const config = useIncentiveConfig(network, chainId)
+  const { config } = useIncentiveConfig(network, chainId)
   const { data } = useQuery(
     ['useQueryIncentiveContracts', config],
     async () => await fetchIncentiveContracts(client, config),

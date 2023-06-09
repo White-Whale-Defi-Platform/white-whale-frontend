@@ -4,7 +4,7 @@ import { Wallet } from 'util/wallet-adapters/index'
 import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
 import { IncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
 
-export const useCheckIncentiveSnapshots = (client, config: IncentiveConfig) => {
+export const useCheckIncentiveSnapshots = (client: Wallet, config: IncentiveConfig) => {
   const { data: currentEpochData } = useCurrentEpoch(client, config)
   const epochId = currentEpochData?.currentEpoch?.epoch.id
   const incentiveAddresses = useQueryIncentiveContracts(client)

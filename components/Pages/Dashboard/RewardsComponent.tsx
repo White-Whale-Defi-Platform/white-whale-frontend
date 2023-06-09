@@ -147,7 +147,7 @@ const RewardsComponent = ({
 
   const { txStep, submit } = useTransaction()
 
-  const config = useIncentiveConfig(network, chainId)
+  const { config } = useIncentiveConfig(network, chainId)
   const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses: null,
     config: config,

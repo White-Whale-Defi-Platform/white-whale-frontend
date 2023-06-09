@@ -16,7 +16,7 @@ import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncent
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
   const { address, client, network, chainId } = useRecoilValue(walletState)
-  const incentiveConfig = useIncentiveConfig(network, chainId)
+  const { config: incentiveConfig } = useIncentiveConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
   const [matchingPools] = useQueryMatchingPoolForSwap({

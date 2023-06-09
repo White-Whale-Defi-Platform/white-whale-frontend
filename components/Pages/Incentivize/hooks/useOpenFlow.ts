@@ -27,7 +27,7 @@ interface Props {
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { address, client, network, chainId } = useRecoilValue(walletState)
-  const incentiveConfig = useIncentiveConfig(network, chainId)
+  const { config: incentiveConfig } = useIncentiveConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
