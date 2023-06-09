@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { NUMBER_OF_SECONDS_IN_DAY } from 'constants'
 import usePositions from '../../Liquidity/hooks/usePositions'
+import { NUMBER_OF_SECONDS_IN_DAY } from 'constants/index'
 
 const useIsNewPosition = ({ bondingDays, poolId }) => {
   const { data: positions = [] } = usePositions(poolId)

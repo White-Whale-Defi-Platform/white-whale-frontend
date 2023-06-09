@@ -133,7 +133,6 @@ export const useQueryMultiplePoolsLiquidity = ({
           flows: {},
         })
         .then((flows) => {
-          console.log('flows', flows)
           return flows?.map((flow = {}) => {
             const denom =
               flow?.flow_asset?.info?.token?.contract_addr ||

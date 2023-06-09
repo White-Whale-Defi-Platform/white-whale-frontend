@@ -14,7 +14,7 @@ export const useClaim = ({ poolId }: Props) => {
   const { address, client } = useRecoilValue(walletState)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
-    transcationType: 'Claim',
+    transactionType: 'Claim',
     client,
   })
 

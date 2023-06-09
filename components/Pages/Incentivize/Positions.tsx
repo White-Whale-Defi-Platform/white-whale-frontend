@@ -26,16 +26,17 @@ const CloseAction = ({ poolId, flowId }) => {
   )
 }
 
-const Token = ({ imgUrl }) => (
-  <Box>
+const Token = ({ imgUrl, symbol }) => (
+  <HStack>
     <Image
       src={imgUrl}
       width="auto"
-      maxW="1.6rem"
-      maxH="1.6rem"
+      maxW="1.2rem"
+      maxH="1.2rem"
       alt="token1-img"
     />
-  </Box>
+    <Text fontSize="sm">{symbol}</Text>
+  </HStack>
 )
 
 const Positions = ({ flows, poolId }: Props) => {
@@ -44,7 +45,9 @@ const Positions = ({ flows, poolId }: Props) => {
 
   const positions = useMemo(() => {
     return flows.map((flow) => ({
-      token: <Token imgUrl={flow?.token?.logoURI} />,
+      token: (
+        <Token imgUrl={flow?.token?.logoURI} symbol={flow?.token?.symbol} />
+      ),
       id: flow.flowId,
       state: flow.state,
       // startDate: dayjs.unix(flow.startTime).format("YYYY/MM/DD"),

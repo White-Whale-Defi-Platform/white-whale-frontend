@@ -11,10 +11,12 @@ import { tokenLpAtom } from '../lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
 import useIsNewPosition from './useIsNewPosition'
+import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client, network, chainId } = useRecoilValue(walletState)
+  const incentiveConfig = useIncentiveConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
   const [matchingPools] = useQueryMatchingPoolForSwap({
@@ -31,7 +33,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
   const { minUnbondingDuration, maxUnbondingDuration } = useFactoryConfig(
-    pool?.incentiveFactory
+    incentiveConfig?.incentive_factory_address
   )
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =

@@ -15,7 +15,7 @@ import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'types/common'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import Claim from './Claim'
@@ -28,6 +28,8 @@ import {
   IncentivePoolInfo,
   useIncentivePoolInfo,
 } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import usePrices from 'hooks/usePrices'
+import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -41,21 +43,37 @@ const ManageLiquidity: FC = () => {
   const { simulated, tx } = useProvideLP({ reverse, bondingDays })
 
   const poolId = router.query.poolId as string
-
+  const prices = usePrices()
   const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(client)
-  const dailyEmissionData =
-    incentivePoolInfos
-      ?.find((info) => info.poolId === poolId)
-      ?.flowData.map((data) => {
+  const pool = useMemo(
+    () => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
+    [poolId, poolList]
+  )
+
+  const poolUserShare = usePoolUserShare(client, pool?.staking_address, address)
+
+  const dailyEmissionData = useMemo(() => {
+    const incentivePoolInfo = incentivePoolInfos?.find(
+      (info) => info.poolId === poolId
+    )
+    if (!poolUserShare) return null
+    return (
+      incentivePoolInfo?.flowData?.map((data) => {
+        const dailyEmission = data.dailyEmission * Number(poolUserShare.share)
         return {
           symbol: data.tokenSymbol,
-          dailyEmission: data.dailyEmission,
+          dailyEmission: dailyEmission,
+          dailyUsdEmission: dailyEmission * prices[data.tokenSymbol],
           denom: data.denom,
         }
       }) ?? []
+    )
+  }, [prices, incentivePoolInfos, poolId, poolUserShare])
+
   const chainIdParam = router.query.chainId as string
   const currentChain = chains.find((row) => row.chainId === chainId)
 
+  //TODO default query param in url when no poolId is provided
   useEffect(() => {
     if (currentChain) {
       if (poolId) {
@@ -70,7 +88,7 @@ const ManageLiquidity: FC = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, poolId, poolList, address, chains])
+  }, [chainId, poolId, poolList, currentChain])
 
   useEffect(() => {
     if (poolId) {
@@ -135,7 +153,8 @@ const ManageLiquidity: FC = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '800px' }}
+      w="auto"
+      minWidth={{ base: '100%', md: '800' }}
       alignItems="center"
       padding={5}
     >
@@ -159,7 +178,7 @@ const ManageLiquidity: FC = () => {
       </HStack>
 
       <Box
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         padding={[6, 12]}
         paddingTop={[10]}
         borderRadius="30px"
@@ -173,7 +192,7 @@ const ManageLiquidity: FC = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background="#1C1C1C">
+            <TabList justifyContent="center" background={'#1C1C1C'}>
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
@@ -181,7 +200,7 @@ const ManageLiquidity: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview poolId={poolId} rewards={dailyEmissionData} />
+                <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
               </TabPanel>
               <TabPanel padding={4}>
                 {isTokenSet && (
@@ -204,11 +223,7 @@ const ManageLiquidity: FC = () => {
               <TabPanel padding={4}>
                 <WithdrawForm
                   connected={status}
-                  tokenA={{
-                    tokenSymbol: poolId,
-                    amount: 0,
-                    decimals: 6,
-                  }}
+                  clearForm={clearForm}
                   poolId={poolId}
                 />
               </TabPanel>

@@ -16,6 +16,7 @@ import { num, toChainAmount } from 'libs/num'
 import { createAsset } from 'services/asset'
 import useFactoryConfig from './useFactoryConfig'
 import useEpoch from './useEpoch'
+import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
 
 interface Props {
   poolId: string
@@ -25,15 +26,16 @@ interface Props {
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client, network, chainId } = useRecoilValue(walletState)
+  const incentiveConfig = useIncentiveConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
-    transcationType: 'Open Flow',
+    transactionType: 'Open Flow',
     client,
   })
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
-  const config = useFactoryConfig(pool?.incentiveFactory)
+  const config = useFactoryConfig(incentiveConfig?.incentive_factory_address)
   const { dateToEpoch } = useEpoch()
 
   const msgs = useMemo(() => {

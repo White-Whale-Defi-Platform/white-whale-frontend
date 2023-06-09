@@ -29,7 +29,6 @@ export type PoolEntityType = {
   swap_address: string
   staking_address: string
   rewards_tokens: Array<TokenInfoWithReward>
-  incentiveFactory: string
   liquidity?: PoolLiquidityState
 }
 

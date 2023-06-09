@@ -48,7 +48,8 @@ const Incentivize: FC = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '800px' }}
+      width="auto"
+      minWidth={{ base: '100%', md: '800' }}
       alignItems="center"
       padding={5}
     >
@@ -72,7 +73,7 @@ const Incentivize: FC = () => {
       </HStack>
 
       <Box
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         padding={[6, 12]}
         paddingTop={[10]}
         borderRadius="30px"
@@ -86,7 +87,7 @@ const Incentivize: FC = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background="#1C1C1C">
+            <TabList justifyContent="center" background={'#1C1C1C'}>
               <Tab>Overview</Tab>
               <Tab>Create</Tab>
             </TabList>

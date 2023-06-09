@@ -19,7 +19,6 @@ import {
 import { STABLE_COIN_LIST } from 'util/constants'
 import { ActionCTAs } from './ActionCTAs'
 import AllPoolsTable from './AllPoolsTable'
-import { Incentives } from './Incentives'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 import { useChains } from 'hooks/useChainInfo'
@@ -123,17 +122,10 @@ const Pools: FC<Props> = () => {
           poolAssets: pool?.pool_assets,
           price: pool?.ratio,
           isUSDPool: isUSDPool,
-          incentives: (
-            <Incentives
-              flows={
-                incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
-                  ?.flowData ?? []
-              }
-            />
-          ),
-          action: (
-            <ActionCTAs chainIdParam={chainIdParam} poolId={pool?.pool_id} />
-          ),
+          flows:
+            incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
+              ?.flowData ?? [],
+          action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
           isSubqueryNetwork: false,
         }
       })
@@ -148,7 +140,7 @@ const Pools: FC<Props> = () => {
   useEffect(() => {
     initPools()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, cosmWasmClient, pools])
+  }, [address, client, pools])
 
   // get a list of my pools
   const myPools = useMemo(() => {
@@ -173,11 +165,9 @@ const Pools: FC<Props> = () => {
       margin="auto"
     >
       <Box width={{ base: '100%' }}>
-        <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
-            My Pools
-          </Text>
-        </HStack>
+        <Text as="h2" fontSize="24" fontWeight="700">
+          My Pools
+        </Text>
         <MyPoolsTable
           show={true}
           pools={myPools}

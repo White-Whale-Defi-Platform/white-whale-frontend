@@ -14,7 +14,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
   const { address, client } = useRecoilValue(walletState)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
-    transcationType: 'Close positiion',
+    transactionType: 'Close Position',
     client,
   })
 

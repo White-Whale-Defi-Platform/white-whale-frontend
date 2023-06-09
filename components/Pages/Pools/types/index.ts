@@ -1,3 +1,5 @@
+import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+
 export type Pool = {
   contract: string
   pool: string
@@ -11,6 +13,6 @@ export type Pool = {
   isUSDPool?: boolean
   isSubqueryNetwork?: boolean
   cta?: () => void
-  incentives: React.ReactNode
+  flows: FlowData[]
   action: React.ReactNode
 }

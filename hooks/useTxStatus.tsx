@@ -8,7 +8,7 @@ import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 
-const useTx = ({ client, transcationType }) => {
+const useTxStatus = ({ client, transactionType }) => {
   const [txState, setTxState] = useRecoilState(txAtom)
   const toast = useToast()
   const txInfo = useTxInfo({ txHash: txState.txHash, client })
@@ -38,7 +38,7 @@ const useTx = ({ client, transcationType }) => {
     const message = parseError(error)
 
     toast({
-      title: `${transcationType} Failed.`,
+      title: `${transactionType} Failed.`,
       description: message,
       status: 'error',
       duration: 9000,
@@ -76,7 +76,7 @@ const useTx = ({ client, transcationType }) => {
     })
 
     toast({
-      title: `${transcationType} Success.`,
+      title: `${transactionType} Success.`,
       description: description(data.transactionHash),
       status: 'success',
       duration: 9000,
@@ -102,4 +102,4 @@ const useTx = ({ client, transcationType }) => {
   }
 }
 
-export default useTx
+export default useTxStatus

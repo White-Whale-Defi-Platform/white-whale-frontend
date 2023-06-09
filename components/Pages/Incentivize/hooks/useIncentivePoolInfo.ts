@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query'
-import { getCurrentEpoch } from 'components/Pages/Dashboard/hooks/getCurrentEpoch'
 import {
   Config,
   useConfig,
@@ -9,6 +8,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import usePrices from 'hooks/usePrices'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
+import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 
 export interface Flow {
   claimed_amount: string
@@ -50,11 +50,7 @@ export const useIncentivePoolInfo = (client): IncentivePoolInfo[] => {
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
 
-  const { data: currentEpochData } = useQuery(
-    'currentEpoch',
-    () => getCurrentEpoch(client, config),
-    { enabled: !!client && !!config }
-  )
+  const { data: currentEpochData } = useCurrentEpoch(client, config)
   let poolAssets = []
 
   if (Array.isArray(poolsData?.pools)) {
@@ -72,8 +68,7 @@ export const useIncentivePoolInfo = (client): IncentivePoolInfo[] => {
 }
 
 const fetchFlows = async (client, address): Promise<Flow[]> => {
-  const flows = await client.queryContractSmart(address, { flows: {} })
-  return flows
+  return await client.queryContractSmart(address, { flows: {} })
 }
 
 const getPoolFlowData = async (
@@ -86,7 +81,6 @@ const getPoolFlowData = async (
   const poolFlowData = poolsData?.pools
     ? await Promise.all(
         poolsData?.pools.map(async (pool) => {
-          console.log('pool', pool)
           if (pool.staking_address === '') {
             return {
               poolId: pool.pool_id,
@@ -116,6 +110,7 @@ const getPoolFlowData = async (
             }
             return acc
           }, [])
+
           if (flows.length > 0) {
             flows?.forEach((flow) => {
               if (

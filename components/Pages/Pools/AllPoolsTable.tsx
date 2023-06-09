@@ -1,7 +1,5 @@
 import {
-  Box,
   Flex,
-  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -9,7 +7,6 @@ import {
   Text,
   Th,
   Thead,
-  Tooltip,
   Tr,
 } from '@chakra-ui/react'
 import {
@@ -23,7 +20,6 @@ import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import Volume from './components/Volume'
 import { Pool } from './types'
-import InfoIcon from 'components/icons/InfoIcon'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -49,48 +45,12 @@ const columns = [
     },
   }),
   columnHelper.accessor('apr', {
-    header: () => (
-      <HStack>
-        <Tooltip
-          label={
-            <Box
-              width="230px"
-              borderRadius="10px"
-              bg="black"
-              color="white"
-              fontSize={14}
-              p={4}
-            >
-              {'Pool APR plus incentive APR'}
-            </Box>
-          }
-          bg="transparent"
-          hasArrow={false}
-          placement="bottom"
-          closeOnClick={false}
-          arrowSize={0}
-        >
-          <Box>
-            <InfoIcon color={'white'} cursor="pointer" />
-          </Box>
-        </Tooltip>
-        <Text align="right" color="brand.50">
-          {`APR`}
-        </Text>
-      </HStack>
-    ),
+    header: () => <Text align="right" color="brand.50">{`APR`}</Text>,
     cell: (info) => {
-      return (
-        <>
-          {info.row.original.isSubqueryNetwork ? (
-            <Apr
-              pairAddr={info.row.original.contract}
-              tvl={info.row.original.totalLiq}
-            />
-          ) : (
-            <Text align="right">{info.getValue()}</Text>
-          )}
-        </>
+      return info.getValue() === 'n/a' ? (
+        <Text>{info.getValue()}</Text>
+      ) : (
+        <Apr apr={info.getValue()} flows={info.row.original.flows} />
       )
     },
   }),
@@ -120,16 +80,6 @@ const columns = [
     ),
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
-  columnHelper.accessor('incentives', {
-    header: () => (
-      <Text align="right" color="brand.50">
-        Incentives
-      </Text>
-    ),
-    cell: (info) => {
-      return info.getValue()
-    },
-  }),
   columnHelper.accessor('action', {
     header: () => (
       <Text align="left" color="brand.50">
@@ -142,7 +92,7 @@ const columns = [
   }),
 ]
 
-const PoolsTable = ({
+const AllPoolsTable = ({
   pools,
   isLoading,
 }: {
@@ -160,7 +110,7 @@ const PoolsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
         justifyContent="center"
@@ -175,7 +125,7 @@ const PoolsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
         justifyContent="center"
@@ -191,7 +141,7 @@ const PoolsTable = ({
     <Flex
       padding={10}
       width={['full', 'auto']}
-      background="#1C1C1C"
+      background={'#1C1C1C'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}
@@ -232,4 +182,4 @@ const PoolsTable = ({
   )
 }
 
-export default PoolsTable
+export default AllPoolsTable

@@ -42,5 +42,4 @@ const Overview = ({ poolId, dailyEmissions }: Props) => {
     </VStack>
   )
 }
-
 export default Overview

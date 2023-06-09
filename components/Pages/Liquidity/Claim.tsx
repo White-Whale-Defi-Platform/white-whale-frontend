@@ -1,10 +1,16 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { useMemo } from 'react'
 import { TxStep } from 'types/common'
 import ClaimTable from './ClaimTable'
 import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/useCheckIncentiveSnapshots'
 
 const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
   <HStack
@@ -36,7 +42,27 @@ type Props = {
 
 const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
+
+  const { client, network, chainId } = useRecoilValue(walletState)
+  const config = useIncentiveConfig(network, chainId)
+  // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
+  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
+  const allSnapshotsTaken = useMemo(() => {
+    return noSnapshotTakenAddresses.length === 0
+  }, [noSnapshotTakenAddresses.length])
+  const forceSnapshots = useForceEpochAndTakingSnapshots({
+    noSnapshotTakenAddresses: noSnapshotTakenAddresses,
+    config: config,
+  })
   const { rewards = [], totalValue } = useRewards(poolId)
+
+  // check if there are rewards to claim
+  const isClaimable = useMemo(() => {
+    const rewardsSum = rewards.reduce((acc, reward) => {
+      return acc + Number(reward.assetAmount)
+    }, 0)
+    return rewardsSum > 0
+  }, [rewards])
 
   return (
     <VStack gap={10} py={5}>
@@ -45,12 +71,16 @@ const Claim = ({ poolId }: Props) => {
       <ClaimTable tokens={rewards} />
 
       <SubmitButton
-        label="Claim"
+        label={allSnapshotsTaken ? 'Claim' : 'Take Snapshots'}
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={Number(totalValue) === 0}
+        isDisabled={!isClaimable && allSnapshotsTaken}
         isLoading={claim.isLoading}
-        onClick={() => claim.submit()}
+        onClick={
+          allSnapshotsTaken
+            ? () => claim.submit()
+            : () => forceSnapshots.submit()
+        }
       />
     </VStack>
   )

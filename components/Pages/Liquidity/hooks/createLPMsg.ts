@@ -5,8 +5,6 @@ import { createIncreaseAllowanceMessage } from 'util/messages'
 
 import { createAsset } from 'services/asset'
 
-const NUMBER_OF_SECONDS_IN_DAY = 86400
-
 const createLpMsg = ({
   tokenA,
   tokenB,
@@ -27,20 +25,11 @@ const createLpMsg = ({
     }
   }
 
-  // if (!isNewPosition) {
-  //   return {
-  //     expandPosition: {
-  //       assets: [asset1, asset2],
-  //       pair_address: pairAddress,
-  //       unbonding_duration: bondingDays * NUMBER_OF_SECONDS_IN_DAY
-  //     },
-  //   }
-  // }
   return {
     deposit: {
       assets: [asset1, asset2],
       pair_address: pairAddress,
-      unbonding_duration: bondingDays * NUMBER_OF_SECONDS_IN_DAY,
+      unbonding_duration: bondingDays * minUnbondingDuration,
     },
   }
 }
