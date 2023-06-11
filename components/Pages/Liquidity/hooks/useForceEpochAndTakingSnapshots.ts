@@ -5,7 +5,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { createExecuteMessage } from 'util/messages'
 import useTxStatus from 'hooks/useTxStatus'
 import { IncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
 
 export enum Force {
   epochAndSnapshots,
@@ -21,19 +21,21 @@ const useForceEpochAndTakingSnapshots = ({
   config,
 }: Params) => {
   const { address, client } = useRecoilValue(walletState)
-  const { data: poolList } = usePoolsListQuery()
+  const incentiveAddresses = useQueryIncentiveContracts(client)
+
   const mode = useMemo(
     () =>
       noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots,
     [noSnapshotTakenAddresses]
   )
-  const incentiveAddresses =
-    mode === Force.snapshotsOnly
-      ? noSnapshotTakenAddresses
-      : useMemo(
-          () => poolList?.pools.map((pool) => pool.staking_address) ?? [],
-          [poolList]
-        )
+  const addresses = useMemo(
+    () =>
+      mode === Force.snapshotsOnly
+        ? noSnapshotTakenAddresses
+        : incentiveAddresses,
+    [incentiveAddresses]
+  ) ?? []
+
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType:
       mode === Force.epochAndSnapshots
@@ -43,7 +45,7 @@ const useForceEpochAndTakingSnapshots = ({
   })
 
   const msgs = useMemo(() => {
-    if (incentiveAddresses.length === 0) return null
+    if (addresses.length === 0) return null
 
     return (
       mode === Force.epochAndSnapshots
@@ -60,7 +62,7 @@ const useForceEpochAndTakingSnapshots = ({
           ]
         : []
     ).concat(
-      ...incentiveAddresses.flatMap((incentiveAddress) => {
+      ...addresses.flatMap((incentiveAddress) => {
         return [
           // create snapshot message
           createExecuteMessage({
@@ -74,7 +76,7 @@ const useForceEpochAndTakingSnapshots = ({
         ]
       })
     )
-  }, [incentiveAddresses, address])
+  }, [addresses, address])
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: () => client.post(address, msgs),

@@ -9,34 +9,34 @@ import { walletState } from 'state/atoms/walletAtoms'
 import Status from '../Status'
 import MobileNotSupportedModal from '../Wallet/Modal/MobileNotSupportedModal'
 import RadialGradient from './RadialGradient'
-import usePrices from 'hooks/usePrices'
 
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
-  const prices = usePrices()
 
   return (
     <>
       {(isMobile || isMobileView) && <MobileNotSupportedModal />}
-      <Flex direction="column" backgroundColor="transparent" height="100vh">
-        <RadialGradient />
-        <Navbar />
-        <Flex
-          key={chainId}
-          justifyContent="center"
-          mx="auto"
-          maxWidth="container.xl"
-          marginBottom={20}
-          width="full"
-          flex="1 1 auto "
-        >
-          {children}
+      {!(isMobile || isMobileView) && (
+        <Flex direction="column" backgroundColor="transparent" height="100vh">
+          <RadialGradient />
+          <Navbar />
+          <Flex
+            key={chainId}
+            justifyContent="center"
+            mx="auto"
+            maxWidth="container.xl"
+            marginBottom={20}
+            width="full"
+            flex="1 1 auto "
+          >
+            {children}
+          </Flex>
+          <Flex paddingY={10} paddingX={6} alignSelf="flex-end">
+            <Status />
+          </Flex>
         </Flex>
-        <Flex paddingY={10} paddingX={6} alignSelf="flex-end">
-          <Status />
-        </Flex>
-      </Flex>
+      )}
     </>
   )
 }
