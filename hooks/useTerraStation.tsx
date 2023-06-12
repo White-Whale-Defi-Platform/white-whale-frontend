@@ -18,6 +18,7 @@ export const useTerraStation = (onCloseModal) => {
   const connectedWallet = useConnectedWallet()
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
+  let [chainInfo] = useChainInfo(currentWalletState.chainId)
 
   const filterForStation = (connection: Connection) => {
     return connection.identifier === 'station'

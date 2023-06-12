@@ -1,7 +1,5 @@
 import {
-  Button,
   Flex,
-  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -18,7 +16,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
@@ -55,17 +52,10 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <>
-          {info.row.original.isSubqueryNetwork ? (
-            <Apr
-              pairAddr={info.row.original.contract}
-              tvl={info.row.original.totalLiq}
-            />
-          ) : (
-            <Text align="right">{info.getValue()}</Text>
-          )}
-        </>
+      return info.getValue() === 'n/a' ? (
+        <Text>{info.getValue()}</Text>
+      ) : (
+        <Apr apr={info.getValue()} flows={info.row.original.flows} />
       )
     },
   }),
@@ -105,15 +95,25 @@ const columns = [
       <Text align="right">${info.getValue().toLocaleString()}</Text>
     ),
   }),
-  columnHelper.accessor('cta', {
-    header: '',
-    cell: (info) => (
-      <HStack justifyContent="flex-end">
-        <Button variant="outline" size="sm" onClick={() => info.getValue()()}>
-          {`Manage Liquidity`}
-        </Button>
-      </HStack>
+  columnHelper.accessor('incentives', {
+    header: () => (
+      <Text align="left" color="brand.50">
+        Incentives
+      </Text>
     ),
+    cell: (info) => {
+      return info.getValue()
+    },
+  }),
+  columnHelper.accessor('action', {
+    header: () => (
+      <Text align="left" color="brand.50">
+        Action
+      </Text>
+    ),
+    cell: (info) => {
+      return info.getValue()
+    },
   }),
 ]
 
@@ -138,8 +138,8 @@ const PoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', '1160px']}
-        background="#1C1C1C"
+        width={['full', 'auto']}
+        background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
         justifyContent="center"
@@ -153,8 +153,8 @@ const PoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', '1160px']}
-        background="#1C1C1C"
+        width={['full', 'auto']}
+        background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
         justifyContent="center"
@@ -169,9 +169,7 @@ const PoolsTable = ({
   return (
     <Flex
       px="30px"
-      // padding={10}
-      // width={['full', '1170px']}
-      background="#212121"
+      background={'#212121'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}
@@ -191,6 +189,7 @@ const PoolsTable = ({
                 p="2px"
                 borderTopRadius="10px"
               ></Th>
+              <Th></Th>
               <Th isNumeric></Th>
             </Tr>
             {table.getHeaderGroups().map((headerGroup, index) => (
@@ -253,16 +252,6 @@ const PoolsTable = ({
           </Tfoot>
         </Table>
       </TableContainer>
-      {/* {datProvidedByCoinhall && (
-        <Flex justifyContent="end" alignItems="center" mt="16px">
-          <Text
-            color="white"
-            fontSize="12px"
-            mr="4px"
-          >{`data provided by`}</Text>
-          <Image src="/logos/coinhall.png" alt="coinhall" height="14px" />
-        </Flex>
-      )} */}
     </Flex>
   )
 }

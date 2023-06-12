@@ -22,6 +22,8 @@ import { ActionType } from './BondingOverview'
 import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
+import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 
 const pulseAnimation = keyframes`
   0% {
@@ -113,7 +115,7 @@ const RewardsComponent = ({
   totalGlobalClaimable,
   weightInfo,
 }) => {
-  const [{ chainId }, _] = useRecoilState(walletState)
+  const [{ network, chainId }] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -144,6 +146,12 @@ const RewardsComponent = ({
     ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio
 
   const { txStep, submit } = useTransaction()
+
+  const { config } = useIncentiveConfig(network, chainId)
+  const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
+    noSnapshotTakenAddresses: null,
+    config: config,
+  })
 
   // TODO global constant?
   const boxBg = '#1C1C1C'
@@ -333,9 +341,7 @@ const RewardsComponent = ({
                     border: '1px solid #6ACA70',
                     color: '#6ACA70',
                   }}
-                  onClick={async () => {
-                    await submit(ActionType.createNewEpoch, null, null)
-                  }}
+                  onClick={() => forceEpochAndTakeSnapshots.submit()}
                 >
                   {'Force Epoch'}
                 </Button>

@@ -6,7 +6,13 @@ import { useChains } from 'hooks/useChainInfo'
 import ChainItem from './ChainItem'
 
 function ChainList({ onChange, onClose, currentWalletState }) {
-  const chains = useChains()
+  let chains = useChains()
+
+  // if (currentWalletState.activeWallet === 'station') {
+  //   return chains.filter(
+  //     (chain) => chain.chainId !== 'comdex-1' && chain.chainId !== 'injective-1'
+  //   );
+  // }
 
   // if (currentWalletState.activeWallet === 'station') {
   //   return chains.filter(

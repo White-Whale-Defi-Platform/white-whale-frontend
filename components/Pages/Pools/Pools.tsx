@@ -1,11 +1,10 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
-
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { num } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import {
   PoolEntityTypeWithLiquidity,
   useQueryMultiplePoolsLiquidity,
@@ -18,11 +17,16 @@ import {
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
 import { STABLE_COIN_LIST } from 'util/constants'
-
+import { ActionCTAs } from './ActionCTAs'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 import { useChains } from 'hooks/useChainInfo'
+import {
+  IncentivePoolInfo,
+  useIncentivePoolInfo,
+} from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import { Incentives } from 'components/Pages/Pools/Incentives'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -39,8 +43,8 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools: FC<Props> = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { address, chainId } = useRecoilValue(walletState)
-  const client = useCosmwasmClient(chainId)
+  const { address, chainId, client } = useRecoilValue(walletState)
+  const cosmWasmClient = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
@@ -52,10 +56,14 @@ const Pools: FC<Props> = () => {
     useQueryMultiplePoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
-      client,
+      client: cosmWasmClient,
     })
   )
   const chains: any = useChains()
+  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
+    client,
+    pools
+  )
 
   const currentChain = useMemo(
     () =>
@@ -99,11 +107,17 @@ const Pools: FC<Props> = () => {
         ),
       }
     })
+
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+
+        const flows =
+          incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
+            ?.flowData ?? []
+
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
@@ -118,13 +132,10 @@ const Pools: FC<Props> = () => {
           poolAssets: pool?.pool_assets,
           price: pool?.ratio,
           isUSDPool: isUSDPool,
+          flows: flows,
+          incentives: <Incentives key={pool.pool_id} flows={flows} />,
+          action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
           isSubqueryNetwork: false,
-          cta: () => {
-            const [asset1, asset2] = pool?.pool_id.split('-') || []
-            router.push(
-              `/${chainIdParam}/pools/new_position?from=${asset1}&to=${asset2}`
-            )
-          },
         }
       })
     )
@@ -144,18 +155,9 @@ const Pools: FC<Props> = () => {
   const myPools = useMemo(() => {
     return (
       allPools &&
-      allPools
-        .filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-        .map((item) => ({
-          ...item,
-          // myPosition: formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          // myPosition: NoPrice.includes(item?.poolId)? 'NA' : formatPrice(item?.liquidity?.providedTotal?.dollarValue),
-          // myPosition : calculateMyPostion(item),
-          cta: () =>
-            router.push(
-              `/${chainIdParam}/pools/manage_liquidity?poolId=${item.poolId}`
-            ),
-        }))
+      allPools.filter(
+        ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
+      )
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPools])
@@ -172,18 +174,9 @@ const Pools: FC<Props> = () => {
       margin="auto"
     >
       <Box width={{ base: '100%' }}>
-        <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
-            My Pools
-          </Text>
-          {/* <Button
-            variant="primary"
-            size="sm"
-            onClick={() => router.push(`/${chainIdParam}/pools/new_position`)}
-          >
-            New Position
-          </Button> */}
-        </HStack>
+        <Text as="h2" fontSize="24" fontWeight="700">
+          My Pools
+        </Text>
         <MyPoolsTable
           show={true}
           pools={myPools}

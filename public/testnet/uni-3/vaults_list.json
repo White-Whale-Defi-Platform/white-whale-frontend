@@ -5,7 +5,7 @@
       "pool_id": "JUNOX",
       "vault_assets": {
         "id": "juno-testnet",
-        "chain_id": "uni-3",
+        "chain_id": "uni-6",
         "token_address": "ujunox",
         "symbol": "JUNO",
         "name": "Juno",
@@ -24,7 +24,7 @@
       "pool_id": "JUNOONE",
       "vault_assets": {
         "id": "juno-testnet",
-        "chain_id": "uni-3",
+        "chain_id": "uni-6",
         "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
         "symbol": "JUNOONE",
         "name": "Junoone",

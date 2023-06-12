@@ -40,7 +40,7 @@ export const getPairInfos = async (
     chainDataResponse = await fetch(url)
   }
   const data = await chainDataResponse.text()
-  if (chainDataResponse.status === 200 && data) {
+  if (chainDataResponse.status === 200 && data !== 'chain unknown' && data) {
     return JSON.parse(data)
   } else {
     return []

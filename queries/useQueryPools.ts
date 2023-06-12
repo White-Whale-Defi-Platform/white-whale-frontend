@@ -10,16 +10,18 @@ import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
 } from 'util/constants'
-import { calcPoolTokenDollarValue } from '../util/conversion'
-import { queryMyLiquidity } from './queryMyLiquidity'
+import { calcPoolTokenDollarValue } from 'util/conversion'
+import { lpToAssets, queryMyLiquidity } from './queryMyLiquidity'
 import {
   queryRewardsContracts,
   SerializedRewardsContract,
 } from './queryRewardsContracts'
-import { queryStakedLiquidity } from './queryStakedLiquidity'
 import { querySwapInfo } from './querySwapInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+import { useTokenList } from 'hooks/useTokenList'
+import { TokenInfo } from 'types'
+import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
 
 export type ReserveType = [number, number]
 
@@ -31,6 +33,15 @@ export type PoolTokenValue = {
 export type PoolState = {
   total: PoolTokenValue
   provided: PoolTokenValue
+}
+
+export type Flow = {
+  token: TokenInfo
+  endTime: number
+  startTime: number
+  flowId: number
+  amount: string
+  state: 'active' | 'over'
 }
 
 export type PoolLiquidityState = {
@@ -51,6 +62,8 @@ export type PoolLiquidityState = {
     annualYieldPercentageReturn: number
     contracts?: Array<SerializedRewardsContract>
   }
+
+  myFlows: Flow[]
 }
 
 export type PoolEntityTypeWithLiquidity = PoolEntityType & {
@@ -63,6 +76,24 @@ export type QueryMultiplePoolsArgs = {
   client: any
 }
 
+const queryStakedLiquidity = async ({ pool, client, address }) => {
+  if (!address || !client || !pool.staking_address) return
+
+  const { positions = [] } =
+    (await client?.queryContractSmart(pool.staking_address, {
+      positions: { address },
+    })) || []
+
+  return (
+    positions
+      ?.map((p = {}) => {
+        const { open_position = {}, closed_position = {} } = p
+        return { ...open_position, ...closed_position }
+      })
+      .reduce((acc, p) => acc + Number(p.amount), 0) || 0
+  )
+}
+
 export const useQueryMultiplePoolsLiquidity = ({
   pools,
   refetchInBackground = false,
@@ -71,6 +102,9 @@ export const useQueryMultiplePoolsLiquidity = ({
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
   const { address } = useRecoilValue(walletState)
+
+  const [tokenList] = useTokenList()
+  const { epochToDate, currentEpoch } = useEpoch()
 
   const context = {
     // client: signingClient,
@@ -91,6 +125,80 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
+    const getFlows = ({ client }) => {
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
+        return []
+      return client
+        ?.queryContractSmart(pool.staking_address, {
+          flows: {},
+        })
+        .then((flows) => {
+          return flows?.map((flow = {}) => {
+            const denom =
+              flow?.flow_asset?.info?.token?.contract_addr ||
+              flow?.flow_asset?.info.native_token?.denom ||
+              null
+            return tokenList?.tokens?.find((t) => t?.denom === denom)
+          })
+        })
+    }
+    const getMyFlows = ({ client, address }) => {
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
+        return []
+      return client
+        ?.queryContractSmart(pool.staking_address, {
+          flows: {},
+        })
+        .then((flows) => {
+          const flowTokens = flows?.map((flow = {}) => {
+            if (flow.flow_creator !== address) return null
+
+            const startEpoch = flow.start_epoch
+            const endEpoch = flow.end_epoch
+
+            const getState = () => {
+              switch (true) {
+                case currentEpoch < startEpoch:
+                  return 'upcoming'
+                case currentEpoch >= startEpoch && currentEpoch < endEpoch:
+                  return 'active'
+                case currentEpoch >= endEpoch:
+                  return 'over'
+                default:
+                  return ''
+              }
+            }
+
+            // check if end time is in the past
+            // const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+            const state = getState()
+            const denom =
+              flow?.flow_asset?.info?.token?.contract_addr ||
+              flow?.flow_asset?.info?.native_token?.denom ||
+              null
+            const token = tokenList?.tokens?.find((t) => t?.denom === denom)
+
+            return {
+              token,
+              endTime: epochToDate(endEpoch),
+              startTime: epochToDate(startEpoch),
+              flowId: flow.flow_id,
+              amount: flow.flow_asset.amount,
+              state,
+            }
+          })
+          return flowTokens.filter(Boolean)
+        })
+    }
+
+    const flows = await getFlows({ client })
+
+    const stakedLP = await queryStakedLiquidity({ pool, client, address })
+    const stakedReserved = lpToAssets({
+      swap,
+      providedLiquidityInMicroDenom: stakedLP,
+    })
+
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
         context,
@@ -103,13 +211,12 @@ export const useQueryMultiplePoolsLiquidity = ({
       totalStakedAmountInMicroDenom,
       totalStakedReserve,
       providedStakedReserve,
-    } = await queryStakedLiquidity({
-      context,
-      address,
-      stakingAddress: pool.staking_address,
-      totalReserve,
-      swap,
-    })
+    } = {
+      providedStakedAmountInMicroDenom: stakedLP || 0,
+      totalStakedAmountInMicroDenom: 0,
+      totalStakedReserve: [],
+      providedStakedReserve: stakedReserved?.providedReserve || [],
+    }
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenA,
@@ -165,6 +272,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
     }
 
+    const myFlows = await getMyFlows({ client, address })
     const liquidity = {
       available: {
         total: totalLiquidity,
@@ -178,15 +286,13 @@ export const useQueryMultiplePoolsLiquidity = ({
         tokenAmount: providedLiquidity.tokenAmount + providedStaked.tokenAmount,
         dollarValue: providedLiquidity.dollarValue + providedStaked.dollarValue,
       },
+      myFlows,
       reserves: {
         total: totalReserve,
         provided: providedReserve,
         totalStaked: totalStakedReserve,
         providedStaked: providedStakedReserve,
-        totalProvided: [
-          providedReserve[0] + providedStakedReserve[0],
-          providedReserve[1] + providedStakedReserve[1],
-        ] as ReserveType,
+        totalProvided: providedReserve as ReserveType,
       },
       rewards: {
         annualYieldPercentageReturn,
@@ -196,6 +302,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
     return {
       ...pool,
+      flows,
       liquidity,
     }
   }
@@ -203,7 +310,9 @@ export const useQueryMultiplePoolsLiquidity = ({
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled: Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue),
+      enabled:
+        Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue) &&
+        tokenList.tokens.length > 0,
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
@@ -234,8 +343,6 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     refetchInBackground: true,
     client,
   })
-
-  // const persistedData = usePersistance(poolResponse?.data)
 
   return [
     poolResponse?.data,

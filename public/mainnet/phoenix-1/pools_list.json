@@ -32,7 +32,7 @@
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
         {
-          
+          "id": "white-whale",
           "chain_id": "phoenix-1",
           "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
           "symbol": "WHALE",
@@ -57,7 +57,7 @@
       ],
       "lp_token": "terra1necjy4mmes4fvsvjvne5kkl3zhszg7s3s3jayfgzudsshnpv69kss5m2k2",
       "swap_address": "terra1qdu4g5zxxtmwsd95v8vjslq5874nkcull7ejycm0gy2v7p5qc67qenkf8t",
-      "staking_address": "",
+      "staking_address": "terra1hnd5e4w9q7afmj3ql7nam5qna978qapmts839hfuvuueeq6f5lgqykrejn",
       "rewards_tokens": []
     },
     {
@@ -94,7 +94,7 @@
       ],
       "lp_token": "terra16z3ksy6aqjkug8l3u48q0kvdaqk3dgaytl7ykt6vg2he9d6z9rgslr4k7l",
       "swap_address": "terra1ntx595elf3ukxcd0wy76h24rzztcv2p6n3wmfd358ks95prv42fs9mn63n",
-      "staking_address": "",
+      "staking_address": "terra19a63jwphxh2f8j8r5cn74kyrrjlu35gk4h4y7uj9zam8lquqrnzsjtxlhl",
       "rewards_tokens": []
     },
     {
@@ -131,7 +131,7 @@
       ],
       "lp_token": "terra1le46uu9qjk53aktjs8dev96sl9sd2ujvcpspk75pdeg0txfvhyuswm6653",
       "swap_address": "terra1j9jmsplecj9ay2py27953p84nfmv7f6ce75ms5fleyhd0aecpc7q0hgmsa",
-      "staking_address": "",
+      "staking_address": "terra1avs33y34j9t23e6ujuzpa5x58ru0cfk4c5nglm5l0etn7vaq6h8qhszt66",
       "rewards_tokens": []
     },
     {
@@ -169,7 +169,7 @@
       ],
       "lp_token": "terra1adp223mw8937arxcfl36acjjyn2dcf7wzp8h09jek5k0gw3vch8sqlq6su",
       "swap_address": "terra1frfcj4xhvx0emkup4vel5jun9zun0797j5yhn7ant3r4jzy9mkxqzcwev6",
-      "staking_address": "",
+      "staking_address": "terra1zwk4ajwy9v7tugqvfyldl8f3sj8uev7naafpelfd4jftx9czsxxsm0ncw5",
       "rewards_tokens": []
     },
     {
@@ -206,7 +206,7 @@
       ],
       "lp_token": "terra17ly9laewec70qu6tl0e3qrwh2vhz9akpf2jd7mxqram63xg2n0rsj36xvr",
       "swap_address": "terra17l9xj8f6m8smumhn8wgpgnswr3mu60wfkcm6pjc69drxp0t398rs7335vn",
-      "staking_address": "",
+      "staking_address": "terra1jjkwz5fluaa87a4w5xd2yku8c6vrqsuhrt9yaax3pyhfl5ftp9wsy6na3x",
       "rewards_tokens": []
     },
     {
@@ -243,7 +243,7 @@
       ],
       "lp_token": "terra19glrs2vtgxaxww39cq5acxapgv2v8hyw562zmsk7ucn4yznmyv3sljewv9",
       "swap_address": "terra1e6t37fgjkxrzdx2s95fyq6jdra5s82720vhtmxvx4yhcvnsrey4ssmrya6",
-      "staking_address": "",
+      "staking_address": "terra1valpnysajk756uwesegkfeq6gqt9ld8ez8ke247ghhpfh4wjjgase0hhl8",
       "rewards_tokens": []
     },
     {
@@ -280,7 +280,7 @@
       ],
       "lp_token": "terra1rlmjwapg7y3p39aucq2rq5rffyns7z94twm8acl59na4d9aehu9sl2dfkc",
       "swap_address": "terra1ck8nkz35sa8mmqez3lqrm77vh36n2gd2f0dxjde4uemkwsjt22pqgk49zj",
-      "staking_address": "",
+      "staking_address": "terra1guwyktv5uhjkvmnmtvrwevgpgcl3f4zzy74959whju8qglrc66fqgrqs40",
       "rewards_tokens": []
     },
     {
@@ -317,7 +317,7 @@
       ],
       "lp_token": "terra1q475uvk9te5nxq2lzu0h96t0devmx4v8ctxqtm253ut05wrpugsq0m4e3k",
       "swap_address": "terra1j5znhs9jeyty9u9jcagl3vefkvzwqp6u9tq9a3e5qrz4gmj2udyqp0z0xc",
-      "staking_address": "",
+      "staking_address": "terra10vu0f9nknuhj89xq00aymqxxypmztgx8hwty5jj7cutnkx4j5sjshagm9a",
       "rewards_tokens": []
     },
     {
@@ -354,7 +354,7 @@
       ],
       "lp_token": "terra10un5hr6asmn7g0ggh9sz0x3v8f9evh5cvawk8xs65rghundc25mq7g5par",
       "swap_address": "terra1tsx0dmasjvd45k6tdywzv77d5t9k3lpzyuleavuah77pg3lwm9cq4469pm",
-      "staking_address": "",
+      "staking_address": "terra1aw872zyt2y0qzzxn7x00mefympk5n9at04mmfmmxqpe42ev2pj0qax89d8",
       "rewards_tokens": []
     },
     {
@@ -428,7 +428,7 @@
       ],
       "lp_token": "terra1j7zej67gl6kjmgc2tl2hggp4xcvchnrn5reffc489u6ffsvm7aeq5k4sas",
       "swap_address": "terra1g8clplgv3ah405qjrf9yhkgur9zqlqayt8ftrvkuzsm5am7pr9ls7s26rx",
-      "staking_address": "",
+      "staking_address": "terra1y967zn8xhlx3k67c8quaatqxaugw9kmvu2pu4tddk2rjxhcfegaqvdvtv7",
       "rewards_tokens": []
     }
   ],

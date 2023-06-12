@@ -4,7 +4,7 @@ import { fetchDollarPriceByTokenIds } from './fetchDollarPriceByTokenIds'
 import { pricingServiceIsDownAlert } from './pricingServiceIsDownAlert'
 
 const network = {
-  'uni-3': 'juno-network',
+  'uni-6': 'juno-network',
   'juno-1': 'juno-network',
   'phoenix-1': 'terra-luna-2',
   'pisco-1': 'terra-luna-2',
