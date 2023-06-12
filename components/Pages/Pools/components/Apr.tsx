@@ -19,28 +19,24 @@ import {
 import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 
 type Props = {
-  apr: string | number
+  apr: string
   flows: FlowData[]
 }
 
 const Apr = ({ apr, flows }: Props) => {
-  const {
-    logos = [],
-    more = [],
-    hasIncentives = false,
-  } = useMemo(() => {
-    const logos = flows.slice(0, 2).map((flow) => flow?.logoURI)
-    const more = flows.slice(3).length
-    const hasIncentives = flows.length > 0
-    return { logos, more, hasIncentives }
-  }, [flows])
+  const totalApr = useMemo(() => {
+    const incentiveApr = flows.reduce((total, item) => {
+      return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+    }, 0)
+    return Number(apr.replace('%', '')) + Number(incentiveApr)
+  }, [flows, apr])
 
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
         <Button variant="unstyled">
           <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)" h="30px">
-            <Text align="right">{apr}</Text>
+            <Text align="right">{totalApr.toFixed(2)}%</Text>
           </HStack>
         </Button>
       </PopoverTrigger>
@@ -84,14 +80,16 @@ const Apr = ({ apr, flows }: Props) => {
                 </Tr>
                 {flows?.map((flowInfo, index) => (
                   <Tr
-                    key={flowInfo?.tokenSymbol}
+                    key={flowInfo?.tokenSymbol + "_" + index}
                     borderBottom={
                       index < flows.length - 1
                         ? '1px solid rgba(255, 255, 255, 0.1)'
                         : 'unset'
                     }
                   >
-                    <Td color="white">{flowInfo?.tokenSymbol} Incentive</Td>
+                    <Td color="white">
+                      {flowInfo?.tokenSymbol ?? 'Unknown'} Incentive
+                    </Td>
                     <Td color="white" isNumeric>
                       {flowInfo?.apr.toFixed(2)}%
                     </Td>

@@ -5,10 +5,11 @@ import { useMemo } from 'react'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => {
-    return dailyEmissions.reduce((acc, item) => {
-      return acc + item.dailyUsdEmission
+    return dailyEmissions.reduce((total, item) => {
+      return total + (isNaN(item.dailyEmission) ? 0 : item.dailyEmission)
     }, 0)
   }, [dailyEmissions])
+
   return (
     <VStack
       alignItems="flex-start"

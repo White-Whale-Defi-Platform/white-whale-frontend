@@ -26,6 +26,7 @@ import {
   IncentivePoolInfo,
   useIncentivePoolInfo,
 } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import { Incentives } from 'components/Pages/Pools/Incentives'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {}
@@ -59,7 +60,10 @@ const Pools: FC<Props> = () => {
     })
   )
   const chains: any = useChains()
-  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(client)
+  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
+    client,
+    pools
+  )
 
   const currentChain = useMemo(
     () =>
@@ -103,11 +107,17 @@ const Pools: FC<Props> = () => {
         ),
       }
     })
+
     const _allPools = await Promise.all(
       _pools.map(async (pool) => {
         const isUSDPool =
           STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
           STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+
+        const flows =
+          incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
+            ?.flowData ?? []
+
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
@@ -122,9 +132,8 @@ const Pools: FC<Props> = () => {
           poolAssets: pool?.pool_assets,
           price: pool?.ratio,
           isUSDPool: isUSDPool,
-          flows:
-            incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
-              ?.flowData ?? [],
+          flows: flows,
+          incentives: <Incentives key={pool.pool_id} flows={flows} />,
           action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
           isSubqueryNetwork: false,
         }

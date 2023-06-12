@@ -24,7 +24,7 @@ const TokenRow = ({ item, isLast }: { item: Reward; isLast: boolean }) => {
           alt="logo-small"
         />
         <Text fontSize="16px" fontWeight="400">
-          {item?.symbol}
+          {item?.symbol ?? 'Unknown'}
         </Text>
       </HStack>
 
@@ -45,7 +45,7 @@ const ClaimTable = ({ tokens = [] }: Props) => {
   return (
     <VStack
       width="full"
-      background="#151515"
+      background={'#151515'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="15px"
       maxH="250px"

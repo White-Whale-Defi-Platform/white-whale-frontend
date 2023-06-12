@@ -1,4 +1,4 @@
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     border-radius: 4px;
     margin-right: 2px;
@@ -7,6 +7,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color-scheme: dark;
   }
   
-  input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
     opacity: 1
   }

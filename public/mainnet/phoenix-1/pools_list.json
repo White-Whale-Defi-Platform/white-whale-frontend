@@ -32,7 +32,7 @@
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
         {
-          
+          "id": "white-whale",
           "chain_id": "phoenix-1",
           "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
           "symbol": "WHALE",

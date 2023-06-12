@@ -45,7 +45,7 @@ const Create = ({ poolId }: Props) => {
   const { status } = useRecoilValue(walletState)
   const isConnected = status === WalletStatusType.connected
   const { txStep } = useRecoilValue(txAtom)
-  const { simulate, submit, tx } = useOpenFlow({ poolId, ...formData })
+  const { simulate, submit } = useOpenFlow({ poolId, ...formData })
 
   return (
     <Stack as="form" gap="5" onSubmit={handleSubmit(() => submit())}>
@@ -82,7 +82,7 @@ const Create = ({ poolId }: Props) => {
                 color="white"
                 placeholder="Enter amount"
                 h="50px"
-                type="datetime-local"
+                type="date"
                 min={new Date().toISOString().slice(0, 16)}
                 // max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
@@ -110,7 +110,7 @@ const Create = ({ poolId }: Props) => {
                 color="white"
                 placeholder="Enter amount"
                 h="50px"
-                type="datetime-local"
+                type="date"
                 min={new Date().toISOString().slice(0, 16)}
                 focusBorderColor="brand.500"
               />

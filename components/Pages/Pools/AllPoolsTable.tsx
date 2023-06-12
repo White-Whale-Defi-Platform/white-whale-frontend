@@ -80,6 +80,16 @@ const columns = [
     ),
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
+  columnHelper.accessor('incentives', {
+    header: () => (
+      <Text align="right" color="brand.50">
+        Incentives
+      </Text>
+    ),
+    cell: (info) => {
+      return info.getValue()
+    },
+  }),
   columnHelper.accessor('action', {
     header: () => (
       <Text align="left" color="brand.50">

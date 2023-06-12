@@ -10,7 +10,7 @@ export const IncentivesLogos = ({ logos, more }) => (
     <HStack spacing="0">
       {logos?.map((logo, i) => (
         <Box
-          key={logo}
+          key={`${logo}-${i}`}
           boxShadow="lg"
           borderRadius="full"
           position="absolute"

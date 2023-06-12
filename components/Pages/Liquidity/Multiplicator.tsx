@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack } from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 
 type Props = {
@@ -19,17 +19,18 @@ const Multiplicator = ({ multiplicator, show }: Props) => {
       pt={3.5}
       style={{ marginBottom: 50 }}
     >
-      <TooltipWithChildren label="Multiplicator" isHeading fontSize="16">
-        <Text fontSize="16">Multiplicator</Text>
-      </TooltipWithChildren>
+      <TooltipWithChildren
+        label="Multiplicator"
+        children={'Factor by which your APR gets multiplied.'}
+        isHeading
+        fontSize="16"
+      />
 
       <TooltipWithChildren
         label={multiplicator}
         fontSize="16"
         showTooltip={false}
-      >
-        <Text fontSize="16">3,111</Text>
-      </TooltipWithChildren>
+      />
     </HStack>
   )
 }

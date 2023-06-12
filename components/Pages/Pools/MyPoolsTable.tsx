@@ -95,6 +95,16 @@ const columns = [
       <Text align="right">${info.getValue().toLocaleString()}</Text>
     ),
   }),
+  columnHelper.accessor('incentives', {
+    header: () => (
+      <Text align="left" color="brand.50">
+        Incentives
+      </Text>
+    ),
+    cell: (info) => {
+      return info.getValue()
+    },
+  }),
   columnHelper.accessor('action', {
     header: () => (
       <Text align="left" color="brand.50">

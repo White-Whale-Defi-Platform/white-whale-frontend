@@ -5,7 +5,6 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import usePrices from 'hooks/usePrices'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
@@ -44,25 +43,23 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
-export const useIncentivePoolInfo = (client): IncentivePoolInfo[] => {
+export const useIncentivePoolInfo = (client, pools): IncentivePoolInfo[] => {
   const { chainId, network } = useRecoilValue(walletState)
-  const { data: poolsData } = usePoolsListQuery()
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
 
   const { data: currentEpochData } = useCurrentEpoch(client, config)
   let poolAssets = []
 
-  if (Array.isArray(poolsData?.pools)) {
+  if (Array.isArray(pools)) {
     poolAssets = []
-      .concat(...poolsData.pools.map((pool) => pool.pool_assets))
+      .concat(...pools.map((pool) => pool.pool_assets))
       .filter((v, i, a) => a.findIndex((t) => t.denom === v.denom) === i)
   }
   const { data: flowPoolData } = useQuery(
     ['apr', currentEpochData, prices],
-    () =>
-      getPoolFlowData(client, poolsData, currentEpochData, poolAssets, prices),
-    { enabled: !!client && !!currentEpochData && !!poolsData && !!prices }
+    () => getPoolFlowData(client, pools, currentEpochData, poolAssets, prices),
+    { enabled: !!client && !!currentEpochData && !!pools && !!prices }
   )
   return flowPoolData
 }
@@ -73,14 +70,15 @@ const fetchFlows = async (client, address): Promise<Flow[]> => {
 
 const getPoolFlowData = async (
   client,
-  poolsData,
+  pools,
   currentEpochData,
   poolAssets,
   prices
 ): Promise<IncentivePoolInfo[]> => {
-  const poolFlowData = poolsData?.pools
+
+  const poolFlowData = pools
     ? await Promise.all(
-        poolsData?.pools.map(async (pool) => {
+        pools.map(async (pool) => {
           if (pool.staking_address === '') {
             return {
               poolId: pool.pool_id,
@@ -126,16 +124,16 @@ const getPoolFlowData = async (
                   flow.flow_asset.info?.native_token?.denom
                 const tokenSymbol = poolAssets.find(
                   (asset) => asset.denom === flowDenom
-                ).symbol
+                )?.symbol
 
                 const emission =
                   convertMicroDenomToDenom(
                     Number(flow.flow_asset.amount) -
-                      emittedTokens / flow.start_epoch +
-                      (flow.end_epoch - flow.start_epoch) -
+                      emittedTokens / Number(flow.start_epoch) +
+                      (Number(flow.end_epoch) - Number(flow.start_epoch)) -
                       Number(currentEpochData.currentEpoch.epoch.id),
                     6
-                  ) * prices[tokenSymbol]
+                  ) * Number(prices[tokenSymbol])
 
                 const uniqueFlow = uniqueFlowList.find(
                   (f) => f.denom === flowDenom
@@ -148,15 +146,16 @@ const getPoolFlowData = async (
             const poolAsset = poolAssets.find(
               (asset) => asset.denom === flow.denom
             )
-            const tokenSymbol = poolAsset.symbol
-            const logoURI = poolAsset.logoURI
+            const tokenSymbol = poolAsset?.symbol
+            const logoURI = poolAsset?.logoURI
+
             return {
               ...flow,
               tokenSymbol: tokenSymbol,
               logoURI: logoURI,
               apr:
-                ((flow.dailyEmission * 365.25) /
-                  (pool.liquidity?.providedTotal?.dollarValue | 1)) *
+                ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
+                  Number(pool.liquidity?.available?.total?.dollarValue | 1)) *
                 100,
             }
           })
