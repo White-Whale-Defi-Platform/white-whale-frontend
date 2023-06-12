@@ -11,7 +11,6 @@ import SubmitButton from 'components/SubmitButton'
 import BondingDaysSlider from './BondingDaysSlider'
 import Multiplicator from './Multiplicator'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
-import { round } from '@popperjs/core/lib/utils/math'
 
 type Props = {
   connected: WalletStatusType
@@ -58,7 +57,7 @@ const DepositForm = ({
 
   const multiplicator = useMemo(
     () =>
-      round(
+      Math.round(
         0.997132 +
           0.0027633 * bondingDays +
           0.000105042 * (bondingDays * bondingDays)
