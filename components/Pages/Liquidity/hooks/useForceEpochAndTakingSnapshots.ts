@@ -28,13 +28,14 @@ const useForceEpochAndTakingSnapshots = ({
       noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots,
     [noSnapshotTakenAddresses]
   )
-  const addresses = useMemo(
-    () =>
-      mode === Force.snapshotsOnly
-        ? noSnapshotTakenAddresses
-        : incentiveAddresses,
-    [incentiveAddresses]
-  ) ?? []
+  const addresses =
+    useMemo(
+      () =>
+        mode === Force.snapshotsOnly
+          ? noSnapshotTakenAddresses
+          : incentiveAddresses,
+      [incentiveAddresses]
+    ) ?? []
 
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType:

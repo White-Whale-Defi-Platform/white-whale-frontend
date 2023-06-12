@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 export interface IncentiveConfig {
   incentive_factory_address: string
   fee_distributor_address: string
+  frontend_helper_address: string
 }
 
 export const useIncentiveConfig = (network: string, chainId: string) => {

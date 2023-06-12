@@ -1,4 +1,5 @@
 {
   "incentive_factory_address": "terra1qsfcuketm4slntdp92kg3ltnn57j7dzq3wg3yqjr8xhsnae6fn3sjmle9y",
-  "fee_distributor_address": "terra1xm0yh8cv8rww6g87h3q0megt6ntxqzw6p6hgh5l4jrhed4fe7hnq9cvzm5"
+  "fee_distributor_address": "terra1xm0yh8cv8rww6g87h3q0megt6ntxqzw6p6hgh5l4jrhed4fe7hnq9cvzm5",
+  "frontend_helper_address": "terra1tslnzaadfhwdj67dzfvxhhy2agp0w69dt5uk5nfeaecevdqkh52sufhfrd"
 }

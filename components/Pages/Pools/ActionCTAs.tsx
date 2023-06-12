@@ -24,7 +24,7 @@ export const ActionCTAs = ({ chainIdParam, pool }) => {
     <HStack spacing={2}>
       <Button variant="outline" size="sm" onClick={onManageLiquidityClick}>
         {' '}
-        Manage Liquidity
+        Manage
       </Button>
       <Button
         variant="outline"

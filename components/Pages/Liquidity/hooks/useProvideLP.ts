@@ -30,7 +30,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     matchingPools?.streamlinePoolAB?.lpOrder ||
     matchingPools?.streamlinePoolBA?.lpOrder
 
-  const [pool] = usePoolFromListQueryById({ poolId })
+  //const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
   const { minUnbondingDuration, maxUnbondingDuration } = useFactoryConfig(
     incentiveConfig?.incentive_factory_address
@@ -57,7 +57,6 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       : [lpTokenB, lpTokenA]
   }, [lpTokenA, lpTokenB, lpOrder])
 
-  const slippage = '0.1'
   //@ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
 
@@ -133,7 +132,10 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
           tokenA,
           bondingDays,
           pairAddress: swapAddress,
-          stakingProxy: bondingDays === 0 ? swapAddress : pool?.staking_proxy,
+          stakingProxy:
+            bondingDays === 0
+              ? swapAddress
+              : incentiveConfig?.frontend_helper_address,
           amountA: reverse
             ? flipped
               ? tokenAAmount
@@ -160,7 +162,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     tokenB,
     tokenBAmount,
     reverse,
-    pool?.staking_proxy,
+    incentiveConfig?.frontend_helper_address,
     bondingDays,
     isNewPosition,
   ])
@@ -169,7 +171,10 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     poolId,
     enabled:
       !!encodedMsgs && Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
-    swapAddress: bondingDays === 0 ? swapAddress : pool?.staking_proxy,
+    swapAddress:
+      bondingDays === 0
+        ? swapAddress
+        : incentiveConfig?.frontend_helper_address,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     client,
