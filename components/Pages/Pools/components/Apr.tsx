@@ -80,7 +80,7 @@ const Apr = ({ apr, flows }: Props) => {
                 </Tr>
                 {flows?.map((flowInfo, index) => (
                   <Tr
-                    key={flowInfo?.tokenSymbol + "_" + index}
+                    key={flowInfo?.tokenSymbol + '_' + index}
                     borderBottom={
                       index < flows.length - 1
                         ? '1px solid rgba(255, 255, 255, 0.1)'

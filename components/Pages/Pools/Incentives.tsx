@@ -42,7 +42,8 @@ export const Incentives = ({ flows }) => {
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="5px"
         border="unset"
-        width="auto">
+        width="auto"
+      >
         <PopoverArrow
           bg="black"
           boxShadow="unset"
@@ -61,12 +62,13 @@ export const Incentives = ({ flows }) => {
               <Tbody>
                 {flows.map((flow, index) => (
                   <Tr
-                    key={flow?.tokenSymbol + "_" + index}
+                    key={flow?.tokenSymbol + '_' + index}
                     borderBottom={
                       index < flows.length - 1
                         ? '1px solid rgba(255, 255, 255, 0.1)'
                         : 'unset'
-                    }>
+                    }
+                  >
                     <Td color="white">{flow?.tokenSymbol ?? 'Unknown'}</Td>
                   </Tr>
                 ))}

@@ -75,7 +75,6 @@ const getPoolFlowData = async (
   poolAssets,
   prices
 ): Promise<IncentivePoolInfo[]> => {
-
   const poolFlowData = pools
     ? await Promise.all(
         pools.map(async (pool) => {
