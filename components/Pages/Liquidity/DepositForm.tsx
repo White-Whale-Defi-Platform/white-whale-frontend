@@ -57,11 +57,13 @@ const DepositForm = ({
 
   const multiplicator = useMemo(
     () =>
-      Math.round(
-        0.997132 +
-          0.0027633 * bondingDays +
-          0.000105042 * (bondingDays * bondingDays)
-      ),
+      bondingDays == 0
+        ? bondingDays
+        : Math.round(
+            0.997132 +
+              0.0027633 * bondingDays +
+              0.000105042 * (bondingDays * bondingDays)
+          ),
     [bondingDays]
   )
   // const [bondingDays, setBondingDays] = useState(0)
