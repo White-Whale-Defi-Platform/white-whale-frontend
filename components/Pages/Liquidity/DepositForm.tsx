@@ -60,10 +60,11 @@ const DepositForm = ({
       bondingDays == 0
         ? bondingDays
         : Math.round(
-            0.997132 +
-              0.0027633 * bondingDays +
-              0.000105042 * (bondingDays * bondingDays)
-          ),
+            100 *
+              (0.997132 +
+                0.0027633 * bondingDays +
+                0.000105042 * bondingDays ** 2)
+          ) / 100,
     [bondingDays]
   )
   // const [bondingDays, setBondingDays] = useState(0)
