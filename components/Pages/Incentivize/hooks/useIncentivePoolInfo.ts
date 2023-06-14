@@ -107,7 +107,6 @@ const getPoolFlowData = async (
             }
             return acc
           }, [])
-
           if (flows.length > 0) {
             flows?.forEach((flow) => {
               if (
@@ -121,19 +120,15 @@ const getPoolFlowData = async (
                 const flowDenom =
                   flow.flow_asset.info?.token?.contract_addr ??
                   flow.flow_asset.info?.native_token?.denom
-                const tokenSymbol = poolAssets.find(
-                  (asset) => asset.denom === flowDenom
-                )?.symbol
 
                 const emission =
                   convertMicroDenomToDenom(
-                    Number(flow.flow_asset.amount) -
-                      emittedTokens / Number(flow.start_epoch) +
+                    (Number(flow.flow_asset.amount) -
+                      emittedTokens) / (Number(flow.start_epoch) +
                       (Number(flow.end_epoch) - Number(flow.start_epoch)) -
-                      Number(currentEpochData.currentEpoch.epoch.id),
+                      Number(currentEpochData.currentEpoch.epoch.id)),
                     6
-                  ) * Number(prices[tokenSymbol])
-
+                  )
                 const uniqueFlow = uniqueFlowList.find(
                   (f) => f.denom === flowDenom
                 )
