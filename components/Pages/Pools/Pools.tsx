@@ -144,12 +144,12 @@ const Pools: FC<Props> = () => {
       setInitLoading(false)
     }, 500)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools])
+  }, [pools, incentivePoolInfos])
 
   useEffect(() => {
     initPools()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, client, pools])
+  }, [address, client, pools, incentivePoolInfos])
 
   // get a list of my pools
   const myPools = useMemo(() => {

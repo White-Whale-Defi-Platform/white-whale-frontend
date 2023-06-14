@@ -151,8 +151,6 @@ export const useQueryMultiplePoolsLiquidity = ({
         })
         .then((flows) => {
           const flowTokens = flows?.map((flow = {}) => {
-            if (flow.flow_creator !== address) return null
-
             const startEpoch = flow.start_epoch
             const endEpoch = flow.end_epoch
 
@@ -180,6 +178,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
             return {
               token,
+              isCreator: flow.flow_creator === address,
               endTime: epochToDate(endEpoch),
               startTime: epochToDate(startEpoch),
               flowId: flow.flow_id,

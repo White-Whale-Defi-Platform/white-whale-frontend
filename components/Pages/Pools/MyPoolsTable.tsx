@@ -55,7 +55,7 @@ const columns = [
       return info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
       ) : (
-        <Apr apr={info.getValue()} flows={info.row.original.flows} />
+        <Apr apr={info.getValue().toString()} flows={info.row.original.flows} />
       )
     },
   }),

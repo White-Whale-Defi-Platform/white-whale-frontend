@@ -13,23 +13,45 @@ import {
 } from '@chakra-ui/react'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
 import Create from './Create'
-import Overview from './Overview'
+import { useChains } from 'hooks/useChainInfo'
+import PositionsOverview from 'components/Pages/Incentivize/PositionsOverview'
 
 const Incentivize: FC = () => {
   const router: NextRouter = useRouter()
-  const poolId = router.query.poolId as string
+  const chains: Array<any> = useChains()
 
   const { chainId } = useRecoilValue(walletState)
   const { data: poolList } = usePoolsListQuery()
+
+  const poolId = useMemo(
+    () => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
+    [poolList]
+  )
   const chainIdParam = router.query.chainId as string
+  const currentChain = chains.find((row) => row.chainId === chainId)
+
   const client = useCosmwasmClient(chainId)
+
+  useEffect(() => {
+    if (currentChain) {
+      const pools = poolList?.pools
+      if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
+        router.push(`/${currentChain.label.toLowerCase()}/pools`)
+      } else {
+        router.push(
+          `/${currentChain.label.toLowerCase()}/pools/incentivize?poolId=${poolId}`
+        )
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolId, poolList, currentChain])
 
   const [pools] = useQueriesDataSelector(
     useQueryMultiplePoolsLiquidity({
@@ -93,7 +115,7 @@ const Incentivize: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview flows={myFlows} poolId={poolId} />
+                <PositionsOverview flows={myFlows} poolId={poolId} />
               </TabPanel>
               <TabPanel padding={4}>
                 <Create poolId={poolId} />

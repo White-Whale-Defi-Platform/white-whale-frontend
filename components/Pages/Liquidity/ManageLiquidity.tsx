@@ -57,7 +57,7 @@ const ManageLiquidity: FC = () => {
         client: cosmWasmClient,
       })
     )
-  const poolId = router.query.poolId as string
+  const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
 
   const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(

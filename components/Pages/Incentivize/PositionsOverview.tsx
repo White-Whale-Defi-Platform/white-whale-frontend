@@ -11,13 +11,14 @@ type Props = {
 
 const STATES = ['all', 'active', 'upcoming', 'over']
 
-const CloseAction = ({ poolId, flowId }) => {
+const CloseAction = ({ poolId, flowId, isCreator }) => {
   const close = useClosePosition({ poolId })
 
   return (
     <Button
       variant="outline"
       size="sm"
+      disabled={!isCreator}
       isLoading={close?.isLoading}
       onClick={() => close?.submit({ flowId })}
     >
@@ -39,7 +40,7 @@ const Token = ({ imgUrl, symbol }) => (
   </HStack>
 )
 
-const Positions = ({ flows, poolId }: Props) => {
+const PositionsOverview = ({ flows, poolId }: Props) => {
   const [activeButton, setActiveButton] = useState('all')
   const [columnFilters, setColumnFilters] = useState([])
 
@@ -57,7 +58,13 @@ const Positions = ({ flows, poolId }: Props) => {
       value: num(flow.amount)
         .div(10 ** 6)
         .toNumber(),
-      action: <CloseAction poolId={poolId} flowId={flow.flowId} />,
+      action: (
+        <CloseAction
+          poolId={poolId}
+          flowId={flow.flowId}
+          isCreator={flow.isCreator}
+        />
+      ),
     }))
   }, [flows])
 
@@ -105,12 +112,10 @@ const Positions = ({ flows, poolId }: Props) => {
           </Button>
         ))}
       </HStack>
-
       <Divider opacity="0.2" />
-
       <PositionsTable columnFilters={columnFilters} positions={positions} />
     </Box>
   )
 }
 
-export default Positions
+export default PositionsOverview
