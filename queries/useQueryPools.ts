@@ -151,7 +151,6 @@ export const useQueryMultiplePoolsLiquidity = ({
         })
         .then((flows) => {
           const flowTokens = flows?.map((flow = {}) => {
-
             const startEpoch = flow.start_epoch
             const endEpoch = flow.end_epoch
 

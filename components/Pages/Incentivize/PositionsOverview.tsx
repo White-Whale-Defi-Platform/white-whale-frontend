@@ -58,7 +58,13 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
       value: num(flow.amount)
         .div(10 ** 6)
         .toNumber(),
-      action: <CloseAction poolId={poolId} flowId={flow.flowId} isCreator={flow.isCreator}/>,
+      action: (
+        <CloseAction
+          poolId={poolId}
+          flowId={flow.flowId}
+          isCreator={flow.isCreator}
+        />
+      ),
     }))
   }, [flows])
 
@@ -100,13 +106,14 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
                     ]
               )
             }}
-            textTransform="capitalize">
+            textTransform="capitalize"
+          >
             {item}
           </Button>
         ))}
       </HStack>
       <Divider opacity="0.2" />
-      <PositionsTable columnFilters={columnFilters} positions={positions}/>
+      <PositionsTable columnFilters={columnFilters} positions={positions} />
     </Box>
   )
 }

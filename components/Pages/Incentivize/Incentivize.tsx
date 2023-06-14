@@ -30,7 +30,10 @@ const Incentivize: FC = () => {
   const { chainId } = useRecoilValue(walletState)
   const { data: poolList } = usePoolsListQuery()
 
-  const poolId = useMemo(()=> router.query.poolId as string ?? poolList?.pools[0].pool_id, [poolList])
+  const poolId = useMemo(
+    () => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
+    [poolList]
+  )
   const chainIdParam = router.query.chainId as string
   const currentChain = chains.find((row) => row.chainId === chainId)
 
@@ -38,14 +41,14 @@ const Incentivize: FC = () => {
 
   useEffect(() => {
     if (currentChain) {
-        const pools = poolList?.pools
-        if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
-          router.push(`/${currentChain.label.toLowerCase()}/pools`)
-        } else {
-          router.push(
-            `/${currentChain.label.toLowerCase()}/pools/incentivize?poolId=${poolId}`
-          )
-        }
+      const pools = poolList?.pools
+      if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
+        router.push(`/${currentChain.label.toLowerCase()}/pools`)
+      } else {
+        router.push(
+          `/${currentChain.label.toLowerCase()}/pools/incentivize?poolId=${poolId}`
+        )
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolId, poolList, currentChain])
@@ -112,7 +115,7 @@ const Incentivize: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <PositionsOverview flows={myFlows} poolId={poolId}/>
+                <PositionsOverview flows={myFlows} poolId={poolId} />
               </TabPanel>
               <TabPanel padding={4}>
                 <Create poolId={poolId} />

@@ -121,14 +121,13 @@ const getPoolFlowData = async (
                   flow.flow_asset.info?.token?.contract_addr ??
                   flow.flow_asset.info?.native_token?.denom
 
-                const emission =
-                  convertMicroDenomToDenom(
-                    (Number(flow.flow_asset.amount) -
-                      emittedTokens) / (Number(flow.start_epoch) +
+                const emission = convertMicroDenomToDenom(
+                  (Number(flow.flow_asset.amount) - emittedTokens) /
+                    (Number(flow.start_epoch) +
                       (Number(flow.end_epoch) - Number(flow.start_epoch)) -
                       Number(currentEpochData.currentEpoch.epoch.id)),
-                    6
-                  )
+                  6
+                )
                 const uniqueFlow = uniqueFlowList.find(
                   (f) => f.denom === flowDenom
                 )
