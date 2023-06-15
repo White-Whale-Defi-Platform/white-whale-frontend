@@ -69,7 +69,7 @@ const ManageLiquidity: FC = () => {
     () => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
     [poolId, poolList]
   )
-
+  //TODO pool user share might be falsy
   const poolUserShare = usePoolUserShare(client, pool?.staking_address, address)
 
   const dailyEmissionData = useMemo(() => {

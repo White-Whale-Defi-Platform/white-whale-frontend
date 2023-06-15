@@ -9,7 +9,7 @@ const LineItem = ({ token, isLast }) => (
     pb={2}
   >
     <Text>{token?.symbol ?? 'Unknown'}</Text>
-    <Text> {token?.assetAmount?.toFixed(6) | token.dailyEmissions}</Text>
+    <Text> {token?.assetAmount?.toFixed(6) | token.dailyEmission}</Text>
   </HStack>
 )
 

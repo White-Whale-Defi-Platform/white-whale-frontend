@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => {
     return dailyEmissions.reduce((total, item) => {
-      return total + (isNaN(item.dailyEmission) ? 0 : item.dailyEmission)
+      return total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission)
     }, 0)
   }, [dailyEmissions])
 
