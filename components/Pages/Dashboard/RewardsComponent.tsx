@@ -22,8 +22,11 @@ import { ActionType } from './BondingOverview'
 import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
-import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 const pulseAnimation = keyframes`
   0% {
@@ -123,7 +126,7 @@ const RewardsComponent = ({
   } = useDisclosure()
 
   const claimableRewards = useMemo(
-    () => totalGlobalClaimable * Number(weightInfo?.share),
+    () => totalGlobalClaimable * Number(weightInfo?.share || 0),
     [totalGlobalClaimable, weightInfo]
   )
 
@@ -147,7 +150,8 @@ const RewardsComponent = ({
 
   const { txStep, submit } = useTransaction()
 
-  const { config } = useIncentiveConfig(network, chainId)
+  const config: Config = useConfig(network, chainId)
+
   const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses: null,
     config: config,
@@ -190,7 +194,7 @@ const RewardsComponent = ({
           borderRadius={borderRadius}
           minH={320}
           w={450}
-          gap={4}
+          gap={3}
           overflow="hidden"
           position="relative"
           display="flex"
@@ -238,7 +242,7 @@ const RewardsComponent = ({
               <Text fontSize={20}>WHALE</Text>
             </HStack>
             <Text color="#7CFB7D" fontSize={18}>
-              ${whalePrice.toFixed(6)}
+              ${whalePrice?.toFixed(6)}
             </Text>
           </HStack>
           <VStack>
@@ -272,7 +276,7 @@ const RewardsComponent = ({
                     : 'n/a'
                 }
                 isWalletConnected={isWalletConnected}
-                whale={claimableRewards}
+                whale={claimableRewards.toFixed(6)}
               />
             </HStack>
             <HStack>

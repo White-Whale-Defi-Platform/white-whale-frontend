@@ -9,8 +9,8 @@ import useRewards from './hooks/useRewards'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
 import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/useCheckIncentiveSnapshots'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
   <HStack
@@ -44,7 +44,7 @@ const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
   const { client, network, chainId } = useRecoilValue(walletState)
-  const { config } = useIncentiveConfig(network, chainId)
+  const config = useConfig(network, chainId)
   // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
   const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
   const allSnapshotsTaken = useMemo(() => {

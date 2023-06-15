@@ -1,6 +1,5 @@
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
@@ -11,12 +10,15 @@ import { tokenLpAtom } from '../lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
 import useIsNewPosition from './useIsNewPosition'
-import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
   const { address, client, network, chainId } = useRecoilValue(walletState)
-  const { config: incentiveConfig } = useIncentiveConfig(network, chainId)
+  const config: Config = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
   const [matchingPools] = useQueryMatchingPoolForSwap({
@@ -33,7 +35,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   //const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
   const { minUnbondingDuration, maxUnbondingDuration } = useFactoryConfig(
-    incentiveConfig?.incentive_factory_address
+    config?.incentive_factory
   )
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
@@ -133,9 +135,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
           bondingDays,
           pairAddress: swapAddress,
           stakingProxy:
-            bondingDays === 0
-              ? swapAddress
-              : incentiveConfig?.frontend_helper_address,
+            bondingDays === 0 ? swapAddress : config?.frontend_helper,
           amountA: reverse
             ? flipped
               ? tokenAAmount
@@ -162,7 +162,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     tokenB,
     tokenBAmount,
     reverse,
-    incentiveConfig?.frontend_helper_address,
+    config?.frontend_helper,
     bondingDays,
     isNewPosition,
   ])
@@ -171,10 +171,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     poolId,
     enabled:
       !!encodedMsgs && Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
-    swapAddress:
-      bondingDays === 0
-        ? swapAddress
-        : incentiveConfig?.frontend_helper_address,
+    swapAddress: bondingDays === 0 ? swapAddress : config?.frontend_helper,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     client,

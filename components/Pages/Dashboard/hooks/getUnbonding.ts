@@ -92,7 +92,7 @@ const fetchUnbonding = async (
 ): Promise<UnbondingInfo[]> => {
   const results: UnbondingInfo[] = await Promise.all(
     Object.entries(config.lsd_token).map(async ([key, token]) => {
-      return await client.queryContractSmart(config.whale_lair_address, {
+      return await client.queryContractSmart(config.whale_lair, {
         unbonding: { address: address, denom: token.denom },
       })
     })

@@ -16,7 +16,10 @@ import { num, toChainAmount } from 'libs/num'
 import { createAsset } from 'services/asset'
 import useFactoryConfig from './useFactoryConfig'
 import useEpoch from './useEpoch'
-import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 interface Props {
   poolId: string
@@ -27,7 +30,7 @@ interface Props {
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { address, client, network, chainId } = useRecoilValue(walletState)
-  const { config: incentiveConfig } = useIncentiveConfig(network, chainId)
+  const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
@@ -35,7 +38,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   })
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
-  const config = useFactoryConfig(incentiveConfig?.incentive_factory_address)
+  const factoryConfig = useFactoryConfig(config?.incentive_factory)
   const { dateToEpoch } = useEpoch()
 
   const msgs = useMemo(() => {
@@ -54,14 +57,17 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
     const nativeAmount =
       tokenInfo?.denom === 'uwhale'
-        ? num(amount).plus(config?.createFlowFee?.amount).toString()
+        ? num(amount).plus(factoryConfig?.createFlowFee?.amount).toString()
         : amount
 
     const funds = [
       tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
-      config &&
+      factoryConfig &&
         tokenInfo?.denom !== 'uwhale' &&
-        coin(config?.createFlowFee?.amount, config?.createFlowFee?.denom),
+        coin(
+          factoryConfig?.createFlowFee?.amount,
+          factoryConfig?.createFlowFee?.denom
+        ),
     ].filter(Boolean)
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []

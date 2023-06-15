@@ -32,8 +32,8 @@ import {
   useConfig,
   useDashboardData,
 } from '../Dashboard/hooks/useDashboardData'
-import { usePriceForOneToken } from 'features/swap/index'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
+import usePrices from 'hooks/usePrices'
 
 export enum WhaleTokenType {
   ampWHALE,
@@ -66,11 +66,14 @@ const BondingActions = ({ globalAction }) => {
 
   const { balance: liquidBWhale } = useTokenBalance(B_WHALE_TOKEN_SYMBOL)
 
-  const whalePrice =
-    usePriceForOneToken({
-      tokenASymbol: 'WHALE',
-      tokenBSymbol: 'axlUSDC',
-    })[0] || 0
+  const prices = usePrices()
+
+  const whalePrice = useMemo(() => {
+    if (prices && prices['WHALE']) {
+      return prices['WHALE']
+    }
+    return 0 // Default value
+  }, [prices])
 
   const {
     bondedAmpWhale,

@@ -33,7 +33,7 @@ const fetchWeight = async (
   config: Config
 ): Promise<WeightInfo> => {
   const result: JsonObject = await client.queryContractSmart(
-    config.whale_lair_address,
+    config.whale_lair,
     {
       weight: { address: address },
     }

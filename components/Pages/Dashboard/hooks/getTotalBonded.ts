@@ -41,7 +41,7 @@ const fetchTotalBonded = async (
   config: Config
 ): Promise<TotalBondedInfo> => {
   const result: JsonObject = await client.queryContractSmart(
-    config.whale_lair_address,
+    config.whale_lair,
     {
       total_bonded: {},
     }

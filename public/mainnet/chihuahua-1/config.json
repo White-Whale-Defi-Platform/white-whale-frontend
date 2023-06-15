@@ -1,0 +1,24 @@
+{
+  "whale_lair": "chihuahua1dd7e5l7jf7yu23u8ehjw36aahsk7jjls9llcgm34szq0qemj6a9q8h30j7",
+  "incentive_factory": "chihuahua1wzde4vn8p8deskata2vy7z4cfvfzll0syjg8x659suhxnwqy7a8s6fhl4w",
+  "fee_distributor": "chihuahua15umr63cfrav8qk572x57rzjfcyqtfnret6rpfasju9ayeqmxrhjq5k0y8c",
+  "frontend_helper": "chihuahua1u28kmt7m6vkfjpxq0gz6vgud59ahwfd3vsewarjjtgdtrtlcvmhq79qws0",
+  "whale_base_token": {
+    "name": "WHALE",
+    "denom": "uwhale",
+    "decimals": 6
+  },
+  "lsd_token": {
+    "ampWHALE": {
+      "name": "ampWHALE",
+      "denom": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF",
+      "decimals": 6
+    },
+    "bWHALE": {
+      "name": "bWHALE",
+      "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
+      "decimals": 6
+    }
+  }
+}
+
