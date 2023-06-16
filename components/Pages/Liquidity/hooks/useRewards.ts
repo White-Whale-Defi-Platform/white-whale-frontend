@@ -103,9 +103,7 @@ const useRewards = (poolId) => {
         const t = tokenList?.tokens.find(
           (token) => token.denom === reward.info.native_token.denom
         )
-        const amount =
-          fromChainAmount(
-            reward.amount, t?.decimals)
+        const amount = fromChainAmount(reward.amount, t?.decimals)
         const dollarValue = num(amount)
           .times(prices?.[t?.symbol] || 0)
           .dp(4)

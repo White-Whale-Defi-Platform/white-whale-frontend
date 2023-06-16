@@ -22,7 +22,7 @@ export const SegmentedRewardsSimulator = ({
   ]).current
 
   const [activeValue, setActiveValue] =
-    useState<typeof values[number]['value']>('year')
+    useState<(typeof values)[number]['value']>('year')
 
   const hasStakedLiquidity = stakedLiquidityDollarValue > 0
 
