@@ -5456,10 +5456,10 @@ jsx-ast-utils@^3.3.2:
     array-includes "^3.1.5"
     object.assign "^4.1.3"
 
-junoblocks@^0.2.1:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/junoblocks/-/junoblocks-0.2.7.tgz#ea3ffbc46d2e785f04a82ac5c57969f35350c15f"
-  integrity sha512-YLGYwBu3wXkFHXu6qXyfgBDwWA3QGDDCPCw5SaLcG02w09MyUjPYDGvnCaimzmsk8jCHLQM+KzctakY/bt1tVg==
+junoblocks@^0.2.93:
+  version "0.2.93"
+  resolved "https://registry.yarnpkg.com/junoblocks/-/junoblocks-0.2.93.tgz#d6dbb0d191bb960dc0ade5afdae266a83981a1a0"
+  integrity sha512-faN1FwqV/AgPw4CtzefbYGVfJWXu+d4IDnLNrZEfZ+LspBS5FsT5T/kyBsOl4hAunAOW7VaWKFWuInnKR06LkA==
   dependencies:
     "@floating-ui/react-dom" "^0.7.2"
     "@react-spring/web" "^9.4.4"
