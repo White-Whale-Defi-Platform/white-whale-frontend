@@ -21,17 +21,25 @@ export type Position = {
   formatedTime: string
 }
 
-const lpToAssets = ({ totalReserve, totalLpSuppy, providedLp }) => {
+const lpToAssets = ({ totalReserve, totalLpSupply, providedLp }) => {
   return [
-    num(totalReserve?.[0]).times(providedLp).div(totalLpSuppy).dp(6).toNumber(),
-    num(totalReserve?.[1]).times(providedLp).div(totalLpSuppy).dp(6).toNumber(),
+    num(totalReserve?.[0])
+      .times(providedLp)
+      .div(totalLpSupply)
+      .dp(6)
+      .toNumber(),
+    num(totalReserve?.[1])
+      .times(providedLp)
+      .div(totalLpSupply)
+      .dp(6)
+      .toNumber(),
   ]
 }
 
 const usePositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address } = {}] =
     useQueryPoolLiquidity({ poolId })
-  const totalLpSuppy = liquidity?.available?.total?.tokenAmount || 0
+  const totalLpSupply = liquidity?.available?.total?.tokenAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]
   const { address, client } = useRecoilValue(walletState)
   const tokens = useTokenList()
@@ -55,13 +63,13 @@ const usePositions = (poolId: string) => {
         .then((data) =>
           data.positions
             .map((p) => {
-              const positiosns = []
+              const positions = []
 
               // open position
               const open = { ...(p?.open_position || {}) }
               open.formatedTime = formatSeconds(open.unbonding_duration)
               open.isOpen = true
-              if (p?.open_position) positiosns.push(open)
+              if (p?.open_position) positions.push(open)
 
               // closed position
               const close = { ...(p?.closed_position || {}) }
@@ -70,12 +78,12 @@ const usePositions = (poolId: string) => {
               const diff = unbonding.diff(today, 'second')
               close.formatedTime = formatSeconds(diff)
               close.isOpen = false
-              if (p?.closed_position) positiosns.push(close)
+              if (p?.closed_position) positions.push(close)
 
-              return positiosns.map((position) => {
+              return positions.map((position) => {
                 const lpAssets = lpToAssets({
                   totalReserve,
-                  totalLpSuppy,
+                  totalLpSupply,
                   providedLp: position.amount,
                 })
                 const assets = pool_assets.map((asset, i) => {
