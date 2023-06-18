@@ -113,9 +113,10 @@ const getPoolFlowData = async (
                 flow.end_epoch >= currentEpochId &&
                 flow.start_epoch <= currentEpochId
               ) {
-                const emittedTokens: number = Object.values(
-                  flow.emitted_tokens
-                ).reduce((acc: number, value: number) => acc + Number(value), 0)
+                // every new entry contains overall emitted token value
+                const emittedTokens: number = Math.max(
+                  ...Object.values(flow.emitted_tokens).map(Number)
+                )
 
                 const flowDenom =
                   flow.flow_asset.info?.token?.contract_addr ??
