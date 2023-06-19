@@ -60,16 +60,17 @@ const Pools: FC<Props> = () => {
     })
   )
   const chains: any = useChains()
-  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
-    client,
-    pools
-  )
-
   const currentChain = useMemo(
     () =>
       chains.find((row) => row.chainId === chainId)?.bech32Config
         ?.bech32PrefixAccAddr,
     [chains, chainId]
+  )
+
+  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
+    client,
+    pools,
+    currentChain
   )
 
   const calculateTotalLiq = (pool) => {

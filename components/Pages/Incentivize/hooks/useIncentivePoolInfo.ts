@@ -8,6 +8,12 @@ import { walletState } from 'state/atoms/walletAtoms'
 import usePrices from 'hooks/usePrices'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
+import {
+  EnigmaPoolData,
+  getPairAprAndDailyVolume,
+  getPairAprAndDailyVolumeTerra,
+} from 'util/enigma'
+import { useEffect, useState } from 'react'
 
 export interface Flow {
   claimed_amount: string
@@ -43,12 +49,30 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
-export const useIncentivePoolInfo = (client, pools): IncentivePoolInfo[] => {
+export const useIncentivePoolInfo = (
+  client,
+  pools,
+  currentChain
+): IncentivePoolInfo[] => {
   const { chainId, network } = useRecoilValue(walletState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
-
   const { data: currentEpochData } = useCurrentEpoch(client, config)
+  const [poolsWithAprAnd24HrVolume, setPoolsWithAprAnd24HrVolume] = useState<
+    EnigmaPoolData[]
+  >([])
+
+  useEffect(() => {
+    const fetchPoolData = async () => {
+      const poolData =
+        currentChain === 'terra'
+          ? await getPairAprAndDailyVolumeTerra(pools)
+          : await getPairAprAndDailyVolume(pools, currentChain)
+      setPoolsWithAprAnd24HrVolume(poolData)
+    }
+    fetchPoolData()
+  }, [currentChain, pools?.length])
+
   let poolAssets = []
 
   if (Array.isArray(pools)) {
@@ -58,8 +82,23 @@ export const useIncentivePoolInfo = (client, pools): IncentivePoolInfo[] => {
   }
   const { data: flowPoolData } = useQuery(
     ['apr', currentEpochData, prices],
-    () => getPoolFlowData(client, pools, currentEpochData, poolAssets, prices),
-    { enabled: !!client && !!currentEpochData && !!pools && !!prices }
+    () =>
+      getPoolFlowData(
+        client,
+        pools,
+        currentEpochData,
+        poolAssets,
+        prices,
+        poolsWithAprAnd24HrVolume
+      ),
+    {
+      enabled:
+        !!client &&
+        !!currentEpochData &&
+        !!pools &&
+        !!prices &&
+        !!poolsWithAprAnd24HrVolume,
+    }
   )
   return flowPoolData
 }
@@ -83,17 +122,21 @@ const getPoolFlowData = async (
   pools,
   currentEpochData,
   poolAssets,
-  prices
+  prices,
+  poolsWithAprAnd24HrVolume
 ): Promise<IncentivePoolInfo[]> => {
   const poolFlowData = pools
     ? await Promise.all(
-        pools.map(async (pool) => {
+        pools?.map(async (pool) => {
           if (pool.staking_address === '') {
             return {
               poolId: pool.pool_id,
               flowData: null,
             } // Skip this iteration and continue with the next one.
           }
+          const totalLiquidity = poolsWithAprAnd24HrVolume.find(
+            (p) => p.pool_id === pool.pool_id
+          )?.totalLiquidity
           const flows = await fetchFlows(client, pool.staking_address)
 
           const currentEpochIdCheck: number = Number(
@@ -159,8 +202,7 @@ const getPoolFlowData = async (
               logoURI: logoURI,
               apr:
                 ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
-                  (Number(pool.liquidity?.available?.total?.dollarValue | 1) *
-                    2.5)) *
+                  (totalLiquidity * 4)) *
                 100,
             }
           })
