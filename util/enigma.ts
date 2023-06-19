@@ -60,17 +60,16 @@ export const getPairInfosTerra = async (): Promise<any> => {
     return []
   }
 }
-
 export const getPairAprAndDailyVolume = async (
   pools: any[],
   chain: any
 ): Promise<EnigmaPoolData[]> => {
-  const poolIds = pools.map((pool: any) => pool.pool_id)
+  const poolIds = pools?.map((pool: any) => pool.pool_id)
 
   const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chain)
 
   if (pairInfos.length > 0) {
-    return poolIds.map((poolId: string) => {
+    return poolIds?.map((poolId: string) => {
       const pairInfo = pairInfos.find((row: any) => row.pool_id === poolId)
       return {
         pool_id: poolId,
@@ -83,7 +82,7 @@ export const getPairAprAndDailyVolume = async (
     })
   } else {
     console.log('No pair infos found')
-    return poolIds.map((poolId: any) => {
+    return poolIds?.map((poolId: any) => {
       return {
         pool_id: poolId,
         TVL: 'n/a',
@@ -98,11 +97,11 @@ export const getPairAprAndDailyVolume = async (
 export const getPairAprAndDailyVolumeTerra = async (
   pools: any[]
 ): Promise<EnigmaPoolData[]> => {
-  const swapAddresses = pools.map((pool: any) => pool.swap_address)
+  const swapAddresses = pools?.map((pool: any) => pool.swap_address)
   const pairInfos: any = await getPairInfosTerra()
 
   if (!!pairInfos && pairInfos.pairs.length > 0) {
-    return swapAddresses.map((swapAddress: string) => {
+    return swapAddresses?.map((swapAddress: string) => {
       const pairInfo = pairInfos.pairs.find(
         (row: any) => row.pairAddress === swapAddress
       )
@@ -132,7 +131,8 @@ export const getPairAprAndDailyVolumeTerra = async (
         pool_id: poolId,
         usdVolume24h: `$${formatPrice(pairInfo?.usdVolume24h)}`,
         usdVolume7d: `$${formatPrice(pairInfo?.usdVolume7d)}`,
-        TVL: `$${formatPrice(pool.liquidity?.available?.total?.dollarValue)}`,
+        totalLiquidity: Number(pairInfo?.usdLiquidity),
+        TVL: `$${formatPrice(pairInfo?.usdLiquidity)}`,
         apr7d: `${Number(pairInfo?.apr7d).toFixed(2)}%`,
         ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData
