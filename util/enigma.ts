@@ -132,7 +132,7 @@ export const getPairAprAndDailyVolumeTerra = async (
         pool_id: poolId,
         usdVolume24h: `$${formatPrice(pairInfo?.usdVolume24h)}`,
         usdVolume7d: `$${formatPrice(pairInfo?.usdVolume7d)}`,
-        TVL: `$${formatPrice(pool.liquidity?.available?.total?.dollarValue)}`,
+        TVL: `$${formatPrice(pairInfo?.usdLiquidity)}`,
         apr7d: `${Number(pairInfo?.apr7d).toFixed(2)}%`,
         ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData
