@@ -67,9 +67,13 @@ export const useIncentivePoolInfo = (client, pools): IncentivePoolInfo[] => {
 const fetchFlows = async (client, address): Promise<Flow[]> => {
   return await client.queryContractSmart(address, { flows: {} })
 }
-const fetchGlobalIncentiveWeight = async (client, epochId, incentiveAddress) => {
+const fetchGlobalIncentiveWeight = async (
+  client,
+  epochId,
+  incentiveAddress
+) => {
   const { global_weight } = await client.queryContractSmart(incentiveAddress, {
-    global_weight: { epoch_id: Number(epochId) }
+    global_weight: { epoch_id: Number(epochId) },
   })
   return Number(global_weight)
 }
@@ -155,7 +159,8 @@ const getPoolFlowData = async (
               logoURI: logoURI,
               apr:
                 ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
-                  (Number(pool.liquidity?.available?.total?.dollarValue | 1)*2.5)) *
+                  (Number(pool.liquidity?.available?.total?.dollarValue | 1) *
+                    2.5)) *
                 100,
             }
           })
