@@ -15,6 +15,18 @@ import { useCallback, useMemo } from 'react'
 import { num } from 'libs/num'
 import { useQuery } from 'react-query'
 
+interface PriceData {
+  priceInvertedUsd: string
+}
+
+interface Content {
+  content: PriceData[]
+}
+
+interface PriceByTokenList {
+  priceByTokenList: Content
+}
+
 export const useWhalePrice = () => {
   const GRAPHQL_URL = 'https://tfm-multi-stage.tfm.dev/graphql'
 
@@ -28,13 +40,16 @@ export const useWhalePrice = () => {
     }
   `
 
-  const { data } = useQuery('whale-price', async () => {
-    return await request(GRAPHQL_URL, query, {
-      chain: 'terra2',
-      tokenList:
-        'ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB,ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
-    })
-  })
+  const { data } = useQuery(
+    'whale-price',
+    async (): Promise<PriceByTokenList> => {
+      return await request(GRAPHQL_URL, query, {
+        chain: 'terra2',
+        tokenList:
+          'ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB,ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
+      })
+    }
+  )
 
   return useMemo(() => {
     return (
@@ -75,7 +90,7 @@ export const useGetTokenDollarValueQuery = () => {
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
       else return priceForOneToken
     },
-    [tokenADollarPrice, whalePrice]
+    [tokenADollarPrice, whalePrice, client]
   )
 
   const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =

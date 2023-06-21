@@ -44,7 +44,7 @@ const getMatchingPool = ({
   poolsList,
   baseToken,
 }: GetMatchingPoolArgs): PoolMatchForSwap => {
-  if (!poolsList || !token || !baseToken) return []
+  if (!poolsList || !token || !baseToken) return
 
   return findPoolForSwap({
     baseToken,

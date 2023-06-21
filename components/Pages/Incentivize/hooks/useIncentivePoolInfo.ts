@@ -45,7 +45,7 @@ export interface FlowData {
   tokenSymbol: string
 }
 export interface IncentivePoolInfo {
-  flowData: FlowData[]
+  flowData?: FlowData[]
 
   poolId: string
 }
@@ -125,7 +125,7 @@ const getPoolFlowData = async (
   prices,
   poolsWithAprAnd24HrVolume
 ): Promise<IncentivePoolInfo[]> => {
-  const poolFlowData = pools
+  return pools
     ? await Promise.all(
         pools?.map(async (pool) => {
           if (pool.staking_address === '') {
@@ -214,6 +214,4 @@ const getPoolFlowData = async (
         })
       )
     : []
-
-  return poolFlowData
 }

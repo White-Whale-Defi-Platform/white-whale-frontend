@@ -15,7 +15,7 @@ export const IncentivesLogos = ({ logos, more }) => (
           borderRadius="full"
           position="absolute"
           pl={i > 0 && '10px'}
-          zIndex={10 + i}
+          zIndex={i}
         >
           <Image
             src={logo}

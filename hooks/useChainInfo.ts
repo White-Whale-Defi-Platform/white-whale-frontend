@@ -10,10 +10,6 @@ import { walletState } from 'state/atoms/walletAtoms'
 
 import { queryClient } from 'services/queryClient'
 
-interface CustomChainType extends ChainInfo {
-  label: string
-}
-
 export const unsafelyReadChainInfoCache = () =>
   queryClient.getQueryCache().find(chainInfoQueryKey)?.state?.data as
     | ChainInfo

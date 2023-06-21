@@ -13,6 +13,7 @@ export type Position = {
   amount: number
   weight: string
   duration: string
+  unbonding_duration: number
   assets: TokenInfo & { dollarValue: number; assetAmount: number }[]
   value: number
   state: string
@@ -107,7 +108,7 @@ export const fetchPositions = async (
     .flat()
 }
 const useLockedPositions = (poolId: string) => {
-  const [{ liquidity = {}, pool_assets = [], staking_address } = {}] =
+  const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
     useQueryPoolLiquidity({ poolId })
   const totalLpSupply = liquidity?.available?.total?.tokenAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]

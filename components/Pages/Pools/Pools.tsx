@@ -26,6 +26,7 @@ import {
   useIncentivePoolInfo,
 } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
+import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -39,7 +40,9 @@ const Pools = () => {
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { chainId, status } = useRecoilValue(walletState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
-  const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(false)
+  const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
+    !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
+  )
   const cosmWasmClient = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
