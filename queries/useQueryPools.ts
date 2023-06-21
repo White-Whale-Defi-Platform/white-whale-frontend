@@ -10,7 +10,10 @@ import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
 } from 'util/constants'
-import { calcPoolTokenDollarValue } from 'util/conversion'
+import {
+  calcPoolTokenDollarValue,
+  convertMicroDenomToDenom,
+} from 'util/conversion'
 import { lpToAssets, queryMyLiquidity } from './queryMyLiquidity'
 import {
   queryRewardsContracts,
@@ -22,8 +25,9 @@ import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
 import { useTokenList } from 'hooks/useTokenList'
 import { TokenInfo } from 'types'
 import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
+import usePrices from 'hooks/usePrices'
 
-export type ReserveType = [number, number]
+export type ReserveType = [number?, number?]
 
 export type PoolTokenValue = {
   tokenAmount: number
@@ -68,6 +72,7 @@ export type PoolLiquidityState = {
 
 export type PoolEntityTypeWithLiquidity = PoolEntityType & {
   liquidity?: PoolLiquidityState
+  flows?: any
 }
 
 export type QueryMultiplePoolsArgs = {
@@ -76,17 +81,16 @@ export type QueryMultiplePoolsArgs = {
   client: any
 }
 
-const queryStakedLiquidity = async ({ pool, client, address }) => {
+const queryLockedLiquidity = async ({ pool, client, address }) => {
   if (!address || !client || !pool.staking_address) return
 
   const { positions = [] } =
     (await client?.queryContractSmart(pool.staking_address, {
       positions: { address },
     })) || []
-
   return (
     positions
-      ?.map((p = {}) => {
+      ?.map((p) => {
         const { open_position = {}, closed_position = {} } = p
         return { ...open_position, ...closed_position }
       })
@@ -101,13 +105,13 @@ export const useQueryMultiplePoolsLiquidity = ({
 }: QueryMultiplePoolsArgs) => {
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
+  const prices = usePrices()
   const { address } = useRecoilValue(walletState)
 
   const [tokenList] = useTokenList()
   const { epochToDate, currentEpoch } = useEpoch()
 
   const context = {
-    // client: signingClient,
     client,
     signingClient: client,
     getTokenDollarValue,
@@ -115,7 +119,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
   async function queryPoolLiquidity(
     pool: PoolEntityType
-  ): Promise<PoolEntityTypeWithLiquidity> {
+  ): Promise<PoolEntityTypeWithLiquidity | any> {
     if (!client) return pool
 
     const [tokenA, tokenB] = pool.pool_assets
@@ -125,22 +129,19 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-    const getFlows = ({ client }) => {
+    const getFlows = async ({ client }) => {
       if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
         return []
-      return client
-        ?.queryContractSmart(pool.staking_address, {
-          flows: {},
-        })
-        .then((flows) => {
-          return flows?.map((flow = {}) => {
-            const denom =
-              flow?.flow_asset?.info?.token?.contract_addr ||
-              flow?.flow_asset?.info.native_token?.denom ||
-              null
-            return tokenList?.tokens?.find((t) => t?.denom === denom)
-          })
-        })
+      const flows = await client?.queryContractSmart(pool.staking_address, {
+        flows: {},
+      })
+      return flows?.map((flow) => {
+        const denom =
+          flow?.flow_asset?.info?.token?.contract_addr ||
+          flow?.flow_asset?.info.native_token?.denom ||
+          null
+        return tokenList?.tokens?.find((t) => t?.denom === denom)
+      })
     }
     const getMyFlows = ({ client, address }) => {
       if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
@@ -150,7 +151,7 @@ export const useQueryMultiplePoolsLiquidity = ({
           flows: {},
         })
         .then((flows) => {
-          const flowTokens = flows?.map((flow = {}) => {
+          const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch
             const endEpoch = flow.end_epoch
 
@@ -191,12 +192,9 @@ export const useQueryMultiplePoolsLiquidity = ({
     }
 
     const flows = await getFlows({ client })
+    const lockedLP = await queryLockedLiquidity({ pool, client, address })
 
-    const stakedLP = await queryStakedLiquidity({ pool, client, address })
-    const stakedReserved = lpToAssets({
-      swap,
-      providedLiquidityInMicroDenom: stakedLP,
-    })
+    const lockedReserved = lpToAssets(swap, lockedLP)
 
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
@@ -206,15 +204,13 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
 
     const {
-      providedStakedAmountInMicroDenom,
       totalStakedAmountInMicroDenom,
       totalStakedReserve,
       providedStakedReserve,
     } = {
-      providedStakedAmountInMicroDenom: stakedLP || 0,
       totalStakedAmountInMicroDenom: 0,
-      totalStakedReserve: [],
-      providedStakedReserve: stakedReserved?.providedReserve || [],
+      totalStakedReserve: lockedReserved?.totalReserve,
+      providedStakedReserve: lockedReserved?.providedReserve,
     }
 
     const tokenADollarPrice = await getTokenDollarValue({
@@ -222,17 +218,29 @@ export const useQueryMultiplePoolsLiquidity = ({
       tokenAmountInDenom: 1,
       tokenB,
     })
+    const [tokenASymbol, tokenBSymbol] = pool?.lpOrder
 
+    //TODO dollarAmount for one lpToken seems to be incorrect
     function getPoolTokensValue({ tokenAmountInMicroDenom }) {
       return {
         tokenAmount: tokenAmountInMicroDenom,
-        dollarValue: calcPoolTokenDollarValue({
-          tokenAmountInMicroDenom,
-          tokenSupply: swap.lp_token_supply,
-          tokenReserves: totalReserve[0],
-          tokenDollarPrice: tokenADollarPrice,
-          tokenDecimals: tokenA?.decimals,
-        }),
+        dollarValue:
+          calcPoolTokenDollarValue({
+            tokenAmountInMicroDenom,
+            tokenSupply: swap.lp_token_supply,
+            tokenReserves: totalReserve[0],
+            tokenDollarPrice: tokenADollarPrice,
+            tokenDecimals: tokenA?.decimals,
+          }) || 0,
+      }
+    }
+    function getLockedPoolDollarValue(tokenProvided, dollarValues) {
+      return {
+        tokenAmount: tokenProvided[0] + tokenProvided[1],
+        dollarValue:
+          convertMicroDenomToDenom(tokenProvided[0], 6) * dollarValues[0] +
+            convertMicroDenomToDenom(tokenProvided[1], 6) * dollarValues[1] ||
+          0,
       }
     }
 
@@ -250,9 +258,10 @@ export const useQueryMultiplePoolsLiquidity = ({
         tokenAmountInMicroDenom: totalStakedAmountInMicroDenom,
       }),
       /* calc provided liquidity dollar value */
-      getPoolTokensValue({
-        tokenAmountInMicroDenom: providedStakedAmountInMicroDenom,
-      }),
+      getLockedPoolDollarValue(providedStakedReserve, [
+        prices?.[tokenASymbol],
+        prices?.[tokenBSymbol],
+      ]),
     ]
 
     let annualYieldPercentageReturn = 0
@@ -311,7 +320,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
       enabled:
         Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue) &&
-        tokenList.tokens.length > 0,
+        tokenList.tokens.length > 0 && !!prices,
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL

@@ -91,9 +91,7 @@ const columns = [
         {`My Position`}
       </Text>
     ),
-    cell: (info) => (
-      <Text align="right">${info.getValue().toLocaleString()}</Text>
-    ),
+    cell: (info) => <Text align="right">${info.getValue()}</Text>,
   }),
   columnHelper.accessor('incentives', {
     header: () => (
