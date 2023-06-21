@@ -70,8 +70,6 @@ const Pools = () => {
   )
 
   const calculateMyPosition = (pool) => {
-    console.log("myposition")
-    console.log(pool.liquidity)
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
   }
@@ -111,7 +109,6 @@ const Pools = () => {
           const flows =
             incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
               ?.flowData ?? []
-          console.log("flows in POOls.tsx", flows)
           return {
             contract: pool?.swap_address,
             pool: pool?.displayName,
