@@ -1,6 +1,5 @@
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useMemo } from 'react'
@@ -32,9 +31,13 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
 
   //const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
-  const { minUnbondingDuration, maxUnbondingDuration } = useFactoryConfig(
+  const factoryConfig = useFactoryConfig(
     incentiveConfig?.incentive_factory_address
   )
+  let minUnbondingDuration = null
+  if (factoryConfig) {
+    minUnbondingDuration = factoryConfig?.minUnbondingDuration
+  }
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
@@ -86,9 +89,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       .div(10 ** tokenInfoB?.decimals)
       .toNumber()
     const ratio = reverse ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA)
-    const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
-
-    return sim
+    return num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
   }, [
     lpTokenA,
     lpTokenB,
@@ -104,7 +105,8 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       simulated == null ||
       !tokenAAmount ||
       !tokenBAmount ||
-      swapAddress == null
+      swapAddress == null ||
+      minUnbondingDuration == null
     )
       return {}
 

@@ -11,8 +11,8 @@ function NetworkSwitch() {
   const [currentWalletState, setWalletState] = useRecoilState(walletState)
   const { disconnect } = useWallet()
 
-  const changeNetwork = ({ target }) => {
-    queryClient.invalidateQueries([
+  const changeNetwork = async ({ target }) => {
+    await queryClient.invalidateQueries([
       'multipleTokenBalances',
       'tokenBalance',
       '@pools-list',

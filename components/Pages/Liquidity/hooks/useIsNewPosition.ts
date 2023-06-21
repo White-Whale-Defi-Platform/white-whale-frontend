@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import usePositions from '../../Liquidity/hooks/usePositions'
+import useLockedPositions from 'components/Pages/Liquidity/hooks/useLockedPositions'
 import { NUMBER_OF_SECONDS_IN_DAY } from 'constants/index'
 
 const useIsNewPosition = ({ bondingDays, poolId }) => {
-  const { data: positions = [] } = usePositions(poolId)
+  const { data: positions = [] } = useLockedPositions(poolId)
 
   return useMemo(() => {
     const match = positions?.filter((p) => {

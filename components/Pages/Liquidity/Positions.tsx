@@ -1,11 +1,10 @@
 import { HStack, Divider, Button, Box } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Position } from './hooks/usePositions'
 import { PositionsTable } from './PositionsTable'
 
 const STATES = ['all', 'active', 'unbonding']
 
-type Props = Position & {
+type Props = {
   positions: any[]
 }
 

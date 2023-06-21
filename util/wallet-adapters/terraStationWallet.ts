@@ -10,7 +10,6 @@ import {
   MsgTransfer,
   TxInfo,
 } from '@terra-money/feather.js'
-// import { LCDClient } from '@terra-money/terra.js/dist/client/lcd/LCDClient'
 import { LCDClient } from '@terra-money/feather.js/dist/client/lcd/LCDClient'
 import { ConnectedWallet } from '@terra-money/wallet-provider'
 import axios from 'axios'
@@ -89,7 +88,6 @@ export class TerraStationWallet implements Wallet {
     senderAddress: string,
     msgs: EncodeObject[],
     memo: string | undefined,
-    chainID: string = 'juno-1'
   ): Promise<TxResponse> {
     return this.client
       .post({
@@ -161,7 +159,6 @@ export class TerraStationWallet implements Wallet {
     messages: readonly EncodeObject[],
     memo: string | undefined
   ): Promise<number> {
-    console.log(this.lcdClient.config)
     let tx = {
       msgs: messages
         .map((msg) =>
@@ -187,7 +184,6 @@ export class TerraStationWallet implements Wallet {
     return this.lcdClient.auth
       .accountInfo(signerAddress)
       .then((result) => {
-        console.log(this.lcdClient.config)
         return this.lcdClient.tx.estimateFee(
           [
             {
@@ -199,8 +195,6 @@ export class TerraStationWallet implements Wallet {
         )
       })
       .then((result) => {
-        console.log(result)
-        console.log(TX_MAAP.get(this.chainID))
         return result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
       })
       .catch((err) => {

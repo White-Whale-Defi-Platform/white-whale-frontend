@@ -4,13 +4,11 @@ import { Pool } from 'types'
 import { Wallet } from 'util/wallet-adapters'
 
 export interface GetToken1ForToken2PriceInput {
-  nativeAmount: number | string
   swapAddress: string
   client: Wallet
 }
 
 export const getToken1ForToken2Price = async ({
-  nativeAmount,
   swapAddress,
   client,
 }: GetToken1ForToken2PriceInput) => {
@@ -27,13 +25,11 @@ export const getToken1ForToken2Price = async ({
 }
 
 export interface GetToken2ForToken1PriceInput {
-  tokenAmount: number
   swapAddress: string
   client: Wallet
 }
 
 export const getToken2ForToken1Price = async ({
-  tokenAmount,
   swapAddress,
   client,
 }: GetToken2ForToken1PriceInput) => {
@@ -59,10 +55,7 @@ export const getTokenForTokenPrice = async (
   input: GetTokenForTokenPriceInput
 ) => {
   try {
-    const nativePrice = await getToken2ForToken1Price(input)
-
     return getToken1ForToken2Price({
-      nativeAmount: num(nativePrice).toNumber(),
       swapAddress: input.outputSwapAddress,
       client: input.client,
     })

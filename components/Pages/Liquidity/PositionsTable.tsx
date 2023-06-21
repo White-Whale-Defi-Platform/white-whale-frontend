@@ -30,11 +30,12 @@ type TableProps = {
   weight: string
   action: JSX.Element
   state: string
+  assets: any[]
 }
 
 const columnHelper = createColumnHelper<TableProps>()
 
-const columns = (totlaValue, totalDollarValue) => {
+const columns = (totalValue, totalDollarValue) => {
   return [
     columnHelper.accessor('duration', {
       header: () => (
@@ -51,13 +52,13 @@ const columns = (totlaValue, totalDollarValue) => {
       enableSorting: true,
     }),
     columnHelper.accessor('value', {
-      header: (info) => {
+      header: () => {
         return (
           <TooltipWithChildren
             label={`Value($${totalDollarValue})`}
             isHeading={true}
           >
-            <AvailableRewards data={totlaValue} />
+            <AvailableRewards data={totalValue} />
           </TooltipWithChildren>
         )
       },
@@ -174,7 +175,7 @@ export const PositionsTable = ({ columnFilters, positions }) => {
     <TableContainer color="white" width="full">
       <Table size="md" variant="unstyled" margin="auto" width="full">
         <Thead borderBottom="1px solid rgba(255, 255, 255, 0.1)" color="gray">
-          {table.getHeaderGroups().map((headerGroup, index) => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <Th

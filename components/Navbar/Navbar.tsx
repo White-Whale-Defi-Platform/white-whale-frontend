@@ -55,7 +55,7 @@ export const links = [
     link: 'https://tfm.com/bridge',
   },
 ]
-const Navbar = ({}) => {
+const Navbar = () => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network }, setWalletState] =
     useRecoilState(walletState)

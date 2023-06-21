@@ -8,12 +8,14 @@ type FactoryConfig = {
     amount: string
     denom: string
   }
+  minUnbondingDuration: any
+  maxUnbondingDuration: any
 }
 
 const useFactoryConfig = (incentiveFactory: string) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { client } = useRecoilValue(walletState)
 
-  const { data: config = {} } = useQuery<FactoryConfig>({
+  const { data: config } = useQuery<FactoryConfig>({
     queryKey: ['factoryConfig', incentiveFactory],
     queryFn: () =>
       client

@@ -45,7 +45,7 @@ export interface FlowData {
   tokenSymbol: string
 }
 export interface IncentivePoolInfo {
-  flowData: FlowData[]
+  flowData?: FlowData[]
 
   poolId: string
 }
@@ -71,7 +71,7 @@ export const useIncentivePoolInfo = (
       setPoolsWithAprAnd24HrVolume(poolData)
     }
     fetchPoolData()
-  }, [currentChain, pools?.length])
+  }, [currentChain, pools?.length, client])
 
   let poolAssets = []
 
@@ -81,7 +81,7 @@ export const useIncentivePoolInfo = (
       .filter((v, i, a) => a.findIndex((t) => t.denom === v.denom) === i)
   }
   const { data: flowPoolData } = useQuery(
-    ['apr', currentEpochData, prices],
+    ['apr', currentEpochData, prices, pools, poolsWithAprAnd24HrVolume],
     () =>
       getPoolFlowData(
         client,
@@ -125,7 +125,7 @@ const getPoolFlowData = async (
   prices,
   poolsWithAprAnd24HrVolume
 ): Promise<IncentivePoolInfo[]> => {
-  const poolFlowData = pools
+  return pools
     ? await Promise.all(
         pools?.map(async (pool) => {
           if (pool.staking_address === '') {
@@ -214,6 +214,4 @@ const getPoolFlowData = async (
         })
       )
     : []
-
-  return poolFlowData
 }
