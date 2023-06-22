@@ -2,6 +2,7 @@ import { useConnectedWallet } from '@terra-money/wallet-provider'
 import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { PoolLiquidityState } from './useQueryPools'
 
 export type TokenInfo = {
   id: string
@@ -28,6 +29,7 @@ export type PoolEntityType = {
   swap_address: string
   staking_address: string
   rewards_tokens: Array<TokenInfoWithReward>
+  liquidity?: PoolLiquidityState
 }
 
 export type PoolsListQueryResponse = {

@@ -1,10 +1,8 @@
 import {
-  Coin,
   EncodeObject,
   OfflineDirectSigner,
   OfflineSigner,
 } from '@cosmjs/proto-signing'
-import { StdFee } from '@cosmjs/stargate'
 import { getNetworkEndpoints, Network } from '@injectivelabs/networks'
 import {
   BaseAccount,
@@ -27,7 +25,7 @@ import {
   DEFAULT_STD_FEE,
 } from '@injectivelabs/utils'
 
-import { base64ToJson } from '../util/base64'
+import { base64ToJson } from 'util/base64'
 
 const DEFAULT_GAS = '250000000000000'
 const HIGHER_DEFAULT_GAS_LIMIT = '450000'
@@ -123,20 +121,11 @@ class Injective {
     return this.chainId
   }
 
-  getNetwork() {
-    return this.network
-  }
-
   async getTx(txHash: string) {
     return this.txClient.fetchTx(txHash)
   }
 
-  async signAndBroadcast(
-    signerAddress: string,
-    messages: EncodeObject[],
-    fee: StdFee | 'auto' | number,
-    memo?: string
-  ) {
+  async signAndBroadcast(signerAddress: string, messages: EncodeObject[]) {
     try {
       this.txRaw = null
       const { txRaw } = await this.prepair(messages)
@@ -168,7 +157,7 @@ class Injective {
     }
   }
 
-  async prepair(messages: EncodeObject[], send = true) {
+  async prepair(messages: EncodeObject[]) {
     try {
       await this.init()
       const restEndpoint = getNetworkEndpoints(this.network).rest
@@ -202,8 +191,8 @@ class Injective {
 
       //     console.log({MessageExecuteContract})
 
-      const encodedExecuteMsg = messages.map((msg, idx) => {
-        const { msgT, contract, funds } = msg?.value || {}
+      const encodedExecuteMsg = messages.map((msg) => {
+        const { contract, funds } = msg?.value || {}
         const msgString = Buffer.from(msg?.value?.msg).toString('utf8')
         const jsonMessage = JSON.parse(msgString)
 
@@ -224,8 +213,7 @@ class Injective {
           exec: executeMessageJson,
         }
 
-        const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
-        return MessageExecuteContract
+        return MsgExecuteContract.fromJSON(params)
       })
       // Create the transaction for signing and broadcasting
       return createTransaction({
@@ -252,11 +240,7 @@ class Injective {
     }
   }
 
-  async simulate(
-    signerAddress: string,
-    messages: EncodeObject[],
-    memo: string | undefined
-  ) {
+  async simulate(signerAddress: string, messages: EncodeObject[]) {
     try {
       this.txRaw = null
       const { txRaw } = await this.prepair(messages)
@@ -328,8 +312,7 @@ class Injective {
   async execute(
     senderAddress: string,
     contractAddress: string,
-    msg: Record<string, unknown>,
-    funds?: Coin[]
+    msg: Record<string, unknown>
   ) {
     if (!this.txRaw) {
       const { txRaw } = await this.getTxRawFromJson(msg, contractAddress, [])

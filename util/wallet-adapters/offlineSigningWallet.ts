@@ -4,11 +4,7 @@ import {
   SigningCosmWasmClient,
 } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Coin } from '@cosmjs/launchpad'
-import {
-  EncodeObject,
-  OfflineDirectSigner,
-  OfflineSigner,
-} from '@cosmjs/proto-signing'
+import { EncodeObject } from '@cosmjs/proto-signing'
 import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
 import { Network } from '@injectivelabs/networks'
 import {
@@ -24,18 +20,14 @@ import {
 } from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 
-import Injective from '../../services/injective'
+import Injective from 'services/injective'
 import { TxResponse, Wallet } from './wallet'
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient | Injective
 
   network: string
 
-  constructor(
-    client: SigningCosmWasmClient | Injective,
-    network?: string,
-    activeWallet?: string
-  ) {
+  constructor(client: SigningCosmWasmClient | Injective, network?: string) {
     this.client = client
     this.network = network
   }
@@ -43,7 +35,7 @@ export class OfflineSigningWallet implements Wallet {
   static connectWithSigner(
     chainId: string,
     endpoint: string,
-    signer: OfflineSigner & OfflineDirectSigner,
+    signer: any,
     network: string,
     options?: SigningStargateClientOptions,
     activeWallet?: string

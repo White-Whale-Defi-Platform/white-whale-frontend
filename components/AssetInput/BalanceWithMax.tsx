@@ -78,10 +78,10 @@ const TokenToPrice = ({
   return (
     <HStack spacing={0} gap={0} flex={1}>
       <Text color="brand.50" fontWeight={400} fontSize="14px">
-        {numberOfTokens}=
+        {isNaN(Number(numberOfTokens)) ? numberOfTokens : 0}=
       </Text>
       <Text fontWeight={700} fontSize="14px">
-        ${dollarValue}
+        ${isNaN(Number(dollarValue)) ? 0 : dollarValue}
       </Text>
     </HStack>
   )

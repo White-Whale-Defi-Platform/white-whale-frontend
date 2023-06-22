@@ -17,24 +17,26 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
   return (
     <>
       {(isMobile || isMobileView) && <MobileNotSupportedModal />}
-      <Flex direction="column" backgroundColor="transparent" height="100vh">
-        <RadialGradient />
-        <Navbar />
-        <Flex
-          key={chainId}
-          justifyContent="center"
-          mx="auto"
-          maxWidth="container.xl"
-          marginBottom={20}
-          width="full"
-          flex="1 1 auto "
-        >
-          {children}
+      {!(isMobile || isMobileView) && (
+        <Flex direction="column" backgroundColor="transparent" height="100vh">
+          <RadialGradient />
+          <Navbar />
+          <Flex
+            key={chainId}
+            justifyContent="center"
+            mx="auto"
+            maxWidth="container.xl"
+            marginBottom={20}
+            width="full"
+            flex="1 1 auto "
+          >
+            {children}
+          </Flex>
+          <Flex paddingY={10} paddingX={6} alignSelf="flex-end">
+            <Status />
+          </Flex>
         </Flex>
-        <Flex paddingY={10} paddingX={6} alignSelf="flex-end">
-          <Status />
-        </Flex>
-      </Flex>
+      )}
     </>
   )
 }

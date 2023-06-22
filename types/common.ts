@@ -2,6 +2,37 @@ import { Msg } from '@terra-money/feather.js'
 import { PairResponse, Asset, Pair } from './terraswap'
 import { Network } from './network'
 
+export enum TxStep {
+  /**
+   * Idle
+   */
+  Idle = 0,
+  /**
+   * Estimating fees
+   */
+  Estimating = 1,
+  /**
+   * Ready to post transaction
+   */
+  Ready = 2,
+  /**
+   * Signing transaction in Terra Station
+   */
+  Posting = 3,
+  /**
+   * Broadcasting
+   */
+  Broadcasting = 4,
+  /**
+   * Succesful
+   */
+  Success = 5,
+  /**
+   * Failed
+   */
+  Failed = 6,
+}
+
 export type ContractVariables = {
   contract: string
   msg: object

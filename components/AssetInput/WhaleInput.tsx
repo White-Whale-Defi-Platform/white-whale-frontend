@@ -125,7 +125,6 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
               placeholder="0.00"
               disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
               onChange={({ target }) => {
-                console.log({ ...token, amount: target.value })
                 onChange({ ...token, amount: target.value })
               }}
             />

@@ -223,7 +223,7 @@
           "symbol": "HUAHUA",
           "name": "Huahua",
           "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
+          "logoURI": "/logos/huahua.png",
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
@@ -254,7 +254,7 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "id": "whale-token",
+          "id": "white-whale",
           "chain_id": "chihuahua-1",
           "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
           "symbol": "WHALE",
@@ -291,7 +291,7 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "id": "whale-token",
+          "id": "white-whale",
           "chain_id": "chihuahua-1",
           "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
           "symbol": "WHALE",
@@ -330,7 +330,7 @@
       "pool_assets": [
        
         {
-          "id": "whale-token",
+          "id": "white-whale",
           "chain_id": "chihuahua-1",
           "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
           "symbol": "WHALE",
@@ -347,7 +347,7 @@
           "symbol": "HUAHUA",
           "name": "Huahua",
           "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
+          "logoURI": "/logos/huahua.png",
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
@@ -361,7 +361,7 @@
     {
       "pool_id": "ROAR-HUAHUA",
       "lpOrder": ["ROAR", "HUAHUA"],
-      "assetOrder": ["ROAR", "WHALE"],
+      "assetOrder": ["ROAR", "HUAHUA"],
       "displayName": "ROAR-HUAHUA",
       "displayLogo1": "/logos/lion.png",
       "displayLogo2": "/logos/huahua.png",
@@ -386,7 +386,7 @@
           "symbol": "HUAHUA",
           "name": "Huahua",
           "decimals": 6,
-          "logoURI": "/logos/huahua.jpeg",
+          "logoURI": "/logos/huahua.png",
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
@@ -394,6 +394,44 @@
       ],
       "lp_token": "chihuahua1r2un7qsaqfmurm8ytcwqtylhrufhkkfwvrqdxa90c74ghgcpa9ps5tqn9n",
       "swap_address": "chihuahua1qekdpx5su9hhsswr0w4qq2szss0rwywl7y9gp4dawmp7jnm98mgss84zgv",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "TREATZ-HUAHUA",
+      "lpOrder": ["TREATZ", "HUAHUA"],
+      "assetOrder": ["TREATZ", "HUAHUA"],
+      "displayName": "TREATZ-HUAHUA",
+      "displayLogo1": "/logos/treatz.png",
+      "displayLogo2": "/logos/huahua.png",
+      "pool_assets": [
+       
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1se7z0mx6rs84zvd89c7v9lf7kum90y2hsevhht2c3pdww35n2m6sm5gg9x",
+          "symbol": "TREATZ",
+          "name": "TREATZ",
+          "decimals": 6,
+          "logoURI": "/logos/treatz.png",
+          "tags": [""],
+          "native": false,
+          "denom": "chihuahua1se7z0mx6rs84zvd89c7v9lf7kum90y2hsevhht2c3pdww35n2m6sm5gg9x"
+        },
+        {
+          "id": "chihuahua-chain",
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        }
+      ],
+      "lp_token": "chihuahua1e3ets9mwmffnzuuj03w53g3ch6jmazdwtpqhu0f2wc5a6z6yxaks6r3lrs",
+      "swap_address": "chihuahua19x48cf5d5lm0z2dmqptgh4mhfglsy0nvvznra36zd3fpvjp277vqeyd2x6",
       "staking_address": "",
       "rewards_tokens": []
     }

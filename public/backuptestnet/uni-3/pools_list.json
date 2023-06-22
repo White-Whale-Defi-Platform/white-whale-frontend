@@ -11,7 +11,7 @@
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
     "id": "juno-testnet",
-    "chain_id": "uni-3",
+    "chain_id": "uni-6",
     "token_address": "",
     "symbol": "JUNO",
     "name": "Juno",
@@ -28,7 +28,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "ujunox",
           "symbol": "JUNO",
           "name": "Juno",
@@ -40,7 +40,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
           "name": "Junoone",
@@ -61,7 +61,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "",
           "symbol": "JUNO",
           "name": "Juno",
@@ -73,7 +73,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
           "symbol": "JUNOTWO",
           "name": "Junotwo",
@@ -94,7 +94,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "",
           "symbol": "JUNO",
           "name": "Juno",
@@ -106,7 +106,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k",
           "symbol": "JUNOTHREE",
           "name": "Junothree",
@@ -127,7 +127,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
           "name": "Junoone",
@@ -139,7 +139,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1ey3fsj3gzax0ss24vtj0pmcg6vvf532gtffkecx5e09dn8uqfstqg8xake",
           "symbol": "JUNOTWO",
           "name": "Junotwo",
@@ -160,7 +160,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1zvg8qf0acgpcmeugmw3qsggrr02tzsfg5ca7avv5r2fekpfta68q3q939g",
           "symbol": "JUNOONE",
           "name": "Junoone",
@@ -172,7 +172,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1dlmv5zdnss9dqjetgczt2yegzaz0yh6ku85sfxdt9u4xvvhwvxysr9yafg",
           "symbol": "JUNOFOUR",
           "name": "Junofour",
@@ -193,7 +193,7 @@
       "pool_assets": [
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1l02rqg3ncjyxw4ugdg48z68wyvp4w4j3g0peqsqlw7mtpd0w5d2qyuc47k",
           "symbol": "JUNOTHREE",
           "name": "Junothree",
@@ -205,7 +205,7 @@
         },
         {
           "id": "juno-testnet",
-          "chain_id": "uni-3",
+          "chain_id": "uni-6",
           "token_address": "juno1r4kw8zp0g0yx9epnatuhzxm8esfapkkc4nx5hztap480skw4gynq3czeer",
           "symbol": "JUNOFIVE",
           "name": "Junofive",

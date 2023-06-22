@@ -109,7 +109,10 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const onChainChange = async (chain) => {
     // onDisconnect()
-    if (!BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId))
+    if (
+      !BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId) &&
+      router.pathname.includes('dashboard')
+    )
       await router.push('/swap')
     setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
   }
@@ -135,7 +138,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       (row) => row.chainId.toLowerCase() === currentWalletState.chainId
     )
     if (sourceChain) {
-      router.push(getPathName(router, sourceChain.label))
+      const path = getPathName(router, sourceChain.label)
+      router.push(path)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWalletState.chainId, isInitialized, availableConnections])

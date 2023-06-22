@@ -5,7 +5,6 @@ export const NETWORK_FEE = 0.003
 export const GAS_PRICE = process.env.NEXT_PUBLIC_GAS_PRICE
 
 export const APP_NAME = process.env.NEXT_PUBLIC_SITE_TITLE
-export const APP_MAX_WIDTH = '1920px'
 
 export const POOL_TOKENS_DECIMALS = 6
 
@@ -31,3 +30,6 @@ export const __DARK_MODE_ENABLED_BY_DEFAULT__ = JSON.parse(
 
 // stable coins
 export const STABLE_COIN_LIST = ['CMST', 'USDT', 'axlUSDC']
+
+export const POOL_INFO_BASE_URL =
+  'https://www.api-white-whale.enigma-validator.com/summary'

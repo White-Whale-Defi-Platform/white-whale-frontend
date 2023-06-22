@@ -7,6 +7,7 @@ import {
   Image,
   keyframes,
   Text,
+  Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -21,6 +22,8 @@ import { ActionType } from './BondingOverview'
 import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
+import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 
 const pulseAnimation = keyframes`
   0% {
@@ -112,7 +115,7 @@ const RewardsComponent = ({
   totalGlobalClaimable,
   weightInfo,
 }) => {
-  const [{ chainId }, _] = useRecoilState(walletState)
+  const [{ network, chainId }] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -143,6 +146,12 @@ const RewardsComponent = ({
     ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio
 
   const { txStep, submit } = useTransaction()
+
+  const { config } = useIncentiveConfig(network, chainId)
+  const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
+    noSnapshotTakenAddresses: null,
+    config: config,
+  })
 
   // TODO global constant?
   const boxBg = '#1C1C1C'
@@ -253,7 +262,7 @@ const RewardsComponent = ({
           >
             <HStack justifyContent="space-between">
               <HStack>
-                <Text color="whiteAlpha.600">Rewards</Text>
+                <Text color="whiteAlpha.600">Estimated Rewards</Text>
                 <BondingActionTooltip action={ActionType.claim} />
               </HStack>
               <RewardsTooltip
@@ -285,36 +294,60 @@ const RewardsComponent = ({
               </Text>
             </HStack>
           </Box>
-          <Button
-            alignSelf="center"
-            bg="#6ACA70"
-            borderRadius="full"
-            width="100%"
-            variant="primary"
-            w={390}
-            disabled={
-              txStep == TxStep.Estimating ||
-              txStep == TxStep.Posting ||
-              txStep == TxStep.Broadcasting ||
-              (isWalletConnected && claimableRewards === 0)
-            }
-            maxWidth={570}
-            isLoading={
-              txStep == TxStep.Estimating ||
-              txStep == TxStep.Posting ||
-              txStep == TxStep.Broadcasting
-            }
-            onClick={async () => {
-              if (isWalletConnected) {
-                await submit(ActionType.claim, null, null)
-              } else {
-                onOpenModal()
+          <HStack w={390}>
+            <Button
+              alignSelf="center"
+              bg="#6ACA70"
+              borderRadius="full"
+              variant="primary"
+              width={'100%'}
+              disabled={
+                txStep == TxStep.Estimating ||
+                txStep == TxStep.Posting ||
+                txStep == TxStep.Broadcasting ||
+                (isWalletConnected && claimableRewards === 0)
               }
-            }}
-            style={{ textTransform: 'capitalize' }}
-          >
-            {buttonLabel}
-          </Button>
+              maxWidth={570}
+              isLoading={
+                txStep == TxStep.Estimating ||
+                txStep == TxStep.Posting ||
+                txStep == TxStep.Broadcasting
+              }
+              onClick={async () => {
+                if (isWalletConnected) {
+                  await submit(ActionType.claim, null, null)
+                } else {
+                  onOpenModal()
+                }
+              }}
+              style={{ textTransform: 'capitalize' }}
+            >
+              {buttonLabel}
+            </Button>
+            {progress === 100 && isWalletConnected && (
+              <Tooltip
+                label="Community driven enforcement of the next epoch."
+                borderRadius={10}
+                bg="black"
+              >
+                <Button
+                  alignSelf="center"
+                  bg="transparent"
+                  borderRadius="full"
+                  border="1px solid white"
+                  width="50%"
+                  variant="primary"
+                  _hover={{
+                    border: '1px solid #6ACA70',
+                    color: '#6ACA70',
+                  }}
+                  onClick={() => forceEpochAndTakeSnapshots.submit()}
+                >
+                  {'Force Epoch'}
+                </Button>
+              </Tooltip>
+            )}
+          </HStack>
           <WalletModal
             isOpenModal={isOpenModal}
             onCloseModal={onCloseModal}

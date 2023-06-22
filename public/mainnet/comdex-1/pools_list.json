@@ -107,7 +107,7 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "id": "whale-token",
+          "id": "white-whale",
           "chain_id": "comdex-1",
           "token_address": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2",
           "symbol": "WHALE",
@@ -144,7 +144,7 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "id": "whale-token",
+          "id": "white-whale",
           "chain_id": "comdex-1",
           "token_address": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2",
           "symbol": "WHALE",

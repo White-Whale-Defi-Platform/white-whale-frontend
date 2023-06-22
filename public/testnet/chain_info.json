@@ -27,7 +27,7 @@
         "coinDenom": "WHALE",
         "coinMinimalDenom": "uwhale",
         "coinDecimals": 6,
-        "coinGeckoId": "whale-network"
+        "coinGeckoId": "white-whale"
       }
     ],
     "feeCurrencies": [
@@ -35,23 +35,23 @@
         "coinDenom": "WHALE",
         "coinMinimalDenom": "uwhale",
         "coinDecimals": 6,
-        "coinGeckoId": "whale-network"
+        "coinGeckoId": "white-whale"
       }
     ],
     "coinType": 118,
     "gasPriceStep": {
-      "low": 0.0,
-      "average": 0.0,
-      "high": 0.0
+      "low": 0.5,
+      "average": 1,
+      "high": 2
     },
     "features": ["cosmwasm"]
   },
   {
-    "chainId": "uni-3",
+    "chainId": "uni-6",
     "chainName": "Juno Uni Testnet",
     "label": "Juno",
     "icon": "/logos/juno.svg",
-    "rpc": "https://rpc.uni.juno.deuslabs.fi:443/",
+    "rpc": "https://juno-testnet-rpc.polkachu.com:443/",
     "rest": "https://lcd.uni.juno.deuslabs.fi:443/",
     "stakeCurrency": {
       "coinDenom": "JUNO",
@@ -103,7 +103,7 @@
     "stakeCurrency": {
       "coinDenom": "LUNA",
       "coinMinimalDenom": "uluna",
-      "coinDecimals": 18
+      "coinDecimals": 6
     },
     "bip44": {
       "coinType": 118
@@ -120,7 +120,7 @@
       {
         "coinDenom": "LUNA",
         "coinMinimalDenom": "uluna",
-        "coinDecimals": 18,
+        "coinDecimals": 6,
         "coinGeckoId": "terra"
       }
     ],
@@ -139,55 +139,5 @@
       "high": 0.75
     },
     "features": ["cosmwasm"]
-  },
-  {
-    "chainId": "comdex-test2",
-    "chainName": "Comdex Test Chain",
-    "label": "Comdex",
-    "icon": "/logos/comdex.png",
-    "rpc": "https://test2-rpc.comdex.one",
-    "rest": "https://test2-rest.comdex.one",
-    "stakeCurrency": {
-      "coinDenom": "CMDX",
-      "coinMinimalDenom": "ucmdx",
-      "coinDecimals": 6
-    },
-    "bip44": {
-      "coinType": 118
-    },
-    "bech32Config": {
-      "bech32PrefixAccAddr": "comdex",
-      "bech32PrefixAccPub": "comdexpub",
-      "bech32PrefixValAddr": "comdexvaloper",
-      "bech32PrefixValPub": "comdexvaloperpub",
-      "bech32PrefixConsAddr": "comdexvalcons",
-      "bech32PrefixConsPub": "comdexvalconspub"
-    },
-    "currencies": [
-      {
-        "coinDenom": "CMDX",
-        "coinMinimalDenom": "ucmdx",
-        "coinDecimals": 6
-      }
-    ],
-    "feeCurrencies": [
-      {
-        "coinDenom": "CMDX",
-        "coinMinimalDenom": "ucmdx",
-        "coinDecimals": 6,
-        "gasPriceStep": {
-          "low": 0.25,
-          "average": 0.5,
-          "high": 1.0
-        }
-      }
-    ],
-    "gasPriceStep": {
-      "low": 0.25,
-      "average": 0.5,
-      "high": 1.0
-    },
-    "coinType": 118,
-    "beta": true
   }
 ]

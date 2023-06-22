@@ -15,6 +15,7 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { createNewEpoch } from 'components/Pages/BondingActions/hooks/createNewEpoch'
 
 export enum TxStep {
   /**
@@ -132,8 +133,10 @@ export const useTransaction = () => {
         )
       } else if (data.bondingAction === ActionType.withdraw) {
         return withdrawTokens(client, senderAddress, data.denom, config)
-      } else {
+      } else if (data.bondingAction === ActionType.claim) {
         return claimRewards(client, senderAddress, config)
+      } else {
+        return createNewEpoch(client, config, senderAddress)
       }
     },
     {

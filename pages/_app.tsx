@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
+import 'theme/global.css'
+
 import { ChakraProvider, CSSReset } from '@chakra-ui/react'
 import {
   getChainOptions,
@@ -17,7 +19,7 @@ import Head from 'next/head'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 
-import theme from '../theme'
+import theme from 'theme'
 
 const MyApp: FC<AppProps> = ({
   Component,
@@ -26,7 +28,6 @@ const MyApp: FC<AppProps> = ({
   walletConnectChainIds,
 }: AppProps & WalletControllerChainOptions) => {
   const [mounted, setMounted] = useState<boolean>(false)
-  const [chainOpts, setChainOpts] = useState({})
 
   useEffect(() => setMounted(true), [])
 

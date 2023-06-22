@@ -10,18 +10,24 @@ import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
 } from 'util/constants'
-import { calcPoolTokenDollarValue } from '../util/conversion'
-import { queryMyLiquidity } from './queryMyLiquidity'
+import {
+  calcPoolTokenDollarValue,
+  convertMicroDenomToDenom,
+} from 'util/conversion'
+import { lpToAssets, queryMyLiquidity } from './queryMyLiquidity'
 import {
   queryRewardsContracts,
   SerializedRewardsContract,
 } from './queryRewardsContracts'
-import { queryStakedLiquidity } from './queryStakedLiquidity'
 import { querySwapInfo } from './querySwapInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+import { useTokenList } from 'hooks/useTokenList'
+import { TokenInfo } from 'types'
+import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
+import usePrices from 'hooks/usePrices'
 
-export type ReserveType = [number, number]
+export type ReserveType = [number?, number?]
 
 export type PoolTokenValue = {
   tokenAmount: number
@@ -31,6 +37,15 @@ export type PoolTokenValue = {
 export type PoolState = {
   total: PoolTokenValue
   provided: PoolTokenValue
+}
+
+export type Flow = {
+  token: TokenInfo
+  endTime: number
+  startTime: number
+  flowId: number
+  amount: string
+  state: 'active' | 'over'
 }
 
 export type PoolLiquidityState = {
@@ -51,16 +66,36 @@ export type PoolLiquidityState = {
     annualYieldPercentageReturn: number
     contracts?: Array<SerializedRewardsContract>
   }
+
+  myFlows: Flow[]
 }
 
 export type PoolEntityTypeWithLiquidity = PoolEntityType & {
   liquidity?: PoolLiquidityState
+  flows?: any
 }
 
-type QueryMultiplePoolsArgs = {
-  pools: Array<PoolEntityType>
+export type QueryMultiplePoolsArgs = {
+  pools: Array<PoolEntityTypeWithLiquidity>
   refetchInBackground?: boolean
   client: any
+}
+
+const queryLockedLiquidity = async ({ pool, client, address }) => {
+  if (!address || !client || !pool.staking_address) return
+
+  const { positions = [] } =
+    (await client?.queryContractSmart(pool.staking_address, {
+      positions: { address },
+    })) || []
+  return (
+    positions
+      ?.map((p) => {
+        const { open_position = {}, closed_position = {} } = p
+        return { ...open_position, ...closed_position }
+      })
+      .reduce((acc, p) => acc + Number(p.amount), 0) || 0
+  )
 }
 
 export const useQueryMultiplePoolsLiquidity = ({
@@ -70,10 +105,13 @@ export const useQueryMultiplePoolsLiquidity = ({
 }: QueryMultiplePoolsArgs) => {
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
+  const prices = usePrices()
   const { address } = useRecoilValue(walletState)
 
+  const [tokenList] = useTokenList()
+  const { epochToDate, currentEpoch } = useEpoch()
+
   const context = {
-    // client: signingClient,
     client,
     signingClient: client,
     getTokenDollarValue,
@@ -81,7 +119,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
   async function queryPoolLiquidity(
     pool: PoolEntityType
-  ): Promise<PoolEntityTypeWithLiquidity> {
+  ): Promise<PoolEntityTypeWithLiquidity | any> {
     if (!client) return pool
 
     const [tokenA, tokenB] = pool.pool_assets
@@ -91,6 +129,73 @@ export const useQueryMultiplePoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
+    const getFlows = async ({ client }) => {
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
+        return []
+      const flows = await client?.queryContractSmart(pool.staking_address, {
+        flows: {},
+      })
+      return flows?.map((flow) => {
+        const denom =
+          flow?.flow_asset?.info?.token?.contract_addr ||
+          flow?.flow_asset?.info.native_token?.denom ||
+          null
+        return tokenList?.tokens?.find((t) => t?.denom === denom)
+      })
+    }
+    const getMyFlows = ({ client, address }) => {
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
+        return []
+      return client
+        ?.queryContractSmart(pool.staking_address, {
+          flows: {},
+        })
+        .then((flows) => {
+          const flowTokens = flows?.map((flow) => {
+            const startEpoch = flow.start_epoch
+            const endEpoch = flow.end_epoch
+
+            const getState = () => {
+              switch (true) {
+                case currentEpoch < startEpoch:
+                  return 'upcoming'
+                case currentEpoch >= startEpoch && currentEpoch < endEpoch:
+                  return 'active'
+                case currentEpoch >= endEpoch:
+                  return 'over'
+                default:
+                  return ''
+              }
+            }
+
+            // check if end time is in the past
+            // const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+            const state = getState()
+            const denom =
+              flow?.flow_asset?.info?.token?.contract_addr ||
+              flow?.flow_asset?.info?.native_token?.denom ||
+              null
+            const token = tokenList?.tokens?.find((t) => t?.denom === denom)
+
+            return {
+              token,
+              isCreator: flow.flow_creator === address,
+              endTime: epochToDate(endEpoch),
+              startTime: epochToDate(startEpoch),
+              flowId: flow.flow_id,
+              amount: flow.flow_asset.amount,
+              state,
+            }
+          })
+          return flowTokens.filter(Boolean)
+        })
+    }
+
+    const flows = await getFlows({ client })
+    const lockedLP = await queryLockedLiquidity({ pool, client, address })
+
+    const lockedReserved = lpToAssets(swap, lockedLP)
+
     const { totalReserve, providedLiquidityInMicroDenom, providedReserve } =
       await queryMyLiquidity({
         context,
@@ -99,34 +204,43 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
 
     const {
-      providedStakedAmountInMicroDenom,
       totalStakedAmountInMicroDenom,
       totalStakedReserve,
       providedStakedReserve,
-    } = await queryStakedLiquidity({
-      context,
-      address,
-      stakingAddress: pool.staking_address,
-      totalReserve,
-      swap,
-    })
+    } = {
+      totalStakedAmountInMicroDenom: 0,
+      totalStakedReserve: lockedReserved?.totalReserve,
+      providedStakedReserve: lockedReserved?.providedReserve,
+    }
 
     const tokenADollarPrice = await getTokenDollarValue({
       tokenA,
       tokenAmountInDenom: 1,
       tokenB,
     })
+    const [tokenASymbol, tokenBSymbol] = pool?.lpOrder
 
+    //TODO dollarAmount for one lpToken seems to be incorrect
     function getPoolTokensValue({ tokenAmountInMicroDenom }) {
       return {
         tokenAmount: tokenAmountInMicroDenom,
-        dollarValue: calcPoolTokenDollarValue({
-          tokenAmountInMicroDenom,
-          tokenSupply: swap.lp_token_supply,
-          tokenReserves: totalReserve[0],
-          tokenDollarPrice: tokenADollarPrice,
-          tokenDecimals: tokenA?.decimals,
-        }),
+        dollarValue:
+          calcPoolTokenDollarValue({
+            tokenAmountInMicroDenom,
+            tokenSupply: swap.lp_token_supply,
+            tokenReserves: totalReserve[0],
+            tokenDollarPrice: tokenADollarPrice,
+            tokenDecimals: tokenA?.decimals,
+          }) || 0,
+      }
+    }
+    function getLockedPoolDollarValue(tokenProvided, dollarValues) {
+      return {
+        tokenAmount: tokenProvided[0] + tokenProvided[1],
+        dollarValue:
+          convertMicroDenomToDenom(tokenProvided[0], 6) * dollarValues[0] +
+            convertMicroDenomToDenom(tokenProvided[1], 6) * dollarValues[1] ||
+          0,
       }
     }
 
@@ -144,9 +258,10 @@ export const useQueryMultiplePoolsLiquidity = ({
         tokenAmountInMicroDenom: totalStakedAmountInMicroDenom,
       }),
       /* calc provided liquidity dollar value */
-      getPoolTokensValue({
-        tokenAmountInMicroDenom: providedStakedAmountInMicroDenom,
-      }),
+      getLockedPoolDollarValue(providedStakedReserve, [
+        prices?.[tokenASymbol],
+        prices?.[tokenBSymbol],
+      ]),
     ]
 
     let annualYieldPercentageReturn = 0
@@ -165,6 +280,7 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
     }
 
+    const myFlows = await getMyFlows({ client, address })
     const liquidity = {
       available: {
         total: totalLiquidity,
@@ -178,15 +294,13 @@ export const useQueryMultiplePoolsLiquidity = ({
         tokenAmount: providedLiquidity.tokenAmount + providedStaked.tokenAmount,
         dollarValue: providedLiquidity.dollarValue + providedStaked.dollarValue,
       },
+      myFlows,
       reserves: {
         total: totalReserve,
         provided: providedReserve,
         totalStaked: totalStakedReserve,
         providedStaked: providedStakedReserve,
-        totalProvided: [
-          providedReserve[0] + providedStakedReserve[0],
-          providedReserve[1] + providedStakedReserve[1],
-        ] as ReserveType,
+        totalProvided: providedReserve as ReserveType,
       },
       rewards: {
         annualYieldPercentageReturn,
@@ -196,6 +310,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
     return {
       ...pool,
+      flows,
       liquidity,
     }
   }
@@ -203,7 +318,10 @@ export const useQueryMultiplePoolsLiquidity = ({
   return useQueries(
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled: Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue),
+      enabled:
+        Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue) &&
+        tokenList.tokens.length > 0 &&
+        !!prices,
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
@@ -234,8 +352,6 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     refetchInBackground: true,
     client,
   })
-
-  // const persistedData = usePersistance(poolResponse?.data)
 
   return [
     poolResponse?.data,

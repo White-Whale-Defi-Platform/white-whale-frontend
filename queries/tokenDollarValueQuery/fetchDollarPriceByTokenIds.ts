@@ -2,7 +2,7 @@ type ApiResponse = Record<string, { usd: number }>
 
 export const fetchDollarPriceByTokenIds = debounce(
   async (tokenIds: Array<string>): Promise<ApiResponse> => {
-    const apiIds = tokenIds.flat().filter((token) => token !== 'whale-token')
+    const apiIds = tokenIds.flat()
     const newApiIds = [...new Set(apiIds)].join(',')
 
     try {
