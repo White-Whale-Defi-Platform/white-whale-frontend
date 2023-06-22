@@ -34,9 +34,12 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
 
   //const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
-  const { minUnbondingDuration, maxUnbondingDuration } = useFactoryConfig(
-    config?.incentive_factory
-  )
+
+  const factoryConfig = useFactoryConfig(config?.incentive_factory)
+  let minUnbondingDuration = null
+  if (factoryConfig) {
+    minUnbondingDuration = factoryConfig?.minUnbondingDuration
+  }
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
@@ -88,9 +91,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       .div(10 ** tokenInfoB?.decimals)
       .toNumber()
     const ratio = reverse ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA)
-    const sim = num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
-
-    return sim
+    return num(normalizedValue).times(ratio.toNumber()).toFixed(decimals)
   }, [
     lpTokenA,
     lpTokenB,
@@ -106,7 +107,8 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       simulated == null ||
       !tokenAAmount ||
       !tokenBAmount ||
-      swapAddress == null
+      swapAddress == null ||
+      minUnbondingDuration == null
     )
       return {}
 

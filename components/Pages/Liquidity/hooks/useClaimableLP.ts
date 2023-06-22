@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import usePositions from './usePositions'
+import useLockedPositions from 'components/Pages/Liquidity/hooks/useLockedPositions'
 
 const useClaimableLP = ({ poolId }) => {
-  const { data: positions = [] } = usePositions(poolId)
+  const { data: positions = [] } = useLockedPositions(poolId)
 
   return useMemo(() => {
     //filter out positions that are not open and are not unbound and add total of amount
