@@ -185,6 +185,10 @@ const RewardsComponent = ({
     100
   )
 
+  const bondingHasStarted: boolean = useMemo(() => {
+    return genesisStartTimeInNano / 1_000_000 < Date.now()
+  }, [genesisStartTimeInNano])
+
   return (
     <>
       {isLoading ? (
@@ -328,7 +332,7 @@ const RewardsComponent = ({
             >
               {buttonLabel}
             </Button>
-            {progress === 100 && isWalletConnected && (
+            {progress === 100 && isWalletConnected && bondingHasStarted && (
               <Tooltip
                 label="Community driven enforcement of the next epoch."
                 borderRadius={10}

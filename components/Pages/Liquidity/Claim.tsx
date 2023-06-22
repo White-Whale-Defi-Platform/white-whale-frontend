@@ -8,7 +8,7 @@ import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/useCheckIncentiveSnapshots'
 import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
@@ -43,7 +43,11 @@ type Props = {
 const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
-  const { client, network, chainId } = useRecoilValue(walletState)
+  const { client, network, chainId, status } = useRecoilValue(walletState)
+  const isWalletConnected = useMemo(
+    () => status === WalletStatusType.connected,
+    [status]
+  )
   const config = useConfig(network, chainId)
   // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
   const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
@@ -71,7 +75,9 @@ const Claim = ({ poolId }: Props) => {
       <ClaimTable tokens={rewards} />
 
       <SubmitButton
-        label={allSnapshotsTaken ? 'Claim' : 'Take Snapshots'}
+        label={
+          allSnapshotsTaken && isWalletConnected ? 'Claim' : 'Take Snapshots'
+        }
         isConnected={true}
         txStep={TxStep.Ready}
         isDisabled={!isClaimable && allSnapshotsTaken}
