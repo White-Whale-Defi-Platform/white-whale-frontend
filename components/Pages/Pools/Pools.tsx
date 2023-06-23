@@ -128,7 +128,13 @@ const Pools = () => {
             isUSDPool: isUSDPool,
             flows: flows,
             incentives: <Incentives key={pool.pool_id} flows={flows} />,
-            action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
+            action: (
+              <ActionCTAs
+                chainIdParam={chainIdParam}
+                chainId={chainId}
+                pool={pool}
+              />
+            ),
             isSubqueryNetwork: false,
           }
         })

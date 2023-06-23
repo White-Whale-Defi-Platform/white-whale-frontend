@@ -49,7 +49,7 @@ export const fetchCurrentEpoch = async (
   client: Wallet,
   config: Config
 ): Promise<Epoch> => {
-  const result: JsonObject = await client.queryContractSmart(
+  const result: JsonObject = await client?.queryContractSmart(
     config.fee_distributor,
     {
       current_epoch: {},
