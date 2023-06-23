@@ -9,5 +9,5 @@ export const claimRewards = (
   const handleMsg = {
     claim: {},
   }
-  return client.execute(address, config.fee_distributor_address, handleMsg)
+  return client.execute(address, config.fee_distributor, handleMsg)
 }

@@ -36,7 +36,7 @@ const fetchWithdrawable = async (
 ): Promise<WithdrawableInfo[]> => {
   const results = await Promise.all(
     Object.entries(config.lsd_token).map(async ([key, token]) => {
-      return await client.queryContractSmart(config.whale_lair_address, {
+      return await client.queryContractSmart(config.whale_lair, {
         withdrawable: { address: address, denom: token.denom },
       })
     })

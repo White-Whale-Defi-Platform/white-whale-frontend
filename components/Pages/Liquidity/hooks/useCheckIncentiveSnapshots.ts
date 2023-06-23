@@ -2,12 +2,9 @@ import { useQuery } from 'react-query'
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { Wallet } from 'util/wallet-adapters/index'
 import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
-import { IncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
-export const useCheckIncentiveSnapshots = (
-  client: Wallet,
-  config: IncentiveConfig
-) => {
+export const useCheckIncentiveSnapshots = (client: Wallet, config: Config) => {
   const { data: currentEpochData } = useCurrentEpoch(client, config)
   const epochId = currentEpochData?.currentEpoch?.epoch.id
   const incentiveAddresses = useQueryIncentiveContracts(client)

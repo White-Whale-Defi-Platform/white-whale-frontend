@@ -59,7 +59,7 @@ const Pools = () => {
     })
   )
   const chains: any = useChains()
-  const currentChain = useMemo(
+  const currentChainPrefix = useMemo(
     () =>
       chains.find((row) => row.chainId === chainId)?.bech32Config
         ?.bech32PrefixAccAddr,
@@ -69,7 +69,7 @@ const Pools = () => {
   const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
     cosmWasmClient,
     pools,
-    currentChain
+    currentChainPrefix
   )
 
   const calculateMyPosition = (pool) => {
@@ -90,9 +90,9 @@ const Pools = () => {
     const initPools = async () => {
       setInitLoading(true)
       const poolsWithAprAnd24HrVolume: EnigmaPoolData[] =
-        currentChain === 'terra'
+        currentChainPrefix === 'terra'
           ? await getPairAprAndDailyVolumeTerra(pools)
-          : await getPairAprAndDailyVolume(pools, currentChain)
+          : await getPairAprAndDailyVolume(pools, currentChainPrefix)
 
       const _pools: PoolData[] = pools.map((pool: any) => {
         return {
@@ -128,7 +128,13 @@ const Pools = () => {
             isUSDPool: isUSDPool,
             flows: flows,
             incentives: <Incentives key={pool.pool_id} flows={flows} />,
-            action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
+            action: (
+              <ActionCTAs
+                chainIdParam={chainIdParam}
+                chainId={chainId}
+                pool={pool}
+              />
+            ),
             isSubqueryNetwork: false,
           }
         })

@@ -1,10 +1,14 @@
 import { Button, HStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { useMemo } from 'react'
 
-export const ActionCTAs = ({ chainIdParam, pool }) => {
+export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {
   const router = useRouter()
-
-  const isIncentivized = !!pool?.staking_address
+  const isIncentivized = useMemo(
+    () => INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId),
+    [chainId]
+  )
 
   const onIncentivizeClick = () => {
     router.push({

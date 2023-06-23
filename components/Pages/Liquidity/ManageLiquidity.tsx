@@ -59,10 +59,16 @@ const ManageLiquidity: FC = () => {
     )
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
-
+  const currentChainPrefix = useMemo(
+    () =>
+      chains.find((row) => row.chainId === chainId)?.bech32Config
+        ?.bech32PrefixAccAddr,
+    [chains, chainId]
+  )
   const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
     client,
-    pools
+    pools,
+    currentChainPrefix
   )
 
   const pool = useMemo(
@@ -233,9 +239,9 @@ const ManageLiquidity: FC = () => {
                     tokenB={tokenB}
                     onInputChange={onInputChange}
                     simulated={simulated}
-                    poolId={poolId}
                     tx={tx}
                     clearForm={clearForm}
+                    chainId={chainId}
                   />
                 )}
               </TabPanel>

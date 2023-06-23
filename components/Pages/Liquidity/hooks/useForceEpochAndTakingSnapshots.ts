@@ -4,8 +4,8 @@ import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { createExecuteMessage } from 'util/messages'
 import useTxStatus from 'hooks/useTxStatus'
-import { IncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
 import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
+import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 export enum Force {
   epochAndSnapshots,
@@ -14,7 +14,7 @@ export enum Force {
 
 type Params = {
   noSnapshotTakenAddresses?: Array<string>
-  config: IncentiveConfig
+  config: Config
 }
 const useForceEpochAndTakingSnapshots = ({
   noSnapshotTakenAddresses,
@@ -57,7 +57,7 @@ const useForceEpochAndTakingSnapshots = ({
                 new_epoch: {},
               },
               senderAddress: address,
-              contractAddress: config?.fee_distributor_address,
+              contractAddress: config?.fee_distributor,
               funds: [],
             }),
           ]

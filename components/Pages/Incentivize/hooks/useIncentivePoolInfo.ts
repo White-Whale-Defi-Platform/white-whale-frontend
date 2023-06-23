@@ -52,7 +52,7 @@ export interface IncentivePoolInfo {
 export const useIncentivePoolInfo = (
   client,
   pools,
-  currentChain
+  currentChainPrefix
 ): IncentivePoolInfo[] => {
   const { chainId, network } = useRecoilValue(walletState)
   const config: Config = useConfig(network, chainId)
@@ -65,13 +65,13 @@ export const useIncentivePoolInfo = (
   useEffect(() => {
     const fetchPoolData = async () => {
       const poolData =
-        currentChain === 'terra'
+        currentChainPrefix === 'terra'
           ? await getPairAprAndDailyVolumeTerra(pools)
-          : await getPairAprAndDailyVolume(pools, currentChain)
+          : await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)
     }
     fetchPoolData()
-  }, [currentChain, pools?.length, client])
+  }, [currentChainPrefix, pools?.length, client])
 
   let poolAssets = []
 
@@ -104,7 +104,7 @@ export const useIncentivePoolInfo = (
 }
 
 const fetchFlows = async (client, address): Promise<Flow[]> => {
-  return await client.queryContractSmart(address, { flows: {} })
+  return await client?.queryContractSmart(address, { flows: {} })
 }
 const fetchGlobalIncentiveWeight = async (
   client,

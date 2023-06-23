@@ -41,7 +41,7 @@ const Withdraw = ({
   }
 
   const TokenBox = ({ label, ampWhale, bWhale }) => {
-    const dollarValue = ((ampWhale + bWhale) * whalePrice).toLocaleString()
+    const dollarValue = ((ampWhale + bWhale) * whalePrice).toFixed(2)
     return (
       <Box
         border="0.5px solid"
