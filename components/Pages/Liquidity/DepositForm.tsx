@@ -54,6 +54,11 @@ const DepositForm = ({
   const isStakingEnabled = useMemo(() => !!pool?.staking_address, [pool])
 
   //const multiplicator = useMultiplicator(poolId)
+  // const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
+  //   cosmWasmClient,
+  //   pools,
+  //   currentChain
+  // )
 
   const multiplicator = useMemo(
     () =>
@@ -160,6 +165,7 @@ const DepositForm = ({
 
       <Multiplicator
         multiplicator={String(multiplicator)}
+        apr={"1"}
         show={isStakingEnabled}
       />
 

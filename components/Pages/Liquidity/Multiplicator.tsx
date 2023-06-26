@@ -1,16 +1,17 @@
-import { HStack } from '@chakra-ui/react'
+import { HStack, Text, VStack } from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 
 type Props = {
   multiplicator: string
+  apr: string
   show: boolean
 }
 
-const Multiplicator = ({ multiplicator, show }: Props) => {
+const Multiplicator = ({ multiplicator, apr, show }: Props) => {
   if (!show) return null
 
   return (
-    <HStack
+    <VStack
       justifyContent="space-between"
       width="full"
       border="1px solid rgba(255, 255, 255, 0.1)"
@@ -19,19 +20,32 @@ const Multiplicator = ({ multiplicator, show }: Props) => {
       pt={3.5}
       style={{ marginBottom: 50 }}
     >
-      <TooltipWithChildren
-        label="Multiplicator"
-        children={'Factor by which your APR gets multiplied.'}
-        isHeading
-        fontSize="16"
-      />
+      <HStack justifyContent="space-between" width="full">
+        <TooltipWithChildren
+          label="Multiplicator"
+          children={'Factor by which your APR gets multiplied.'}
+          isHeading
+          fontSize="16"
+        />
 
-      <TooltipWithChildren
-        label={multiplicator}
-        fontSize="16"
-        showTooltip={false}
-      />
-    </HStack>
+        <TooltipWithChildren
+          label={multiplicator}
+          fontSize="16"
+          showTooltip={false}
+        />
+      </HStack>
+      <HStack justifyContent="space-between" width="full">
+        <Text fontSize="14px" color="whiteAlpha.700">
+          Estimated APR
+        </Text>
+
+        <TooltipWithChildren
+          label={`${apr}%`}
+          fontSize="16"
+          showTooltip={false}
+        />
+      </HStack>
+    </VStack>
   )
 }
 

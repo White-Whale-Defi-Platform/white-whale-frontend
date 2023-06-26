@@ -21,13 +21,16 @@ import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInf
 type Props = {
   apr: string
   flows: FlowData[]
+
+  isMyPools: boolean
 }
 
-const Apr = ({ apr, flows }: Props) => {
+const Apr = ({ apr, flows, isMyPools = false }: Props) => {
   const totalApr = useMemo(() => {
-    const incentiveApr = flows.reduce((total, item) => {
-      return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-    }, 0)
+    const incentiveApr =
+      flows.reduce((total, item) => {
+        return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+      }, 0) * (isMyPools ? 16 : 1)
     return Number(apr.replace('%', '')) + Number(incentiveApr)
   }, [flows, apr])
 
@@ -91,7 +94,13 @@ const Apr = ({ apr, flows }: Props) => {
                       {flowInfo?.tokenSymbol ?? 'Unknown'} Incentive
                     </Td>
                     <Td color="white" isNumeric>
-                      {flowInfo?.apr.toFixed(2)}%
+                      {isNaN(flowInfo?.apr)
+                        ? '-'
+                        : !isMyPools
+                        ? `${flowInfo?.apr.toFixed(2)}% - ${(
+                            flowInfo?.apr * 16
+                          ).toFixed(2)}%`
+                        : `${(flowInfo?.apr * 16).toFixed(2)}%`}
                     </Td>
                   </Tr>
                 ))}

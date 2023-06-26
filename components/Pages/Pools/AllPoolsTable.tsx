@@ -50,7 +50,11 @@ const columns = [
       return info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
       ) : (
-        <Apr apr={info.getValue().toString()} flows={info.row.original.flows} />
+        <Apr
+          apr={info.getValue()?.toString()}
+          flows={info.row.original.flows}
+          isMyPools={false}
+        />
       )
     },
   }),
@@ -160,7 +164,7 @@ const AllPoolsTable = ({
       <TableContainer width="full">
         <Table variant="unstyled">
           <Thead>
-            {table.getHeaderGroups().map((headerGroup, index) => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th key={header.id} color="brand.50">
@@ -176,7 +180,7 @@ const AllPoolsTable = ({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row, index) => (
+            {table.getRowModel().rows.map((row) => (
               <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <Td key={cell.id}>

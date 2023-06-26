@@ -27,6 +27,7 @@ import {
 } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import usePrices from 'hooks/usePrices'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -35,10 +36,15 @@ type PoolData = PoolEntityTypeWithLiquidity &
     displayLogo2: string
   }
 
+type YearlyIncentiveDollarEmission = {
+  poolId: string
+  yearlyIncentiveDollarEmission: number
+}
+
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status } = useRecoilValue(walletState)
+  const { chainId, status, client } = useRecoilValue(walletState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
@@ -58,6 +64,7 @@ const Pools = () => {
       client: cosmWasmClient,
     })
   )
+  const prices = usePrices()
   const chains: any = useChains()
   const currentChain = useMemo(
     () =>
@@ -72,9 +79,37 @@ const Pools = () => {
     currentChain
   )
 
+  const [
+    myYearlyIncentiveDollarEmissions,
+    setMyYearlyIncentiveDollarEmissions,
+  ] = useState<YearlyIncentiveDollarEmission[]>(null)
+  useEffect(() => {
+    const fetchMyYearlyIncentiveDollarEmissions = async () => {
+      const result = await Promise.all(
+        (incentivePoolInfos ?? []).map(async (incentivePoolInfo) => {
+          const usdEmissions =
+            incentivePoolInfo?.flowData?.reduce(
+              (acc, flowData) =>
+                acc +
+                flowData.myDailyEmission *
+                  (prices?.[flowData.tokenSymbol] || 0),
+              0
+            ) * 365.25
+          return {
+            poolId: incentivePoolInfo.poolId,
+            yearlyIncentiveDollarEmission: usdEmissions,
+          }
+        })
+      )
+      setMyYearlyIncentiveDollarEmissions(result)
+    }
+
+    fetchMyYearlyIncentiveDollarEmissions()
+  }, [incentivePoolInfos, client, poolList?.pools])
+
   const calculateMyPosition = (pool) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
-    return dollarValue.toFixed(2)
+    return dollarValue
   }
   useEffect(() => {
     if (
@@ -112,6 +147,10 @@ const Pools = () => {
           const flows =
             incentivePoolInfos?.find((info) => info.poolId === pool.pool_id)
               ?.flowData ?? []
+          const yearlyUsd =
+            myYearlyIncentiveDollarEmissions?.find(
+              (info) => info.poolId === pool.pool_id
+            )?.yearlyIncentiveDollarEmission ?? 0
           return {
             contract: pool?.swap_address,
             pool: pool?.displayName,
@@ -121,14 +160,15 @@ const Pools = () => {
             apr: pool?.apr7d,
             volume24hr: pool?.usdVolume24h,
             totalLiq: pool?.TVL,
-            myPosition: calculateMyPosition(pool),
+            myPosition: calculateMyPosition(pool).toFixed(2),
+            incentiveApr: (yearlyUsd / calculateMyPosition(pool)) * 100,
             liquidity: pool?.liquidity,
             poolAssets: pool?.pool_assets,
             price: pool?.ratio,
             isUSDPool: isUSDPool,
             flows: flows,
             incentives: <Incentives key={pool.pool_id} flows={flows} />,
-            action: <ActionCTAs chainIdParam={chainIdParam} pool={pool} />,
+            action: <ActionCTAs chainIdParam={chainIdParam} pool={pool}/>,
             isSubqueryNetwork: false,
           }
         })

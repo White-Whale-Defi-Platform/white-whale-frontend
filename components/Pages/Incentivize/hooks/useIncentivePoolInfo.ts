@@ -14,6 +14,7 @@ import {
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
 import { useEffect, useState } from 'react'
+import { fetchPoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
 
 export interface Flow {
   claimed_amount: string
@@ -39,6 +40,7 @@ export interface Flow {
 }
 export interface FlowData {
   dailyEmission: number
+  myDailyEmission: number
   denom: string
   apr: number
   logoURI: string
@@ -49,12 +51,20 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
+interface WeightData {
+  address: string
+  address_weight: string
+  epoch_id: number
+  global_weight: string
+  share: string
+}
+
 export const useIncentivePoolInfo = (
   client,
   pools,
-  currentChain
+  currentChainPrefix
 ): IncentivePoolInfo[] => {
-  const { chainId, network } = useRecoilValue(walletState)
+  const { chainId, network, address } = useRecoilValue(walletState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)
@@ -65,13 +75,13 @@ export const useIncentivePoolInfo = (
   useEffect(() => {
     const fetchPoolData = async () => {
       const poolData =
-        currentChain === 'terra'
+        currentChainPrefix === 'terra'
           ? await getPairAprAndDailyVolumeTerra(pools)
-          : await getPairAprAndDailyVolume(pools, currentChain)
+          : await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)
     }
     fetchPoolData()
-  }, [currentChain, pools?.length, client])
+  }, [currentChainPrefix, pools?.length, client])
 
   let poolAssets = []
 
@@ -89,7 +99,8 @@ export const useIncentivePoolInfo = (
         currentEpochData,
         poolAssets,
         prices,
-        poolsWithAprAnd24HrVolume
+        poolsWithAprAnd24HrVolume,
+        address
       ),
     {
       enabled:
@@ -123,7 +134,8 @@ const getPoolFlowData = async (
   currentEpochData,
   poolAssets,
   prices,
-  poolsWithAprAnd24HrVolume
+  poolsWithAprAnd24HrVolume,
+  address
 ): Promise<IncentivePoolInfo[]> => {
   return pools
     ? await Promise.all(
@@ -134,6 +146,10 @@ const getPoolFlowData = async (
               flowData: null,
             } // Skip this iteration and continue with the next one.
           }
+          const incentiveWeights: WeightData = !!address
+            ? await fetchPoolUserShare(client, pool.staking_address, address)
+            : null
+
           const totalLiquidity = poolsWithAprAnd24HrVolume.find(
             (p) => p.pool_id === pool.pool_id
           )?.totalLiquidity
@@ -152,6 +168,7 @@ const getPoolFlowData = async (
                 flow.flow_asset.info?.native_token?.denom ??
                 flow.flow_asset.info.token.contract_addr,
               dailyEmission: 0,
+              myDailyEmission: 0,
             }
           })
           const uniqueFlowList = flowList.reduce((acc, current) => {
@@ -186,6 +203,8 @@ const getPoolFlowData = async (
                   (f) => f.denom === flowDenom
                 )
                 uniqueFlow.dailyEmission += emission
+                uniqueFlow.myDailyEmission +=
+                  emission * Number(incentiveWeights?.share ?? 0)
               }
             })
           }
