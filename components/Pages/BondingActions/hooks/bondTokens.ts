@@ -21,7 +21,7 @@ export const bondTokens = async (
       },
     },
   }
-  return client.execute(address, config.whale_lair_address, handleMsg, [
+  return client.execute(address, config.whale_lair, handleMsg, [
     coin(amount, denom),
   ])
 }

@@ -5,23 +5,18 @@ import { useChains } from 'hooks/useChainInfo'
 
 export const useCosmwasmClient = (chainId?: string): CosmWasmClient => {
   const chainInfo = useChains()
-  const [clients, setClients] = useState<any>({})
-
-  const getClients = async () => {
-    const clientList = {}
-    await Promise.all(
-      chainInfo.map(async (row) => {
-        clientList[row.chainId] = await CosmWasmClient.connect(row.rpc)
-      })
-    )
-
-    if (Object.keys(clientList).length > 0) setClients(clientList)
-  }
+  const [client, setClient] = useState<any>({})
 
   useEffect(() => {
-    getClients()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainInfo])
+    const getClient = async () => {
+      const chain = chainInfo.find((row) => row.chainId === chainId)
+      const client = await CosmWasmClient.connect(chain?.rpc)
 
-  return clients[chainId]
+      if (!!client) setClient(client)
+    }
+    if (!!chainInfo && !!chainId) getClient()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainInfo, chainId])
+
+  return client
 }

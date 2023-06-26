@@ -115,7 +115,7 @@ export const useIncentivePoolInfo = (
 }
 
 const fetchFlows = async (client, address): Promise<Flow[]> => {
-  return await client.queryContractSmart(address, { flows: {} })
+  return await client?.queryContractSmart(address, { flows: {} })
 }
 const fetchGlobalIncentiveWeight = async (
   client,

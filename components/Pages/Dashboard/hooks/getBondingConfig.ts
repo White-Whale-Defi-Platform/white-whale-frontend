@@ -33,7 +33,7 @@ export const fetchConfig = async (
   config: Config
 ): Promise<BondingContractConfig> => {
   const result: JsonObject = await client.queryContractSmart(
-    config.whale_lair_address,
+    config.whale_lair,
     {
       config: {},
     }

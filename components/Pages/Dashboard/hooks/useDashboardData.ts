@@ -20,8 +20,11 @@ export interface TokenDetails {
 }
 
 export interface Config {
-  whale_lair_address: string
-  fee_distributor_address: string
+  whale_lair: string
+  fee_distributor: string
+  incentive_factory: string
+  frontend_helper: string
+
   whale_base_token: TokenDetails
   lsd_token: {
     ampWHALE: TokenDetails
@@ -37,9 +40,7 @@ export const useConfig = (network: string, chainId: string) => {
       // Only execute if network and chainId are defined
       const fetchConfig = async () => {
         try {
-          const response = await fetch(
-            `/${network}/${chainId}/bonding_config.json`
-          )
+          const response = await fetch(`/${network}/${chainId}/config.json`)
           const json: Config = await response.json()
           setConfig(json)
         } catch (error) {

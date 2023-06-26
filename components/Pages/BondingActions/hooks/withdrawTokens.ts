@@ -12,5 +12,5 @@ export const withdrawTokens = (
       denom: denom,
     },
   }
-  return client.execute(address, config.whale_lair_address, handleMsg)
+  return client.execute(address, config.whale_lair, handleMsg)
 }

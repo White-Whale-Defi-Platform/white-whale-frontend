@@ -4,29 +4,32 @@ import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import utc from 'dayjs/plugin/utc'
-import { useIncentiveConfig } from 'components/Pages/Incentivize/hooks/useIncentiveConfig'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 dayjs.extend(utc)
 
 const useEpoch = () => {
   const { client, network, chainId } = useRecoilValue(walletState)
-  const { config: incentiveConfig } = useIncentiveConfig(network, chainId)
+  const contracts: Config = useConfig(network, chainId)
 
   const { data: config } = useQuery<number>({
-    queryKey: ['incentive', 'config', incentiveConfig?.fee_distributor_address],
+    queryKey: ['incentive', 'config', contracts?.fee_distributor],
     queryFn: () =>
-      client?.queryContractSmart(incentiveConfig?.fee_distributor_address, {
+      client?.queryContractSmart(contracts?.fee_distributor, {
         config: {},
       }),
-    enabled: !!incentiveConfig && !!client,
+    enabled: !!contracts && !!client,
   })
 
   const { data } = useQuery<number>({
-    queryKey: ['incentive', 'epoch', incentiveConfig?.fee_distributor_address],
+    queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
     queryFn: () =>
-      client?.queryContractSmart(incentiveConfig?.fee_distributor_address, {
+      client?.queryContractSmart(contracts?.fee_distributor, {
         current_epoch: {},
       }),
-    enabled: !!incentiveConfig && !!client,
+    enabled: !!contracts && !!client,
   })
 
   const checkLocalAndUTC = () => {
@@ -72,9 +75,7 @@ const useEpoch = () => {
     const diff = Math.floor(timestampDiffNew / epochDurationInMillis)
 
     // Calculate the epoch number based on the current epoch and timestamp difference
-    const epochNumber = diff < 0 ? currentEpoch : currentEpoch + diff
-
-    return epochNumber
+    return diff < 0 ? currentEpoch : currentEpoch + diff
   }
 
   const epochToDate = (givenEpoch) => {

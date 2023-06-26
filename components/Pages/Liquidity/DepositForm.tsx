@@ -10,7 +10,7 @@ import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import BondingDaysSlider from './BondingDaysSlider'
 import Multiplicator from './Multiplicator'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
+import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 
 type Props = {
   connected: WalletStatusType
@@ -21,10 +21,10 @@ type Props = {
   onInputChange: (asset: TokenItemState, index: number) => void
   setReverse: (value: boolean) => void
   reverse: boolean
-  poolId: string
   setBondingDays: (value: number) => void
   bondingDays: number
   clearForm: () => void
+  chainId: string
 }
 
 const DepositForm = ({
@@ -38,8 +38,8 @@ const DepositForm = ({
   reverse,
   bondingDays,
   setBondingDays,
-  poolId,
   clearForm,
+  chainId,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -49,9 +49,10 @@ const DepositForm = ({
     },
   })
 
-  const [pool] = usePoolFromListQueryById({ poolId })
-
-  const isStakingEnabled = useMemo(() => !!pool?.staking_address, [pool])
+  const incentivesEnabled = useMemo(
+    () => INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId),
+    [chainId]
+  )
 
   //const multiplicator = useMultiplicator(poolId)
   // const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
@@ -160,13 +161,13 @@ const DepositForm = ({
       <BondingDaysSlider
         bondingDays={bondingDays}
         setBondingDays={setBondingDays}
-        show={isStakingEnabled}
+        show={incentivesEnabled}
       />
 
       <Multiplicator
         multiplicator={String(multiplicator)}
         apr={'1'}
-        show={isStakingEnabled}
+        show={incentivesEnabled}
       />
 
       <SubmitButton

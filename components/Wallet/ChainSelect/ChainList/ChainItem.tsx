@@ -37,7 +37,7 @@ function ChainItem({
       }}
       onClick={() => {
         onChange(chain)
-        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+        queryClient.clear()
         onClose()
       }}
     >

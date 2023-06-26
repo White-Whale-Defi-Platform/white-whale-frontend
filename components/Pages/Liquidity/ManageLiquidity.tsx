@@ -240,9 +240,9 @@ const ManageLiquidity: FC = () => {
                     tokenB={tokenB}
                     onInputChange={onInputChange}
                     simulated={simulated}
-                    poolId={poolId}
                     tx={tx}
                     clearForm={clearForm}
+                    chainId={chainId}
                   />
                 )}
               </TabPanel>

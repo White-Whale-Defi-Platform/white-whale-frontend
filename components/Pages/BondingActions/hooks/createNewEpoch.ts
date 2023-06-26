@@ -9,5 +9,5 @@ export const createNewEpoch = async (
   const handleMsg = {
     new_epoch: {},
   }
-  return client.execute(address, config.fee_distributor_address, handleMsg)
+  return client.execute(address, config.fee_distributor, handleMsg)
 }

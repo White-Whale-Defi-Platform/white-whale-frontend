@@ -35,7 +35,7 @@ const fetchConfig = async (
   config: Config
 ): Promise<FeeDistributionConfig> => {
   const result: JsonObject = await client.queryContractSmart(
-    config.fee_distributor_address,
+    config.fee_distributor,
     {
       config: {},
     }
