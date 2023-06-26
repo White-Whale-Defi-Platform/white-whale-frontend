@@ -165,7 +165,7 @@ const DepositForm = ({
 
       <Multiplicator
         multiplicator={String(multiplicator)}
-        apr={"1"}
+        apr={'1'}
         show={isStakingEnabled}
       />
 

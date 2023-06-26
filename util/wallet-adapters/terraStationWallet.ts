@@ -87,7 +87,7 @@ export class TerraStationWallet implements Wallet {
   post(
     senderAddress: string,
     msgs: EncodeObject[],
-    memo: string | undefined,
+    memo: string | undefined
   ): Promise<TxResponse> {
     return this.client
       .post({
