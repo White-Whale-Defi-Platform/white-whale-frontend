@@ -3,8 +3,6 @@ import React, { useCallback } from 'react'
 import { Button, HStack, Text } from '@chakra-ui/react'
 import useConnectShell from 'hooks/useConnectShell'
 
-import ShellWalletIcon from '../../icons/ShellWalletIcon'
-
 function ShellConnectButton({ onCloseModal }) {
   const { setShellAndConnect } = useConnectShell()
 
@@ -17,7 +15,7 @@ function ShellConnectButton({ onCloseModal }) {
     <Button variant="wallet" onClick={() => setShellMemo()} colorScheme="black">
       <HStack justify="space-between" width="full">
         <Text>Shell Wallet</Text>
-        <ShellWalletIcon />
+        <img src="/img/shell-icon.png" width={'24px'} />
       </HStack>
     </Button>
   )
