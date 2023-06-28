@@ -162,10 +162,13 @@ export const useTransaction = () => {
         } else if (/out of gas/i.test(e?.toString())) {
           setError('Out of gas, try increasing gas limit on wallet.')
           message = 'Out of gas, try increasing gas limit on wallet.'
-        } else if (/There are unclaimed rewards available./i.test(e?.toString())) {
+        } else if (
+          /There are unclaimed rewards available./i.test(e?.toString())
+        ) {
           setError('There are unclaimed rewards available.')
-          message = 'There are unclaimed rewards available. Claim them before attempting to bond/unbond.'
-        }else if (
+          message =
+            'There are unclaimed rewards available. Claim them before attempting to bond/unbond.'
+        } else if (
           /was submitted but was not yet found on the chain/i.test(
             e?.toString()
           )

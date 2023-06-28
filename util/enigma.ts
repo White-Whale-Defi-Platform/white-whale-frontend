@@ -50,12 +50,12 @@ export const getPairInfosTerra = async (): Promise<any> => {
   const swapAddresses = terraPoolConfig.pools
     .map((pool: any) => pool.swap_address)
     .join(',')
-  const url = `/api/cors?url=https://api.coinhall.org/api/v1/pairs?addresses=${swapAddresses}`
+  const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses}`
   let chainDataResponse = await fetch(url)
+  const data = await chainDataResponse.json()
 
-  const data = await chainDataResponse.text()
   if (chainDataResponse.status === 200 && data) {
-    return JSON.parse(data)
+    return data
   } else {
     return []
   }
@@ -100,19 +100,19 @@ export const getPairAprAndDailyVolumeTerra = async (
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
   const pairInfos: any = await getPairInfosTerra()
 
-  if (!!pairInfos && pairInfos.pairs.length > 0 && !!pools) {
+  if (!!pairInfos && pairInfos.pools?.length > 0 && !!pools) {
     return swapAddresses?.map((swapAddress: string) => {
-      const pairInfo = pairInfos.pairs.find(
-        (row: any) => row.pairAddress === swapAddress
+      const pairInfo = pairInfos.pools.find(
+        (row: any) => row.id === swapAddress
       )
       const poolId = terraPoolConfig.pools.find(
         (pool: any) => pool.swap_address === swapAddress
       )?.pool_id
       const asset0Symbol = poolId?.split('-')[0]
       const chRatio =
-        pairInfo?.asset0.symbol === asset0Symbol
-          ? pairInfo?.asset0.usdPrice / pairInfo?.asset1.usdPrice
-          : pairInfo?.asset1.usdPrice / pairInfo?.asset0.usdPrice
+        pairInfo?.assets[0].symbol === asset0Symbol
+          ? pairInfo?.assets[0].usdPrice / pairInfo?.assets[1].usdPrice
+          : pairInfo?.assets[1].usdPrice / pairInfo?.assets[0].usdPrice
 
       const pool = pools.find((pool: any) => pool.swap_address === swapAddress)
       const displayAssetOrder = pool.displayName?.split('-')
@@ -129,10 +129,10 @@ export const getPairAprAndDailyVolumeTerra = async (
       const ratio = poolId?.includes('axlUSDC') ? chRatio : poolRatio
       return {
         pool_id: poolId,
-        usdVolume24h: `$${formatPrice(pairInfo?.usdVolume24h)}`,
-        usdVolume7d: `$${formatPrice(pairInfo?.usdVolume7d)}`,
-        totalLiquidity: Number(pairInfo?.usdLiquidity),
-        TVL: `$${formatPrice(pairInfo?.usdLiquidity)}`,
+        usdVolume24h: `$${formatPrice(pairInfo?.volume24h)}`,
+        usdVolume7d: `$${formatPrice(pairInfo?.volume7d)}`,
+        totalLiquidity: Number(pairInfo?.liquidity),
+        TVL: `$${formatPrice(pairInfo?.liquidity)}`,
         apr7d: `${Number(pairInfo?.apr7d).toFixed(2)}%`,
         ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData
