@@ -40,6 +40,19 @@ export const KeplrWalletInfo = ({ css, depositing }: WalletInfoProps) => {
   )
 }
 
+export const ShellWalletInfo = ({ css, depositing }: WalletInfoProps) => {
+  const { address: ibcWalletAddress } = useRecoilValue(ibcWalletState)
+
+  return (
+    <WalletInfo
+      css={css}
+      label={`${depositing ? 'To ' : ''}Shell wallet`}
+      icon={<StyledImgForIcon src="/img/shell-icon.png" alt="Shell wallet" />}
+      address={ibcWalletAddress}
+    />
+  )
+}
+
 export const AppWalletInfo = ({ css, depositing }: WalletInfoProps) => {
   const { address: walletAddress } = useRecoilValue(walletState)
 
