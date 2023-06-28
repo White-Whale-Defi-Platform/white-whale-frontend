@@ -11,71 +11,70 @@ import {
 dayjs.extend(utc)
 interface Epoch {
   available: {
-    amount: string;
+    amount: string
     info: {
       native_token: {
-        denom: string;
-      };
-    };
-  }[];
+        denom: string
+      }
+    }
+  }[]
   claimed: {
-    amount: string;
+    amount: string
     info: {
       native_token: {
-        denom: string;
-      };
-    };
-  }[];
+        denom: string
+      }
+    }
+  }[]
   global_index: {
-    bonded_amount: string;
+    bonded_amount: string
     bonded_assets: {
-      amount: string;
+      amount: string
       info: {
         native_token: {
-          denom: string;
-        };
-      };
-    }[];
-  };
-  timestamp: string;
-  weight: string;
-  id: string;
-  start_time: string;
+          denom: string
+        }
+      }
+    }[]
+  }
+  timestamp: string
+  weight: string
+  id: string
+  start_time: string
   total: {
-    amount: string;
+    amount: string
     info: {
       native_token: {
-        denom: string;
-      };
-    };
-  }[];
+        denom: string
+      }
+    }
+  }[]
 }
 
 interface EpochData {
-  epoch: Epoch;
+  epoch: Epoch
 }
 
 interface EpochConfig {
-  duration: string;
-  genesis_epoch: string;
+  duration: string
+  genesis_epoch: string
 }
 
 interface DistributionAsset {
   native_token: {
-    denom: string;
-  };
+    denom: string
+  }
 }
 
 interface EpochConfigData {
-  owner: string;
-  bonding_contract_addr: string;
-  fee_collector_addr: string;
-  grace_period: string;
-  epoch_config: EpochConfig;
-  distribution_asset: DistributionAsset;
+  owner: string
+  bonding_contract_addr: string
+  fee_collector_addr: string
+  grace_period: string
+  epoch_config: EpochConfig
+  distribution_asset: DistributionAsset
   // Add any additional properties as needed
 }
-
 
 const useEpoch = () => {
   const { client, network, chainId } = useRecoilValue(walletState)
@@ -92,13 +91,12 @@ const useEpoch = () => {
 
   const { data } = useQuery<EpochData>({
     queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
-    queryFn: async ()  =>
+    queryFn: async () =>
       await client?.queryContractSmart(contracts?.fee_distributor, {
         current_epoch: {},
       }),
     enabled: !!contracts && !!client,
   })
-
 
   const checkLocalAndUTC = () => {
     // Get the current local date

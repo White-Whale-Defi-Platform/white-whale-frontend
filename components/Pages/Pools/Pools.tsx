@@ -28,7 +28,10 @@ import {
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import usePrices from 'hooks/usePrices'
-import { aprHelperState, updateAPRHelperState } from 'state/atoms/aprHelperState'
+import {
+  aprHelperState,
+  updateAPRHelperState,
+} from 'state/atoms/aprHelperState'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -155,11 +158,16 @@ const Pools = () => {
               (info) => info.poolId === pool.pool_id
             )?.yearlyIncentiveDollarEmission ?? 0
           const myIncentiveApr = (yearlyUsd / calculateMyPosition(pool)) * 100
-          const incentiveBaseApr =  flows.reduce((total, item) => {
+          const incentiveBaseApr = flows.reduce((total, item) => {
             return total + (isNaN(item.apr) ? 0 : Number(item.apr))
           }, 0)
 
-          updateAPRHelperState(pool?.pool_id, pool?.apr7d.toString(), incentiveBaseApr, setAPRs )
+          updateAPRHelperState(
+            pool?.pool_id,
+            pool?.apr7d.toString(),
+            incentiveBaseApr,
+            setAPRs
+          )
 
           return {
             contract: pool?.swap_address,
@@ -196,7 +204,12 @@ const Pools = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
     initPools()
-  }, [pools, incentivePoolInfos, incentivePoolsLoaded, myYearlyIncentiveDollarEmissions])
+  }, [
+    pools,
+    incentivePoolInfos,
+    incentivePoolsLoaded,
+    myYearlyIncentiveDollarEmissions,
+  ])
 
   useEffect(() => {
     if (incentivePoolInfos?.length > 0) {

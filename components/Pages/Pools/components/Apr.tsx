@@ -26,12 +26,12 @@ type Props = {
 }
 
 const Apr = ({ apr, flows, myIncentiveApr, isMyPools = false }: Props) => {
-
   const totalApr = useMemo(() => {
-    const incentiveApr = isMyPools ? myIncentiveApr :
-      flows.reduce((total, item) => {
-        return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-      }, 0)
+    const incentiveApr = isMyPools
+      ? myIncentiveApr
+      : flows.reduce((total, item) => {
+          return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+        }, 0)
     return Number(apr.replace('%', '')) + Number(incentiveApr)
   }, [flows, apr, myIncentiveApr])
 

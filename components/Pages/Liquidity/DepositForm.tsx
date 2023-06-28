@@ -43,7 +43,7 @@ const DepositForm = ({
   setBondingDays,
   clearForm,
   chainId,
-  poolId
+  poolId,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -59,7 +59,10 @@ const DepositForm = ({
   )
   const [currentAprHelperState, _] = useRecoilState(aprHelperState)
 
-  const poolAPRs = useMemo(() => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId), [currentAprHelperState, poolId])
+  const poolAPRs = useMemo(
+    () => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
+    [currentAprHelperState, poolId]
+  )
 
   const multiplicator = useMemo(
     () =>
@@ -166,7 +169,10 @@ const DepositForm = ({
 
       <Multiplicator
         multiplicator={String(multiplicator)}
-        apr={`${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(2)}`}
+        apr={`${(
+          poolAPRs?.fees * 100 +
+          poolAPRs?.incentives * multiplicator
+        ).toFixed(2)}`}
         show={incentivesEnabled}
       />
 

@@ -81,7 +81,7 @@ export const useIncentivePoolInfo = (
       setPoolsWithAprAnd24HrVolume(poolData)
     }
     fetchPoolData()
-  }, [currentChainPrefix, pools?.length, client])
+  }, [currentChainPrefix, pools?.length])
 
   let poolAssets = []
 
@@ -221,7 +221,7 @@ const getPoolFlowData = async (
               logoURI: logoURI,
               apr:
                 ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
-                  (totalLiquidity * 4)) *
+                  (totalLiquidity * 3.4)) *
                 100,
             }
           })

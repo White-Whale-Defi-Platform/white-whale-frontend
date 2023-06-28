@@ -13,6 +13,7 @@ import KeplrConnectButton from './KeplrConnectButton'
 import CosmostationConnectButton from './CosmostationConnectButton'
 import TerraStationConnectButton from './TerraStationConnectButton'
 import LeapConnectButton from './LeapConnectButton'
+import ShellConnectButton from './ShellConnectButton'
 
 function WalletModal({ isOpenModal, onCloseModal, chainId }) {
   return (
@@ -26,6 +27,7 @@ function WalletModal({ isOpenModal, onCloseModal, chainId }) {
             {chainId !== 'comdex-1' && chainId !== 'injective-1' && (
               <TerraStationConnectButton onCloseModal={onCloseModal} />
             )}
+            <ShellConnectButton onCloseModal={onCloseModal} />
             <KeplrConnectButton onCloseModal={onCloseModal} />
             <LeapConnectButton onCloseModal={onCloseModal} />
             <CosmostationConnectButton onCloseModal={onCloseModal} />
