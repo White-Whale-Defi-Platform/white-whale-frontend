@@ -21,18 +21,19 @@ import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInf
 type Props = {
   apr: string
   flows: FlowData[]
-
   isMyPools: boolean
+  myIncentiveApr?: string
 }
 
-const Apr = ({ apr, flows, isMyPools = false }: Props) => {
+const Apr = ({ apr, flows, myIncentiveApr, isMyPools = false }: Props) => {
+
   const totalApr = useMemo(() => {
-    const incentiveApr =
+    const incentiveApr = isMyPools ? myIncentiveApr :
       flows.reduce((total, item) => {
         return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-      }, 0) * (isMyPools ? 16 : 1)
+      }, 0)
     return Number(apr.replace('%', '')) + Number(incentiveApr)
-  }, [flows, apr])
+  }, [flows, apr, myIncentiveApr])
 
   return (
     <Popover trigger="hover">

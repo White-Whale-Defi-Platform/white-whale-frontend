@@ -57,6 +57,7 @@ const columns = [
       ) : (
         <Apr
           apr={info.getValue().toString()}
+          myIncentiveApr={info.row.original.myIncentiveApr}
           flows={info.row.original.flows}
           isMyPools={true}
         />

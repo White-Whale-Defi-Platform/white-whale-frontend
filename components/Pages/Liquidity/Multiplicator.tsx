@@ -35,7 +35,7 @@ const Multiplicator = ({ multiplicator, apr, show }: Props) => {
         />
       </HStack>
       <HStack justifyContent="space-between" width="full">
-        <Text fontSize="14px" color="whiteAlpha.700">
+        <Text fontSize="15px" color="brand.50">
           Estimated APR
         </Text>
 

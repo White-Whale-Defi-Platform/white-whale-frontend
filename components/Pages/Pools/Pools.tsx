@@ -8,7 +8,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryMultiplePoolsLiquidity,
 } from 'queries/useQueryPools'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import {
   getPairAprAndDailyVolume,
@@ -28,15 +28,17 @@ import {
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import usePrices from 'hooks/usePrices'
+import { aprHelperState, updateAPRHelperState } from 'state/atoms/aprHelperState'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
     displayName: string
     displayLogo1: string
     displayLogo2: string
+    myIncentiveApr: number
   }
 
-type YearlyIncentiveDollarEmission = {
+export type YearlyIncentiveDollarEmission = {
   poolId: string
   yearlyIncentiveDollarEmission: number
 }
@@ -45,6 +47,8 @@ const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { chainId, status, client } = useRecoilValue(walletState)
+  const [_, setAPRs] = useRecoilState(aprHelperState)
+
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
@@ -103,7 +107,6 @@ const Pools = () => {
       )
       setMyYearlyIncentiveDollarEmissions(result)
     }
-
     fetchMyYearlyIncentiveDollarEmissions()
   }, [incentivePoolInfos, client, poolList?.pools])
 
@@ -151,6 +154,13 @@ const Pools = () => {
             myYearlyIncentiveDollarEmissions?.find(
               (info) => info.poolId === pool.pool_id
             )?.yearlyIncentiveDollarEmission ?? 0
+          const myIncentiveApr = (yearlyUsd / calculateMyPosition(pool)) * 100
+          const incentiveBaseApr =  flows.reduce((total, item) => {
+            return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+          }, 0)
+
+          updateAPRHelperState(pool?.pool_id, pool?.apr7d.toString(), incentiveBaseApr, setAPRs )
+
           return {
             contract: pool?.swap_address,
             pool: pool?.displayName,
@@ -161,7 +171,7 @@ const Pools = () => {
             volume24hr: pool?.usdVolume24h,
             totalLiq: pool?.TVL,
             myPosition: calculateMyPosition(pool).toFixed(2),
-            incentiveApr: (yearlyUsd / calculateMyPosition(pool)) * 100,
+            myIncentiveApr: myIncentiveApr,
             liquidity: pool?.liquidity,
             poolAssets: pool?.pool_assets,
             price: pool?.ratio,
@@ -186,7 +196,7 @@ const Pools = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
     initPools()
-  }, [pools, incentivePoolInfos, incentivePoolsLoaded])
+  }, [pools, incentivePoolInfos, incentivePoolsLoaded, myYearlyIncentiveDollarEmissions])
 
   useEffect(() => {
     if (incentivePoolInfos?.length > 0) {

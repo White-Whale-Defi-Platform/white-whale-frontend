@@ -16,5 +16,6 @@ export type Pool = {
   cta?: () => void
   incentives: React.ReactNode
   flows: FlowData[]
+  myIncentiveApr: string
   action: React.ReactNode
 }
