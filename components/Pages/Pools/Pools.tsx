@@ -72,6 +72,11 @@ const Pools = () => {
     currentChainPrefix
   )
 
+  if (window['debugLogsEnabled']) {
+    console.log('Pools-Liquidity: ', pools)
+    console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
+  }
+
   const calculateMyPosition = (pool) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
