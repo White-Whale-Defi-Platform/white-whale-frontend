@@ -58,7 +58,7 @@
       ],
       "lp_token": "juno1g3549wm0tffdzdpasufjr0nccu9ynzpzway5g3u6ucmhfd4ds05swswasc",
       "swap_address": "juno1p9z8xe96fyvg3h5gtvnpjjv2u47q6l7sdhg6asmyfgc6q8l8ttgqfvxnxh",
-      "staking_address": "",
+      "staking_address": "juno1krkuxv305q946x9vx5mvs406lp7zcxgyr09kdlr7xqvkgasdg6aqe88w35",
       "rewards_tokens": []
     },
     {
@@ -95,7 +95,7 @@
       ],
       "lp_token": "juno12caca3ymhxr7a73wtdefye86djs69704ktzkv02xkf59se8hx72qwyxq72",
       "swap_address": "juno1v6stcdrvwrthfvcwvlmmzht32ft9g9nw85tthcjqer242xg3nvdq8fjasx",
-      "staking_address": "",
+      "staking_address": "juno1r8t9e6agehtyack3vsskx885jepynf9jku48g2z96rgaz2u6jshs2gs28f",
       "rewards_tokens": []
     },
     {
@@ -132,7 +132,7 @@
       ],
       "lp_token": "juno19mkjyvydnq440a3ms4fccpltrzmxlvlz6nvz6qul0mgxvse42n2q9qkf72",
       "swap_address": "juno1wkjy5wl0pd5xxvwtrx37r7ydkt3dkwvghs00tvvqyd3xnjukah7qpj0vj7",
-      "staking_address": "",
+      "staking_address": "juno12zk3vhpukhqucpkv9xd2j9xrxlqc0v5yuw0sdd7n3jg2cts4rdaqaf02vr",
       "rewards_tokens": []
     },
     {
@@ -168,7 +168,7 @@
       ],
       "lp_token": "juno1lqc9u7lv52jpqgewhtl4w2yjch0234ewfz2z3ykl0z2q67xyfrnsjqw95j",
       "swap_address": "juno1g7ctm7dynjsduf597d8nvt36kwvhfutmzrczdnm00tsz48uryvzqp7p32h",
-      "staking_address": "",
+      "staking_address": "juno13wl6hktnurvt6y529a8knzn0w0ml5ff6szlwhkfrwzjhl0zm2nlqgwwec9",
       "rewards_tokens": []
     },
     {
@@ -180,6 +180,17 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
+          "chain_id": "juno-1",
+          "token_address": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
+          "symbol": "ampWHALE",
+          "name": "ampWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF"
+        },
+        {
           "id" : "white-whale",
           "chain_id": "juno-1",
           "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
@@ -190,23 +201,11 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
-        },
-        {
-          "chain_id": "juno-1",
-          "token_address": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
-          "symbol": "ampWHALE",
-          "name": "ampWHALE",
-          "decimals": 6,
-          "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF"
         }
-        
       ],
       "lp_token": "juno1cvnwcgkhxaj70gjg7x57fh447m2wj5yx7p2puu4mqgtf62qphtds88mdsd",
       "swap_address": "juno1dwmrkyhed4szdxxk6l0c98hseancjtdet58n77tfhv2as8cdjdlq7vps00",
-      "staking_address": "",
+      "staking_address": "juno198znyptksrfsrv0lvwcz65g07fx89hew6qq8gl58wtn3gualfa9s5jtzem",
       "rewards_tokens": []
     },
     {
@@ -218,6 +217,17 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
+          "chain_id": "juno-1",
+          "token_address": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF"
+        },
+        {
           "id" : "white-whale",
           "chain_id": "juno-1",
           "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
@@ -228,23 +238,11 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
-        },
-        {
-          "chain_id": "juno-1",
-          "token_address": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF",
-          "symbol": "bWHALE",
-          "name": "bWHALE",
-          "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF"
         }
-        
       ],
       "lp_token": "juno1a68d46fyzyq50t3geqe5c50kmswhrezyec8hz6sfngts6k4e77nqqd3yd0",
       "swap_address": "juno160uh2xtegzvc7ekte5x377aud0y40hw75m9l92h7pkqk3l3eg9vqltel48",
-      "staking_address": "",
+      "staking_address": "juno18a3qpkw5xh8m6r3lkughhv3ccqapjqgzq8923vw8tz6aqepxj5sqxet2gh",
       "rewards_tokens": []
     },
     {
@@ -281,7 +279,7 @@
       ],
       "lp_token": "juno1th5zf95xevutfgqc2a4cexqpeykx0y0q87jzexhd7pmzdxnpg4qs8tg3t5",
       "swap_address": "juno137593pljsgltp9863sawquejpxzmtpvuafg0c7tpqqer3hkz48eslwrl4l",
-      "staking_address": "",
+      "staking_address": "juno1zzs9fv6qz8sjn0v36d22900txv9c7m7u9vlt66t07kwjvl6srcyqq2q63z",
       "rewards_tokens": []
     },
     {
@@ -318,7 +316,7 @@
       ],
       "lp_token": "juno1qdj9shhfasyjuvncawstvmcqp2afxet0x36jaaxt0udp6gq27ftq9xr5d4",
       "swap_address": "juno12w6f755zx9l0vflfvql2jvl2jlyv348esyh7utvx727nwpy2jg5qsjemyx",
-      "staking_address": "",
+      "staking_address": "juno1nwrtue0vjftecegzyarhxdtedh0263akfle3522x0dx5jr0decms3vpd4t",
       "rewards_tokens": []
     }
   ],

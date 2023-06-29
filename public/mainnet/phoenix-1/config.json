@@ -5,7 +5,7 @@
   "frontend_helper": "terra1tslnzaadfhwdj67dzfvxhhy2agp0w69dt5uk5nfeaecevdqkh52sufhfrd",
   "whale_base_token": {
     "name": "WHALE",
-    "denom": "uwhale",
+    "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
     "decimals": 6
   },
   "lsd_token": {

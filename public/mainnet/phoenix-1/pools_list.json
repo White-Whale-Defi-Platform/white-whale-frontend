@@ -396,7 +396,7 @@
     {
       "pool_id": "WHALE-ROAR",
       "lpOrder": ["WHALE", "ROAR"],
-      "assetOrder": ["ROAR", "WHALE"],
+      "assetOrder": ["WHALE", "ROAR"],
       "displayName": "ROAR-WHALE",
       "displayLogo1": "/logos/lion.png",
       "displayLogo2": "/logos/whale.svg",
