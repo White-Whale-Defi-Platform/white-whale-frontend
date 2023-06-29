@@ -144,6 +144,7 @@
       "displayLogo2": "/logos/axlUSDC.png",
       "pool_assets": [
         {
+          "id" : "white-whale",
           "chain_id": "juno-1",
           "token_address": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
           "symbol": "WHALE",
