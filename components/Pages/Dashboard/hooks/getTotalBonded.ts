@@ -1,5 +1,4 @@
-import { Wallet } from 'util/wallet-adapters'
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 import { Config } from './useDashboardData'
 
@@ -19,7 +18,10 @@ interface TotalBondedInfo {
   total_bonded: string
 }
 
-export const getTotalBonded = async (client: Wallet, config: Config) => {
+export const getTotalBonded = async (
+  client: CosmWasmClient,
+  config: Config
+) => {
   if (!client) {
     return null
   }
@@ -37,7 +39,7 @@ export const getTotalBonded = async (client: Wallet, config: Config) => {
   }
 }
 const fetchTotalBonded = async (
-  client: Wallet,
+  client: CosmWasmClient,
   config: Config
 ): Promise<TotalBondedInfo> => {
   const result: JsonObject = await client.queryContractSmart(

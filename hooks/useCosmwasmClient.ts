@@ -5,7 +5,7 @@ import { useChains } from 'hooks/useChainInfo'
 
 export const useCosmwasmClient = (chainId?: string): CosmWasmClient => {
   const chainInfo = useChains()
-  const [client, setClient] = useState<any>({})
+  const [client, setClient] = useState<any>(undefined)
 
   useEffect(() => {
     const getClient = async () => {

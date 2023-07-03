@@ -52,11 +52,11 @@
     ],
     "migaloo": [
       {
-        "tokenSymbol": "axlUSDC",
+        "tokenSymbol": "WHALE",
         "amount": 0
       },
       {
-        "tokenSymbol": "WHALE",
+        "tokenSymbol": "ampWHALE",
         "amount": 0
       }
     ]

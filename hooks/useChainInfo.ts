@@ -1,43 +1,16 @@
-const chainInfoQueryKey = '@chain-info'
-// import chainInfo from "components/Wallet/chainInfo.json"
 import { useMemo } from 'react'
 
-import { ChainInfo } from '@keplr-wallet/types'
 import mainnetChainInfo from 'public/mainnet/chain_info.json'
 import testnetChainInfo from 'public/testnet/chain_info.json'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-import { queryClient } from 'services/queryClient'
-
-export const unsafelyReadChainInfoCache = () =>
-  queryClient.getQueryCache().find(chainInfoQueryKey)?.state?.data as
-    | ChainInfo
-    | undefined
-
 export const useChains = () => {
-  const currentWalletState = useRecoilValue(walletState)
+  const { network } = useRecoilValue(walletState)
 
-  // const { data = [], isLoading } = useQuery<CustomChainType[]>(
-  //   ['chainInfo', currentWalletState.network],
-  //   async () => {
-  //     const url = `/${currentWalletState.network}${process.env.NEXT_PUBLIC_CHAIN_INFO_URL}`
-  //     const response = await fetch(url)
-
-  //     return response.json()
-  //   },
-  //   {
-  //     enabled: !!currentWalletState.network,
-  //     onError(e) {
-  //       console.error('Error loading chain info:', e)
-  //     },
-  //   }
-  // )
-
-  // return data || []
-  return currentWalletState.network === 'testnet'
+  return useMemo(()=> network === 'testnet'
     ? testnetChainInfo || []
-    : mainnetChainInfo || []
+    : mainnetChainInfo || [], [network])
 }
 
 export const useChainInfo = (id = null) => {
