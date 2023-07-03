@@ -35,7 +35,10 @@ interface Data {
   epochs: Epoch[]
 }
 
-export const getClaimableEpochs = async (client: CosmWasmClient, config: Config) => {
+export const getClaimableEpochs = async (
+  client: CosmWasmClient,
+  config: Config
+) => {
   if (!client) {
     return null
   }

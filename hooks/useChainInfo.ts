@@ -8,9 +8,11 @@ import { walletState } from 'state/atoms/walletAtoms'
 export const useChains = () => {
   const { network } = useRecoilValue(walletState)
 
-  return useMemo(()=> network === 'testnet'
-    ? testnetChainInfo || []
-    : mainnetChainInfo || [], [network])
+  return useMemo(
+    () =>
+      network === 'testnet' ? testnetChainInfo || [] : mainnetChainInfo || [],
+    [network]
+  )
 }
 
 export const useChainInfo = (id = null) => {
