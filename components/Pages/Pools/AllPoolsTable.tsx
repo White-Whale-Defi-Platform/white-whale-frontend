@@ -11,7 +11,7 @@ import {
   Text,
   Th,
   Thead,
-  Tr
+  Tr,
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
@@ -19,7 +19,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 
 import Loader from '../../Loader'
@@ -32,7 +32,11 @@ const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
   columnHelper.accessor('pool', {
-    header: () => <Text color="brand.50" display="inline">Pool</Text>,
+    header: () => (
+      <Text color="brand.50" display="inline">
+        Pool
+      </Text>
+    ),
     cell: (info) => (
       <PoolName
         poolId={info.getValue()}
@@ -43,7 +47,7 @@ const columns = [
   }),
   columnHelper.accessor('price', {
     header: () => (
-      <Text align="right" color="brand.50"  display="inline">
+      <Text align="right" color="brand.50" display="inline">
         {`RATIO`}
       </Text>
     ),
@@ -52,7 +56,9 @@ const columns = [
     },
   }),
   columnHelper.accessor('apr', {
-    header: () => <Text align="right" color="brand.50" display="inline">{`APR`}</Text>,
+    header: () => (
+      <Text align="right" color="brand.50" display="inline">{`APR`}</Text>
+    ),
     cell: (info) => {
       return info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
@@ -73,7 +79,7 @@ const columns = [
           {info.row.original.isSubqueryNetwork ? (
             <Volume pairAddr={info.row.original.contract} />
           ) : (
-            <Text align="right" >{info.getValue()}</Text>
+            <Text align="right">{info.getValue()}</Text>
           )}
         </>
       )
@@ -116,18 +122,17 @@ const AllPoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-
-    const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({
-   data: pools,
+    data: pools,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting
-    }
+      sorting,
+    },
   })
 
   if (isLoading || !pools) {
@@ -178,10 +183,14 @@ const AllPoolsTable = ({
             {table.getHeaderGroups().map((headerGroup, index) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <Th 
-                  key={header.id} 
-                  color="brand.50"
-                  onClick={header.id === 'action' ? null :  header.column.getToggleSortingHandler()} 
+                  <Th
+                    key={header.id}
+                    color="brand.50"
+                    onClick={
+                      header.id === 'action' || header.id === 'incentives'
+                        ? null
+                        : header.column.getToggleSortingHandler()
+                    }
                   >
                     {header.isPlaceholder
                       ? null
@@ -191,13 +200,13 @@ const AllPoolsTable = ({
                         )}
                     <chakra.span pl="2">
                       {header.column.getIsSorted() ? (
-                        header.column.getIsSorted() === "desc" ? (
+                        header.column.getIsSorted() === 'desc' ? (
                           <TriangleDownIcon aria-label="sorted descending" />
-                          ) : (
+                        ) : (
                           <TriangleUpIcon aria-label="sorted ascending" />
-                          )
-                          ) : null}
-                  </chakra.span>
+                        )
+                      ) : null}
+                    </chakra.span>
                   </Th>
                 ))}
               </Tr>
