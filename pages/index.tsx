@@ -6,7 +6,7 @@ const Index = () => {
   const router: NextRouter = useRouter()
 
   useEffect(() => {
-    router.replace('/dashboard')
+    router.replace('/terra/dashboard')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
