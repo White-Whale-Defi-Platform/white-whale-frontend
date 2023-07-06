@@ -12,12 +12,11 @@ import RadialGradient from './RadialGradient'
 
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
-  const [isMobileView] = useMediaQuery('(max-width: 480px)')
-
+  const [isMobileView] = useMediaQuery('(max-width: 1px)')
+//{(isMobile || isMobileView) && <MobileNotSupportedModal />}
   return (
     <>
-      {(isMobile || isMobileView) && <MobileNotSupportedModal />}
-      {!(isMobile || isMobileView) && (
+      (
         <Flex direction="column" backgroundColor="transparent" height="100vh">
           <RadialGradient />
           <Navbar />
@@ -36,7 +35,7 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
             <Status />
           </Flex>
         </Flex>
-      )}
+      )
     </>
   )
 }

@@ -25,6 +25,7 @@ type Props = {
   bondingDays: number
   clearForm: () => void
   chainId: string
+  mobile?:boolean
 }
 
 const DepositForm = ({
@@ -40,6 +41,7 @@ const DepositForm = ({
   setBondingDays,
   clearForm,
   chainId,
+  mobile
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -135,6 +137,7 @@ const DepositForm = ({
         name="token1"
         control={control}
         token={tokenA}
+        mobile={mobile}
         isDisabled={isInputDisabled}
         onChange={(value) => {
           setReverse(false)
@@ -147,6 +150,7 @@ const DepositForm = ({
         control={control}
         token={tokenB}
         isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
+        mobile={mobile}
         onChange={(value) => {
           setReverse(true)
           onInputChange(value, 1)

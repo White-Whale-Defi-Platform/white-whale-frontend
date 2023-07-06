@@ -13,6 +13,7 @@ export default function useConnectKeplr() {
   const { disconnect } = useWallet()
 
   const connectKeplr = async () => {
+    console.log(connectedWallet)
     if (connectedWallet) {
       disconnect()
     }

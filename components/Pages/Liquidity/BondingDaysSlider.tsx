@@ -1,6 +1,12 @@
 import {
   Box,
   HStack,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -17,19 +23,21 @@ type Props = {
 }
 
 const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
+  const format = (val:string) => val+` Days`
+  const parse = (val:string) => val.replace(/ Days$/, '')
   if (!show) return null
 
-  return (
-    <VStack width="full" alignItems="flex-start" gap="2" pb="6">
+
+  return (<VStack width="full" alignItems="flex-start" gap="2" pb="6">
       <TooltipWithChildren label="Unlock Duration">
         <Text>
           Unlock duration refers to the period of time it takes for your staked
           funds to be released.
         </Text>
       </TooltipWithChildren>
-
       <Box width="full">
         <Slider
+          focusThumbOnChange={false}
           defaultValue={0}
           value={bondingDays}
           step={1}
@@ -45,18 +53,18 @@ const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
           <SliderThumb boxSize={6} bg="brand.500" />
         </Slider>
       </Box>
-
-      <HStack gap="4">
-        <Box px="10" py="2" bg="rgba(0, 0, 0, 0.5)" borderRadius="100px">
-          <Text color="white" fontSize="14">
-            {' '}
-            ~{bondingDays} days
-          </Text>
+      <HStack >
+        <Box px={2} py="2" bg="rgba(0, 0, 0, 0.5)" borderRadius="100px" maxWidth={""}>
+          <NumberInput defaultValue={0} min={0} max={365} size={"xs"} value={bondingDays} inputMode= {"numeric"}  onChange={(elem:string)=> {if(elem.length <= 3 && Number(elem) <= 365 && Number(elem) >= 0){setBondingDays(elem)} else if(Number(elem) > 365){setBondingDays(365)}}}>
+  <NumberInputField border={'hidden'} maxWidth={"70"}/>
+  <NumberInputStepper minWidth={"8"} py={"3px"}>
+  <Text fontSize={"12"}>Days</Text>
+  </NumberInputStepper>
+</NumberInput>
         </Box>
         {/* <Text color="brand.50" fontSize="14">Block 14936784 </Text> */}
       </HStack>
-    </VStack>
-  )
+    </VStack>)
 }
 
 export default BondingDaysSlider

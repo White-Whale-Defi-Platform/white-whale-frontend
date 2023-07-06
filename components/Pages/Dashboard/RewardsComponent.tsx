@@ -81,7 +81,8 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
   return (
     <Box
       h="7px"
-      minW={390}
+      width={'calc(100vw)'}
+      maxWidth={390}
       bg={
         percent === 100 && currentEpochStartTimeInNano > 0
           ? 'transparent'
@@ -196,8 +197,6 @@ const RewardsComponent = ({
           width="full"
           background={boxBg}
           borderRadius={borderRadius}
-          minH={320}
-          w={450}
           gap={3}
           overflow="hidden"
           position="relative"
@@ -205,8 +204,6 @@ const RewardsComponent = ({
           justifyContent="center"
         >
           <HStack
-            minW={100}
-            minH={100}
             width="full"
             alignContent="center"
             justifyContent="center"
@@ -217,12 +214,13 @@ const RewardsComponent = ({
         </VStack>
       ) : (
         <VStack
-          width="full"
           background={boxBg}
           borderRadius={borderRadius}
           alignItems="center"
           minH={320}
-          w={450}
+          minWidth={420}
+          maxWidth={'calc(40vw)'}
+          
           gap={4}
           overflow="hidden"
           position="relative"
@@ -230,10 +228,9 @@ const RewardsComponent = ({
           justifyContent="flex-start"
         >
           <HStack
-            justifyContent="space-between"
+            spacing={170}
             align="stretch"
             mt={7}
-            minW={390}
           >
             <HStack flex="1">
               <a>

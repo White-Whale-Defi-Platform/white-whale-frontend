@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 
-import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Text, VStack, Stack } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -119,14 +119,14 @@ function FlashloanForm({}: Props) {
   return (
     <Flex
       padding={10}
-      width={['full', '900px']}
-      height="600px"
+      width={"flex"}
+      height={"600"}
       background="#1C1C1C"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
-      display={['none', 'flex']}
+      display={'flex'}
     >
-      <VStack width="full">
+      <VStack width={["300px","full"]} height={"full"}>
         <HStack
           width="full"
           justifyContent="space-between"
@@ -139,9 +139,10 @@ function FlashloanForm({}: Props) {
           {/* <Error message={error || tx?.error} /> */}
         </HStack>
         <Editor containerRef={containerRef} />
-        <HStack justify="space-between" width="full" p={4} alignItems="center">
-          <HStack>
-            <Button
+        <HStack width="full" p={4} >
+          <Stack direction={['column', 'row']} align={"center"}>
+            <Button 
+              width={[60,120]}
               leftIcon={<MdOutlineFormatIndentDecrease size={16} />}
               variant="outline"
               onClick={format}
@@ -157,9 +158,9 @@ function FlashloanForm({}: Props) {
             >
               {tx?.buttonLabel || 'Simulate'}
             </Button> */}
-          </HStack>
+          
 
-          <Button
+            <Button
             onClick={tx?.submit}
             variant="primary"
             width={60}
@@ -170,7 +171,8 @@ function FlashloanForm({}: Props) {
             disabled={!!error || !isConnected}
           >
             {buttonLabel}
-          </Button>
+            </Button>
+          </Stack>
         </HStack>
 
         {/* <Text>{JSON.stringify(json, null, 2)}</Text> */}

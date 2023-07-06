@@ -1,4 +1,4 @@
-import { VStack, forwardRef } from '@chakra-ui/react'
+import { Button, HStack, Hide, VStack, forwardRef } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
 import WhaleInput from './WhaleInput'
@@ -26,6 +26,7 @@ interface AssetInputProps {
   showBalanceSlider?: boolean
   isBonding?: boolean
   unbondingBalances?: { [key: string]: number }
+  mobile?:boolean
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, ref) => {
@@ -39,6 +40,7 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     ignoreSlack,
     hideMax,
     hideDollarValue,
+    mobile
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
@@ -95,6 +97,7 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
         hideMax={hideMax}
         onMaxClick={onMaxClick}
         onHalfClick={onHalfClick}
+        mobile={mobile}
       />
     </VStack>
   )

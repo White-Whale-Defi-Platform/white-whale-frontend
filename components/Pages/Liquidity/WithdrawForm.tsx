@@ -10,14 +10,16 @@ import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
 import useClaimableLP from './hooks/useClaimableLP'
+import { AddIcon } from '@chakra-ui/icons'
 
 type Props = {
   poolId: string
   connected: WalletStatusType
+  mobile?:boolean
   clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
+const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -153,12 +155,12 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
         isDisabled={isInputDisabled}
         balance={num(tokenABalance).toNumber()}
         fetchBalance={false}
+        mobile={mobile}
         onChange={(value) => {
           if (reverse) setReverse(false)
           onInputChange(value, 1)
         }}
       />
-
       <Input
         control={control}
         name="token2"
@@ -166,6 +168,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
         isDisabled={isInputDisabled}
         balance={num(tokenBBalance).toNumber()}
         fetchBalance={false}
+        mobile={mobile}
         onChange={(value) => {
           if (!reverse) setReverse(true)
           onInputChange(value, 2)

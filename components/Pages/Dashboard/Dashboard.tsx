@@ -1,13 +1,14 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
+import { Flex, HStack, Text, VStack,useMediaQuery } from '@chakra-ui/react'
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import RewardsComponent from './RewardsComponent'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { BondingData } from './types/BondingData'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useChains } from 'hooks/useChainInfo'
 import { useDashboardData } from './hooks/useDashboardData'
+import { useRouter } from 'next/router'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
@@ -16,15 +17,18 @@ import {
 import usePrices from 'hooks/usePrices'
 
 const Dashboard: FC = () => {
-  const [{ chainId, status, client, address, network }] =
-    useRecoilState(walletState)
+  const router = useRouter()
+  const { chainId, status, client, address, network } =
+    useRecoilValue(walletState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
   const currentChain = chains.find(
     (row: { chainId: string }) => row.chainId === chainId
   )
   const currentChainName = currentChain?.label.toLowerCase()
-
+  console.log(currentChainName)
+  console.log(status)
+ 
   const data: BondingData[] = [
     {
       tokenType: TokenType.liquid,
@@ -67,8 +71,10 @@ const Dashboard: FC = () => {
       actionType: ActionType.withdraw,
     },
   ]
+ 
 
   const [updatedData, setData] = useState(null)
+  const [isMobile] = useMediaQuery("(max-width: 720px)") 
 
   const setValues = (
     tokenType: TokenType,
@@ -145,16 +151,16 @@ const Dashboard: FC = () => {
   }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale])
 
   return (
-    <VStack alignSelf="center">
+    <VStack alignSelf="center" paddingLeft={10}>
       <Flex
         direction={{ base: 'column', xl: 'row' }}
-        gap={10}
+        gap={5}
         justifyContent="space-between"
         alignItems="flex-end"
       >
-        <VStack>
+        <VStack width="flex">
           <HStack width="full" paddingY={5}>
-            <Text as="h2" fontSize="24" fontWeight="900">
+            <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding
             </Text>
           </HStack>
@@ -164,6 +170,7 @@ const Dashboard: FC = () => {
             data={updatedData}
             whalePrice={whalePrice}
             currentChainName={currentChainName}
+            mobile={isMobile}
           />
         </VStack>
         <VStack alignSelf={{ base: 'center', xl: 'end' }}>

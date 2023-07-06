@@ -100,7 +100,7 @@ export const getPairAprAndDailyVolumeTerra = async (
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
   const pairInfos: any = await getPairInfosTerra()
 
-  if (!!pairInfos && pairInfos.pairs.length > 0 && !!pools) {
+  if (!!pairInfos &&pairInfos.pairs&& pairInfos.pairs.length > 0 && !!pools) {
     return swapAddresses?.map((swapAddress: string) => {
       const pairInfo = pairInfos.pairs.find(
         (row: any) => row.pairAddress === swapAddress

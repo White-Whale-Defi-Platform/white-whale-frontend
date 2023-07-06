@@ -1,8 +1,12 @@
-import { ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Tab,
   TabList,
   TabPanel,
@@ -10,6 +14,7 @@ import {
   Tabs,
   Text,
   VStack,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'types/common'
@@ -38,6 +43,7 @@ import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 
 const ManageLiquidity: FC = () => {
+  const [isMobile] = useMediaQuery("(max-width: 640px)") 
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
   const { address, chainId, status, client } = useRecoilValue(walletState)
@@ -176,6 +182,113 @@ const ManageLiquidity: FC = () => {
     setTokenLPState(newState)
   }
 
+  const options = () => {
+    if (!isMobile){
+      return (
+        <Box
+        border="2px"
+        borderColor="whiteAlpha.200"
+        borderRadius="3xl"
+        pt="10"
+        maxH="fit-content"
+      >
+      <Tabs variant="brand">
+      <TabList justifyContent="center" background={'#1C1C1C'}>
+        <Tab>Overview</Tab>
+        <Tab>Deposit</Tab>
+        <Tab>Withdraw</Tab>
+        <Tab>Claim</Tab>
+      </TabList>
+      <TabPanels p={4}>
+        <TabPanel padding={4}>
+          <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
+        </TabPanel>
+        <TabPanel padding={4}>
+          {isTokenSet && (
+            <DepositForm
+              setBondingDays={setBondingDays}
+              bondingDays={bondingDays}
+              setReverse={setReverse}
+              reverse={reverse}
+              connected={status}
+              tokenA={tokenA}
+              tokenB={tokenB}
+              onInputChange={onInputChange}
+              simulated={simulated}
+              tx={tx}
+              clearForm={clearForm}
+              chainId={chainId}
+            />
+          )}
+        </TabPanel>
+        <TabPanel padding={4}>
+          <WithdrawForm
+            connected={status}
+            clearForm={clearForm}
+            poolId={poolId}
+          />
+        </TabPanel>
+        <TabPanel padding={4}>
+          <Claim poolId={poolId} />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+    </Box>)
+    }else{
+      return (<Box
+        border="2px"
+        borderColor="whiteAlpha.200"
+        borderRadius="3xl"
+        paddingTop={"10"}
+        maxH="fit-content"
+      ><Tabs variant={"brand"}>
+      <TabList display='flex' flexWrap={'wrap'} justifyContent="center" background={'#1C1C1C'} borderBottom={"white"}>
+        <Tab >Overview</Tab>
+        <Tab >Deposit</Tab>
+        <Tab >Withdraw</Tab>
+        <Tab>Claim</Tab>
+      </TabList>
+      <TabPanels p={4}>
+        <TabPanel padding={4}>
+          <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
+        </TabPanel>
+        <TabPanel padding={4} >
+          {isTokenSet && (
+            <DepositForm
+              setBondingDays={setBondingDays}
+              bondingDays={bondingDays}
+              setReverse={setReverse}
+              reverse={reverse}
+              connected={status}
+              tokenA={tokenA}
+              tokenB={tokenB}
+              onInputChange={onInputChange}
+              simulated={simulated}
+              tx={tx}
+              clearForm={clearForm}
+              chainId={chainId}
+              mobile={isMobile}
+            />
+          )}
+        </TabPanel>
+        <TabPanel padding={4}>
+          <WithdrawForm
+            connected={status}
+            clearForm={clearForm}
+            poolId={poolId}
+            mobile={isMobile}
+          />
+        </TabPanel>
+        <TabPanel padding={4}>
+          <Claim poolId={poolId} />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+    </Box>
+    )
+    }
+  }
+
   return (
     <VStack
       w="auto"
@@ -205,59 +318,11 @@ const ManageLiquidity: FC = () => {
       <Box
         background={'#1C1C1C'}
         padding={[6, 12]}
-        paddingTop={[10]}
         borderRadius="30px"
         width={['full']}
       >
-        <Box
-          border="2px"
-          borderColor="whiteAlpha.200"
-          borderRadius="3xl"
-          pt="8"
-          maxH="fit-content"
-        >
-          <Tabs variant="brand">
-            <TabList justifyContent="center" background={'#1C1C1C'}>
-              <Tab>Overview</Tab>
-              <Tab>Deposit</Tab>
-              <Tab>Withdraw</Tab>
-              <Tab>Claim</Tab>
-            </TabList>
-            <TabPanels p={4}>
-              <TabPanel padding={4}>
-                <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
-              </TabPanel>
-              <TabPanel padding={4}>
-                {isTokenSet && (
-                  <DepositForm
-                    setBondingDays={setBondingDays}
-                    bondingDays={bondingDays}
-                    setReverse={setReverse}
-                    reverse={reverse}
-                    connected={status}
-                    tokenA={tokenA}
-                    tokenB={tokenB}
-                    onInputChange={onInputChange}
-                    simulated={simulated}
-                    tx={tx}
-                    clearForm={clearForm}
-                    chainId={chainId}
-                  />
-                )}
-              </TabPanel>
-              <TabPanel padding={4}>
-                <WithdrawForm
-                  connected={status}
-                  clearForm={clearForm}
-                  poolId={poolId}
-                />
-              </TabPanel>
-              <TabPanel padding={4}>
-                <Claim poolId={poolId} />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Box>
+          {options()}
+        
       </Box>
     </VStack>
   )

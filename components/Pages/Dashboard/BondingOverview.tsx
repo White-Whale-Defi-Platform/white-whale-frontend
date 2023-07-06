@@ -34,15 +34,20 @@ const BondingOverview = ({
   data,
   whalePrice,
   currentChainName,
+  mobile
 }) => {
   const borderRadius = '30px'
   const router = useRouter()
   const TokenBox = ({ tokenType }) => {
     const { color, label } = data.find((e) => e.tokenType == tokenType)
-
+    const box = ()=>{
+      if (!mobile){
+        return (<Box bg={color} w="4" h="4" borderRadius="50%" mr="2"></Box>)
+      }else return
+    }
     return (
       <HStack mr="10" paddingBottom={6}>
-        <Box bg={color} w="4" h="4" borderRadius="50%" mr="2"></Box>
+        {box()}
         <WhaleTooltip
           key={`${tokenType}${color}`}
           label={label}
@@ -54,43 +59,12 @@ const BondingOverview = ({
     )
   }
 
-  let aggregatedAssets = data?.reduce((acc, e) => acc + (e?.value ?? 0), 0)
-
-  return (
-    <VStack
-      width="full"
-      background={'#1C1C1C'}
-      borderRadius={borderRadius}
-      alignItems="flex-start"
-      verticalAlign="center"
-      minH={320}
-      minW={850}
-      as="form"
-      overflow="hidden"
-      position="relative"
-      display="flex"
-      justifyContent="center"
-    >
-      {isLoading ? (
-        <HStack
-          minW={100}
-          minH={100}
-          width="full"
-          alignContent="center"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Loader />
-        </HStack>
-      ) : (
-        <HStack
-          alignItems="center"
-          justifyContent="flex-start"
-          pl={8}
-          pt={5}
-          spacing={10}
-        >
-          <PieChart style={{ pointerEvents: 'none' }} width={250} height={275}>
+  const piechart = ()=>{
+    if (mobile){
+      return
+    }else{
+    return(
+    <PieChart style={{ pointerEvents: 'none' }} width={250} height={275}>
             <Pie
               data={isWalletConnected ? data : [{ value: 1 }]}
               cx="50%"
@@ -108,7 +82,42 @@ const BondingOverview = ({
                 <Cell key={'cell-${index}'} fill="grey" />
               )}
             </Pie>
-          </PieChart>
+          </PieChart>)}
+  }
+
+  let aggregatedAssets = data?.reduce((acc, e) => acc + (e?.value ?? 0), 0)
+
+  return (
+    <VStack
+      width="full"
+      background={'#1C1C1C'}
+      borderRadius={borderRadius}
+      alignItems="flex-start"
+      verticalAlign="center"
+      as="form"
+      overflow="hidden"
+      position="relative"
+      display="flex"
+      justifyContent="center"
+    >
+      {isLoading ? (
+        <HStack
+          width="full"
+          alignContent="center"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Loader />
+        </HStack>
+      ) : (
+        <HStack
+          alignItems="center"
+          justifyContent="flex-start"
+          pl={8}
+          pt={5}
+          spacing={"5"}
+        >
+          {piechart()}
           <VStack alignItems="start" alignSelf="flex-start">
             <Text paddingBottom={4} color="whiteAlpha.600">
               Tokens
@@ -153,6 +162,7 @@ const BondingOverview = ({
             alignItems="flex-start"
             justify="flex-start"
             alignSelf="flex-start"
+            paddingRight={5}
             spacing={8}
           >
             <Text mb={-2} color="whiteAlpha.600">

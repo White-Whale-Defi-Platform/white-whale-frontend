@@ -3,6 +3,17 @@ import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
+import { wallets as keplrWallets } from '@cosmos-kit/keplr';
+import { wallets as cosmostationWallets } from '@cosmos-kit/cosmostation';
+import { wallets as leapWallets } from '@cosmos-kit/leap';
+
+import { assets, chains } from 'chain-registry';
+import { getSigningCosmosClientOptions } from 'interchain';
+import { GasPrice } from '@cosmjs/stargate';
+
+import { SignerOptions } from '@cosmos-kit/core';
+import { Chain } from '@chain-registry/types';
+
 import 'theme/global.css'
 
 import { ChakraProvider, CSSReset } from '@chakra-ui/react'
@@ -86,6 +97,8 @@ const MyApp: FC<AppProps> = ({
     </StaticWalletProvider>
   )
 }
+
+
 
 MyApp.getInitialProps = async () => {
   const chainOptions = await getChainOptions()

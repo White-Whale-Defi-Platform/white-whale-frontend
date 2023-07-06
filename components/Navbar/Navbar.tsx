@@ -29,32 +29,6 @@ import menuLinks from './NavMenu.json'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 
-export const links = [
-  {
-    label: 'Swap',
-    link: '/swap',
-  },
-  {
-    label: 'Pools',
-    link: '/pools',
-  },
-  {
-    label: 'Flashloan',
-    link: '/flashloan',
-  },
-  {
-    label: 'Vaults',
-    link: '/vaults',
-  },
-  {
-    label: 'Dashboard',
-    link: '/dashboard',
-  },
-  {
-    label: 'Bridge',
-    link: 'https://tfm.com/bridge',
-  },
-]
 const Navbar = () => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network }, setWalletState] =
@@ -67,6 +41,31 @@ const Navbar = () => {
     onClose: onCloseModal,
   } = useDisclosure()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChainName = currentChain?.label.toLowerCase()
+ 
+  const links = [
+    {
+      label: 'Swap',
+      link: `/swap`,
+    },
+    {
+      label: 'Pools',
+      link: `/pools`,
+    },
+    {
+      label: 'Dashboard',
+      link: `/dashboard`,
+    },
+    {
+      label: 'Vaults',
+      link: `/vaults`,
+    },
+    {
+      label: 'Bridge',
+      link: 'https://tfm.com/bridge',
+    },
+  ]
 
   const resetWalletConnection = () => {
     setWalletState({
@@ -81,8 +80,6 @@ const Navbar = () => {
     disconnect()
   }
 
-  const currentChain = chains.find((row) => row.chainId === chainId)
-  const currentChainName = currentChain?.label.toLowerCase()
 
   return (
     <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
@@ -181,5 +178,4 @@ const Navbar = () => {
     </Box>
   )
 }
-
 export default Navbar
