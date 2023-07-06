@@ -95,6 +95,43 @@
       "lp_token": "factory/migaloo1ull9s4el2pmkdevdgrjt6pwa4e5xhkda40w84kghftnlxg4h3knqpm5u3n/uLP",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "RAC-WHALE",
+      "lpOrder": ["RAC", "WHALE"],
+      "assetOrder": ["RAC", "WHALE"],
+      "displayName": "RAC-WHALE",
+      "displayLogo1": "/logos/ampWhale.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/urac",
+          "symbol": "RAC",
+          "name": "RAC",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/urac"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo1crsvm4qddplxhag29nd2zyw6k6jzh06hlcctya4ynfvuhhu3yt4q0pn4t3",
+      "lp_token": "factory/migaloo1crsvm4qddplxhag29nd2zyw6k6jzh06hlcctya4ynfvuhhu3yt4q0pn4t3/uLP",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
