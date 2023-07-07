@@ -101,7 +101,7 @@
       "lpOrder": ["ASH", "WHALE"],
       "assetOrder": ["ASH", "WHALE"],
       "displayName": "ASH-WHALE",
-      "displayLogo1": "/logos/whale.svg",
+      "displayLogo1": "/logos/ash.svg",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
@@ -110,7 +110,7 @@
           "symbol": "ASH",
           "name": "ASH",
           "decimals": 6,
-          "logoURI": "/logos/whale.svg",
+          "logoURI": "/logos/ash.svg",
           "tags": ["native"],
           "native": true,
           "denom": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash"
