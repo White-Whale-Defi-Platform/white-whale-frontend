@@ -146,10 +146,13 @@ const Pools = () => {
     initPools()
   }, [pools, incentivePoolInfos, incentivePoolsLoaded, pairInfos])
 
-  const flowLength =
-    useMemo(()=>incentivePoolInfos
-      ?.map((info) => info.flowData?.length ?? 0)
-      .reduce((a, b) => a + b, 0) ?? 0, [incentivePoolInfos])
+  const flowLength = useMemo(
+    () =>
+      incentivePoolInfos
+        ?.map((info) => info.flowData?.length ?? 0)
+        .reduce((a, b) => a + b, 0) ?? 0,
+    [incentivePoolInfos]
+  )
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
@@ -211,12 +214,12 @@ const Pools = () => {
     }
   }, [allPools])
   // get a list of all myPools pools
-  const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools]);
+  const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
   const allPoolsForShown = useMemo(
     () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId]
-  );
+  )
 
   return (
     <VStack
