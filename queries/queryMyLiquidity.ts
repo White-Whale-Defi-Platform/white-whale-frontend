@@ -1,12 +1,15 @@
 import { queryLiquidityBalance } from '../services/liquidity'
 import { protectAgainstNaN } from '../util/conversion'
+import { isNativeToken } from 'services/asset'
 
 export async function queryMyLiquidity({ swap, address, context: { client } }) {
+  const isNative = isNativeToken(swap.lp_token)
   const providedLiquidityInMicroDenom = address
     ? await queryLiquidityBalance({
         tokenAddress: swap.lp_token,
         client,
         address,
+        isNative,
       })
     : 0
 

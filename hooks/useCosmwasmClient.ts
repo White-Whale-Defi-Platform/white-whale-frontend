@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react'
-
+import { useQuery } from 'react-query'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChains } from 'hooks/useChainInfo'
 
-export const useCosmwasmClient = (chainId?: string): CosmWasmClient => {
+export const useCosmwasmClient = (
+  chainId?: string
+): CosmWasmClient | undefined => {
   const chainInfo = useChains()
-  const [client, setClient] = useState<any>(undefined)
 
-  useEffect(() => {
-    const getClient = async () => {
+  const { data: client } = useQuery(
+    ['cosmwasmClient', chainId],
+    async () => {
       const chain = chainInfo.find((row) => row.chainId === chainId)
-      const client = await CosmWasmClient.connect(chain?.rpc)
-
-      if (!!client) setClient(client)
+      return await CosmWasmClient.connect(chain.rpc)
+    },
+    {
+      enabled: !!chainId,
     }
-    if (!!chainInfo && !!chainId) getClient()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainInfo, chainId])
+  )
 
   return client
 }

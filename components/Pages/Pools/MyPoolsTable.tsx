@@ -55,7 +55,10 @@ const columns = [
       return info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
       ) : (
-        <Apr apr={info.getValue().toString()} flows={info.row.original.flows} />
+        <Apr
+          apr={info.getValue()?.toString()}
+          flows={info.row.original.flows}
+        />
       )
     },
   }),
@@ -190,7 +193,7 @@ const PoolsTable = ({
               <Th></Th>
               <Th isNumeric></Th>
             </Tr>
-            {table.getHeaderGroups().map((headerGroup, index) => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th

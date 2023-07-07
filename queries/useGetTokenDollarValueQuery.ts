@@ -62,7 +62,7 @@ export const useWhalePrice = () => {
 export const useGetTokenDollarValueQuery = () => {
   const baseToken = useBaseTokenInfo()
   const { chainId } = useRecoilValue(walletState)
-  const client = useCosmwasmClient(chainId)
+  const cosmwasmClient = useCosmwasmClient(chainId)
   const whalePrice = useWhalePrice()
 
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(
@@ -77,20 +77,16 @@ export const useGetTokenDollarValueQuery = () => {
         matchingPools: getMatchingPoolForSwap({ tokenA, tokenB }),
         tokenA,
         tokenB,
-        client,
+        client: cosmwasmClient,
         amount: 1,
         id: tokenA?.id,
       })
-
-      // if (tokenA?.id === 'white-whale' || tokenB?.id === 'white-whale') {
-      //   return whalePrice
-      // }
 
       if (tokenA?.id === tokenB?.id && !!tokenA?.id)
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
       else return priceForOneToken
     },
-    [tokenADollarPrice, whalePrice, client]
+    [tokenADollarPrice, whalePrice, cosmwasmClient]
   )
 
   const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
@@ -100,7 +96,7 @@ export const useGetTokenDollarValueQuery = () => {
     getTokenDollarValue,
     Boolean(
       baseToken &&
-        client &&
+        cosmwasmClient &&
         !fetchingDollarPrice &&
         !isLoadingPoolForSwapMatcher
     ),

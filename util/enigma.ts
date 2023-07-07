@@ -33,14 +33,26 @@ export const getPairInfos = async (
   chain = chain === 'inj' ? 'injective' : chain
   const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
 
-  let chainDataResponse = await fetch(url)
-  // sometimes throws 400 error for unknown reason
-  while (chainDataResponse.status === 400) {
-    console.log('Retrying...')
-    chainDataResponse = await fetch(url)
+  async function fetchWithRetry(url, retries = 5, interval = 3000) {
+    while (retries) {
+      const response = await fetch(url)
+
+      if (response.status !== 400) {
+        return response
+      }
+
+      console.log('Retrying...')
+      await new Promise((resolve) => setTimeout(resolve, interval))
+      retries--
+    }
+
+    return null
   }
-  const data = await chainDataResponse.text()
-  if (chainDataResponse.status === 200 && data !== 'chain unknown' && data) {
+
+  let chainDataResponse = await fetchWithRetry(url)
+
+  const data = await chainDataResponse?.text()
+  if (chainDataResponse?.status === 200 && data !== 'chain unknown' && data) {
     return JSON.parse(data)
   } else {
     return []

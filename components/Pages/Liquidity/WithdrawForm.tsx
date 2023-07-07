@@ -22,8 +22,8 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
     {
       swap_address: swapAddress = null,
       lp_token: contract = null,
-      liquidity,
-      staking_address,
+      liquidity = {},
+      staking_address = null,
     } = {},
   ] = useQueryPoolLiquidity({ poolId })
 
@@ -89,7 +89,6 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
     amount: lp || '0',
     contract,
     swapAddress,
-    poolId,
     claimIncentive: claimableLP > 0,
     stakingAddress: staking_address,
   })
