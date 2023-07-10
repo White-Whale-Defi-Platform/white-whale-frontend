@@ -15,10 +15,10 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
-      - name: Use Node.js 17.3.0
+      - name: Use Node.js 18.16.1
         uses: actions/setup-node@v3
         with:
-          node-version: 17.3.0
+          node-version: 18.16.1
       - name: Install dependencies
         run: yarn install
       - run: yarn build
