@@ -11,7 +11,7 @@ import { getClaimableEpochs } from 'components/Pages/Dashboard/hooks/getClaimabl
 import { getClaimable } from 'components/Pages/Dashboard/hooks/getClaimable'
 import { getBondingConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { getWeight } from 'components/Pages/Dashboard/hooks/getWeight'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 
 export interface TokenDetails {

@@ -132,43 +132,6 @@
       "lp_token": "factory/migaloo1crsvm4qddplxhag29nd2zyw6k6jzh06hlcctya4ynfvuhhu3yt4q0pn4t3/uLP",
       "staking_address": "",
       "rewards_tokens": []
-    },
-    {
-      "pool_id": "ASH-WHALE",
-      "lpOrder": ["ASH", "WHALE"],
-      "assetOrder": ["ASH", "WHALE"],
-      "displayName": "ASH-WHALE",
-      "displayLogo1": "/logos/ash.svg",
-      "displayLogo2": "/logos/whale.svg",
-      "pool_assets": [
-        {
-          "chain_id": "migaloo-1",
-          "token_address": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash",
-          "symbol": "ASH",
-          "name": "ASH",
-          "decimals": 6,
-          "logoURI": "/logos/ash.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash"
-        },
-        {
-          "id": "white-whale",
-          "chain_id": "migaloo-1",
-          "token_address": "uwhale",
-          "symbol": "WHALE",
-          "name": "Whale",
-          "decimals": 6,
-          "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "uwhale"
-        }
-      ],
-      "swap_address": "migaloo1u4npx7xvprwanpru7utv8haq99rtfmdzzw6p3hpfc38n7zmzm42q8ydga3",
-      "lp_token": "factory/migaloo1u4npx7xvprwanpru7utv8haq99rtfmdzzw6p3hpfc38n7zmzm42q8ydga3/uLP",
-      "staking_address": "",
-      "rewards_tokens": []
     }
   ],
   "version": {

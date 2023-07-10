@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch'
-import { POOL_INFO_BASE_URL } from 'util/constants'
+import { POOL_INFO_BASE_URL } from 'constants/settings'
 import { formatPrice } from 'libs/num'
 
 import terraPoolConfig from 'public/mainnet/phoenix-1/pools_list.json'

@@ -2,10 +2,10 @@ import { useQuery } from 'react-query'
 
 import { useRecoilValue } from 'recoil'
 
-import { usePoolsListQuery } from '../queries/usePoolsListQuery'
-import { getSwapInfo, InfoResponse } from '../services/swap'
-import { walletState } from '../state/atoms/walletAtoms'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { getSwapInfo, InfoResponse } from 'services/swap'
+import { walletState } from 'state/atoms/walletAtoms'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 
 export type SwapInfo = Pick<
   InfoResponse,

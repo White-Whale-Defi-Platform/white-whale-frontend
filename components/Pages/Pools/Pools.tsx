@@ -11,7 +11,7 @@ import {
 import { useRecoilValue } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { EnigmaPoolData } from 'util/enigma'
-import { STABLE_COIN_LIST } from 'util/constants'
+import { STABLE_COIN_LIST } from 'constants/settings'
 import { ActionCTAs } from './ActionCTAs'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'

@@ -6,11 +6,11 @@ import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-} from 'util/constants'
+} from 'constants/settings'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
-import { useGetTokenDollarValueQuery } from '../queries/useGetTokenDollarValueQuery'
-import { PoolEntityTypeWithLiquidity } from '../queries/useQueryPools'
+import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
+import { PoolEntityTypeWithLiquidity } from 'queries/useQueryPools'
 import { useTokenList } from './useTokenList'
 
 type UsePendingRewardsArgs = {

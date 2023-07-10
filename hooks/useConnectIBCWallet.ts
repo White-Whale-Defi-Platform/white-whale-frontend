@@ -5,7 +5,7 @@ import { GasPrice, SigningStargateClient } from '@cosmjs/stargate'
 import { useRecoilState } from 'recoil'
 
 import { ibcWalletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { GAS_PRICE } from 'util/constants'
+import { GAS_PRICE } from 'constants/settings'
 import { useIBCAssetInfo } from './useIBCAssetInfo'
 
 /* shares very similar logic with `useConnectWallet` and is a subject to refactor */
