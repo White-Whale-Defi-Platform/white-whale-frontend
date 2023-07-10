@@ -77,7 +77,7 @@ export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
       .filter((v, i, a) => a.findIndex((t) => t.denom === v.denom) === i)
   }
   const { data: flowPoolData, isLoading } = useQuery(
-    ['apr', currentEpochData, prices, pools, poolsWithAprAnd24HrVolume],
+    ['apr', currentEpochData, pools, poolsWithAprAnd24HrVolume],
     () =>
       getPoolFlowData(
         client,
