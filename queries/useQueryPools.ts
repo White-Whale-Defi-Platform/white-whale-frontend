@@ -9,7 +9,7 @@ import { walletState } from 'state/atoms/walletAtoms'
 import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-} from 'util/constants'
+} from 'constants/settings'
 import {
   calcPoolTokenDollarValue,
   convertMicroDenomToDenom,

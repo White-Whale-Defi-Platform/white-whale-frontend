@@ -5,11 +5,13 @@ export const validChains = {
     chihuahua: 'chihuahua-1',
     injective: 'injective-1',
     comdex: 'comdex-1',
+    migaloo: 'migaloo-1',
   },
   testnet: {
     juno: 'uni-6',
     terra: 'pisco-1',
     injective: 'injective-888',
     comdex: 'comdex-test2',
+    narwhal: 'narwhal-1',
   },
 }

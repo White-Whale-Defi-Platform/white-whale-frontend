@@ -5,6 +5,7 @@ import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 
 import { executeFlashloan } from './executeFlashloan'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**
@@ -60,7 +61,7 @@ export const useTransaction = ({
   onSuccess,
   onError,
 }: Params) => {
-  // const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
+  const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   // const [tokenA, tokenB] = swapAssets
   const toast = useToast()
 
@@ -75,7 +76,7 @@ export const useTransaction = ({
     async () => {
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, encodedMsgs, '')
+        const response = await client.simulate(senderAddress, debouncedMsgs, '')
         if (!!buttonLabel) setButtonLabel(null)
         setTxStep(TxStep.Ready)
         return response
@@ -109,7 +110,7 @@ export const useTransaction = ({
     },
     {
       enabled:
-        encodedMsgs != null &&
+        debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
         !!client &&

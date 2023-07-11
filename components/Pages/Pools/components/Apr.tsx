@@ -28,7 +28,7 @@ const Apr = ({ apr, flows }: Props) => {
     const incentiveApr = flows.reduce((total, item) => {
       return total + (isNaN(item.apr) ? 0 : Number(item.apr))
     }, 0)
-    return Number(apr.replace('%', '')) + Number(incentiveApr)
+    return Number(apr?.replace('%', '')) + Number(incentiveApr)
   }, [flows, apr])
 
   return (

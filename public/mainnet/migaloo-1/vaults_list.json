@@ -1,0 +1,24 @@
+{
+  "factory": "migaloo188uzgffek7xrru8myakjasjn84aqvfkw9a6wks2xzgawvqejkqxqg2vnxp",
+  "vaults": [
+    {
+      "pool_id": "WHALE",
+      "vault_assets": {
+        "id": "white-whale",
+        "chain_id": "migaloo-1",
+        "token_address": "uwhale",
+        "symbol": "WHALE",
+        "name": "WHALE",
+        "decimals": 6,
+        "logoURI": "/logos/whale.svg",
+        "tags": ["native"],
+        "native": true,
+        "denom": "uwhale"
+      },
+      "lp_token": "migaloo1xzl0a08mzsjauj76qqzx2mmgtmexgrylyhn96xz44s0386rhhwlsj0s5tp",
+      "vault_address": "migaloo1d22dmna52l4aemcva9g0kyhyza0fsqlfmhfkrj2sxr87sxkhwzqs7u38wg",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

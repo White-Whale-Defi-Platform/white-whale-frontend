@@ -1,5 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-# yarn prettier
-yarn prettier "**/*.{ts,md,tsx}" --write
+yarn lint-staged

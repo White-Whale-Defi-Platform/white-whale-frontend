@@ -49,11 +49,7 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
-export const useIncentivePoolInfo = (
-  client,
-  pools,
-  currentChainPrefix
-): IncentivePoolInfo[] => {
+export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
   const { chainId, network } = useRecoilValue(walletState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
@@ -70,7 +66,7 @@ export const useIncentivePoolInfo = (
           : await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)
     }
-    fetchPoolData()
+    if (pools?.length > 0 && currentChainPrefix) fetchPoolData()
   }, [currentChainPrefix, pools?.length, client])
 
   let poolAssets = []
@@ -80,8 +76,8 @@ export const useIncentivePoolInfo = (
       .concat(...pools.map((pool) => pool.pool_assets))
       .filter((v, i, a) => a.findIndex((t) => t.denom === v.denom) === i)
   }
-  const { data: flowPoolData } = useQuery(
-    ['apr', currentEpochData, prices, pools, poolsWithAprAnd24HrVolume],
+  const { data: flowPoolData, isLoading } = useQuery(
+    ['apr', currentEpochData, pools, poolsWithAprAnd24HrVolume],
     () =>
       getPoolFlowData(
         client,
@@ -100,7 +96,7 @@ export const useIncentivePoolInfo = (
         !!poolsWithAprAnd24HrVolume,
     }
   )
-  return flowPoolData
+  return { flowPoolData, poolsWithAprAnd24HrVolume, isLoading }
 }
 
 const fetchFlows = async (client, address): Promise<Flow[]> => {

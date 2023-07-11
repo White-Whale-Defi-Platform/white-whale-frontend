@@ -10,9 +10,9 @@
   },
   "timestamp": "2021-06-12T00:00:00+00:00",
   "base_token": {
-    "id": "whale-network",
+    "id": "white-whale",
     "chain_id": "migaloo-1",
-    "token_address": "",
+    "token_address": "uwhale",
     "symbol": "WHALE",
     "name": "Whale",
     "decimals": 6,
@@ -21,17 +21,28 @@
     "native": true,
     "denom": "uwhale"
   },
+  "routerAddress": "migaloo1tma28exp38q92c69r8uujhphxy95xa4awq2cudqqg3nhzkhnrg5s4r60en",
   "pools": [
     {
-      "pool_id": "WHALE-axlUSDC",
-      "lpOrder": ["WHALE", "axlUSDC"],
-      "assetOrder": ["WHALE", "axlUSDC"],
-      "displayName": "WHALE-axlUSDC",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/axlUSDC.png",
+      "pool_id": "bWHALE-WHALE",
+      "lpOrder": ["bWHALE", "WHALE"],
+      "assetOrder": ["bWHALE", "WHALE"],
+      "displayName": "bWHALE-WHALE",
+      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
-          "id": "terra-luna-2",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale",
+          "symbol": "bWHALE",
+          "name": "bWhale",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale"
+        },{
+          "id": "white-whale",
           "chain_id": "migaloo-1",
           "token_address": "uwhale",
           "symbol": "WHALE",
@@ -41,21 +52,84 @@
           "tags": ["native"],
           "native": true,
           "denom": "uwhale"
-        },
-        {
-          "chain_id": "migaloo-1",
-          "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
-          "symbol": "axlUSDC",
-          "name": "axlUSDC",
-          "decimals": 6,
-          "logoURI": "/logos/axlUSDC.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4"
         }
       ],
-      "lp_token": "terra1necjy4mmes4fvsvjvne5kkl3zhszg7s3s3jayfgzudsshnpv69kss5m2k2",
-      "swap_address": "terra1qdu4g5zxxtmwsd95v8vjslq5874nkcull7ejycm0gy2v7p5qc67qenkf8t",
+      "swap_address": "migaloo1dg5jrt89nddtymjx5pzrvdvdt0m4zl3l2l3ytunl6a0kqd7k8hss594wy6",
+      "lp_token": "factory/migaloo1dg5jrt89nddtymjx5pzrvdvdt0m4zl3l2l3ytunl6a0kqd7k8hss594wy6/uLP",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampWHALE-WHALE",
+      "lpOrder": ["ampWHALE", "WHALE"],
+      "assetOrder": ["ampWHALE", "WHALE"],
+      "displayName": "ampWHALE-WHALE",
+      "displayLogo1": "/logos/ampWhale.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE",
+          "symbol": "ampWHALE",
+          "name": "ampWhale",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo1ull9s4el2pmkdevdgrjt6pwa4e5xhkda40w84kghftnlxg4h3knqpm5u3n",
+      "lp_token": "factory/migaloo1ull9s4el2pmkdevdgrjt6pwa4e5xhkda40w84kghftnlxg4h3knqpm5u3n/uLP",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "RAC-WHALE",
+      "lpOrder": ["RAC", "WHALE"],
+      "assetOrder": ["RAC", "WHALE"],
+      "displayName": "RAC-WHALE",
+      "displayLogo1": "/logos/rac.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/urac",
+          "symbol": "RAC",
+          "name": "RAC",
+          "decimals": 6,
+          "logoURI": "/logos/rac.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/urac"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo1crsvm4qddplxhag29nd2zyw6k6jzh06hlcctya4ynfvuhhu3yt4q0pn4t3",
+      "lp_token": "factory/migaloo1crsvm4qddplxhag29nd2zyw6k6jzh06hlcctya4ynfvuhhu3yt4q0pn4t3/uLP",
       "staking_address": "",
       "rewards_tokens": []
     }

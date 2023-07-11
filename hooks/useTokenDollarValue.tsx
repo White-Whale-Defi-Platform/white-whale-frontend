@@ -1,23 +1,15 @@
 import { useQuery } from 'react-query'
-
-import { usePriceForOneToken } from 'features/swap'
-
-import { tokenDollarValueQuery } from '../queries/tokenDollarValueQuery'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from '../util/constants'
+import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { useGetMultipleIBCAssetInfo } from './useIBCAssetInfo'
 import {
   useBaseTokenInfo,
   useGetMultipleTokenInfo,
   useTokenInfo,
 } from './useTokenInfo'
-import request, { gql } from 'graphql-request'
-import { useMemo } from 'react'
-import { num } from '../libs/num'
+import { usePriceForOneToken } from 'components/Pages/Swap/index'
 
-export const useTokenDollarValueQuery = (
-  tokenSymbols?: Array<string>,
-  chainId?: string
-) => {
+export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
   const getMultipleTokenInfo = useGetMultipleTokenInfo()
   const getMultipleIBCAssetInfo = useGetMultipleIBCAssetInfo()
 
@@ -59,8 +51,7 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
     useTokenDollarValueQuery(
       tokenSymbolToLookupDollarValueFor
         ? [tokenSymbolToLookupDollarValueFor]
-        : null,
-      tokenInfo?.chain_id
+        : null
     )
 
   const [oneTokenToTokenPrice, fetchingTokenToTokenPrice] = usePriceForOneToken(

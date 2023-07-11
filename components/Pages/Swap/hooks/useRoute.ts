@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
 import { num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -105,11 +104,10 @@ const useRoute = ({
   slippage,
 }) => {
   const [tokenList] = useTokenList()
-  const baseToken = useBaseTokenInfo()
-  const { data: poolsList, isLoading } = usePoolsListQuery()
+  const { data: poolsList } = usePoolsListQuery()
   const { routerAddress } = poolsList || {}
 
-  const { pools, tokens, graph, path, route } = useMemo(() => {
+  const { path, route } = useMemo(() => {
     if (!poolsList || !tokenList)
       return {
         pools: [],
