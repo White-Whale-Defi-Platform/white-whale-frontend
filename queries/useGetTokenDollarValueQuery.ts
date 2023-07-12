@@ -69,6 +69,9 @@ export const useGetTokenDollarValueQuery = () => {
     baseToken?.symbol
   )
 
+  const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
+    useGetQueryMatchingPoolForSwap()
+
   const getTokenDollarValue = useCallback(
     async ({ tokenA, tokenB = baseToken, tokenAmountInDenom }) => {
       if (!tokenAmountInDenom) return 0
@@ -86,11 +89,14 @@ export const useGetTokenDollarValueQuery = () => {
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
       else return priceForOneToken
     },
-    [tokenADollarPrice, whalePrice, cosmwasmClient]
+    [
+      tokenADollarPrice,
+      whalePrice,
+      cosmwasmClient,
+      getMatchingPoolForSwap,
+      fetchingDollarPrice,
+    ]
   )
-
-  const [getMatchingPoolForSwap, isLoadingPoolForSwapMatcher] =
-    useGetQueryMatchingPoolForSwap()
 
   return [
     getTokenDollarValue,

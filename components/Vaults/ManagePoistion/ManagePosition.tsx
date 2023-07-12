@@ -19,7 +19,7 @@ import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-import useVault, { useVaultDepost } from '../hooks/useVaults'
+import useVault, { useVaultDeposit } from '../hooks/useVaults'
 import DepositForm from './DepositForm'
 import WithdrawForm from './WithdrawForm'
 
@@ -28,7 +28,7 @@ const ManagePosition = () => {
   const { vaults, refetch: vaultsRefetch } = useVault()
   const chains: Array<any> = useChains()
   const params = new URLSearchParams(location.search)
-  const { chainId, key, address, status } = useRecoilValue(walletState)
+  const { chainId, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNO'
 
   const vault = useMemo(
@@ -56,7 +56,11 @@ const ManagePosition = () => {
     balance: lpTokenBalance,
     isLoading: lpTokenBalanceLoading,
     refetch: lpRefetch,
-  } = useVaultDepost(vault?.lp_token, vault?.vault_address, vault?.vault_assets)
+  } = useVaultDeposit(
+    vault?.lp_token,
+    vault?.vault_address,
+    vault?.vault_assets
+  )
   const {
     balance: tokenBalance,
     isLoading: tokenBalanceLoading,

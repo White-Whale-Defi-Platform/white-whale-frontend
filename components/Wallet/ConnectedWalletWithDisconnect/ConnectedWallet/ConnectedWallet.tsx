@@ -32,7 +32,7 @@ function ConnectedWallet({ connected }) {
       onClick={copyToClipboard}
       width="full"
     >
-      <ConnectedWalletIcon connected={connected} />
+      <ConnectedWalletIcon />
       <TruncatedAddress connected={connected} />
     </HStack>
   )
