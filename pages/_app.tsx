@@ -45,7 +45,6 @@ const MyApp: FC<AppProps> = ({
             </Head>
             <RecoilRoot>
               <QueryClientProvider client={queryClient}>
-                {/* <ErrorBoundary> */}
                 <ChakraProvider theme={theme}>
                   <CSSReset />
                   {!mounted ? (

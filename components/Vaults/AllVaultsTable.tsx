@@ -27,7 +27,7 @@ export type Vault = {
   apr: number | string
   cta?: () => void
   ctaLabel: string
-  totalDeposts: string
+  totalDeposits: string
   myDeposit: string
 }
 
@@ -49,7 +49,7 @@ const columns = [
         My Deposit
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
@@ -59,13 +59,13 @@ const columns = [
     ),
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
-  columnHelper.accessor('totalDeposts', {
+  columnHelper.accessor('totalDeposits', {
     header: () => (
       <Text align="right" color="brand.50">
         Total Deposits
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
 
   columnHelper.accessor('cta', {
@@ -92,7 +92,7 @@ const AllVaultsTable = ({
   isLoading,
 }: {
   vaults: Vault[]
-  isLoading?: boolean
+  isLoading: boolean
 }) => {
   const table = useReactTable({
     data: vaults,
@@ -145,7 +145,7 @@ const AllVaultsTable = ({
       <TableContainer width="full">
         <Table variant="unstyled">
           <Thead>
-            {table.getHeaderGroups().map((headerGroup, index) => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th key={header.id} color="brand.50">
@@ -161,7 +161,7 @@ const AllVaultsTable = ({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row, index) => (
+            {table.getRowModel().rows.map((row) => (
               <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <Td key={cell.id}>

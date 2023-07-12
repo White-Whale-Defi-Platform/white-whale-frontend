@@ -28,6 +28,7 @@ import NavbarPopper from './NavbarPopper'
 import menuLinks from './NavMenu.json'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { useQueryClient } from 'react-query'
 
 export const links = [
   {
@@ -59,7 +60,7 @@ const Navbar = () => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network }, setWalletState] =
     useRecoilState(walletState)
-
+  const queryClient = useQueryClient()
   const chains: Array<any> = useChains()
   const {
     isOpen: isOpenModal,
@@ -78,6 +79,7 @@ const Navbar = () => {
       chainId,
       activeWallet: null,
     })
+    queryClient.clear()
     disconnect()
   }
 
