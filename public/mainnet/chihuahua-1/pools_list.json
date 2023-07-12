@@ -431,6 +431,43 @@
       "swap_address": "chihuahua19x48cf5d5lm0z2dmqptgh4mhfglsy0nvvznra36zd3fpvjp277vqeyd2x6",
       "staking_address": "chihuahua1n0js6p3ea68hc825x2t6y569y7xkll0e2xqra52a223kchn66tusj6wrh4",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "RAC-WHALE",
+      "lpOrder": ["RAC", "WHALE"],
+      "assetOrder": ["RAC", "WHALE"],
+      "displayName": "RAC-WHALE",
+      "displayLogo1": "/logos/rac.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/E45945EAF3F1587CA3013FFC6CE0B5EEE0F49DAFED2CE51370B5B6A0C3AA258E",
+          "symbol": "RAC",
+          "name": "RAC",
+          "decimals": 6,
+          "logoURI": "/logos/rac.png",
+          "tags": [],
+          "native": true,
+          "denom": "ibc/E45945EAF3F1587CA3013FFC6CE0B5EEE0F49DAFED2CE51370B5B6A0C3AA258E"
+        },
+        {
+          "id" : "white-whale",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B"
+        }
+      ],
+      "lp_token": "chihuahua12p7mqzxq30y47v4g39zxgy2zvy45as9ylhelvvp4z8wnjga7kajqjhwq9u",
+      "swap_address": "chihuahua1vl35p9erd4g7ytwwc3fcux30c7jnhnp2tas7zp837wrl65073cws57qwve",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
