@@ -352,8 +352,8 @@
           "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C"
         }
       ],
-      "lp_token": "factory/juno1sw7cs84qt5477spwpdfrjlu7ftn3772f2sp5zahjvjafkph4yvlscxmp58/uLP",
-      "swap_address": "juno1sw7cs84qt5477spwpdfrjlu7ftn3772f2sp5zahjvjafkph4yvlscxmp58",
+      "lp_token": "factory/juno1qv337g245ger3cx294m3vu74z74ku7lpf4944qxf8nhx29s8568q4uwrmk/uLP",
+      "swap_address": "juno1qv337g245ger3cx294m3vu74z74ku7lpf4944qxf8nhx29s8568q4uwrmk",
       "staking_address": "",
       "rewards_tokens": []
     }
