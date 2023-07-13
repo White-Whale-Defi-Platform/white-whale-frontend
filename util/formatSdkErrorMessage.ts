@@ -1,7 +1,8 @@
 export function formatSdkErrorMessage(e) {
-  return String(e).length > 300
-    ? `${String(e).substring(0, 150)} ... ${String(e).substring(
-        String(e).length - 150
+  const strError = String(e)
+  return strError.length > 300
+    ? `${strError.substring(0, 150)} ... ${strError.substring(
+        strError.length - 150
       )}`
-    : String(e)
+    : strError
 }
