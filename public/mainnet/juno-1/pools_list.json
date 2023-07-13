@@ -322,8 +322,8 @@
     },
     {
       "pool_id": "RAC-WHALE",
-      "lpOrder": ["RAC", "WHALE"],
-      "assetOrder": ["RAC", "WHALE"],
+      "lpOrder": ["WHALE", "RAC"],
+      "assetOrder": ["WHALE", "RAC"],
       "displayName": "RAC-WHALE",
       "displayLogo1": "/logos/rac.png",
       "displayLogo2": "/logos/whale.svg",
