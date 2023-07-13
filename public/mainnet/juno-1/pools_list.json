@@ -330,14 +330,14 @@
       "pool_assets": [
         {
           "chain_id": "juno-1",
-          "token_address": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
+          "token_address": "ibc/D8D6271EC54E3A96C6B9FB6C2BA9E99692B07CEB42754638029657072EA48337",
           "symbol": "RAC",
           "name": "RAC",
           "decimals": 6,
           "logoURI": "/logos/rac.png",
           "tags": [],
           "native": true,
-          "denom": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF"
+          "denom": "ibc/D8D6271EC54E3A96C6B9FB6C2BA9E99692B07CEB42754638029657072EA48337"
         },
         {
           "id" : "white-whale",
