@@ -1,8 +1,8 @@
 {
   "whale_lair": "migaloo1692nylpkryu7q00eukt93egtqu657z33nf0tedp0ps6htm8aty6qjdlpvh",
-  "incentive_factory": "",
+  "incentive_factory": "migaloo1rqfr752hn6auzm3vzzyr2pd8rt6fapf208vm8qfpejstt69uxfwqcdrdq3",
   "fee_distributor": "migaloo13e3ywqudfz92pq2sxwuwf35rdtp3hvz7xu0danyk38dchevywraswfgnqx",
-  "frontend_helper": "",
+  "frontend_helper": "migaloo1yk896ldldnfd4y4f3xgxwnpapmyezgdqw5czp4zz6nnvetl70lkq42mp8u",
   "whale_base_token": {
     "name": "WHALE",
     "denom": "uwhale",
