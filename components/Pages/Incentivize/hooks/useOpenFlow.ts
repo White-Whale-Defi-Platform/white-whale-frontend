@@ -39,6 +39,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
+  const flowFeeDenom = factoryConfig?.createFlowFee?.denom
   const { dateToEpoch } = useEpoch()
 
   const msgs = useMemo(() => {
@@ -56,13 +57,13 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     const end_epoch = dateToEpoch(endDate)
 
     const nativeAmount =
-      tokenInfo?.denom === 'uwhale'
+      tokenInfo?.denom === flowFeeDenom
         ? num(amount).plus(factoryConfig?.createFlowFee?.amount).toString()
         : amount
 
     const funds = [
       factoryConfig &&
-        tokenInfo?.denom !== 'uwhale' &&
+        tokenInfo?.denom !== flowFeeDenom &&
         coin(
           factoryConfig?.createFlowFee?.amount,
           factoryConfig?.createFlowFee?.denom
