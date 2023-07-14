@@ -8,7 +8,7 @@ import { TxStep } from 'types/common'
 
 type Simulate = {
   msgs: EncodeObject[]
-  client: Wallet | undefined
+  signingClient: Wallet | undefined
   address: string | undefined
   connected: boolean
   amount: string
@@ -18,7 +18,7 @@ type Simulate = {
 
 const useSimulate = ({
   msgs,
-  client,
+  signingClient,
   address,
   connected,
   amount,
@@ -30,7 +30,13 @@ const useSimulate = ({
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],
     queryFn: () => {
-      if (!connected || Number(amount) <= 0 || !address || !client || !msgs)
+      if (
+        !connected ||
+        Number(amount) <= 0 ||
+        !address ||
+        !signingClient ||
+        !msgs
+      )
         return
 
       setTxState({
@@ -40,7 +46,7 @@ const useSimulate = ({
         buttonLabel: null,
       })
 
-      return client?.simulate(address, msgs!, undefined)
+      return signingClient?.simulate(address, msgs!, undefined)
     },
     onSuccess: (data) => {
       onSuccess?.(data)

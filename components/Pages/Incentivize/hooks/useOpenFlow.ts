@@ -61,16 +61,14 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         : amount
 
     const funds = [
+      tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
       factoryConfig &&
         tokenInfo?.denom !== 'uwhale' &&
         coin(
           factoryConfig?.createFlowFee?.amount,
           factoryConfig?.createFlowFee?.denom
         ),
-      tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
-    ]
-      .filter(Boolean)
-      .sort((a, b) => a.denom.localeCompare(b.denom))
+    ].filter(Boolean)
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
     /* increase allowance for each non-native token */
@@ -105,7 +103,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const simulate = useSimulate({
     msgs,
-    client: client,
+    signingClient: client,
     address,
     connected: !!address,
     amount,
