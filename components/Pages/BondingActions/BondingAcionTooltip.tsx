@@ -13,7 +13,7 @@ const bondingActionText = (action: ActionType) => {
     case ActionType.claim:
       return (
         'Rewards fluctuate due to bonding activity.\nUnstable APR (depending on share, trading/flashloan volume, amp/bWHALE relation to WHALE etc.).\n' +
-        'Time dependent multiplier, i.e. the longer you bond the more you get.\nShown APR assumes 1x multiplier.'
+        'Time dependent multiplier, i.e. the longer you bond the more you get.\nShown APR takes multiplier into account.'
       )
   }
 }
