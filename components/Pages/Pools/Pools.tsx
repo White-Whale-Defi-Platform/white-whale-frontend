@@ -183,10 +183,9 @@ const Pools = () => {
         return total + (isNaN(item.apr) ? 0 : Number(item.apr))
       }, 0)
 
-      console.log('incentiveBaseApr', incentiveBaseApr)
       updateAPRHelperState(
-        pool?.pool_id,
-        pool?.apr7d?.toString(),
+        pool?.poolId,
+        pool?.apr,
         incentiveBaseApr,
         setAprHelperState
       )

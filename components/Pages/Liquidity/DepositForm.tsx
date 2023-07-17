@@ -131,6 +131,14 @@ const DepositForm = ({
     else return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
+  const apr = useMemo(
+    () =>
+      `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(
+        2
+      )}`,
+    [poolAPRs, multiplicator]
+  )
+
   return (
     <VStack
       paddingY={6}
@@ -169,10 +177,7 @@ const DepositForm = ({
 
       <Multiplicator
         multiplicator={String(multiplicator)}
-        apr={`${(
-          poolAPRs?.fees * 100 +
-          poolAPRs?.incentives * multiplicator
-        ).toFixed(2)}`}
+        apr={apr}
         show={incentivesEnabled}
       />
 
