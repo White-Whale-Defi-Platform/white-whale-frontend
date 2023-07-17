@@ -245,7 +245,45 @@
       "swap_address": "terra1g8clplgv3ah405qjrf9yhkgur9zqlqayt8ftrvkuzsm5am7pr9ls7s26rx",
       "staking_address": "terra1y967zn8xhlx3k67c8quaatqxaugw9kmvu2pu4tddk2rjxhcfegaqvdvtv7",
       "rewards_tokens": []
-    }
+    },
+    {
+      "pool_id": "LUNA-WHALE",
+      "lpOrder": ["LUNA", "WHALE"],
+      "assetOrder": ["LUNA", "WHALE"],
+      "displayName": "LUNA-WHALE",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/luna.svg",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "factory/terra1zushwxgqdkg22mtv9p946yp53r6den6lv427esjaadua3ftzyjpsqgtl5z/uLP",
+      "swap_address": "terra1zushwxgqdkg22mtv9p946yp53r6den6lv427esjaadua3ftzyjpsqgtl5z",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
   ],
   "version": {
     "major": 0,
