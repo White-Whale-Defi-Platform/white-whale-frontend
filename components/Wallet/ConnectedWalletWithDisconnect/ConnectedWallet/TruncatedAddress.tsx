@@ -10,7 +10,7 @@ function TruncatedAddress({ connected }) {
   const { address, chainId } = useRecoilValue(walletState)
   const connectedWallet = useConnectedWallet()
   // TODO: review, is this okay
-  const truncatWalletAddress = (addr: string) => {
+  const truncatedWalletAddress = (addr: string) => {
     const chainName = addr?.substring(0, addr.indexOf('1'))
     return connected
       ? `${chainName}${truncate(address, [0, 4])}`
@@ -20,8 +20,8 @@ function TruncatedAddress({ connected }) {
   return (
     <Text color="brand.500" fontSize={['14px', '16px']}>
       {connected
-        ? truncatWalletAddress(address)
-        : truncatWalletAddress(connectedWallet.addresses[chainId])}
+        ? truncatedWalletAddress(address)
+        : truncatedWalletAddress(connectedWallet.addresses[chainId])}
     </Text>
   )
 }

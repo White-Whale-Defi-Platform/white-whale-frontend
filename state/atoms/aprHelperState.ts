@@ -22,9 +22,9 @@ export function updateAPRHelperState(
   setAPRs: SetterOrUpdater<APRHelperState>
 ) {
   // Helper function to update the APR for a specific pool
-  const fees = Number(feeAsString.replace('%', '')) / 100
+  const fees = Number(feeAsString?.replace('%', '')) / 100
   setAPRs((prevAPR) => {
-    const updatedAPR = prevAPR.map((item) => {
+    const updatedAPR = prevAPR?.map((item) => {
       if (item.poolId === poolId) {
         return { ...item, fees, incentives }
       }

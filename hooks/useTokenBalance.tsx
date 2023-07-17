@@ -5,8 +5,8 @@ import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { CW20 } from 'services/cw20'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
-import { Wallet } from '../util/wallet-adapters'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { Wallet } from 'util/wallet-adapters'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
@@ -133,7 +133,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
     async () => {
-      const balances = await Promise.all(
+      return await Promise.all(
         tokenSymbols
           // .filter(Boolean)
           .map((tokenSymbol) => {
@@ -149,8 +149,6 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
             })
           })
       )
-
-      return balances
     },
     {
       enabled: Boolean(

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
-import { tokenDollarValueQuery } from '../queries/tokenDollarValueQuery'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
+import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { useGetMultipleIBCAssetInfo } from './useIBCAssetInfo'
 import {
   useBaseTokenInfo,

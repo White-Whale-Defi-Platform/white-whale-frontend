@@ -24,10 +24,7 @@ import useProvideLP from './hooks/useProvideLP'
 import { tokenLpAtom } from './lpAtoms'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
-import {
-  IncentivePoolInfo,
-  useIncentivePoolInfo,
-} from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import usePrices from 'hooks/usePrices'
 import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
 import {
@@ -47,14 +44,14 @@ const ManageLiquidity: FC = () => {
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({ reverse, bondingDays })
-  const cosmWasmClient = useCosmwasmClient(chainId)
+  const cosmwasmClient = useCosmwasmClient(chainId)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(
       useQueryMultiplePoolsLiquidity({
         refetchInBackground: false,
         pools: poolList?.pools,
-        client: cosmWasmClient,
+        client: cosmwasmClient,
       })
     )
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
@@ -65,8 +62,7 @@ const ManageLiquidity: FC = () => {
         ?.bech32PrefixAccAddr,
     [chains, chainId]
   )
-
-  const incentivePoolInfos: IncentivePoolInfo[] = useIncentivePoolInfo(
+  const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
     client,
     pools,
     currentChainPrefix

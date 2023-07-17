@@ -252,7 +252,7 @@ const RewardsComponent = ({
           <VStack>
             <HStack justifyContent="space-between" minW={390}>
               <Text color="whiteAlpha.600">Next rewards in</Text>
-              <Text>{isWalletConnected ? durationString : ''}</Text>
+              <Text>{durationString}</Text>
             </HStack>
             <ProgressBar
               progress={progress}

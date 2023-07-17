@@ -18,6 +18,7 @@ import useCoinGecko from './useCoinGecko'
 import { useCosmwasmClient } from './useCosmwasmClient'
 import { useBaseTokenInfo } from './useTokenInfo'
 import { TokenList, useTokenList } from './useTokenList'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export type Prices = {
   [key: string]: {
@@ -78,7 +79,7 @@ const getPrices = async ({
           matchingPools,
           tokenA: !!streamlinePoolAB ? token : baseToken,
           tokenB: !!streamlinePoolBA ? token : baseToken,
-          client: client as Wallet,
+          client: client as Wallet | CosmWasmClient,
           amount: 1,
         })
         const price = value * baseTokenPrice

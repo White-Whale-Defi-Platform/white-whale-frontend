@@ -36,7 +36,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
-  let minUnbondingDuration = null
+  let minUnbondingDuration = 0
   if (factoryConfig) {
     minUnbondingDuration = factoryConfig?.minUnbondingDuration
   }

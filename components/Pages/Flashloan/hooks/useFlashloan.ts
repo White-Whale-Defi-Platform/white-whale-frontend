@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 import { createFlashLoanMsg } from './createFlashLoanMsg'
-import flashLoanContract from './flashLoanContract.json'
+import flashLoanContract from 'components/Pages/Flashloan/hooks/vaultRouterAddresses.json'
 import useTransaction from './useTransaction'
 
 const useFlashloan = ({ json }) => {
@@ -20,17 +20,14 @@ const useFlashloan = ({ json }) => {
     })
   }, [json, address, chainId])
 
-  const tx = useTransaction({
-    // enabled : !!client && !!encodedMsgs,
-    enabled: false,
+  return useTransaction({
+    enabled: !!client && !!encodedMsgs,
     msgs: json,
     client,
     senderAddress: address,
     encodedMsgs: [encodedMsgs],
     contractAddress: flashLoanContract[chainId],
   })
-
-  return tx
 }
 
 export default useFlashloan

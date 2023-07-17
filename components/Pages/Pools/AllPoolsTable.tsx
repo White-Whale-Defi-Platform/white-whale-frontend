@@ -1,4 +1,8 @@
+import React from 'react'
+
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
+  chakra,
   Flex,
   Table,
   TableContainer,
@@ -13,8 +17,11 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from '@tanstack/react-table'
+
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
@@ -25,7 +32,11 @@ const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
   columnHelper.accessor('pool', {
-    header: () => <Text color="brand.50">Pool</Text>,
+    header: () => (
+      <Text color="brand.50" display="inline">
+        Pool
+      </Text>
+    ),
     cell: (info) => (
       <PoolName
         poolId={info.getValue()}
@@ -36,7 +47,7 @@ const columns = [
   }),
   columnHelper.accessor('price', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {`RATIO`}
       </Text>
     ),
@@ -45,7 +56,9 @@ const columns = [
     },
   }),
   columnHelper.accessor('apr', {
-    header: () => <Text align="right" color="brand.50">{`APR`}</Text>,
+    header: () => (
+      <Text align="right" color="brand.50" display="inline">{`APR`}</Text>
+    ),
     cell: (info) => {
       return info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
@@ -53,14 +66,13 @@ const columns = [
         <Apr
           apr={info.getValue()?.toString()}
           flows={info.row.original.flows}
-          isMyPools={false}
         />
       )
     },
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {`24hr Volume`}
       </Text>
     ),
@@ -78,7 +90,7 @@ const columns = [
   }),
   columnHelper.accessor('totalLiq', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {`Total Liquidity`}
       </Text>
     ),
@@ -86,7 +98,7 @@ const columns = [
   }),
   columnHelper.accessor('incentives', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         Incentives
       </Text>
     ),
@@ -96,7 +108,7 @@ const columns = [
   }),
   columnHelper.accessor('action', {
     header: () => (
-      <Text align="left" color="brand.50">
+      <Text align="left" color="brand.50" display="inline">
         Action
       </Text>
     ),
@@ -113,10 +125,17 @@ const AllPoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+
   const table = useReactTable({
     data: pools,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   })
 
   if (isLoading || !pools) {
@@ -167,13 +186,30 @@ const AllPoolsTable = ({
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <Th key={header.id} color="brand.50">
+                  <Th
+                    key={header.id}
+                    color="brand.50"
+                    onClick={
+                      header.id === 'action' || header.id === 'incentives'
+                        ? null
+                        : header.column.getToggleSortingHandler()
+                    }
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                    <chakra.span pl="2">
+                      {header.column.getIsSorted() ? (
+                        header.column.getIsSorted() === 'desc' ? (
+                          <TriangleDownIcon aria-label="sorted descending" />
+                        ) : (
+                          <TriangleUpIcon aria-label="sorted ascending" />
+                        )
+                      ) : null}
+                    </chakra.span>
                   </Th>
                 ))}
               </Tr>

@@ -16,7 +16,11 @@ type Props = {
   show: boolean
 }
 
-const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
+export const BondingDaysSlider = ({
+  bondingDays,
+  setBondingDays,
+  show,
+}: Props) => {
   if (!show) return null
 
   return (
@@ -54,10 +58,7 @@ const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
             ~{bondingDays} days
           </Text>
         </Box>
-        {/* <Text color="brand.50" fontSize="14">Block 14936784 </Text> */}
       </HStack>
     </VStack>
   )
 }
-
-export default BondingDaysSlider

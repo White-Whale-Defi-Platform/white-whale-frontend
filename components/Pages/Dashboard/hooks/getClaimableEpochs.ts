@@ -1,5 +1,4 @@
-import { Wallet } from 'util/wallet-adapters'
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 import { Config } from './useDashboardData'
 
@@ -36,7 +35,10 @@ interface Data {
   epochs: Epoch[]
 }
 
-export const getClaimableEpochs = async (client: Wallet, config: Config) => {
+export const getClaimableEpochs = async (
+  client: CosmWasmClient,
+  config: Config
+) => {
   if (!client) {
     return null
   }
@@ -70,7 +72,7 @@ export const getClaimableEpochs = async (client: Wallet, config: Config) => {
 }
 
 export const fetchClaimableEpoch = async (
-  client: Wallet,
+  client: CosmWasmClient,
   config: Config
 ): Promise<Data> => {
   const result: JsonObject = await client.queryContractSmart(

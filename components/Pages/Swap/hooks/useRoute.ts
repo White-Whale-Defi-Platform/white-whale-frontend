@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
 import { num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -30,14 +29,7 @@ const buildRoute = (graph, start, end) => {
   }
 }
 
-const createRouteMessage = (
-  route,
-  amount,
-  token,
-  reverse,
-  routerAddress,
-  slippage
-) => {
+const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
   if (!!!amount || !!!route.length || !routerAddress) return {}
 
   const operations = route.map(([offerAsset, askAsset]) => {
@@ -105,11 +97,10 @@ const useRoute = ({
   slippage,
 }) => {
   const [tokenList] = useTokenList()
-  const baseToken = useBaseTokenInfo()
-  const { data: poolsList, isLoading } = usePoolsListQuery()
+  const { data: poolsList } = usePoolsListQuery()
   const { routerAddress } = poolsList || {}
 
-  const { pools, tokens, graph, path, route } = useMemo(() => {
+  const { path, route } = useMemo(() => {
     if (!poolsList || !tokenList)
       return {
         pools: [],
@@ -152,8 +143,7 @@ const useRoute = ({
       amount,
       tokenA,
       reverse,
-      routerAddress,
-      slippage
+      routerAddress
     )
     const encodedMsgs = executeMessage(
       executeMsg,

@@ -20,6 +20,7 @@ import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 
 import theme from 'theme'
+import Script from 'next/script'
 
 const MyApp: FC<AppProps> = ({
   Component,
@@ -31,59 +32,69 @@ const MyApp: FC<AppProps> = ({
 
   useEffect(() => setMounted(true), [])
 
-  return typeof window !== 'undefined' ? (
-    <WalletProvider
-      defaultNetwork={defaultNetwork}
-      walletConnectChainIds={walletConnectChainIds}
-    >
-      <>
-        <Head>
-          <link rel="shortcut icon" href="/favicon.ico" />
-        </Head>
-        <RecoilRoot>
-          <QueryClientProvider client={queryClient}>
-            {/* <ErrorBoundary> */}
-            <ChakraProvider theme={theme}>
-              <CSSReset />
-              {!mounted ? (
-                <AppLoading />
-              ) : (
-                <AppLayout>
-                  <Component {...pageProps} />
-                </AppLayout>
-              )}
-            </ChakraProvider>
-            <Toaster position="top-right" toastOptions={{ duration: 10000 }} />
-            {/* </ErrorBoundary> */}
-          </QueryClientProvider>
-        </RecoilRoot>
-      </>
-    </WalletProvider>
-  ) : (
-    <StaticWalletProvider defaultNetwork={defaultNetwork}>
-      <>
-        <Head>
-          <link rel="shortcut icon" href="/favicon.ico" />
-        </Head>
-        <RecoilRoot>
-          <QueryClientProvider client={queryClient}>
-            {/* <ErrorBoundary> */}
-            <ChakraProvider theme={theme}>
-              <CSSReset />
-              {!mounted ? (
-                <AppLoading />
-              ) : (
-                <AppLayout>
-                  <Component {...pageProps} />
-                </AppLayout>
-              )}
-            </ChakraProvider>
-            <Toaster position="top-right" toastOptions={{ duration: 10000 }} />
-            {/* </ErrorBoundary> */}
-          </QueryClientProvider>
-        </RecoilRoot>
-      </>
-    </StaticWalletProvider>
+  return (
+    <>
+      {typeof window !== 'undefined' ? (
+        <WalletProvider
+          defaultNetwork={defaultNetwork}
+          walletConnectChainIds={walletConnectChainIds}
+        >
+          <>
+            <Head>
+              <link rel="shortcut icon" href="/favicon.ico" />
+            </Head>
+            <RecoilRoot>
+              <QueryClientProvider client={queryClient}>
+                <ChakraProvider theme={theme}>
+                  <CSSReset />
+                  {!mounted ? (
+                    <AppLoading />
+                  ) : (
+                    <AppLayout>
+                      <Component {...pageProps} />
+                    </AppLayout>
+                  )}
+                </ChakraProvider>
+                <Toaster
+                  position="top-right"
+                  toastOptions={{ duration: 10000 }}
+                />
+                {/* </ErrorBoundary> */}
+              </QueryClientProvider>
+            </RecoilRoot>
+          </>
+        </WalletProvider>
+      ) : (
+        <StaticWalletProvider defaultNetwork={defaultNetwork}>
+          <>
+            <Head>
+              <link rel="shortcut icon" href="/favicon.ico" />
+            </Head>
+            <RecoilRoot>
+              <QueryClientProvider client={queryClient}>
+                {/* <ErrorBoundary> */}
+                <ChakraProvider theme={theme}>
+                  <CSSReset />
+                  {!mounted ? (
+                    <AppLoading />
+                  ) : (
+                    <AppLayout>
+                      <Component {...pageProps} />
+                    </AppLayout>
+                  )}
+                </ChakraProvider>
+                <Toaster
+                  position="top-right"
+                  toastOptions={{ duration: 10000 }}
+                />
+                {/* </ErrorBoundary> */}
+              </QueryClientProvider>
+            </RecoilRoot>
+          </>
+        </StaticWalletProvider>
+      )}
+      <Script src="/logs.js" />
+    </>
   )
 }
 

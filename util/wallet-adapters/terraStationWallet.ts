@@ -22,6 +22,7 @@ const TX_MAAP = new Map([
   ['chihuahua-1', 'uhuahua'],
   ['comdex-1', 'ucmdx'],
   ['injective-1', 'uinj'],
+  ['migaloo-1', 'uwhale'],
 ])
 export class TerraStationWallet implements Wallet {
   client: ConnectedWallet

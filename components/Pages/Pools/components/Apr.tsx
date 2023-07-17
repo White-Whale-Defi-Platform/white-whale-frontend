@@ -21,19 +21,15 @@ import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInf
 type Props = {
   apr: string
   flows: FlowData[]
-  isMyPools: boolean
-  myIncentiveApr?: string
 }
 
-const Apr = ({ apr, flows, myIncentiveApr, isMyPools = false }: Props) => {
+const Apr = ({ apr, flows }: Props) => {
   const totalApr = useMemo(() => {
-    const incentiveApr = isMyPools
-      ? myIncentiveApr
-      : flows.reduce((total, item) => {
-          return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-        }, 0)
-    return Number(apr.replace('%', '')) + Number(incentiveApr)
-  }, [flows, apr, myIncentiveApr])
+    const incentiveApr = flows.reduce((total, item) => {
+      return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+    }, 0)
+    return Number(apr?.replace('%', '')) + Number(incentiveApr)
+  }, [flows, apr])
 
   return (
     <Popover trigger="hover">
@@ -95,13 +91,7 @@ const Apr = ({ apr, flows, myIncentiveApr, isMyPools = false }: Props) => {
                       {flowInfo?.tokenSymbol ?? 'Unknown'} Incentive
                     </Td>
                     <Td color="white" isNumeric>
-                      {isNaN(flowInfo?.apr)
-                        ? '-'
-                        : !isMyPools
-                        ? `${flowInfo?.apr.toFixed(2)}% - ${(
-                            flowInfo?.apr * 16
-                          ).toFixed(2)}%`
-                        : `${(flowInfo?.apr * 16).toFixed(2)}%`}
+                      {flowInfo?.apr.toFixed(2)}%
                     </Td>
                   </Tr>
                 ))}

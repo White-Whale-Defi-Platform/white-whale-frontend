@@ -4,7 +4,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 

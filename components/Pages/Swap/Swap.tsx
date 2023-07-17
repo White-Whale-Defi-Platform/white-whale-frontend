@@ -32,8 +32,8 @@ const Swap: FC<SwapProps> = ({}) => {
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
   const router = useRouter()
-  const currenChain = chains.find((row) => row.chainId === chainId)
-  const currentChainId = currenChain?.label.toLowerCase()
+  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChainId = currentChain?.label.toLowerCase()
 
   const tokenList = useMemo(() => {
     let listObj = {}

@@ -39,6 +39,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
+  const flowFeeDenom = factoryConfig?.createFlowFee?.denom
   const { dateToEpoch } = useEpoch()
 
   const msgs = useMemo(() => {
@@ -56,19 +57,21 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     const end_epoch = dateToEpoch(endDate)
 
     const nativeAmount =
-      tokenInfo?.denom === 'uwhale'
+      tokenInfo?.denom === flowFeeDenom
         ? num(amount).plus(factoryConfig?.createFlowFee?.amount).toString()
         : amount
 
     const funds = [
-      tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
       factoryConfig &&
-        tokenInfo?.denom !== 'uwhale' &&
+        tokenInfo?.denom !== flowFeeDenom &&
         coin(
           factoryConfig?.createFlowFee?.amount,
           factoryConfig?.createFlowFee?.denom
         ),
-    ].filter(Boolean)
+      tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
+    ]
+      .filter(Boolean)
+      .sort((a, b) => a.denom.localeCompare(b.denom))
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
     /* increase allowance for each non-native token */
@@ -103,7 +106,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const simulate = useSimulate({
     msgs,
-    signingClient: client,
+    client: client,
     address,
     connected: !!address,
     amount,

@@ -30,7 +30,7 @@ const config = {
     return [
       {
         source: '/',
-        destination: '/terra/dashboard',
+        destination: '/migaloo/swap',
         permanent: false,
       },
     ]

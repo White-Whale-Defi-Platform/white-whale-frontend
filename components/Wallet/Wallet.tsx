@@ -15,7 +15,7 @@ import { useTerraStation } from 'hooks/useTerraStation'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { validChains } from 'util/chain'
+import { validChains } from 'constants/validChains'
 import { getPathName } from 'util/route'
 import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 

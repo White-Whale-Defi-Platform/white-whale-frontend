@@ -1,4 +1,4 @@
-import { AssetInfo, CW20AssetInfo, NativeAssetInfo, Route } from 'types'
+import { AssetInfo, CW20AssetInfo, NativeAssetInfo } from 'types'
 
 export function isNativeAssetInfo(
   value: NativeAssetInfo | CW20AssetInfo
@@ -6,8 +6,10 @@ export function isNativeAssetInfo(
   return value.hasOwnProperty('native_token')
 }
 
-export const isNativeToken = (token: string = ''): boolean => {
-  return token.startsWith('u')
+export const isNativeToken = (token?: string): boolean => {
+  return token
+    ? token.startsWith('u') || token.includes('factory' || 'ibc')
+    : false
 }
 
 export const isNativeAsset = (info: AssetInfo): boolean => {

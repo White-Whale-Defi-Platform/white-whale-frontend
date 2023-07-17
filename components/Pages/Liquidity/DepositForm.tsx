@@ -8,11 +8,11 @@ import { TokenItemState } from 'types/index'
 import Input from 'components/AssetInput/Input'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import BondingDaysSlider from './BondingDaysSlider'
 import Multiplicator from './Multiplicator'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import { useRecoilState } from 'recoil'
 import { aprHelperState } from 'state/atoms/aprHelperState'
+import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
 
 type Props = {
   connected: WalletStatusType

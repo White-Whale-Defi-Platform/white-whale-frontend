@@ -13,7 +13,7 @@ export const useQueryIncentiveContracts = (client: Wallet): Array<string> => {
   const { data } = useQuery(
     ['useQueryIncentiveContracts', config],
     async () => await fetchIncentiveContracts(client, config),
-    { enabled: !!client && !!config }
+    { enabled: !!client && !!config && !!config.incentive_factory }
   )
   return data
 }
