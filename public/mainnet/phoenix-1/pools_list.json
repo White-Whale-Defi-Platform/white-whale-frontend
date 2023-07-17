@@ -283,7 +283,7 @@
       "swap_address": "terra1zushwxgqdkg22mtv9p946yp53r6den6lv427esjaadua3ftzyjpsqgtl5z",
       "staking_address": "",
       "rewards_tokens": []
-    },
+    }
   ],
   "version": {
     "major": 0,
