@@ -87,6 +87,7 @@ export const getPairAprAndDailyVolume = async (
         pool_id: poolId,
         usdVolume24h: `$${formatPrice(pairInfo?.volume_24h)}`,
         usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
+        totalLiquidity: Number(pairInfo?.TVL),
         TVL: `$${formatPrice(pairInfo?.TVL)}`,
         apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
         ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
