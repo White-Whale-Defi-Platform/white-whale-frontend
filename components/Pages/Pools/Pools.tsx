@@ -178,7 +178,7 @@ const Pools = () => {
       const flows =
         incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
           ?.flowData ?? []
-      console.log('flows', flows)
+
       const incentiveBaseApr = flows.reduce((total, item) => {
         return total + (isNaN(item.apr) ? 0 : Number(item.apr))
       }, 0)
