@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { VStack } from '@chakra-ui/react'
+import { VStack, useMediaQuery } from '@chakra-ui/react'
 import AssetInput from '../../AssetInput'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
@@ -9,6 +9,7 @@ import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
+  const [isMobile] = useMediaQuery("(max-width: 720px)") 
   const [{ status }] = useRecoilState(walletState)
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
@@ -68,6 +69,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
         rules={{ required: true }}
         render={({ field }) => (
           <AssetInput
+            mobile={isMobile}
             isBonding={true}
             unbondingBalances={unbondingBalances}
             hideToken={currentBondState.tokenSymbol}

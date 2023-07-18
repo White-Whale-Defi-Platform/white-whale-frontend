@@ -113,7 +113,7 @@ const BondingOverview = ({
         <HStack
           alignItems="center"
           justifyContent="flex-start"
-          pl={8}
+          pl={4}
           pt={5}
           spacing={"5"}
         >

@@ -1,22 +1,18 @@
 import { FC, ReactNode } from 'react'
 import { isMobile } from 'react-device-detect'
 
-import { Flex, useMediaQuery } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import Navbar from 'components/Navbar'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
 import Status from '../Status'
-import MobileNotSupportedModal from '../Wallet/Modal/MobileNotSupportedModal'
 import RadialGradient from './RadialGradient'
 
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
-  const [isMobileView] = useMediaQuery('(max-width: 1px)')
-//{(isMobile || isMobileView) && <MobileNotSupportedModal />}
   return (
     <>
-      (
         <Flex direction="column" backgroundColor="transparent" height="100vh">
           <RadialGradient />
           <Navbar />
@@ -35,7 +31,6 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
             <Status />
           </Flex>
         </Flex>
-      )
     </>
   )
 }

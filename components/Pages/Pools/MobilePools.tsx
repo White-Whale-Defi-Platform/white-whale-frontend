@@ -1,7 +1,10 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
-
+import { useChains } from 'hooks/useChainInfo'
+import { useRouter } from 'next/router'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 type Props = {
   pools: Pool[]
@@ -9,6 +12,14 @@ type Props = {
 }
 
 const MobilePools = ({ pools, ctaLabel }: Props) => {
+  const router = useRouter()
+  const { chainId, status} =
+    useRecoilValue(walletState)
+  const chains: Array<any> = useChains()
+  const currentChain = chains.find(
+    (row: { chainId: string }) => row.chainId === chainId
+  )
+  const currentChainName = currentChain?.label.toLowerCase()
   return (
     <VStack width="full" display={['flex', 'none']} gap={8}>
       {pools &&
@@ -24,7 +35,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
           >
             <HStack width="full" justifyContent="space-between">
               <Text color="brand.50">{`Pool`}</Text>
-              <Text color="brand.50">{`APY`}</Text>
+              <Text color="brand.50">{`APR`}</Text>
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
@@ -44,7 +55,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
-              <Text>{`$ ${pool?.totalLiq}`}</Text>
+              <Text>{`$ ${Number(pool?.liquidity.available.total.dollarValue).toFixed()}`}</Text>
               <Text>{` coming soon`}</Text>
             </HStack>
 
@@ -54,9 +65,9 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() => pool?.cta()}
+              onClick={() =>router.push(`/${currentChainName}/pools/manage_liquidity?poolId=${pool?.poolId}`)}
             >
-              {ctaLabel || 'Manage Liquidity'}
+              {ctaLabel || 'Manage'}
             </Button>
           </VStack>
         ))}

@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
@@ -25,9 +26,8 @@ import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
-import menuLinks from './NavMenu.json'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import menuLinks from './NavMenu.json'
 
 const Navbar = () => {
   const { disconnect } = useWallet()
@@ -47,19 +47,19 @@ const Navbar = () => {
   const links = [
     {
       label: 'Swap',
-      link: `/swap`,
+      link: `/${currentChainName}/swap`,
     },
     {
       label: 'Pools',
-      link: `/pools`,
+      link: `/${currentChainName}/pools`,
     },
     {
       label: 'Dashboard',
-      link: `/dashboard`,
+      link: `/${currentChainName}/dashboard`,
     },
     {
-      label: 'Vaults',
-      link: `/vaults`,
+      label: 'Flashloan',
+      link: `/${currentChainName}/flashloan`,
     },
     {
       label: 'Bridge',
@@ -80,9 +80,8 @@ const Navbar = () => {
     disconnect()
   }
 
-
   return (
-    <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
+    <Box width={"full"} py={{ base: '2', md: '10' }} px={{ base: '2', md: '10' }}>
       <Flex
         justifyContent="space-between"
         mx="auto"
@@ -126,7 +125,8 @@ const Navbar = () => {
       <Flex
         justify="space-between"
         align="center"
-        py="4"
+        py="2"
+        px="1"
         display={{ base: 'flex', md: 'none' }}
       >
         <Logo />
@@ -139,9 +139,10 @@ const Navbar = () => {
         />
         <IconButton
           aria-label="Open drawer"
+          align="right"
           variant="ghost"
           color="white"
-          icon={<BurgerIcon width="1rem" height="1rem" />}
+          icon={<BurgerIcon width="3rem" height="1rem" />}
           onClick={onOpen}
           display={{ base: 'block', md: 'none' }}
           _focus={{
@@ -157,7 +158,6 @@ const Navbar = () => {
           Open
         </IconButton>
       </Flex>
-
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>

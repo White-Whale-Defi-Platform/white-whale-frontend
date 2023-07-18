@@ -26,8 +26,7 @@ const Dashboard: FC = () => {
     (row: { chainId: string }) => row.chainId === chainId
   )
   const currentChainName = currentChain?.label.toLowerCase()
-  console.log(currentChainName)
-  console.log(status)
+
  
   const data: BondingData[] = [
     {
@@ -151,7 +150,7 @@ const Dashboard: FC = () => {
   }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale])
 
   return (
-    <VStack alignSelf="center" paddingLeft={10}>
+    <VStack width={"full"} alignSelf="center" paddingLeft={10}>
       <Flex
         direction={{ base: 'column', xl: 'row' }}
         gap={5}
@@ -159,7 +158,7 @@ const Dashboard: FC = () => {
         alignItems="flex-end"
       >
         <VStack width="flex">
-          <HStack width="full" paddingY={5}>
+          <HStack width="full" paddingY={{base: 3, md:5}}>
             <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding
             </Text>

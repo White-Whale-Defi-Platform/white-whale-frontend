@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { VStack } from '@chakra-ui/react'
+import { VStack,useMediaQuery } from '@chakra-ui/react'
 import AssetInput from '../../AssetInput'
 import { useRecoilState } from 'recoil'
 import { bondingAtom } from './bondAtoms'
@@ -22,6 +22,7 @@ export enum LSDToken {
   bWHALE,
 }
 const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
+  const [isMobile] = useMediaQuery("(max-width: 720px)") 
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
   const [{ status }, _] = useRecoilState(walletState)
@@ -74,6 +75,7 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
         rules={{ required: true }}
         render={({ field }) => (
           <AssetInput
+          mobile={isMobile}
             isBonding={true}
             hideToken={currentBondState.tokenSymbol}
             {...field}

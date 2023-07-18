@@ -3,16 +3,9 @@ import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
-import { wallets as keplrWallets } from '@cosmos-kit/keplr';
 import { wallets as cosmostationWallets } from '@cosmos-kit/cosmostation';
 import { wallets as leapWallets } from '@cosmos-kit/leap';
-
 import { assets, chains } from 'chain-registry';
-import { getSigningCosmosClientOptions } from 'interchain';
-import { GasPrice } from '@cosmjs/stargate';
-
-import { SignerOptions } from '@cosmos-kit/core';
-import { Chain } from '@chain-registry/types';
 
 import 'theme/global.css'
 
@@ -29,8 +22,22 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
-
 import theme from 'theme'
+
+const ConnectedView = ({
+  onClose,
+  onReturn,
+  wallet,
+}: WalletViewProps) => {
+  const {
+    walletInfo: { prettyName },
+    username,
+    address,
+  } = wallet;
+ 
+  return <div>{`${prettyName}/${username}/${address}`}</div>;
+};
+
 
 const MyApp: FC<AppProps> = ({
   Component,
@@ -38,15 +45,46 @@ const MyApp: FC<AppProps> = ({
   defaultNetwork,
   walletConnectChainIds,
 }: AppProps & WalletControllerChainOptions) => {
+  const [chainName, setChainName] = useState<ChainName | undefined>(
+    'terra2'
+  );
+
   const [mounted, setMounted] = useState<boolean>(false)
 
-  useEffect(() => setMounted(true), [])
+  const signerOptions: SignerOptions = {
+    // signingStargate: (_chain: Chain) => {
+    //   return getSigningCosmosClientOptions();
+    // }
+  };
+  useEffect(() => {
+    setChainName(window.localStorage.getItem('selected-chain') || 'terra2');
+    setMounted(true)
+  } , [])
 
   return typeof window !== 'undefined' ? (
     <WalletProvider
       defaultNetwork={defaultNetwork}
       walletConnectChainIds={walletConnectChainIds}
     >
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...keplrWallets, ...cosmostationWallets, ...leapWallets]}
+        walletConnectOptions={{
+          signClient: {
+            projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+            relayUrl: 'wss://relay.walletconnect.org',
+            metadata: {
+              name: 'CosmosKit Template',
+              description: 'CosmosKit dapp template',
+              url: 'https://docs.cosmoskit.com/',
+              icons: [],
+            },
+          },
+        }}
+        wrappedWithChakra={true}
+        signerOptions={signerOptions}
+      >
       <>
         <Head>
           <link rel="shortcut icon" href="/favicon.ico" />
@@ -69,9 +107,29 @@ const MyApp: FC<AppProps> = ({
           </QueryClientProvider>
         </RecoilRoot>
       </>
+      </ChainProvider>
     </WalletProvider>
   ) : (
     <StaticWalletProvider defaultNetwork={defaultNetwork}>
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...keplrWallets, ...cosmostationWallets, ...leapWallets]}
+        walletConnectOptions={{
+          signClient: {
+            projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+            relayUrl: 'wss://relay.walletconnect.org',
+            metadata: {
+              name: 'CosmosKit Template',
+              description: 'CosmosKit dapp template',
+              url: 'https://docs.cosmoskit.com/',
+              icons: [],
+            },
+          },
+        }}
+        wrappedWithChakra={true}
+        signerOptions={signerOptions}
+      >
       <>
         <Head>
           <link rel="shortcut icon" href="/favicon.ico" />
@@ -94,11 +152,10 @@ const MyApp: FC<AppProps> = ({
           </QueryClientProvider>
         </RecoilRoot>
       </>
+      </ChainProvider>
     </StaticWalletProvider>
   )
 }
-
-
 
 MyApp.getInitialProps = async () => {
   const chainOptions = await getChainOptions()

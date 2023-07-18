@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack, useMediaQuery,Stack } from '@chakra-ui/react'
 import { WhaleTokenType } from './BondingActions'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
@@ -22,6 +22,7 @@ const Withdraw = ({
   unbondingPeriodInNano,
   whalePrice,
 }) => {
+  const [isMobile] = useMediaQuery("(max-width: 720px)") 
   const [{ status, chainId, network }, _] = useRecoilState(walletState)
 
   const isWalletConnected = status === WalletStatusType.connected
@@ -95,11 +96,11 @@ const Withdraw = ({
         />
       </VStack>
     )
-  }
+  } 
 
   return (
     <VStack spacing={5} mb={35}>
-      <HStack spacing={7}>
+      <Stack direction={['column', 'column', 'row']} spacing={7}>
         <TokenBox
           label="Unbonding"
           ampWhale={unbondingAmpWhale}
@@ -110,7 +111,7 @@ const Withdraw = ({
           ampWhale={withdrawableAmpWhale}
           bWhale={withdrawableBWhale}
         />
-      </HStack>
+      </Stack>
       {isWalletConnected &&
         filteredUnbondingRequests !== null &&
         filteredUnbondingRequests?.length > 0 && (
