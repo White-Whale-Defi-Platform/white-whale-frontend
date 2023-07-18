@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
@@ -117,10 +117,7 @@ const columns = [
     },
   }),
 ]
-const parseLiquidity = (liqString) => {
-  const value = parseFloat(liqString.replace(/[^\d.-]/g, ''));
-  return liqString.toUpperCase().includes('K') ? value * 1000 : value;
-}
+
 
 const AllPoolsTable = ({
   pools,
@@ -131,17 +128,12 @@ const AllPoolsTable = ({
   isLoading: boolean
   allPools?: boolean
 }) => {
-    console.log('pools', pools)
   // console.log('filteredPools', filteredPools)
-
+  // const [filteredPools, setPools] = React.useState<Pool[]>(pools)
   const [sorting, setSorting] = React.useState<SortingState>([])
-  // We need this to be able to react to dynamic changes in the the allPools value 
-  // and filter the pools accordingly
 
-
-  
   const table = useReactTable({
-    data: allPools ? pools : pools.filter(pool => parseLiquidity(pool.totalLiq) >= 1000),
+    data: pools,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,

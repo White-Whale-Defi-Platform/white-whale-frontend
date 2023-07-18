@@ -248,9 +248,18 @@ const Pools = () => {
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
   const allPoolsForShown = useMemo(
+
     () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId]
   )
+  const parseLiquidity = (liqString) => {
+    const value = parseFloat(liqString.replace(/[^\d.-]/g, ''));
+    return liqString.toUpperCase().includes('K') ? value * 1000 : value;
+  }
+  const showAllPoolsList = useMemo(() => {
+    const pools  = allPoolsForShown; 
+    return showAllPools ? pools : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
+  }, [allPoolsForShown, showAllPools])
 
   return (
     <VStack
@@ -288,7 +297,7 @@ const Pools = () => {
         </HStack>
         
         <AllPoolsTable
-          pools={allPoolsForShown}
+          pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
         />
         <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
