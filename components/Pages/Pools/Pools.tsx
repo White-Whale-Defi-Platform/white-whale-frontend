@@ -8,7 +8,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryMultiplePoolsLiquidity,
 } from 'queries/useQueryPools'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { EnigmaPoolData } from 'util/enigma'
 import { STABLE_COIN_LIST } from 'constants/settings'
@@ -20,18 +20,24 @@ import { useChains } from 'hooks/useChainInfo'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import {
+  aprHelperState,
+  updateAPRHelperState,
+} from 'state/atoms/aprHelperState'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
     displayName: string
     displayLogo1: string
     displayLogo2: string
+    myIncentiveApr: number
   }
 
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { chainId, status } = useRecoilValue(walletState)
+  const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
@@ -172,6 +178,17 @@ const Pools = () => {
       const flows =
         incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
           ?.flowData ?? []
+
+      const incentiveBaseApr = flows.reduce((total, item) => {
+        return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+      }, 0)
+
+      updateAPRHelperState(
+        pool?.poolId,
+        pool?.apr,
+        incentiveBaseApr,
+        setAprHelperState
+      )
       if (flows) {
         return {
           ...pool,

@@ -87,7 +87,7 @@ const NewPosition = () => {
         </Text>
       </HStack>
       <Box
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         padding={[6, 12]}
         paddingTop={[10]}
         borderRadius="30px"

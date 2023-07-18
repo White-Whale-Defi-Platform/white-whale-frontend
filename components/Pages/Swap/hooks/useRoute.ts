@@ -29,14 +29,7 @@ const buildRoute = (graph, start, end) => {
   }
 }
 
-const createRouteMessage = (
-  route,
-  amount,
-  token,
-  reverse,
-  routerAddress,
-  slippage
-) => {
+const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
   if (!!!amount || !!!route.length || !routerAddress) return {}
 
   const operations = route.map(([offerAsset, askAsset]) => {
@@ -150,8 +143,7 @@ const useRoute = ({
       amount,
       tokenA,
       reverse,
-      routerAddress,
-      slippage
+      routerAddress
     )
     const encodedMsgs = executeMessage(
       executeMsg,

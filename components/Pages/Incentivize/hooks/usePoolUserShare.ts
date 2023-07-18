@@ -24,7 +24,7 @@ export const usePoolUserShare = (
   return { ...data }
 }
 
-const fetchPoolUserShare = async (
+export const fetchPoolUserShare = async (
   client: Wallet,
   contractAddr: string,
   userAddr: string

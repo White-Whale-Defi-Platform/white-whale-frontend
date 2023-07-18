@@ -1,7 +1,6 @@
 import { GasPrice } from '@cosmjs/stargate'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
 import { useChainInfo } from 'hooks/useChainInfo'
-import { Router } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
