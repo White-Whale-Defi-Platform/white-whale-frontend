@@ -1,4 +1,14 @@
-import { Box, Checkbox, HStack, Text, Switch, VStack, FormControl, FormLabel } from '@chakra-ui/react'
+import {
+  Box,
+  Checkbox,
+  HStack,
+  Text,
+  Switch,
+  VStack,
+  FormControl,
+  FormLabel,
+  Stack,
+} from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
@@ -42,7 +52,7 @@ const Pools = () => {
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
   )
-  const [showAllPools, setShowAllPools] = useState<boolean>(true)
+  const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -248,17 +258,18 @@ const Pools = () => {
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
   const allPoolsForShown = useMemo(
-
     () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId]
   )
   const parseLiquidity = (liqString) => {
-    const value = parseFloat(liqString.replace(/[^\d.-]/g, ''));
-    return liqString.toUpperCase().includes('K') ? value * 1000 : value;
+    const value = parseFloat(liqString.replace(/[^\d.-]/g, ''))
+    return liqString.toUpperCase().includes('K') ? value * 1000 : value
   }
   const showAllPoolsList = useMemo(() => {
-    const pools  = allPoolsForShown; 
-    return showAllPools ? pools : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
+    const pools = allPoolsForShown
+    return showAllPools
+      ? pools
+      : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
   }, [allPoolsForShown, showAllPools])
 
   return (
@@ -285,17 +296,19 @@ const Pools = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
-          {/* Add a single checkbox on the right hand side we pass its value to AllPoolsTable */}
-         {/* On the right, put a   <Switch id="email-alerts" /> which is hooked up to showAllPools */}
-          <Switch
-            isChecked={showAllPools}
-            onChange={() => setShowAllPools(!showAllPools)}
-            colorScheme="green"
-            size="md"
-          />
-      
+          <Stack direction="row">
+            <Text as="h6" fontSize="14" fontWeight="700">
+              Show All Pools
+            </Text>
+            <Switch
+              isChecked={showAllPools}
+              onChange={() => setShowAllPools(!showAllPools)}
+              colorScheme="green"
+              size="sm"
+            ></Switch>
+          </Stack>
         </HStack>
-        
+
         <AllPoolsTable
           pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
