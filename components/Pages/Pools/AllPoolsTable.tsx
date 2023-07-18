@@ -117,18 +117,31 @@ const columns = [
     },
   }),
 ]
+const parseLiquidity = (liqString) => {
+  const value = parseFloat(liqString.replace(/[^\d.-]/g, ''));
+  return liqString.toUpperCase().includes('K') ? value * 1000 : value;
+}
 
 const AllPoolsTable = ({
   pools,
   isLoading,
+  allPools
 }: {
   pools: Pool[]
   isLoading: boolean
+  allPools?: boolean
 }) => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+    console.log('pools', pools)
+  // console.log('filteredPools', filteredPools)
 
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  // We need this to be able to react to dynamic changes in the the allPools value 
+  // and filter the pools accordingly
+
+
+  
   const table = useReactTable({
-    data: pools,
+    data: allPools ? pools : pools.filter(pool => parseLiquidity(pool.totalLiq) >= 1000),
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,

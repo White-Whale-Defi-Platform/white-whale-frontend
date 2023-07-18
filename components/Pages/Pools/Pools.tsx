@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Checkbox, HStack, Text, Switch, VStack, FormControl, FormLabel } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
@@ -42,6 +42,7 @@ const Pools = () => {
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
   )
+  const [showAllPools, setShowAllPools] = useState<boolean>(true)
   const cosmwasmClient = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -265,6 +266,7 @@ const Pools = () => {
           show={true}
           pools={myPools}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
+          allPools={showAllPools}
         />
         <MobilePools pools={myPools} />
       </Box>
@@ -274,7 +276,17 @@ const Pools = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
+          {/* Add a single checkbox on the right hand side we pass its value to AllPoolsTable */}
+         {/* On the right, put a   <Switch id="email-alerts" /> which is hooked up to showAllPools */}
+          <Switch
+            isChecked={showAllPools}
+            onChange={() => setShowAllPools(!showAllPools)}
+            colorScheme="green"
+            size="md"
+          />
+      
         </HStack>
+        
         <AllPoolsTable
           pools={allPoolsForShown}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}

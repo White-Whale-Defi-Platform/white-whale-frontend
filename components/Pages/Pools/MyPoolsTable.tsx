@@ -122,15 +122,17 @@ const PoolsTable = ({
   show,
   pools,
   isLoading,
+  allPools=true,
 }: {
   show: boolean
   pools: Pool[]
   isLoading: boolean
+  allPools: boolean
 }) => {
   if (!show) return null
-
+  const filteredPools = allPools ? pools : pools.filter(pool => parseLiquidity(pool.totalLiq) >= 1000);
   const table = useReactTable({
-    data: pools,
+    data: filteredPools,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
