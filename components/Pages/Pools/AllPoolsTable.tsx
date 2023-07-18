@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
@@ -122,14 +122,10 @@ const columns = [
 const AllPoolsTable = ({
   pools,
   isLoading,
-  allPools
 }: {
   pools: Pool[]
   isLoading: boolean
-  allPools?: boolean
 }) => {
-  // console.log('filteredPools', filteredPools)
-  // const [filteredPools, setPools] = React.useState<Pool[]>(pools)
   const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({
