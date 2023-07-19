@@ -8,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   Stack,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -34,6 +35,7 @@ import {
   aprHelperState,
   updateAPRHelperState,
 } from 'state/atoms/aprHelperState'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -297,9 +299,12 @@ const Pools = () => {
             All Pools
           </Text>
           <Stack direction="row">
-            <Text as="h6" fontSize="14" fontWeight="700">
-              Show All Pools
-            </Text>
+            <Tooltip label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown">
+              <Text as="h6" fontSize="14" fontWeight="700">
+                <InfoOutlineIcon marginRight={2} />
+                Show All Pools
+              </Text>
+            </Tooltip>
             <Switch
               isChecked={showAllPools}
               onChange={() => setShowAllPools(!showAllPools)}
