@@ -128,7 +128,6 @@ const PoolsTable = ({
   isLoading: boolean
 }) => {
   if (!show) return null
-
   const table = useReactTable({
     data: pools,
     columns,
