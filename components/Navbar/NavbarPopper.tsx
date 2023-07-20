@@ -1,3 +1,5 @@
+import React, { useMemo } from 'react'
+
 import {
   Box,
   Button,
@@ -12,7 +14,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+
+import { validChains } from '../../constants/validChains'
 import NavbarLink from './NavbarLink'
 const NavbarPopper = ({ menu, currentChainName }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
@@ -33,16 +36,9 @@ const NavbarPopper = ({ menu, currentChainName }) => {
   }, [asPath, menu])
 
   const getTfmUrl = () => {
-    const urlToReturn = {
-      migaloo: '/?chainFrom=migaloo-1&chainTo=',
-      juno: '/?chainTo=migaloo-1&chainFrom=juno-1',
-      chihuahua: '/?chainTo=migaloo-1&chainFrom=chihuahua-1',
-      injective: '/?chainTo=migaloo-1&chainFrom=injective-1',
-      comdex: '/?chainTo=migaloo-1&chainFrom=comdex-1',
-      terra: '/?chainFrom=phoenix-1&chainTo=migaloo-1',
-    }
-
-    return urlToReturn[currentChainName]
+    return currentChainName === 'migaloo'
+      ? `/?chainFrom=${validChains.mainnet.migaloo}&chainTo=`
+      : `/?chainTo=${validChains.mainnet.migaloo}&chainFrom=${validChains.mainnet[currentChainName]}`
   }
   const openLink = (url: string): (() => void) => {
     return () => {
