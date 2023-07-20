@@ -1,3 +1,5 @@
+import React, { useMemo } from 'react'
+
 import {
   Box,
   Button,
@@ -12,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+
 import NavbarLink from './NavbarLink'
 const NavbarPopper = ({ menu, currentChainName }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
@@ -32,9 +34,14 @@ const NavbarPopper = ({ menu, currentChainName }) => {
     return !!linkInAsPath
   }, [asPath, menu])
 
+  const getTfmUrl = () => {
+    return currentChainName === 'migaloo'
+      ? `/?chainFrom=${validChains.mainnet.migaloo}&chainTo=`
+      : `/?chainTo=${validChains.mainnet.migaloo}&chainFrom=${validChains.mainnet[currentChainName]}`
+  }
   const openLink = (url: string): (() => void) => {
     return () => {
-      window.open(url, '_blank')
+      window.open(`${url}${getTfmUrl()}`, '_blank')
     }
   }
 
