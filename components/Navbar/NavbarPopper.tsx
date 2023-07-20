@@ -32,9 +32,21 @@ const NavbarPopper = ({ menu, currentChainName }) => {
     return !!linkInAsPath
   }, [asPath, menu])
 
+  const getTfmUrl = () => {
+    const urlToReturn = {
+      migaloo: '/?chainFrom=migaloo-1&chainTo=',
+      juno: '/?chainTo=migaloo-1&chainFrom=juno-1',
+      chihuahua: '/?chainTo=migaloo-1&chainFrom=chihuahua-1',
+      injective: '/?chainTo=migaloo-1&chainFrom=injective-1',
+      comdex: '/?chainTo=migaloo-1&chainFrom=comdex-1',
+      terra: '/?chainFrom=phoenix-1&chainTo=migaloo-1',
+    }
+
+    return urlToReturn[currentChainName]
+  }
   const openLink = (url: string): (() => void) => {
     return () => {
-      window.open(url, '_blank')
+      window.open(`${url}${getTfmUrl()}`, '_blank')
     }
   }
 
