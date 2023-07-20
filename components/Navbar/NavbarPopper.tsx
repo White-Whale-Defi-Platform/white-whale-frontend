@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
+import { validChains } from '../../constants/validChains'
 import NavbarLink from './NavbarLink'
 const NavbarPopper = ({ menu, currentChainName }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
