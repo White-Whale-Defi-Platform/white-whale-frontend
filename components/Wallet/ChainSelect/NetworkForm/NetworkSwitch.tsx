@@ -12,21 +12,22 @@ function NetworkSwitch() {
   const { disconnect } = useWallet()
 
   const changeNetwork = async ({ target }) => {
+    const checked = target.checked
     await queryClient.invalidateQueries([
       'multipleTokenBalances',
       'tokenBalance',
       '@pools-list',
     ])
-    console.log('network change triggered' + target.checked)
+    console.log('network change triggered' + checked)
     const updatedChainId =
-      currentWalletState.chainId === 'migaloo-1' && target.checked
+      currentWalletState.chainId === 'migaloo-1' && checked
         ? 'narwhal-1'
-        : currentWalletState.chainId === 'narwhal-1' && !target.checked
+        : currentWalletState.chainId === 'narwhal-1' && !checked
         ? 'migaloo-1'
         : currentWalletState.chainId
     setWalletState({
       ...currentWalletState,
-      network: target.checked ? 'testnet' : 'mainnet',
+      network: checked ? 'testnet' : 'mainnet',
       chainId: updatedChainId,
     })
     disconnect()
