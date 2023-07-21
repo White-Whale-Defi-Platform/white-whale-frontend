@@ -1,5 +1,6 @@
-import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import React from 'react'
+
+import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 
 export type Pool = {
   contract: string

@@ -1,10 +1,11 @@
 import { useQuery } from 'react-query'
-import { parseError } from 'util/parseError'
-import { Wallet } from 'util/wallet-adapters'
+
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { useRecoilState } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
+import { parseError } from 'util/parseError'
+import { Wallet } from 'util/wallet-adapters'
 
 type Simulate = {
   msgs: EncodeObject[]
@@ -30,8 +31,9 @@ const useSimulate = ({
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],
     queryFn: () => {
-      if (!connected || Number(amount) <= 0 || !address || !client || !msgs)
+      if (!connected || Number(amount) <= 0 || !address || !client || !msgs) {
         return
+      }
 
       setTxState({
         txStep: TxStep.Estimating,

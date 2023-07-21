@@ -1,11 +1,11 @@
 import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
-
 import {
   getToken1ForToken2Price,
   getToken2ForToken1Price,
   getTokenForTokenPrice,
 } from 'services/swap'
 import { convertDenomToMicroDenom } from 'util/conversion'
+
 import { TokenInfo } from './usePoolsListQuery'
 import { PoolMatchForSwap } from './useQueryMatchingPoolForSwap'
 
@@ -30,7 +30,9 @@ export async function tokenToTokenPriceQueryWithPools({
     return 1
   }
 
-  if (!client) return
+  if (!client) {
+    return
+  }
 
   const convertedTokenAmount = convertDenomToMicroDenom(amount, tokenA.decimals)
 

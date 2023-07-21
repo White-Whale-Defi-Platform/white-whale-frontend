@@ -1,6 +1,7 @@
-import { ErrorIcon, Toast } from 'junoblocks'
 import React from 'react'
 import { toast } from 'react-hot-toast'
+
+import { ErrorIcon, Toast } from 'junoblocks'
 
 function createAlertPricingServiceIsDown() {
   let hasRenderedAlert

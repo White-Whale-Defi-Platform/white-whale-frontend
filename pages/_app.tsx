@@ -16,11 +16,10 @@ import AppLoading from 'components/AppLoading'
 import AppLayout from 'components/Layout/AppLayout'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
-
 import theme from 'theme'
-import Script from 'next/script'
 
 const MyApp: FC<AppProps> = ({
   Component,

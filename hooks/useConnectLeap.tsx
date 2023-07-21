@@ -15,7 +15,9 @@ export default function useConnectLeap() {
   const { disconnect } = useWallet()
 
   const connectLeap = async () => {
-    if (isConnecting) return
+    if (isConnecting) {
+      return
+    }
 
     if (connectedWallet) {
       disconnect()

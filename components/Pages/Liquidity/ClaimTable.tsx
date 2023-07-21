@@ -1,4 +1,5 @@
 import { HStack, Image, Text, VStack } from '@chakra-ui/react'
+
 import { Reward } from './hooks/useRewards'
 
 type Props = {
@@ -39,8 +40,9 @@ const TokenRow = ({ item, isLast }: { item: Reward; isLast: boolean }) => {
 }
 
 const ClaimTable = ({ tokens = [] }: Props) => {
-  if (tokens.length === 0)
+  if (tokens.length === 0) {
     return <Text color="whiteAlpha.700">No rewards available</Text>
+  }
 
   return (
     <VStack

@@ -1,19 +1,21 @@
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+
 import {
   Box,
-  HStack,
   Input as ChakraInput,
+  HStack,
   InputGroup,
   Stack,
 } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
-import React, { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
-import { TxStep } from 'types/common'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { TxStep } from 'types/common'
+
 import { useOpenFlow } from './hooks/useOpenFlow'
 
 const defaultToken = {

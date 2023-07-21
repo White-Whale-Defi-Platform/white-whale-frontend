@@ -1,4 +1,4 @@
-import { Box, HStack, Text, Image } from '@chakra-ui/react'
+import { Box, HStack, Image, Text } from '@chakra-ui/react'
 
 export const IncentivesLogos = ({ logos, more }) => (
   <HStack

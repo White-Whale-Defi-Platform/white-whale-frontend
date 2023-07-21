@@ -1,25 +1,27 @@
-import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
-import { coin } from '@cosmjs/proto-signing'
-import useSimulate from 'hooks/useSimulate'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
+
+import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import { coin } from '@cosmjs/proto-signing'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
+import useSimulate from 'hooks/useSimulate'
+import { useTokenInfo } from 'hooks/useTokenInfo'
+import useTxStatus from 'hooks/useTxStatus'
+import { num, toChainAmount } from 'libs/num'
+import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
+import { createAsset } from 'services/asset'
 import { walletState } from 'state/atoms/walletAtoms'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
 } from 'util/messages'
-import { useTokenInfo } from 'hooks/useTokenInfo'
-import useTxStatus from 'hooks/useTxStatus'
-import { num, toChainAmount } from 'libs/num'
-import { createAsset } from 'services/asset'
-import useFactoryConfig from './useFactoryConfig'
+
 import useEpoch from './useEpoch'
-import {
-  Config,
-  useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+import useFactoryConfig from './useFactoryConfig'
 
 interface Props {
   poolId: string
@@ -49,8 +51,9 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       !startDate ||
       !endDate ||
       Number(token?.amount || 0) <= 0
-    )
+    ) {
       return null
+    }
 
     const flow_asset = createAsset(amount, tokenInfo.denom, tokenInfo?.native)
     const start_epoch = dateToEpoch(startDate)

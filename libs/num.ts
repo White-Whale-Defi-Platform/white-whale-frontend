@@ -26,10 +26,7 @@ export const toChainAmount = (
   return new BigNumber(value).times(10 ** decimal).toFixed(0)
 }
 
-export const toDecimal = (
-  value: BigNumber.Value = '0',
-  dp: number = 6
-): string => {
+export const toDecimal = (value: BigNumber.Value = '0', dp = 6): string => {
   return new BigNumber(value).toFixed(dp).toString()
 }
 

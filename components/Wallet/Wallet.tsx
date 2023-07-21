@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { Box, Button, Divider } from '@chakra-ui/react'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
@@ -7,6 +7,8 @@ import WalletIcon from 'components/icons/WalletIcon'
 import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { validChains } from 'constants/validChains'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import useConnectCosmostation from 'hooks/useConnectCosmostation'
 import useConnectKeplr from 'hooks/useConnectKeplr'
@@ -15,9 +17,7 @@ import { useTerraStation } from 'hooks/useTerraStation'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { validChains } from 'constants/validChains'
 import { getPathName } from 'util/route'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const [isInitialized, setInitialized] = useState(false)
@@ -41,7 +41,9 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   useEffect(() => {
     // onDisconnect()
 
-    if (router.pathname === '/') return
+    if (router.pathname === '/') {
+      return
+    }
 
     const defaultChainId =
       currentWalletState.network === 'mainnet' ? 'phoenix-1' : 'pisco-1'
@@ -67,7 +69,9 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   }, [])
 
   const denom = useMemo(() => {
-    if (!chainInfo) return
+    if (!chainInfo) {
+      return
+    }
     const [coinDenom] = (chainInfo as any)?.currencies || []
     return coinDenom
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,14 +87,19 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (
       !BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId) &&
       router.pathname.includes('dashboard')
-    )
+    ) {
       await router.push('/swap')
+    }
     setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
   }
 
   useEffect(() => {
-    if (!isInitialized) return
-    if (!currentWalletState.chainId) return
+    if (!isInitialized) {
+      return
+    }
+    if (!currentWalletState.chainId) {
+      return
+    }
     if (router.pathname.includes('/404')) {
       router.push('/404')
     }
@@ -103,7 +112,9 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     } else if (currentWalletState.activeWallet === 'station') {
       const [{ type = null, identifier = null } = {}] =
         availableConnections.filter(filterForStation)
-      if (type && identifier) connectTerraAndCloseModal(type, identifier)
+      if (type && identifier) {
+        connectTerraAndCloseModal(type, identifier)
+      }
     }
 
     // update route

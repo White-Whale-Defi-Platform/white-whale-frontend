@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react'
+
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -21,7 +23,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
-import { useMemo, useState } from 'react'
+
 import { AvailableRewards } from './AvailableRewards'
 
 type TableProps = {

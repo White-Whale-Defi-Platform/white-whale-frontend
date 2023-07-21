@@ -26,7 +26,7 @@ export const useIBCAssetList = () => {
     '@ibc-asset-list',
     async () => {
       const response = await fetch(process.env.NEXT_PUBLIC_IBC_ASSETS_URL)
-      return await response.json()
+      return response.json()
     },
     {
       onError(e) {

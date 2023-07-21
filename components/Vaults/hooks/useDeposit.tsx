@@ -23,7 +23,9 @@ const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (!tokenInfo || !Number(amount)) return {}
+    if (!tokenInfo || !Number(amount)) {
+      return {}
+    }
 
     return {
       msgs: createDepostMsg({ amount }),

@@ -1,19 +1,20 @@
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
+import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import usePrices from 'hooks/usePrices'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import {
   EnigmaPoolData,
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
-import { useEffect, useState } from 'react'
 
 export interface Flow {
   claimed_amount: string
@@ -66,7 +67,9 @@ export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
           : await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)
     }
-    if (pools?.length > 0 && currentChainPrefix) fetchPoolData()
+    if (pools?.length > 0 && currentChainPrefix) {
+      fetchPoolData()
+    }
   }, [currentChainPrefix, pools?.length, client])
 
   let poolAssets = []
@@ -122,7 +125,7 @@ const getPoolFlowData = async (
   poolsWithAprAnd24HrVolume
 ): Promise<IncentivePoolInfo[]> => {
   return pools
-    ? await Promise.all(
+    ? Promise.all(
         pools?.map(async (pool) => {
           if (pool.staking_address === '') {
             return {
@@ -135,7 +138,7 @@ const getPoolFlowData = async (
           )?.totalLiquidity
           const flows = await fetchFlows(client, pool.staking_address)
 
-          const currentEpochIdCheck: number = Number(
+          const currentEpochIdCheck = Number(
             currentEpochData?.currentEpoch?.epoch.id
           )
           const currentEpochId: number = isNaN(currentEpochIdCheck)

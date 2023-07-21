@@ -15,8 +15,9 @@ const Flashloan: FC = () => {
   const chainIdParam = router.query.chainId as string
   const currenChain = chains.find((row) => row.chainId === chainId)
 
-  if (!currenChain || currenChain.label.toLowerCase() !== chainIdParam)
+  if (!currenChain || currenChain.label.toLowerCase() !== chainIdParam) {
     return null
+  }
 
   return (
     <VStack width={{ base: '100%', md: '722px' }} alignItems="center">

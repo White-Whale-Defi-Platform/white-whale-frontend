@@ -35,7 +35,9 @@ export const getCGCTokenHistoryPriceUrl = (id: string, timestamp: number) => {
 
 export const getTokenPrice = async (address: string, timestamp?: number) => {
   const tokenCGCId = getTokenCGCId(address)
-  if (tokenCGCId === '' || !timestamp) return 1
+  if (tokenCGCId === '' || !timestamp) {
+    return 1
+  }
 
   try {
     const cgcUrl = getCGCTokenHistoryPriceUrl(
@@ -45,7 +47,7 @@ export const getTokenPrice = async (address: string, timestamp?: number) => {
 
     const res = await axios.get(cgcUrl)
     if (res.status === 200) {
-      return res.data && res.data.market_data.current_price['usd']
+      return res.data && res.data.market_data.current_price.usd
     }
     return 1
   } catch {
@@ -55,7 +57,9 @@ export const getTokenPrice = async (address: string, timestamp?: number) => {
 
 export const getToken24hrPrice = async (address: string) => {
   const tokenCGCId = getTokenCGCId(address)
-  if (tokenCGCId === '') return 1
+  if (tokenCGCId === '') {
+    return 1
+  }
 
   try {
     const cgcUrl = `${coingeckoV3RootUrl}/${tokenCGCId}/market_chart?vs_currency=usd&days=1`

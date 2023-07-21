@@ -1,7 +1,7 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import { coin } from '@cosmjs/stargate'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
-import { coin } from '@cosmjs/stargate'
 
 export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
@@ -39,7 +39,7 @@ export const createWithdrawExecuteMsgs = (
   const msgs = []
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
-  if (!isNative)
+  if (!isNative) {
     increaseAllowanceMessages.push(
       createIncreaseAllowanceMessage({
         tokenAmount: amount,
@@ -48,6 +48,7 @@ export const createWithdrawExecuteMsgs = (
         swapAddress,
       })
     )
+  }
 
   const inventiveMsg = createExecuteMessage({
     message: {
@@ -58,7 +59,9 @@ export const createWithdrawExecuteMsgs = (
     funds: [],
   })
 
-  if (claimIncentive) msgs.push(inventiveMsg)
+  if (claimIncentive) {
+    msgs.push(inventiveMsg)
+  }
 
   return [
     ...msgs,

@@ -12,7 +12,9 @@ export const toBase64 = (obj: object) => {
 }
 
 const buildRoute = (graph, start, end) => {
-  if (!start || !end) return []
+  if (!start || !end) {
+    return []
+  }
 
   const queue = [[start, []]],
     seen = new Set()
@@ -20,7 +22,9 @@ const buildRoute = (graph, start, end) => {
   while (queue.length) {
     const [curVert, [...path]] = queue.shift()
     path.push(curVert)
-    if (curVert === end) return path
+    if (curVert === end) {
+      return path
+    }
 
     if (!seen.has(curVert) && graph[curVert]) {
       queue.push(...graph[curVert].map((v) => [v, path]))
@@ -30,7 +34,9 @@ const buildRoute = (graph, start, end) => {
 }
 
 const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
-  if (!!!amount || !!!route.length || !routerAddress) return {}
+  if (!!!amount || !!!route.length || !routerAddress) {
+    return {}
+  }
 
   const operations = route.map(([offerAsset, askAsset]) => {
     const offer_asset_info = toAssetInfo(offerAsset?.denom, offerAsset?.native)
@@ -78,7 +84,9 @@ const executeMessage = (
   routerAddress,
   senderAddress
 ) => {
-  if (!message || !routerAddress) return null
+  if (!message || !routerAddress) {
+    return null
+  }
 
   return createExecuteMessage({
     senderAddress,
@@ -101,7 +109,7 @@ const useRoute = ({
   const { routerAddress } = poolsList || {}
 
   const { path, route } = useMemo(() => {
-    if (!poolsList || !tokenList)
+    if (!poolsList || !tokenList) {
       return {
         pools: [],
         tokens: [],
@@ -109,6 +117,7 @@ const useRoute = ({
         path: [],
         route: [],
       }
+    }
     const graph = {}
 
     const pools = poolsList?.pools?.map(({ pool_id }) => pool_id)
@@ -136,7 +145,9 @@ const useRoute = ({
   }, [poolsList, tokenList, tokenA?.symbol, tokenB?.symbol])
 
   const { simulateMsg, executeMsg, encodedExecuteMsg } = useMemo(() => {
-    if (route.length < 1) return {}
+    if (route.length < 1) {
+      return {}
+    }
 
     const { simulateMsg, executeMsg } = createRouteMessage(
       route,

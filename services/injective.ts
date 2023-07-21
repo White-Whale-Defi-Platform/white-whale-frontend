@@ -24,7 +24,6 @@ import {
   DEFAULT_BLOCK_TIMEOUT_HEIGHT,
   DEFAULT_STD_FEE,
 } from '@injectivelabs/utils'
-
 import { base64ToJson } from 'util/base64'
 
 const DEFAULT_GAS = '250000000000000'
@@ -332,7 +331,7 @@ class Injective {
       )
       const signTxRaw = createTxRawFromSigResponse(directSignResponse)
       this.txRaw = null
-      return this.txClient.broadcast(signTxRaw).then((result) => {
+      return await this.txClient.broadcast(signTxRaw).then((result) => {
         console.log({ result })
         if (!!result.code) {
           throw new Error(

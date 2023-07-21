@@ -17,8 +17,9 @@ function ChainItem({
   if (
     walletState?.activeWallet == 'station' &&
     (chain?.chainId == 'injective-1' || chain?.chainId == 'comdex-1')
-  )
+  ) {
     return null
+  }
   return (
     <ListItem
       justifyContent="space-between"

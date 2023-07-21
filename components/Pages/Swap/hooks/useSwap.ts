@@ -44,7 +44,9 @@ const useSwap = ({ reverse }) => {
     routerAddress,
   })
   const minReceive = useMemo(() => {
-    if (!simulated) return null
+    if (!simulated) {
+      return null
+    }
 
     const rate1 = num(1).minus(slippageToDecimal)
     const rate2 = num(1).minus(0.001)

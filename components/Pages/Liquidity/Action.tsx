@@ -1,4 +1,5 @@
-import { Button, Box } from '@chakra-ui/react'
+import { Box, Button } from '@chakra-ui/react'
+
 import { useClosePosition } from './hooks/useClosePosition'
 import { useWithdrawPosition } from './hooks/useWithdrawPosition'
 
@@ -6,7 +7,7 @@ export const Action = ({ item, poolId }) => {
   const close = useClosePosition({ poolId })
   const withdraw = useWithdrawPosition({ poolId })
 
-  if (item?.state === 'active')
+  if (item?.state === 'active') {
     return (
       <Button
         width="full"
@@ -20,13 +21,13 @@ export const Action = ({ item, poolId }) => {
         Close
       </Button>
     )
-  else if (item?.state === 'unbonding')
+  } else if (item?.state === 'unbonding') {
     return (
       <Button width="full" variant="outline" size="sm" isDisabled={true}>
         Unbonding
       </Button>
     )
-  else if (item?.state === 'unbound')
+  } else if (item?.state === 'unbound') {
     return (
       <Button
         width="full"
@@ -38,5 +39,7 @@ export const Action = ({ item, poolId }) => {
         Unbound
       </Button>
     )
-  else <Box w="full" />
+  } else {
+    ;<Box w="full" />
+  }
 }

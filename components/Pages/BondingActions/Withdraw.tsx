@@ -1,5 +1,8 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { WhaleTokenType } from './BondingActions'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import {
@@ -7,11 +10,9 @@ import {
   convertMicroDenomToDenom,
   nanoToMilli,
 } from 'util/conversion'
+
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
-import {
-  Config,
-  useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { WhaleTokenType } from './BondingActions'
 
 const Withdraw = ({
   unbondingAmpWhale,

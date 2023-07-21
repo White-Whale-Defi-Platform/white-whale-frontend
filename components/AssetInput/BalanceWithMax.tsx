@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
 
 type BalanceProps = {
@@ -31,7 +32,9 @@ type HalfButtonProps = {
 }
 
 const MaxButton = ({ disabled, onClick, hideMax = false }: MaxButtonProps) => {
-  if (hideMax) return null
+  if (hideMax) {
+    return null
+  }
   return (
     <Button
       disabled={disabled}
@@ -49,7 +52,9 @@ const HalfButton = ({
   onClick,
   hideHalf = false,
 }: HalfButtonProps) => {
-  if (hideHalf) return null
+  if (hideHalf) {
+    return null
+  }
   return (
     <Button
       disabled={disabled}
@@ -73,7 +78,9 @@ const TokenToPrice = ({
   dollarValue,
   hide = false,
 }: TokenToPriceProps) => {
-  if (hide) return <Box flex={1} />
+  if (hide) {
+    return <Box flex={1} />
+  }
 
   return (
     <HStack spacing={0} gap={0} flex={1}>

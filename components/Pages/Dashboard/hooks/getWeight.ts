@@ -1,5 +1,6 @@
-import { Wallet } from 'util/wallet-adapters'
 import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { Wallet } from 'util/wallet-adapters'
+
 import { Config } from './useDashboardData'
 
 export interface WeightInfo {

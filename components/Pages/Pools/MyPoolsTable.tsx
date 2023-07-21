@@ -16,6 +16,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
@@ -127,7 +128,9 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  if (!show) return null
+  if (!show) {
+    return null
+  }
   const table = useReactTable({
     data: pools,
     columns,

@@ -1,6 +1,8 @@
-import { Box, Divider, HStack, Text, VStack, Tooltip } from '@chakra-ui/react'
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
+
+import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+
 import { TokenType, WhaleType } from './BondingOverview'
 import { BondingData } from './types/BondingData'
 
