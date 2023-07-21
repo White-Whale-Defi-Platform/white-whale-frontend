@@ -6,7 +6,9 @@ export function convertMicroDenomToDenom(
   value: number | string,
   decimals: number
 ): number {
-  if (decimals === 0) return Number(value)
+  if (decimals === 0) {
+    return Number(value)
+  }
 
   return protectAgainstNaN(Number(value) / Math.pow(10, decimals))
 }
@@ -15,7 +17,9 @@ export function convertDenomToMicroDenom(
   value: number | string,
   decimals: number
 ): number {
-  if (decimals === 0) return Number(value)
+  if (decimals === 0) {
+    return Number(value)
+  }
 
   return protectAgainstNaN(
     parseInt(String(Number(value) * Math.pow(10, decimals)), 10)

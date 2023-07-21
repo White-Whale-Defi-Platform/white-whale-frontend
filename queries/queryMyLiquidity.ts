@@ -1,6 +1,7 @@
+import { isNativeToken } from 'services/asset'
+
 import { queryLiquidityBalance } from '../services/liquidity'
 import { protectAgainstNaN } from '../util/conversion'
-import { isNativeToken } from 'services/asset'
 
 export async function queryMyLiquidity({ swap, address, context: { client } }) {
   const isNative = isNativeToken(swap.lp_token)

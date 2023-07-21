@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { formatPrice, fromChainAmount } from 'libs/num'
 import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 
 export type TokenInfo = {
   id: string
@@ -48,7 +48,9 @@ export type VaultsResponse = {
 }
 
 const queryShare = (client, contract, amount) => {
-  if (!!!amount) return null
+  if (!!!amount) {
+    return null
+  }
   return client.queryContractSmart(contract, {
     share: { amount },
   })
@@ -207,7 +209,9 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
   )
 
   const withBalance = useMemo(() => {
-    if (!vaults) return null
+    if (!vaults) {
+      return null
+    }
 
     const _vaults = vaults.vaults.map((vault, index) => ({
       ...vault,

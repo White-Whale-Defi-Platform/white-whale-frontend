@@ -58,10 +58,15 @@ const WithdrawForm = ({
   const isConnected = connected === `@wallet-state/connected`
 
   const buttonLabel = useMemo(() => {
-    if (connected !== `@wallet-state/connected`) return 'Connect Wallet'
-    else if (!!!token?.amount) return 'Enter Amount'
-    else if (tx?.buttonLabel) return tx?.buttonLabel
-    else return 'Withdraw'
+    if (connected !== `@wallet-state/connected`) {
+      return 'Connect Wallet'
+    } else if (!!!token?.amount) {
+      return 'Enter Amount'
+    } else if (tx?.buttonLabel) {
+      return tx?.buttonLabel
+    } else {
+      return 'Withdraw'
+    }
   }, [tx?.buttonLabel, connected, token])
 
   const onSubmit = (event) => {

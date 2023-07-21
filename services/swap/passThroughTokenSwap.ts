@@ -62,7 +62,7 @@ export const passThroughTokenSwap = async ({
     )
   }
 
-  return await client.execute(senderAddress, swapAddress, swapMessage, [
+  return client.execute(senderAddress, swapAddress, swapMessage, [
     coin(tokenAmount, tokenA.denom),
   ])
 }

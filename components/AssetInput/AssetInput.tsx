@@ -1,10 +1,12 @@
-import { VStack, forwardRef } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
+
+import { forwardRef, VStack } from '@chakra-ui/react'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
-import WhaleInput from './WhaleInput'
-import { num } from 'libs/num'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import { num } from 'libs/num'
+
 import BalanceWithMaxNHalf from './BalanceWithMax'
+import WhaleInput from './WhaleInput'
 
 interface AssetInputProps {
   image?: boolean

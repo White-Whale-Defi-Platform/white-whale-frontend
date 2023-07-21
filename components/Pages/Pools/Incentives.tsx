@@ -1,19 +1,21 @@
 import { useMemo } from 'react'
+
 import {
   Button,
-  Text,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
   PopoverArrow,
   PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Td,
   TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Thead,
+  Tr,
 } from '@chakra-ui/react'
+
 import { IncentivesLogos } from './IncentivesLogos'
 
 export const Incentives = ({ flows }) => {
@@ -29,7 +31,9 @@ export const Incentives = ({ flows }) => {
   }, [flows])
 
   //show dash if no incentives
-  if (!hasIncentives) return <Text>-</Text>
+  if (!hasIncentives) {
+    return <Text>-</Text>
+  }
   return (
     <Popover trigger="hover">
       <PopoverTrigger>

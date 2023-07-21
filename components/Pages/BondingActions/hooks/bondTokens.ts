@@ -1,6 +1,6 @@
-import { Wallet } from 'util/wallet-adapters'
 import { coin } from '@cosmjs/stargate'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { Wallet } from 'util/wallet-adapters'
 
 export const bondTokens = async (
   client: Wallet,

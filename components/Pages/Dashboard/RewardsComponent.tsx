@@ -11,22 +11,21 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-
-import { walletState } from 'state/atoms/walletAtoms'
-
-import { useRecoilState } from 'recoil'
-import WalletModal from '../../Wallet/Modal/Modal'
-import Loader from '../../Loader'
-import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
-import { ActionType } from './BondingOverview'
-import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
-import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
-import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import { useRecoilState } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
+
+import Loader from '../../Loader'
+import WalletModal from '../../Wallet/Modal/Modal'
+import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
+import { ActionType } from './BondingOverview'
 
 const pulseAnimation = keyframes`
   0% {
@@ -170,9 +169,13 @@ const RewardsComponent = ({
     Date.now() - currentEpochStartDateTimeInMilli
 
   const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) return 'Connect Wallet'
-    else if (claimableRewards === 0) return 'No Rewards'
-    else return 'Claim'
+    if (!isWalletConnected) {
+      return 'Connect Wallet'
+    } else if (claimableRewards === 0) {
+      return 'No Rewards'
+    } else {
+      return 'Claim'
+    }
   }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
   const durationString = calculateRewardDurationString(

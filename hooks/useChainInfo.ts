@@ -19,7 +19,9 @@ export const useChainInfo = (id = null) => {
   const chainInfo: Array<any> = useChains()
 
   const chain = useMemo(() => {
-    if (!chainInfo) return []
+    if (!chainInfo) {
+      return []
+    }
 
     return chainInfo.find(({ chainId }) => chainId === id) || chainInfo?.[0]
   }, [chainInfo, id])

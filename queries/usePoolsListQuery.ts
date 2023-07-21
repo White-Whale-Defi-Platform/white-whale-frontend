@@ -1,7 +1,9 @@
-import { useConnectedWallet } from '@terra-money/wallet-provider'
 import { useQuery } from 'react-query'
+
+import { useConnectedWallet } from '@terra-money/wallet-provider'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+
 import { PoolLiquidityState } from './useQueryPools'
 
 export type TokenInfo = {

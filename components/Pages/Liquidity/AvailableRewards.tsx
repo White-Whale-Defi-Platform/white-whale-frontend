@@ -17,7 +17,9 @@ const LineItem = ({ token, isLast }) => (
 )
 
 export const AvailableRewards = ({ data = [] }) => {
-  if (!data.length) return null
+  if (!data.length) {
+    return null
+  }
 
   return (
     <VStack minWidth="150px" alignItems="flex-start">

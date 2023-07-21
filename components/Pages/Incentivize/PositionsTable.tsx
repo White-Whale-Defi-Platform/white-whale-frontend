@@ -1,3 +1,5 @@
+import React, { useState } from 'react'
+
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
   HStack,
@@ -19,7 +21,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import React, { useState } from 'react'
 
 type Props = {
   columnFilters: any

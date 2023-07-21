@@ -1,13 +1,14 @@
+import { useQuery } from 'react-query'
+
 import dayjs from 'dayjs'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num } from 'libs/num'
+import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPools'
-import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { formatSeconds } from 'util/formatSeconds'
-import { TokenInfo } from 'queries/usePoolsListQuery'
 
 export type Position = {
   amount: number
@@ -60,7 +61,9 @@ export const fetchPositions = async (
       const open = { ...(p?.open_position || {}) }
       open.formatedTime = formatSeconds(open.unbonding_duration)
       open.isOpen = true
-      if (p?.open_position) positions.push(open)
+      if (p?.open_position) {
+        positions.push(open)
+      }
 
       // closed position
       const close = { ...(p?.closed_position || {}) }
@@ -69,7 +72,9 @@ export const fetchPositions = async (
       const diff = unbonding.diff(today, 'second')
       close.formatedTime = formatSeconds(diff)
       close.isOpen = false
-      if (p?.closed_position) positions.push(close)
+      if (p?.closed_position) {
+        positions.push(close)
+      }
 
       return positions.map((position) => {
         const lpAssets = lpPositionToAssets({

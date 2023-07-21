@@ -1,18 +1,20 @@
-import { VStack } from '@chakra-ui/react'
-import { TxStep } from 'hooks/useTransaction'
-import { num } from 'libs/num'
 import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
-import { TokenItemState } from 'types/index'
+
+import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
+import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import Multiplicator from './Multiplicator'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { TxStep } from 'hooks/useTransaction'
+import { num } from 'libs/num'
 import { useRecoilState } from 'recoil'
 import { aprHelperState } from 'state/atoms/aprHelperState'
-import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { TokenItemState } from 'types/index'
+
+import Multiplicator from './Multiplicator'
 
 type Props = {
   connected: WalletStatusType
@@ -98,11 +100,13 @@ const DepositForm = ({
       }
     } else {
       if (reverse) {
-        if (!!!tokenB.amount)
+        if (!!!tokenB.amount) {
           setValue('token1', { ...tokenA, amount: undefined })
+        }
       } else {
-        if (!!!tokenA.amount)
+        if (!!!tokenA.amount) {
           setValue('token2', { ...tokenB, amount: undefined })
+        }
       }
     }
 
@@ -124,11 +128,17 @@ const DepositForm = ({
   }, [tx?.txStep])
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatusType.connected) return 'Connect Wallet'
-    else if (!tokenB?.tokenSymbol) return 'Select Token'
-    else if (!!!amountA?.amount) return 'Enter Amount'
-    else if (tx?.buttonLabel) return tx?.buttonLabel
-    else return 'Deposit'
+    if (connected !== WalletStatusType.connected) {
+      return 'Connect Wallet'
+    } else if (!tokenB?.tokenSymbol) {
+      return 'Select Token'
+    } else if (!!!amountA?.amount) {
+      return 'Enter Amount'
+    } else if (tx?.buttonLabel) {
+      return tx?.buttonLabel
+    } else {
+      return 'Deposit'
+    }
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
   const apr = useMemo(

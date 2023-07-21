@@ -1,17 +1,18 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
-import { useRecoilValue } from 'recoil'
-import { convertMicroDenomToDenom } from 'util/conversion'
 
+import { useConnectedWallet } from '@terra-money/wallet-provider'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { useRecoilValue } from 'recoil'
 import { CW20 } from 'services/cw20'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { convertMicroDenomToDenom } from 'util/conversion'
 import { Wallet } from 'util/wallet-adapters'
+
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 async function fetchTokenBalance({
   client,
@@ -133,7 +134,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
     async () => {
-      return await Promise.all(
+      return Promise.all(
         tokenSymbols
           // .filter(Boolean)
           .map((tokenSymbol) => {

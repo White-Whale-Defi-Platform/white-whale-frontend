@@ -106,7 +106,9 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) setButtonLabel(null)
+        if (!!buttonLabel) {
+          setButtonLabel(null)
+        }
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {

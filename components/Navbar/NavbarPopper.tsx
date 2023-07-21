@@ -1,3 +1,5 @@
+import React, { useMemo } from 'react'
+
 import {
   Box,
   Button,
@@ -12,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+
 import NavbarLink from './NavbarLink'
 const NavbarPopper = ({ menu, currentChainName }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()

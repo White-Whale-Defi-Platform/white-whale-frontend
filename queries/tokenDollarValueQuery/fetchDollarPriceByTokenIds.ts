@@ -15,7 +15,7 @@ export const fetchDollarPriceByTokenIds = debounce(
         }
       )
       if (response.status === 200) {
-        return response.json()
+        return await response.json()
       } else {
         return {}
       }

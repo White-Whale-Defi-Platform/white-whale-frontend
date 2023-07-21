@@ -1,5 +1,6 @@
-import { Wallet } from 'util/wallet-adapters'
 import { convertMicroDenomToDenom } from 'util/conversion'
+import { Wallet } from 'util/wallet-adapters'
+
 import { Config } from './useDashboardData'
 
 interface WithdrawableInfo {
@@ -36,7 +37,7 @@ const fetchWithdrawable = async (
 ): Promise<WithdrawableInfo[]> => {
   const results = await Promise.all(
     Object.entries(config.lsd_token).map(async ([key, token]) => {
-      return await client.queryContractSmart(config.whale_lair, {
+      return client.queryContractSmart(config.whale_lair, {
         withdrawable: { address: address, denom: token.denom },
       })
     })

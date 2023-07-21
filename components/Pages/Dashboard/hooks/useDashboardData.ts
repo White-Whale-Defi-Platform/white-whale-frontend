@@ -1,18 +1,19 @@
-import { useQueries } from 'react-query'
 import { useEffect, useMemo, useState } from 'react'
-import { debounce } from 'lodash'
+import { useQueries } from 'react-query'
+
 import { getBonded } from 'components/Pages/Dashboard/hooks/getBonded'
+import { getBondingConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
+import { getClaimable } from 'components/Pages/Dashboard/hooks/getClaimable'
+import { getClaimableEpochs } from 'components/Pages/Dashboard/hooks/getClaimableEpochs'
+import { getCurrentEpoch } from 'components/Pages/Dashboard/hooks/getCurrentEpoch'
+import { getFeeDistributorConfig } from 'components/Pages/Dashboard/hooks/getFeeDistributorConfig'
 import { getTotalBonded } from 'components/Pages/Dashboard/hooks/getTotalBonded'
 import { getUnbonding } from 'components/Pages/Dashboard/hooks/getUnbonding'
-import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import { getFeeDistributorConfig } from 'components/Pages/Dashboard/hooks/getFeeDistributorConfig'
-import { getCurrentEpoch } from 'components/Pages/Dashboard/hooks/getCurrentEpoch'
-import { getClaimableEpochs } from 'components/Pages/Dashboard/hooks/getClaimableEpochs'
-import { getClaimable } from 'components/Pages/Dashboard/hooks/getClaimable'
-import { getBondingConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { getWeight } from 'components/Pages/Dashboard/hooks/getWeight'
+import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { debounce } from 'lodash'
 
 export interface TokenDetails {
   name: string

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useQueryClient } from 'react-query'
 
 import {
   Box,
@@ -15,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
@@ -25,10 +27,8 @@ import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
-import menuLinks from './NavMenu.json'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
-import { useQueryClient } from 'react-query'
+import menuLinks from './NavMenu.json'
 
 export const links = [
   {

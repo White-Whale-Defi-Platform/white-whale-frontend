@@ -1,13 +1,15 @@
 import { useQuery } from 'react-query'
-import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
+
+import { usePriceForOneToken } from 'components/Pages/Swap/index'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
+
 import { useGetMultipleIBCAssetInfo } from './useIBCAssetInfo'
 import {
   useBaseTokenInfo,
   useGetMultipleTokenInfo,
   useTokenInfo,
 } from './useTokenInfo'
-import { usePriceForOneToken } from 'components/Pages/Swap/index'
 
 export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
   const getMultipleTokenInfo = useGetMultipleTokenInfo()

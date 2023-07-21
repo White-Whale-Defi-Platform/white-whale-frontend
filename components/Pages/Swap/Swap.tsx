@@ -8,13 +8,13 @@ import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { TokenItemState } from 'types'
 
 import defaultTokens from './defaultTokens.json'
 import useSwap from './hooks/useSwap'
 import { tokenSwapAtom } from './swapAtoms'
 import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
-import { TokenItemState } from 'types'
 
 type SwapProps = {
   /* will be used if provided on first render instead of internal state */
@@ -55,7 +55,9 @@ const Swap: FC<SwapProps> = ({}) => {
   }, [poolList, chainId])
 
   useEffect(() => {
-    if (!currentChainId) return
+    if (!currentChainId) {
+      return
+    }
     const { from, to } = router.query
     const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
 
@@ -99,7 +101,9 @@ const Swap: FC<SwapProps> = ({}) => {
   }, [address, currentChainId, tokenList])
 
   useEffect(() => {
-    if (!currentChainId) return
+    if (!currentChainId) {
+      return
+    }
 
     if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
       if (
@@ -122,8 +126,9 @@ const Swap: FC<SwapProps> = ({}) => {
   }
 
   const onInputChange = ({ tokenSymbol, amount }, index: number) => {
-    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
       tx.reset()
+    }
 
     const newState: TokenItemState[] = [tokenA, tokenB]
     newState[index] = {

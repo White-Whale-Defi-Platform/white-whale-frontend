@@ -1,3 +1,5 @@
+import React, { useMemo } from 'react'
+
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -8,32 +10,32 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
-import { useChains } from 'hooks/useChainInfo'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { ActionType } from '../Dashboard/BondingOverview'
-import Bond, { LSDTokenItemState } from './Bond'
-import Unbond from './Unbond'
-import Withdraw from './Withdraw'
-import { useRouter } from 'next/router'
-
-import { bondingAtom } from './bondAtoms'
-import React, { useMemo } from 'react'
-import WalletModal from '../../Wallet/Modal/Modal'
-import useTransaction, { TxStep } from './hooks/useTransaction'
+import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
 } from 'constants/bonding_contract'
-import Loader from '../../Loader'
+import { useChains } from 'hooks/useChainInfo'
+import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useRouter } from 'next/router'
+import { useRecoilState } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+
+import Loader from '../../Loader'
+import WalletModal from '../../Wallet/Modal/Modal'
+import { ActionType } from '../Dashboard/BondingOverview'
 import {
   Config,
   useConfig,
   useDashboardData,
 } from '../Dashboard/hooks/useDashboardData'
-import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
-import usePrices from 'hooks/usePrices'
+import Bond, { LSDTokenItemState } from './Bond'
+import { bondingAtom } from './bondAtoms'
+import Unbond from './Unbond'
+import Withdraw from './Withdraw'
+
+import useTransaction, { TxStep } from './hooks/useTransaction'
 
 export enum WhaleTokenType {
   ampWHALE,
@@ -69,8 +71,8 @@ const BondingActions = ({ globalAction }) => {
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
-    if (prices && prices['WHALE']) {
-      return prices['WHALE']
+    if (prices && prices.WHALE) {
+      return prices.WHALE
     }
     return 0 // Default value
   }, [prices])
@@ -91,15 +93,21 @@ const BondingActions = ({ globalAction }) => {
   const totalWithdrawable = withdrawableAmpWhale + withdrawableBWhale
 
   const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) return 'Connect Wallet'
-    else if (
+    if (!isWalletConnected) {
+      return 'Connect Wallet'
+    } else if (
       currentBondState?.amount === 0 &&
       globalAction !== ActionType.withdraw
-    )
+    ) {
       return 'Enter Amount'
-    else if (totalWithdrawable === 0 && globalAction === ActionType.withdraw)
+    } else if (
+      totalWithdrawable === 0 &&
+      globalAction === ActionType.withdraw
+    ) {
       return 'No Withdrawals'
-    else return ActionType[globalAction]
+    } else {
+      return ActionType[globalAction]
+    }
   }, [isWalletConnected, currentBondState, globalAction, totalWithdrawable])
 
   const BondingActionButton = ({ action }) => {

@@ -1,41 +1,43 @@
+import { useEffect, useMemo, useState } from 'react'
+
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
   Checkbox,
-  HStack,
-  Text,
-  Switch,
-  VStack,
   FormControl,
   FormLabel,
+  HStack,
   Stack,
+  Switch,
+  Text,
   Tooltip,
+  VStack,
 } from '@chakra-ui/react'
+import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import { Incentives } from 'components/Pages/Pools/Incentives'
+import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { STABLE_COIN_LIST } from 'constants/settings'
+import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useEffect, useMemo, useState } from 'react'
 import {
   PoolEntityTypeWithLiquidity,
   useQueryMultiplePoolsLiquidity,
 } from 'queries/useQueryPools'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { EnigmaPoolData } from 'util/enigma'
-import { STABLE_COIN_LIST } from 'constants/settings'
-import { ActionCTAs } from './ActionCTAs'
-import AllPoolsTable from './AllPoolsTable'
-import MobilePools from './MobilePools'
-import MyPoolsTable from './MyPoolsTable'
-import { useChains } from 'hooks/useChainInfo'
-import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
-import { Incentives } from 'components/Pages/Pools/Incentives'
-import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import {
   aprHelperState,
   updateAPRHelperState,
 } from 'state/atoms/aprHelperState'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { EnigmaPoolData } from 'util/enigma'
+
+import { ActionCTAs } from './ActionCTAs'
+import AllPoolsTable from './AllPoolsTable'
+import MobilePools from './MobilePools'
+import MyPoolsTable from './MyPoolsTable'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -92,7 +94,7 @@ const Pools = () => {
     isLoading: isIncentivePoolInfoLoading,
   } = useIncentivePoolInfo(cosmwasmClient, pools, currentChainPrefix)
 
-  if (window['debugLogsEnabled']) {
+  if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
   }
@@ -121,8 +123,9 @@ const Pools = () => {
       isLoading ||
       isIncentivePoolInfoLoading ||
       pairInfos.length === 0
-    )
+    ) {
       return
+    }
     if (allPools.length > 0) {
       return
     }

@@ -107,7 +107,9 @@ export const useGetQueryMatchingPoolForSwap = () => {
 
   const getMatchingPool = useCallback(
     ({ tokenA, tokenB }: GetMatchingPoolArgs) => {
-      if (!poolsListResponse?.pools || !tokenA || !tokenB) return undefined
+      if (!poolsListResponse?.pools || !tokenA || !tokenB) {
+        return undefined
+      }
 
       return findPoolForSwap({
         baseToken,

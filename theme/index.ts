@@ -1,16 +1,16 @@
 import { extendTheme } from '@chakra-ui/react'
 
-import Modal from './modal'
 import Badge from './badge'
-import Tooltip from './tooltip'
-import Text from './text'
 import Button from './button'
-import Tabs from './tabs'
-import Input from './input'
-import NumberInput from './numberInput'
-import Textarea from './textarea'
-import Menu from './menu'
 import Drawer from './drawer'
+import Input from './input'
+import Menu from './menu'
+import Modal from './modal'
+import NumberInput from './numberInput'
+import Tabs from './tabs'
+import Text from './text'
+import Textarea from './textarea'
+import Tooltip from './tooltip'
 
 export default extendTheme({
   styles: {

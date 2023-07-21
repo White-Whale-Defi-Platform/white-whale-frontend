@@ -1,11 +1,12 @@
-import { useToast } from '@chakra-ui/react'
-import Finder from 'components/Finder'
-import useDebounceValue from 'hooks/useDebounceValue'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+
+import { useToast } from '@chakra-ui/react'
+import { coin } from '@cosmjs/stargate'
+import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/common'
 import { Wallet } from 'util/wallet-adapters/index'
-import { coin } from '@cosmjs/stargate'
 
 type Params = {
   lpTokenAddress: string
@@ -52,7 +53,9 @@ export const useWithdrawTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) setButtonLabel(null)
+        if (!!buttonLabel) {
+          setButtonLabel(null)
+        }
         setTxStep(TxStep.Ready)
         return response
       } catch (e) {
