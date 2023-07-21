@@ -18,7 +18,6 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
     "@chakra-ui/react": "2.2.1",
-    "@cosmjs/amino": "0.31.0",
     "@cosmjs/cosmwasm": "^0.25.6",
     "@cosmjs/cosmwasm-stargate": "0.31.0",
     "@cosmjs/crypto": "0.31.0",
@@ -29,8 +28,6 @@
     "@cosmjs/stargate": "0.31.0",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@headlessui/react": "^1.4.0",
-    "@heroicons/react": "^1.0.3",
     "@injectivelabs/sdk-ts": "^1.0.299",
     "@keplr-wallet/wc-qrcode-modal": "^0.10.13",
     "@next/bundle-analyzer": "^12.2.4",
@@ -82,7 +79,7 @@
     "react-hook-form": "^7.32.1",
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.7.1",
-    "react-merge-refs": "^1.1.0",
+    "react-merge-refs": "^2.0.2",
     "react-query": "^3.39.1",
     "recharts": "^2.4.3",
     "recoil": "^0.7.3",
@@ -104,5 +101,4 @@
   "lint-staged": {
     "**/*.{ts,md,tsx}": "prettier --write"
   }
-
 }
