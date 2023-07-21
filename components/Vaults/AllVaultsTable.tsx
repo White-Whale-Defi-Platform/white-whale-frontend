@@ -105,7 +105,7 @@ const AllVaultsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
         justifyContent="center"
@@ -120,7 +120,7 @@ const AllVaultsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
         justifyContent="center"
@@ -137,7 +137,7 @@ const AllVaultsTable = ({
     <Flex
       padding={10}
       width={['full', '1160px']}
-      background="#1C1C1C"
+      background={'#1C1C1C'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={['none', 'flex']}

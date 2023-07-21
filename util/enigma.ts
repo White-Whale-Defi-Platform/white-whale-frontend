@@ -74,11 +74,11 @@ export const getPairInfosTerra = async (): Promise<any> => {
 }
 export const getPairAprAndDailyVolume = async (
   pools: any[],
-  chain: any
+  chainPrefix: any
 ): Promise<EnigmaPoolData[]> => {
   const poolIds = pools?.map((pool: any) => pool.pool_id)
 
-  const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chain)
+  const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chainPrefix)
 
   if (pairInfos.length > 0) {
     return poolIds?.map((poolId: string) => {
@@ -87,6 +87,7 @@ export const getPairAprAndDailyVolume = async (
         pool_id: poolId,
         usdVolume24h: `$${formatPrice(pairInfo?.volume_24h)}`,
         usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
+        totalLiquidity: Number(pairInfo?.TVL),
         TVL: `$${formatPrice(pairInfo?.TVL)}`,
         apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
         ratio: `${Number(pairInfo?.Price).toFixed(3)}`,

@@ -27,7 +27,6 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const chains: Array<any> = useChains()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
-
   const connectedWallet = useConnectedWallet()
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
 
@@ -45,7 +44,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (router.pathname === '/') return
 
     const defaultChainId =
-      currentWalletState.network === 'mainnet' ? 'migaloo-1' : 'narwhal-1'
+      currentWalletState.network === 'mainnet' ? 'phoenix-1' : 'pisco-1'
 
     if (
       validChains[currentWalletState.network][chainIdParam] !==

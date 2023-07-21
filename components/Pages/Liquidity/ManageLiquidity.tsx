@@ -239,6 +239,7 @@ const ManageLiquidity: FC = () => {
                     tx={tx}
                     clearForm={clearForm}
                     chainId={chainId}
+                    poolId={poolId}
                   />
                 )}
               </TabPanel>

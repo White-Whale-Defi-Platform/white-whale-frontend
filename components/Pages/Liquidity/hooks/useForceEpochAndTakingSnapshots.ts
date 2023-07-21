@@ -63,7 +63,7 @@ const useForceEpochAndTakingSnapshots = ({
           ]
         : []
     ).concat(
-      ...addresses.flatMap((incentiveAddress) => {
+      ...(addresses?.flatMap((incentiveAddress) => {
         return [
           // create snapshot message
           createExecuteMessage({
@@ -75,7 +75,7 @@ const useForceEpochAndTakingSnapshots = ({
             funds: [],
           }),
         ]
-      })
+      }) ?? [])
     )
   }, [addresses, address])
 

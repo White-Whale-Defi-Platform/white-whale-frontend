@@ -9,24 +9,90 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 dayjs.extend(utc)
+interface Epoch {
+  available: {
+    amount: string
+    info: {
+      native_token: {
+        denom: string
+      }
+    }
+  }[]
+  claimed: {
+    amount: string
+    info: {
+      native_token: {
+        denom: string
+      }
+    }
+  }[]
+  global_index: {
+    bonded_amount: string
+    bonded_assets: {
+      amount: string
+      info: {
+        native_token: {
+          denom: string
+        }
+      }
+    }[]
+  }
+  timestamp: string
+  weight: string
+  id: string
+  start_time: string
+  total: {
+    amount: string
+    info: {
+      native_token: {
+        denom: string
+      }
+    }
+  }[]
+}
+
+interface EpochData {
+  epoch: Epoch
+}
+
+interface EpochConfig {
+  duration: string
+  genesis_epoch: string
+}
+
+interface DistributionAsset {
+  native_token: {
+    denom: string
+  }
+}
+
+interface EpochConfigData {
+  owner: string
+  bonding_contract_addr: string
+  fee_collector_addr: string
+  grace_period: string
+  epoch_config: EpochConfig
+  distribution_asset: DistributionAsset
+  // Add any additional properties as needed
+}
 
 const useEpoch = () => {
   const { client, network, chainId } = useRecoilValue(walletState)
   const contracts: Config = useConfig(network, chainId)
 
-  const { data: config } = useQuery<number>({
+  const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
-    queryFn: () =>
-      client?.queryContractSmart(contracts?.fee_distributor, {
+    queryFn: async () =>
+      await client?.queryContractSmart(contracts?.fee_distributor, {
         config: {},
       }),
     enabled: !!contracts && !!client,
   })
 
-  const { data } = useQuery<number>({
+  const { data } = useQuery<EpochData>({
     queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
-    queryFn: () =>
-      client?.queryContractSmart(contracts?.fee_distributor, {
+    queryFn: async () =>
+      await client?.queryContractSmart(contracts?.fee_distributor, {
         current_epoch: {},
       }),
     enabled: !!contracts && !!client,
@@ -75,9 +141,7 @@ const useEpoch = () => {
     const diff = Math.floor(timestampDiffNew / epochDurationInMillis)
 
     // Calculate the epoch number based on the current epoch and timestamp difference
-    const epochNumber = diff < 0 ? currentEpoch : currentEpoch + diff
-
-    return epochNumber
+    return diff < 0 ? currentEpoch : currentEpoch + diff
   }
 
   const epochToDate = (givenEpoch) => {

@@ -1,4 +1,15 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Checkbox,
+  HStack,
+  Text,
+  Switch,
+  VStack,
+  FormControl,
+  FormLabel,
+  Stack,
+  Tooltip,
+} from '@chakra-ui/react'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
@@ -8,7 +19,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryMultiplePoolsLiquidity,
 } from 'queries/useQueryPools'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { EnigmaPoolData } from 'util/enigma'
 import { STABLE_COIN_LIST } from 'constants/settings'
@@ -20,22 +31,30 @@ import { useChains } from 'hooks/useChainInfo'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import {
+  aprHelperState,
+  updateAPRHelperState,
+} from 'state/atoms/aprHelperState'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
     displayName: string
     displayLogo1: string
     displayLogo2: string
+    myIncentiveApr: number
   }
 
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { chainId, status } = useRecoilValue(walletState)
+  const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
   )
+  const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -172,6 +191,17 @@ const Pools = () => {
       const flows =
         incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
           ?.flowData ?? []
+
+      const incentiveBaseApr = flows.reduce((total, item) => {
+        return total + (isNaN(item.apr) ? 0 : Number(item.apr))
+      }, 0)
+
+      updateAPRHelperState(
+        pool?.poolId,
+        pool?.apr,
+        incentiveBaseApr,
+        setAprHelperState
+      )
       if (flows) {
         return {
           ...pool,
@@ -233,6 +263,16 @@ const Pools = () => {
     () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId]
   )
+  const parseLiquidity = (liqString) => {
+    const value = parseFloat(liqString.replace(/[^\d.-]/g, ''))
+    return liqString.toUpperCase().includes('K') ? value * 1000 : value
+  }
+  const showAllPoolsList = useMemo(() => {
+    const pools = allPoolsForShown
+    return showAllPools
+      ? pools
+      : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
+  }, [allPoolsForShown, showAllPools])
 
   return (
     <VStack
@@ -248,6 +288,7 @@ const Pools = () => {
           show={true}
           pools={myPools}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
+          allPools={showAllPools}
         />
         <MobilePools pools={myPools} />
       </Box>
@@ -257,9 +298,24 @@ const Pools = () => {
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
+          <Stack direction="row">
+            <Tooltip label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown">
+              <Text as="h6" fontSize="14" fontWeight="700">
+                <InfoOutlineIcon marginRight={2} />
+                Show All Pools
+              </Text>
+            </Tooltip>
+            <Switch
+              isChecked={showAllPools}
+              onChange={() => setShowAllPools(!showAllPools)}
+              colorScheme="green"
+              size="sm"
+            ></Switch>
+          </Stack>
         </HStack>
+
         <AllPoolsTable
-          pools={allPoolsForShown}
+          pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
         />
         <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />

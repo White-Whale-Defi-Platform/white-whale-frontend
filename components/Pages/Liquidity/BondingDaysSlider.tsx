@@ -16,15 +16,20 @@ type Props = {
   show: boolean
 }
 
-const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
+export const BondingDaysSlider = ({
+  bondingDays,
+  setBondingDays,
+  show,
+}: Props) => {
   if (!show) return null
 
   return (
     <VStack width="full" alignItems="flex-start" gap="2" pb="6">
       <TooltipWithChildren label="Unlock Duration">
         <Text>
-          Unlock duration refers to the period of time it takes for your staked
-          funds to be released.
+          {'Unlock duration refers to the period of time it takes for your locked funds to be released.\n' +
+            'IMPORTANT: Tokens are locked until the position is closed and the unbonding period is over, ' +
+            'which only starts after this position has been closed.'}
         </Text>
       </TooltipWithChildren>
 
@@ -57,5 +62,3 @@ const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
     </VStack>
   )
 }
-
-export default BondingDaysSlider

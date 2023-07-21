@@ -8,9 +8,11 @@ import { TokenItemState } from 'types/index'
 import Input from 'components/AssetInput/Input'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import BondingDaysSlider from './BondingDaysSlider'
 import Multiplicator from './Multiplicator'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { useRecoilState } from 'recoil'
+import { aprHelperState } from 'state/atoms/aprHelperState'
+import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
 
 type Props = {
   connected: WalletStatusType
@@ -25,6 +27,7 @@ type Props = {
   bondingDays: number
   clearForm: () => void
   chainId: string
+  poolId: string
 }
 
 const DepositForm = ({
@@ -40,6 +43,7 @@ const DepositForm = ({
   setBondingDays,
   clearForm,
   chainId,
+  poolId,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -53,8 +57,12 @@ const DepositForm = ({
     () => INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId),
     [chainId]
   )
+  const [currentAprHelperState, _] = useRecoilState(aprHelperState)
 
-  //const multiplicator = useMultiplicator(poolId)
+  const poolAPRs = useMemo(
+    () => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
+    [currentAprHelperState, poolId]
+  )
 
   const multiplicator = useMemo(
     () =>
@@ -123,6 +131,14 @@ const DepositForm = ({
     else return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
+  const apr = useMemo(
+    () =>
+      `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(
+        2
+      )}`,
+    [poolAPRs, multiplicator]
+  )
+
   return (
     <VStack
       paddingY={6}
@@ -161,6 +177,7 @@ const DepositForm = ({
 
       <Multiplicator
         multiplicator={String(multiplicator)}
+        apr={apr}
         show={incentivesEnabled}
       />
 

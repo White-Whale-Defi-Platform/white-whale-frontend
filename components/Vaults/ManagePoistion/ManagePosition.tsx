@@ -99,7 +99,7 @@ const ManagePosition = () => {
       </HStack>
 
       <Box
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         padding={[6, 12]}
         paddingTop={[10]}
         borderRadius="30px"
@@ -114,7 +114,7 @@ const ManagePosition = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background="#1C1C1C">
+            <TabList justifyContent="center" background={'#1C1C1C'}>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
             </TabList>
