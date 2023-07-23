@@ -5,7 +5,6 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
 import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -18,7 +17,6 @@ const useSwap = ({ reverse }) => {
   const { address, client } = useRecoilValue(walletState)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
-  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
   const slippage = useRecoilValue(slippageAtom)
   const { data: poolsList } = usePoolsListQuery()
 
@@ -46,7 +44,9 @@ const useSwap = ({ reverse }) => {
     routerAddress,
   })
   const minReceive = useMemo(() => {
-    if (!simulated) return null
+    if (!simulated) {
+      return null
+    }
 
     const rate1 = num(1).minus(slippageToDecimal)
     const rate2 = num(1).minus(0.001)

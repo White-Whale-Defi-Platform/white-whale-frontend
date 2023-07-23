@@ -2,7 +2,6 @@ import React, { FC, useMemo } from 'react'
 
 import { Box } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
-
 import { walletState } from 'state/atoms/walletAtoms'
 
 const backgrounds = {

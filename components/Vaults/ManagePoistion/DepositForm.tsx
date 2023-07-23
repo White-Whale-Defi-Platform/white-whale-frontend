@@ -61,10 +61,15 @@ const DepositForm = ({
 
   const buttonLabel = useMemo(() => {
     // TODO: Note for later, Select Token is commented
-    if (connected !== `@wallet-state/connected`) return 'Connect Wallet'
-    else if (!!!token?.amount) return 'Enter Amount'
-    else if (tx?.buttonLabel) return tx?.buttonLabel
-    else return 'Deposit'
+    if (connected !== `@wallet-state/connected`) {
+      return 'Connect Wallet'
+    } else if (!!!token?.amount) {
+      return 'Enter Amount'
+    } else if (tx?.buttonLabel) {
+      return tx?.buttonLabel
+    } else {
+      return 'Deposit'
+    }
   }, [tx?.buttonLabel, connected, token])
 
   const onSubmit = (event) => {

@@ -19,8 +19,8 @@ import {
   TxInfo,
 } from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
-
 import Injective from 'services/injective'
+
 import { TxResponse, Wallet } from './wallet'
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient | Injective
@@ -110,7 +110,9 @@ export class OfflineSigningWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
-    if (this.client.getTx) return this.client.getTx(txHash)
+    if (this.client.getTx) {
+      return this.client.getTx(txHash)
+    }
 
     // @ts-ignore
     const promise: Promise<GetTxResponse> =

@@ -12,7 +12,7 @@ import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
 
-const defualtJson = {
+const defaultJson = {
   flash_loan: {
     assets: [],
     msgs: [],
@@ -36,7 +36,7 @@ function FlashloanForm({}: Props) {
   const editorRef = useRef(null)
   const containerRef = useRef(null)
   const [error, setError] = useState(null)
-  const [json, setJson] = useState(defualtJson)
+  const [json, setJson] = useState(defaultJson)
   const { status } = useRecoilValue(walletState)
   const isConnected = status === `@wallet-state/connected`
 
@@ -50,7 +50,7 @@ function FlashloanForm({}: Props) {
         setJson(jsonData)
         setError('')
       } else {
-        setError('Messgae validation failed.')
+        setError('Message validation failed.')
       }
     } catch (e) {
       setError('Invalid JSON')
@@ -79,9 +79,13 @@ function FlashloanForm({}: Props) {
   }, [containerRef, editorRef, options])
 
   const buttonLabel = useMemo(() => {
-    if (!isConnected) return 'Connect Wallet'
-    else if (!!error) return error
-    else return 'Flashloan'
+    if (!isConnected) {
+      return 'Connect Wallet'
+    } else if (!!error) {
+      return error
+    } else {
+      return 'Flashloan'
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, status, error])
 
@@ -92,10 +96,12 @@ function FlashloanForm({}: Props) {
     event.target.value = null
     fileReader.onload = (e: any) => {
       try {
-        if (error) setError('')
+        if (error) {
+          setError('')
+        }
         setJson(JSON.parse(e?.target?.result))
         editorRef.current.set(JSON.parse(e.target.result))
-      } catch (errro) {
+      } catch (error) {
         editorRef.current.set(e.target.result)
         setError('Invalid JSON')
       }
@@ -105,7 +111,9 @@ function FlashloanForm({}: Props) {
   const format = () => {
     if (editorRef) {
       try {
-        if (error) setError('')
+        if (error) {
+          setError('')
+        }
         editorRef.current.repair()
         editorRef.current.format()
         const jsonData = editorRef?.current?.get()
@@ -150,15 +158,6 @@ function FlashloanForm({}: Props) {
               Format
             </Button>
             <UploadFile handleChange={handleChange} />
-            {/* <Button
-              variant="outline"
-              isLoading={tx?.txStep == TxStep.Estimating}
-              disabled={!!error}
-              onClick={() => tx?.simulate()}
-            >
-              {tx?.buttonLabel || 'Simulate'}
-            </Button> */}
-          
 
             <Button
             onClick={tx?.submit}
@@ -174,8 +173,6 @@ function FlashloanForm({}: Props) {
             </Button>
           </Stack>
         </HStack>
-
-        {/* <Text>{JSON.stringify(json, null, 2)}</Text> */}
       </VStack>
     </Flex>
   )

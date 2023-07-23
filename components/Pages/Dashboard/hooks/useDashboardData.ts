@@ -1,17 +1,19 @@
-import { useQueries } from 'react-query'
 import { useEffect, useMemo, useState } from 'react'
-import { debounce } from 'lodash'
+import { useQueries } from 'react-query'
+
 import { getBonded } from 'components/Pages/Dashboard/hooks/getBonded'
+import { getBondingConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
+import { getClaimable } from 'components/Pages/Dashboard/hooks/getClaimable'
+import { getClaimableEpochs } from 'components/Pages/Dashboard/hooks/getClaimableEpochs'
+import { getCurrentEpoch } from 'components/Pages/Dashboard/hooks/getCurrentEpoch'
+import { getFeeDistributorConfig } from 'components/Pages/Dashboard/hooks/getFeeDistributorConfig'
 import { getTotalBonded } from 'components/Pages/Dashboard/hooks/getTotalBonded'
 import { getUnbonding } from 'components/Pages/Dashboard/hooks/getUnbonding'
-import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import { getFeeDistributorConfig } from 'components/Pages/Dashboard/hooks/getFeeDistributorConfig'
-import { getCurrentEpoch } from 'components/Pages/Dashboard/hooks/getCurrentEpoch'
-import { getClaimableEpochs } from 'components/Pages/Dashboard/hooks/getClaimableEpochs'
-import { getClaimable } from 'components/Pages/Dashboard/hooks/getClaimable'
-import { getBondingConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { getWeight } from 'components/Pages/Dashboard/hooks/getWeight'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'util/constants'
+import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { debounce } from 'lodash'
 
 export interface TokenDetails {
   name: string
@@ -60,6 +62,7 @@ export const useDashboardData = (client, address, network, chainId) => {
     []
   )
   const config: Config = useConfig(network, chainId)
+  const queryClient = useCosmwasmClient(chainId)
 
   const queries = useQueries([
     {
@@ -84,9 +87,9 @@ export const useDashboardData = (client, address, network, chainId) => {
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
-      queryKey: ['totalBonded', address, network, chainId],
-      queryFn: () => getTotalBonded(client, config),
-      enabled: !!client && !!config,
+      queryKey: ['totalBonded', network, chainId],
+      queryFn: () => getTotalBonded(queryClient, config),
+      enabled: !!queryClient && !!config,
     },
     {
       queryKey: ['weightInfo', address, network, chainId],
@@ -94,19 +97,19 @@ export const useDashboardData = (client, address, network, chainId) => {
       enabled: !!client && !!address && !!config,
     },
     {
-      queryKey: ['feeDistributionConfig', address, network, chainId],
-      queryFn: () => getFeeDistributorConfig(client, config),
-      enabled: !!client && !!config,
+      queryKey: ['feeDistributionConfig', network, chainId],
+      queryFn: () => getFeeDistributorConfig(queryClient, config),
+      enabled: !!queryClient && !!config,
     },
     {
-      queryKey: ['currentEpoch', address, network, chainId],
-      queryFn: () => getCurrentEpoch(client, config),
-      enabled: !!client && !!config,
+      queryKey: ['currentEpoch', network, chainId],
+      queryFn: () => getCurrentEpoch(queryClient, config),
+      enabled: !!queryClient && !!config,
     },
     {
-      queryKey: ['claimableEpochs', address, network, chainId],
-      queryFn: () => getClaimableEpochs(client, config),
-      enabled: !!client && !!config,
+      queryKey: ['claimableEpochs', network, chainId],
+      queryFn: () => getClaimableEpochs(queryClient, config),
+      enabled: !!queryClient && !!config,
     },
     {
       queryKey: ['claimableRewards', address, network, chainId],
@@ -114,9 +117,9 @@ export const useDashboardData = (client, address, network, chainId) => {
       enabled: !!client && !!address && !!config,
     },
     {
-      queryKey: ['bondingConfig', address, network, chainId],
-      queryFn: () => getBondingConfig(client, config),
-      enabled: !!client && !!config,
+      queryKey: ['bondingConfig', network, chainId],
+      queryFn: () => getBondingConfig(queryClient, config),
+      enabled: !!queryClient && !!config,
     },
   ])
 

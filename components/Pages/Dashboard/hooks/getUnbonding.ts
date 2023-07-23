@@ -1,7 +1,8 @@
-import { Wallet } from 'util/wallet-adapters'
-import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
-import { Config } from './useDashboardData'
 import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
+import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
+import { Wallet } from 'util/wallet-adapters'
+
+import { Config } from './useDashboardData'
 
 export interface UnbondingInfo {
   total_amount: string
@@ -90,13 +91,11 @@ const fetchUnbonding = async (
   address: string,
   config: Config
 ): Promise<UnbondingInfo[]> => {
-  const results: UnbondingInfo[] = await Promise.all(
+  return Promise.all(
     Object.entries(config.lsd_token).map(async ([key, token]) => {
-      return await client.queryContractSmart(config.whale_lair, {
+      return client.queryContractSmart(config.whale_lair, {
         unbonding: { address: address, denom: token.denom },
       })
     })
   )
-
-  return results
 }

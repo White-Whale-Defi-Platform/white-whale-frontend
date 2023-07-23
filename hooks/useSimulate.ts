@@ -1,14 +1,15 @@
 import { useQuery } from 'react-query'
-import { parseError } from 'util/parseError'
-import { Wallet } from 'util/wallet-adapters'
+
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { useRecoilState } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
+import { parseError } from 'util/parseError'
+import { Wallet } from 'util/wallet-adapters'
 
 type Simulate = {
   msgs: EncodeObject[]
-  signingClient: Wallet | undefined
+  client: Wallet | undefined
   address: string | undefined
   connected: boolean
   amount: string
@@ -18,7 +19,7 @@ type Simulate = {
 
 const useSimulate = ({
   msgs,
-  signingClient,
+  client,
   address,
   connected,
   amount,
@@ -30,14 +31,9 @@ const useSimulate = ({
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],
     queryFn: () => {
-      if (
-        !connected ||
-        Number(amount) <= 0 ||
-        !address ||
-        !signingClient ||
-        !msgs
-      )
+      if (!connected || Number(amount) <= 0 || !address || !client || !msgs) {
         return
+      }
 
       setTxState({
         txStep: TxStep.Estimating,
@@ -46,7 +42,7 @@ const useSimulate = ({
         buttonLabel: null,
       })
 
-      return signingClient?.simulate(address, msgs!, undefined)
+      return client?.simulate(address, msgs!, undefined)
     },
     onSuccess: (data) => {
       onSuccess?.(data)

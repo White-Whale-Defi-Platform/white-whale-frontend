@@ -1,19 +1,20 @@
-import { Wallet } from 'util/wallet-adapters/index'
 import { useQuery } from 'react-query'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import { Wallet } from 'util/wallet-adapters/index'
 
 export const useQueryIncentiveContracts = (client: Wallet): Array<string> => {
   const { chainId, network } = useRecoilValue(walletState)
   const config: Config = useConfig(network, chainId)
   const { data } = useQuery(
     ['useQueryIncentiveContracts', config],
-    async () => await fetchIncentiveContracts(client, config),
-    { enabled: !!client && !!config }
+    async () => fetchIncentiveContracts(client, config),
+    { enabled: !!client && !!config && !!config.incentive_factory }
   )
   return data
 }

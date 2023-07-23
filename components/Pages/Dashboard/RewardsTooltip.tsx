@@ -1,6 +1,8 @@
-import { Box, HStack, Text, VStack, Tooltip } from '@chakra-ui/react'
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
+
+import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+
 import { WhaleType } from './BondingOverview'
 
 export const RewardsTooltip = ({ value, whale, isWalletConnected }) => {

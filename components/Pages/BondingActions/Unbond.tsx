@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { VStack, useMediaQuery } from '@chakra-ui/react'
-import AssetInput from '../../AssetInput'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+
+import { useMediaQuery, VStack } from '@chakra-ui/react'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { Controller, useForm } from 'react-hook-form'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+
+import AssetInput from '../../AssetInput'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
@@ -92,7 +94,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
               onInputChange(value, 0)
               field.onChange(value)
               if (isTokenChange) {
-                let lsdToken =
+                const lsdToken =
                   value.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL
                     ? LSDToken.ampWHALE
                     : LSDToken.bWHALE

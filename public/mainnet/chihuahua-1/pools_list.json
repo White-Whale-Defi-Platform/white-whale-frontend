@@ -143,6 +143,17 @@
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/C0AFA9090B2DE3B79EA0296A43CD8C3C2FDAF153CC81E90A234AB8CBB1EAD6D6",
+          "symbol": "rHUAHUA",
+          "name": "rHUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/C0AFA9090B2DE3B79EA0296A43CD8C3C2FDAF153CC81E90A234AB8CBB1EAD6D6"
+        },
+        {
           "id": "chihuahua-token",
           "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
@@ -153,17 +164,6 @@
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
-        },
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "ibc/C0AFA9090B2DE3B79EA0296A43CD8C3C2FDAF153CC81E90A234AB8CBB1EAD6D6",
-          "symbol": "rHUAHUA",
-          "name": "rHUAHUA",
-          "decimals": 6,
-          "logoURI": "/logos/huahua.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/C0AFA9090B2DE3B79EA0296A43CD8C3C2FDAF153CC81E90A234AB8CBB1EAD6D6"
         }
       ],
       "lp_token": "chihuahua1v5yqf0jcw3hl8uc8ucug8fr98n45krwfl0k5ktxrevqpu3c60f7qsjys7v",
@@ -180,6 +180,17 @@
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w",
+          "symbol": "bHUAHUA",
+          "name": "bHUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/bHUA.png",
+          "tags": [],
+          "native": false,
+          "denom": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w"
+        },
+        {
           "id": "chihuahua-token",
           "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
@@ -190,17 +201,6 @@
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
-        },
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w",
-          "symbol": "bHUAHUA",
-          "name": "bHUAHUA",
-          "decimals": 6,
-          "logoURI": "/logos/bHUA.png",
-          "tags": [],
-          "native": false,
-          "denom": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w"
         }
       ],
       "lp_token": "chihuahua1ju5ecz9xcfly70g7fvh4yflh60d2uyf9g3hxl8xahra8szzy2jdsg6p63r",
@@ -217,6 +217,17 @@
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
+          "chain_id": "chihuahua-1",
+          "token_address": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d",
+          "symbol": "ampHUAHUA",
+          "name": "ampHUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/ampHUAHUA.png",
+          "tags": [""],
+          "native": false,
+          "denom": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d"
+        },
+        {
           "id": "chihuahua-token",
           "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
@@ -227,17 +238,6 @@
           "tags": ["native"],
           "native": true,
           "denom": "uhuahua"
-        },
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d",
-          "symbol": "ampHUAHUA",
-          "name": "ampHUAHUA",
-          "decimals": 6,
-          "logoURI": "/logos/ampHUAHUA.png",
-          "tags": [""],
-          "native": false,
-          "denom": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d"
         }
       ],
       "lp_token": "chihuahua1zcv45lr7gu7amg6plr6z0rmx29wts3d9gklm9g53klwj45qat84qm2cvld",
@@ -254,6 +254,17 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF",
+          "symbol": "ampWHALE",
+          "name": "ampWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF"
+        },
+        {
           "id": "white-whale",
           "chain_id": "chihuahua-1",
           "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
@@ -264,17 +275,6 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B"
-        },
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF",
-          "symbol": "ampWHALE",
-          "name": "ampWHALE",
-          "decimals": 6,
-          "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF"
         }
       ],
       "lp_token": "chihuahua1wsxgq90w0sz7z5pzf828fdymtjfw9zutfxscpmjt8y024feaky5s5ugwvr",
@@ -291,6 +291,17 @@
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7"
+        },
+        {
           "id": "white-whale",
           "chain_id": "chihuahua-1",
           "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
@@ -301,19 +312,7 @@
           "tags": ["native"],
           "native": true,
           "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B"
-        },
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
-          "symbol": "bWHALE",
-          "name": "bWHALE",
-          "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7"
         }
-       
       ],
       "lp_token": "chihuahua1qj4qexx7flmwwv8fauzegshk3yh36f666kte72p9ede09q22n78s3vyrue",
       "swap_address": "chihuahua1pwdlm72srpfr6tdvfln0fagcczl93etj0mhh9w55czwg2je3k6pqdmqa3h",
@@ -323,12 +322,11 @@
     {
       "pool_id": "WHALE-HUAHUA",
       "lpOrder": ["WHALE", "HUAHUA"],
-      "assetOrder": ["HUAHUA", "WHALE"],
+      "assetOrder": ["WHALE", "HUAHUA"],
       "displayName": "WHALE-HUAHUA",
       "displayLogo1": "/logos/whale.svg",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
-       
         {
           "id": "white-whale",
           "chain_id": "chihuahua-1",
@@ -366,7 +364,6 @@
       "displayLogo1": "/logos/lion.png",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
-       
         {
           "id": "lion-dao",
           "chain_id": "chihuahua-1",
@@ -433,6 +430,43 @@
       "lp_token": "chihuahua1e3ets9mwmffnzuuj03w53g3ch6jmazdwtpqhu0f2wc5a6z6yxaks6r3lrs",
       "swap_address": "chihuahua19x48cf5d5lm0z2dmqptgh4mhfglsy0nvvznra36zd3fpvjp277vqeyd2x6",
       "staking_address": "chihuahua1n0js6p3ea68hc825x2t6y569y7xkll0e2xqra52a223kchn66tusj6wrh4",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "RAC-WHALE",
+      "lpOrder": ["RAC", "WHALE"],
+      "assetOrder": ["RAC", "WHALE"],
+      "displayName": "RAC-WHALE",
+      "displayLogo1": "/logos/rac.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/E45945EAF3F1587CA3013FFC6CE0B5EEE0F49DAFED2CE51370B5B6A0C3AA258E",
+          "symbol": "RAC",
+          "name": "RAC",
+          "decimals": 6,
+          "logoURI": "/logos/rac.png",
+          "tags": [],
+          "native": true,
+          "denom": "ibc/E45945EAF3F1587CA3013FFC6CE0B5EEE0F49DAFED2CE51370B5B6A0C3AA258E"
+        },
+        {
+          "id" : "white-whale",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B"
+        }
+      ],
+      "lp_token": "chihuahua12p7mqzxq30y47v4g39zxgy2zvy45as9ylhelvvp4z8wnjga7kajqjhwq9u",
+      "swap_address": "chihuahua1vl35p9erd4g7ytwwc3fcux30c7jnhnp2tas7zp837wrl65073cws57qwve",
+      "staking_address": "chihuahua1rweychser0d7qcg5qfglaqp7l8w425z5edpfrya2jx4gpzwc83aqj9qm83",
       "rewards_tokens": []
     }
   ],

@@ -1,16 +1,18 @@
-import { VStack } from '@chakra-ui/react'
-import { TxStep } from 'hooks/useTransaction'
-import { fromChainAmount, num, toChainAmount } from 'libs/num'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
+
+import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
+import { TxStep } from 'hooks/useTransaction'
+import { fromChainAmount, num, toChainAmount } from 'libs/num'
+import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
+
 import useClaimableLP from './hooks/useClaimableLP'
 import { AddIcon } from '@chakra-ui/icons'
+import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
 
 type Props = {
   poolId: string
@@ -24,8 +26,8 @@ const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
     {
       swap_address: swapAddress = null,
       lp_token: contract = null,
-      liquidity,
-      staking_address,
+      liquidity = {},
+      staking_address = null,
     } = {},
   ] = useQueryPoolLiquidity({ poolId })
 
@@ -91,7 +93,6 @@ const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
     amount: lp || '0',
     contract,
     swapAddress,
-    poolId,
     claimIncentive: claimableLP > 0,
     stakingAddress: staking_address,
   })
@@ -100,11 +101,17 @@ const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
   const isInputDisabled = tx?.txStep == TxStep.Posting
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatusType.connected) return 'Connect Wallet'
-    else if (!!!tokenA?.amount) return 'Enter Amount'
+    if (connected !== WalletStatusType.connected) {
+      return 'Connect Wallet'
+    } else if (!!!tokenA?.amount) {
+      return 'Enter Amount'
+    }
     // else if (!isFinite(Number(lp)) || Number(lp) > lpBalance) return 'Insufficient funds'
-    else if (tx?.buttonLabel) return tx?.buttonLabel
-    else return 'Withdraw'
+    else if (tx?.buttonLabel) {
+      return tx?.buttonLabel
+    } else {
+      return 'Withdraw'
+    }
   }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
 
   useEffect(() => {
@@ -119,11 +126,15 @@ const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
 
   // on input change reset input or update value
   const onInputChange = (value, asset) => {
-    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
       tx.reset()
+    }
 
-    if (asset == 1) setValue('token1', value)
-    else setValue('token2', value)
+    if (asset == 1) {
+      setValue('token1', value)
+    } else {
+      setValue('token2', value)
+    }
   }
 
   // reset form on success
@@ -157,7 +168,9 @@ const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
         fetchBalance={false}
         mobile={mobile}
         onChange={(value) => {
-          if (reverse) setReverse(false)
+          if (reverse) {
+            setReverse(false)
+          }
           onInputChange(value, 1)
         }}
       />
@@ -170,7 +183,9 @@ const WithdrawForm = ({ poolId, connected, clearForm, mobile }: Props) => {
         fetchBalance={false}
         mobile={mobile}
         onChange={(value) => {
-          if (!reverse) setReverse(true)
+          if (!reverse) {
+            setReverse(true)
+          }
           onInputChange(value, 2)
         }}
       />

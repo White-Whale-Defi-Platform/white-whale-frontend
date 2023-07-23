@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
 
 type BalanceProps = {
@@ -65,7 +66,9 @@ const HalfButton = ({
   minwidth,
   size,
 }: HalfButtonProps) => {
-  if (hideHalf) return null
+  if (hideHalf) {
+    return null
+  }
   return (
     <Button 
       disabled={disabled}

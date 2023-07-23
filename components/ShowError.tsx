@@ -6,7 +6,9 @@ type Props = {
 }
 
 const ShowError = ({ message, show }: Props) => {
-  if (!show) return null
+  if (!show) {
+    return null
+  }
 
   return (
     <Text color="red" fontSize={12}>

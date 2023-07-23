@@ -4,10 +4,10 @@ import { Coin } from '@cosmjs/launchpad'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { parseRawLog } from '@cosmjs/stargate/build/logs'
 import {
-  Coin as StationCoin,
   Msg,
   MsgExecuteContract,
   MsgTransfer,
+  Coin as StationCoin,
   TxInfo,
 } from '@terra-money/feather.js'
 import { LCDClient } from '@terra-money/feather.js/dist/client/lcd/LCDClient'
@@ -22,11 +22,15 @@ const TX_MAAP = new Map([
   ['chihuahua-1', 'uhuahua'],
   ['comdex-1', 'ucmdx'],
   ['injective-1', 'uinj'],
+  ['migaloo-1', 'uwhale'],
 ])
 export class TerraStationWallet implements Wallet {
   client: ConnectedWallet
+
   lcdClient: LCDClient
+
   network: string
+
   chainID: string
 
   constructor(
@@ -159,7 +163,7 @@ export class TerraStationWallet implements Wallet {
     messages: readonly EncodeObject[],
     memo: string | undefined
   ): Promise<number> {
-    let tx = {
+    const tx = {
       msgs: messages
         .map((msg) =>
           Msg.fromAmino({
@@ -206,11 +210,11 @@ export class TerraStationWallet implements Wallet {
       })
   }
 
-  getChainId(): Promise<String> {
+  getChainId(): Promise<string> {
     return Promise.resolve(this.chainID)
   }
 
-  getNetwork(): Promise<String> {
+  getNetwork(): Promise<string> {
     return Promise.resolve(this.network)
   }
 

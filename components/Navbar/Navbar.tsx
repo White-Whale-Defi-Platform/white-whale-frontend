@@ -1,4 +1,5 @@
 import React from 'react'
+import { useQueryClient } from 'react-query'
 
 import {
   Box,
@@ -33,7 +34,7 @@ const Navbar = () => {
   const { disconnect } = useWallet()
   const [{ key, chainId, network }, setWalletState] =
     useRecoilState(walletState)
-
+  const queryClient = useQueryClient()
   const chains: Array<any> = useChains()
   const {
     isOpen: isOpenModal,
@@ -81,6 +82,7 @@ const Navbar = () => {
       chainId,
       activeWallet: null,
     })
+    queryClient.clear()
     disconnect()
   }
 

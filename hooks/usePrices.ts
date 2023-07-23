@@ -1,3 +1,8 @@
+import { useMemo } from 'react'
+import { useQuery } from 'react-query'
+
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import {
   PoolEntityType,
   TokenInfo,
@@ -7,13 +12,11 @@ import {
   findPoolForSwap,
   PoolMatchForSwap,
 } from 'queries/useQueryMatchingPoolForSwap'
-import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 import asyncForEach from 'util/asyncForEach'
 import { Wallet } from 'util/wallet-adapters'
-import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
-import { walletState } from 'state/atoms/walletAtoms'
+
 import useCoinGecko from './useCoinGecko'
 import { useCosmwasmClient } from './useCosmwasmClient'
 import { useBaseTokenInfo } from './useTokenInfo'
@@ -44,7 +47,9 @@ const getMatchingPool = ({
   poolsList,
   baseToken,
 }: GetMatchingPoolArgs): PoolMatchForSwap => {
-  if (!poolsList || !token || !baseToken) return
+  if (!poolsList || !token || !baseToken) {
+    return
+  }
 
   return findPoolForSwap({
     baseToken,
@@ -67,8 +72,9 @@ const getPrices = async ({
   await asyncForEach(tokens, async (token) => {
     const symbol = token?.symbol
 
-    if (token?.id) prices[symbol] = coingecko?.[token?.id]?.usd || 0
-    else {
+    if (token?.id) {
+      prices[symbol] = coingecko?.[token?.id]?.usd || 0
+    } else {
       const matchingPools = getMatchingPool({ token, poolsList, baseToken })
 
       const { streamlinePoolBA, streamlinePoolAB } = matchingPools
@@ -78,7 +84,7 @@ const getPrices = async ({
           matchingPools,
           tokenA: !!streamlinePoolAB ? token : baseToken,
           tokenB: !!streamlinePoolBA ? token : baseToken,
-          client: client as Wallet,
+          client: client as Wallet | CosmWasmClient,
           amount: 1,
         })
         const price = value * baseTokenPrice

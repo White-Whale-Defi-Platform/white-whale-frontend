@@ -40,7 +40,7 @@ const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
 
   // if (!tokenInfo && !symbol) return null
 
-  if (!tokenInfo?.symbol && !symbol)
+  if (!tokenInfo?.symbol && !symbol) {
     return (
       <Text
         // paddingLeft="10px"
@@ -52,6 +52,7 @@ const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
         Select Token
       </Text>
     )
+  }
 
   return (
     <HStack gap={[1]} pl={3}>

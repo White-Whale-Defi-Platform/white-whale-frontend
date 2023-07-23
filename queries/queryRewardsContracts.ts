@@ -34,7 +34,7 @@ export async function queryRewardsContracts({
 
   const currentHeight = await client.getHeight()
 
-  return await Promise.all(
+  return Promise.all(
     rewardsContractsInfo.map(async (contractInfo, index) => {
       const tokenInfo = rewardsTokens[index]
       const expired = currentHeight > contractInfo.reward.period_finish

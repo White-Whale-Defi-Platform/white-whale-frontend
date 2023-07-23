@@ -5,7 +5,7 @@
   "frontend_helper": "chihuahua1u28kmt7m6vkfjpxq0gz6vgud59ahwfd3vsewarjjtgdtrtlcvmhq79qws0",
   "whale_base_token": {
     "name": "WHALE",
-    "denom": "uwhale",
+    "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
     "decimals": 6
   },
   "lsd_token": {

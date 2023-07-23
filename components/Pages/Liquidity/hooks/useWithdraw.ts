@@ -1,18 +1,21 @@
-import { num } from 'libs/num'
 import { useMemo } from 'react'
+
+import { num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
+import { isNativeToken } from 'services/asset'
 import { walletState } from 'state/atoms/walletAtoms'
+import { protectAgainstNaN } from 'util/conversion/index'
+
 import {
   createWithdrawExecuteMsgs,
   createWithdrawMsg,
 } from './createWithdrawMsgs'
-import { useTransaction } from './useWithdrawTransaction'
+import { useWithdrawTransaction } from './useWithdrawTransaction'
 
 type Props = {
   amount: string
   contract: string
   swapAddress: string
-  poolId: string
   claimIncentive?: boolean
   stakingAddress: string
 }
@@ -21,18 +24,18 @@ const useWithdraw = ({
   amount,
   contract,
   swapAddress,
-  poolId,
   claimIncentive,
   stakingAddress,
 }: Props) => {
   const { address, client } = useRecoilValue(walletState)
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (parseFloat(amount) === 0 || contract === null) return {}
+    if (parseFloat(amount) === 0 || contract === null || !client) {
+      return {}
+    }
 
     return {
       msgs: createWithdrawMsg({
-        contract,
         amount,
         swapAddress,
       }),
@@ -43,6 +46,7 @@ const useWithdraw = ({
           amount,
           claimIncentive,
           stakingAddress,
+          isNative: isNativeToken(contract),
         },
         address
       ),
@@ -50,16 +54,16 @@ const useWithdraw = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, contract, swapAddress, stakingAddress, claimIncentive, address])
 
-  return useTransaction({
-    poolId,
+  return useWithdrawTransaction({
+    lpTokenAddress: contract,
+    swapAddress,
     enabled: !!encodedMsgs,
     msgs,
     encodedMsgs,
     amount,
-    swapAddress,
     senderAddress: address,
-    lpTokenAddress: contract,
     client,
+    isNative: isNativeToken(contract),
   })
 }
 
@@ -84,7 +88,7 @@ const simulate = ({ reverse, amount, lp, tokenA, tokenB }) => {
         ? tokenB
         : (tokenB * (lp - lpTokensForPartialA)) / lp
     return {
-      lp: num(lpTokensForPartialA).dp(0).toString(),
+      lp: num(protectAgainstNaN(lpTokensForPartialA)).dp(0).toString(),
       simulated:
         lpTokensForPartialA === lp
           ? num(tokenBForLP).dp(0).toString()

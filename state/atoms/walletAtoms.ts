@@ -1,6 +1,5 @@
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
-
 import { Wallet } from 'util/wallet-adapters'
 
 export enum WalletStatusType {

@@ -1,5 +1,6 @@
-import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import React from 'react'
+
+import { FlowData } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 
 export type Pool = {
   contract: string
@@ -16,5 +17,6 @@ export type Pool = {
   cta?: () => void
   incentives: React.ReactNode
   flows: FlowData[]
+  myIncentiveApr: string
   action: React.ReactNode
 }

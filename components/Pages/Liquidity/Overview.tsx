@@ -1,7 +1,9 @@
-import { Box, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import { Action } from './Action'
+
+import { Box, Text, VStack } from '@chakra-ui/react'
 import useLockedPositions from 'components/Pages/Liquidity/hooks/useLockedPositions'
+
+import { Action } from './Action'
 import useRewards from './hooks/useRewards'
 import { Positions } from './Positions'
 import { Rewards } from './Rewards'

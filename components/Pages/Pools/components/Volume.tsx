@@ -20,8 +20,12 @@ const Volume = ({ pairAddr }: Props) => {
     dateTime,
   })
 
-  if (!pairAddr) return null
-  if (isLoading) return <Spinner color="white" size="xs" float="right" />
+  if (!pairAddr) {
+    return null
+  }
+  if (isLoading) {
+    return <Spinner color="white" size="xs" float="right" />
+  }
 
   return <Text align="right">{`$${formatPrice(tradingVolume)}`}</Text>
 }

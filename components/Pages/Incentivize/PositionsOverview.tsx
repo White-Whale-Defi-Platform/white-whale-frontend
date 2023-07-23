@@ -1,8 +1,10 @@
-import { Box, Button, Divider, HStack, Image, Text } from '@chakra-ui/react'
 import React, { useMemo, useState } from 'react'
+
+import { Box, Button, Divider, HStack, Image, Text } from '@chakra-ui/react'
 import { num } from 'libs/num'
-import PositionsTable from './PositionsTable'
+
 import { useClosePosition } from './hooks/useClosePosition'
+import PositionsTable from './PositionsTable'
 
 type Props = {
   flows: any[]
@@ -68,12 +70,13 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
     }))
   }, [flows])
 
-  if (positions.length === 0)
+  if (positions.length === 0) {
     return (
       <Box width="full" textAlign="center">
         <Text color="whiteAlpha.700">No open positions</Text>
       </Box>
     )
+  }
 
   return (
     <Box width="full">

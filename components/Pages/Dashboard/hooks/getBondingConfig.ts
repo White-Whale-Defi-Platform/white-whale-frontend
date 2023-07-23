@@ -1,5 +1,5 @@
-import { Wallet } from 'util/wallet-adapters'
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+
 import { Config } from './useDashboardData'
 
 interface NativeToken {
@@ -18,7 +18,7 @@ export interface BondingContractConfig {
 }
 
 export const getBondingConfig = async (
-  client: Wallet | null,
+  client: CosmWasmClient | null,
   config: Config
 ) => {
   if (!client && !config) {
@@ -29,7 +29,7 @@ export const getBondingConfig = async (
 }
 
 export const fetchConfig = async (
-  client: Wallet,
+  client: CosmWasmClient,
   config: Config
 ): Promise<BondingContractConfig> => {
   const result: JsonObject = await client.queryContractSmart(

@@ -1,5 +1,6 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useQuery } from 'react-query'
+
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 type TxInfo = {
   txHash: string | null

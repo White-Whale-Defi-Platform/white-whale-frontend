@@ -2,65 +2,48 @@ import React, { FC, useMemo, useState } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useRecoilValue } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
-
-const Vaults: FC<Props> = () => {
-  const [isAllVaultsInited, setAllVaultsInited] = useState<boolean>(true)
-  const [isMyVaultsInited, setMyVaultsInited] = useState<boolean>(true)
+const Vaults: FC = () => {
+  const [allVaultsInitialized, setAllVaultsInitialized] =
+    useState<boolean>(false)
+  const { status } = useRecoilValue(walletState)
+  const isWalletConnected = status === WalletStatusType.connected
   const { vaults, isLoading } = useVault()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
 
-  const myVaults = useMemo(() => {
-    if (!vaults) return []
-    setMyVaultsInited(false)
+  const allVaults = useMemo(() => {
+    if (!vaults && isWalletConnected) {
+      return []
+    }
+    setAllVaultsInitialized(true)
 
-    return vaults.vaults
-      .filter((vault) => !!Number(vault?.deposits?.lpBalance))
-      .map((vault) => ({
-        totalDeposts: 'comming soon',
-        myDeposit: 'comming soon',
+    return vaults?.vaults.map((vault) => {
+      const ctaLabel = vault?.hasDeposit ? 'Manage Position' : 'New Position'
+      const url = `/${chainIdParam}/vaults/${
+        vault?.hasDeposit ? 'manage_position' : 'new_position'
+      }?vault=${vault.vault_assets?.symbol}`
+      return {
         vaultId: vault?.pool_id,
         tokenImage: vault.vault_assets?.logoURI,
         apr: 'coming soon',
-        cta: () =>
-          router.push(
-            `/${chainIdParam}/vaults/manage_position?vault=${vault.vault_assets?.symbol}`
-          ),
-      }))
+        totalDeposits: !!vault?.totalDeposit
+          ? `$${vault?.totalDeposit?.dollarValue}`
+          : 'n/a',
+        myDeposit: !!vault?.deposits
+          ? `$${vault?.deposits?.dollarValue}`
+          : 'n/a',
+        cta: () => router.push(url),
+        ctaLabel,
+      }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vaults, isMyVaultsInited])
-
-  const allVaults = useMemo(() => {
-    if (!vaults) return []
-    setAllVaultsInited(false)
-
-    return (
-      vaults.vaults
-        // .filter(vault => !!!Number(vault.deposits.lptoken))
-        .map((vault) => {
-          const ctaLabel = vault?.hasDepost ? 'Manage Position' : 'New Position'
-          const url = `/${chainIdParam}/vaults/${
-            vault?.hasDepost ? 'manage_position' : 'new_position'
-          }?vault=${vault.vault_assets?.symbol}`
-          return {
-            vaultId: vault?.pool_id,
-            tokenImage: vault.vault_assets?.logoURI,
-            apr: 'coming soon',
-            totalDeposts: vault?.totalDepost?.dollarValue,
-            myDeposit: vault?.deposits?.dollarValue,
-            cta: () => router.push(url),
-            ctaLabel,
-          }
-        })
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vaults, isAllVaultsInited])
+  }, [vaults, allVaultsInitialized])
 
   return (
     <VStack
@@ -76,7 +59,7 @@ const Vaults: FC<Props> = () => {
         </HStack>
         <AllVaultsTable
           vaults={allVaults}
-          isLoading={isLoading || isAllVaultsInited}
+          isLoading={isLoading || !allVaultsInitialized}
         />
       </Box>
     </VStack>

@@ -8,7 +8,7 @@ import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-import useVault, { useVaultDepost } from './hooks/useVaults'
+import useVault, { useVaultDeposit } from './hooks/useVaults'
 import DepositForm from './ManagePoistion/DepositForm'
 
 const NewPosition = () => {
@@ -16,7 +16,7 @@ const NewPosition = () => {
   const { vaults, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
   const chains: Array<any> = useChains()
-  const { chainId, key, address, status } = useRecoilValue(walletState)
+  const { chainId, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNOX'
 
   const vault = useMemo(
@@ -44,11 +44,11 @@ const NewPosition = () => {
     () => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
     [vaults]
   )
-  const {
-    balance: lpTokenBalance,
-    isLoading: lpTokenBalanceLoading,
-    refetch: lpRefetch,
-  } = useVaultDepost(vault?.lp_token, vault?.vault_address, vault?.vault_assets)
+  const { refetch: lpRefetch } = useVaultDeposit(
+    vault?.lp_token,
+    vault?.vault_address,
+    vault?.vault_assets
+  )
   const {
     balance: tokenBalance,
     isLoading: tokenBalanceLoading,
@@ -87,7 +87,7 @@ const NewPosition = () => {
         </Text>
       </HStack>
       <Box
-        background="#1C1C1C"
+        background={'#1C1C1C'}
         padding={[6, 12]}
         paddingTop={[10]}
         borderRadius="30px"

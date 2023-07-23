@@ -1,5 +1,5 @@
-import { Wallet } from 'util/wallet-adapters'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { Wallet } from 'util/wallet-adapters'
 
 export const withdrawTokens = (
   client: Wallet,

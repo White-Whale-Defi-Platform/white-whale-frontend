@@ -7,9 +7,8 @@ import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-function ConnectedWalletIcon({ connected }) {
-  const [currentWalletState, setCurrentWalletState] =
-    useRecoilState(walletState)
+function ConnectedWalletIcon() {
+  const [currentWalletState, _] = useRecoilState(walletState)
   switch (currentWalletState?.activeWallet) {
     case 'keplr':
       return <KeplrWalletIcon />

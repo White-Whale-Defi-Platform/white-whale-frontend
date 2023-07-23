@@ -6,7 +6,7 @@ import { useChains } from 'hooks/useChainInfo'
 import ChainItem from './ChainItem'
 
 function ChainList({ onChange, onClose, currentWalletState }) {
-  let chains = useChains()
+  const chains = useChains()
 
   // if (currentWalletState.activeWallet === 'station') {
   //   return chains.filter(
@@ -23,7 +23,6 @@ function ChainList({ onChange, onClose, currentWalletState }) {
   return (
     <List spacing={1} color="white" width="full">
       {chains.map((chain, index) => {
-        if (chain.chainId === 'migaloo-1') return
         return (
           <ChainItem
             key={chain.chainId + chain?.chainName}

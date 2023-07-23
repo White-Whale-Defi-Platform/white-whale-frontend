@@ -1,19 +1,23 @@
 import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
-import { protectAgainstNaN } from 'junoblocks'
-import { useRecoilValue } from 'recoil'
-
-import { walletState } from 'state/atoms/walletAtoms'
+import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
 import {
   __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-} from 'util/constants'
+} from 'constants/settings'
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import usePrices from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
+import { protectAgainstNaN } from 'junoblocks'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import { TokenInfo } from 'types'
 import {
   calcPoolTokenDollarValue,
   convertMicroDenomToDenom,
 } from 'util/conversion'
+
 import { lpToAssets, queryMyLiquidity } from './queryMyLiquidity'
 import {
   queryRewardsContracts,
@@ -22,10 +26,6 @@ import {
 import { querySwapInfo } from './querySwapInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
-import { useTokenList } from 'hooks/useTokenList'
-import { TokenInfo } from 'types'
-import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
-import usePrices from 'hooks/usePrices'
 
 export type ReserveType = [number?, number?]
 
@@ -82,7 +82,9 @@ export type QueryMultiplePoolsArgs = {
 }
 
 const queryLockedLiquidity = async ({ pool, client, address }) => {
-  if (!address || !client || !pool.staking_address) return
+  if (!address || !client || !pool.staking_address) {
+    return
+  }
 
   const { positions = [] } =
     (await client?.queryContractSmart(pool.staking_address, {
@@ -120,7 +122,9 @@ export const useQueryMultiplePoolsLiquidity = ({
   async function queryPoolLiquidity(
     pool: PoolEntityType
   ): Promise<PoolEntityTypeWithLiquidity | any> {
-    if (!client) return pool
+    if (!client) {
+      return pool
+    }
 
     const [tokenA, tokenB] = pool.pool_assets
 
@@ -130,8 +134,9 @@ export const useQueryMultiplePoolsLiquidity = ({
     })
 
     const getFlows = async ({ client }) => {
-      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) {
         return []
+      }
       const flows = await client?.queryContractSmart(pool.staking_address, {
         flows: {},
       })
@@ -144,8 +149,9 @@ export const useQueryMultiplePoolsLiquidity = ({
       })
     }
     const getMyFlows = ({ client, address }) => {
-      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0))
+      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) {
         return []
+      }
       return client
         ?.queryContractSmart(pool.staking_address, {
           flows: {},
@@ -329,7 +335,9 @@ export const useQueryMultiplePoolsLiquidity = ({
       refetchIntervalInBackground: refetchInBackground,
 
       async queryFn() {
-        if (!client) return pool
+        if (!client) {
+          return pool
+        }
         return queryPoolLiquidity(pool)
       },
     }))
@@ -364,7 +372,9 @@ export function calculateRewardsAnnualYieldRate({
   rewardsContracts,
   totalStakedDollarValue,
 }) {
-  if (!__POOL_REWARDS_ENABLED__) return 0
+  if (!__POOL_REWARDS_ENABLED__) {
+    return 0
+  }
 
   const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce(
     (value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,

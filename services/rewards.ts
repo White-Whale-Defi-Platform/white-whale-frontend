@@ -43,7 +43,7 @@ export const getPendingRewards = async (
   client: Wallet
 ): Promise<PendingRewardsResponse> => {
   const msg = { get_pending_rewards: { address } }
-  return await client.queryContractSmart(rewardsAddress, msg)
+  return client.queryContractSmart(rewardsAddress, msg)
 }
 
 export type RewardsInfoResponse = {
@@ -65,5 +65,5 @@ export const getRewardsInfo = async (
   client: Wallet
 ): Promise<RewardsInfoResponse> => {
   const msg = { info: {} }
-  return await client.queryContractSmart(rewardsAddress, msg)
+  return client.queryContractSmart(rewardsAddress, msg)
 }

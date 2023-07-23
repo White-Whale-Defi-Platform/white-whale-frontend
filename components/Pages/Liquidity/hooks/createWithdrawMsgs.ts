@@ -1,4 +1,5 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import { coin } from '@cosmjs/stargate'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
@@ -6,7 +7,7 @@ export const toBase64 = (obj: object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64')
 }
 
-export const createWithdrawMsg = ({ contract, amount, swapAddress }) => {
+export const createWithdrawMsg = ({ amount, swapAddress }) => {
   return {
     send: {
       amount,
@@ -18,21 +19,36 @@ export const createWithdrawMsg = ({ contract, amount, swapAddress }) => {
   }
 }
 
+export const createNativeWithdrawMsg = () => {
+  return {
+    withdraw_liquidity: {},
+  }
+}
+
 export const createWithdrawExecuteMsgs = (
-  { contract, amount, swapAddress, claimIncentive, stakingAddress },
+  {
+    contract,
+    amount,
+    swapAddress,
+    claimIncentive,
+    stakingAddress,
+    isNative = false,
+  },
   senderAddress
 ) => {
   const msgs = []
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
-  increaseAllowanceMessages.push(
-    createIncreaseAllowanceMessage({
-      tokenAmount: amount,
-      tokenAddress: contract,
-      senderAddress,
-      swapAddress,
-    })
-  )
+  if (!isNative) {
+    increaseAllowanceMessages.push(
+      createIncreaseAllowanceMessage({
+        tokenAmount: amount,
+        tokenAddress: contract,
+        senderAddress,
+        swapAddress,
+      })
+    )
+  }
 
   const inventiveMsg = createExecuteMessage({
     message: {
@@ -43,15 +59,20 @@ export const createWithdrawExecuteMsgs = (
     funds: [],
   })
 
-  if (claimIncentive) msgs.push(inventiveMsg)
+  if (claimIncentive) {
+    msgs.push(inventiveMsg)
+  }
 
   return [
     ...msgs,
     ...increaseAllowanceMessages,
     createExecuteMessage({
       senderAddress,
-      contractAddress: contract,
-      message: createWithdrawMsg({ contract, amount, swapAddress }),
+      contractAddress: isNative ? swapAddress : contract,
+      message: isNative
+        ? createNativeWithdrawMsg()
+        : createWithdrawMsg({ amount, swapAddress }),
+      funds: isNative ? [coin(amount, contract)] : [],
     }),
   ]
 }

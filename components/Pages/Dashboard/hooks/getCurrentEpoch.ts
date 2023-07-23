@@ -1,5 +1,5 @@
-import { Wallet } from 'util/wallet-adapters'
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+
 import { Config } from './useDashboardData'
 
 export interface EpochData {
@@ -35,7 +35,10 @@ export interface Epoch {
   epoch: EpochData
 }
 
-export const getCurrentEpoch = async (client: Wallet, config: Config) => {
+export const getCurrentEpoch = async (
+  client: CosmWasmClient,
+  config: Config
+) => {
   if (!client) {
     return null
   }
@@ -46,7 +49,7 @@ export const getCurrentEpoch = async (client: Wallet, config: Config) => {
 }
 
 export const fetchCurrentEpoch = async (
-  client: Wallet,
+  client: CosmWasmClient,
   config: Config
 ): Promise<Epoch> => {
   const result: JsonObject = await client?.queryContractSmart(

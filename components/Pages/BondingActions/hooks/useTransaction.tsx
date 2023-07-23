@@ -3,19 +3,20 @@ import { useMutation, useQuery } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import { ActionType } from '../../Dashboard/BondingOverview'
-import { bondTokens } from './bondTokens'
-import { unbondTokens } from './unbondTokens'
-import { withdrawTokens } from './withdrawTokens'
-import { convertDenomToMicroDenom } from 'util/conversion'
-import { claimRewards } from '../../Dashboard/hooks/claimRewards'
+import { createNewEpoch } from 'components/Pages/BondingActions/hooks/createNewEpoch'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { createNewEpoch } from 'components/Pages/BondingActions/hooks/createNewEpoch'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+import { convertDenomToMicroDenom } from 'util/conversion'
+
+import { ActionType } from '../../Dashboard/BondingOverview'
+import { claimRewards } from '../../Dashboard/hooks/claimRewards'
+import { bondTokens } from './bondTokens'
+import { unbondTokens } from './unbondTokens'
+import { withdrawTokens } from './withdrawTokens'
 
 export enum TxStep {
   /**
@@ -69,7 +70,9 @@ export const useTransaction = () => {
       setTxStep(TxStep.Estimating)
       try {
         const response = 0 //await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) setButtonLabel(null)
+        if (!!buttonLabel) {
+          setButtonLabel(null)
+        }
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
@@ -162,10 +165,13 @@ export const useTransaction = () => {
         } else if (/out of gas/i.test(e?.toString())) {
           setError('Out of gas, try increasing gas limit on wallet.')
           message = 'Out of gas, try increasing gas limit on wallet.'
-        } else if (/There are unclaimed rewards available./i.test(e?.toString())) {
+        } else if (
+          /There are unclaimed rewards available./i.test(e?.toString())
+        ) {
           setError('There are unclaimed rewards available.')
-          message = 'There are unclaimed rewards available. Claim them before attempting to bond/unbond.'
-        }else if (
+          message =
+            'There are unclaimed rewards available. Claim them before attempting to bond/unbond.'
+        } else if (
           /was submitted but was not yet found on the chain/i.test(
             e?.toString()
           )

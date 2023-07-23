@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { VStack,useMediaQuery } from '@chakra-ui/react'
-import AssetInput from '../../AssetInput'
-import { useRecoilState } from 'recoil'
-import { bondingAtom } from './bondAtoms'
 import { Controller, useForm } from 'react-hook-form'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+
+import { useMediaQuery,VStack } from '@chakra-ui/react'
 import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+import { useRecoilState } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+
+import AssetInput from '../../AssetInput'
+import { bondingAtom } from './bondAtoms'
 
 export interface LSDTokenBalances {
   ampWHALE: number
@@ -97,7 +99,7 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
               onInputChange(value, 0)
               field.onChange(value)
               if (isTokenChange) {
-                let lsdToken =
+                const lsdToken =
                   value.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL
                     ? LSDToken.ampWHALE
                     : LSDToken.bWHALE

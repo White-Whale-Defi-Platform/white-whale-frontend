@@ -1,5 +1,6 @@
-import { Wallet } from 'util/wallet-adapters/index'
 import { useQuery } from 'react-query'
+
+import { Wallet } from 'util/wallet-adapters/index'
 
 export interface AddressInfo {
   address: string
@@ -16,20 +17,19 @@ export const usePoolUserShare = (
 ): AddressInfo => {
   const { data } = useQuery({
     queryKey: ['poolUserShare', contractAddr, userAddr],
-    queryFn: async () =>
-      await fetchPoolUserShare(client, contractAddr, userAddr),
+    queryFn: async () => fetchPoolUserShare(client, contractAddr, userAddr),
     enabled: !!client && !!contractAddr && !!userAddr,
     refetchOnMount: 'always',
   })
   return { ...data }
 }
 
-const fetchPoolUserShare = async (
+export const fetchPoolUserShare = async (
   client: Wallet,
   contractAddr: string,
   userAddr: string
 ): Promise<AddressInfo> => {
-  return await client.queryContractSmart(contractAddr, {
+  return client.queryContractSmart(contractAddr, {
     current_epoch_rewards_share: { address: userAddr },
   })
 }

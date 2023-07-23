@@ -1,7 +1,6 @@
+import { POOL_INFO_BASE_URL } from 'constants/settings'
 import fetch from 'isomorphic-unfetch'
-import { POOL_INFO_BASE_URL } from 'util/constants'
 import { formatPrice } from 'libs/num'
-
 import terraPoolConfig from 'public/mainnet/phoenix-1/pools_list.json'
 
 export interface EnigmaPoolResponse {
@@ -29,18 +28,32 @@ export interface EnigmaPoolData {
 export const getPairInfos = async (
   chain: string
 ): Promise<EnigmaPoolResponse[]> => {
-  if (!chain) return []
+  if (!chain) {
+    return []
+  }
   chain = chain === 'inj' ? 'injective' : chain
   const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
 
-  let chainDataResponse = await fetch(url)
-  // sometimes throws 400 error for unknown reason
-  while (chainDataResponse.status === 400) {
-    console.log('Retrying...')
-    chainDataResponse = await fetch(url)
+  async function fetchWithRetry(url, retries = 5, interval = 3000) {
+    while (retries) {
+      const response = await fetch(url)
+
+      if (response.status !== 400) {
+        return response
+      }
+
+      console.log('Retrying...')
+      await new Promise((resolve) => setTimeout(resolve, interval))
+      retries--
+    }
+
+    return null
   }
-  const data = await chainDataResponse.text()
-  if (chainDataResponse.status === 200 && data !== 'chain unknown' && data) {
+
+  const chainDataResponse = await fetchWithRetry(url)
+
+  const data = await chainDataResponse?.text()
+  if (chainDataResponse?.status === 200 && data !== 'chain unknown' && data) {
     return JSON.parse(data)
   } else {
     return []
@@ -50,23 +63,23 @@ export const getPairInfosTerra = async (): Promise<any> => {
   const swapAddresses = terraPoolConfig.pools
     .map((pool: any) => pool.swap_address)
     .join(',')
-  const url = `/api/cors?url=https://api.coinhall.org/api/v1/pairs?addresses=${swapAddresses}`
-  let chainDataResponse = await fetch(url)
+  const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses}`
+  const chainDataResponse = await fetch(url)
+  const data = await chainDataResponse.json()
 
-  const data = await chainDataResponse.text()
   if (chainDataResponse.status === 200 && data) {
-    return JSON.parse(data)
+    return data
   } else {
     return []
   }
 }
 export const getPairAprAndDailyVolume = async (
   pools: any[],
-  chain: any
+  chainPrefix: any
 ): Promise<EnigmaPoolData[]> => {
   const poolIds = pools?.map((pool: any) => pool.pool_id)
 
-  const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chain)
+  const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chainPrefix)
 
   if (pairInfos.length > 0) {
     return poolIds?.map((poolId: string) => {
@@ -75,6 +88,7 @@ export const getPairAprAndDailyVolume = async (
         pool_id: poolId,
         usdVolume24h: `$${formatPrice(pairInfo?.volume_24h)}`,
         usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
+        totalLiquidity: Number(pairInfo?.TVL),
         TVL: `$${formatPrice(pairInfo?.TVL)}`,
         apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
         ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
@@ -100,19 +114,19 @@ export const getPairAprAndDailyVolumeTerra = async (
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
   const pairInfos: any = await getPairInfosTerra()
 
-  if (!!pairInfos &&pairInfos.pairs&& pairInfos.pairs.length > 0 && !!pools) {
+  if (!!pairInfos && pairInfos.pairs && pairInfos.pairs.length > 0 && !!pools) {
     return swapAddresses?.map((swapAddress: string) => {
-      const pairInfo = pairInfos.pairs.find(
-        (row: any) => row.pairAddress === swapAddress
+      const pairInfo = pairInfos.pools.find(
+        (row: any) => row.id === swapAddress
       )
       const poolId = terraPoolConfig.pools.find(
         (pool: any) => pool.swap_address === swapAddress
       )?.pool_id
       const asset0Symbol = poolId?.split('-')[0]
       const chRatio =
-        pairInfo?.asset0.symbol === asset0Symbol
-          ? pairInfo?.asset0.usdPrice / pairInfo?.asset1.usdPrice
-          : pairInfo?.asset1.usdPrice / pairInfo?.asset0.usdPrice
+        pairInfo?.assets[0].symbol === asset0Symbol
+          ? pairInfo?.assets[0].usdPrice / pairInfo?.assets[1].usdPrice
+          : pairInfo?.assets[1].usdPrice / pairInfo?.assets[0].usdPrice
 
       const pool = pools.find((pool: any) => pool.swap_address === swapAddress)
       const displayAssetOrder = pool.displayName?.split('-')
@@ -129,10 +143,10 @@ export const getPairAprAndDailyVolumeTerra = async (
       const ratio = poolId?.includes('axlUSDC') ? chRatio : poolRatio
       return {
         pool_id: poolId,
-        usdVolume24h: `$${formatPrice(pairInfo?.usdVolume24h)}`,
-        usdVolume7d: `$${formatPrice(pairInfo?.usdVolume7d)}`,
-        totalLiquidity: Number(pairInfo?.usdLiquidity),
-        TVL: `$${formatPrice(pairInfo?.usdLiquidity)}`,
+        usdVolume24h: `$${formatPrice(pairInfo?.volume24h)}`,
+        usdVolume7d: `$${formatPrice(pairInfo?.volume7d)}`,
+        totalLiquidity: Number(pairInfo?.liquidity),
+        TVL: `$${formatPrice(pairInfo?.liquidity)}`,
         apr7d: `${Number(pairInfo?.apr7d).toFixed(2)}%`,
         ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData

@@ -1,16 +1,20 @@
-import { VStack } from '@chakra-ui/react'
-import { TxStep } from 'hooks/useTransaction'
-import { num } from 'libs/num'
 import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
-import { TokenItemState } from 'types/index'
+
+import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
+import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import BondingDaysSlider from './BondingDaysSlider'
-import Multiplicator from './Multiplicator'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { TxStep } from 'hooks/useTransaction'
+import { num } from 'libs/num'
+import { useRecoilState } from 'recoil'
+import { aprHelperState } from 'state/atoms/aprHelperState'
+import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { TokenItemState } from 'types/index'
+
+import Multiplicator from './Multiplicator'
 
 type Props = {
   connected: WalletStatusType
@@ -26,6 +30,7 @@ type Props = {
   clearForm: () => void
   chainId: string
   mobile?:boolean
+  poolId: string
 }
 
 const DepositForm = ({
@@ -42,6 +47,7 @@ const DepositForm = ({
   clearForm,
   chainId,
   mobile
+  poolId,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -55,8 +61,12 @@ const DepositForm = ({
     () => INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId),
     [chainId]
   )
+  const [currentAprHelperState, _] = useRecoilState(aprHelperState)
 
-  //const multiplicator = useMultiplicator(poolId)
+  const poolAPRs = useMemo(
+    () => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
+    [currentAprHelperState, poolId]
+  )
 
   const multiplicator = useMemo(
     () =>
@@ -92,11 +102,13 @@ const DepositForm = ({
       }
     } else {
       if (reverse) {
-        if (!!!tokenB.amount)
+        if (!!!tokenB.amount) {
           setValue('token1', { ...tokenA, amount: undefined })
+        }
       } else {
-        if (!!!tokenA.amount)
+        if (!!!tokenA.amount) {
           setValue('token2', { ...tokenB, amount: undefined })
+        }
       }
     }
 
@@ -118,12 +130,26 @@ const DepositForm = ({
   }, [tx?.txStep])
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatusType.connected) return 'Connect Wallet'
-    else if (!tokenB?.tokenSymbol) return 'Select Token'
-    else if (!!!amountA?.amount) return 'Enter Amount'
-    else if (tx?.buttonLabel) return tx?.buttonLabel
-    else return 'Deposit'
+    if (connected !== WalletStatusType.connected) {
+      return 'Connect Wallet'
+    } else if (!tokenB?.tokenSymbol) {
+      return 'Select Token'
+    } else if (!!!amountA?.amount) {
+      return 'Enter Amount'
+    } else if (tx?.buttonLabel) {
+      return tx?.buttonLabel
+    } else {
+      return 'Deposit'
+    }
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
+
+  const apr = useMemo(
+    () =>
+      `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(
+        2
+      )}`,
+    [poolAPRs, multiplicator]
+  )
 
   return (
     <VStack
@@ -165,6 +191,7 @@ const DepositForm = ({
 
       <Multiplicator
         multiplicator={String(multiplicator)}
+        apr={apr}
         show={incentivesEnabled}
       />
 

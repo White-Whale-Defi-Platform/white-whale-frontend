@@ -1,6 +1,7 @@
+import { Controller } from 'react-hook-form'
+
 import { VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
-import { Controller } from 'react-hook-form'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { TokenItemState } from 'types'
 

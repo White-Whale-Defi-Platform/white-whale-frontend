@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
+
+import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
+import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { createExecuteMessage } from 'util/messages'
-import useTxStatus from 'hooks/useTxStatus'
-import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
-import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 export enum Force {
   epochAndSnapshots,
@@ -46,7 +47,9 @@ const useForceEpochAndTakingSnapshots = ({
   })
 
   const msgs = useMemo(() => {
-    if (addresses.length === 0) return null
+    if (addresses.length === 0) {
+      return null
+    }
 
     return (
       mode === Force.epochAndSnapshots
@@ -63,7 +66,7 @@ const useForceEpochAndTakingSnapshots = ({
           ]
         : []
     ).concat(
-      ...addresses.flatMap((incentiveAddress) => {
+      ...(addresses?.flatMap((incentiveAddress) => {
         return [
           // create snapshot message
           createExecuteMessage({
@@ -75,7 +78,7 @@ const useForceEpochAndTakingSnapshots = ({
             funds: [],
           }),
         ]
-      })
+      }) ?? [])
     )
   }, [addresses, address])
 

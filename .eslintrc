@@ -19,7 +19,11 @@
   },
   "plugins": ["eslint-plugin-import-helpers"],
   "rules": {
-    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-var-requires": "warn",
+    "@typescript-eslint/no-unused-expressions": "warn",
+    "eqeqeq": "warn",
+    "curly": "warn",
+    "prefer-const": "warn",
     "@typescript-eslint/no-empty-interface": [
       "error",
       {

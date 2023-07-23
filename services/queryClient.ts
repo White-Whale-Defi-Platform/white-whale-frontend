@@ -1,6 +1,6 @@
 import { QueryClient } from 'react-query'
 
-import { DEFAULT_REFETCH_ON_WINDOW_FOCUS_STALE_TIME } from '../util/constants'
+import { DEFAULT_REFETCH_ON_WINDOW_FOCUS_STALE_TIME } from 'constants/settings'
 
 export const queryClient = new QueryClient({
   defaultOptions: {

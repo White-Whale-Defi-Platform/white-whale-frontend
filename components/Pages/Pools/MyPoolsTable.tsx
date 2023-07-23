@@ -16,6 +16,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
@@ -55,7 +56,10 @@ const columns = [
       return info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
       ) : (
-        <Apr apr={info.getValue().toString()} flows={info.row.original.flows} />
+        <Apr
+          apr={info.getValue()?.toString()}
+          flows={info.row.original.flows}
+        />
       )
     },
   }),
@@ -124,8 +128,9 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  if (!show) return null
-
+  if (!show) {
+    return null
+  }
   const table = useReactTable({
     data: pools,
     columns,
@@ -190,7 +195,7 @@ const PoolsTable = ({
               <Th></Th>
               <Th isNumeric></Th>
             </Tr>
-            {table.getHeaderGroups().map((headerGroup, index) => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th

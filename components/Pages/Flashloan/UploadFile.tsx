@@ -11,7 +11,9 @@ const UploadFile = ({ handleChange }: Props) => {
   const fileRef = useRef(null)
 
   const handleFile = () => {
-    if (fileRef) fileRef.current?.click()
+    if (fileRef) {
+      fileRef.current?.click()
+    }
   }
 
   return (

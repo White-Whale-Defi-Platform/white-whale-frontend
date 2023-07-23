@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
-import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useTokenList } from 'hooks/useTokenList'
 import { num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -13,7 +12,9 @@ export const toBase64 = (obj: object) => {
 }
 
 const buildRoute = (graph, start, end) => {
-  if (!start || !end) return []
+  if (!start || !end) {
+    return []
+  }
 
   const queue = [[start, []]],
     seen = new Set()
@@ -21,7 +22,9 @@ const buildRoute = (graph, start, end) => {
   while (queue.length) {
     const [curVert, [...path]] = queue.shift()
     path.push(curVert)
-    if (curVert === end) return path
+    if (curVert === end) {
+      return path
+    }
 
     if (!seen.has(curVert) && graph[curVert]) {
       queue.push(...graph[curVert].map((v) => [v, path]))
@@ -30,15 +33,10 @@ const buildRoute = (graph, start, end) => {
   }
 }
 
-const createRouteMessage = (
-  route,
-  amount,
-  token,
-  reverse,
-  routerAddress,
-  slippage
-) => {
-  if (!!!amount || !!!route.length || !routerAddress) return {}
+const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
+  if (!!!amount || !!!route.length || !routerAddress) {
+    return {}
+  }
 
   const operations = route.map(([offerAsset, askAsset]) => {
     const offer_asset_info = toAssetInfo(offerAsset?.denom, offerAsset?.native)
@@ -86,7 +84,9 @@ const executeMessage = (
   routerAddress,
   senderAddress
 ) => {
-  if (!message || !routerAddress) return null
+  if (!message || !routerAddress) {
+    return null
+  }
 
   return createExecuteMessage({
     senderAddress,
@@ -105,12 +105,11 @@ const useRoute = ({
   slippage,
 }) => {
   const [tokenList] = useTokenList()
-  const baseToken = useBaseTokenInfo()
-  const { data: poolsList, isLoading } = usePoolsListQuery()
+  const { data: poolsList } = usePoolsListQuery()
   const { routerAddress } = poolsList || {}
 
-  const { pools, tokens, graph, path, route } = useMemo(() => {
-    if (!poolsList || !tokenList)
+  const { path, route } = useMemo(() => {
+    if (!poolsList || !tokenList) {
       return {
         pools: [],
         tokens: [],
@@ -118,6 +117,7 @@ const useRoute = ({
         path: [],
         route: [],
       }
+    }
     const graph = {}
 
     const pools = poolsList?.pools?.map(({ pool_id }) => pool_id)
@@ -145,15 +145,16 @@ const useRoute = ({
   }, [poolsList, tokenList, tokenA?.symbol, tokenB?.symbol])
 
   const { simulateMsg, executeMsg, encodedExecuteMsg } = useMemo(() => {
-    if (route.length < 1) return {}
+    if (route.length < 1) {
+      return {}
+    }
 
     const { simulateMsg, executeMsg } = createRouteMessage(
       route,
       amount,
       tokenA,
       reverse,
-      routerAddress,
-      slippage
+      routerAddress
     )
     const encodedMsgs = executeMessage(
       executeMsg,

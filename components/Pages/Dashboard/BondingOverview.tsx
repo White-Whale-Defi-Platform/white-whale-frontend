@@ -1,9 +1,8 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
-
+import { useRouter } from 'next/router'
 import { Cell, Pie, PieChart } from 'recharts'
 
 import Loader from '../../Loader'
-import { useRouter } from 'next/router'
 import { WhaleTooltip } from './WhaleTooltip'
 
 export enum TokenType {

@@ -1,6 +1,5 @@
 import { num } from 'libs/num'
 import { Pool } from 'types'
-
 import { Wallet } from 'util/wallet-adapters'
 
 export interface GetToken1ForToken2PriceInput {
@@ -55,7 +54,7 @@ export const getTokenForTokenPrice = async (
   input: GetTokenForTokenPriceInput
 ) => {
   try {
-    return getToken1ForToken2Price({
+    return await getToken1ForToken2Price({
       swapAddress: input.outputSwapAddress,
       client: input.client,
     })

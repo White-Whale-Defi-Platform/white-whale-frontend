@@ -2,21 +2,21 @@
   "mainnet": {
     "juno": [
       {
-        "tokenSymbol": "JUNO",
+        "tokenSymbol": "axlUSDC",
         "amount": 0
       },
       {
-        "tokenSymbol": "ATOM",
+        "tokenSymbol": "WHALE",
         "amount": 0
       }
     ],
     "terra": [
       {
-        "tokenSymbol": "LUNA",
+        "tokenSymbol": "axlUSDC",
         "amount": 0
       },
       {
-        "tokenSymbol": "ATOM",
+        "tokenSymbol": "WHALE",
         "amount": 0
       }
     ],
@@ -26,7 +26,7 @@
         "amount": 0
       },
       {
-        "tokenSymbol": "PUPPY",
+        "tokenSymbol": "WHALE",
         "amount": 0
       }
     ],
@@ -52,11 +52,11 @@
     ],
     "migaloo": [
       {
-        "tokenSymbol": "axlUSDC",
+        "tokenSymbol": "WHALE",
         "amount": 0
       },
       {
-        "tokenSymbol": "WHALE",
+        "tokenSymbol": "ampWHALE",
         "amount": 0
       }
     ]

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { formatPrice, fromChainAmount } from 'libs/num'
 import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
 import { useRecoilValue } from 'recoil'
@@ -31,6 +32,10 @@ export type PoolEntityType = {
   vault_address: string
   staking_address: string
   rewards_tokens: Array<TokenInfoWithReward>
+  deposits?: any
+  myDeposit?: any
+  totalDeposit?: any
+  hasDeposit?: boolean
 }
 
 export type VaultsResponse = {
@@ -43,7 +48,9 @@ export type VaultsResponse = {
 }
 
 const queryShare = (client, contract, amount) => {
-  if (!!!amount) return null
+  if (!!!amount) {
+    return null
+  }
   return client.queryContractSmart(contract, {
     share: { amount },
   })
@@ -86,7 +93,7 @@ const queryBalance = async (
   }
 }
 
-export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
+export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
   const { chainId, client, address, network } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
@@ -113,7 +120,7 @@ export const useVaultDepost = (lpToken: string, vaultAddress, tokenInfo) => {
 
   return { balance, isLoading, refetch }
 }
-export const useVaultMultiDepost = (lpTokens: any[]) => {
+export const useVaultMultiDeposit = (lpTokens: any[]) => {
   const { chainId, client, address, network } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
@@ -144,32 +151,34 @@ export const useVaultMultiDepost = (lpTokens: any[]) => {
 
   return { balance, isLoading, refetch }
 }
-export const useVaulTotal = (lpTokenIds: any[]) => {
-  const { chainId, client, network } = useRecoilValue(walletState)
-  const [getTokenDollarValue] = useGetTokenDollarValueQuery()
-
+export const useVaultTotal = (lpTokenIds: any[]) => {
+  const { chainId, network } = useRecoilValue(walletState)
+  const [getTokenDollarValue, isQueryLoading] = useGetTokenDollarValueQuery()
+  const cosmwasmClient = useCosmwasmClient(chainId)
   const { data: balance, isLoading } = useQuery(
-    ['vaultsInfo', lpTokenIds, chainId, network],
+    ['vaultsInfo', lpTokenIds, chainId, network, isQueryLoading],
     async () => {
       return Promise.all(
         lpTokenIds.map(({ lp_token, vault_assets }) =>
-          queryVault(client, lp_token, vault_assets, getTokenDollarValue)
+          queryVault(
+            cosmwasmClient,
+            lp_token,
+            vault_assets,
+            getTokenDollarValue
+          )
         )
       )
     },
     {
-      enabled:
-        !!chainId && !!client && !!lpTokenIds?.length && !!getTokenDollarValue,
+      enabled: !!chainId && !!lpTokenIds && !!getTokenDollarValue,
       refetchOnMount: false,
     }
   )
-
   return { balance: balance, isLoading }
 }
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
-  const { chainId, client, network } = useRecoilValue(walletState)
-
+  const { chainId, network } = useRecoilValue(walletState)
   const { data: vaults, isLoading } = useQuery<VaultsResponse>(
     ['vaults/list', chainId, network],
     async () => {
@@ -179,20 +188,20 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
     },
     {
       ...options,
-      enabled: !!chainId && !!client,
+      enabled: !!chainId && !!network,
       refetchOnMount: false,
     }
   )
 
   // const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
-  const { balance, refetch } = useVaultMultiDepost(
+  const { balance, refetch } = useVaultMultiDeposit(
     vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
       lp_token,
       vault_address,
       vault_assets,
     }))
   )
-  const { balance: vaultInfo } = useVaulTotal(
+  const { balance: vaultInfo } = useVaultTotal(
     vaults?.vaults?.map(({ lp_token, vault_assets }) => ({
       lp_token,
       vault_assets,
@@ -200,13 +209,15 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
   )
 
   const withBalance = useMemo(() => {
-    if (!vaults) return null
+    if (!vaults) {
+      return null
+    }
 
     const _vaults = vaults.vaults.map((vault, index) => ({
       ...vault,
-      hasDepost: Number(balance?.[index].lpBalance) > 0 ? true : false,
+      hasDeposit: Number(balance?.[index].lpBalance) > 0,
       deposits: balance?.[index],
-      totalDepost: vaultInfo?.[index],
+      totalDeposit: vaultInfo?.[index],
     }))
 
     return { ...vaults, vaults: _vaults }
