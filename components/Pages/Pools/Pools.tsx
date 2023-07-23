@@ -177,7 +177,7 @@ const Pools = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: 'auto' }}
+      width={{ base: '100%'}}
       alignItems="center"
       margin="auto"
     >
@@ -193,7 +193,7 @@ const Pools = () => {
         <MobilePools pools={myPools} />
       </Box>
 
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
@@ -203,7 +203,7 @@ const Pools = () => {
           pools={allPoolsForShown}
           isLoading={isLoading || isInitLoading}
         />
-        <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
+        <MobilePools pools={allPoolsForShown} ctaLabel="Manage" />
       </Box>
     </VStack>
   )

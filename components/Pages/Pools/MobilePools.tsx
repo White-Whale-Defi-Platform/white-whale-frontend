@@ -21,13 +21,13 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
   )
   const currentChainName = currentChain?.label.toLowerCase()
   return (
-    <VStack width="full" display={['flex', 'none']} gap={8}>
+    <VStack width="full" display={['flex', 'flex', 'flex','none']} gap={8}>
       {pools &&
         pools.map((pool) => (
           <VStack
             key={pool?.pool}
             padding={10}
-            width={['full', '1160px']}
+            width={['full']}
             background="#1C1C1C"
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
             borderRadius="30px"
@@ -44,7 +44,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Text color="brand.50">{`coming soon`}</Text>
+              <Text color="brand.50">{` ${Number(pool?.apr).toFixed()}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -55,8 +55,9 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
+              {console.log(pool)}
               <Text>{`$ ${Number(pool?.liquidity.available.total.dollarValue).toFixed()}`}</Text>
-              <Text>{` coming soon`}</Text>
+              <Text>{` ${Number(pool?.volume24hr).toFixed()}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -65,9 +66,17 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() =>router.push(`/${currentChainName}/pools/manage_liquidity?poolId=${pool?.poolId}`)}
+              onClick={() => router.push(`/${currentChainName}/pools/manage_liquidity?poolId=${pool?.poolId}`)}
             >
               {ctaLabel || 'Manage'}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              width="full"
+              onClick={() => router.push(`/${currentChainName}/pools/incentivize?poolId=${pool?.poolId}`)}
+            >
+              {'Incentivize'}
             </Button>
           </VStack>
         ))}

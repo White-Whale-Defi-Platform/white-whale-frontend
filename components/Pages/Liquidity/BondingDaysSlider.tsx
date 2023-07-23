@@ -22,11 +22,19 @@ type Props = {
   show: boolean
 }
 
+const setBondingdays = (input:string, setBondingDays:any) => {
+  if(Number(input) <= 365 && Number(input) >= 1){
+    setBondingDays(input)
+  }
+  if(Number(input) > 365){
+    setBondingDays(365)
+  }
+}
+
 const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
   const format = (val:string) => val+` Days`
   const parse = (val:string) => val.replace(/ Days$/, '')
   if (!show) return null
-
 
   return (<VStack width="full" alignItems="flex-start" gap="2" pb="6">
       <TooltipWithChildren label="Unlock Duration">
@@ -55,12 +63,12 @@ const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
       </Box>
       <HStack >
         <Box px={2} py="2" bg="rgba(0, 0, 0, 0.5)" borderRadius="100px" maxWidth={""}>
-          <NumberInput defaultValue={0} min={0} max={365} size={"xs"} value={bondingDays} inputMode= {"numeric"}  onChange={(elem:string)=> {if(elem.length <= 3 && Number(elem) <= 365 && Number(elem) >= 0){setBondingDays(elem)} else if(Number(elem) > 365){setBondingDays(365)}}}>
-  <NumberInputField border={'hidden'} maxWidth={"70"}/>
-  <NumberInputStepper minWidth={"8"} py={"3px"}>
-  <Text fontSize={"12"}>Days</Text>
-  </NumberInputStepper>
-</NumberInput>
+          <NumberInput defaultValue={0} min={0} max={365} size={"xs"} value={bondingDays} inputMode= {"numeric"}  onChange={(elem:string)=> {setBondingdays(elem, setBondingDays)}}>
+            <NumberInputField border={'hidden'} maxWidth={"70"}/>
+            <NumberInputStepper minWidth={"8"} py={"3px"}>
+            <Text fontSize={"12"}>Days</Text>
+            </NumberInputStepper>
+          </NumberInput>
         </Box>
         {/* <Text color="brand.50" fontSize="14">Block 14936784 </Text> */}
       </HStack>

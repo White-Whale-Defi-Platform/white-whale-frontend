@@ -46,6 +46,10 @@ const Navbar = () => {
  
   const links = [
     {
+      label: 'Dashboard',
+      link: `/${currentChainName}/dashboard`,
+    },
+    {
       label: 'Swap',
       link: `/${currentChainName}/swap`,
     },
@@ -54,8 +58,8 @@ const Navbar = () => {
       link: `/${currentChainName}/pools`,
     },
     {
-      label: 'Dashboard',
-      link: `/${currentChainName}/dashboard`,
+      label: 'Vaults',
+      link: `/${currentChainName}/vaults`,
     },
     {
       label: 'Flashloan',
