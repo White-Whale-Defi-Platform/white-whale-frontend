@@ -184,114 +184,6 @@ const ManageLiquidity: FC = () => {
     setTokenLPState(newState)
   }
 
-  const options = () => {
-    if (!isMobile){
-      return (
-        <Box
-          border="2px"
-          borderColor="whiteAlpha.200"
-          borderRadius="3xl"
-          pt="8"
-          maxH="fit-content"
-        >
-          <Tabs variant="brand">
-            <TabList justifyContent="center" background={'#1C1C1C'}>
-              <Tab>Overview</Tab>
-              <Tab>Deposit</Tab>
-              <Tab>Withdraw</Tab>
-              <Tab>Claim</Tab>
-            </TabList>
-            <TabPanels p={4}>
-              <TabPanel padding={4}>
-                <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
-              </TabPanel>
-              <TabPanel padding={4}>
-                {isTokenSet && (
-                  <DepositForm
-                    setBondingDays={setBondingDays}
-                    bondingDays={bondingDays}
-                    setReverse={setReverse}
-                    reverse={reverse}
-                    connected={status}
-                    tokenA={tokenA}
-                    tokenB={tokenB}
-                    onInputChange={onInputChange}
-                    simulated={simulated}
-                    tx={tx}
-                    clearForm={clearForm}
-                    chainId={chainId}
-                    poolId={poolId}
-                  />
-                )}
-              </TabPanel>
-              <TabPanel padding={4}>
-                <WithdrawForm
-                  connected={status}
-                  clearForm={clearForm}
-                  poolId={poolId}
-                />
-              </TabPanel>
-              <TabPanel padding={4}>
-                <Claim poolId={poolId} />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-      </Box>)
-    }else{
-      return (<Box
-        border="2px"
-        borderColor="whiteAlpha.200"
-        borderRadius="3xl"
-        paddingTop={"10"}
-        maxH="fit-content"
-      ><Tabs variant={"brand"}>
-      <TabList display='flex' flexWrap={'wrap'} justifyContent="center" background={'#1C1C1C'} borderBottom={"white"}>
-        <Tab >Overview</Tab>
-        <Tab >Deposit</Tab>
-        <Tab >Withdraw</Tab>
-        <Tab>Claim</Tab>
-      </TabList>
-      <TabPanels p={4}>
-        <TabPanel padding={4}>
-          <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
-        </TabPanel>
-        <TabPanel padding={4} >
-          {isTokenSet && (
-            <DepositForm
-              setBondingDays={setBondingDays}
-              bondingDays={bondingDays}
-              setReverse={setReverse}
-              reverse={reverse}
-              connected={status}
-              tokenA={tokenA}
-              tokenB={tokenB}
-              onInputChange={onInputChange}
-              simulated={simulated}
-              tx={tx}
-              clearForm={clearForm}
-              chainId={chainId}
-              mobile={isMobile}
-            />
-          )}
-        </TabPanel>
-        <TabPanel padding={4}>
-          <WithdrawForm
-            connected={status}
-            clearForm={clearForm}
-            poolId={poolId}
-            mobile={isMobile}
-          />
-        </TabPanel>
-        <TabPanel padding={4}>
-          <Claim poolId={poolId} />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-    </Box>
-    )
-    }
-  }
-
   return (
     <VStack
       w="auto"
@@ -323,9 +215,57 @@ const ManageLiquidity: FC = () => {
         padding={[6, 12]}
         borderRadius="30px"
         width={['full']}
-      >
-          {options()}
-        
+      ><Box
+      border="2px"
+      borderColor="whiteAlpha.200"
+      borderRadius="3xl"
+      pt="8"
+      maxH="fit-content"
+    ><Tabs variant={"brand"}>
+      <TabList display={['flex']} flexWrap={['wrap']} justifyContent="center" background={'#1C1C1C'}>
+      <Tab >Overview</Tab>
+        <Tab >Deposit</Tab>
+        <Tab >Withdraw</Tab>
+        <Tab>Claim</Tab>
+      </TabList>
+      <TabPanels p={4}>
+              <TabPanel padding={4}>
+                <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
+              </TabPanel>
+              <TabPanel padding={4}>
+                {isTokenSet && (
+                  <DepositForm
+                    setBondingDays={setBondingDays}
+                    bondingDays={bondingDays}
+                    setReverse={setReverse}
+                    reverse={reverse}
+                    connected={status}
+                    tokenA={tokenA}
+                    tokenB={tokenB}
+                    onInputChange={onInputChange}
+                    simulated={simulated}
+                    tx={tx}
+                    clearForm={clearForm}
+                    chainId={chainId}
+                    poolId={poolId}
+                    mobile={isMobile}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel padding={4}>
+                <WithdrawForm
+                  connected={status}
+                  clearForm={clearForm}
+                  poolId={poolId}
+                  mobile={isMobile}
+                />
+              </TabPanel>
+              <TabPanel padding={4}>
+                <Claim poolId={poolId} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
       </Box>
     </VStack>
   )

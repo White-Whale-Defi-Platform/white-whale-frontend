@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 
-import { Box, Button, Divider, HStack, Image, Text } from '@chakra-ui/react'
+import { Box, Button, Divider, HStack, Stack, Image, Text } from '@chakra-ui/react'
 import { num } from 'libs/num'
 
 import { useClosePosition } from './hooks/useClosePosition'
@@ -77,10 +77,11 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
       </Box>
     )
   }
-
+  // TODO: Responsive Design
   return (
     <Box width="full">
-      <HStack
+      <Stack
+        direction={['column', 'column', 'row']}
         margin="20px"
         backgroundColor="rgba(0, 0, 0, 0.25)"
         width="auto"
@@ -114,7 +115,7 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
             {item}
           </Button>
         ))}
-      </HStack>
+      </Stack>
       <Divider opacity="0.2" />
       <PositionsTable columnFilters={columnFilters} positions={positions} />
     </Box>
