@@ -321,7 +321,7 @@ const Pools = () => {
           pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
         />
-        <MobilePools pools={allPoolsForShown} ctaLabel="Manage" />
+        <MobilePools pools={showAllPoolsList} ctaLabel="Manage" />
       </Box>
     </VStack>
   )
