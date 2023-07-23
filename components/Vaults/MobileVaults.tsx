@@ -21,7 +21,6 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
     (row: { chainId: string }) => row.chainId === chainId
   )
   const currentChainName = currentChain?.label.toLowerCase()
-  console.log(vaults)
   return (
     <VStack width="full" display={['flex', 'flex', 'flex','none']} gap={8}>
       {vaults &&
@@ -45,7 +44,7 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
                 vaultId={vault?.vaultId}
                 tokenImage={vault.tokenImage}
               />
-              <Text color="brand.50">{` ${Number(vault?.apr).toFixed()}`}</Text>
+              <Text color="brand.50">{` ${Number(vault?.apr).toFixed(2)}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -56,8 +55,7 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
-              {console.log(vault)}
-              <Text>{`$ ${Number(vault?.totalDeposits).toFixed()}`}</Text>
+              <Text>{`$ ${Number(vault?.totalDeposits).toFixed(2)}`}</Text>
               <Text>{`$ ${Number(vault?.myDeposit).toFixed(2)}`}</Text>
             </HStack>
 

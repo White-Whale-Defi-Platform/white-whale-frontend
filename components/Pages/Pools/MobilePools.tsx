@@ -44,7 +44,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Text color="brand.50">{` ${Number(pool?.apr).toFixed()}`}</Text>
+              <Text color="brand.50">{` ${Number(pool?.apr).toFixed(2)}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -55,8 +55,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
-              {console.log(pool)}
-              <Text>{`$ ${Number(pool?.liquidity.available.total.dollarValue).toFixed()}`}</Text>
+              <Text>{`$ ${Number(pool?.liquidity.available.total.dollarValue).toFixed(2)}`}</Text>
               <Text>{` ${Number(pool?.volume24hr).toFixed()}`}</Text>
             </HStack>
 
