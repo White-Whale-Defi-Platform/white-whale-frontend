@@ -32,8 +32,6 @@ const setBondingdays = (input:string, setBondingDays:any) => {
 }
 
 const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
-  const format = (val:string) => val+` Days`
-  const parse = (val:string) => val.replace(/ Days$/, '')
   if (!show) return null
 
   return (<VStack width="full" alignItems="flex-start" gap="2" pb="6">
