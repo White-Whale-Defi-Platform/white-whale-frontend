@@ -12,6 +12,7 @@ import { WalletStatusType } from 'state/atoms/walletAtoms'
 
 import useClaimableLP from './hooks/useClaimableLP'
 import { AddIcon } from '@chakra-ui/icons'
+
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
 
 type Props = {

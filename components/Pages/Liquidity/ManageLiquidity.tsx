@@ -31,8 +31,8 @@ import {
   useQueryMultiplePoolsLiquidity,
 } from 'queries/useQueryPools'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { TxStep } from 'types/common'
 import { walletState } from 'state/atoms/walletAtoms'
+import { TxStep } from 'types/common'
 
 import Claim from './Claim'
 import DepositForm from './DepositForm'

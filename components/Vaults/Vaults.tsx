@@ -7,6 +7,7 @@ import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
+import MobileVaults from './MobileVaults'
 
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =
@@ -47,11 +48,11 @@ const Vaults: FC = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '1160px' }}
+      width={{ base: '100%'}}
       alignItems="center"
-      // margin="auto"
+      margin="auto"
     >
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">
             Vaults
@@ -61,6 +62,7 @@ const Vaults: FC = () => {
           vaults={allVaults}
           isLoading={isLoading || !allVaultsInitialized}
         />
+        <MobileVaults vaults={allVaults} ctaLabel="New Position" />
       </Box>
     </VStack>
   )

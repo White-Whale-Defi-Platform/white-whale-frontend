@@ -46,7 +46,7 @@ const DepositForm = ({
   setBondingDays,
   clearForm,
   chainId,
-  mobile
+  mobile,
   poolId,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({

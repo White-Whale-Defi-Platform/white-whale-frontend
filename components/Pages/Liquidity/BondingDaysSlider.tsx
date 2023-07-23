@@ -31,17 +31,8 @@ const setBondingdays = (input:string, setBondingDays:any) => {
   }
 }
 
-const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
+export const BondingDaysSlider = ({ bondingDays, setBondingDays, show }: Props) => {
   if (!show) return null
-export const BondingDaysSlider = ({
-  bondingDays,
-  setBondingDays,
-  show,
-}: Props) => {
-  if (!show) {
-    return null
-  }
-
   return (<VStack width="full" alignItems="flex-start" gap="2" pb="6">
       <TooltipWithChildren label="Unlock Duration">
         <Text>
