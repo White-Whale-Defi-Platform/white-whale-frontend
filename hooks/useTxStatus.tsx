@@ -4,12 +4,14 @@ import { useQueryClient } from 'react-query'
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useTxInfo from 'hooks/useTxInfo'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
+import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 
 const useTxStatus = ({ client, transactionType }) => {
+  const {chainId} = useRecoilValue(walletState)
   const [txState, setTxState] = useRecoilState(txAtom)
   const toast = useToast()
   const txInfo = useTxInfo({ txHash: txState.txHash, client })
@@ -32,7 +34,7 @@ const useTxStatus = ({ client, transactionType }) => {
   }, [txInfo, txState.txHash])
 
   const description = (hash: string) => (
-    <Finder txHash={hash} chainId={client.client.chainId} />
+    <Finder txHash={hash} chainId={chainId} />
   )
 
   const onError = (error: Error) => {

@@ -85,11 +85,10 @@ class Injective {
     network: Network = Network.TestnetK8s
   ) {
     const endpoints = getNetworkEndpoints(network)
-
     this.offlineSigner = offlineSigner
-    this.txClient = new TxRestClient(endpoints.rest)
+    this.txClient = new TxRestClient("https://ww-injective-rest.polkachu.com/")
     this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
-    this.bankApi = new ChainRestBankApi(endpoints.rest)
+    this.bankApi = new ChainRestBankApi("https://ww-injective-rest.polkachu.com/")
     this.chainId =
       network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
     this.network = network

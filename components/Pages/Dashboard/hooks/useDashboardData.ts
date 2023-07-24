@@ -149,7 +149,6 @@ export const useDashboardData = (client, address, network, chainId) => {
     const claimableEpochsData = queries[7].data
     const claimableRewardsData = queries[8].data
     const bondingConfigData = queries[9].data
-
     return {
       ...bondedData,
       ...unbondingData,

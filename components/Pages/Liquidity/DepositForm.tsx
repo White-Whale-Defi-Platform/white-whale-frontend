@@ -199,7 +199,6 @@ const DepositForm = ({
           tx.txStep != TxStep.Ready || simulated == null || !isConnected
         }
       />
-
       <ShowError show={tx?.error && !!!tx.buttonLabel} message={tx?.error} />
     </VStack>
   )
