@@ -3,7 +3,10 @@ import {
   OfflineDirectSigner,
   OfflineSigner,
 } from '@cosmjs/proto-signing'
-import { getNetworkEndpoints, Network } from '@injectivelabs/networks'
+import {
+  getNetworkEndpoints,
+  Network as InjectiveNetwork,
+} from '@injectivelabs/networks'
 import {
   BaseAccount,
   ChainGrpcWasmApi,
@@ -50,8 +53,10 @@ type SimulateResponse = {
 const getKey = async (wallet, chainId) => {
   switch (wallet) {
     case 'cosmostation':
+      // @ts-ignore
       return await window.cosmostation.providers.keplr.getKey(chainId)
     default:
+      // @ts-ignore
       return await window[wallet].getKey(chainId)
   }
 }
@@ -75,14 +80,14 @@ class Injective {
 
   txRaw: TxRaw
 
-  network: Network
+  network: InjectiveNetwork
 
   activeWallet: string
 
   constructor(
     offlineSigner: OfflineSigner & OfflineDirectSigner,
     activeWallet: string,
-    network: Network = Network.TestnetK8s
+    network: InjectiveNetwork = InjectiveNetwork.TestnetK8s
   ) {
     const endpoints = getNetworkEndpoints(network)
 
@@ -91,7 +96,9 @@ class Injective {
     this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
     this.bankApi = new ChainRestBankApi(endpoints.rest)
     this.chainId =
-      network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
+      network === InjectiveNetwork.TestnetK8s
+        ? ChainId.Testnet
+        : ChainId.Mainnet
     this.network = network
     this.activeWallet = activeWallet
     this.init()

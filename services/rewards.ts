@@ -1,8 +1,6 @@
-import {
-  createExecuteMessage,
-  validateTransactionSuccess,
-} from '../util/messages'
-import { Wallet } from '../util/wallet-adapters'
+import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
+import { Wallet } from 'util/wallet-adapters'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 type Denom =
   | {
@@ -62,7 +60,7 @@ export type RewardsInfoResponse = {
 
 export const getRewardsInfo = async (
   rewardsAddress: string,
-  client: Wallet
+  client: CosmWasmClient
 ): Promise<RewardsInfoResponse> => {
   const msg = { info: {} }
   return client.queryContractSmart(rewardsAddress, msg)

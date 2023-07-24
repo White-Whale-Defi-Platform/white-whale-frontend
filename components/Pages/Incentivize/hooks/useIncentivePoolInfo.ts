@@ -44,6 +44,7 @@ export interface FlowData {
   apr: number
   logoURI: string
   tokenSymbol: string
+  endEpoch: number
 }
 export interface IncentivePoolInfo {
   flowData?: FlowData[]
@@ -151,6 +152,7 @@ const getPoolFlowData = async (
                 flow.flow_asset.info?.native_token?.denom ??
                 flow.flow_asset.info.token.contract_addr,
               dailyEmission: 0,
+              endEpoch: Number(flow.end_epoch),
             }
           })
           const uniqueFlowList = flowList.reduce((acc, current) => {

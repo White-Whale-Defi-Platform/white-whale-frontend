@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-
 import AssetInput from '../../AssetInput'
 import { bondingAtom } from './bondAtoms'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bondingContract'
 
 export interface LSDTokenBalances {
   ampWHALE: number
@@ -23,7 +21,7 @@ export enum LSDToken {
   ampWHALE,
   bWHALE,
 }
-const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
+export const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
   const [{ status }, _] = useRecoilState(walletState)
@@ -120,5 +118,3 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
     </VStack>
   )
 }
-
-export default Bond

@@ -25,8 +25,12 @@ type GeneratedWalletState<
   status: WalletStatusType
   address: string
   chainId: string
-  network: Network
+  network: NetworkType
   activeWallet: string
+}
+export enum NetworkType {
+  testnet = 'testnet',
+  mainnet = 'mainnet',
 }
 
 type CreateWalletStateArgs<TState = {}> = {
@@ -43,10 +47,9 @@ function createWalletState<TClient = any, TState = {}>({
     default: {
       status: WalletStatusType.idle,
       client: null,
-      // chainId: 'juno-1',
       chainId: null,
       address: '',
-      network: 'mainnet',
+      network: NetworkType.mainnet,
       activeWallet: '',
       ...defaultState,
     },
@@ -69,11 +72,6 @@ function createWalletState<TClient = any, TState = {}>({
         }
 
         onSet((newValue, oldValue) => {
-          // const isReset = newValue.address !== (oldValue as any)?.address
-
-          // if (isReset) {
-          //   localStorage.removeItem(CACHE_KEY)
-          // } else {
           localStorage.setItem(
             CACHE_KEY,
             /* let's not store the client in the cache */
@@ -92,18 +90,3 @@ export const walletState = createWalletState<Wallet, { key?: Key }>({
     key: null,
   },
 })
-
-export const ibcWalletState = createWalletState<
-  Wallet,
-  {
-    /* ibc wallet is connected */
-    tokenSymbol?: string
-  }
->({
-  key: 'ibc-wallet',
-  default: {
-    tokenSymbol: null,
-  },
-})
-
-type Network = 'testnet' | 'mainnet'

@@ -54,6 +54,11 @@ const Swap: FC<SwapProps> = ({}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
 
+  const tokenSymbols = useMemo(
+    () => tokenList.map((token) => token.symbol),
+    [tokenList]
+  )
+
   useEffect(() => {
     if (!currentChainId) {
       return
@@ -73,11 +78,7 @@ const Swap: FC<SwapProps> = ({}) => {
         decimals: 6,
       },
     ]
-
-    if (
-      tokenList.find((row) => row.symbol === from) &&
-      tokenList.find((row) => row.symbol === to)
-    ) {
+    if (tokenSymbols.includes(from) && tokenSymbols.includes(to)) {
       return
     } else {
       newState = [
@@ -107,10 +108,10 @@ const Swap: FC<SwapProps> = ({}) => {
 
     if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
       if (
-        tokenList.find((row) => row.symbol === tokenA?.tokenSymbol) &&
-        tokenList.find((row) => row.symbol === tokenB?.tokenSymbol)
+        tokenSymbols.includes(tokenA.tokenSymbol) &&
+        tokenSymbols.includes(tokenB.tokenSymbol)
       ) {
-        const url = `/${currentChainId}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+        const url = `/${currentChainId}/swap?from=${tokenA.tokenSymbol}&to=${tokenB.tokenSymbol}`
         router.push(url)
       }
     }

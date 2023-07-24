@@ -94,7 +94,7 @@ const queryBalance = async (
 }
 
 export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
-  const { chainId, client, address, network } = useRecoilValue(walletState)
+  const { chainId, client, address } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -102,7 +102,7 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
     isLoading,
     refetch,
   } = useQuery(
-    ['vaultsDeposit', lpToken, chainId, network],
+    ['vaultsDeposit', lpToken, chainId],
     async () => {
       return queryBalance(
         client,
@@ -121,7 +121,7 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
   return { balance, isLoading, refetch }
 }
 export const useVaultMultiDeposit = (lpTokens: any[]) => {
-  const { chainId, client, address, network } = useRecoilValue(walletState)
+  const { chainId, client, address } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -129,7 +129,7 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     isLoading,
     refetch,
   } = useQuery(
-    ['vaultsDeposits', lpTokens, chainId, network],
+    ['vaultsDeposits', lpTokens, chainId],
     async () => {
       return Promise.all(
         lpTokens.map(({ lp_token, vault_address, vault_assets }) =>
@@ -152,11 +152,11 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
   return { balance, isLoading, refetch }
 }
 export const useVaultTotal = (lpTokenIds: any[]) => {
-  const { chainId, network } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(walletState)
   const [getTokenDollarValue, isQueryLoading] = useGetTokenDollarValueQuery()
   const cosmwasmClient = useCosmwasmClient(chainId)
   const { data: balance, isLoading } = useQuery(
-    ['vaultsInfo', lpTokenIds, chainId, network, isQueryLoading],
+    ['vaultsInfo', lpTokenIds, chainId, isQueryLoading],
     async () => {
       return Promise.all(
         lpTokenIds.map(({ lp_token, vault_assets }) =>

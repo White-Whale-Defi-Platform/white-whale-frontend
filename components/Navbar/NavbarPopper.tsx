@@ -16,7 +16,9 @@ import {
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'
-const NavbarPopper = ({ menu, currentChainName }) => {
+import { PRESELECTED_BRIDGE_CHAINS } from 'constants/preselectedBridgeChains'
+
+const NavbarPopper = ({ menu, currentChainName, chainId }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
   const numberOfLinks = menu.children?.length
@@ -48,7 +50,9 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       // children defining sub menu items
       onOpen={
         menu.isExternal
-          ? openLink(menu.link)
+          ? openLink(
+              `${menu.link}/?chainFrom=${chainId}&chainTo=${PRESELECTED_BRIDGE_CHAINS[chainId]}`
+            )
           : menu?.children === undefined
           ? () => window.location.assign(`/${currentChainName}${menu.link}`)
           : onOpen
