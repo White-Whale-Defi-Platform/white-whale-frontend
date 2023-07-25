@@ -15,6 +15,8 @@ import {
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
+import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
+import { fetchTotalPoolSupply } from 'components/Pages/Pools/hooks/fetchTotalPoolLp'
 
 export interface Flow {
   claimed_amount: string
@@ -136,6 +138,17 @@ const getPoolFlowData = async (
           const totalLiquidity = poolsWithAprAnd24HrVolume.find(
             (p) => p.pool_id === pool.pool_id
           )?.totalLiquidity
+          const lockedLp = await fetchTotalLockedLp(
+            pool.staking_address,
+            pool.lp_token,
+            client
+          )
+          const totalPoolLp = await fetchTotalPoolSupply(
+            pool.swap_address,
+            client
+          )
+          const lockedLpShare = lockedLp / totalPoolLp
+
           const flows = await fetchFlows(client, pool.staking_address)
 
           const currentEpochIdCheck = Number(
@@ -205,7 +218,7 @@ const getPoolFlowData = async (
               logoURI: logoURI,
               apr:
                 ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
-                  (totalLiquidity * 4)) *
+                  (totalLiquidity * lockedLpShare)) *
                 100,
             }
           })
