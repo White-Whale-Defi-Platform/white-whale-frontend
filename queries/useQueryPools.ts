@@ -23,9 +23,9 @@ import {
   queryRewardsContracts,
   SerializedRewardsContract,
 } from './queryRewardsContracts'
-import { querySwapInfo } from './querySwapInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+import { queryPoolInfo } from 'queries/queryPoolInfo'
 
 export type ReserveType = [number?, number?]
 
@@ -128,7 +128,7 @@ export const useQueryMultiplePoolsLiquidity = ({
 
     const [tokenA, tokenB] = pool.pool_assets
 
-    const swap = await querySwapInfo({
+    const swap = await queryPoolInfo({
       context,
       swap_address: pool.swap_address,
     })

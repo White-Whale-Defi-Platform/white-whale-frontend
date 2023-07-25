@@ -3,9 +3,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
-  Checkbox,
-  FormControl,
-  FormLabel,
   HStack,
   Stack,
   Switch,
@@ -291,7 +288,6 @@ const Pools = () => {
           show={true}
           pools={myPools}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
-          allPools={showAllPools}
         />
         <MobilePools pools={myPools} />
       </Box>
