@@ -21,8 +21,8 @@ import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
-  useQueryMultiplePoolsLiquidity,
-} from 'queries/useQueryPools'
+  useQueryPoolsLiquidity,
+} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   aprHelperState,
@@ -63,7 +63,7 @@ const Pools = () => {
     boolean,
     boolean
   ] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
+    useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client: cosmwasmClient,

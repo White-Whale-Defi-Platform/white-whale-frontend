@@ -23,8 +23,8 @@ import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
-  useQueryMultiplePoolsLiquidity,
-} from 'queries/useQueryPools'
+  useQueryPoolsLiquidity,
+} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { TxStep } from 'types/common'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -50,7 +50,7 @@ const ManageLiquidity: FC = () => {
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(
-      useQueryMultiplePoolsLiquidity({
+      useQueryPoolsLiquidity({
         refetchInBackground: false,
         pools: poolList?.pools,
         client: cosmwasmClient,

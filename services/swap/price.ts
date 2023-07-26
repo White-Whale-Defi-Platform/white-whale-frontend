@@ -65,10 +65,6 @@ export const getTokenForTokenPrice = async (
 export type PoolInfoResponse = {
   total_share: string
   lp_token_address: string
-  token1_denom: string
-  token1_reserve: string
-  token2_denom: string
-  token2_reserve: string
   assets: any
 }
 

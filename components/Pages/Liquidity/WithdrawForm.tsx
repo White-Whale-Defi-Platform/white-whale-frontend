@@ -7,7 +7,7 @@ import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
 
 import useClaimableLP from './hooks/useClaimableLP'
@@ -36,7 +36,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
 
   const { tokenABalance, tokenBBalance } = useMemo(() => {
-    const [reserveA, reserveB] = liquidity?.reserves?.totalProvided || []
+    const [reserveA, reserveB] = liquidity?.reserves?.myNotLocked || []
 
     return {
       tokenABalance: fromChainAmount(reserveA),
@@ -65,8 +65,8 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
 
   const { lp, simulated } = useSimulateWithdraw({
     lp: liquidity?.available?.provided?.tokenAmount,
-    tokenA: liquidity?.reserves?.totalProvided?.[0],
-    tokenB: liquidity?.reserves?.totalProvided?.[1],
+    tokenA: liquidity?.reserves?.myNotLocked?.[0],
+    tokenB: liquidity?.reserves?.myNotLocked?.[1],
     amount: reverse
       ? toChainAmount(tokenB.amount)
       : toChainAmount(tokenA.amount),

@@ -128,7 +128,7 @@ const getPoolFlowData = async (
 ): Promise<IncentivePoolInfo[]> => {
   return pools
     ? Promise.all(
-        pools?.map(async (pool) => {
+        pools.map(async (pool) => {
           if (pool.staking_address === '') {
             return {
               poolId: pool.pool_id,
@@ -151,12 +151,8 @@ const getPoolFlowData = async (
 
           const flows = await fetchFlows(client, pool.staking_address)
 
-          const currentEpochIdCheck = Number(
-            currentEpochData?.currentEpoch?.epoch.id
-          )
-          const currentEpochId: number = isNaN(currentEpochIdCheck)
-            ? 0
-            : currentEpochIdCheck
+          const currentEpochId: number =
+            Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
           const flowList = flows.map((flow) => {
             return {
@@ -193,8 +189,8 @@ const getPoolFlowData = async (
 
                 const emission = convertMicroDenomToDenom(
                   (Number(flow.flow_asset.amount) - emittedTokens) /
-                    (Number(flow.start_epoch) +
-                      (Number(flow.end_epoch) - Number(flow.start_epoch)) -
+                    (flow.start_epoch +
+                      (flow.end_epoch - flow.start_epoch) -
                       Number(currentEpochData.currentEpoch.epoch.id)),
                   6
                 )
