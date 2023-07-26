@@ -115,11 +115,10 @@ const RewardsComponent = ({
   annualRewards,
   globalAvailableRewards,
   totalGlobalClaimable,
-  lastClaim,
+  daysSinceLastClaim,
   weightInfo,
 }) => {
-  const [{ chainId, network }, _] =
-    useRecoilState(walletState)
+  const [{ chainId, network }, _] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -157,18 +156,6 @@ const RewardsComponent = ({
     noSnapshotTakenAddresses: null,
     config: config,
   })
-
-  const lastClaimed = () => {if( lastClaim == 21){
-    return '21+ Days ago'
-  }else if (lastClaim == 0){
-    return 'today'
-  }else {
-    let multiple = 's'
-    if (lastClaim == 1){
-      multiple = ''
-    }
-    return `${lastClaim} Day${multiple} ago`
-  }}
 
   // TODO global constant?
   const boxBg = '#1C1C1C'
@@ -298,6 +285,7 @@ const RewardsComponent = ({
                 }
                 isWalletConnected={isWalletConnected}
                 whale={claimableRewards.toFixed(6)}
+                daysSinceLastClaim={daysSinceLastClaim}
               />
             </HStack>
             <HStack>
@@ -315,16 +303,6 @@ const RewardsComponent = ({
               <Text fontSize={11}>
                 {isWalletConnected
                   ? `${((multiplierRatio - 1) * 100).toFixed(2)}%`
-                  : 'n/a'}
-              </Text>
-            </HStack>
-            <HStack>
-              <Text color="whiteAlpha.600" fontSize={11}>
-                Last Claimed
-              </Text>
-              <Text fontSize={11}>
-                {isWalletConnected
-                  ? lastClaimed()
                   : 'n/a'}
               </Text>
             </HStack>

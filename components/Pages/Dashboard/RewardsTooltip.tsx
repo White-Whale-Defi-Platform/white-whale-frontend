@@ -5,7 +5,22 @@ import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 
 import { WhaleType } from './BondingOverview'
 
-export const RewardsTooltip = ({ value, whale, isWalletConnected }) => {
+export const RewardsTooltip = ({
+  value,
+  whale,
+  isWalletConnected,
+  daysSinceLastClaim,
+}) => {
+  const lastClaimed = () => {
+    if (daysSinceLastClaim >= 21) {
+      return '21+ days ago'
+    } else if (daysSinceLastClaim === 0) {
+      return 'Today'
+    } else {
+      const multiple = daysSinceLastClaim === 1 ? '' : 's'
+      return `${daysSinceLastClaim} day${multiple} ago`
+    }
+  }
   const TokenDetail = ({ whaleType, value }) => {
     return (
       <HStack justify="space-between" direction="row" width="full" px={2}>
@@ -41,6 +56,14 @@ export const RewardsTooltip = ({ value, whale, isWalletConnected }) => {
             alignItems="center"
           >
             <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
+            <HStack justify="space-between" direction="row" width="full" px={2}>
+              <Text color="whiteAlpha.600" fontSize={14}>
+                {'Last Claimed'}
+              </Text>
+              <Text fontSize={14}>
+                {isWalletConnected ? lastClaimed() : 'n/a'}
+              </Text>
+            </HStack>
           </VStack>
         ) : null
       } //displaying nothing when wallet disconnected

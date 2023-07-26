@@ -95,11 +95,12 @@ const columns = [
         {`Total Liquidity`}
       </Text>
     ),
-    cell: (info) =>
-    <Liquidity
-    liquidity={info.getValue()?.toString()}
-    infos={info.row.original}
-  />,
+    cell: (info) => (
+      <Liquidity
+        liquidity={info.getValue()?.toString()}
+        infos={info.row.original}
+      />
+    ),
   }),
   columnHelper.accessor('incentives', {
     header: () => (

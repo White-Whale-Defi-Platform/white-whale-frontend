@@ -1,20 +1,12 @@
 import React, { useMemo } from 'react'
 
 import {
-  Button,
+  Box,
+  Divider,
   HStack,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
   Text,
-  Thead,
-  Tr,
+  Tooltip,
+  VStack,
 } from '@chakra-ui/react'
 
 type Props = {
@@ -23,56 +15,86 @@ type Props = {
 }
 
 const Liquidity = ({ liquidity, infos }: Props) => {
-
+  const assets = infos.poolAssets
   return (
-    <Popover trigger="hover">
-      <PopoverTrigger>
-        <Button variant="unstyled">
-          <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)" h="30px">
-            <Text align="right">{liquidity}</Text>
-          </HStack>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        background={'black'}
-        boxShadow={'0px 0px 50px rgba(0, 0, 0, 0.25)'}
-        borderRadius="5px"
-        border="unset"
-        width="auto"
-      >
-        <PopoverArrow
-          bg="black"
-          boxShadow="unset"
-          style={{ boxShadow: 'unset' }}
-          sx={{ '--popper-arrow-shadow-color': 'black' }}
-        />
-        <PopoverBody>
-          {/* TODO: add incentives table */}
-          <TableContainer>
-            <Table size="sm" variant="unstyled">
-              <Thead>
-                <Tr border="0">
-                  <Td color="gray.500"></Td>
-                  {infos.poolAssets?.map((name)=>(<Td key={name.symbol} color="gray.500" isNumeric>{name.symbol}</Td>))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr
-                >
-                  <Td color="white">Token in Pool</Td>
-                  {infos.liquidity.reserves.total.map((amount: number, index: string | number)=>
-                  // eslint-disable-next-line react/jsx-key
-                  (<Td color="gray.500" isNumeric>
-                    {(amount / (Math.pow(10,infos.poolAssets[index].decimals))).toFixed(2)}
-                    </Td>
-                    ))}
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+    <Tooltip
+      sx={{ boxShadow: 'none' }}
+      label={
+        <VStack
+          minW="250px"
+          minH="fit-content"
+          borderRadius="10px"
+          bg="blackAlpha.900"
+          px="4"
+          py="4"
+          position="relative"
+          border="none"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <>
+            {<> </>}
+            {assets.map((name, index) => {
+              return (
+                <React.Fragment key={name.name}>
+                  <HStack
+                    justify="space-between"
+                    direction="row"
+                    width="full"
+                    px={2}
+                  >
+                    <Text color="whiteAlpha.600" fontSize={14}>
+                      {name.name}
+                    </Text>
+                    <Text fontSize={14}>
+                      {(
+                        infos.liquidity.reserves.total[index] /
+                        Math.pow(10, infos.poolAssets[index].decimals)
+                      ).toFixed(2)}
+                    </Text>
+                  </HStack>
+                  {index !== assets.length - 1 && (
+                    <Divider
+                      width="93%"
+                      borderWidth="0.1px"
+                      color="whiteAlpha.300"
+                    />
+                  )}
+                </React.Fragment>
+              )
+            })}
+          </>
+        </VStack>
+      } //displaying nothing when wallet disconnected
+      bg="transparent"
+    >
+      <VStack alignItems="flex-start" minW={100}>
+        <Text mb="-0.3rem" color="white">
+          {
+            <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)" h="30px">
+              <Text align="right">{liquidity}</Text>
+            </HStack>
+          }
+        </Text>
+        <Box pb={1}>
+          {
+            <div
+              style={{
+                width: `0px`,
+                height: '1px',
+                background: `repeating-linear-gradient(
+            to right,
+            white,
+            white 1px,
+            transparent 1px,
+            transparent 5px
+          )`,
+              }}
+            />
+          }
+        </Box>
+      </VStack>
+    </Tooltip>
   )
 }
 
