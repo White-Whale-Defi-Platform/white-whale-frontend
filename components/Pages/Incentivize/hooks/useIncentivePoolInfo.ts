@@ -15,6 +15,8 @@ import {
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
+import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
+import { fetchTotalPoolSupply } from 'components/Pages/Pools/hooks/fetchTotalPoolLp'
 
 export interface Flow {
   claimed_amount: string
@@ -126,7 +128,7 @@ const getPoolFlowData = async (
 ): Promise<IncentivePoolInfo[]> => {
   return pools
     ? Promise.all(
-        pools?.map(async (pool) => {
+        pools.map(async (pool) => {
           if (pool.staking_address === '') {
             return {
               poolId: pool.pool_id,
@@ -136,14 +138,21 @@ const getPoolFlowData = async (
           const totalLiquidity = poolsWithAprAnd24HrVolume.find(
             (p) => p.pool_id === pool.pool_id
           )?.totalLiquidity
+          const lockedLp = await fetchTotalLockedLp(
+            pool.staking_address,
+            pool.lp_token,
+            client
+          )
+          const totalPoolLp = await fetchTotalPoolSupply(
+            pool.swap_address,
+            client
+          )
+          const lockedLpShare = lockedLp / totalPoolLp
+
           const flows = await fetchFlows(client, pool.staking_address)
 
-          const currentEpochIdCheck = Number(
-            currentEpochData?.currentEpoch?.epoch.id
-          )
-          const currentEpochId: number = isNaN(currentEpochIdCheck)
-            ? 0
-            : currentEpochIdCheck
+          const currentEpochId: number =
+            Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
           const flowList = flows.map((flow) => {
             return {
@@ -180,8 +189,8 @@ const getPoolFlowData = async (
 
                 const emission = convertMicroDenomToDenom(
                   (Number(flow.flow_asset.amount) - emittedTokens) /
-                    (Number(flow.start_epoch) +
-                      (Number(flow.end_epoch) - Number(flow.start_epoch)) -
+                    (flow.start_epoch +
+                      (flow.end_epoch - flow.start_epoch) -
                       Number(currentEpochData.currentEpoch.epoch.id)),
                   6
                 )
@@ -205,7 +214,7 @@ const getPoolFlowData = async (
               logoURI: logoURI,
               apr:
                 ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
-                  (totalLiquidity * 4)) *
+                  (totalLiquidity * lockedLpShare)) *
                 100,
             }
           })
