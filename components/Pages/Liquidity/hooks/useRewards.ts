@@ -5,7 +5,7 @@ import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 

@@ -1,8 +1,8 @@
 import { getRewardsInfo, RewardsInfoResponse } from 'services/rewards'
-import { convertMicroDenomToDenom } from '../util/conversion'
+import { convertMicroDenomToDenom } from 'util/conversion'
 import { InternalQueryContext } from './types'
 import { PoolEntityType, TokenInfoWithReward } from './usePoolsListQuery'
-import { PoolTokenValue } from './useQueryPools'
+import { PoolTokenValue } from 'queries/useQueryPoolsLiquidity'
 
 const blocksPerSecond = 6
 const blocksPerYear = (525600 * 60) / blocksPerSecond

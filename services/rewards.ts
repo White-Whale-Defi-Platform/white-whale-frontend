@@ -1,5 +1,3 @@
-import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
-import { Wallet } from 'util/wallet-adapters'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 type Denom =
@@ -10,39 +8,6 @@ type Denom =
       /* cw20 token_address */
       cw20: string
     }
-
-export const claimRewards = async (
-  senderAddress: string,
-  rewardsAddresses: Array<string>,
-  client: Wallet
-) => {
-  const claimRewardsMsg = { claim: {} }
-
-  const messages = rewardsAddresses.map((rewardsAddress) =>
-    createExecuteMessage({
-      senderAddress,
-      contractAddress: rewardsAddress,
-      message: claimRewardsMsg,
-    })
-  )
-
-  return validateTransactionSuccess(await client.post(senderAddress, messages))
-}
-
-type PendingRewardsResponse = {
-  address: string
-  pending_rewards: number
-  denom: Denom
-}
-
-export const getPendingRewards = async (
-  address: string,
-  rewardsAddress: string,
-  client: Wallet
-): Promise<PendingRewardsResponse> => {
-  const msg = { get_pending_rewards: { address } }
-  return client.queryContractSmart(rewardsAddress, msg)
-}
 
 export type RewardsInfoResponse = {
   config: {

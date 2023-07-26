@@ -7,7 +7,7 @@ import {
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 

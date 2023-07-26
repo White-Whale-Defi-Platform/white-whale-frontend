@@ -20,8 +20,8 @@ import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
-  useQueryMultiplePoolsLiquidity,
-} from 'queries/useQueryPools'
+  useQueryPoolsLiquidity,
+} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   aprHelperState,
@@ -75,7 +75,7 @@ const Pools = () => {
     boolean,
     boolean
   ] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
+    useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client: cosmwasmClient,
@@ -109,19 +109,6 @@ const Pools = () => {
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
   }
 
-  // const calcuateTotalLiq = (pool) => {
-  //   return pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
-  // }
-  //
-  // const calculateMyPosition = (pool) => {
-  //   const totalLiq = calcuateTotalLiq(pool)
-  //   const { provided, total } = pool.liquidity?.available || {}
-  //   return num(provided?.tokenAmount)
-  //     .times(totalLiq)
-  //     .div(total?.tokenAmount)
-  //     .dp(6)
-  //     .toNumber()
-  // }
   const calculateMyPosition = (pool) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)

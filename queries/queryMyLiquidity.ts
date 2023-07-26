@@ -3,9 +3,15 @@ import { isNativeToken } from 'services/asset'
 import { queryLiquidityBalance } from '../services/liquidity'
 import { protectAgainstNaN } from '../util/conversion'
 
-export async function queryMyLiquidity({ swap, address, context: { client } }) {
+export async function queryMyLiquidity({
+  swap,
+  address,
+  context: { client },
+  totalLockedLp,
+  myLockedLp,
+}) {
   const isNative = isNativeToken(swap.lp_token)
-  const providedLiquidityInMicroDenom = address
+  const myNotLockedLp = address
     ? await queryLiquidityBalance({
         tokenAddress: swap.lp_token,
         client,
@@ -15,45 +21,51 @@ export async function queryMyLiquidity({ swap, address, context: { client } }) {
     : 0
 
   /* provide dollar value for reserves as well */
-  const totalReserve: [number, number] = [
+  const totalAssets: [number, number] = [
     protectAgainstNaN(swap.token1_reserve),
     protectAgainstNaN(swap.token2_reserve),
   ]
 
-  const providedReserve: [number, number] = [
-    protectAgainstNaN(
-      totalReserve[0] * (providedLiquidityInMicroDenom / swap.lp_token_supply)
-    ),
-    protectAgainstNaN(
-      totalReserve[1] * (providedLiquidityInMicroDenom / swap.lp_token_supply)
-    ),
+  const myNotLockedAssets: [number, number] = [
+    protectAgainstNaN(totalAssets[0] * (myNotLockedLp / swap.lp_token_supply)),
+    protectAgainstNaN(totalAssets[1] * (myNotLockedLp / swap.lp_token_supply)),
+  ]
+  const totalLockedAssets: [number, number] = [
+    protectAgainstNaN(totalAssets[0] * (totalLockedLp / swap.lp_token_supply)),
+    protectAgainstNaN(totalAssets[1] * (totalLockedLp / swap.lp_token_supply)),
+  ]
+
+  const myLockedAssets: [number, number] = [
+    protectAgainstNaN(totalAssets[0] * (myLockedLp / swap.lp_token_supply)),
+    protectAgainstNaN(totalAssets[1] * (myLockedLp / swap.lp_token_supply)),
   ]
 
   return {
-    totalReserve,
-    providedReserve,
-    providedLiquidityInMicroDenom,
+    totalAssets,
+    myNotLockedAssets,
+    myLockedAssets,
+    totalLockedAssets,
+    myNotLockedLp,
   }
 }
 
-export const lpToAssets = (swap, lockedLiquidityInMicroDenom) => {
-  const totalReserve: [number, number] = [
-    protectAgainstNaN(swap.token1_reserve),
-    protectAgainstNaN(swap.token2_reserve),
+export const getLockedLpAssets = (poolInfo, myLockedLp) => {
+  const totalLpAssets: [number, number] = [
+    protectAgainstNaN(poolInfo.token1_reserve),
+    protectAgainstNaN(poolInfo.token2_reserve),
   ]
 
-  const providedReserve: [number, number] = [
+  const myLockedLpAssets: [number, number] = [
     protectAgainstNaN(
-      totalReserve[0] * (lockedLiquidityInMicroDenom / swap.lp_token_supply)
+      totalLpAssets[0] * (myLockedLp / poolInfo.lp_token_supply)
     ),
     protectAgainstNaN(
-      totalReserve[1] * (lockedLiquidityInMicroDenom / swap.lp_token_supply)
+      totalLpAssets[1] * (myLockedLp / poolInfo.lp_token_supply)
     ),
   ]
 
   return {
-    totalReserve,
-    providedReserve,
-    lockedLiquidityInMicroDenom,
+    totalLpAssets,
+    myLockedLpAssets,
   }
 }
