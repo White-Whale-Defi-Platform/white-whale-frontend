@@ -50,7 +50,6 @@ export function findPoolForSwap({
     if (
       result.streamlinePoolAB &&
       result.streamlinePoolBA &&
-      result.baseTokenBPool &&
       result.baseTokenBPool
     ) {
       return result

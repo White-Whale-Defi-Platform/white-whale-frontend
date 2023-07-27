@@ -122,9 +122,26 @@ const useRoute = ({
 
     const pools = poolsList?.pools?.map(({ pool_id }) => pool_id)
     const tokens = tokenList?.tokens?.map(({ symbol }) => symbol)
-    tokens.forEach((token) => (graph[token] = []))
+
+    tokens && tokens.forEach((token) => (graph[token] = []))
+    // NULL_POINTER check for pools
+    if (!pools) {
+      return {
+        pools: [],
+        tokens: [],
+        graph: [],
+        path: [],
+        route: [],
+      }
+    }
+
     pools.forEach((pool) => {
-      const [a, b] = pool?.split('-')
+      // NULL_POINTER check for pool
+      if (!pool) {
+        return
+      }
+
+      const [a, b] = pool.split('-')
       graph[a]?.push(b)
       graph[b]?.push(a)
     })
