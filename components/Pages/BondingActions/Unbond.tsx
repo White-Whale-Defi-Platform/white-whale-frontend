@@ -8,7 +8,7 @@ import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bondingContract'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
-const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
+const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   const [{ status }] = useRecoilState(walletState)
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
@@ -73,7 +73,6 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
-            whalePrice={whalePrice}
             balance={(() => {
               switch (currentBondState.lsdToken) {
                 case LSDToken.ampWHALE:

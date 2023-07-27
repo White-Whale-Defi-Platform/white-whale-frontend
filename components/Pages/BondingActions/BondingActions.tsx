@@ -238,7 +238,6 @@ const BondingActions = ({ globalAction }) => {
                     <Bond
                       liquidAmpWhale={liquidAmpWhale}
                       liquidBWhale={liquidBWhale}
-                      whalePrice={whalePrice}
                     />
                   )
                 case ActionType.unbond:
@@ -246,7 +245,6 @@ const BondingActions = ({ globalAction }) => {
                     <Unbond
                       bondedAmpWhale={bondedAmpWhale}
                       bondedBWhale={bondedBWhale}
-                      whalePrice={whalePrice}
                     />
                   )
                 case ActionType.withdraw:

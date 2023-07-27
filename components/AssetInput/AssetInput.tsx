@@ -1,12 +1,10 @@
+import { VStack, forwardRef } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
-
-import { forwardRef, VStack } from '@chakra-ui/react'
-import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
-import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
-import { num } from 'libs/num'
-
-import BalanceWithMaxNHalf from './BalanceWithMax'
 import WhaleInput from './WhaleInput'
+import { num } from 'libs/num'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import BalanceWithMaxNHalf from './BalanceWithMax'
+import usePrices from 'hooks/usePrices'
 
 interface AssetInputProps {
   image?: boolean
@@ -35,7 +33,6 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     balance,
     disabled,
     isSingleInput,
-    whalePrice,
     token,
     onChange,
     ignoreSlack,
@@ -44,7 +41,6 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
-
   const onMaxClick = () => {
     const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
     onChange({
@@ -65,17 +61,28 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     return disabled || (!isSingleInput && !tokenInfo?.symbol)
   }, [balance, disabled, isSingleInput, tokenInfo])
 
+  const formatNumber = (num, decimalPlaces) => {
+    const parts = num.toString().split('.')
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    parts[1] = parts[1]?.substring(0, decimalPlaces).replace(/0+$/, '')
+    return parts[1] ? parts.join('.') : parts[0]
+  }
+
   const numberOfTokens = useMemo(
-    () => `${token?.amount} ${token?.tokenSymbol}`,
+    () => `${formatNumber(token?.amount, 6)} ${token?.tokenSymbol}`,
     [token]
   )
-  //TODO reason no price in swap form, resolve by !!whalePrice ? ...
-  const [tokenPrice] =
-    whalePrice !== null ? [whalePrice] : useTokenDollarValue(token?.tokenSymbol)
-
+  const prices = usePrices()
+  const tokenSymbol = useMemo(
+    () =>
+      token?.tokenSymbol === 'ampWHALE' || token?.tokenSymbol === 'ampWHALE'
+        ? 'WHALE'
+        : token?.tokenSymbol,
+    [token]
+  )
   const dollarValue = useMemo(() => {
-    return num(tokenPrice).times(token?.amount).dp(6).toString()
-  }, [tokenPrice, token?.amount])
+    return num(prices?.[tokenSymbol]).times(token?.amount).dp(6).toFixed(2)
+  }, [tokenSymbol, prices, token?.amount])
 
   const balanceWithDecimals = useMemo(
     () =>

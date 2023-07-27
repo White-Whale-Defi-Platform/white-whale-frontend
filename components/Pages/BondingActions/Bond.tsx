@@ -21,7 +21,7 @@ export enum LSDToken {
   ampWHALE,
   bWHALE,
 }
-export const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
+export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
   const [{ status }, _] = useRecoilState(walletState)
@@ -78,7 +78,6 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
-            whalePrice={whalePrice}
             balance={(() => {
               switch (currentBondState.lsdToken) {
                 case LSDToken.ampWHALE:

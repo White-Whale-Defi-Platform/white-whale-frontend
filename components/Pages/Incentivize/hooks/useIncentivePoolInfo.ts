@@ -15,7 +15,6 @@ import {
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
-import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
 import { fetchTotalPoolSupply } from 'components/Pages/Pools/hooks/fetchTotalPoolLp'
 
 export interface Flow {
@@ -131,22 +130,31 @@ const getPoolFlowData = async (
             (p) => p.pool_id === pool.pool_id
           )?.totalLiquidity
 
-          //TODO refactor and put together using useQuery
-          const lockedLp = await fetchTotalLockedLp(
-            pool.staking_address,
-            pool.lp_token,
-            client
-          )
           const totalPoolLp = await fetchTotalPoolSupply(
             pool.swap_address,
             client
           )
-          const lockedLpShare = lockedLp / totalPoolLp
 
           const flows = await fetchFlows(client, pool.staking_address)
-
           const currentEpochId: number =
             Number(currentEpochData?.currentEpoch?.epoch.id) || 0
+
+          let lockedLpShare
+          try {
+            const weight = await client.queryContractSmart(
+              pool.staking_address,
+              {
+                global_weight: { epoch_id: currentEpochId },
+              }
+            )
+            const globalWeight = Number(weight?.global_weight)
+            lockedLpShare =
+              isNaN(globalWeight) || globalWeight === 0
+                ? 1
+                : globalWeight / totalPoolLp
+          } catch {
+            lockedLpShare = 1
+          }
 
           const flowList = flows.map((flow) => {
             return {
