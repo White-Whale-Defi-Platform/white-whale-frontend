@@ -3,6 +3,7 @@ import { useMutation } from 'react-query'
 
 import { useRefetchQueries } from 'hooks/useRefetchQueries'
 import { useTokenInfo } from 'hooks/useTokenInfo'
+// TODO: These should be deprecated in place of some other chakra component so we can remove the dep on junoblocks
 import {
   Button,
   ErrorIcon,

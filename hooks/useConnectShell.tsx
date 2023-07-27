@@ -22,45 +22,37 @@ export default function useConnectShell() {
       return
     }
 
-    try {
-      if (chainInfo !== undefined) {
-        // @ts-ignore
-        await window.shellwallet?.experimentalSuggestChain(chainInfo)
-        // @ts-ignore
-        await window.shellwallet.enable(currentWalletState.chainId)
-        // @ts-ignore
-        const offlineSigner = await window.getOfflineSignerAutoShell(
-          currentWalletState.chainId
-        )
+    if (chainInfo !== undefined) {
+      await window.shellwallet?.experimentalSuggestChain(chainInfo)
+      await window.shellwallet.enable(currentWalletState.chainId)
+      const offlineSigner = await window.getOfflineSignerAutoShell(
+        currentWalletState.chainId
+      )
 
-        const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
-          currentWalletState.chainId,
-          chainInfo.rpc,
-          offlineSigner,
-          currentWalletState.network,
-          {
-            gasPrice: GasPrice.fromString(
-              `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
-            ),
-          },
-          'shellwallet'
-        )
-        const [{ address }] = await offlineSigner.getAccounts()
-        // @ts-ignore
-        const key = await window.shellwallet.getKey(currentWalletState.chainId)
-        /* successfully update the wallet state */
-        setCurrentWalletState({
-          key,
-          address: address,
-          client: wasmChainClient,
-          chainId: currentWalletState.chainId,
-          network: currentWalletState.network,
-          status: WalletStatusType.connected,
-          activeWallet: 'shellwallet',
-        })
-      }
-    } catch (e) {
-      throw e
+      const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
+        currentWalletState.chainId,
+        chainInfo.rpc,
+        offlineSigner,
+        currentWalletState.network,
+        {
+          gasPrice: GasPrice.fromString(
+            `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
+          ),
+        },
+        'shellwallet'
+      )
+      const [{ address }] = await offlineSigner.getAccounts()
+      const key = await window.shellwallet.getKey(currentWalletState.chainId)
+      /* successfully update the wallet state */
+      setCurrentWalletState({
+        key,
+        address: address,
+        client: wasmChainClient,
+        chainId: currentWalletState.chainId,
+        network: currentWalletState.network,
+        status: WalletStatusType.connected,
+        activeWallet: 'shellwallet',
+      })
     }
   }
 

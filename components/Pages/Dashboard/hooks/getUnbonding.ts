@@ -45,6 +45,9 @@ export const getUnbonding = async (
 
   // filtering out unbonding requests which have already finished, so they won't get shown
   const filterUnbondingRequests = (unbondingRequests) => {
+    if (!unbondingRequests) {
+      return []
+    }
     return unbondingRequests.filter(
       (req) => Number(req.timestamp) + unbondingPeriodInNano > currentTimeInNano
     )

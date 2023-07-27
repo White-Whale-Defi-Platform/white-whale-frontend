@@ -200,7 +200,11 @@ export const useQueryPoolsLiquidity = ({
               state,
             }
           })
-          return flowTokens?.filter(Boolean)
+          if (!flowTokens) {
+            return []
+          }
+
+          return flowTokens.filter(Boolean)
         })
     }
 
