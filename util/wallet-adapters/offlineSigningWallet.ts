@@ -6,7 +6,7 @@ import {
 import { Coin } from '@cosmjs/launchpad'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
-import { Network } from '@injectivelabs/networks'
+import { Network as InjectiveNetwork } from '@injectivelabs/networks'
 import {
   AuthInfo,
   Fee,
@@ -19,9 +19,10 @@ import {
   TxInfo,
 } from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
-
 import Injective from 'services/injective'
+
 import { TxResponse, Wallet } from './wallet'
+import { NetworkType } from 'state/atoms/walletAtoms'
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient | Injective
 
@@ -36,7 +37,7 @@ export class OfflineSigningWallet implements Wallet {
     chainId: string,
     endpoint: string,
     signer: any,
-    network: string,
+    network: NetworkType,
     options?: SigningStargateClientOptions,
     activeWallet?: string
   ): Promise<OfflineSigningWallet> {
@@ -44,7 +45,9 @@ export class OfflineSigningWallet implements Wallet {
       const injectiveClient = new Injective(
         signer,
         activeWallet,
-        chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s
+        chainId === 'injective-1'
+          ? InjectiveNetwork.MainnetK8s
+          : InjectiveNetwork.TestnetK8s
       )
       return new Promise((resolve, reject) => {
         resolve(new OfflineSigningWallet(injectiveClient, network))
@@ -110,7 +113,9 @@ export class OfflineSigningWallet implements Wallet {
   }
 
   getTx(txHash: string): Promise<TxInfo> {
-    if (this.client.getTx) return this.client.getTx(txHash)
+    if (this.client.getTx) {
+      return this.client.getTx(txHash)
+    }
 
     // @ts-ignore
     const promise: Promise<GetTxResponse> =

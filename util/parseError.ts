@@ -14,10 +14,8 @@ export const parseError = (error: Error) => {
     },
   ]
 
-  const errorMessage = error?.message || ''
-
-  const matchedError = customErrors.find(({ regex }) =>
-    regex.test(errorMessage)
+  return (
+    customErrors.find(({ regex }) => regex.test(error?.message || ''))
+      ?.message || 'Failed to execute transaction'
   )
-  return matchedError ? matchedError.message : 'Failed to execute transaction'
 }

@@ -3,9 +3,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 import { executeFlashloan } from './executeFlashloan'
-import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**
@@ -77,7 +77,9 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) setButtonLabel(null)
+        if (!!buttonLabel) {
+          setButtonLabel(null)
+        }
         setTxStep(TxStep.Ready)
         return response
       } catch (err) {

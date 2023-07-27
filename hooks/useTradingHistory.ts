@@ -64,12 +64,21 @@ export const useTradingHistory = ({ pair, dateTime }) => {
   }
 
   const calculateVolume = async (data) => {
-    if (!data) return 0
-    if (volume !== undefined || feeVolume !== undefined) return
+    if (!data) {
+      return 0
+    }
+    if (volume !== undefined || feeVolume !== undefined) {
+      return
+    }
 
     const tradingHistories = data?.tradingHistories?.nodes
       ? data?.tradingHistories?.nodes
       : []
+
+    // NULL POINTER CHECK for tradingHistories
+    if (!tradingHistories) {
+      return
+    }
 
     const swapAssets = Array.from(
       new Set(
@@ -123,7 +132,9 @@ export const useTradingHistory = ({ pair, dateTime }) => {
   }
 
   useEffect(() => {
-    if (!queryData) return
+    if (!queryData) {
+      return
+    }
     calculateVolume(queryData)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryData])

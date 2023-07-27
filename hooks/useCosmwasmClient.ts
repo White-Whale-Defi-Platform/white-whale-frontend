@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query'
+
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChains } from 'hooks/useChainInfo'
 
@@ -11,7 +12,7 @@ export const useCosmwasmClient = (
     ['cosmwasmClient', chainId],
     async () => {
       const chain = chainInfo.find((row) => row.chainId === chainId)
-      return await CosmWasmClient.connect(chain.rpc)
+      return CosmWasmClient.connect(chain.rpc)
     },
     {
       enabled: !!chainId,

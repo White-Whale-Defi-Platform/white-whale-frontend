@@ -1,3 +1,5 @@
+import { FC, useEffect, useMemo } from 'react'
+
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -11,17 +13,17 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { NextRouter, useRouter } from 'next/router'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { FC, useEffect, useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import PositionsOverview from 'components/Pages/Incentivize/PositionsOverview'
+import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import { NextRouter, useRouter } from 'next/router'
+import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { useQueryPoolsLiquidity } from 'queries/useQueryPoolsLiquidity'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+
 import Create from './Create'
-import { useChains } from 'hooks/useChainInfo'
-import PositionsOverview from 'components/Pages/Incentivize/PositionsOverview'
 
 const Incentivize: FC = () => {
   const router: NextRouter = useRouter()
@@ -54,7 +56,7 @@ const Incentivize: FC = () => {
   }, [poolId, poolList, currentChain])
 
   const [pools] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
+    useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client,
@@ -62,7 +64,9 @@ const Incentivize: FC = () => {
   )
 
   const myFlows = useMemo(() => {
-    if (!pools || !poolId) return []
+    if (!pools || !poolId) {
+      return []
+    }
 
     const flows = pools.find((p) => p.pool_id === poolId)
     return flows?.liquidity?.myFlows || []
@@ -70,8 +74,7 @@ const Incentivize: FC = () => {
 
   return (
     <VStack
-      width="auto"
-      minWidth={{ base: '100%', md: '800' }}
+      minWidth={{ base: '100%', md: '880' }}
       alignItems="center"
       padding={5}
     >

@@ -8,13 +8,13 @@ import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { TokenItemState } from 'types'
 
 import defaultTokens from './defaultTokens.json'
 import useSwap from './hooks/useSwap'
 import { tokenSwapAtom } from './swapAtoms'
 import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
-import { TokenItemState } from 'types'
 
 type SwapProps = {
   /* will be used if provided on first render instead of internal state */
@@ -54,8 +54,15 @@ const Swap: FC<SwapProps> = ({}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
 
+  const tokenSymbols = useMemo(
+    () => tokenList.map((token) => token.symbol),
+    [tokenList]
+  )
+
   useEffect(() => {
-    if (!currentChainId) return
+    if (!currentChainId) {
+      return
+    }
     const { from, to } = router.query
     const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
 
@@ -71,11 +78,7 @@ const Swap: FC<SwapProps> = ({}) => {
         decimals: 6,
       },
     ]
-
-    if (
-      tokenList.find((row) => row.symbol === from) &&
-      tokenList.find((row) => row.symbol === to)
-    ) {
+    if (tokenSymbols.includes(from) && tokenSymbols.includes(to)) {
       return
     } else {
       newState = [
@@ -99,14 +102,16 @@ const Swap: FC<SwapProps> = ({}) => {
   }, [address, currentChainId, tokenList])
 
   useEffect(() => {
-    if (!currentChainId) return
+    if (!currentChainId) {
+      return
+    }
 
     if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
       if (
-        tokenList.find((row) => row.symbol === tokenA?.tokenSymbol) &&
-        tokenList.find((row) => row.symbol === tokenB?.tokenSymbol)
+        tokenSymbols.includes(tokenA.tokenSymbol) &&
+        tokenSymbols.includes(tokenB.tokenSymbol)
       ) {
-        const url = `/${currentChainId}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+        const url = `/${currentChainId}/swap?from=${tokenA.tokenSymbol}&to=${tokenB.tokenSymbol}`
         router.push(url)
       }
     }
@@ -122,8 +127,9 @@ const Swap: FC<SwapProps> = ({}) => {
   }
 
   const onInputChange = ({ tokenSymbol, amount }, index: number) => {
-    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
       tx.reset()
+    }
 
     const newState: TokenItemState[] = [tokenA, tokenB]
     newState[index] = {

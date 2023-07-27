@@ -16,10 +16,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
-import Volume from './components/Volume'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -69,15 +69,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => {
-      return (
-        <>
-          {info.row.original.isSubqueryNetwork ? (
-            <Volume pairAddr={info.row.original.contract} />
-          ) : (
-            <Text align="right">{info.getValue()}</Text>
-          )}
-        </>
-      )
+      return <Text align="right">{info.getValue()}</Text>
     },
   }),
   columnHelper.accessor('totalLiq', {
@@ -127,7 +119,9 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
-  if (!show) return null
+  if (!show) {
+    return null
+  }
   const table = useReactTable({
     data: pools,
     columns,

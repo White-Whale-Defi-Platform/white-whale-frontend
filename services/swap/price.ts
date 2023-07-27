@@ -1,6 +1,4 @@
 import { num } from 'libs/num'
-import { Pool } from 'types'
-
 import { Wallet } from 'util/wallet-adapters'
 
 export interface GetToken1ForToken2PriceInput {
@@ -55,7 +53,7 @@ export const getTokenForTokenPrice = async (
   input: GetTokenForTokenPriceInput
 ) => {
   try {
-    return getToken1ForToken2Price({
+    return await getToken1ForToken2Price({
       swapAddress: input.outputSwapAddress,
       client: input.client,
     })
@@ -64,33 +62,20 @@ export const getTokenForTokenPrice = async (
   }
 }
 
-export type InfoResponse = {
+export type PoolInfoResponse = {
   total_share: string
   lp_token_address: string
-  token1_denom: string
-  token1_reserve: string
-  token2_denom: string
-  token2_reserve: string
+  assets: any
 }
 
-export const getSwapInfo = async (
+export const getPoolInfo = async (
   swapAddress: string,
   client: Wallet
-): Promise<Pool> => {
-  try {
-    if (!swapAddress || !client) {
-      throw new Error(
-        `No swapAddress or rpcEndpoint was provided: ${JSON.stringify({
-          swapAddress,
-          client,
-        })}`
-      )
-    }
-
-    return await client.queryContractSmart(swapAddress, {
-      pool: {},
-    })
-  } catch (e) {
-    console.error('Cannot get swap info:', e)
+): Promise<PoolInfoResponse> => {
+  if (!swapAddress || !client) {
+    return null
   }
+  return await client.queryContractSmart(swapAddress, {
+    pool: {},
+  })
 }

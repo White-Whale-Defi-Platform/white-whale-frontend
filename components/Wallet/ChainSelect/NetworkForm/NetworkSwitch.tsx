@@ -4,29 +4,28 @@ import { useQueryClient } from 'react-query'
 import { Switch } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { NetworkType, walletState } from 'state/atoms/walletAtoms'
+import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/bondingContract'
 
 function NetworkSwitch() {
   const queryClient = useQueryClient()
   const [currentWalletState, setWalletState] = useRecoilState(walletState)
   const { disconnect } = useWallet()
 
-  const changeNetwork = async ({ target }) => {
-    await queryClient.invalidateQueries([
-      'multipleTokenBalances',
-      'tokenBalance',
-      '@pools-list',
-    ])
-    console.log('network change triggered' + target.checked)
+  const changeNetwork = async () => {
+    await queryClient.clear()
+
     const updatedChainId =
-      currentWalletState.chainId === 'migaloo-1' && target.checked
-        ? 'narwhal-1'
-        : currentWalletState.chainId === 'narwhal-1' && !target.checked
-        ? 'migaloo-1'
-        : currentWalletState.chainId
+      MAINNET_TESTNET_MAP?.[currentWalletState.chainId] ??
+      currentWalletState.chainId
+    const updatedNetwork =
+      updatedChainId !== currentWalletState.chainId
+        ? NETWORK_MAP[currentWalletState.network]
+        : currentWalletState.network
+
     setWalletState({
       ...currentWalletState,
-      network: target.checked ? 'testnet' : 'mainnet',
+      network: NetworkType[updatedNetwork],
       chainId: updatedChainId,
     })
     disconnect()
@@ -36,7 +35,7 @@ function NetworkSwitch() {
     <>
       <Switch
         id="network"
-        isChecked={currentWalletState.network === 'testnet'}
+        isChecked={currentWalletState.network === NetworkType.testnet}
         onChange={changeNetwork}
       />
     </>

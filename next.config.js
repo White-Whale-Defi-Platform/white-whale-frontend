@@ -2,7 +2,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const withBundleJunoblocks = require('next-bundle-junoblocks')
 
 /**
  * @0xFable - Suppress errant recoil errors which seem to occur due to hot reloading
@@ -103,8 +102,4 @@ const config = {
   },
 }
 
-module.exports = withBundleAnalyzer(
-  process.env.BUNDLE_JUNOBLOCKS === 'true'
-    ? withBundleJunoblocks(config)
-    : config
-)
+module.exports = withBundleAnalyzer(config)

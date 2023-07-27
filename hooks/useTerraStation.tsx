@@ -7,10 +7,10 @@ import {
   useConnectedWallet,
   useWallet,
 } from '@terra-money/wallet-provider'
-
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
+
 import { useChainInfo } from './useChainInfo'
 
 export const useTerraStation = (onCloseModal) => {
@@ -18,7 +18,7 @@ export const useTerraStation = (onCloseModal) => {
   const connectedWallet = useConnectedWallet()
   const [currentWalletState, setCurrentWalletState] =
     useRecoilState(walletState)
-  let [chainInfo] = useChainInfo(currentWalletState.chainId)
+  const [chainInfo] = useChainInfo(currentWalletState.chainId)
 
   const filterForStation = (connection: Connection) => {
     return connection.identifier === 'station'

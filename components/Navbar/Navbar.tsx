@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { useQueryClient } from 'react-query'
 import {
   Box,
   Drawer,
@@ -25,10 +25,9 @@ import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
-import menuLinks from './NavMenu.json'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
-import { useQueryClient } from 'react-query'
+import menuLinks from './NavMenu.json'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 
 export const links = [
   {
@@ -75,7 +74,7 @@ const Navbar = () => {
       address: '',
       key: null,
       client: null,
-      network,
+      network: network,
       chainId,
       activeWallet: null,
     })
@@ -107,6 +106,7 @@ const Navbar = () => {
               key={menu.label}
               menu={menu}
               currentChainName={currentChainName}
+              chainId={chainId}
             />
           ))}
         </Card>

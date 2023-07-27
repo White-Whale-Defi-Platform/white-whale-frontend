@@ -1,8 +1,9 @@
+import { useEffect } from 'react'
+import { useQueryClient } from 'react-query'
+
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useTxInfo from 'hooks/useTxInfo'
-import { useEffect } from 'react'
-import { useQueryClient } from 'react-query'
 import { useRecoilState } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
@@ -31,7 +32,9 @@ const useTxStatus = ({ client, transactionType }) => {
   }, [txInfo, txState.txHash])
 
   const description = (hash: string) => (
-    <Finder txHash={hash} chainId={client.client.chainId} />
+    <Finder txHash={hash} chainId={client.client.chainId}>
+      {' '}
+    </Finder>
   )
 
   const onError = (error: Error) => {

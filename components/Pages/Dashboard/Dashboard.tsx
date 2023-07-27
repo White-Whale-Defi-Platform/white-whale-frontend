@@ -1,19 +1,19 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
-import BondingOverview, { ActionType, TokenType } from './BondingOverview'
-import RewardsComponent from './RewardsComponent'
-import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { BondingData } from './types/BondingData'
-import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useChains } from 'hooks/useChainInfo'
-import { useDashboardData } from './hooks/useDashboardData'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
-} from 'constants/bonding_contract'
+} from 'constants/bondingContract'
 import usePrices from 'hooks/usePrices'
+import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useRecoilState } from 'recoil'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import BondingOverview, { ActionType, TokenType } from './BondingOverview'
+import { useDashboardData } from './hooks/useDashboardData'
+import RewardsComponent from './RewardsComponent'
+import { BondingData } from './types/BondingData'
+import { useChains } from 'hooks/useChainInfo'
 
 const Dashboard: FC = () => {
   const [{ chainId, status, client, address, network }] =
@@ -108,8 +108,10 @@ const Dashboard: FC = () => {
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
-    if (prices && prices['WHALE']) {
-      return prices['WHALE']
+    // @ts-ignore
+    if (prices && prices?.WHALE) {
+      // @ts-ignore
+      return prices?.WHALE
     }
     return 0 // Default value
   }, [prices])

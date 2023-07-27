@@ -25,8 +25,8 @@ export interface Wallet {
     messages: readonly EncodeObject[],
     memo: string | undefined
   ) => Promise<number>
-  getChainId: () => Promise<String>
-  getNetwork: () => Promise<String>
+  getChainId: () => Promise<string>
+  getNetwork: () => Promise<string>
   getBalance: (address: string, searchDenom: string) => Promise<Coin>
   getTx: (txHash: string) => Promise<TxInfo>
 }

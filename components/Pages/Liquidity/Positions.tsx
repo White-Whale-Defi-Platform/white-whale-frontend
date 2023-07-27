@@ -1,5 +1,7 @@
-import { HStack, Divider, Button, Box } from '@chakra-ui/react'
 import { useState } from 'react'
+
+import { Box, Button, Divider, HStack } from '@chakra-ui/react'
+
 import { PositionsTable } from './PositionsTable'
 
 const STATES = ['all', 'active', 'unbonding']

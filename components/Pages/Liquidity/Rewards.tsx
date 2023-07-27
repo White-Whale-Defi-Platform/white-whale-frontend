@@ -1,7 +1,9 @@
-import { VStack, Text, HStack, Divider } from '@chakra-ui/react'
-import { TooltipWithChildren } from 'components/TooltipWithChildren'
-import { AvailableRewards } from './AvailableRewards'
 import { useMemo } from 'react'
+
+import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
+
+import { AvailableRewards } from './AvailableRewards'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => {

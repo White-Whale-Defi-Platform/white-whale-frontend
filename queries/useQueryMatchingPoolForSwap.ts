@@ -50,7 +50,6 @@ export function findPoolForSwap({
     if (
       result.streamlinePoolAB &&
       result.streamlinePoolBA &&
-      result.baseTokenBPool &&
       result.baseTokenBPool
     ) {
       return result
@@ -107,7 +106,9 @@ export const useGetQueryMatchingPoolForSwap = () => {
 
   const getMatchingPool = useCallback(
     ({ tokenA, tokenB }: GetMatchingPoolArgs) => {
-      if (!poolsListResponse?.pools || !tokenA || !tokenB) return undefined
+      if (!poolsListResponse?.pools || !tokenA || !tokenB) {
+        return undefined
+      }
 
       return findPoolForSwap({
         baseToken,

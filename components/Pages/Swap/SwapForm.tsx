@@ -19,10 +19,10 @@ import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-
 import { WalletStatusType } from 'state/atoms/walletAtoms'
-import { Simulated } from './hooks/useSimulate'
 import { TokenItemState } from 'types'
+
+import { Simulated } from './hooks/useSimulate'
 
 type Props = {
   connected: WalletStatusType
@@ -88,12 +88,19 @@ const SwapForm: FC<Props> = ({
   const amountB = getValues('tokenB')
 
   const buttonLabel = useMemo(() => {
-    if (connected !== `@wallet-state/connected`) return 'Connect Wallet'
-    else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol) return 'Select Token'
-    else if (state?.error) return state?.error
-    else if (!!!amountA?.amount) return 'Enter Amount'
-    else if (tx?.buttonLabel) return tx?.buttonLabel
-    else return 'Swap'
+    if (connected !== `@wallet-state/connected`) {
+      return 'Connect Wallet'
+    } else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol) {
+      return 'Select Token'
+    } else if (state?.error) {
+      return state?.error
+    } else if (!!!amountA?.amount) {
+      return 'Enter Amount'
+    } else if (tx?.buttonLabel) {
+      return tx?.buttonLabel
+    } else {
+      return 'Swap'
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
@@ -131,7 +138,9 @@ const SwapForm: FC<Props> = ({
   }
 
   const rate = useMemo(() => {
-    if (!simulated) return null
+    if (!simulated) {
+      return null
+    }
 
     const e = num(tokenA.amount).times(Math.pow(10, tokenBInfo.decimals))
     return num(simulated?.amount).div(e).toFixed(6)
@@ -337,8 +346,12 @@ const SwapForm: FC<Props> = ({
               showBalanceSlider={false}
               // onInputFocus={() => setIsReverse(true)}
               onChange={(value, isTokenChange) => {
-                if (tokenB?.tokenSymbol && !isTokenChange) setReverse(true)
-                if (isTokenChange && isReverse) setReverse(false)
+                if (tokenB?.tokenSymbol && !isTokenChange) {
+                  setReverse(true)
+                }
+                if (isTokenChange && isReverse) {
+                  setReverse(false)
+                }
                 onInputChange(value, 1)
                 field.onChange(value)
               }}

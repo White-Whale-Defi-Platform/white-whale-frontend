@@ -1,6 +1,7 @@
-import { Wallet } from 'util/wallet-adapters'
 import { JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
+import { Wallet } from 'util/wallet-adapters'
+
 import { Config } from './useDashboardData'
 
 interface NativeTokenInfo {

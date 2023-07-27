@@ -1,19 +1,21 @@
+import { useMemo } from 'react'
+
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
-import { useMemo } from 'react'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+
 import useFactoryConfig from '../../Incentivize/hooks/useFactoryConfig'
 import { tokenLpAtom } from '../lpAtoms'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
 import useIsNewPosition from './useIsNewPosition'
-import {
-  Config,
-  useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
@@ -47,7 +49,9 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   // const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
 
   const [tokenA, tokenB, flipped] = useMemo(() => {
-    if (!lpOrder) return [tokenInfoA, tokenInfoB, false]
+    if (!lpOrder) {
+      return [tokenInfoA, tokenInfoB, false]
+    }
 
     return lpOrder?.[0] === tokenInfoA?.symbol
       ? [tokenInfoA, tokenInfoB, false]
@@ -55,7 +59,9 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   }, [tokenInfoA, tokenInfoB, lpOrder])
 
   const [lpA, lpB] = useMemo(() => {
-    if (!lpOrder) return [lpTokenA, lpTokenB]
+    if (!lpOrder) {
+      return [lpTokenA, lpTokenB]
+    }
 
     return lpOrder?.[0] === lpTokenA?.tokenSymbol
       ? [lpTokenA, lpTokenB]
@@ -79,8 +85,9 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       (reverse && !lpTokenB?.amount) ||
       tokenAReserve === 0 ||
       tokenBReserve === 0
-    )
+    ) {
       return null
+    }
 
     const decimals = reverse ? tokenInfoB?.decimals : tokenInfoA?.decimals
     const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0
@@ -109,8 +116,9 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       !tokenBAmount ||
       swapAddress == null ||
       minUnbondingDuration == null
-    )
+    ) {
       return {}
+    }
 
     return {
       msgs: createLpMsg({

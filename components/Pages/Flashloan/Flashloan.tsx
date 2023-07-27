@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
@@ -13,10 +13,11 @@ const Flashloan: FC = () => {
   const router = useRouter()
   const chains = useChains()
   const chainIdParam = router.query.chainId as string
-  const currenChain = chains.find((row) => row.chainId === chainId)
+  const currentChain = chains.find((row) => row.chainId === chainId)
 
-  if (!currenChain || currenChain.label.toLowerCase() !== chainIdParam)
+  if (!currentChain || currentChain.label.toLowerCase() !== chainIdParam) {
     return null
+  }
 
   return (
     <VStack width={{ base: '100%', md: '722px' }} alignItems="center">

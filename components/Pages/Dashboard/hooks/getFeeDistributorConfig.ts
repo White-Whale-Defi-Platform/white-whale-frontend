@@ -1,5 +1,7 @@
 import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+
 import { Config } from './useDashboardData'
+import { Wallet } from 'util/wallet-adapters/index'
 
 export interface FeeDistributionConfig {
   owner: string
@@ -18,7 +20,7 @@ export interface FeeDistributionConfig {
 }
 
 export const getFeeDistributorConfig = async (
-  client: CosmWasmClient,
+  client: CosmWasmClient | Wallet,
   config: Config
 ) => {
   if (!client) {
@@ -30,7 +32,7 @@ export const getFeeDistributorConfig = async (
 }
 
 const fetchConfig = async (
-  client: CosmWasmClient,
+  client: CosmWasmClient | Wallet,
   config: Config
 ): Promise<FeeDistributionConfig> => {
   const result: JsonObject = await client.queryContractSmart(

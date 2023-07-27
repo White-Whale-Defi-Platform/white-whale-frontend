@@ -1,7 +1,6 @@
-import fetch from 'isomorphic-unfetch'
 import { POOL_INFO_BASE_URL } from 'constants/settings'
+import fetch from 'isomorphic-unfetch'
 import { formatPrice } from 'libs/num'
-
 import terraPoolConfig from 'public/mainnet/phoenix-1/pools_list.json'
 
 export interface EnigmaPoolResponse {
@@ -29,7 +28,9 @@ export interface EnigmaPoolData {
 export const getPairInfos = async (
   chain: string
 ): Promise<EnigmaPoolResponse[]> => {
-  if (!chain) return []
+  if (!chain) {
+    return []
+  }
   chain = chain === 'inj' ? 'injective' : chain
   const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
 
@@ -49,7 +50,7 @@ export const getPairInfos = async (
     return null
   }
 
-  let chainDataResponse = await fetchWithRetry(url)
+  const chainDataResponse = await fetchWithRetry(url)
 
   const data = await chainDataResponse?.text()
   if (chainDataResponse?.status === 200 && data !== 'chain unknown' && data) {
@@ -63,7 +64,7 @@ export const getPairInfosTerra = async (): Promise<any> => {
     .map((pool: any) => pool.swap_address)
     .join(',')
   const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses}`
-  let chainDataResponse = await fetch(url)
+  const chainDataResponse = await fetch(url)
   const data = await chainDataResponse.json()
 
   if (chainDataResponse.status === 200 && data) {

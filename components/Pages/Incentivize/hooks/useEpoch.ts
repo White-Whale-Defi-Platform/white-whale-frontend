@@ -1,13 +1,14 @@
-import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import utc from 'dayjs/plugin/utc'
+
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 dayjs.extend(utc)
 interface Epoch {
   available: {
@@ -116,8 +117,9 @@ const useEpoch = () => {
   }
 
   const dateToEpoch = (givenDate) => {
-    if (!data?.epoch?.id || !config?.epoch_config?.duration || !givenDate)
+    if (!data?.epoch?.id || !config?.epoch_config?.duration || !givenDate) {
       return null
+    }
 
     const epochStartTimeInMillis = Number(data?.epoch?.start_time) / 1_000_000
     const epochDurationInMillis =
@@ -146,7 +148,9 @@ const useEpoch = () => {
 
   const epochToDate = (givenEpoch) => {
     // Check if the current epoch is available or return null
-    if (!data?.epoch?.id || !config?.epoch_config?.duration) return null
+    if (!data?.epoch?.id || !config?.epoch_config?.duration) {
+      return null
+    }
 
     // Get the current epoch number
     const currentEpoch = Number(data?.epoch?.id)
@@ -174,7 +178,9 @@ const useEpoch = () => {
   }
 
   const currentEpoch = useMemo(() => {
-    if (!data?.epoch?.id) return null
+    if (!data?.epoch?.id) {
+      return null
+    }
 
     return Number(data?.epoch?.id)
   }, [data])

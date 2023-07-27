@@ -1,16 +1,18 @@
+import { useMemo } from 'react'
+
 import { HStack, VStack } from '@chakra-ui/react'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/useCheckIncentiveSnapshots'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
-import { useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
+
 import ClaimTable from './ClaimTable'
 import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
-import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/useCheckIncentiveSnapshots'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
   <HStack

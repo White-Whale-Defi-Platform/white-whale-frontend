@@ -1,3 +1,5 @@
+import { FC, useEffect, useMemo, useState } from 'react'
+
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -11,28 +13,28 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
 import { useChains } from 'hooks/useChainInfo'
-import { TxStep } from 'types/common'
+import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import usePrices from 'hooks/usePrices'
+import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { FC, useEffect, useMemo, useState } from 'react'
+import {
+  PoolEntityTypeWithLiquidity,
+  useQueryPoolsLiquidity,
+} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { TxStep } from 'types/common'
 import { walletState } from 'state/atoms/walletAtoms'
+
 import Claim from './Claim'
 import DepositForm from './DepositForm'
 import useProvideLP from './hooks/useProvideLP'
 import { tokenLpAtom } from './lpAtoms'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
-import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
-import usePrices from 'hooks/usePrices'
-import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
-import {
-  PoolEntityTypeWithLiquidity,
-  useQueryMultiplePoolsLiquidity,
-} from 'queries/useQueryPools'
-import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -48,7 +50,7 @@ const ManageLiquidity: FC = () => {
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(
-      useQueryMultiplePoolsLiquidity({
+      useQueryPoolsLiquidity({
         refetchInBackground: false,
         pools: poolList?.pools,
         client: cosmwasmClient,
@@ -79,7 +81,9 @@ const ManageLiquidity: FC = () => {
     const incentivePoolInfo = incentivePoolInfos?.find(
       (info) => info.poolId === poolId
     )
-    if (!poolUserShare) return null
+    if (!poolUserShare) {
+      return null
+    }
     return (
       incentivePoolInfo?.flowData?.map((data) => {
         const dailyEmission = data.dailyEmission * Number(poolUserShare.share)
@@ -162,8 +166,9 @@ const ManageLiquidity: FC = () => {
   }
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
-    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success)
+    if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
       tx.reset()
+    }
 
     const newState: any = [tokenA, tokenB]
     newState[index] = {

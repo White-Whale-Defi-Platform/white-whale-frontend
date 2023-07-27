@@ -1,41 +1,44 @@
+import { useEffect, useMemo, useState } from 'react'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
-  Checkbox,
   HStack,
-  Text,
-  Switch,
-  VStack,
-  FormControl,
-  FormLabel,
   Stack,
+  Switch,
+  Text,
   Tooltip,
+  VStack,
 } from '@chakra-ui/react'
+import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
+import { Incentives } from 'components/Pages/Pools/Incentives'
+import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
+import { STABLE_COIN_LIST } from 'constants/settings'
+import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useEffect, useMemo, useState } from 'react'
 import {
   PoolEntityTypeWithLiquidity,
-  useQueryMultiplePoolsLiquidity,
-} from 'queries/useQueryPools'
+  useQueryPoolsLiquidity,
+} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { EnigmaPoolData } from 'util/enigma'
-import { STABLE_COIN_LIST } from 'constants/settings'
-import { ActionCTAs } from './ActionCTAs'
-import AllPoolsTable from './AllPoolsTable'
-import MobilePools from './MobilePools'
-import MyPoolsTable from './MyPoolsTable'
-import { useChains } from 'hooks/useChainInfo'
-import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
-import { Incentives } from 'components/Pages/Pools/Incentives'
-import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import {
   aprHelperState,
   updateAPRHelperState,
 } from 'state/atoms/aprHelperState'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { EnigmaPoolData } from 'util/enigma'
+
+import { ActionCTAs } from './ActionCTAs'
+import AllPoolsTable from './AllPoolsTable'
+import MobilePools from './MobilePools'
+import MyPoolsTable from './MyPoolsTable'
+import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -48,7 +51,7 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status } = useRecoilValue(walletState)
+  const { chainId, status, network } = useRecoilValue(walletState)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
@@ -56,6 +59,14 @@ const Pools = () => {
   )
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
+  const config: Config = useConfig(network, chainId)
+
+  const { data: currentEpochData } = useCurrentEpoch(cosmwasmClient, config)
+  const currentEpoch = useMemo(
+    () => Number(currentEpochData?.currentEpoch?.epoch.id),
+    [currentEpochData]
+  )
+
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
@@ -64,7 +75,7 @@ const Pools = () => {
     boolean,
     boolean
   ] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
+    useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client: cosmwasmClient,
@@ -92,24 +103,12 @@ const Pools = () => {
     isLoading: isIncentivePoolInfoLoading,
   } = useIncentivePoolInfo(cosmwasmClient, pools, currentChainPrefix)
 
-  if (window['debugLogsEnabled']) {
+  // @ts-ignore
+  if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
   }
 
-  // const calcuateTotalLiq = (pool) => {
-  //   return pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
-  // }
-  //
-  // const calculateMyPosition = (pool) => {
-  //   const totalLiq = calcuateTotalLiq(pool)
-  //   const { provided, total } = pool.liquidity?.available || {}
-  //   return num(provided?.tokenAmount)
-  //     .times(totalLiq)
-  //     .div(total?.tokenAmount)
-  //     .dp(6)
-  //     .toNumber()
-  // }
   const calculateMyPosition = (pool) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
@@ -121,8 +120,9 @@ const Pools = () => {
       isLoading ||
       isIncentivePoolInfoLoading ||
       pairInfos.length === 0
-    )
+    ) {
       return
+    }
     if (allPools.length > 0) {
       return
     }
@@ -165,7 +165,6 @@ const Pools = () => {
                 pool={pool}
               />
             ),
-            isSubqueryNetwork: false,
           }
         })
       )
@@ -188,9 +187,10 @@ const Pools = () => {
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
-      const flows =
+      const flows = (
         incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
           ?.flowData ?? []
+      ).filter((flow) => flow.endEpoch >= currentEpoch)
 
       const incentiveBaseApr = flows.reduce((total, item) => {
         return total + (isNaN(item.apr) ? 0 : Number(item.apr))
@@ -288,7 +288,6 @@ const Pools = () => {
           show={true}
           pools={myPools}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
-          allPools={showAllPools}
         />
         <MobilePools pools={myPools} />
       </Box>
@@ -299,9 +298,30 @@ const Pools = () => {
             All Pools
           </Text>
           <Stack direction="row">
-            <Tooltip label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown">
+            <Tooltip
+              label={
+                <Box
+                  maxWidth="250px"
+                  minWidth="fit-content"
+                  borderRadius="10px"
+                  bg="black"
+                  color="white"
+                  fontSize={14}
+                  p={4}
+                  whiteSpace="pre-wrap"
+                >
+                  By default, pools with less than $1.0k total liquidity will be
+                  hidden but optionally can be shown.
+                </Box>
+              }
+              bg="transparent"
+              hasArrow={false}
+              placement="bottom"
+              closeOnClick={false}
+              arrowSize={0}
+            >
               <Text as="h6" fontSize="14" fontWeight="700">
-                <InfoOutlineIcon marginRight={2} />
+                <InfoOutlineIcon marginRight={2} mb={1} />
                 Show All Pools
               </Text>
             </Tooltip>

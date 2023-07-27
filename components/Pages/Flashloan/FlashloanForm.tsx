@@ -79,9 +79,13 @@ function FlashloanForm({}: Props) {
   }, [containerRef, editorRef, options])
 
   const buttonLabel = useMemo(() => {
-    if (!isConnected) return 'Connect Wallet'
-    else if (!!error) return error
-    else return 'Flashloan'
+    if (!isConnected) {
+      return 'Connect Wallet'
+    } else if (!!error) {
+      return error
+    } else {
+      return 'Flashloan'
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, status, error])
 
@@ -92,7 +96,9 @@ function FlashloanForm({}: Props) {
     event.target.value = null
     fileReader.onload = (e: any) => {
       try {
-        if (error) setError('')
+        if (error) {
+          setError('')
+        }
         setJson(JSON.parse(e?.target?.result))
         editorRef.current.set(JSON.parse(e.target.result))
       } catch (error) {
@@ -105,7 +111,9 @@ function FlashloanForm({}: Props) {
   const format = () => {
     if (editorRef) {
       try {
-        if (error) setError('')
+        if (error) {
+          setError('')
+        }
         editorRef.current.repair()
         editorRef.current.format()
         const jsonData = editorRef?.current?.get()

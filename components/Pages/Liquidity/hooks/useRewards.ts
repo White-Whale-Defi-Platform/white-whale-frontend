@@ -1,12 +1,13 @@
+import { useMemo } from 'react'
 import { useQuery } from 'react-query'
+
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
-import { useMemo } from 'react'
 import { fromChainAmount, num } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
 
 type RewardData = {
   amount: string
@@ -26,7 +27,7 @@ export type Reward = TokenInfo & {
 }
 
 export type RewardsResult = {
-  rewards: Reward[]
+  rewards: RewardData[]
   totalValue: number
 }
 
@@ -38,7 +39,9 @@ function aggregateRewards(rewards: RewardData[]): RewardData[] {
       reward.info.token?.contract_addr || reward.info.native_token?.denom
 
     // If neither contract_addr nor denom exist, skip this reward
-    if (!denom) return acc
+    if (!denom) {
+      return acc
+    }
 
     const amount = parseInt(reward.amount)
     acc[denom] = (acc[denom] || 0) + amount
@@ -61,13 +64,13 @@ function aggregateRewards(rewards: RewardData[]): RewardData[] {
 const useRewards = (poolId) => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
-  const [{ staking_address } = {}] = useQueryPoolLiquidity({ poolId })
+  const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
   const { address, client } = useRecoilValue(walletState)
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
-    queryFn: async (): Promise<RewardData[]> => {
+    queryFn: async (): Promise<RewardsResult> => {
       // return Promise.resolve(rewardsMock)
       return client?.queryContractSmart(staking_address, {
         rewards: { address },

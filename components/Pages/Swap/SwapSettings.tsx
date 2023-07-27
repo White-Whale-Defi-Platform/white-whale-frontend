@@ -36,13 +36,19 @@ const SwapSettings = () => {
   }
 
   const onSlippageChange = ({ target }) => {
-    if (auto === true) setAuto.off()
+    if (auto === true) {
+      setAuto.off()
+    }
 
     if (!!target?.value && Number(target?.value) < 100) {
-      if (error) setError(false)
+      if (error) {
+        setError(false)
+      }
       setSlippage(target?.value)
     } else {
-      if (!!target?.value) setError(true)
+      if (!!target?.value) {
+        setError(true)
+      }
       setSlippage(0)
       setAuto.on()
     }

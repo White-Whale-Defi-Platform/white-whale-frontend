@@ -30,6 +30,9 @@ export function updateAPRHelperState(
       }
       return item
     })
+    if (!updatedAPR) {
+      return []
+    }
 
     const existingPool = updatedAPR.find((item) => item.poolId === poolId)
     if (!existingPool) {

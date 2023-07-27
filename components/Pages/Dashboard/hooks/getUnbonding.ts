@@ -1,7 +1,8 @@
-import { Wallet } from 'util/wallet-adapters'
-import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
-import { Config } from './useDashboardData'
 import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
+import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
+import { Wallet } from 'util/wallet-adapters'
+
+import { Config } from './useDashboardData'
 
 export interface UnbondingInfo {
   total_amount: string
@@ -44,6 +45,9 @@ export const getUnbonding = async (
 
   // filtering out unbonding requests which have already finished, so they won't get shown
   const filterUnbondingRequests = (unbondingRequests) => {
+    if (!unbondingRequests) {
+      return []
+    }
     return unbondingRequests.filter(
       (req) => Number(req.timestamp) + unbondingPeriodInNano > currentTimeInNano
     )
@@ -90,9 +94,9 @@ const fetchUnbonding = async (
   address: string,
   config: Config
 ): Promise<UnbondingInfo[]> => {
-  return await Promise.all(
+  return Promise.all(
     Object.entries(config.lsd_token).map(async ([key, token]) => {
-      return await client.queryContractSmart(config.whale_lair, {
+      return client.queryContractSmart(config.whale_lair, {
         unbonding: { address: address, denom: token.denom },
       })
     })

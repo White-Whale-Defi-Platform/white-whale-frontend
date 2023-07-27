@@ -8,7 +8,9 @@ type Props = {
 }
 
 const Multiplicator = ({ multiplicator, apr, show }: Props) => {
-  if (!show) return null
+  if (!show) {
+    return null
+  }
 
   return (
     <VStack

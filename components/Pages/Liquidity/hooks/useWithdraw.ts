@@ -1,14 +1,16 @@
-import { num } from 'libs/num'
 import { useMemo } from 'react'
+
+import { num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
+import { isNativeToken } from 'services/asset'
 import { walletState } from 'state/atoms/walletAtoms'
+import { protectAgainstNaN } from 'util/conversion/index'
+
 import {
   createWithdrawExecuteMsgs,
   createWithdrawMsg,
 } from './createWithdrawMsgs'
 import { useWithdrawTransaction } from './useWithdrawTransaction'
-import { isNativeToken } from 'services/asset'
-import { protectAgainstNaN } from 'util/conversion/index'
 
 type Props = {
   amount: string
@@ -28,7 +30,9 @@ const useWithdraw = ({
   const { address, client } = useRecoilValue(walletState)
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (parseFloat(amount) === 0 || contract === null || !client) return {}
+    if (parseFloat(amount) === 0 || contract === null || !client) {
+      return {}
+    }
 
     return {
       msgs: createWithdrawMsg({

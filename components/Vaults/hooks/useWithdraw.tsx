@@ -32,7 +32,9 @@ const useWithdraw = ({
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (!tokenInfo || !Number(amount)) return {}
+    if (!tokenInfo || !Number(amount)) {
+      return {}
+    }
 
     return {
       msgs: createWithdrawMsg({

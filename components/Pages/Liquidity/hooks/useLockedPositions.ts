@@ -1,13 +1,15 @@
+import { useQuery } from 'react-query'
+
 import dayjs from 'dayjs'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
-import { fromChainAmount, num } from 'libs/num'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
-import { useQuery } from 'react-query'
+import { fromChainAmount } from 'libs/num'
+import { TokenInfo } from 'queries/usePoolsListQuery'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { formatSeconds } from 'util/formatSeconds'
-import { TokenInfo } from 'queries/usePoolsListQuery'
+import { protectAgainstNaN } from 'util/conversion/index'
 
 export type Position = {
   amount: number
@@ -23,21 +25,13 @@ export type Position = {
 }
 
 export const lpPositionToAssets = ({
-  totalReserve,
+  totalAssets,
   totalLpSupply,
-  providedLp,
+  myLockedLp,
 }) => {
   return [
-    num(totalReserve?.[0])
-      .times(providedLp)
-      .div(totalLpSupply)
-      .dp(6)
-      .toNumber(),
-    num(totalReserve?.[1])
-      .times(providedLp)
-      .div(totalLpSupply)
-      .dp(6)
-      .toNumber(),
+    protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
+    protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
   ]
 }
 export const fetchPositions = async (
@@ -46,7 +40,7 @@ export const fetchPositions = async (
   incentiveAddress,
   address,
   pool_assets,
-  totalReserve,
+  totalAssets,
   totalLpSupply
 ) => {
   const data = await client?.queryContractSmart(incentiveAddress, {
@@ -60,7 +54,9 @@ export const fetchPositions = async (
       const open = { ...(p?.open_position || {}) }
       open.formatedTime = formatSeconds(open.unbonding_duration)
       open.isOpen = true
-      if (p?.open_position) positions.push(open)
+      if (p?.open_position) {
+        positions.push(open)
+      }
 
       // closed position
       const close = { ...(p?.closed_position || {}) }
@@ -69,19 +65,19 @@ export const fetchPositions = async (
       const diff = unbonding.diff(today, 'second')
       close.formatedTime = formatSeconds(diff)
       close.isOpen = false
-      if (p?.closed_position) positions.push(close)
+      if (p?.closed_position) {
+        positions.push(close)
+      }
 
       return positions.map((position) => {
         const lpAssets = lpPositionToAssets({
-          totalReserve,
+          totalAssets,
           totalLpSupply,
-          providedLp: position.amount,
+          myLockedLp: position.amount,
         })
         const assets = pool_assets.map((asset, i) => {
           const assetAmount = fromChainAmount(lpAssets[i], asset.decimals)
-          const dollarValue = num(assetAmount)
-            .times(prices?.[asset.symbol] || 0)
-            .toNumber()
+          const dollarValue = Number(assetAmount) * prices?.[asset.symbol] || 0
           return {
             ...asset,
             assetAmount: parseFloat(assetAmount),
@@ -110,7 +106,7 @@ export const fetchPositions = async (
 const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
     useQueryPoolLiquidity({ poolId })
-  const totalLpSupply = liquidity?.available?.total?.tokenAmount || 0
+  const totalLpSupply = liquidity?.available?.totalLpAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]
   const { address, client } = useRecoilValue(walletState)
   const tokens = useTokenList()

@@ -1,8 +1,8 @@
-import { getRewardsInfo, RewardsInfoResponse } from '../services/rewards'
-import { convertMicroDenomToDenom } from '../util/conversion'
+import { getRewardsInfo, RewardsInfoResponse } from 'services/rewards'
+import { convertMicroDenomToDenom } from 'util/conversion'
 import { InternalQueryContext } from './types'
 import { PoolEntityType, TokenInfoWithReward } from './usePoolsListQuery'
-import { PoolTokenValue } from './useQueryPools'
+import { PoolTokenValue } from 'queries/useQueryPoolsLiquidity'
 
 const blocksPerSecond = 6
 const blocksPerYear = (525600 * 60) / blocksPerSecond
@@ -34,7 +34,7 @@ export async function queryRewardsContracts({
 
   const currentHeight = await client.getHeight()
 
-  return await Promise.all(
+  return Promise.all(
     rewardsContractsInfo.map(async (contractInfo, index) => {
       const tokenInfo = rewardsTokens[index]
       const expired = currentHeight > contractInfo.reward.period_finish
