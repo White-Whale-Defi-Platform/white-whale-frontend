@@ -185,8 +185,8 @@ export const useQueryPoolsLiquidity = ({
             // const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
             const state = getState()
             const denom =
-              flow?.flow_asset?.info?.token?.contract_addr ||
-              flow?.flow_asset?.info?.native_token?.denom ||
+              flow.flow_asset.info?.token?.contract_addr ||
+              flow.flow_asset.info?.native_token?.denom ||
               null
             const token = tokenList?.tokens?.find((t) => t?.denom === denom)
 
@@ -291,7 +291,6 @@ export const useQueryPoolsLiquidity = ({
     }
 
     const myFlows = await getMyFlows({ client, address })
-
     const liquidity = {
       available: {
         totalLpAmount: poolInfo.lp_token_supply,

@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-
 import AssetInput from '../../AssetInput'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bondingContract'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 

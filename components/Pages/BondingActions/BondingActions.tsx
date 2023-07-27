@@ -14,15 +14,13 @@ import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAci
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bonding_contract'
-import { useChains } from 'hooks/useChainInfo'
-import usePrices from 'hooks/usePrices'
+} from 'constants/bondingContract'
+import Loader from '../../Loader'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 
-import Loader from '../../Loader'
 import WalletModal from '../../Wallet/Modal/Modal'
 import { ActionType } from '../Dashboard/BondingOverview'
 import {
@@ -30,12 +28,14 @@ import {
   useConfig,
   useDashboardData,
 } from '../Dashboard/hooks/useDashboardData'
-import Bond, { LSDTokenItemState } from './Bond'
+import { Bond, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
 
 import useTransaction, { TxStep } from './hooks/useTransaction'
+import { useChains } from 'hooks/useChainInfo'
+import usePrices from 'hooks/usePrices'
 
 export enum WhaleTokenType {
   ampWHALE,
@@ -71,7 +71,9 @@ const BondingActions = ({ globalAction }) => {
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
+    // @ts-ignore
     if (prices && prices.WHALE) {
+      // @ts-ignore
       return prices.WHALE
     }
     return 0 // Default value

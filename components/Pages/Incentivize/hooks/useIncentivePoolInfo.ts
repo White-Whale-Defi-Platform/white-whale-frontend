@@ -46,6 +46,7 @@ export interface FlowData {
   apr: number
   logoURI: string
   tokenSymbol: string
+  endEpoch: number
 }
 export interface IncentivePoolInfo {
   flowData?: FlowData[]
@@ -107,16 +108,6 @@ export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
 const fetchFlows = async (client, address): Promise<Flow[]> => {
   return await client?.queryContractSmart(address, { flows: {} })
 }
-const fetchGlobalIncentiveWeight = async (
-  client,
-  epochId,
-  incentiveAddress
-) => {
-  const { global_weight } = await client.queryContractSmart(incentiveAddress, {
-    global_weight: { epoch_id: Number(epochId) },
-  })
-  return Number(global_weight)
-}
 
 const getPoolFlowData = async (
   client,
@@ -135,9 +126,12 @@ const getPoolFlowData = async (
               flowData: null,
             } // Skip this iteration and continue with the next one.
           }
+          //TODO replace with own total liq calc
           const totalLiquidity = poolsWithAprAnd24HrVolume.find(
             (p) => p.pool_id === pool.pool_id
           )?.totalLiquidity
+
+          //TODO refactor and put together using useQuery
           const lockedLp = await fetchTotalLockedLp(
             pool.staking_address,
             pool.lp_token,
@@ -160,6 +154,7 @@ const getPoolFlowData = async (
                 flow.flow_asset.info?.native_token?.denom ??
                 flow.flow_asset.info.token.contract_addr,
               dailyEmission: 0,
+              endEpoch: Number(flow.end_epoch),
             }
           })
           const uniqueFlowList = flowList.reduce((acc, current) => {

@@ -84,7 +84,7 @@ const useEpoch = () => {
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
     queryFn: async () =>
-      client?.queryContractSmart(contracts?.fee_distributor, {
+      await client?.queryContractSmart(contracts?.fee_distributor, {
         config: {},
       }),
     enabled: !!contracts && !!client,
@@ -93,7 +93,7 @@ const useEpoch = () => {
   const { data } = useQuery<EpochData>({
     queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
     queryFn: async () =>
-      client?.queryContractSmart(contracts?.fee_distributor, {
+      await client?.queryContractSmart(contracts?.fee_distributor, {
         current_epoch: {},
       }),
     enabled: !!contracts && !!client,

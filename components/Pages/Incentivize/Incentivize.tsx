@@ -74,8 +74,7 @@ const Incentivize: FC = () => {
 
   return (
     <VStack
-      width="auto"
-      minWidth={{ base: '100%', md: '800' }}
+      minWidth={{ base: '100%', md: '880' }}
       alignItems="center"
       padding={5}
     >

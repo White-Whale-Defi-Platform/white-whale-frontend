@@ -7,7 +7,7 @@ import WalletIcon from 'components/icons/WalletIcon'
 import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 import { validChains } from 'constants/validChains'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import useConnectCosmostation from 'hooks/useConnectCosmostation'
@@ -16,7 +16,7 @@ import useConnectLeap from 'hooks/useConnectLeap'
 import { useTerraStation } from 'hooks/useTerraStation'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { NetworkType, walletState } from 'state/atoms/walletAtoms'
 import { getPathName } from 'util/route'
 
 const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
@@ -46,7 +46,9 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     }
 
     const defaultChainId =
-      currentWalletState.network === 'mainnet' ? 'phoenix-1' : 'pisco-1'
+      currentWalletState.network === NetworkType.mainnet
+        ? 'migaloo-1'
+        : 'narwhal-1'
 
     if (
       validChains[currentWalletState.network][chainIdParam] !==

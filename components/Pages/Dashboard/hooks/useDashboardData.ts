@@ -14,6 +14,7 @@ import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawabl
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { debounce } from 'lodash'
+import { NetworkType } from 'state/atoms/walletAtoms'
 
 export interface TokenDetails {
   name: string
@@ -34,7 +35,7 @@ export interface Config {
   }
 }
 
-export const useConfig = (network: string, chainId: string) => {
+export const useConfig = (network: NetworkType, chainId: string) => {
   const [config, setConfig] = useState<Config | null>(null)
 
   useEffect(() => {

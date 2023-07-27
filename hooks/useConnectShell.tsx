@@ -16,6 +16,7 @@ export default function useConnectShell() {
     if (connectedWallet) {
       disconnect()
     }
+    // @ts-ignore
     if (window && !window?.shellwallet) {
       alert('Please install Shell Wallet extension and refresh the page.')
       return
@@ -55,13 +56,13 @@ export default function useConnectShell() {
     }
   }
 
-  const setShellAndConnect = () => {
+  const setShellAndConnect = async () => {
     setCurrentWalletState({
       ...currentWalletState,
       activeWallet: 'shellwallet',
     })
     localStorage.removeItem('__terra_extension_router_session__')
-    connectShell()
+    await connectShell()
   }
 
   return { connectShell, setShellAndConnect }

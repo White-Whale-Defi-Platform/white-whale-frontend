@@ -1,6 +1,5 @@
 import React from 'react'
 import { useQueryClient } from 'react-query'
-
 import {
   Box,
   Drawer,
@@ -16,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
@@ -29,6 +27,7 @@ import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
+import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 
 export const links = [
   {
@@ -75,7 +74,7 @@ const Navbar = () => {
       address: '',
       key: null,
       client: null,
-      network,
+      network: network,
       chainId,
       activeWallet: null,
     })
@@ -107,6 +106,7 @@ const Navbar = () => {
               key={menu.label}
               menu={menu}
               currentChainName={currentChainName}
+              chainId={chainId}
             />
           ))}
         </Card>

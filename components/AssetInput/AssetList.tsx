@@ -5,10 +5,10 @@ import FallbackImage from 'components/FallbackImage'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bonding_contract'
-import useFilter from 'hooks/useFilter'
+} from 'constants/bondingContract'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
+import useFilter from 'hooks/useFilter'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void

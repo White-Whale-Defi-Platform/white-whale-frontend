@@ -1,5 +1,5 @@
 import { getRewardsInfo, RewardsInfoResponse } from 'services/rewards'
-import { convertMicroDenomToDenom } from '../util/conversion'
+import { convertMicroDenomToDenom } from 'util/conversion'
 import { InternalQueryContext } from './types'
 import { PoolEntityType, TokenInfoWithReward } from './usePoolsListQuery'
 import { PoolTokenValue } from 'queries/useQueryPoolsLiquidity'

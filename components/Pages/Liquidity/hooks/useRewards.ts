@@ -27,7 +27,7 @@ export type Reward = TokenInfo & {
 }
 
 export type RewardsResult = {
-  rewards: Reward[]
+  rewards: RewardData[]
   totalValue: number
 }
 
@@ -64,13 +64,13 @@ function aggregateRewards(rewards: RewardData[]): RewardData[] {
 const useRewards = (poolId) => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
-  const [{ staking_address } = {}] = useQueryPoolLiquidity({ poolId })
+  const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
   const { address, client } = useRecoilValue(walletState)
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
-    queryFn: async (): Promise<RewardData[]> => {
+    queryFn: async (): Promise<RewardsResult> => {
       // return Promise.resolve(rewardsMock)
       return client?.queryContractSmart(staking_address, {
         rewards: { address },
