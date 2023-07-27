@@ -12,7 +12,7 @@ export function useQueriesDataSelector<
     const queriesData: Array<TQueries[number]['data']> = queriesResult?.map(
       ({ data: _data }) => _data
     )
-    const didFetchEveryQuery = !queriesData.includes(undefined)
+    const didFetchEveryQuery = queriesData && !queriesData.includes(undefined)
 
     return [
       didFetchEveryQuery ? queriesData : undefined,

@@ -75,6 +75,11 @@ export const useTradingHistory = ({ pair, dateTime }) => {
       ? data?.tradingHistories?.nodes
       : []
 
+    // NULL POINTER CHECK for tradingHistories
+    if (!tradingHistories) {
+      return
+    }
+
     const swapAssets = Array.from(
       new Set(
         tradingHistories.map((row) => {
