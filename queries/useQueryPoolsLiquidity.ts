@@ -2,27 +2,28 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
 import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
+import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
 import {
-  __POOL_REWARDS_ENABLED__,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+  __POOL_REWARDS_ENABLED__,
 } from 'constants/settings'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { protectAgainstNaN } from 'junoblocks'
+import { fromChainAmount } from 'libs/num'
+import { queryPoolInfo } from 'queries/queryPoolInfo'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { TokenInfo } from 'types'
+
 import { queryMyLiquidity } from './queryMyLiquidity'
 import {
-  queryRewardsContracts,
   SerializedRewardsContract,
+  queryRewardsContracts,
 } from './queryRewardsContracts'
-import { queryPoolInfo } from 'queries/queryPoolInfo'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
-import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
-import { fromChainAmount } from 'libs/num'
 
 export type AssetType = [number?, number?]
 
@@ -181,8 +182,10 @@ export const useQueryPoolsLiquidity = ({
               }
             }
 
-            // check if end time is in the past
-            // const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+            /*
+             * Check if end time is in the past
+             * const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+             */
             const state = getState()
             const denom =
               flow.flow_asset.info?.token?.contract_addr ||
@@ -229,26 +232,28 @@ export const useQueryPoolsLiquidity = ({
       totalLockedLp,
       myLockedLp,
     })
-    //
-    // const tokenADollarPrice = await getTokenDollarValue({
-    //   tokenA,
-    //   tokenAmountInDenom: 1,
-    //   tokenB,
-    // })
-    //
-    // function getPoolTokensValue({ tokenAmountInMicroDenom }) {
-    //   return {
-    //     tokenAmount: tokenAmountInMicroDenom,
-    //     dollarValue:
-    //       calcPoolTokenDollarValue({
-    //         tokenAmountInMicroDenom,
-    //         tokenSupply:  poolInfo.lp_token_supply,
-    //         tokenReserves: totalAssets[0],
-    //         tokenDollarPrice: tokenADollarPrice,
-    //         tokenDecimals: tokenA?.decimals,
-    //       }) || 0,
-    //   }
-    // }
+    /*
+     *
+     * Const tokenADollarPrice = await getTokenDollarValue({
+     *   tokenA,
+     *   tokenAmountInDenom: 1,
+     *   tokenB,
+     * })
+     *
+     * function getPoolTokensValue({ tokenAmountInMicroDenom }) {
+     *   return {
+     *     tokenAmount: tokenAmountInMicroDenom,
+     *     dollarValue:
+     *       calcPoolTokenDollarValue({
+     *         tokenAmountInMicroDenom,
+     *         tokenSupply:  poolInfo.lp_token_supply,
+     *         tokenReserves: totalAssets[0],
+     *         tokenDollarPrice: tokenADollarPrice,
+     *         tokenDecimals: tokenA?.decimals,
+     *       }) || 0,
+     *   }
+     * }
+     */
     function getPoolTokensValues(assets, lpTokenAmount = null) {
       const tokenASymbol =
         tokenA.symbol === 'ampWHALE' || tokenA.symbol === 'bWHALE'
@@ -267,11 +272,11 @@ export const useQueryPoolsLiquidity = ({
     }
 
     const [myNotLockedLiquidity, totalLockedLiquidity, myLockedLiquidity] = [
-      /* calc provided liquidity dollar value */
+      /* Calc provided liquidity dollar value */
       getPoolTokensValues(myNotLockedAssets, myNotLockedLp),
-      /* calc total locked liquidity dollar value */
+      /* Calc total locked liquidity dollar value */
       getPoolTokensValues(totalLockedAssets),
-      /* calc provided liquidity dollar value */
+      /* Calc provided liquidity dollar value */
       getPoolTokensValues(myLockedAssets),
     ]
     let annualYieldPercentageReturn = 0
@@ -330,9 +335,9 @@ export const useQueryPoolsLiquidity = ({
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
       enabled:
-        Boolean(!!client && pool.pool_id && enabledGetTokenDollarValue) &&
+        Boolean(client && pool.pool_id && enabledGetTokenDollarValue) &&
         tokenList.tokens.length > 0 &&
-        !!prices,
+        Boolean(prices),
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL

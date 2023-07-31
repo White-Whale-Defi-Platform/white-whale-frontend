@@ -70,14 +70,13 @@ const useRewards = (poolId) => {
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
-    queryFn: async (): Promise<RewardsResult> => {
-      // return Promise.resolve(rewardsMock)
-      return client?.queryContractSmart(staking_address, {
+    queryFn: async (): Promise<RewardsResult> =>
+      // Return Promise.resolve(rewardsMock)
+      client?.queryContractSmart(staking_address, {
         rewards: { address },
-      })
-    },
+      }),
     select: (data) => data?.rewards || [],
-    enabled: !!staking_address && !!address,
+    enabled: Boolean(staking_address) && Boolean(address),
   })
   const aggregatedRewards = useMemo(() => aggregateRewards(rewards), [rewards])
 
@@ -85,7 +84,7 @@ const useRewards = (poolId) => {
     const rewardsWithToken = []
 
     aggregatedRewards?.forEach((reward) => {
-      //cw20 token
+      // Cw20 token
       if (reward.info.token) {
         const t = tokenList?.tokens.find(
           (token) => token.denom === reward.info.token.contract_addr
@@ -101,7 +100,7 @@ const useRewards = (poolId) => {
           dollarValue,
         })
       }
-      //native token
+      // Native token
       if (reward.info.native_token) {
         const t = tokenList?.tokens.find(
           (token) => token.denom === reward.info.native_token.denom

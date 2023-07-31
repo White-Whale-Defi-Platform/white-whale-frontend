@@ -22,10 +22,12 @@ export default extendTheme({
         initialColorMode: 'dark',
         useSystemColorMode: false,
       },
-      // "#chakra-toast-manager-bottom-right": {
-      //   right: "32px!important",
-      //   bottom: "32px!important",
-      // },
+      /*
+       * "#chakra-toast-manager-bottom-right": {
+       *   right: "32px!important",
+       *   bottom: "32px!important",
+       * },
+       */
     },
   },
   fonts: {
@@ -48,18 +50,20 @@ export default extendTheme({
     Menu,
   },
   colors: {
-    // green: { 500: "#5ECFD1" },
-    // red: { 500: "#ED7470" },
-    // white: { 500: "white" },
-    // brand: {
-    //   100: "rgba(255,255,255,0.15)",
-    //   200: "rgba(255,255,255,0.5)",
-    //   500: "#3CCD64",
-    //   600: "#35364F",
-    //   700: "#25273C",
-    //   800: "#303348",
-    //   900: "#252525",
-    // },
+    /*
+     * Green: { 500: "#5ECFD1" },
+     * red: { 500: "#ED7470" },
+     * white: { 500: "white" },
+     * brand: {
+     *   100: "rgba(255,255,255,0.15)",
+     *   200: "rgba(255,255,255,0.5)",
+     *   500: "#3CCD64",
+     *   600: "#35364F",
+     *   700: "#25273C",
+     *   800: "#303348",
+     *   900: "#252525",
+     * },
+     */
     brand: {
       '50': '#ffffff80',
       '100': '#B4FAB3',
@@ -73,7 +77,7 @@ export default extendTheme({
       '900': '#0B6245',
     },
     dark: {
-      900: '#252525',
+      '900': '#252525',
     },
   },
 })

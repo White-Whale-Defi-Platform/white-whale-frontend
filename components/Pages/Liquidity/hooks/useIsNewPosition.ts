@@ -7,9 +7,9 @@ const useIsNewPosition = ({ bondingDays, poolId }) => {
   const { data: positions = [] } = useLockedPositions(poolId)
 
   return useMemo(() => {
-    const match: any[] = positions?.filter((p) => {
-      return p?.unbonding_duration === bondingDays * NUMBER_OF_SECONDS_IN_DAY
-    })
+    const match: any[] = positions?.filter(
+      (p) => p?.unbonding_duration === bondingDays * NUMBER_OF_SECONDS_IN_DAY
+    )
 
     return match.length === 0
   }, [positions, bondingDays, poolId])

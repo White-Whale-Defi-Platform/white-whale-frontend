@@ -15,7 +15,7 @@ export const useCosmwasmClient = (
       return CosmWasmClient.connect(chain.rpc)
     },
     {
-      enabled: !!chainId,
+      enabled: Boolean(chainId),
     }
   )
 

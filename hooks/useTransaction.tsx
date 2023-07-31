@@ -86,7 +86,7 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) {
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -106,15 +106,16 @@ export const useTransaction = ({
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
-        }
-        // else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
-        //   console.error(error)
-        //   setTxStep(TxStep.Idle)
-        //   setButtonLabel('Insuifficient liquidity')
-        //   setError("Insuifficient liquidity")
-        //   throw new Error('Insuifficient liquidity')
-        // }
-        else {
+        } else {
+        /*
+         * Else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
+         *   console.error(error)
+         *   setTxStep(TxStep.Idle)
+         *   setButtonLabel('Insuifficient liquidity')
+         *   setError("Insuifficient liquidity")
+         *   throw new Error('Insuifficient liquidity')
+         * }
+         */
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Failed to execute transaction.')
@@ -141,16 +142,15 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(
-    (data: any) => {
-      return directTokenSwap({
+    (data: any) =>
+      directTokenSwap({
         tokenA,
         swapAddress,
         senderAddress,
         msgs,
         tokenAmount: Number(amount),
         client,
-      })
-    },
+      }),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -268,8 +268,8 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       fee,
       buttonLabel,
       submit,
@@ -278,9 +278,10 @@ export const useTransaction = ({
       txHash,
       error,
       reset,
-    }
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txStep, txInfo, txHash, error, reset, fee])
+    [txStep, txInfo, txHash, error, reset, fee]
+  )
 }
 
 export default useTransaction

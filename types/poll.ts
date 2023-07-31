@@ -1,13 +1,13 @@
 export enum PollStatus {
-  InProgress = 'in_progress',
-  Passed = 'passed',
-  Rejected = 'rejected',
-  Executed = 'executed',
+  InProgress = `in_progress`,
+  Passed = `passed`,
+  Rejected = `rejected`,
+  Executed = `executed`,
 }
 
 export enum VoteType {
-  Yes = 'yes',
-  No = 'no',
+  Yes = `yes`,
+  No = `no`,
 }
 
 export enum PollType {

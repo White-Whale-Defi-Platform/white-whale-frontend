@@ -8,13 +8,13 @@ export type Expiration =
   | { readonly never: unknown }
 
 export interface AllowanceResponse {
-  readonly allowance: string // integer as string
+  readonly allowance: string // Integer as string
   readonly expires: Expiration
 }
 
 export interface AllowanceInfo {
-  readonly allowance: string // integer as string
-  readonly spender: string // bech32 address
+  readonly allowance: string // Integer as string
+  readonly spender: string // Bech32 address
   readonly expires: Expiration
 }
 
@@ -49,14 +49,14 @@ export interface Claims {
 }
 
 export interface AllAccountsResponse {
-  // list of bech32 address that have a balance
+  // List of bech32 address that have a balance
   readonly accounts: readonly string[]
 }
 
 export interface CW20Instance {
   readonly contractAddress: string
 
-  // queries
+  // Queries
   balance: (address: string) => Promise<string>
   allowance: (owner: string, spender: string) => Promise<AllowanceResponse>
   allAllowances: (
@@ -73,7 +73,7 @@ export interface CW20Instance {
   claims: (address: string) => Promise<Claims>
   minter: (sender: string) => Promise<any>
 
-  // actions
+  // Actions
   mint: (sender: string, recipient: string, amount: string) => Promise<string>
   transfer: (
     sender: string,
@@ -118,21 +118,19 @@ export const CW20 = (client: Wallet): CW20Contract => {
     const allowance = async (
       owner: string,
       spender: string
-    ): Promise<AllowanceResponse> => {
-      return client.queryContractSmart(contractAddress, {
+    ): Promise<AllowanceResponse> =>
+      client.queryContractSmart(contractAddress, {
         allowance: { owner, spender },
       })
-    }
 
     const allAllowances = async (
       owner: string,
       startAfter?: string,
       limit?: number
-    ): Promise<AllAllowancesResponse> => {
-      return client.queryContractSmart(contractAddress, {
+    ): Promise<AllAllowancesResponse> =>
+      client.queryContractSmart(contractAddress, {
         all_allowances: { owner, start_after: startAfter, limit },
       })
-    }
 
     const allAccounts = async (
       startAfter?: string,
@@ -147,25 +145,21 @@ export const CW20 = (client: Wallet): CW20Contract => {
       return accounts.accounts
     }
 
-    const tokenInfo = async (): Promise<CW20TokenInfo> => {
-      return client.queryContractSmart(contractAddress, { token_info: {} })
-    }
+    const tokenInfo = async (): Promise<CW20TokenInfo> =>
+      client.queryContractSmart(contractAddress, { token_info: {} })
 
-    const investment = async (): Promise<Investment> => {
-      return client.queryContractSmart(contractAddress, { investment: {} })
-    }
+    const investment = async (): Promise<Investment> =>
+      client.queryContractSmart(contractAddress, { investment: {} })
 
-    const claims = async (address: string): Promise<Claims> => {
-      return client.queryContractSmart(contractAddress, {
+    const claims = async (address: string): Promise<Claims> =>
+      client.queryContractSmart(contractAddress, {
         claims: { address },
       })
-    }
 
-    const minter = async (): Promise<any> => {
-      return client.queryContractSmart(contractAddress, { minter: {} })
-    }
+    const minter = async (): Promise<any> =>
+      client.queryContractSmart(contractAddress, { minter: {} })
 
-    // mints tokens, returns transactionHash
+    // Mints tokens, returns transactionHash
     const mint = async (
       sender: string,
       recipient: string,
@@ -177,7 +171,7 @@ export const CW20 = (client: Wallet): CW20Contract => {
       return result.transactionHash
     }
 
-    // transfers tokens, returns transactionHash
+    // Transfers tokens, returns transactionHash
     const transfer = async (
       sender: string,
       recipient: string,
@@ -189,7 +183,7 @@ export const CW20 = (client: Wallet): CW20Contract => {
       return result.transactionHash
     }
 
-    // burns tokens, returns transactionHash
+    // Burns tokens, returns transactionHash
     const burn = async (sender: string, amount: string): Promise<string> => {
       const result = await client.execute(sender, contractAddress, {
         burn: { amount },

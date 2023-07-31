@@ -8,8 +8,8 @@ import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-import { formatSeconds } from 'util/formatSeconds'
 import { protectAgainstNaN } from 'util/conversion/index'
+import { formatSeconds } from 'util/formatSeconds'
 
 export type Position = {
   amount: number
@@ -28,12 +28,10 @@ export const lpPositionToAssets = ({
   totalAssets,
   totalLpSupply,
   myLockedLp,
-}) => {
-  return [
-    protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
-    protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
-  ]
-}
+}) => [
+  protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
+  protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
+]
 export const fetchPositions = async (
   client,
   prices,
@@ -50,7 +48,7 @@ export const fetchPositions = async (
     .map((p) => {
       const positions = []
 
-      // open position
+      // Open position
       const open = { ...(p?.open_position || {}) }
       open.formatedTime = formatSeconds(open.unbonding_duration)
       open.isOpen = true
@@ -58,7 +56,7 @@ export const fetchPositions = async (
         positions.push(open)
       }
 
-      // closed position
+      // Closed position
       const close = { ...(p?.closed_position || {}) }
       const today = dayjs(new Date())
       const unbonding = dayjs.unix(close.unbonding_timestamp)
@@ -89,9 +87,10 @@ export const fetchPositions = async (
           duration: position.formatedTime,
           weight: position.weight,
           assets,
-          value: assets.reduce((acc, asset) => {
-            return acc + Number(asset.dollarValue)
-          }, 0),
+          value: assets.reduce(
+            (acc, asset) => acc + Number(asset.dollarValue),
+            0
+          ),
           state: position.isOpen
             ? 'active'
             : diff <= 0
@@ -132,7 +131,7 @@ const useLockedPositions = (poolId: string) => {
         totalReserve,
         totalLpSupply
       ),
-    enabled: !!address && !!client && !!staking_address,
+    enabled: Boolean(address) && Boolean(client) && Boolean(staking_address),
   })
 }
 

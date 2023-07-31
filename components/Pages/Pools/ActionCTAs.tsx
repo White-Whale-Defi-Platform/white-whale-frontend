@@ -1,8 +1,8 @@
-import { Button, HStack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
+import { Button, HStack } from '@chakra-ui/react'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
+import { useRouter } from 'next/router'
 
 export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {
   const router = useRouter()

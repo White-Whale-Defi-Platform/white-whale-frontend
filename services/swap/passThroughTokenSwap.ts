@@ -40,7 +40,7 @@ export const passThroughTokenSwap = async ({
     },
   }
 
-  if (!tokenA.native) {
+  if (!tokenA['native']) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,
       tokenAmount,

@@ -55,9 +55,8 @@ export const getPairInfos = async (
   const data = await chainDataResponse?.text()
   if (chainDataResponse?.status === 200 && data !== 'chain unknown' && data) {
     return JSON.parse(data)
-  } else {
-    return []
   }
+  return []
 }
 export const getPairInfosTerra = async (): Promise<any> => {
   const swapAddresses = terraPoolConfig.pools
@@ -69,9 +68,8 @@ export const getPairInfosTerra = async (): Promise<any> => {
 
   if (chainDataResponse.status === 200 && data) {
     return data
-  } else {
-    return []
   }
+  return []
 }
 export const getPairAprAndDailyVolume = async (
   pools: any[],
@@ -94,19 +92,16 @@ export const getPairAprAndDailyVolume = async (
         ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
       } as EnigmaPoolData
     })
-  } else {
-    console.log('No pair infos found')
-    return poolIds?.map((poolId: any) => {
-      return {
-        pool_id: poolId,
-        TVL: 'n/a',
-        usdVolume24h: 'n/a',
-        usdVolume7d: 'n/a',
-        apr7d: 'n/a',
-        ratio: 'n/a',
-      }
-    })
   }
+  console.log('No pair infos found')
+  return poolIds?.map((poolId: any) => ({
+    pool_id: poolId,
+    TVL: 'n/a',
+    usdVolume24h: 'n/a',
+    usdVolume7d: 'n/a',
+    apr7d: 'n/a',
+    ratio: 'n/a',
+  }))
 }
 export const getPairAprAndDailyVolumeTerra = async (
   pools: any[]
@@ -114,7 +109,7 @@ export const getPairAprAndDailyVolumeTerra = async (
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
   const pairInfos: any = await getPairInfosTerra()
 
-  if (!!pairInfos && pairInfos.pools?.length > 0 && !!pools) {
+  if (pairInfos && pairInfos.pools?.length > 0 && pools) {
     return swapAddresses?.map((swapAddress: string) => {
       const pairInfo = pairInfos.pools.find(
         (row: any) => row.id === swapAddress
@@ -151,20 +146,19 @@ export const getPairAprAndDailyVolumeTerra = async (
         ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData
     })
-  } else {
-    console.log('No pair infos found')
-    return swapAddresses?.map((swapAddress: any) => {
-      const poolId = terraPoolConfig.pools.find(
-        (pool: any) => pool.swap_address === swapAddress
-      ).pool_id
-      return {
-        pool_id: poolId,
-        TVL: 'n/a',
-        usdVolume24h: 'n/a',
-        usdVolume7d: 'n/a',
-        apr7d: 'n/a',
-        ratio: 'n/a',
-      }
-    })
   }
+  console.log('No pair infos found')
+  return swapAddresses?.map((swapAddress: any) => {
+    const poolId = terraPoolConfig.pools.find(
+      (pool: any) => pool.swap_address === swapAddress
+    ).pool_id
+    return {
+      pool_id: poolId,
+      TVL: 'n/a',
+      usdVolume24h: 'n/a',
+      usdVolume7d: 'n/a',
+      apr7d: 'n/a',
+      ratio: 'n/a',
+    }
+  })
 }

@@ -8,12 +8,12 @@ export const APP_NAME = process.env.NEXT_PUBLIC_SITE_TITLE
 
 export const POOL_TOKENS_DECIMALS = 6
 
-/* the app operates in test mode */
+/* The app operates in test mode */
 export const __TEST_MODE__ = !JSON.parse(
   process.env.NEXT_PUBLIC_TEST_MODE_DISABLED
 )
 
-/* feature flags */
+/* Feature flags */
 export const __POOL_STAKING_ENABLED__ = JSON.parse(
   process.env.NEXT_PUBLIC_ENABLE_FEATURE_STAKING
 )
@@ -28,7 +28,7 @@ export const __DARK_MODE_ENABLED_BY_DEFAULT__ = JSON.parse(
 )
 /* /feature flags */
 
-// stable coins
+// Stable coins
 export const STABLE_COIN_LIST = ['CMST', 'USDT', 'axlUSDC']
 
 export const POOL_INFO_BASE_URL =

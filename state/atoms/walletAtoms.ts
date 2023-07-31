@@ -3,17 +3,17 @@ import { atom } from 'recoil'
 import { Wallet } from 'util/wallet-adapters'
 
 export enum WalletStatusType {
-  /* nothing happens to the wallet */
+  /* Nothing happens to the wallet */
   idle = '@wallet-state/idle',
-  /* restored wallets state from the cache */
+  /* Restored wallets state from the cache */
   restored = '@wallet-state/restored',
-  /* the wallet is fully connected */
+  /* The wallet is fully connected */
   connected = '@wallet-state/connected',
-  /* the wallet is fully connected */
+  /* The wallet is fully connected */
   disconnected = '@wallet-state/disconnected',
-  /* connecting to the wallet */
+  /* Connecting to the wallet */
   connecting = '@wallet-state/connecting',
-  /* error when tried to connect */
+  /* Error when tried to connect */
   error = '@wallet-state/error',
 }
 
@@ -74,7 +74,7 @@ function createWalletState<TClient = any, TState = {}>({
         onSet((newValue, oldValue) => {
           localStorage.setItem(
             CACHE_KEY,
-            /* let's not store the client in the cache */
+            /* Let's not store the client in the cache */
             JSON.stringify({ ...newValue, client: null })
           )
           // }

@@ -57,7 +57,7 @@ const useWithdraw = ({
   return useWithdrawTransaction({
     lpTokenAddress: contract,
     swapAddress,
-    enabled: !!encodedMsgs,
+    enabled: Boolean(encodedMsgs),
     msgs,
     encodedMsgs,
     amount,
@@ -81,38 +81,32 @@ const simulate = ({ reverse, amount, lp, tokenA, tokenB }) => {
           ? num(tokenAForLP).dp(0).toString()
           : num(tokenA).minus(tokenAForLP).dp(0).toString(),
     }
-  } else {
-    const lpTokensForPartialA = lp * (amount / tokenA)
-    const tokenBForLP =
+  }
+  const lpTokensForPartialA = lp * (amount / tokenA)
+  const tokenBForLP =
+    lpTokensForPartialA === lp
+      ? tokenB
+      : (tokenB * (lp - lpTokensForPartialA)) / lp
+  return {
+    lp: num(protectAgainstNaN(lpTokensForPartialA)).dp(0).toString(),
+    simulated:
       lpTokensForPartialA === lp
-        ? tokenB
-        : (tokenB * (lp - lpTokensForPartialA)) / lp
-    return {
-      lp: num(protectAgainstNaN(lpTokensForPartialA)).dp(0).toString(),
-      simulated:
-        lpTokensForPartialA === lp
-          ? num(tokenBForLP).dp(0).toString()
-          : num(tokenB).minus(tokenBForLP).dp(0).toString(),
-    }
+        ? num(tokenBForLP).dp(0).toString()
+        : num(tokenB).minus(tokenBForLP).dp(0).toString(),
   }
 }
 
-export const useSimulateWithdraw = ({
-  lp,
-  tokenA,
-  tokenB,
-  amount,
-  reverse,
-}) => {
-  return useMemo(() => {
-    return simulate({
-      reverse,
-      amount,
-      lp,
-      tokenA: num(tokenA).dp(0).toPrecision(),
-      tokenB: num(tokenB).dp(0).toPrecision(),
-    })
-  }, [amount, lp, tokenA, tokenB])
-}
+export const useSimulateWithdraw = ({ lp, tokenA, tokenB, amount, reverse }) =>
+  useMemo(
+    () =>
+      simulate({
+        reverse,
+        amount,
+        lp,
+        tokenA: num(tokenA).dp(0).toPrecision(),
+        tokenB: num(tokenB).dp(0).toPrecision(),
+      }),
+    [amount, lp, tokenA, tokenB]
+  )
 
 export default useWithdraw

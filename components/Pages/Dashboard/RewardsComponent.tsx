@@ -5,11 +5,11 @@ import {
   Button,
   HStack,
   Image,
-  keyframes,
   Text,
   Tooltip,
-  useDisclosure,
   VStack,
+  keyframes,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import {
@@ -153,7 +153,7 @@ const RewardsComponent = ({
 
   const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses: null,
-    config: config,
+    config,
   })
 
   // TODO global constant?
@@ -173,9 +173,8 @@ const RewardsComponent = ({
       return 'Connect Wallet'
     } else if (claimableRewards === 0) {
       return 'No Rewards'
-    } else {
-      return 'Claim'
     }
+    return 'Claim'
   }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
   const durationString = calculateRewardDurationString(
@@ -188,9 +187,10 @@ const RewardsComponent = ({
     100
   )
 
-  const bondingHasStarted: boolean = useMemo(() => {
-    return genesisStartTimeInNano / 1_000_000 < Date.now()
-  }, [genesisStartTimeInNano])
+  const bondingHasStarted: boolean = useMemo(
+    () => genesisStartTimeInNano / 1_000_000 < Date.now(),
+    [genesisStartTimeInNano]
+  )
 
   return (
     <>

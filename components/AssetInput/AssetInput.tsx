@@ -1,10 +1,12 @@
-import { VStack, forwardRef } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
-import WhaleInput from './WhaleInput'
-import { num } from 'libs/num'
-import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
-import BalanceWithMaxNHalf from './BalanceWithMax'
+
+import { VStack, forwardRef } from '@chakra-ui/react'
 import usePrices from 'hooks/usePrices'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import { num } from 'libs/num'
+
+import BalanceWithMaxNHalf from './BalanceWithMax'
+import WhaleInput from './WhaleInput'
 
 interface AssetInputProps {
   image?: boolean
@@ -57,9 +59,10 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
       amount: num(balance === 0 ? 0 : balance / 2).toFixed(6),
     })
   }
-  const maxDisabled = useMemo(() => {
-    return disabled || (!isSingleInput && !tokenInfo?.symbol)
-  }, [balance, disabled, isSingleInput, tokenInfo])
+  const maxDisabled = useMemo(
+    () => disabled || (!isSingleInput && !tokenInfo?.symbol),
+    [balance, disabled, isSingleInput, tokenInfo]
+  )
 
   const formatNumber = (num, decimalPlaces) => {
     const parts = num.toString().split('.')
@@ -80,9 +83,10 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
         : token?.tokenSymbol,
     [token]
   )
-  const dollarValue = useMemo(() => {
-    return num(prices?.[tokenSymbol]).times(token?.amount).dp(6).toFixed(2)
-  }, [tokenSymbol, prices, token?.amount])
+  const dollarValue = useMemo(
+    () => num(prices?.[tokenSymbol]).times(token?.amount).dp(6).toFixed(2),
+    [tokenSymbol, prices, token?.amount]
+  )
 
   const balanceWithDecimals = useMemo(
     () =>

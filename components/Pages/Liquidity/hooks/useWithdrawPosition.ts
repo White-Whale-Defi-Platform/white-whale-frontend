@@ -27,18 +27,18 @@ export const useWithdrawPosition = ({ poolId }) => {
   const msgs = [executeAddLiquidityMessage]
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: async () => {
-      return validateTransactionSuccess(await client.post(address, msgs))
-    },
+    mutationFn: async () =>
+      validateTransactionSuccess(await client.post(address, msgs)),
     onError,
     onSuccess,
   })
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       submit,
       ...state,
       ...tx,
-    }
-  }, [tx, state, submit])
+    }),
+    [tx, state, submit]
+  )
 }

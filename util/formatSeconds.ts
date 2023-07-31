@@ -5,7 +5,6 @@ export const formatSeconds = (seconds) => {
     return days
   } else if (seconds > 0 && seconds < 86400) {
     return 1
-  } else {
-    return 0
   }
+  return 0
 }

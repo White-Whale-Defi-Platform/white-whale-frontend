@@ -54,7 +54,7 @@ const useForceEpochAndTakingSnapshots = ({
     return (
       mode === Force.epochAndSnapshots
         ? [
-            // create new epoch message
+            // Create new epoch message
             createExecuteMessage({
               message: {
                 new_epoch: {},
@@ -66,19 +66,17 @@ const useForceEpochAndTakingSnapshots = ({
           ]
         : []
     ).concat(
-      ...(addresses?.flatMap((incentiveAddress) => {
-        return [
-          // create snapshot message
-          createExecuteMessage({
-            message: {
-              take_global_weight_snapshot: {},
-            },
-            senderAddress: address,
-            contractAddress: incentiveAddress,
-            funds: [],
-          }),
-        ]
-      }) ?? [])
+      ...(addresses?.flatMap((incentiveAddress) => [
+        // Create snapshot message
+        createExecuteMessage({
+          message: {
+            take_global_weight_snapshot: {},
+          },
+          senderAddress: address,
+          contractAddress: incentiveAddress,
+          funds: [],
+        }),
+      ]) ?? [])
     )
   }, [addresses, address])
 
@@ -88,13 +86,14 @@ const useForceEpochAndTakingSnapshots = ({
     onSuccess,
   })
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       submit,
       ...state,
       ...tx,
-    }
-  }, [tx, state, submit])
+    }),
+    [tx, state, submit]
+  )
 }
 
 export default useForceEpochAndTakingSnapshots

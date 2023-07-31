@@ -7,9 +7,8 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { toAssetInfo } from 'services/asset'
 import { createExecuteMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) => {
-  return Buffer.from(JSON.stringify(obj)).toString('base64')
-}
+export const toBase64 = (obj: object) =>
+  Buffer.from(JSON.stringify(obj)).toString('base64')
 
 const buildRoute = (graph, start, end) => {
   if (!start || !end) {
@@ -34,13 +33,16 @@ const buildRoute = (graph, start, end) => {
 }
 
 const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
-  if (!!!amount || !!!route.length || !routerAddress) {
+  if (!amount || !route.length || !routerAddress) {
     return {}
   }
 
   const operations = route.map(([offerAsset, askAsset]) => {
-    const offer_asset_info = toAssetInfo(offerAsset?.denom, offerAsset?.native)
-    const ask_asset_info = toAssetInfo(askAsset?.denom, askAsset?.native)
+    const offer_asset_info = toAssetInfo(
+      offerAsset?.denom,
+      offerAsset?.['native']
+    )
+    const ask_asset_info = toAssetInfo(askAsset?.denom, askAsset?.['native'])
     return {
       terra_swap: { offer_asset_info, ask_asset_info },
     }
@@ -73,7 +75,7 @@ const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
 
   return {
     simulateMsg,
-    executeMsg: token?.native ? executeMsg : nonNativeExecuteMsg,
+    executeMsg: token?.['native'] ? executeMsg : nonNativeExecuteMsg,
   }
 }
 
@@ -90,9 +92,9 @@ const executeMessage = (
 
   return createExecuteMessage({
     senderAddress,
-    contractAddress: token?.native ? routerAddress : token.token_address,
+    contractAddress: token?.['native'] ? routerAddress : token.token_address,
     message,
-    funds: token?.native ? [coin(amount, token.denom)] : [],
+    funds: token?.['native'] ? [coin(amount, token.denom)] : [],
   })
 }
 

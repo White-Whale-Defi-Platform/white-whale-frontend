@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -9,6 +10,11 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
@@ -27,18 +33,13 @@ import {
   aprHelperState,
   updateAPRHelperState,
 } from 'state/atoms/aprHelperState'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { EnigmaPoolData } from 'util/enigma'
 
 import { ActionCTAs } from './ActionCTAs'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
-import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
-import {
-  Config,
-  useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -129,12 +130,10 @@ const Pools = () => {
     const initPools = async () => {
       setInitLoading(true)
 
-      const _pools: PoolData[] = pools.map((pool: any) => {
-        return {
-          ...pool,
-          ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
-        }
-      })
+      const _pools: PoolData[] = pools.map((pool: any) => ({
+        ...pool,
+        ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
+      }))
 
       const _allPools = await Promise.all(
         _pools.map(async (pool) => {
@@ -155,7 +154,7 @@ const Pools = () => {
             liquidity: pool?.liquidity,
             poolAssets: pool?.pool_assets,
             price: pool?.ratio,
-            isUSDPool: isUSDPool,
+            isUSDPool,
             flows: [],
             incentives: <Incentives key={pool.pool_id} flows={[]} />,
             action: (
@@ -192,9 +191,10 @@ const Pools = () => {
           ?.flowData ?? []
       ).filter((flow) => flow.endEpoch >= currentEpoch)
 
-      const incentiveBaseApr = flows.reduce((total, item) => {
-        return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-      }, 0)
+      const incentiveBaseApr = flows.reduce(
+        (total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
+        0
+      )
 
       updateAPRHelperState(
         pool?.poolId,
@@ -205,7 +205,7 @@ const Pools = () => {
       if (flows) {
         return {
           ...pool,
-          flows: flows,
+          flows,
           incentives: <Incentives key={pool.pool_id} flows={flows} />,
         }
       }
@@ -256,7 +256,7 @@ const Pools = () => {
       setMyPools(pools)
     }
   }, [allPools])
-  // get a list of all myPools pools
+  // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
   const allPoolsForShown = useMemo(

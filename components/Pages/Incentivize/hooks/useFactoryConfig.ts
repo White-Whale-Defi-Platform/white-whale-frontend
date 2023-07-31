@@ -31,7 +31,7 @@ const useFactoryConfig = (incentiveFactory: string) => {
           minUnbondingDuration: data?.min_unbonding_duration,
           maxUnbondingDuration: data?.max_unbonding_duration,
         })),
-    enabled: !!incentiveFactory && !!client,
+    enabled: Boolean(incentiveFactory) && Boolean(client),
   })
 
   return useMemo(() => config, [config])

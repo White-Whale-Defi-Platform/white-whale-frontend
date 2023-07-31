@@ -6,15 +6,11 @@ export function isNativeAssetInfo(
   return value.hasOwnProperty('native_token')
 }
 
-export const isNativeToken = (token?: string): boolean => {
-  return token
-    ? token.startsWith('u') || token.includes('factory' || 'ibc')
-    : false
-}
+export const isNativeToken = (token?: string): boolean =>
+  token ? token.startsWith('u') || token.includes('factory' || 'ibc') : false
 
-export const isNativeAsset = (info: AssetInfo): boolean => {
-  return 'native_token' in info
-}
+export const isNativeAsset = (info: AssetInfo): boolean =>
+  'native_token' in info
 
 export const toAssetInfo = (token: string, isNative: boolean): AssetInfo => {
   if (isNative) {
@@ -30,12 +26,10 @@ type ToAssetOpts = {
   isNative: boolean
 }
 
-export const toAsset = ({ amount, token, isNative }: ToAssetOpts) => {
-  return {
-    amount,
-    info: toAssetInfo(token, isNative),
-  }
-}
+export const toAsset = ({ amount, token, isNative }: ToAssetOpts) => ({
+  amount,
+  info: toAssetInfo(token, isNative),
+})
 
 export const findAsset = (infos: AssetInfo[], token: string) => {
   const asset = infos.find((info) => {
@@ -70,6 +64,5 @@ export const getTokenDenom = (info: AssetInfo): string => {
   return info.token.contract_addr
 }
 
-export const getTokenDenoms = (infos: AssetInfo[]): string[] => {
-  return infos.map((info) => getTokenDenom(info))
-}
+export const getTokenDenoms = (infos: AssetInfo[]): string[] =>
+  infos.map((info) => getTokenDenom(info))

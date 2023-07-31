@@ -26,8 +26,8 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { TxStep } from 'types/common'
 import { walletState } from 'state/atoms/walletAtoms'
+import { TxStep } from 'types/common'
 
 import Claim from './Claim'
 import DepositForm from './DepositForm'
@@ -74,7 +74,7 @@ const ManageLiquidity: FC = () => {
     () => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
     [poolId, poolList]
   )
-  //TODO pool user share might be falsy
+  // TODO pool user share might be falsy
   const poolUserShare = usePoolUserShare(client, pool?.staking_address, address)
 
   const dailyEmissionData = useMemo(() => {
@@ -89,7 +89,7 @@ const ManageLiquidity: FC = () => {
         const dailyEmission = data.dailyEmission * Number(poolUserShare.share)
         return {
           symbol: data.tokenSymbol,
-          dailyEmission: dailyEmission,
+          dailyEmission,
           dailyUsdEmission: dailyEmission * prices[data.tokenSymbol],
           denom: data.denom,
         }
@@ -99,7 +99,7 @@ const ManageLiquidity: FC = () => {
   const chainIdParam = router.query.chainId as string
   const currentChain = chains.find((row) => row.chainId === chainId)
 
-  //TODO default query param in url when no poolId is provided
+  // TODO default query param in url when no poolId is provided
   useEffect(() => {
     if (currentChain) {
       if (poolId) {
@@ -172,7 +172,7 @@ const ManageLiquidity: FC = () => {
 
     const newState: any = [tokenA, tokenB]
     newState[index] = {
-      tokenSymbol: tokenSymbol,
+      tokenSymbol,
       amount: Number(amount),
     }
     setTokenLPState(newState)

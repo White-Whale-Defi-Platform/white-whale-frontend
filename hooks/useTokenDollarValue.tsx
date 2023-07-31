@@ -63,14 +63,14 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
     }
   )
 
-  /* if the token has an id or it's the baseToken then let's return pure price from the api */
+  /* If the token has an id or it's the baseToken then let's return pure price from the api */
   const shouldRenderPureDollarPrice =
     tokenSymbol === baseTokenSymbol || Boolean(tokenInfo?.id)
   if (shouldRenderPureDollarPrice) {
     return [tokenDollarPrice, fetchingTokenDollarPrice] as const
   }
 
-  /* otherwise, let's query the chain and calculate the dollar price based on ratio to base token */
+  /* Otherwise, let's query the chain and calculate the dollar price based on ratio to base token */
   return [
     tokenDollarPrice * oneTokenToTokenPrice,
     fetchingTokenDollarPrice || fetchingTokenToTokenPrice,

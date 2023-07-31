@@ -1,19 +1,21 @@
 import { FC, useEffect, useMemo, useState } from 'react'
+
 import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/bondingContract'
+import { useChains } from 'hooks/useChainInfo'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import { useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
-import { useChains } from 'hooks/useChainInfo'
 
 const Dashboard: FC = () => {
   const [{ chainId, status, client, address, network }] =

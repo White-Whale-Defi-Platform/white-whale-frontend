@@ -86,7 +86,7 @@ const PositionsTable = ({ positions, columnFilters }: Props) => {
 
   const table = useReactTable({
     data: positions || [],
-    columns: columns,
+    columns,
     state: {
       sorting,
       columnFilters,
@@ -158,13 +158,11 @@ const PositionsTable = ({ positions, columnFilters }: Props) => {
                 '1px solid rgba(255, 255, 255, 0.1)'
               }
             >
-              {row.getVisibleCells().map((cell) => {
-                return (
-                  <Td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                )
-              })}
+              {row.getVisibleCells().map((cell) => (
+                <Td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Td>
+              ))}
             </Tr>
           ))}
         </Tbody>

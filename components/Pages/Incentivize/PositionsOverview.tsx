@@ -46,29 +46,33 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
   const [activeButton, setActiveButton] = useState('all')
   const [columnFilters, setColumnFilters] = useState([])
 
-  const positions = useMemo(() => {
-    return flows.map((flow) => ({
-      token: (
-        <Token imgUrl={flow?.token?.logoURI} symbol={flow?.token?.symbol} />
-      ),
-      id: flow.flowId,
-      state: flow.state,
-      // startDate: dayjs.unix(flow.startTime).format("YYYY/MM/DD"),
-      // endDate: dayjs.unix(flow.endTime).format("YYYY/MM/DD"),
-      startDate: flow.startTime,
-      endDate: flow.endTime,
-      value: num(flow.amount)
-        .div(10 ** 6)
-        .toNumber(),
-      action: (
-        <CloseAction
-          poolId={poolId}
-          flowId={flow.flowId}
-          isCreator={flow.isCreator}
-        />
-      ),
-    }))
-  }, [flows])
+  const positions = useMemo(
+    () =>
+      flows.map((flow) => ({
+        token: (
+          <Token imgUrl={flow?.token?.logoURI} symbol={flow?.token?.symbol} />
+        ),
+        id: flow.flowId,
+        state: flow.state,
+        /*
+         * StartDate: dayjs.unix(flow.startTime).format("YYYY/MM/DD"),
+         * endDate: dayjs.unix(flow.endTime).format("YYYY/MM/DD"),
+         */
+        startDate: flow.startTime,
+        endDate: flow.endTime,
+        value: num(flow.amount)
+          .div(10 ** 6)
+          .toNumber(),
+        action: (
+          <CloseAction
+            poolId={poolId}
+            flowId={flow.flowId}
+            isCreator={flow.isCreator}
+          />
+        ),
+      })),
+    [flows]
+  )
 
   if (positions.length === 0) {
     return (

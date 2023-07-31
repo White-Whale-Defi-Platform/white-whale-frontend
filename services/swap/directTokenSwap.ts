@@ -9,7 +9,7 @@ import {
 import { Wallet } from '../../util/wallet-adapters'
 
 type DirectTokenSwapArgs = {
-  // swapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
+  // SwapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
   tokenAmount: number
   senderAddress: string
   swapAddress: string
@@ -26,7 +26,7 @@ export const directTokenSwap = async ({
   client,
   msgs,
 }: DirectTokenSwapArgs) => {
-  if (!tokenA.native) {
+  if (!tokenA['native']) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,
       tokenAmount,

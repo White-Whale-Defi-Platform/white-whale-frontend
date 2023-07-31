@@ -6,16 +6,15 @@ import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { WhaleType } from './BondingOverview'
 
 export const RewardsTooltip = ({ value, whale, isWalletConnected }) => {
-  const TokenDetail = ({ whaleType, value }) => {
-    return (
-      <HStack justify="space-between" direction="row" width="full" px={2}>
-        <Text color="whiteAlpha.600" fontSize={14}>
-          {WhaleType[whaleType]}
-        </Text>
-        <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
-      </HStack>
-    )
-  }
+  const TokenDetail = ({ whaleType, value }) => (
+    <HStack justify="space-between" direction="row" width="full" px={2}>
+      <Text color="whiteAlpha.600" fontSize={14}>
+        {WhaleType[whaleType]}
+      </Text>
+      <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
+    </HStack>
+  )
+
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 
@@ -43,7 +42,7 @@ export const RewardsTooltip = ({ value, whale, isWalletConnected }) => {
             <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
           </VStack>
         ) : null
-      } //displaying nothing when wallet disconnected
+      } // Displaying nothing when wallet disconnected
       bg="transparent"
     >
       <VStack alignItems="flex-start" minW={50}>
