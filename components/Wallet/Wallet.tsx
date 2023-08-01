@@ -41,14 +41,14 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   useEffect(() => {
     // OnDisconnect()
 
-    if (router.pathname === `/`) {
+    if (router.pathname === '/') {
       return
     }
 
     const defaultChainId =
       currentWalletState.network === NetworkType.mainnet
-        ? `migaloo-1`
-        : `narwhal-1`
+        ? 'migaloo-1'
+        : 'narwhal-1'
 
     if (
       validChains[currentWalletState.network][chainIdParam] !==
@@ -105,13 +105,13 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     if (router.pathname.includes('/404')) {
       router.push('/404')
     }
-    if (currentWalletState.activeWallet === `leap`) {
+    if (currentWalletState.activeWallet === 'leap') {
       connectLeap()
-    } else if (currentWalletState.activeWallet === `keplr`) {
+    } else if (currentWalletState.activeWallet === 'keplr') {
       connectKeplr()
-    } else if (currentWalletState.activeWallet === `cosmostation`) {
+    } else if (currentWalletState.activeWallet === 'cosmostation') {
       connectCosmostation()
-    } else if (currentWalletState.activeWallet === `station`) {
+    } else if (currentWalletState.activeWallet === 'station') {
       const [{ type = null, identifier = null } = {}] =
         availableConnections.filter(filterForStation)
       if (type && identifier) {
@@ -164,7 +164,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           onChainChange={onChainChange}
           currentWalletState={currentWalletState}
         />
-        <Box display={{ base: `none`, md: `block` }}>
+        <Box display={{ base: 'none', md: 'block' }}>
           <Divider
             orientation="vertical"
             borderColor="rgba(255, 255, 255, 0.1);"

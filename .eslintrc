@@ -486,7 +486,7 @@
     "padding-line-between-statements": "off",
     "quotes": [
       "error",
-      "double"
+      "single"
     ],
     "rest-spread-spacing": "error",
     "semi": "error",

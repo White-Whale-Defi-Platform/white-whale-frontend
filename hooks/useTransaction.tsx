@@ -107,15 +107,15 @@ export const useTransaction = ({
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
         } else {
-        /*
-         * Else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
-         *   console.error(error)
-         *   setTxStep(TxStep.Idle)
-         *   setButtonLabel('Insuifficient liquidity')
-         *   setError("Insuifficient liquidity")
-         *   throw new Error('Insuifficient liquidity')
-         * }
-         */
+          /*
+           * Else if (/unreachable: query wasm contract failed: invalid request/i.test(error.toString())) {
+           *   console.error(error)
+           *   setTxStep(TxStep.Idle)
+           *   setButtonLabel('Insuifficient liquidity')
+           *   setError("Insuifficient liquidity")
+           *   throw new Error('Insuifficient liquidity')
+           * }
+           */
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Failed to execute transaction.')
