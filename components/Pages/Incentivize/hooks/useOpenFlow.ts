@@ -55,11 +55,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       return null
     }
 
-    const flow_asset = createAsset(
-      amount,
-      tokenInfo.denom,
-      tokenInfo?.['native']
-    )
+    const flow_asset = createAsset(amount, tokenInfo.denom, tokenInfo?.native)
     const start_epoch = dateToEpoch(startDate)
     const end_epoch = dateToEpoch(endDate)
 
@@ -75,14 +71,14 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
           factoryConfig?.createFlowFee?.amount,
           factoryConfig?.createFlowFee?.denom
         ),
-      tokenInfo?.['native'] && coin(nativeAmount, tokenInfo?.denom),
+      tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
     ]
       .filter(Boolean)
       .sort((a, b) => a.denom.localeCompare(b.denom))
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
     /* Increase allowance for each non-native token */
-    if (!tokenInfo?.['native']) {
+    if (!tokenInfo?.native) {
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
           tokenAmount: Number(amount),

@@ -190,12 +190,7 @@
     ],
     "default-case-last": "error",
     "default-param-last": "error",
-    "dot-notation": [
-      "error",
-      {
-        "allowKeywords": false
-      }
-    ],
+    "dot-notation": "error",
     "eqeqeq": [
       "error",
       "always"
@@ -456,13 +451,7 @@
     "multiline-ternary": "off",
     "new-parens": "error",
     "newline-per-chained-call": "error",
-    "no-extra-parens": [
-      "error",
-      "all",
-      {
-        "enforceForArrowConditionals": false
-      }
-    ],
+    "no-extra-parens": "off", // Produces some bugs when casting types using "any".
     "no-mixed-spaces-and-tabs": "off", // We use "no-tabs".
     "no-multi-spaces": "error",
     "no-multiple-empty-lines": [

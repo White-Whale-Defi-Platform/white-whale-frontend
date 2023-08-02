@@ -25,7 +25,7 @@ export const directTokenSwap = async ({
   client,
   msgs,
 }: DirectTokenSwapArgs) => {
-  if (!tokenA['native']) {
+  if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,
       tokenAmount,

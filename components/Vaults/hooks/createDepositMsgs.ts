@@ -18,7 +18,7 @@ export const createDepostExecuteMsgs = ({
 }) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
-  if (!tokenInfo?.['native']) {
+  if (!tokenInfo?.native) {
     increaseAllowanceMessages.push(
       createIncreaseAllowanceMessage({
         tokenAmount: amount,
@@ -35,7 +35,7 @@ export const createDepostExecuteMsgs = ({
       senderAddress,
       contractAddress: vaultAddress,
       message: createDepostMsg({ amount }),
-      funds: [tokenInfo?.['native'] && coin(amount, tokenInfo.denom)].filter(
+      funds: [tokenInfo?.native && coin(amount, tokenInfo.denom)].filter(
         Boolean
       ),
     }),

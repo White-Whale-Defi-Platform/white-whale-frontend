@@ -13,8 +13,8 @@ const createLpMsg = ({
   pairAddress,
   minUnbondingDuration,
 }) => {
-  const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.['native'])
-  const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.['native'])
+  const asset1 = createAsset(amountA, tokenA?.token_address, tokenA?.native)
+  const asset2 = createAsset(amountB, tokenB?.token_address, tokenB?.native)
 
   if (bondingDays === 0) {
     return {
@@ -48,7 +48,7 @@ export const createLPExecuteMsgs = (
 ) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
   /* Increase allowance for each non-native token */
-  if (!tokenA?.['native']) {
+  if (!tokenA?.native) {
     increaseAllowanceMessages.push(
       createIncreaseAllowanceMessage({
         tokenAmount: amountA,
@@ -58,7 +58,7 @@ export const createLPExecuteMsgs = (
       })
     )
   }
-  if (!tokenB?.['native']) {
+  if (!tokenB?.native) {
     increaseAllowanceMessages.push(
       createIncreaseAllowanceMessage({
         tokenAmount: amountB,
@@ -84,8 +84,8 @@ export const createLPExecuteMsgs = (
         minUnbondingDuration,
       }),
       funds: [
-        tokenA?.['native'] && coin(amountA, tokenA?.denom),
-        tokenB?.['native'] && coin(amountB, tokenB?.denom),
+        tokenA?.native && coin(amountA, tokenA?.denom),
+        tokenB?.native && coin(amountB, tokenB?.denom),
       ].filter(Boolean),
     }),
   ]

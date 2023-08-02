@@ -195,7 +195,7 @@ export class TerraStationWallet implements Wallet {
       .then((result) =>
         result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
       )
-      ['catch']((err) => {
+      .catch((err) => {
         if (axios.isAxiosError(err)) {
           console.log(err)
           throw new Error(err.response.data)

@@ -60,7 +60,7 @@ function FlashloanForm({}: Props) {
   const init = async () => {
     if (containerRef && editorRef) {
       const JSONEditor = await import('jsoneditor')
-      editorRef.current = new JSONEditor['default'](containerRef.current, {
+      editorRef.current = new JSONEditor.default(containerRef.current, {
         ...options,
         onChange,
       })

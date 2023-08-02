@@ -38,11 +38,8 @@ const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
   }
 
   const operations = route.map(([offerAsset, askAsset]) => {
-    const offer_asset_info = toAssetInfo(
-      offerAsset?.denom,
-      offerAsset?.['native']
-    )
-    const ask_asset_info = toAssetInfo(askAsset?.denom, askAsset?.['native'])
+    const offer_asset_info = toAssetInfo(offerAsset?.denom, offerAsset?.native)
+    const ask_asset_info = toAssetInfo(askAsset?.denom, askAsset?.native)
     return {
       terra_swap: { offer_asset_info, ask_asset_info },
     }
@@ -75,7 +72,7 @@ const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
 
   return {
     simulateMsg,
-    executeMsg: token?.['native'] ? executeMsg : nonNativeExecuteMsg,
+    executeMsg: token?.native ? executeMsg : nonNativeExecuteMsg,
   }
 }
 
@@ -92,9 +89,9 @@ const executeMessage = (
 
   return createExecuteMessage({
     senderAddress,
-    contractAddress: token?.['native'] ? routerAddress : token.token_address,
+    contractAddress: token?.native ? routerAddress : token.token_address,
     message,
-    funds: token?.['native'] ? [coin(amount, token.denom)] : [],
+    funds: token?.native ? [coin(amount, token.denom)] : [],
   })
 }
 

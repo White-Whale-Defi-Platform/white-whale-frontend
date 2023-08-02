@@ -39,7 +39,7 @@ const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
   }, [amount, tokenInfo, vaultAddress, address])
 
   const tx = useTransaction({
-    isNative: tokenInfo?.['native'],
+    isNative: tokenInfo?.native,
     denom: tokenInfo?.denom,
     contractAddress: vaultAddress,
     enabled: Boolean(encodedMsgs),
