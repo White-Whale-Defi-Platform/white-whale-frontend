@@ -42,7 +42,7 @@ import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
 
 const ManageLiquidity: FC = () => {
-  const [isMobile] = useMediaQuery("(max-width: 640px)") 
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
   const { address, chainId, status, client } = useRecoilValue(walletState)
@@ -215,20 +215,27 @@ const ManageLiquidity: FC = () => {
         padding={[6, 12]}
         borderRadius="30px"
         width={['full']}
-      ><Box
-      border="2px"
-      borderColor="whiteAlpha.200"
-      borderRadius="3xl"
-      pt="8"
-      maxH="fit-content"
-    ><Tabs variant={"brand"}>
-      <TabList display={['flex']} flexWrap={['wrap']} justifyContent="center" background={'#1C1C1C'}>
-      <Tab >Overview</Tab>
-        <Tab >Deposit</Tab>
-        <Tab >Withdraw</Tab>
-        <Tab>Claim</Tab>
-      </TabList>
-      <TabPanels p={4}>
+      >
+        <Box
+          border="2px"
+          borderColor="whiteAlpha.200"
+          borderRadius="3xl"
+          pt="8"
+          maxH="fit-content"
+        >
+          <Tabs variant={'brand'}>
+            <TabList
+              display={['flex']}
+              flexWrap={['wrap']}
+              justifyContent="center"
+              background={'#1C1C1C'}
+            >
+              <Tab>Overview</Tab>
+              <Tab>Deposit</Tab>
+              <Tab>Withdraw</Tab>
+              <Tab>Claim</Tab>
+            </TabList>
+            <TabPanels p={4}>
               <TabPanel padding={4}>
                 <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
               </TabPanel>

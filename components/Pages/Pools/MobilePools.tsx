@@ -13,15 +13,14 @@ type Props = {
 
 const MobilePools = ({ pools, ctaLabel }: Props) => {
   const router = useRouter()
-  const { chainId, status} =
-    useRecoilValue(walletState)
+  const { chainId, status } = useRecoilValue(walletState)
   const chains: Array<any> = useChains()
   const currentChain = chains.find(
     (row: { chainId: string }) => row.chainId === chainId
   )
   const currentChainName = currentChain?.label.toLowerCase()
   return (
-    <VStack width="full" display={['flex', 'flex', 'flex','none']} gap={8}>
+    <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
       {pools &&
         pools.map((pool) => (
           <VStack
@@ -55,7 +54,9 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
-              <Text>{`$ ${Number(pool?.liquidity.available.total.dollarValue).toFixed(2)}`}</Text>
+              <Text>{`$ ${Number(
+                pool?.liquidity.available.total.dollarValue
+              ).toFixed(2)}`}</Text>
               <Text>{` ${Number(pool?.volume24hr).toFixed()}`}</Text>
             </HStack>
 
@@ -65,7 +66,11 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() => router.push(`/${currentChainName}/pools/manage_liquidity?poolId=${pool?.poolId}`)}
+              onClick={() =>
+                router.push(
+                  `/${currentChainName}/pools/manage_liquidity?poolId=${pool?.poolId}`
+                )
+              }
             >
               {ctaLabel || 'Manage'}
             </Button>
@@ -73,7 +78,11 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() => router.push(`/${currentChainName}/pools/incentivize?poolId=${pool?.poolId}`)}
+              onClick={() =>
+                router.push(
+                  `/${currentChainName}/pools/incentivize?poolId=${pool?.poolId}`
+                )
+              }
             >
               {'Incentivize'}
             </Button>

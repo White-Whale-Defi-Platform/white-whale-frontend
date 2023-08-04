@@ -1,4 +1,11 @@
-import { Box, HStack, Stack, Text, useMediaQuery,VStack } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Stack,
+  Text,
+  useMediaQuery,
+  VStack,
+} from '@chakra-ui/react'
 import {
   Config,
   useConfig,
@@ -23,7 +30,7 @@ const Withdraw = ({
   unbondingPeriodInNano,
   whalePrice,
 }) => {
-  const [isMobile] = useMediaQuery("(max-width: 720px)") 
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [{ status, chainId, network }, _] = useRecoilState(walletState)
 
   const isWalletConnected = status === WalletStatusType.connected
@@ -97,7 +104,7 @@ const Withdraw = ({
         />
       </VStack>
     )
-  } 
+  }
 
   return (
     <VStack spacing={5} mb={35}>

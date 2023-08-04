@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 
-import { Box, Button, Flex, HStack, Text, VStack, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Text,
+  VStack,
+  Stack,
+} from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -127,14 +135,14 @@ function FlashloanForm({}: Props) {
   return (
     <Flex
       padding={10}
-      width={"flex"}
-      height={"600"}
+      width={'flex'}
+      height={'600'}
       background="#1C1C1C"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       display={'flex'}
     >
-      <VStack width={["300px","full"]} height={"full"}>
+      <VStack width={['300px', 'full']} height={'full'}>
         <HStack
           width="full"
           justifyContent="space-between"
@@ -147,10 +155,10 @@ function FlashloanForm({}: Props) {
           {/* <Error message={error || tx?.error} /> */}
         </HStack>
         <Editor containerRef={containerRef} />
-        <HStack width="full" p={4} >
-          <Stack direction={['column', 'row']} align={"center"}>
-            <Button 
-              width={[60,120]}
+        <HStack width="full" p={4}>
+          <Stack direction={['column', 'row']} align={'center'}>
+            <Button
+              width={[60, 120]}
               leftIcon={<MdOutlineFormatIndentDecrease size={16} />}
               variant="outline"
               onClick={format}
@@ -160,16 +168,17 @@ function FlashloanForm({}: Props) {
             <UploadFile handleChange={handleChange} />
 
             <Button
-            onClick={tx?.submit}
-            variant="primary"
-            width={60}
-            isLoading={
-              // tx?.txStep == TxStep.Estimating ||
-              tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting
-            }
-            disabled={!!error || !isConnected}
-          >
-            {buttonLabel}
+              onClick={tx?.submit}
+              variant="primary"
+              width={60}
+              isLoading={
+                // tx?.txStep == TxStep.Estimating ||
+                tx?.txStep == TxStep.Posting ||
+                tx?.txStep == TxStep.Broadcasting
+              }
+              disabled={!!error || !isConnected}
+            >
+              {buttonLabel}
             </Button>
           </Stack>
         </HStack>

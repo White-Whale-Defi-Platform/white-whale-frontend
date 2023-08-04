@@ -223,18 +223,13 @@ const RewardsComponent = ({
           minH={320}
           minWidth={420}
           maxWidth={'calc(40vw)'}
-          
           gap={4}
           overflow="hidden"
           position="relative"
           display="flex"
           justifyContent="flex-start"
         >
-          <HStack
-            spacing={170}
-            align="stretch"
-            mt={7}
-          >
+          <HStack spacing={170} align="stretch" mt={7}>
             <HStack flex="1">
               <a>
                 <Image

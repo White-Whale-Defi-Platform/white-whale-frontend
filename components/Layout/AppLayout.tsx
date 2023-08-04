@@ -13,24 +13,24 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(walletState)
   return (
     <>
-        <Flex direction="column" backgroundColor="transparent" height="100vh">
-          <RadialGradient />
-          <Navbar />
-          <Flex
-            key={chainId}
-            justifyContent="center"
-            mx="auto"
-            maxWidth="container.xl"
-            marginBottom={20}
-            width="full"
-            flex="1 1 auto "
-          >
-            {children}
-          </Flex>
-          <Flex paddingY={10} paddingX={6} alignSelf="flex-end">
-            <Status />
-          </Flex>
+      <Flex direction="column" backgroundColor="transparent" height="100vh">
+        <RadialGradient />
+        <Navbar />
+        <Flex
+          key={chainId}
+          justifyContent="center"
+          mx="auto"
+          maxWidth="container.xl"
+          marginBottom={20}
+          width="full"
+          flex="1 1 auto "
+        >
+          {children}
         </Flex>
+        <Flex paddingY={10} paddingX={6} alignSelf="flex-end">
+          <Status />
+        </Flex>
+      </Flex>
     </>
   )
 }

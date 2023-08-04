@@ -21,20 +21,15 @@ import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
 
-const ConnectedView = ({
-  onClose,
-  onReturn,
-  wallet,
-}: WalletViewProps) => {
+const ConnectedView = ({ onClose, onReturn, wallet }: WalletViewProps) => {
   const {
     walletInfo: { prettyName },
     username,
     address,
-  } = wallet;
- 
-  return <div>{`${prettyName}/${username}/${address}`}</div>;
-};
+  } = wallet
 
+  return <div>{`${prettyName}/${username}/${address}`}</div>
+}
 
 const MyApp: FC<AppProps> = ({
   Component,
@@ -42,11 +37,10 @@ const MyApp: FC<AppProps> = ({
   defaultNetwork,
   walletConnectChainIds,
 }: AppProps & WalletControllerChainOptions) => {
- 
   const [mounted, setMounted] = useState<boolean>(false)
   useEffect(() => {
     setMounted(true)
-  } , [])
+  }, [])
 
   return (
     <>

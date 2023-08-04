@@ -44,7 +44,7 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainName = currentChain?.label.toLowerCase()
- 
+
   const links = [
     {
       label: 'Dashboard',
@@ -87,7 +87,11 @@ const Navbar = () => {
   }
 
   return (
-    <Box width={"full"} py={{ base: '2', md: '10' }} px={{ base: '2', md: '10' }}>
+    <Box
+      width={'full'}
+      py={{ base: '2', md: '10' }}
+      px={{ base: '2', md: '10' }}
+    >
       <Flex
         justifyContent="space-between"
         mx="auto"

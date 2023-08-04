@@ -14,15 +14,14 @@ type Props = {
 
 const MobileVaults = ({ vaults, ctaLabel }: Props) => {
   const router = useRouter()
-  const { chainId, status} =
-    useRecoilValue(walletState)
+  const { chainId, status } = useRecoilValue(walletState)
   const chains: Array<any> = useChains()
   const currentChain = chains.find(
     (row: { chainId: string }) => row.chainId === chainId
   )
   const currentChainName = currentChain?.label.toLowerCase()
   return (
-    <VStack width="full" display={['flex', 'flex', 'flex','none']} gap={8}>
+    <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
       {vaults &&
         vaults.map((vault) => (
           <VStack
@@ -44,7 +43,9 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
                 vaultId={vault?.vaultId}
                 tokenImage={vault.tokenImage}
               />
-              <Text color="brand.50">{` ${Number(vault?.apr).toFixed(2)}`}</Text>
+              <Text color="brand.50">{` ${Number(vault?.apr).toFixed(
+                2
+              )}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -65,7 +66,11 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() => router.push(`/${currentChainName}/vaults/new_position?vault=${vault?.vaultId}`)}
+              onClick={() =>
+                router.push(
+                  `/${currentChainName}/vaults/new_position?vault=${vault?.vaultId}`
+                )
+              }
             >
               {ctaLabel || 'New Position'}
             </Button>

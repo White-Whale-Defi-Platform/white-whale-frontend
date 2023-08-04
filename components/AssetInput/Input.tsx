@@ -15,7 +15,7 @@ type Props = {
   fetchBalance?: boolean
   ignoreSlack?: boolean
   showList?: boolean
-  mobile?:boolean
+  mobile?: boolean
 }
 
 const Input = ({
@@ -28,7 +28,7 @@ const Input = ({
   fetchBalance = true,
   ignoreSlack = false,
   showList = false,
-  mobile
+  mobile,
 }: Props) => {
   const { balance: tokenBalance } = useTokenBalance(token?.tokenSymbol)
 

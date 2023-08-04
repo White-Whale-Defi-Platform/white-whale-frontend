@@ -262,6 +262,8 @@ const Pools = () => {
   // get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+
   const allPoolsForShown = useMemo(
     () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId]
@@ -278,13 +280,9 @@ const Pools = () => {
   }, [allPoolsForShown, showAllPools])
 
   return (
-    <VStack
-      width={{ base: '100%'}}
-      alignItems="center"
-      margin="auto"
-    >
+    <VStack width={{ base: '100%' }} alignItems="center" margin="auto">
       <Box width={{ base: '100%' }}>
-        <Text as="h2" fontSize="24" fontWeight="700">
+        <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
           My Pools
         </Text>
         <MyPoolsTable
@@ -298,12 +296,22 @@ const Pools = () => {
 
       <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             All Pools
           </Text>
           <Stack direction="row">
-            <Tooltip label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown">
-              <Text as="h6" fontSize="14" fontWeight="700">
+            <Tooltip
+              label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown"
+              isOpen={isLabelOpen}
+            >
+              <Text
+                as="h6"
+                fontSize="14"
+                fontWeight="700"
+                onMouseEnter={() => setIsLabelOpen(true)}
+                onMouseLeave={() => setIsLabelOpen(false)}
+                onClick={() => setIsLabelOpen(!isLabelOpen)}
+              >
                 <InfoOutlineIcon marginRight={2} />
                 Show All Pools
               </Text>

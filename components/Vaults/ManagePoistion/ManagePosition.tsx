@@ -24,7 +24,6 @@ import DepositForm from './DepositForm'
 import WithdrawForm from './WithdrawForm'
 
 const ManagePosition = () => {
-  
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
   const chains: Array<any> = useChains()
@@ -36,7 +35,6 @@ const ManagePosition = () => {
     () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
     [vaults, vaultId]
   )
- 
 
   useEffect(() => {
     if (chainId) {

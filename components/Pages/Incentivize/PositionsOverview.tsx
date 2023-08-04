@@ -1,6 +1,20 @@
 import React, { useMemo, useState } from 'react'
 
-import { Box, Button, Divider, HStack, Stack, Image, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Stack,
+  Image,
+  Text,
+  VStack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react'
 import { num } from 'libs/num'
 
 import { useClosePosition } from './hooks/useClosePosition'
@@ -79,45 +93,56 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
   }
   // TODO: Responsive Design
   return (
-    <Box width="full">
-      <Stack
-        direction={['column', 'column', 'row']}
-        margin="20px"
-        backgroundColor="rgba(0, 0, 0, 0.25)"
-        width="auto"
-        px="24px"
-        py="12px"
-        borderRadius="75px"
-        gap="20px"
-      >
-        {STATES.map((item) => (
-          <Button
-            key={item}
-            minW="100px"
-            variant={activeButton === item ? 'primary' : 'unstyled'}
-            color="white"
-            size="sm"
-            onClick={() => {
-              setActiveButton(item)
-              setColumnFilters(
-                item === 'all'
-                  ? []
-                  : [
-                      {
-                        id: 'state',
-                        value: item,
-                      },
-                    ]
-              )
-            }}
-            textTransform="capitalize"
-          >
-            {item}
-          </Button>
-        ))}
-      </Stack>
-      <Divider opacity="0.2" />
-      <PositionsTable columnFilters={columnFilters} positions={positions} />
+    <Box
+      border="2px"
+      borderColor="whiteAlpha.200"
+      borderRadius="3xl"
+      pt="8"
+      maxH="fit-content"
+    >
+      <Tabs variant="brand">
+        <TabList
+          display={['flex']}
+          flexWrap={['wrap']}
+          justifyContent="center"
+          background={'#1C1C1C'}
+        >
+          {STATES.map((item) => {
+            return (
+              <Tab
+                onClick={() => {
+                  setActiveButton(item)
+                  setColumnFilters(
+                    item === 'all'
+                      ? []
+                      : [
+                          {
+                            id: 'state',
+                            value: item,
+                          },
+                        ]
+                  )
+                }}
+                textTransform="capitalize"
+              >
+                {item}
+              </Tab>
+            )
+          })}
+        </TabList>
+        <TabPanels p={4}>
+          {STATES.map((item) => {
+            return (
+              <TabPanel padding={4}>
+                <PositionsTable
+                  columnFilters={columnFilters}
+                  positions={positions}
+                />
+              </TabPanel>
+            )
+          })}
+        </TabPanels>
+      </Tabs>
     </Box>
   )
 }

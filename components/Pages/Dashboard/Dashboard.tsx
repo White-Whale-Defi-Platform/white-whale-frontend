@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { Flex, HStack, Text, useMediaQuery,VStack } from '@chakra-ui/react'
+import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
@@ -28,7 +28,7 @@ const Dashboard: FC = () => {
     (row: { chainId: string }) => row.chainId === chainId
   )
   const currentChainName = currentChain?.label.toLowerCase()
- 
+
   const data: BondingData[] = [
     {
       tokenType: TokenType.liquid,
@@ -73,7 +73,7 @@ const Dashboard: FC = () => {
   ]
 
   const [updatedData, setData] = useState(null)
-  const [isMobile] = useMediaQuery("(max-width: 720px)") 
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
 
   const setValues = (
     tokenType: TokenType,
@@ -150,7 +150,7 @@ const Dashboard: FC = () => {
   }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale])
 
   return (
-    <VStack width={"full"} alignSelf="center" paddingLeft={10}>
+    <VStack width={'full'} alignSelf="center" paddingLeft={10}>
       <Flex
         direction={{ base: 'column', xl: 'row' }}
         gap={5}
@@ -158,7 +158,7 @@ const Dashboard: FC = () => {
         alignItems="flex-end"
       >
         <VStack width="flex">
-          <HStack width="full" paddingY={{base: 3, md:5}}>
+          <HStack width="full" paddingY={{ base: 3, md: 5 }}>
             <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding
             </Text>

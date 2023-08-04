@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useMemo } from 'react'
+import { FC, Fragment, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { InfoOutlineIcon } from '@chakra-ui/icons'
@@ -106,36 +106,32 @@ const SwapForm: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
-  const [isMobile] = useMediaQuery("(max-width: 485px)") 
+  const [isMobile] = useMediaQuery('(max-width: 485px)')
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
 
-  const explainer = (input:string)=>{
-    
-      if (!isMobile){
-        return (<Tooltip
-          label={input}
-          padding="1rem"
-          bg="blackAlpha.900"
-          fontSize="xs"
-          maxW="330px"
-        >
-          <Box
-            cursor="pointer"
-            color="brand.50"
-            display="flex"
-            alignItems="center"
-          >
-            <InfoOutlineIcon width=".7rem" height=".7rem" />
-          </Box>
-        </Tooltip>)
-      }else {
-        return (<Box
+  const explainer = (input: string) => {
+    return (
+      <Tooltip
+        label={input}
+        padding="1rem"
+        bg="blackAlpha.900"
+        fontSize="xs"
+        maxW="330px"
+        isOpen={isLabelOpen}
+      >
+        <Box
           cursor="pointer"
           color="brand.50"
           display="flex"
           alignItems="center"
+          onMouseEnter={() => setIsLabelOpen(true)}
+          onMouseLeave={() => setIsLabelOpen(false)}
+          onClick={() => setIsLabelOpen(!isLabelOpen)}
         >
-        </Box>)
-      }
+          <InfoOutlineIcon width=".7rem" height=".7rem" />
+        </Box>
+      </Tooltip>
+    )
   }
   const onReverse = () => {
     const A = {
@@ -347,7 +343,9 @@ const SwapForm: FC<Props> = ({
                 <Text color="brand.500" fontSize={12}>
                   Rate
                 </Text>
-                {explainer("Swap price is calculated based on the pool price and spread")}
+                {explainer(
+                  'Swap price is calculated based on the pool price and spread'
+                )}
               </HStack>
               <Text color="brand.500" fontSize={12}>
                 {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
@@ -366,7 +364,9 @@ const SwapForm: FC<Props> = ({
                   <Text color="brand.500" fontSize={12}>
                     Min Receive
                   </Text>
-                  {explainer("Expected minimum quantity to be received based on the current price, maximum spread, and trading fee")}
+                  {explainer(
+                    'Expected minimum quantity to be received based on the current price, maximum spread, and trading fee'
+                  )}
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
                   {num(minReceive).toFixed(tokenBInfo?.decimals)}
@@ -386,7 +386,7 @@ const SwapForm: FC<Props> = ({
               <Text color="brand.500" fontSize={12}>
                 Route
               </Text>
-              {explainer("Optimized route for your optimal gain")}
+              {explainer('Optimized route for your optimal gain')}
             </HStack>
             <HStack maxW="70%" flexWrap="wrap">
               {path?.map((item, index) => (

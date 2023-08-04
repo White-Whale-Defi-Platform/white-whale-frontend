@@ -7,6 +7,7 @@ import {
   HStack,
   InputGroup,
   Stack,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import SubmitButton from 'components/SubmitButton'
@@ -43,7 +44,7 @@ const Create = ({ poolId }: Props) => {
     },
   })
   const formData = watch()
-
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
   const { status } = useRecoilValue(walletState)
   const isConnected = status === WalletStatusType.connected
   const { txStep } = useRecoilValue(txAtom)
@@ -56,6 +57,7 @@ const Create = ({ poolId }: Props) => {
         control={control}
         token={token}
         showList={true}
+        mobile={isMobile}
         // isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
           setToken({
@@ -85,6 +87,7 @@ const Create = ({ poolId }: Props) => {
                 placeholder="Enter amount"
                 h="50px"
                 type="date"
+                paddingEnd={'2px'}
                 min={new Date().toISOString().slice(0, 16)}
                 // max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
@@ -113,6 +116,7 @@ const Create = ({ poolId }: Props) => {
                 placeholder="Enter amount"
                 h="50px"
                 type="date"
+                paddingEnd={'2px'}
                 min={new Date().toISOString().slice(0, 16)}
                 focusBorderColor="brand.500"
               />

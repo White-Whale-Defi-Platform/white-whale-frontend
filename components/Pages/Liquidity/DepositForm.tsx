@@ -29,7 +29,7 @@ type Props = {
   bondingDays: number
   clearForm: () => void
   chainId: string
-  mobile?:boolean
+  mobile?: boolean
   poolId: string
 }
 

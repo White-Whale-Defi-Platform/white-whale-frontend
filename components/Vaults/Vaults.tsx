@@ -47,14 +47,10 @@ const Vaults: FC = () => {
   }, [vaults, allVaultsInitialized])
 
   return (
-    <VStack
-      width={{ base: '100%'}}
-      alignItems="center"
-      margin="auto"
-    >
+    <VStack width={{ base: '100%' }} alignItems="center" margin="auto">
       <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             Vaults
           </Text>
         </HStack>

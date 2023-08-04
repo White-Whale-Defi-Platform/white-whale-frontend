@@ -25,7 +25,9 @@ export const useIBCAssetList = () => {
   const { data, isLoading } = useQuery<IBCAssetList>(
     '@ibc-asset-list',
     async () => {
-      const response = await(await fetch(process.env.NEXT_PUBLIC_IBC_ASSETS_URL)).json()
+      const response = await (
+        await fetch(process.env.NEXT_PUBLIC_IBC_ASSETS_URL)
+      ).json()
       return response
     },
     {

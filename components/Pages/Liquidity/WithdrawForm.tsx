@@ -18,7 +18,7 @@ import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
 type Props = {
   poolId: string
   connected: WalletStatusType
-  mobile?:boolean
+  mobile?: boolean
   clearForm: () => void
 }
 

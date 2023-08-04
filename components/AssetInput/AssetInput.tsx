@@ -28,7 +28,7 @@ interface AssetInputProps {
   showBalanceSlider?: boolean
   isBonding?: boolean
   unbondingBalances?: { [key: string]: number }
-  mobile?:boolean
+  mobile?: boolean
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, ref) => {
@@ -42,7 +42,7 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     ignoreSlack,
     hideMax,
     hideDollarValue,
-    mobile
+    mobile,
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()

@@ -33,16 +33,16 @@ const BondingOverview = ({
   data,
   whalePrice,
   currentChainName,
-  mobile
+  mobile,
 }) => {
   const borderRadius = '30px'
   const router = useRouter()
   const TokenBox = ({ tokenType }) => {
     const { color, label } = data.find((e) => e.tokenType == tokenType)
-    const box = ()=>{
-      if (!mobile){
-        return (<Box bg={color} w="4" h="4" borderRadius="50%" mr="2"></Box>)
-      }else return
+    const box = () => {
+      if (!mobile) {
+        return <Box bg={color} w="4" h="4" borderRadius="50%" mr="2"></Box>
+      } else return
     }
     return (
       <HStack mr="10" paddingBottom={6}>
@@ -58,30 +58,32 @@ const BondingOverview = ({
     )
   }
 
-  const piechart = ()=>{
-    if (mobile){
+  const piechart = () => {
+    if (mobile) {
       return
-    }else{
-    return(
-    <PieChart style={{ pointerEvents: 'none' }} width={250} height={275}>
-            <Pie
-              data={isWalletConnected ? data : [{ value: 1 }]}
-              cx="50%"
-              cy="50%"
-              innerRadius={85}
-              outerRadius={110}
-              dataKey="value"
-              stroke="none"
-            >
-              {isWalletConnected ? (
-                data?.map((_entry: any, index: number) => (
-                  <Cell key={`cell-${index}`} fill={data[index].color} />
-                ))
-              ) : (
-                <Cell key={'cell-${index}'} fill="grey" />
-              )}
-            </Pie>
-          </PieChart>)}
+    } else {
+      return (
+        <PieChart style={{ pointerEvents: 'none' }} width={250} height={275}>
+          <Pie
+            data={isWalletConnected ? data : [{ value: 1 }]}
+            cx="50%"
+            cy="50%"
+            innerRadius={85}
+            outerRadius={110}
+            dataKey="value"
+            stroke="none"
+          >
+            {isWalletConnected ? (
+              data?.map((_entry: any, index: number) => (
+                <Cell key={`cell-${index}`} fill={data[index].color} />
+              ))
+            ) : (
+              <Cell key={'cell-${index}'} fill="grey" />
+            )}
+          </Pie>
+        </PieChart>
+      )
+    }
   }
 
   let aggregatedAssets = data?.reduce((acc, e) => acc + (e?.value ?? 0), 0)
@@ -114,7 +116,7 @@ const BondingOverview = ({
           justifyContent="flex-start"
           pl={4}
           pt={5}
-          spacing={"5"}
+          spacing={'5'}
         >
           {piechart()}
           <VStack alignItems="start" alignSelf="flex-start">

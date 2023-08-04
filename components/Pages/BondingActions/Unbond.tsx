@@ -11,7 +11,7 @@ import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
-  const [isMobile] = useMediaQuery("(max-width: 720px)") 
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [{ status }] = useRecoilState(walletState)
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
