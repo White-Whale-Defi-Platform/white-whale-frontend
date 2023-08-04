@@ -191,14 +191,14 @@
         },
         {
           "chain_id": "migaloo-1",
-          "token_address": "uwhale",
+          "token_address": "factory/migaloo1ey4sn2mkmhew4pdrzk90l9acluvas25qlhuvsfgssw42ugz8yjlqx92j9l/arbWHALE",
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
           "tags": ["native"],
           "native": true,
-          "denom": "uwhale"
+          "denom": "factory/migaloo1ey4sn2mkmhew4pdrzk90l9acluvas25qlhuvsfgssw42ugz8yjlqx92j9l/arbWHALE "
         }
       ],
       "swap_address": "migaloo12z46dq46hprpyv8j4k7xtqk8gdx7leqzgan2pjpdaktx4ukj53lqar6tsf",
