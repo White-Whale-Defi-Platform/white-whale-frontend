@@ -7,8 +7,7 @@ import WalletIcon from 'components/icons/WalletIcon'
 import Select from 'components/Wallet/ChainSelect/Select'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
-import { validChains } from 'constants/validChains'
+import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS } from 'constants/index'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import useConnectCosmostation from 'hooks/useConnectCosmostation'
 import useConnectKeplr from 'hooks/useConnectKeplr'
@@ -51,16 +50,16 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
         : 'narwhal-1'
 
     if (
-      validChains[currentWalletState.network][chainIdParam] !==
+      ACTIVE_NETWORKS[currentWalletState.network][chainIdParam] !==
       currentWalletState.chainId
     ) {
       setCurrentWalletState({
         ...currentWalletState,
-        chainId: validChains[currentWalletState.network][chainIdParam],
+        chainId: ACTIVE_NETWORKS[currentWalletState.network][chainIdParam],
       })
     }
 
-    if (!validChains[currentWalletState.network][chainIdParam]) {
+    if (!ACTIVE_NETWORKS[currentWalletState.network][chainIdParam]) {
       setCurrentWalletState({
         ...currentWalletState,
         chainId: defaultChainId,
@@ -87,7 +86,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const onChainChange = async (chain) => {
     if (
-      !BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId) &&
+      !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
       router.pathname.includes('dashboard')
     ) {
       await router.push('/swap')

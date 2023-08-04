@@ -5,7 +5,7 @@ import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
-} from 'constants/bondingContract'
+} from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'

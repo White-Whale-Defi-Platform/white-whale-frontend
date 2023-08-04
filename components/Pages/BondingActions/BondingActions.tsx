@@ -11,10 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bondingContract'
+import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'

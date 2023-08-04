@@ -5,8 +5,8 @@ import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
 import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
 import {
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-  __POOL_REWARDS_ENABLED__,
-} from 'constants/settings'
+  POOL_REWARDS_ENABLED,
+} from 'constants/index'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
@@ -382,7 +382,7 @@ export function calculateRewardsAnnualYieldRate({
   rewardsContracts,
   totalStakedDollarValue,
 }) {
-  if (!__POOL_REWARDS_ENABLED__) {
+  if (!POOL_REWARDS_ENABLED) {
     return 0
   }
 

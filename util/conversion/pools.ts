@@ -1,4 +1,4 @@
-import { POOL_TOKENS_DECIMALS } from 'constants/settings'
+import { POOL_TOKENS_DECIMALS } from 'constants/index'
 
 import { convertMicroDenomToDenom } from './conversion'
 

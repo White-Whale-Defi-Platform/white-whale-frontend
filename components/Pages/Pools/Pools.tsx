@@ -17,8 +17,7 @@ import {
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
-import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
-import { STABLE_COIN_LIST } from 'constants/settings'
+import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -56,7 +55,7 @@ const Pools = () => {
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
-    !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
+    !ACTIVE_INCENTIVE_NETWORKS.includes(chainId)
   )
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
