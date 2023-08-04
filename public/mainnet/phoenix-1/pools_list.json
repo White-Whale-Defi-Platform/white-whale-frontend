@@ -251,21 +251,9 @@
       "lpOrder": ["LUNA", "WHALE"],
       "assetOrder": ["LUNA", "WHALE"],
       "displayName": "LUNA-WHALE",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/luna.svg",
+      "displayLogo1": "/logos/luna.svg",
+      "displayLogo2":"/logos/whale.svg" ,
       "pool_assets": [
-        {
-          "id": "white-whale",
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
-          "symbol": "WHALE",
-          "name": "Whale",
-          "decimals": 6,
-          "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
-          "native": true,
-          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
-        },
         {
           "id": "terra-luna-2",
           "chain_id": "phoenix-1",
@@ -277,6 +265,18 @@
           "tags": ["native"],
           "native": true,
           "denom": "uluna"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
         }
       ],
       "lp_token": "factory/terra1zushwxgqdkg22mtv9p946yp53r6den6lv427esjaadua3ftzyjpsqgtl5z/uLP",
