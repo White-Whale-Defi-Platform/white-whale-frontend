@@ -5,11 +5,11 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { Wallet } from 'util/wallet-adapters/index'
 
 export const useQueryIncentiveContracts = (client: Wallet): Array<string> => {
-  const { chainId, network } = useRecoilValue(walletState)
+  const { chainId, network } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const { data } = useQuery(
     ['useQueryIncentiveContracts', config],

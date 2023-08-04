@@ -9,7 +9,7 @@ import { num, toChainAmount } from 'libs/num'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import useFactoryConfig from '../../Incentivize/hooks/useFactoryConfig'
 import { tokenLpAtom } from '../lpAtoms'
@@ -19,7 +19,7 @@ import useIsNewPosition from './useIsNewPosition'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
-  const { address, client, network, chainId } = useRecoilValue(walletState)
+  const { address, client, network, chainId } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)

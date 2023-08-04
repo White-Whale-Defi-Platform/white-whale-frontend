@@ -5,7 +5,7 @@ import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { formatPrice, fromChainAmount } from 'libs/num'
 import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 export type TokenInfo = {
   id: string
@@ -94,7 +94,7 @@ const queryBalance = async (
 }
 
 export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
-  const { chainId, client, address } = useRecoilValue(walletState)
+  const { chainId, client, address } = useRecoilValue(chainState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -121,7 +121,7 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
   return { balance, isLoading, refetch }
 }
 export const useVaultMultiDeposit = (lpTokens: any[]) => {
-  const { chainId, client, address } = useRecoilValue(walletState)
+  const { chainId, client, address } = useRecoilValue(chainState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -152,7 +152,7 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
   return { balance, isLoading, refetch }
 }
 export const useVaultTotal = (lpTokenIds: any[]) => {
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const [getTokenDollarValue, isQueryLoading] = useGetTokenDollarValueQuery()
   const cosmwasmClient = useCosmwasmClient(chainId)
   const { data: balance, isLoading } = useQuery(
@@ -178,7 +178,7 @@ export const useVaultTotal = (lpTokenIds: any[]) => {
 }
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
-  const { chainId, network } = useRecoilValue(walletState)
+  const { chainId, network } = useRecoilValue(chainState)
   const { data: vaults, isLoading } = useQuery<VaultsResponse>(
     ['vaults/list', chainId, network],
     async () => {

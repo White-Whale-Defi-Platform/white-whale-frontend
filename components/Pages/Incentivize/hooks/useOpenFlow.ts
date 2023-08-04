@@ -14,7 +14,7 @@ import { num, toChainAmount } from 'libs/num'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -31,7 +31,7 @@ interface Props {
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
-  const { address, client, network, chainId } = useRecoilValue(walletState)
+  const { address, client, network, chainId } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({

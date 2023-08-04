@@ -1,24 +1,13 @@
 import { useEffect, useMemo } from 'react'
 
 import { LCDClient } from '@terra-money/feather.js'
-import {
-  Connection,
-  ConnectType,
-  useConnectedWallet,
-  useWallet,
-} from '@terra-money/wallet-provider'
+import { Connection, ConnectType } from '@terra-money/wallet-provider'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
-
-import { useChainInfo } from './useChainInfo'
-
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 export const useTerraStation = (onCloseModal) => {
-  const { connect } = useWallet()
-  const connectedWallet = useConnectedWallet()
-  const [currentWalletState, setCurrentWalletState] =
-    useRecoilState(walletState)
-  const [chainInfo] = useChainInfo(currentWalletState.chainId)
+  //const { connect } = useWallet()
+  //const connectedWallet = useConnectedWallet()
+  const [currentWalletState, setCurrentWalletState] = useRecoilState(chainState)
 
   const filterForStation = (connection: Connection) => {
     return connection.identifier === 'station'
@@ -30,7 +19,7 @@ export const useTerraStation = (onCloseModal) => {
   const connectTerraAndCloseModal = (type: ConnectType, identifier: string) => {
     const activeWallet = type === 'WALLETCONNECT' ? 'walletconnect' : 'station'
     setCurrentWalletState({ ...currentWalletState, activeWallet })
-    connect(type, identifier)
+    //connect(type, identifier)
     onCloseModal()
   }
 
@@ -80,20 +69,20 @@ export const useTerraStation = (onCloseModal) => {
     return { mainnet, testnet }
   }, [])
 
-  const wasmChainClient = useMemo(() => {
-    return new TerraStationWallet(
-      connectedWallet,
-      currentWalletState.network === 'mainnet' ? mainnet : testnet,
-      currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
-      currentWalletState.chainId
-    )
-  }, [
-    connectedWallet,
-    currentWalletState.network,
-    mainnet,
-    testnet,
-    currentWalletState.chainId,
-  ])
+  // const wasmChainClient = useMemo(() => {
+  //   return new TerraStationWallet(
+  //     connectedWallet,
+  //     currentWalletState.network === 'mainnet' ? mainnet : testnet,
+  //     currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
+  //     currentWalletState.chainId
+  //   )
+  // }, [
+  //   connectedWallet,
+  //   currentWalletState.network,
+  //   mainnet,
+  //   testnet,
+  //   currentWalletState.chainId,
+  // ])
 
   useEffect(() => {
     if (currentWalletState?.activeWallet !== 'station') {
@@ -102,28 +91,16 @@ export const useTerraStation = (onCloseModal) => {
 
     setCurrentWalletState({
       key: null,
-      status: connectedWallet
-        ? WalletStatusType.connected
-        : WalletStatusType.disconnected,
-      address: connectedWallet?.addresses[currentWalletState.chainId],
+      status: WalletStatusType.disconnected,
+      address: 'c',
       chainId: currentWalletState.chainId,
       network: currentWalletState.network,
-      client: wasmChainClient,
-      activeWallet:
-        connectedWallet?.connectType === 'WALLETCONNECT'
-          ? 'walletconnect'
-          : 'station',
+      client: null,
+      activeWallet: 'walletconnect',
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    connectedWallet,
-    currentWalletState.network,
-    mainnet,
-    testnet,
-    wasmChainClient,
-    currentWalletState.chainId,
-  ])
+  }, [currentWalletState.network, mainnet, testnet, currentWalletState.chainId])
 
   return { connectTerraAndCloseModal, filterForStation, filterForWalletConnect }
 }

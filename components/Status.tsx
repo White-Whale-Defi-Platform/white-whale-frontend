@@ -5,11 +5,11 @@ import { useQuery } from 'react-query'
 import { HStack, Icon, Text } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 const Status = () => {
   const chains: Array<any> = useChains()
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
 
   const url = useMemo(() => {
     return chains?.find((c) => c?.chainId === chainId)?.rpc

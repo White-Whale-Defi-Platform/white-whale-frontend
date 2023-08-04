@@ -4,7 +4,7 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 import {
   calculateDurationString,
   convertMicroDenomToDenom,
@@ -23,7 +23,7 @@ const Withdraw = ({
   unbondingPeriodInNano,
   whalePrice,
 }) => {
-  const [{ status, chainId, network }, _] = useRecoilState(walletState)
+  const [{ status, chainId, network }, _] = useRecoilState(chainState)
 
   const isWalletConnected = status === WalletStatusType.connected
   const config: Config = useConfig(network, chainId)

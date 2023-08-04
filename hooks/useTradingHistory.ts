@@ -6,7 +6,7 @@ import { useChainInfo } from 'hooks/useChainInfo'
 import { fromChainAmount, num } from 'libs/num'
 import moment from 'moment'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { getToken24hrPrice } from 'util/coingecko'
 import { getTokenDecimal } from 'util/token'
 
@@ -30,7 +30,7 @@ const query = gql`
 export const useTradingHistory = ({ pair, dateTime }) => {
   const [volume, setVolume] = useState<number | undefined>()
   const [feeVolume, setFeeVolume] = useState<number | undefined>()
-  const currentWalletState = useRecoilValue(walletState)
+  const currentWalletState = useRecoilValue(chainState)
   const [activeChain]: any = useChainInfo(currentWalletState.chainId)
 
   const filter = {

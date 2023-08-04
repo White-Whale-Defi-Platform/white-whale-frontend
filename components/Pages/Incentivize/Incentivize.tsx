@@ -14,52 +14,45 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import PositionsOverview from 'components/Pages/Incentivize/PositionsOverview'
-import { useChains } from 'hooks/useChainInfo'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryPoolsLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import Create from './Create'
+import { useClients } from 'hooks/useClients'
 
 const Incentivize: FC = () => {
   const router: NextRouter = useRouter()
-  const chains: Array<any> = useChains()
-
-  const { chainId } = useRecoilValue(walletState)
+  const { chainName } = useRecoilValue(chainState)
   const { data: poolList } = usePoolsListQuery()
 
   const poolId = useMemo(
     () => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
     [poolList]
   )
-  const chainIdParam = router.query.chainId as string
-  const currentChain = chains.find((row) => row.chainId === chainId)
 
-  const client = useCosmwasmClient(chainId)
+  const { cosmWasmClient } = useClients(chainName)
 
   useEffect(() => {
-    if (currentChain) {
+    if (chainName) {
       const pools = poolList?.pools
       if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
-        router.push(`/${currentChain.label.toLowerCase()}/pools`)
+        router.push(`/${chainName}/pools`)
       } else {
-        router.push(
-          `/${currentChain.label.toLowerCase()}/pools/incentivize?poolId=${poolId}`
-        )
+        router.push(`/${chainName}/pools/incentivize?poolId=${poolId}`)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolId, poolList, currentChain])
+  }, [poolId, poolList, chainName])
 
   const [pools] = useQueriesDataSelector(
     useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
-      client,
+      cosmWasmClient,
     })
   )
 
@@ -90,7 +83,7 @@ const Incentivize: FC = () => {
           fontSize="28px"
           aria-label="go back"
           icon={<ArrowBackIcon />}
-          onClick={() => router.push(`/${chainIdParam}/pools`)}
+          onClick={() => router.push(`/${chainName}/pools`)}
         />
         <Text as="h2" fontSize="24" fontWeight="900">
           Manage Incentives

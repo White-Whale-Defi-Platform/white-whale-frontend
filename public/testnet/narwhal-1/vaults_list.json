@@ -10,7 +10,7 @@
         "symbol": "WHALE",
         "name": "WHALE",
         "decimals": 6,
-        "logoURI": "/img/logo.svg",
+        "logoURI": "/logos/logo.svg",
         "tags": ["native"],
         "native": true,
         "denom": "uwhale"

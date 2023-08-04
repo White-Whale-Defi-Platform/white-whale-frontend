@@ -4,7 +4,7 @@ import { useMutation } from 'react-query'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { createExecuteMessage } from 'util/messages'
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const useClaim = ({ poolId }: Props) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Claim',

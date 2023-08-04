@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { VStack } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 import AssetInput from '../../AssetInput'
 import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bondingContract'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
-  const [{ status }] = useRecoilState(walletState)
+  const [{ status }] = useRecoilState(chainState)
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
 

@@ -7,7 +7,7 @@ import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/us
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { TxStep } from 'types/common'
 
 import ClaimTable from './ClaimTable'
@@ -45,7 +45,7 @@ type Props = {
 const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
-  const { client, network, chainId } = useRecoilValue(walletState)
+  const { client, network, chainId } = useRecoilValue(chainState)
 
   const config = useConfig(network, chainId)
   // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed

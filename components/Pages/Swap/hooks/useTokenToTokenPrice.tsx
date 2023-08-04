@@ -6,7 +6,7 @@ import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 type UseTokenPairsPricesArgs = {
   tokenASymbol: TokenInfo['symbol']
@@ -23,7 +23,7 @@ export const useTokenToTokenPriceQuery = ({
   enabled = true,
   refetchInBackground,
 }: UseTokenPairsPricesArgs) => {
-  const { client } = useRecoilValue(walletState)
+  const { client } = useRecoilValue(chainState)
 
   const tokenA = useTokenInfo(tokenASymbol)
   const tokenB = useTokenInfo(tokenBSymbol)

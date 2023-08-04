@@ -8,7 +8,7 @@ import {
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 dayjs.extend(utc)
 interface Epoch {
   available: {
@@ -78,7 +78,7 @@ interface EpochConfigData {
 }
 
 const useEpoch = () => {
-  const { client, network, chainId } = useRecoilValue(walletState)
+  const { client, network, chainId } = useRecoilValue(chainState)
   const contracts: Config = useConfig(network, chainId)
 
   const { data: config } = useQuery<EpochConfigData>({

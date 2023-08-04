@@ -5,7 +5,7 @@ import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 
 import { TxStep } from '../hooks/useTransaction'
 import useWithdraw from '../hooks/useWithdraw'
@@ -34,7 +34,7 @@ const WithdrawForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const onSuccess = useCallback(
     (txHash) => {
       refetch?.()

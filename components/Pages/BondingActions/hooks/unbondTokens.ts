@@ -1,8 +1,8 @@
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { Wallet } from 'util/wallet-adapters'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export const unbondTokens = (
-  client: Wallet,
+  signingClient: SigningCosmWasmClient,
   address: string,
   amount: number,
   denom: string,
@@ -20,5 +20,5 @@ export const unbondTokens = (
       },
     },
   }
-  return client.execute(address, config.whale_lair, handleMsg)
+  return signingClient.execute(address, config.whale_lair, handleMsg, 'auto')
 }

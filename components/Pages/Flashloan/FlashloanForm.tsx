@@ -3,7 +3,7 @@ import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 
 import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import Editor from './Editor'
 import useFlashloan from './hooks/useFlashloan'
@@ -11,6 +11,8 @@ import { TxStep } from './hooks/useTransaction'
 import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
 
 const defaultJson = {
   flash_loan: {
@@ -37,8 +39,10 @@ function FlashloanForm({}: Props) {
   const containerRef = useRef(null)
   const [error, setError] = useState(null)
   const [json, setJson] = useState(defaultJson)
-  const { status } = useRecoilValue(walletState)
-  const isConnected = status === `@wallet-state/connected`
+  const { chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
+
+  const isConnected = useMemo(() => status === WalletStatus.Connected, [status])
 
   const tx = useFlashloan({ json })
 

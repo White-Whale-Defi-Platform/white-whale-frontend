@@ -8,7 +8,7 @@ import SubmitButton from 'components/SubmitButton'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/chainState'
 
 import useClaimableLP from './hooks/useClaimableLP'
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'

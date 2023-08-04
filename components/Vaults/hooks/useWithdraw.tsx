@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import {
   createWithdrawExecuteMsgs,
@@ -27,7 +27,7 @@ const useWithdraw = ({
   token,
   onSuccess,
 }: DepostProps) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
   const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 

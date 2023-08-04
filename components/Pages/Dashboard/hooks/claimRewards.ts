@@ -1,13 +1,18 @@
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { Wallet } from 'util/wallet-adapters'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export const claimRewards = (
-  client: Wallet,
+  signingClient: SigningCosmWasmClient,
   address: string,
   config: Config
 ) => {
   const handleMsg = {
     claim: {},
   }
-  return client.execute(address, config.fee_distributor, handleMsg)
+  return signingClient.execute(
+    address,
+    config.fee_distributor,
+    handleMsg,
+    'auto'
+  )
 }

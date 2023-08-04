@@ -6,7 +6,7 @@ import { num, toChainAmount } from 'libs/num'
 import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import useRoute from './useRoute'
 import useSimulate from './useSimulate'
@@ -14,7 +14,7 @@ import useTransaction from './useTransaction'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
   const slippage = useRecoilValue(slippageAtom)

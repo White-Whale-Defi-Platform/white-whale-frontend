@@ -1,15 +1,7 @@
 import React, { useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Button,
-  HStack,
-  IconButton,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
@@ -18,10 +10,9 @@ import {
 import Loader from '../../Loader'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
-import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { chainState } from 'state/atoms/chainState'
 
-import WalletModal from '../../Wallet/Modal/Modal'
 import { ActionType } from '../Dashboard/BondingOverview'
 import {
   Config,
@@ -32,10 +23,10 @@ import { Bond, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
-
 import useTransaction, { TxStep } from './hooks/useTransaction'
-import { useChains } from 'hooks/useChainInfo'
 import usePrices from 'hooks/usePrices'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
 
 export enum WhaleTokenType {
   ampWHALE,
@@ -43,19 +34,13 @@ export enum WhaleTokenType {
 }
 
 const BondingActions = ({ globalAction }) => {
-  const [{ chainId, client, address, status, network }, _] =
-    useRecoilState(walletState)
-  const isWalletConnected: boolean = status === WalletStatusType.connected
-  const chains: Array<any> = useChains()
-  const currentChain = chains.find(
-    (row: { chainId: string }) => row.chainId === chainId
+  const { chainId, network, chainName } = useRecoilValue(chainState)
+  const { address, status, openView } = useChain(chainName)
+
+  const isWalletConnected: boolean = useMemo(
+    () => status === WalletStatus.Connected,
+    [status]
   )
-  const currentChainName = currentChain?.label.toLowerCase()
-  const {
-    isOpen: isOpenModal,
-    onOpen: onOpenModal,
-    onClose: onCloseModal,
-  } = useDisclosure()
 
   const router = useRouter()
 
@@ -89,7 +74,7 @@ const BondingActions = ({ globalAction }) => {
     bondingConfig,
     filteredUnbondingRequests,
     isLoading,
-  } = useDashboardData(client, address, network, chainId)
+  } = useDashboardData(address, network, chainId, chainName)
 
   const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)
   const totalWithdrawable = withdrawableAmpWhale + withdrawableBWhale
@@ -116,7 +101,7 @@ const BondingActions = ({ globalAction }) => {
     const actionString = ActionType[action].toString()
     const onClick = async () => {
       setCurrentBondState({ ...currentBondState, amount: 0 })
-      await router.push(`/${currentChainName}/dashboard/${actionString}`)
+      await router.push(`/${chainName}/dashboard/${actionString}`)
     }
 
     return (
@@ -157,7 +142,7 @@ const BondingActions = ({ globalAction }) => {
           aria-label="go back"
           icon={<ArrowBackIcon />}
           onClick={async () => {
-            await router.push(`/${currentChainName}/dashboard`)
+            await router.push(`/${chainName}/dashboard`)
             setCurrentBondState({ ...currentBondState, amount: 0 })
           }}
         />
@@ -296,18 +281,13 @@ const BondingActions = ({ globalAction }) => {
                 }
                 await submit(globalAction, currentBondState.amount, denom)
               } else {
-                onOpenModal()
+                openView()
               }
             }}
             style={{ textTransform: 'capitalize' }}
           >
             {buttonLabel}
           </Button>
-          <WalletModal
-            isOpenModal={isOpenModal}
-            onCloseModal={onCloseModal}
-            chainId={chainId}
-          />
         </VStack>
       )}
       )

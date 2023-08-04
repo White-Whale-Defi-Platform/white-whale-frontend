@@ -19,7 +19,7 @@ import {
   TransactionStatus,
   transactionStatusState,
 } from 'state/atoms/transactionAtoms'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
@@ -38,7 +38,7 @@ export const useTokenSwap = ({
   tokenAmount: providedTokenAmount,
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
-  const { client, address, status } = useRecoilValue(walletState)
+  const { client, address, status } = useRecoilValue(chainState)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)
   const setTokenSwap = useSetRecoilState(tokenSwapAtom)

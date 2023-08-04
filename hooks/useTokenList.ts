@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query'
 
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
-import { TokenInfo, usePoolsListQuery } from '../queries/usePoolsListQuery'
+import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 export type TokenList = {
   base_token: TokenInfo
@@ -13,7 +13,7 @@ export type TokenList = {
 
 export const useTokenList = () => {
   const { data: poolsListResponse } = usePoolsListQuery()
-  const { chainId, network } = useRecoilValue(walletState)
+  const { chainId, network } = useRecoilValue(chainState)
 
   /* generate token list off pool list and store it in cache */
   const { data } = useQuery<TokenList>(

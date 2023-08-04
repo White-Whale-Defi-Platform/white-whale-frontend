@@ -19,7 +19,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/chainState'
 import { TokenItemState } from 'types'
 
 import { Simulated } from './hooks/useSimulate'

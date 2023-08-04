@@ -8,7 +8,6 @@ import {
   keyframes,
   Text,
   Tooltip,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
@@ -18,14 +17,14 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
-import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/atoms/chainState'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import Loader from '../../Loader'
-import WalletModal from '../../Wallet/Modal/Modal'
 import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { ActionType } from './BondingOverview'
+import { useChain } from '@cosmos-kit/react-lite'
 
 const pulseAnimation = keyframes`
   0% {
@@ -117,12 +116,9 @@ const RewardsComponent = ({
   totalGlobalClaimable,
   weightInfo,
 }) => {
-  const [{ network, chainId }] = useRecoilState(walletState)
-  const {
-    isOpen: isOpenModal,
-    onOpen: onOpenModal,
-    onClose: onCloseModal,
-  } = useDisclosure()
+  const { network, chainId, chainName } = useRecoilValue(chainState)
+
+  const { openView } = useChain(chainName)
 
   const claimableRewards = useMemo(
     () => totalGlobalClaimable * Number(weightInfo?.share || 0),
@@ -144,8 +140,11 @@ const RewardsComponent = ({
     1
   )
 
-  const apr =
-    ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio
+  const apr = useMemo(
+    () =>
+      ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio,
+    [annualRewards, globalTotalBonded, multiplierRatio]
+  )
 
   const { txStep, submit } = useTransaction()
 
@@ -241,7 +240,7 @@ const RewardsComponent = ({
             <HStack flex="1">
               <a>
                 <Image
-                  src="/img/logo.svg"
+                  src="/logos/logo.svg"
                   alt="WhiteWhale Logo"
                   boxSize={[5, 7]}
                 />
@@ -290,9 +289,7 @@ const RewardsComponent = ({
               <Text color="whiteAlpha.600" fontSize={11}>
                 Estimated APR
               </Text>
-              <Text fontSize={11}>
-                {isWalletConnected ? `${apr.toFixed(2)}%` : 'n/a'}
-              </Text>
+              <Text fontSize={11}>{`${apr.toFixed(2)}%`}</Text>
             </HStack>
             <HStack>
               <Text color="whiteAlpha.600" fontSize={11}>
@@ -328,7 +325,7 @@ const RewardsComponent = ({
                 if (isWalletConnected) {
                   await submit(ActionType.claim, null, null)
                 } else {
-                  onOpenModal()
+                  openView()
                 }
               }}
               style={{ textTransform: 'capitalize' }}
@@ -359,11 +356,6 @@ const RewardsComponent = ({
               </Tooltip>
             )}
           </HStack>
-          <WalletModal
-            isOpenModal={isOpenModal}
-            onCloseModal={onCloseModal}
-            chainId={chainId}
-          />
         </VStack>
       )}
     </>

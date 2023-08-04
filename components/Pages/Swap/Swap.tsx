@@ -7,7 +7,7 @@ import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { TokenItemState } from 'types'
 
 import defaultTokens from './defaultTokens.json'
@@ -27,7 +27,7 @@ const Swap: FC<SwapProps> = ({}) => {
   const [reverse, setReverse] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
 
-  const { chainId, address, network, status } = useRecoilValue(walletState)
+  const { chainId, address, network, status } = useRecoilValue(chainState)
   const chains: Array<any> = useChains()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()

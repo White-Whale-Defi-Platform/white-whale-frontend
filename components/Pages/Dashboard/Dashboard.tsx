@@ -7,23 +7,23 @@ import {
 } from 'constants/bondingContract'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/atoms/chainState'
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import { useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
-import { useChains } from 'hooks/useChainInfo'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
 
 const Dashboard: FC = () => {
-  const [{ chainId, status, client, address, network }] =
-    useRecoilState(walletState)
-  const isWalletConnected: boolean = status === WalletStatusType.connected
-  const chains: Array<any> = useChains()
-  const currentChain = chains.find(
-    (row: { chainId: string }) => row.chainId === chainId
+  const { chainId, chainName, network } = useRecoilValue(chainState)
+
+  const { status, address } = useChain(chainName)
+  const isWalletConnected = useMemo(
+    () => status === WalletStatus.Connected,
+    [status]
   )
-  const currentChainName = currentChain?.label.toLowerCase()
 
   const data: BondingData[] = [
     {
@@ -136,7 +136,7 @@ const Dashboard: FC = () => {
     totalGlobalClaimable,
     globalAvailableRewards,
     isLoading,
-  } = useDashboardData(client, address, network, chainId)
+  } = useDashboardData(address, network, chainId, chainName)
 
   useEffect(() => {
     setBondedTokens(bondedAmpWhale, bondedBWhale)
@@ -165,7 +165,7 @@ const Dashboard: FC = () => {
             isLoading={isLoading && isWalletConnected}
             data={updatedData}
             whalePrice={whalePrice}
-            currentChainName={currentChainName}
+            currentChainName={chainName}
           />
         </VStack>
         <VStack alignSelf={{ base: 'center', xl: 'end' }}>

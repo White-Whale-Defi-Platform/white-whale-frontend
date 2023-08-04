@@ -5,7 +5,7 @@ import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { createExecuteMessage } from 'util/messages'
 
 export enum Force {
@@ -21,7 +21,7 @@ const useForceEpochAndTakingSnapshots = ({
   noSnapshotTakenAddresses,
   config,
 }: Params) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
   const incentiveAddresses = useQueryIncentiveContracts(client)
 
   const mode = useMemo(

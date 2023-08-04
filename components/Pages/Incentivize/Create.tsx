@@ -13,7 +13,7 @@ import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 import { TxStep } from 'types/common'
 
 import { useOpenFlow } from './hooks/useOpenFlow'
@@ -44,7 +44,7 @@ const Create = ({ poolId }: Props) => {
   })
   const formData = watch()
 
-  const { status } = useRecoilValue(walletState)
+  const { status } = useRecoilValue(chainState)
   const isConnected = status === WalletStatusType.connected
   const { txStep } = useRecoilValue(txAtom)
   const { simulate, submit } = useOpenFlow({ poolId, ...formData })

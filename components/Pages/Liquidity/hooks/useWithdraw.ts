@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { isNativeToken } from 'services/asset'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 
 import {
@@ -27,7 +27,7 @@ const useWithdraw = ({
   claimIncentive,
   stakingAddress,
 }: Props) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (parseFloat(amount) === 0 || contract === null || !client) {

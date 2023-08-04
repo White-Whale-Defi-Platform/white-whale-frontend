@@ -4,7 +4,7 @@ import { Button, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 
 import useDepost from '../hooks/useDeposit'
 import { TxStep } from '../hooks/useTransaction'
@@ -34,7 +34,7 @@ const DepositForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const isConnected = connected === `@wallet-state/connected`
 
   const onSuccess = useCallback(

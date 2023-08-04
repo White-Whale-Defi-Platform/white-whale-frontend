@@ -9,7 +9,7 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { ActionType } from '../../Dashboard/BondingOverview'
@@ -17,6 +17,8 @@ import { claimRewards } from '../../Dashboard/hooks/claimRewards'
 import { bondTokens } from './bondTokens'
 import { unbondTokens } from './unbondTokens'
 import { withdrawTokens } from './withdrawTokens'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 export enum TxStep {
   /**
@@ -50,12 +52,9 @@ export enum TxStep {
 }
 export const useTransaction = () => {
   const toast = useToast()
-  const {
-    chainId,
-    client,
-    address: senderAddress,
-    network,
-  } = useRecoilValue(walletState)
+  const { chainId, chainName, network } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -102,7 +101,7 @@ export const useTransaction = () => {
     },
     {
       enabled:
-        txStep == TxStep.Idle && error == null && !!client && !!senderAddress,
+        txStep == TxStep.Idle && error == null && !!signingClient && !!address,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -120,26 +119,26 @@ export const useTransaction = () => {
       const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
       if (data.bondingAction === ActionType.bond) {
         return bondTokens(
-          client,
-          senderAddress,
+          signingClient,
+          address,
           adjustedAmount,
           data.denom,
           config
         )
       } else if (data.bondingAction === ActionType.unbond) {
         return unbondTokens(
-          client,
-          senderAddress,
+          signingClient,
+          address,
           adjustedAmount,
           data.denom,
           config
         )
       } else if (data.bondingAction === ActionType.withdraw) {
-        return withdrawTokens(client, senderAddress, data.denom, config)
+        return withdrawTokens(signingClient, address, data.denom, config)
       } else if (data.bondingAction === ActionType.claim) {
-        return claimRewards(client, senderAddress, config)
+        return claimRewards(signingClient, address, config)
       } else {
-        return createNewEpoch(client, config, senderAddress)
+        return createNewEpoch(signingClient, config, address)
       }
     },
     {
@@ -178,7 +177,7 @@ export const useTransaction = () => {
         ) {
           setError(e?.toString())
           message = (
-            <Finder txHash={txInfo?.txhash} chainId={chainId}>
+            <Finder txHash={txInfo?.hash} chainId={chainId}>
               {' '}
             </Finder>
           )
@@ -247,7 +246,7 @@ export const useTransaction = () => {
       if (txHash == null) {
         return
       }
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash != null,

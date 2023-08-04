@@ -14,7 +14,6 @@ import { Incentives } from 'components/Pages/Pools/Incentives'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 import { STABLE_COIN_LIST } from 'constants/settings'
 import { useChains } from 'hooks/useChainInfo'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -27,7 +26,7 @@ import {
   aprHelperState,
   updateAPRHelperState,
 } from 'state/atoms/aprHelperState'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { EnigmaPoolData } from 'util/enigma'
 
 import { ActionCTAs } from './ActionCTAs'
@@ -39,6 +38,9 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
+import { useClients } from 'hooks/useClients'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -51,17 +53,22 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status, network } = useRecoilValue(walletState)
+  const { chainId, network, chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
-  const isWalletConnected: boolean = status === WalletStatusType.connected
+  const isWalletConnected: boolean = useMemo(
+    () => status === WalletStatus.Connected,
+    [status]
+  )
+
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
   )
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
-  const cosmwasmClient = useCosmwasmClient(chainId)
+  const { cosmWasmClient } = useClients(chainName)
   const config: Config = useConfig(network, chainId)
 
-  const { data: currentEpochData } = useCurrentEpoch(cosmwasmClient, config)
+  const { data: currentEpochData } = useCurrentEpoch(cosmWasmClient, config)
   const currentEpoch = useMemo(
     () => Number(currentEpochData?.currentEpoch?.epoch.id),
     [currentEpochData]
@@ -78,7 +85,7 @@ const Pools = () => {
     useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
-      client: cosmwasmClient,
+      cosmWasmClient,
     })
   )
   const myPoolsLength = useMemo(
@@ -101,7 +108,7 @@ const Pools = () => {
     flowPoolData: incentivePoolInfos,
     poolsWithAprAnd24HrVolume: pairInfos,
     isLoading: isIncentivePoolInfoLoading,
-  } = useIncentivePoolInfo(cosmwasmClient, pools, currentChainPrefix)
+  } = useIncentivePoolInfo(cosmWasmClient, pools, currentChainPrefix)
 
   // @ts-ignore
   if (window.debugLogsEnabled) {

@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 
 import { Box } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 const backgrounds = {
   'pisco-1':
@@ -30,7 +30,7 @@ const backgrounds = {
 }
 
 const RadialGradient: FC = () => {
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const wallet = useMemo(() => {
     return backgrounds[chainId]
   }, [chainId])

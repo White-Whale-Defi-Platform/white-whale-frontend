@@ -11,7 +11,7 @@ import { num } from 'libs/num'
 import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 import { useRecoilState } from 'recoil'
 import { aprHelperState } from 'state/atoms/aprHelperState'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType } from 'state/atoms/chainState'
 import { TokenItemState } from 'types/index'
 
 import Multiplicator from './Multiplicator'

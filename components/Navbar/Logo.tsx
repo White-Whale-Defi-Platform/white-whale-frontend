@@ -3,11 +3,10 @@ import React from 'react'
 import { HStack, Image, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 const Logo = () => {
-  const [currentWalletState, setCurrentWalletState] =
-    useRecoilState(walletState)
+  const [currentWalletState, setCurrentWalletState] = useRecoilState(chainState)
   return (
     <HStack alignItems="center">
       <Link href="/">
@@ -19,7 +18,11 @@ const Logo = () => {
             })
           }
         >
-          <Image src="/img/logo.svg" alt="WhiteWhale Logo" boxSize={[8, 12]} />
+          <Image
+            src="/logos/logo.svg"
+            alt="WhiteWhale Logo"
+            boxSize={[8, 12]}
+          />
         </a>
       </Link>
       <HStack display={['none', 'flex']}>

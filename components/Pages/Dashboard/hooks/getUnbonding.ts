@@ -1,8 +1,8 @@
 import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
-import { Wallet } from 'util/wallet-adapters'
 
 import { Config } from './useDashboardData'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface UnbondingInfo {
   total_amount: string
@@ -29,7 +29,7 @@ interface NativeToken {
 }
 
 export const getUnbonding = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config
 ) => {
@@ -90,7 +90,7 @@ export const getUnbonding = async (
 }
 
 const fetchUnbonding = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config
 ): Promise<UnbondingInfo[]> => {

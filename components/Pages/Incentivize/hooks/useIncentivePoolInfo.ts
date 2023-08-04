@@ -8,7 +8,7 @@ import {
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 import {
   EnigmaPoolData,
@@ -53,7 +53,7 @@ export interface IncentivePoolInfo {
   poolId: string
 }
 export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
-  const { chainId, network } = useRecoilValue(walletState)
+  const { chainId, network } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)

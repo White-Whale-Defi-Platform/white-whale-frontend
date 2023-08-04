@@ -7,7 +7,7 @@ import { fromChainAmount } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 import { formatSeconds } from 'util/formatSeconds'
 import { protectAgainstNaN } from 'util/conversion/index'
 
@@ -23,7 +23,11 @@ export type Position = {
   isOpen: boolean
   formattedTime: string
 }
-
+export enum PositionState {
+  unbonding = 'unbonding',
+  active = 'active',
+  unbonded = 'unbonded',
+}
 export const lpPositionToAssets = ({
   totalAssets,
   totalLpSupply,
@@ -93,10 +97,10 @@ export const fetchPositions = async (
             return acc + Number(asset.dollarValue)
           }, 0),
           state: position.isOpen
-            ? 'active'
+            ? PositionState.active
             : diff <= 0
-            ? 'unbound'
-            : 'unbonding',
+            ? PositionState.unbonded
+            : PositionState.unbonding,
           action: null,
         }
       })
@@ -108,7 +112,7 @@ const useLockedPositions = (poolId: string) => {
     useQueryPoolLiquidity({ poolId })
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
   const tokens = useTokenList()
   const prices = usePrices()
 

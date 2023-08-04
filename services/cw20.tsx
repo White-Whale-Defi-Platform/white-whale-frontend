@@ -1,6 +1,6 @@
 import { Coin } from '@cosmjs/launchpad'
-
-import { Wallet } from '../util/wallet-adapters'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export type Expiration =
   | { readonly at_height: number }
@@ -106,10 +106,13 @@ export interface CW20Contract {
   use: (contractAddress: string) => CW20Instance
 }
 
-export const CW20 = (client: Wallet): CW20Contract => {
+export const CW20 = (
+  cosmWasmClient: CosmWasmClient,
+  signingClient: SigningCosmWasmClient
+): CW20Contract => {
   const use = (contractAddress: string): CW20Instance => {
     const balance = async (address: string): Promise<string> => {
-      const result = await client?.queryContractSmart(contractAddress, {
+      const result = await cosmWasmClient?.queryContractSmart(contractAddress, {
         balance: { address },
       })
       return result?.balance
@@ -119,7 +122,7 @@ export const CW20 = (client: Wallet): CW20Contract => {
       owner: string,
       spender: string
     ): Promise<AllowanceResponse> => {
-      return client.queryContractSmart(contractAddress, {
+      return cosmWasmClient.queryContractSmart(contractAddress, {
         allowance: { owner, spender },
       })
     }
@@ -129,7 +132,7 @@ export const CW20 = (client: Wallet): CW20Contract => {
       startAfter?: string,
       limit?: number
     ): Promise<AllAllowancesResponse> => {
-      return client.queryContractSmart(contractAddress, {
+      return cosmWasmClient.queryContractSmart(contractAddress, {
         all_allowances: { owner, start_after: startAfter, limit },
       })
     }
@@ -138,31 +141,33 @@ export const CW20 = (client: Wallet): CW20Contract => {
       startAfter?: string,
       limit?: number
     ): Promise<readonly string[]> => {
-      const accounts: AllAccountsResponse = await client.queryContractSmart(
-        contractAddress,
-        {
+      const accounts: AllAccountsResponse =
+        await cosmWasmClient.queryContractSmart(contractAddress, {
           all_accounts: { start_after: startAfter, limit },
-        }
-      )
+        })
       return accounts.accounts
     }
 
     const tokenInfo = async (): Promise<CW20TokenInfo> => {
-      return client.queryContractSmart(contractAddress, { token_info: {} })
+      return cosmWasmClient.queryContractSmart(contractAddress, {
+        token_info: {},
+      })
     }
 
     const investment = async (): Promise<Investment> => {
-      return client.queryContractSmart(contractAddress, { investment: {} })
+      return cosmWasmClient.queryContractSmart(contractAddress, {
+        investment: {},
+      })
     }
 
     const claims = async (address: string): Promise<Claims> => {
-      return client.queryContractSmart(contractAddress, {
+      return cosmWasmClient.queryContractSmart(contractAddress, {
         claims: { address },
       })
     }
 
     const minter = async (): Promise<any> => {
-      return client.queryContractSmart(contractAddress, { minter: {} })
+      return cosmWasmClient.queryContractSmart(contractAddress, { minter: {} })
     }
 
     // mints tokens, returns transactionHash
@@ -171,9 +176,14 @@ export const CW20 = (client: Wallet): CW20Contract => {
       recipient: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        mint: { recipient, amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          mint: { recipient, amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
@@ -183,17 +193,27 @@ export const CW20 = (client: Wallet): CW20Contract => {
       recipient: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        transfer: { recipient, amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          transfer: { recipient, amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
     // burns tokens, returns transactionHash
     const burn = async (sender: string, amount: string): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        burn: { amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          burn: { amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
@@ -202,9 +222,14 @@ export const CW20 = (client: Wallet): CW20Contract => {
       spender: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        increase_allowance: { spender, amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          increase_allowance: { spender, amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
@@ -213,9 +238,14 @@ export const CW20 = (client: Wallet): CW20Contract => {
       spender: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        decrease_allowance: { spender, amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          decrease_allowance: { spender, amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
@@ -225,33 +255,50 @@ export const CW20 = (client: Wallet): CW20Contract => {
       recipient: string,
       amount: string
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        transfer_from: { owner, recipient, amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          transfer_from: { owner, recipient, amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
     const bond = async (sender: string, coin: Coin): Promise<string> => {
-      const result = await client.execute(
+      const result = await signingClient.execute(
         sender,
         contractAddress,
         { bond: {} },
+        'auto',
+        null,
         [coin]
       )
       return result.transactionHash
     }
 
     const unbond = async (sender: string, amount: string): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        unbond: { amount },
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          unbond: { amount },
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 
     const claim = async (sender: string): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        claim: {},
-      })
+      const result = await signingClient.execute(
+        sender,
+        contractAddress,
+        {
+          claim: {},
+        },
+        'auto'
+      )
       return result.transactionHash
     }
 

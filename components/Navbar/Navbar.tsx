@@ -1,5 +1,4 @@
 import React from 'react'
-import { useQueryClient } from 'react-query'
 import {
   Box,
   Drawer,
@@ -13,14 +12,11 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
-import { useChains } from 'hooks/useChainInfo'
-import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/atoms/chainState'
 
 import Card from '../Card'
-import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
@@ -56,34 +52,9 @@ export const links = [
   },
 ]
 const Navbar = () => {
-  const { disconnect } = useWallet()
-  const [{ key, chainId, network }, setWalletState] =
-    useRecoilState(walletState)
-  const queryClient = useQueryClient()
-  const chains: Array<any> = useChains()
-  const {
-    isOpen: isOpenModal,
-    onOpen: onOpenModal,
-    onClose: onCloseModal,
-  } = useDisclosure()
+  const { chainId, chainName } = useRecoilValue(chainState)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const resetWalletConnection = () => {
-    setWalletState({
-      status: WalletStatusType.idle,
-      address: '',
-      key: null,
-      client: null,
-      network: network,
-      chainId,
-      activeWallet: null,
-    })
-    queryClient.clear()
-    disconnect()
-  }
-
-  const currentChain = chains.find((row) => row.chainId === chainId)
-  const currentChainName = currentChain?.label.toLowerCase()
 
   return (
     <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
@@ -105,27 +76,13 @@ const Navbar = () => {
             <NavbarPopper
               key={menu.label}
               menu={menu}
-              currentChainName={currentChainName}
+              currentChainName={chainName}
               chainId={chainId}
             />
           ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">
-          <Wallet
-            connected={Boolean(key?.name)}
-            walletName={key?.name}
-            onDisconnect={resetWalletConnection}
-            disconnect={disconnect}
-            isOpenModal={isOpenModal}
-            onOpenModal={onOpenModal}
-            onCloseModal={onCloseModal}
-            onPrimaryButton={false}
-          />
-          <WalletModal
-            isOpenModal={isOpenModal}
-            onCloseModal={onCloseModal}
-            chainId={chainId}
-          />
+          <Wallet />
         </HStack>
       </Flex>
       <Flex
@@ -135,13 +92,7 @@ const Navbar = () => {
         display={{ base: 'flex', md: 'none' }}
       >
         <Logo />
-        <Wallet
-          connected={Boolean(key?.name)}
-          walletName={key?.name}
-          onDisconnect={resetWalletConnection}
-          disconnect={disconnect}
-          onOpenModal={onOpenModal}
-        />
+        <Wallet />
         <IconButton
           aria-label="Open drawer"
           variant="ghost"

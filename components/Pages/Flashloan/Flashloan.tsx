@@ -4,12 +4,12 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import FlashloanForm from './FlashloanForm'
 
 const Flashloan: FC = () => {
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const router = useRouter()
   const chains = useChains()
   const chainIdParam = router.query.chainId as string

@@ -25,6 +25,7 @@ type GeneratedWalletState<
   status: WalletStatusType
   address: string
   chainId: string
+  chainName: string
   network: NetworkType
   activeWallet: string
 }
@@ -48,6 +49,7 @@ function createWalletState<TClient = any, TState = {}>({
       status: WalletStatusType.idle,
       client: null,
       chainId: null,
+      chainName: 'migaloo',
       address: '',
       network: NetworkType.mainnet,
       activeWallet: '',
@@ -84,7 +86,7 @@ function createWalletState<TClient = any, TState = {}>({
   })
 }
 
-export const walletState = createWalletState<Wallet, { key?: Key }>({
+export const chainState = createWalletState<Wallet, { key?: Key }>({
   key: 'internal-wallet',
   default: {
     key: null,

@@ -6,7 +6,7 @@ import { protectAgainstNaN } from '../util/conversion'
 export async function queryMyLiquidity({
   swap,
   address,
-  context: { client },
+  context: { cosmWasmClient },
   totalLockedLp,
   myLockedLp,
 }) {
@@ -14,7 +14,7 @@ export async function queryMyLiquidity({
   const myNotLockedLp = address
     ? await queryLiquidityBalance({
         tokenAddress: swap.lp_token,
-        client,
+        cosmWasmClient,
         address,
         isNative,
       })
@@ -46,26 +46,5 @@ export async function queryMyLiquidity({
     myLockedAssets,
     totalLockedAssets,
     myNotLockedLp,
-  }
-}
-
-export const getLockedLpAssets = (poolInfo, myLockedLp) => {
-  const totalLpAssets: [number, number] = [
-    protectAgainstNaN(poolInfo.token1_reserve),
-    protectAgainstNaN(poolInfo.token2_reserve),
-  ]
-
-  const myLockedLpAssets: [number, number] = [
-    protectAgainstNaN(
-      totalLpAssets[0] * (myLockedLp / poolInfo.lp_token_supply)
-    ),
-    protectAgainstNaN(
-      totalLpAssets[1] * (myLockedLp / poolInfo.lp_token_supply)
-    ),
-  ]
-
-  return {
-    totalLpAssets,
-    myLockedLpAssets,
   }
 }

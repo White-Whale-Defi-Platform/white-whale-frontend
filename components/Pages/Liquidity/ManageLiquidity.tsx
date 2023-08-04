@@ -27,7 +27,7 @@ import {
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { TxStep } from 'types/common'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import Claim from './Claim'
 import DepositForm from './DepositForm'
@@ -39,7 +39,7 @@ import WithdrawForm from './WithdrawForm'
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
-  const { address, chainId, status, client } = useRecoilValue(walletState)
+  const { address, chainId, status, client } = useRecoilValue(chainState)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
@@ -53,7 +53,7 @@ const ManageLiquidity: FC = () => {
       useQueryPoolsLiquidity({
         refetchInBackground: false,
         pools: poolList?.pools,
-        client: cosmwasmClient,
+        signingClient: cosmwasmClient,
       })
     )
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id

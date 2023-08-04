@@ -1,8 +1,7 @@
 import { useQuery } from 'react-query'
 
-import { useConnectedWallet } from '@terra-money/wallet-provider'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 
@@ -46,19 +45,12 @@ export type PoolsListQueryResponse = {
 }
 
 export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
-  const currentWalletState = useRecoilValue(walletState)
-  const connectedWallet = useConnectedWallet()
+  const { chainId, network } = useRecoilValue(chainState)
 
   return useQuery<PoolsListQueryResponse>(
-    [
-      '@pools-list',
-      currentWalletState.chainId,
-      currentWalletState.network,
-      currentWalletState.activeWallet,
-      connectedWallet,
-    ],
+    ['@pools-list', chainId, network],
     async () => {
-      const url = `/${currentWalletState.network}/${currentWalletState.chainId}${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`
+      const url = `/${network}/${chainId}${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`
       const response = await fetch(url)
       const tokenList = await response.json()
       return {
@@ -72,7 +64,7 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
     Object.assign(
       {
         retry: 5,
-        enabled: !!currentWalletState.chainId,
+        enabled: !!chainId,
         refetchOnMount: false,
       },
       options || {}

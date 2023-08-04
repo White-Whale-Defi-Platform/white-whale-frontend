@@ -7,7 +7,7 @@ import { fromChainAmount, num } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/atoms/chainState'
 
 type RewardData = {
   amount: string
@@ -66,7 +66,7 @@ const useRewards = (poolId) => {
   const prices = usePrices()
   const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],

@@ -24,15 +24,15 @@ export type SerializedRewardsContract = {
 
 export async function queryRewardsContracts({
   rewardsTokens,
-  context: { client, getTokenDollarValue },
+  context: { cosmWasmClient, getTokenDollarValue },
 }: QueryRewardsContractsArgs): Promise<Array<SerializedRewardsContract>> {
   const rewardsContractsInfo = await Promise.all(
     rewardsTokens.map(({ rewards_address }) =>
-      getRewardsInfo(rewards_address, client)
+      getRewardsInfo(rewards_address, cosmWasmClient)
     )
   )
 
-  const currentHeight = await client.getHeight()
+  const currentHeight = await cosmWasmClient.getHeight()
 
   return Promise.all(
     rewardsContractsInfo.map(async (contractInfo, index) => {

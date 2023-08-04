@@ -22,7 +22,7 @@ import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 import Injective from 'services/injective'
 
 import { TxResponse, Wallet } from './wallet'
-import { NetworkType } from 'state/atoms/walletAtoms'
+import { NetworkType } from 'state/atoms/chainState'
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient | Injective
 

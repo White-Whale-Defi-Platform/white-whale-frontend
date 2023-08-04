@@ -3,7 +3,7 @@ import React, { FC, useMemo, useState } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState, WalletStatusType } from 'state/atoms/chainState'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
@@ -11,7 +11,7 @@ import useVault from './hooks/useVaults'
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =
     useState<boolean>(false)
-  const { status } = useRecoilValue(walletState)
+  const { status } = useRecoilValue(chainState)
   const isWalletConnected = status === WalletStatusType.connected
   const { vaults, isLoading } = useVault()
   const router = useRouter()
