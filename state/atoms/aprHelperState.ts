@@ -1,4 +1,4 @@
-import { atom, SetterOrUpdater } from 'recoil'
+import { SetterOrUpdater, atom } from 'recoil'
 
 type PoolAPR = {
   poolId: string

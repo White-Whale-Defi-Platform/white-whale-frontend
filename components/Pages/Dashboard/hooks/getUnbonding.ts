@@ -43,7 +43,7 @@ export const getUnbonding = async (
   const unbondingPeriodInNano = Number(bondingContractConfig?.unbonding_period)
   const currentTimeInNano = Date.now() * 1_000_000
 
-  // filtering out unbonding requests which have already finished, so they won't get shown
+  // Filtering out unbonding requests which have already finished, so they won't get shown
   const filterUnbondingRequests = (unbondingRequests) => {
     if (!unbondingRequests) {
       return []
@@ -71,18 +71,22 @@ export const getUnbonding = async (
   const unbondingAmpWhale = convertMicroDenomToDenom(
     filteredAmpWhaleUnbondingRequests
       ?.map((req) => req.asset.amount)
-      .reduce((accumulator: number, currentValue: string) => {
-        return accumulator + parseFloat(currentValue)
-      }, 0) || 0,
+      .reduce(
+        (accumulator: number, currentValue: string) =>
+          accumulator + parseFloat(currentValue),
+        0
+      ) || 0,
     config.lsd_token.ampWHALE.decimals
   )
 
   const unbondingBWhale = convertMicroDenomToDenom(
     filteredBWhaleUnbondingRequests
       ?.map((req) => req.asset.amount)
-      .reduce((accumulator: number, currentValue: string) => {
-        return accumulator + parseFloat(currentValue)
-      }, 0) || 0,
+      .reduce(
+        (accumulator: number, currentValue: string) =>
+          accumulator + parseFloat(currentValue),
+        0
+      ) || 0,
     config.lsd_token.bWHALE.decimals
   )
 
@@ -93,12 +97,11 @@ const fetchUnbonding = async (
   client: Wallet,
   address: string,
   config: Config
-): Promise<UnbondingInfo[]> => {
-  return Promise.all(
-    Object.entries(config.lsd_token).map(async ([key, token]) => {
-      return client.queryContractSmart(config.whale_lair, {
-        unbonding: { address: address, denom: token.denom },
+): Promise<UnbondingInfo[]> =>
+  Promise.all(
+    Object.entries(config.lsd_token).map(async ([key, token]) =>
+      client.queryContractSmart(config.whale_lair, {
+        unbonding: { address, denom: token.denom },
       })
-    })
+    )
   )
-}

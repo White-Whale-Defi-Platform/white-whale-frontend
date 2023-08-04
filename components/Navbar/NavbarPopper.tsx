@@ -10,13 +10,13 @@ import {
   PopoverContent,
   PopoverTrigger,
   Text,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { PRESELECTED_BRIDGE_CHAINS } from 'constants/preselectedBridgeChains'
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'
-import { PRESELECTED_BRIDGE_CHAINS } from 'constants/preselectedBridgeChains'
 
 const NavbarPopper = ({ menu, currentChainName, chainId }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
@@ -26,28 +26,28 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
   const { asPath } = useRouter()
 
   const isActiveLink = useMemo(() => {
-    // children defining sub menu items
+    // Children defining sub menu items
     const [linkInAsPath] =
       menu?.children === undefined
         ? [asPath.includes(menu.link)]
         : (menu.children ?? []).filter((item: { link: string }) =>
             asPath.includes(item.link)
           )
-    return !!linkInAsPath
+    return Boolean(linkInAsPath)
   }, [asPath, menu])
 
-  const openLink = (url: string): (() => void) => {
-    return () => {
+  const openLink =
+    (url: string): (() => void) =>
+    () => {
       window.open(url, '_blank')
     }
-  }
 
   return (
     <Popover
       placement="bottom"
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      // children defining sub menu items
+      // Children defining sub menu items
       onOpen={
         menu.isExternal
           ? openLink(

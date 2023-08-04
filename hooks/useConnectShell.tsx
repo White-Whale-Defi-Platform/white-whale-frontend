@@ -2,7 +2,7 @@ import { GasPrice } from '@cosmjs/stargate'
 import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
 import { useChainInfo } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { OfflineSigningWallet } from 'util/wallet-adapters'
 
 export default function useConnectShell() {
@@ -43,10 +43,10 @@ export default function useConnectShell() {
       )
       const [{ address }] = await offlineSigner.getAccounts()
       const key = await window.shellwallet.getKey(currentWalletState.chainId)
-      /* successfully update the wallet state */
+      /* Successfully update the wallet state */
       setCurrentWalletState({
         key,
-        address: address,
+        address,
         client: wasmChainClient,
         chainId: currentWalletState.chainId,
         network: currentWalletState.network,

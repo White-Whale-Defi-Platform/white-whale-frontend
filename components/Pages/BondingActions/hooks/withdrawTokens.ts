@@ -9,7 +9,7 @@ export const withdrawTokens = (
 ) => {
   const handleMsg = {
     withdraw: {
-      denom: denom,
+      denom,
     },
   }
   return client.execute(address, config.whale_lair, handleMsg)

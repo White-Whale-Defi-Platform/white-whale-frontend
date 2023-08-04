@@ -63,7 +63,7 @@ const fetchClaimableData = async (
   const result: JsonObject = await client.queryContractSmart(
     config.fee_distributor,
     {
-      claimable: { address: address },
+      claimable: { address },
     }
   )
 

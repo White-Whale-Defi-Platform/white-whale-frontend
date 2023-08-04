@@ -40,8 +40,8 @@ export const useTxRates = ({
     useTokenDollarValue(tokenASymbol)
 
   const [oneTokenToTokenPrice] = usePriceForOneToken({
-    tokenASymbol: tokenASymbol,
-    tokenBSymbol: tokenBSymbol,
+    tokenASymbol,
+    tokenBSymbol,
   })
 
   const dollarValue = (tokenADollarPrice || 0) * (tokenAAmount || 0)

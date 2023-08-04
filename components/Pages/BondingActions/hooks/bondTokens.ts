@@ -15,7 +15,7 @@ export const bondTokens = async (
         amount: amount.toString(),
         info: {
           native_token: {
-            denom: denom,
+            denom,
           },
         },
       },

@@ -58,7 +58,7 @@ export async function tokenToTokenPriceQueryWithPools({
     })
   }
 
-  // return formatPrice(
+  // Return formatPrice(
   return getTokenForTokenPrice({
     tokenAmount: convertedTokenAmount,
     swapAddress: baseTokenAPool.swap_address,

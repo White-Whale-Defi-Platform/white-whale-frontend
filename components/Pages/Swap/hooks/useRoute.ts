@@ -7,9 +7,8 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { toAssetInfo } from 'services/asset'
 import { createExecuteMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) => {
-  return Buffer.from(JSON.stringify(obj)).toString('base64')
-}
+export const toBase64 = (obj: object) =>
+  Buffer.from(JSON.stringify(obj)).toString('base64')
 
 const buildRoute = (graph, start, end) => {
   if (!start || !end) {
@@ -34,7 +33,7 @@ const buildRoute = (graph, start, end) => {
 }
 
 const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
-  if (!!!amount || !!!route.length || !routerAddress) {
+  if (!amount || !route.length || !routerAddress) {
     return {}
   }
 

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Button, useToast, VStack } from '@chakra-ui/react'
+import { Button, VStack, useToast } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import { TxStep } from '../hooks/useTransaction'
 import useWithdraw from '../hooks/useWithdraw'
@@ -55,18 +55,17 @@ const WithdrawForm = ({
   )
 
   const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
-  const isConnected = connected === `@wallet-state/connected`
+  const isConnected = connected === '@wallet-state/connected'
 
   const buttonLabel = useMemo(() => {
-    if (connected !== `@wallet-state/connected`) {
+    if (connected !== '@wallet-state/connected') {
       return 'Connect Wallet'
-    } else if (!!!token?.amount) {
+    } else if (!token?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Withdraw'
     }
+    return 'Withdraw'
   }, [tx?.buttonLabel, connected, token])
 
   const onSubmit = (event) => {

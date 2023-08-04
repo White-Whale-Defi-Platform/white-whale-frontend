@@ -2,13 +2,13 @@ import { FC } from 'react'
 
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
-  forwardRef,
   HStack,
   IconButton,
   Image,
   Input,
   Stack,
   Text,
+  forwardRef,
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
@@ -38,12 +38,12 @@ interface AssetInputProps {
 const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
   const formatSymbol = symbol?.replace('-', '/')
 
-  // if (!tokenInfo && !symbol) return null
+  // If (!tokenInfo && !symbol) return null
 
   if (!tokenInfo?.symbol && !symbol) {
     return (
       <Text
-        // paddingLeft="10px"
+        // PaddingLeft="10px"
         width="fit-content"
         fontSize="18px"
         fontWeight="400"

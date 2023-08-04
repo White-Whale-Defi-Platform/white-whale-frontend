@@ -30,7 +30,7 @@ const button = {
       },
     },
     secondary: {
-      // outline: "none",
+      // Outline: "none",
       borderRadius: 'full',
       borderWidth: '1px',
       borderColor: 'white',

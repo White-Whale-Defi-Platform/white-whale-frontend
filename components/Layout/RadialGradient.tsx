@@ -31,9 +31,7 @@ const backgrounds = {
 
 const RadialGradient: FC = () => {
   const { chainId } = useRecoilValue(walletState)
-  const wallet = useMemo(() => {
-    return backgrounds[chainId]
-  }, [chainId])
+  const wallet = useMemo(() => backgrounds[chainId], [chainId])
 
   return (
     <Box

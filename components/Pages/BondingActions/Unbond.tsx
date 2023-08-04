@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+
 import { VStack } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
-import AssetInput from '../../AssetInput'
 import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bondingContract'
+import { useRecoilState } from 'recoil'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+
+import AssetInput from '../../AssetInput'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
@@ -29,7 +31,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
       if (tokenSymbol) {
         setCurrentBondState({
           ...currentBondState,
-          tokenSymbol: tokenSymbol,
+          tokenSymbol,
           amount: Number(amount),
         })
       } else {
@@ -80,7 +82,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
                 case LSDToken.bWHALE:
                   return tokenBalances?.bWHALE ?? 0
                 default:
-                  return 0 // or any other default value
+                  return 0 // Or any other default value
               }
             })()}
             minMax={false}
@@ -97,7 +99,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken: lsdToken,
+                  lsdToken,
                 })
               } else {
                 setCurrentBondState({

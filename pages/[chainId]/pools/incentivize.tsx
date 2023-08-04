@@ -1,7 +1,5 @@
 import Incentivize from 'components/Pages/Incentivize'
 
-const IncentivizePage = () => {
-  return <Incentivize />
-}
+const IncentivizePage = () => <Incentivize />
 
 export default IncentivizePage

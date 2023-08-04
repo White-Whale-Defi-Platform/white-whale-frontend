@@ -2,13 +2,13 @@ import { useEffect, useMemo } from 'react'
 
 import { LCDClient } from '@terra-money/feather.js'
 import {
-  Connection,
   ConnectType,
+  Connection,
   useConnectedWallet,
   useWallet,
 } from '@terra-money/wallet-provider'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { TerraStationWallet } from 'util/wallet-adapters/terraStationWallet'
 
 import { useChainInfo } from './useChainInfo'
@@ -20,12 +20,10 @@ export const useTerraStation = (onCloseModal) => {
     useRecoilState(walletState)
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
 
-  const filterForStation = (connection: Connection) => {
-    return connection.identifier === 'station'
-  }
-  const filterForWalletConnect = (connection: Connection) => {
-    return connection.type === 'WALLETCONNECT'
-  }
+  const filterForStation = (connection: Connection) =>
+    connection.identifier === 'station'
+  const filterForWalletConnect = (connection: Connection) =>
+    connection.type === 'WALLETCONNECT'
 
   const connectTerraAndCloseModal = (type: ConnectType, identifier: string) => {
     const activeWallet = type === 'WALLETCONNECT' ? 'walletconnect' : 'station'
@@ -44,8 +42,10 @@ export const useTerraStation = (onCloseModal) => {
         prefix: 'terra',
       },
     })
-    // TODO: Make this better and derived from like a config or something
-    // Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
+    /*
+     * TODO: Make this better and derived from like a config or something
+     * Previous pattern we did was passing 1 chain config when on a given chain but here we can pass em all at once
+     */
     const mainnet = new LCDClient({
       'juno-1': {
         lcd: 'https://ww-juno-rest.polkachu.com',
@@ -80,20 +80,22 @@ export const useTerraStation = (onCloseModal) => {
     return { mainnet, testnet }
   }, [])
 
-  const wasmChainClient = useMemo(() => {
-    return new TerraStationWallet(
+  const wasmChainClient = useMemo(
+    () =>
+      new TerraStationWallet(
+        connectedWallet,
+        currentWalletState.network === 'mainnet' ? mainnet : testnet,
+        currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
+        currentWalletState.chainId
+      ),
+    [
       connectedWallet,
-      currentWalletState.network === 'mainnet' ? mainnet : testnet,
-      currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
-      currentWalletState.chainId
-    )
-  }, [
-    connectedWallet,
-    currentWalletState.network,
-    mainnet,
-    testnet,
-    currentWalletState.chainId,
-  ])
+      currentWalletState.network,
+      mainnet,
+      testnet,
+      currentWalletState.chainId,
+    ]
+  )
 
   useEffect(() => {
     if (currentWalletState?.activeWallet !== 'station') {

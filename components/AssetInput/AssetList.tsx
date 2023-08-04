@@ -6,9 +6,9 @@ import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
 } from 'constants/bondingContract'
+import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
-import useFilter from 'hooks/useFilter'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -99,7 +99,7 @@ const AssetList: FC<AssetListProps> = ({
             onChange(
               {
                 tokenSymbol: item?.symbol,
-                amount: amount,
+                amount,
               },
               true
             )
@@ -109,7 +109,7 @@ const AssetList: FC<AssetListProps> = ({
             <Image
               src={item?.logoURI}
               alt="logo-small"
-              // boxSize="2rem"
+              // BoxSize="2rem"
               width="auto"
               maxW="1.5rem"
               maxH="1.5rem"

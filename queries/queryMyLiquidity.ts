@@ -20,7 +20,7 @@ export async function queryMyLiquidity({
       })
     : 0
 
-  /* provide dollar value for reserves as well */
+  /* Provide dollar value for reserves as well */
   const totalAssets: [number, number] = [
     protectAgainstNaN(swap.token1_reserve),
     protectAgainstNaN(swap.token2_reserve),

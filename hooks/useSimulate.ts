@@ -61,7 +61,7 @@ const useSimulate = ({
       })
       onError?.(error)
     },
-    enabled: msgs?.length > 0 && !!connected && Number(amount) > 0,
+    enabled: msgs?.length > 0 && Boolean(connected) && Number(amount) > 0,
     retry: false,
   })
 

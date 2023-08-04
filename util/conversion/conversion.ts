@@ -10,7 +10,7 @@ export function convertMicroDenomToDenom(
     return Number(value)
   }
 
-  return protectAgainstNaN(Number(value) / Math.pow(10, decimals))
+  return protectAgainstNaN(Number(value) / 10 ** decimals)
 }
 
 export function convertDenomToMicroDenom(
@@ -21,9 +21,7 @@ export function convertDenomToMicroDenom(
     return Number(value)
   }
 
-  return protectAgainstNaN(
-    parseInt(String(Number(value) * Math.pow(10, decimals)), 10)
-  )
+  return protectAgainstNaN(parseInt(String(Number(value) * 10 ** decimals), 10))
 }
 
 export function convertFromMicroDenom(denom: string) {
@@ -61,7 +59,7 @@ export const calculateRewardDurationString = (
   }, [adjustedDurationInMilli])
 
   if (isImminent) {
-    return `imminent`
+    return 'imminent'
   } else if (adjustedDurationInMilli >= 86_400_000) {
     const days = Math.floor(adjustedDurationInMilli / 86_400_000)
     return days === 1 ? `${days} day` : `${days} days`
@@ -90,8 +88,7 @@ export const calculateDurationString = (durationInMilli: number): string => {
   } else if (durationInMilli > 1_000) {
     const seconds = Math.floor(durationInMilli / 1_000)
     return seconds === 1 ? `${seconds} second` : `${seconds} seconds`
-  } else {
-    return `imminent`
   }
+  return 'imminent'
 }
 export const nanoToMilli = (nano: number) => nano / 1_000_000

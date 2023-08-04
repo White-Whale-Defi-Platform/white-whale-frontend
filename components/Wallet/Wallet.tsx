@@ -39,7 +39,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { availableConnections } = useWallet()
 
   useEffect(() => {
-    // onDisconnect()
+    // OnDisconnect()
 
     if (router.pathname === '/') {
       return
@@ -119,7 +119,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       }
     }
 
-    // update route
+    // Update route
     const sourceChain = chains.find(
       (row) => row.chainId.toLowerCase() === currentWalletState.chainId
     )

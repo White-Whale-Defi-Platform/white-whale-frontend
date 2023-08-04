@@ -48,22 +48,24 @@ const Claim = ({ poolId }: Props) => {
   const { client, network, chainId } = useRecoilValue(walletState)
 
   const config = useConfig(network, chainId)
-  // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
+  // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
   const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
-  const allSnapshotsTaken = useMemo(() => {
-    return noSnapshotTakenAddresses.length === 0
-  }, [noSnapshotTakenAddresses.length])
+  const allSnapshotsTaken = useMemo(
+    () => noSnapshotTakenAddresses.length === 0,
+    [noSnapshotTakenAddresses.length]
+  )
   const forceSnapshots = useForceEpochAndTakingSnapshots({
-    noSnapshotTakenAddresses: noSnapshotTakenAddresses,
-    config: config,
+    noSnapshotTakenAddresses,
+    config,
   })
   const { rewards = [], totalValue } = useRewards(poolId)
 
-  // check if there are rewards to claim
+  // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce((acc, reward) => {
-      return acc + Number(reward.assetAmount)
-    }, 0)
+    const rewardsSum = rewards.reduce(
+      (acc, reward) => acc + Number(reward.assetAmount),
+      0
+    )
     return rewardsSum > 0
   }, [rewards])
 

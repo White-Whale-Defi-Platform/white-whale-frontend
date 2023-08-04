@@ -39,7 +39,7 @@ export enum TxStep {
 }
 
 type Params = {
-  // tokenInfo,
+  // TokenInfo,
   isNative: boolean
   denom: string
   enabled: boolean
@@ -59,11 +59,11 @@ type Params = {
 }
 
 export const useTransaction = ({
-  // tokenInfo,
+  // TokenInfo,
   isNative,
   denom,
   contractAddress,
-  // poolId,
+  // PoolId,
   enabled,
   client,
   senderAddress,
@@ -75,7 +75,7 @@ export const useTransaction = ({
   onError,
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
-  // const [tokenA, tokenB] = swapAssets
+  // Const [tokenA, tokenB] = swapAssets
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
@@ -106,7 +106,7 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) {
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -143,7 +143,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!client &&
+        Boolean(client) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -158,8 +158,8 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(
-    (data: any) => {
-      return executeVault({
+    (data: any) =>
+      executeVault({
         amount,
         isNative,
         denom,
@@ -168,8 +168,7 @@ export const useTransaction = ({
         senderAddress,
         msgs,
         encodedMsgs,
-      })
-    },
+      }),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -279,8 +278,8 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       fee,
       buttonLabel,
       submit,
@@ -289,8 +288,9 @@ export const useTransaction = ({
       txHash,
       error,
       reset,
-    }
-  }, [txStep, txInfo, txHash, error, reset, fee, buttonLabel, submit])
+    }),
+    [txStep, txInfo, txHash, error, reset, fee, buttonLabel, submit]
+  )
 }
 
 export default useTransaction

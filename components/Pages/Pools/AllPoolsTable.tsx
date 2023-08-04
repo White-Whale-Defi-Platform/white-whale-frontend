@@ -2,7 +2,6 @@ import React from 'react'
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
-  chakra,
   Flex,
   Table,
   TableContainer,
@@ -12,13 +11,14 @@ import {
   Th,
   Thead,
   Tr,
+  chakra,
 } from '@chakra-ui/react'
 import {
+  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
 } from '@tanstack/react-table'
 
@@ -47,42 +47,39 @@ const columns = [
   columnHelper.accessor('price', {
     header: () => (
       <Text align="right" color="brand.50" display="inline">
-        {`RATIO`}
+        {'RATIO'}
       </Text>
     ),
-    cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
-    },
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
-      <Text align="right" color="brand.50" display="inline">{`APR`}</Text>
+      <Text align="right" color="brand.50" display="inline">
+        {'APR'}
+      </Text>
     ),
-    cell: (info) => {
-      return info.getValue() === 'n/a' ? (
+    cell: (info) =>
+      info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
       ) : (
         <Apr
           apr={info.getValue()?.toString()}
           flows={info.row.original.flows}
         />
-      )
-    },
+      ),
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
       <Text align="right" color="brand.50" display="inline">
-        {`24hr Volume`}
+        {'24hr Volume'}
       </Text>
     ),
-    cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
-    },
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('totalLiq', {
     header: () => (
       <Text align="right" color="brand.50" display="inline">
-        {`Total Liquidity`}
+        {'Total Liquidity'}
       </Text>
     ),
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
@@ -93,9 +90,7 @@ const columns = [
         Incentives
       </Text>
     ),
-    cell: (info) => {
-      return info.getValue()
-    },
+    cell: (info) => info.getValue(),
   }),
   columnHelper.accessor('action', {
     header: () => (
@@ -103,9 +98,7 @@ const columns = [
         Action
       </Text>
     ),
-    cell: (info) => {
-      return info.getValue()
-    },
+    cell: (info) => info.getValue(),
   }),
 ]
 
@@ -155,7 +148,7 @@ const AllPoolsTable = ({
         justifyContent="center"
       >
         <Text py={10} color="white">
-          {`All remaining pools will appear here.`}
+          {'All remaining pools will appear here.'}
         </Text>
       </Flex>
     )

@@ -13,7 +13,7 @@ import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
 
 import { useOpenFlow } from './hooks/useOpenFlow'
@@ -56,7 +56,7 @@ const Create = ({ poolId }: Props) => {
         control={control}
         token={token}
         showList={true}
-        // isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
+        // IsDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
           setToken({
             ...value,
@@ -86,7 +86,7 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 min={new Date().toISOString().slice(0, 16)}
-                // max="2017-06-30T16:30"
+                // Max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
               />
             </InputGroup>

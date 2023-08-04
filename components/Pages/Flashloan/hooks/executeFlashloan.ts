@@ -12,6 +12,5 @@ export const executeFlashloan = async ({
   client,
   contractAddress,
   senderAddress,
-}: ExecuteFlashloanArgs): Promise<any> => {
-  return client.execute(senderAddress, contractAddress, msgs, [])
-}
+}: ExecuteFlashloanArgs): Promise<any> =>
+  client.execute(senderAddress, contractAddress, msgs, [])

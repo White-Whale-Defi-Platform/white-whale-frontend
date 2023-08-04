@@ -47,7 +47,7 @@ export const createLPExecuteMsgs = (
   sender: string
 ) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
-  /* increase allowance for each non-native token */
+  /* Increase allowance for each non-native token */
   if (!tokenA?.native) {
     increaseAllowanceMessages.push(
       createIncreaseAllowanceMessage({

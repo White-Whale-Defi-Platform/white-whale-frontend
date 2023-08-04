@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query'
 
 import { useConnectedWallet } from '@terra-money/wallet-provider'
+import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 
 export type TokenInfo = {
   id: string
@@ -69,14 +68,12 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
         ),
       }
     },
-    Object.assign(
-      {
-        retry: 5,
-        enabled: !!currentWalletState.chainId,
-        refetchOnMount: false,
-      },
-      options || {}
-    )
+    {
+      retry: 5,
+      enabled: Boolean(currentWalletState.chainId),
+      refetchOnMount: false,
+      ...(options || {}),
+    }
   )
 }
 

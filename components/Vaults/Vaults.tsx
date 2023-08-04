@@ -3,7 +3,7 @@ import React, { FC, useMemo, useState } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
@@ -32,12 +32,10 @@ const Vaults: FC = () => {
         vaultId: vault?.pool_id,
         tokenImage: vault.vault_assets?.logoURI,
         apr: 'coming soon',
-        totalDeposits: !!vault?.totalDeposit
+        totalDeposits: vault?.totalDeposit
           ? `$${vault?.totalDeposit?.dollarValue}`
           : 'n/a',
-        myDeposit: !!vault?.deposits
-          ? `$${vault?.deposits?.dollarValue}`
-          : 'n/a',
+        myDeposit: vault?.deposits ? `$${vault?.deposits?.dollarValue}` : 'n/a',
         cta: () => router.push(url),
         ctaLabel,
       }
@@ -49,7 +47,7 @@ const Vaults: FC = () => {
     <VStack
       width={{ base: '100%', md: '1160px' }}
       alignItems="center"
-      // margin="auto"
+      // Margin="auto"
     >
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>

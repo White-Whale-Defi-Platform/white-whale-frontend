@@ -69,58 +69,58 @@ export const useDashboardData = (client, address, network, chainId) => {
     {
       queryKey: ['bonded', address, network, chainId],
       queryFn: () => getBonded(client, address, config),
-      enabled: !!client && !!address && !!config,
+      enabled: Boolean(client) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['unbonding', address, network, chainId],
       queryFn: () => getUnbonding(client, address, config),
-      enabled: !!client && !!address && !!config,
+      enabled: Boolean(client) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['withdrawable', address, network, chainId],
       queryFn: () => getWithdrawable(client, address, config),
-      enabled: !!client && !!address && !!config,
+      enabled: Boolean(client) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['totalBonded', network, chainId],
       queryFn: () => getTotalBonded(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['weightInfo', address, network, chainId],
       queryFn: () => getWeight(client, address, config),
-      enabled: !!client && !!address && !!config,
+      enabled: Boolean(client) && Boolean(address) && Boolean(config),
     },
     {
       queryKey: ['feeDistributionConfig', network, chainId],
       queryFn: () => getFeeDistributorConfig(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['currentEpoch', network, chainId],
       queryFn: () => getCurrentEpoch(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['claimableEpochs', network, chainId],
       queryFn: () => getClaimableEpochs(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['claimableRewards', address, network, chainId],
       queryFn: () => getClaimable(client, address, config),
-      enabled: !!client && !!address && !!config,
+      enabled: Boolean(client) && Boolean(address) && Boolean(config),
     },
     {
       queryKey: ['bondingConfig', network, chainId],
       queryFn: () => getBondingConfig(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
   ])
 
