@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
+import { ACTIVE_BONDING_NETWORKS } from 'constants'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
@@ -99,7 +99,7 @@ const Navbar = () => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
-          {(BONDING_ENABLED_CHAIN_IDS.includes(chainId)
+          {(ACTIVE_BONDING_NETWORKS.includes(chainId)
             ? menuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (

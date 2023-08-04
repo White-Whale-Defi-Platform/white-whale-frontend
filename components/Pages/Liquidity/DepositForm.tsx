@@ -6,7 +6,7 @@ import Input from 'components/AssetInput/Input'
 import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
+import { ACTIVE_INCENTIVE_NETWORKS } from 'constants'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 import { useRecoilState } from 'recoil'
@@ -56,7 +56,7 @@ const DepositForm = ({
   })
 
   const incentivesEnabled = useMemo(
-    () => INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId),
+    () => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
     [chainId]
   )
   const [currentAprHelperState, _] = useRecoilState(aprHelperState)

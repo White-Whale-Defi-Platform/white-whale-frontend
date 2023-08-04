@@ -13,7 +13,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { PRESELECTED_BRIDGE_CHAINS } from 'constants/preselectedBridgeChains'
+import { BRIDGE_NETWORK_DEFAULTS } from 'constants'
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'
@@ -51,7 +51,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       onOpen={
         menu.isExternal
           ? openLink(
-              `${menu.link}/?chainFrom=${chainId}&chainTo=${PRESELECTED_BRIDGE_CHAINS[chainId]}`
+              `${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`
             )
           : menu?.children === undefined
           ? () => window.location.assign(`/${currentChainName}${menu.link}`)

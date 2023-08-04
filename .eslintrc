@@ -1,4 +1,5 @@
 {
+  
   "extends": [
     "next",
     "next/core-web-vitals",
@@ -6,6 +7,9 @@
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
+  "env": {
+    "node": true
+  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -478,7 +482,7 @@
       "single"
     ],
     "rest-spread-spacing": "error",
-    "semi": "error",
+    "semi": "off",
     "semi-spacing": "error",
     "semi-style": "error",
     "space-before-blocks": "error",
@@ -562,7 +566,6 @@
         "leadingUnderscore": "allow"
       }
     ],
-    //"@typescript-eslint/no-unused-vars": "off"
   },
   "settings": {
     "react": {

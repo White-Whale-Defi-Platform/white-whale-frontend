@@ -3,7 +3,7 @@ import { useQueryClient } from 'react-query'
 
 import { Switch } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
-import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/bondingContract'
+import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants'
 import { useRecoilState } from 'recoil'
 import { NetworkType, walletState } from 'state/atoms/walletAtoms'
 
