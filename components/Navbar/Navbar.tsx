@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
-import { ACTIVE_BONDING_NETWORKS } from 'constants'
+import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'

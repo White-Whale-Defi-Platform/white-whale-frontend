@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 

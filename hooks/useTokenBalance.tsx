@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
 import { useConnectedWallet } from '@terra-money/wallet-provider'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
 import { useRecoilValue } from 'recoil'
 import { CW20 } from 'services/cw20'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'

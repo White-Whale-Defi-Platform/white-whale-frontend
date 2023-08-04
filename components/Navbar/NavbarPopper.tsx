@@ -13,7 +13,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { BRIDGE_NETWORK_DEFAULTS } from 'constants'
+import { BRIDGE_NETWORK_DEFAULTS } from 'constants/index'
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'

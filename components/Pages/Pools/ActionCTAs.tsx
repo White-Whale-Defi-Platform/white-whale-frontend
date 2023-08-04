@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { Button, HStack } from '@chakra-ui/react'
-import { ACTIVE_INCENTIVE_NETWORKS } from 'constants'
+import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
 import { useRouter } from 'next/router'
 
 export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {

@@ -6,7 +6,7 @@ import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLocke
 import {
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
   POOL_REWARDS_ENABLED,
-} from 'constants/settings'
+} from 'constants/index'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'

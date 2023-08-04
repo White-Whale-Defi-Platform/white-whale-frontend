@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import useLockedPositions from 'components/Pages/Liquidity/hooks/useLockedPositions'
-import { SECONDS_PER_DAY } from 'constants'
+import { SECONDS_PER_DAY } from 'constants/index'
 
 const useIsNewPosition = ({ bondingDays, poolId }) => {
   const { data: positions = [] } = useLockedPositions(poolId)
