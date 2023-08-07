@@ -54,7 +54,7 @@ const useWithdraw = ({
     isNative: false,
     denom: tokenInfo?.denom,
     contractAddress: lpToken,
-    enabled: !!encodedMsgs,
+    enabled: Boolean(encodedMsgs),
     client,
     senderAddress: address,
     msgs,

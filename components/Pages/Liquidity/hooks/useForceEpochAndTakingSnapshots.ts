@@ -7,6 +7,8 @@ import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/atoms/chainState'
 import { createExecuteMessage } from 'util/messages'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 export enum Force {
   epochAndSnapshots,
@@ -21,9 +23,10 @@ const useForceEpochAndTakingSnapshots = ({
   noSnapshotTakenAddresses,
   config,
 }: Params) => {
-  const { address, client } = useRecoilValue(chainState)
-  const incentiveAddresses = useQueryIncentiveContracts(client)
-
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient, cosmWasmClient } = useClients(chainName)
+  const incentiveAddresses = useQueryIncentiveContracts(cosmWasmClient)
   const mode = useMemo(
     () =>
       noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots,
@@ -43,7 +46,7 @@ const useForceEpochAndTakingSnapshots = ({
       mode === Force.epochAndSnapshots
         ? 'Epoch Created And Snapshots Taken'
         : 'Taking Snapshots',
-    client,
+    signingClient,
   })
 
   const msgs = useMemo(() => {
@@ -54,7 +57,7 @@ const useForceEpochAndTakingSnapshots = ({
     return (
       mode === Force.epochAndSnapshots
         ? [
-            // create new epoch message
+            // Create new epoch message
             createExecuteMessage({
               message: {
                 new_epoch: {},
@@ -66,35 +69,35 @@ const useForceEpochAndTakingSnapshots = ({
           ]
         : []
     ).concat(
-      ...(addresses?.flatMap((incentiveAddress) => {
-        return [
-          // create snapshot message
-          createExecuteMessage({
-            message: {
-              take_global_weight_snapshot: {},
-            },
-            senderAddress: address,
-            contractAddress: incentiveAddress,
-            funds: [],
-          }),
-        ]
-      }) ?? [])
+      ...(addresses?.flatMap((incentiveAddress) => [
+        // Create snapshot message
+        createExecuteMessage({
+          message: {
+            take_global_weight_snapshot: {},
+          },
+          senderAddress: address,
+          contractAddress: incentiveAddress,
+          funds: [],
+        }),
+      ]) ?? [])
     )
   }, [addresses, address])
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: () => client.post(address, msgs),
+    mutationFn: () =>
+      signingClient.signAndBroadcast(address, msgs, 'auto', null),
     onError,
     onSuccess,
   })
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       submit,
       ...state,
       ...tx,
-    }
-  }, [tx, state, submit])
+    }),
+    [tx, state, submit]
+  )
 }
 
 export default useForceEpochAndTakingSnapshots

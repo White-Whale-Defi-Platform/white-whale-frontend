@@ -20,9 +20,9 @@ import {
 } from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 import Injective from 'services/injective'
-
-import { TxResponse, Wallet } from './wallet'
 import { NetworkType } from 'state/atoms/chainState'
+import { TxResponse, Wallet } from './wallet'
+
 export class OfflineSigningWallet implements Wallet {
   client: SigningCosmWasmClient | Injective
 
@@ -118,47 +118,42 @@ export class OfflineSigningWallet implements Wallet {
     }
 
     // @ts-ignore
-    const promise: Promise<GetTxResponse> =
-      this.client.queryClient.tx.getTx(txHash)
-    return promise.then((result) => {
-      return {
-        height: result.txResponse.height.toNumber(),
-        txhash: result.txResponse.txhash.toString(),
-        raw_log: result.txResponse.rawLog,
-        logs: undefined,
-        gas_wanted: result.txResponse.gasWanted.toNumber(),
-        gas_used: result.txResponse.gasUsed.toNumber(),
-        tx: new Tx(
-          new TxBody(
-            [],
-            result.tx.body.memo,
-            result.tx.body.timeoutHeight.toNumber()
-          ),
-          new AuthInfo(
-            result.tx.authInfo.signerInfos.map(
-              (signerInfo) =>
-                new SignerInfo(
-                  new SimplePublicKey(
-                    String.fromCharCode.apply(null, signerInfo.publicKey.value)
-                  ),
-                  signerInfo.sequence.toNumber(),
-                  // @ts-ignore
-                  ModeInfo.fromData(signerInfo.modeInfo)
-                )
-            ),
-            new Fee(
-              result.tx.authInfo.fee.gasLimit.toNumber(),
-              result.tx.authInfo.fee.amount.map(
-                (coin) => new StationCoin(coin.denom, coin.amount)
+    const promise: Promise<GetTxResponse> = this.client.getTx(txHash)
+    return promise.then((result) => ({
+      height: result.txResponse.height.toNumber(),
+      txhash: result.txResponse.txhash.toString(),
+      raw_log: result.txResponse.rawLog,
+      logs: undefined,
+      gas_wanted: result.txResponse.gasWanted.toNumber(),
+      gas_used: result.txResponse.gasUsed.toNumber(),
+      tx: new Tx(
+        new TxBody(
+          [],
+          result.tx.body.memo,
+          result.tx.body.timeoutHeight.toNumber()
+        ),
+        new AuthInfo(
+          result.tx.authInfo.signerInfos.map(
+            (signerInfo) =>
+              new SignerInfo(
+                new SimplePublicKey(
+                  String.fromCharCode.apply(null, signerInfo.publicKey.value)
+                ),
+                signerInfo.sequence.toNumber(),
+                // @ts-ignore
+                ModeInfo.fromData(signerInfo.modeInfo)
               )
-            )
           ),
-          result.tx.signatures.map((sig) =>
-            String.fromCharCode.apply(null, sig)
+          new Fee(
+            result.tx.authInfo.fee.gasLimit.toNumber(),
+            result.tx.authInfo.fee.amount.map(
+              (coin) => new StationCoin(coin.denom, coin.amount)
+            )
           )
         ),
-        timestamp: result.txResponse.timestamp,
-      }
-    })
+        result.tx.signatures.map((sig) => String.fromCharCode.apply(null, sig))
+      ),
+      timestamp: result.txResponse.timestamp,
+    }))
   }
 }

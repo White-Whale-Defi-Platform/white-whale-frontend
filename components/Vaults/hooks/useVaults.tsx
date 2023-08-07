@@ -48,7 +48,7 @@ export type VaultsResponse = {
 }
 
 const queryShare = (client, contract, amount) => {
-  if (!!!amount) {
+  if (!amount) {
     return null
   }
   return client.queryContractSmart(contract, {
@@ -103,18 +103,21 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
     refetch,
   } = useQuery(
     ['vaultsDeposit', lpToken, chainId],
-    async () => {
-      return queryBalance(
+    async () =>
+      queryBalance(
         client,
         lpToken,
         address,
         vaultAddress,
         tokenInfo,
         getTokenDollarValue
-      )
-    },
+      ),
     {
-      enabled: !!chainId && !!client && !!lpToken && !!getTokenDollarValue,
+      enabled:
+        Boolean(chainId) &&
+        Boolean(client) &&
+        Boolean(lpToken) &&
+        Boolean(getTokenDollarValue),
     }
   )
 
@@ -130,8 +133,8 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     refetch,
   } = useQuery(
     ['vaultsDeposits', lpTokens, chainId],
-    async () => {
-      return Promise.all(
+    async () =>
+      Promise.all(
         lpTokens.map(({ lp_token, vault_address, vault_assets }) =>
           queryBalance(
             client,
@@ -142,10 +145,9 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
             getTokenDollarValue
           )
         )
-      )
-    },
+      ),
     {
-      enabled: !!chainId && !!client && !!lpTokens?.length,
+      enabled: Boolean(chainId) && Boolean(client) && Boolean(lpTokens?.length),
     }
   )
 
@@ -157,8 +159,8 @@ export const useVaultTotal = (lpTokenIds: any[]) => {
   const cosmwasmClient = useCosmwasmClient(chainId)
   const { data: balance, isLoading } = useQuery(
     ['vaultsInfo', lpTokenIds, chainId, isQueryLoading],
-    async () => {
-      return Promise.all(
+    async () =>
+      Promise.all(
         lpTokenIds.map(({ lp_token, vault_assets }) =>
           queryVault(
             cosmwasmClient,
@@ -167,14 +169,14 @@ export const useVaultTotal = (lpTokenIds: any[]) => {
             getTokenDollarValue
           )
         )
-      )
-    },
+      ),
     {
-      enabled: !!chainId && !!lpTokenIds && !!getTokenDollarValue,
+      enabled:
+        Boolean(chainId) && Boolean(lpTokenIds) && Boolean(getTokenDollarValue),
       refetchOnMount: false,
     }
   )
-  return { balance: balance, isLoading }
+  return { balance, isLoading }
 }
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
@@ -188,12 +190,12 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
     },
     {
       ...options,
-      enabled: !!chainId && !!network,
+      enabled: Boolean(chainId) && Boolean(network),
       refetchOnMount: false,
     }
   )
 
-  // const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
+  // Const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
   const { balance, refetch } = useVaultMultiDeposit(
     vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
       lp_token,

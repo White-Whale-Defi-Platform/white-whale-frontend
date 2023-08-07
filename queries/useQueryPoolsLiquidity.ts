@@ -2,32 +2,32 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
 import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
-import {
-  __POOL_REWARDS_ENABLED__,
-  DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-} from 'constants/settings'
-import usePrices from 'hooks/usePrices'
-import { useTokenList } from 'hooks/useTokenList'
-import { protectAgainstNaN } from 'junoblocks'
-import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
-import { TokenInfo } from 'types'
-import { queryMyLiquidity } from './queryMyLiquidity'
-import {
-  queryRewardsContracts,
-  SerializedRewardsContract,
-} from './queryRewardsContracts'
-import { queryPoolInfo } from 'queries/queryPoolInfo'
-import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
-import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
 import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
-import { fromChainAmount } from 'libs/num'
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { useClients } from 'hooks/useClients'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bondingContract'
+  DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
+  POOL_REWARDS_ENABLED,
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
+import usePrices from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
+import { protectAgainstNaN } from 'junoblocks'
+import { fromChainAmount } from 'libs/num'
+import { queryPoolInfo } from 'queries/queryPoolInfo'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/atoms/chainState'
+import { TokenInfo } from 'types'
+
+import { queryMyLiquidity } from './queryMyLiquidity'
+import {
+  SerializedRewardsContract,
+  queryRewardsContracts,
+} from './queryRewardsContracts'
+import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
+import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useClients } from 'hooks/useClients'
 
 export type AssetType = [number?, number?]
 
@@ -197,8 +197,10 @@ export const useQueryPoolsLiquidity = ({
               }
             }
 
-            // check if end time is in the past
-            // const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+            /*
+             * Check if end time is in the past
+             * const state = dayjs(new Date()).isAfter(dayjs.unix(f.end_timestamp)) ? "over" : "active"
+             */
             const state = getState()
             const denom =
               flow.flow_asset.info?.token?.contract_addr ||
@@ -250,12 +252,12 @@ export const useQueryPoolsLiquidity = ({
       const tokenASymbol =
         tokenA.symbol === AMP_WHALE_TOKEN_SYMBOL ||
         tokenA.symbol === B_WHALE_TOKEN_SYMBOL
-          ? 'WHALE'
+          ? WHALE_TOKEN_SYMBOL
           : tokenA.symbol
       const tokenBSymbol =
         tokenB.symbol === AMP_WHALE_TOKEN_SYMBOL ||
         tokenB.symbol === B_WHALE_TOKEN_SYMBOL
-          ? 'WHALE'
+          ? WHALE_TOKEN_SYMBOL
           : tokenB.symbol
       return {
         tokenAmount: lpTokenAmount ?? assets[1] + assets[0],
@@ -266,11 +268,11 @@ export const useQueryPoolsLiquidity = ({
     }
 
     const [myNotLockedLiquidity, totalLockedLiquidity, myLockedLiquidity] = [
-      /* calc provided liquidity dollar value */
+      /* Calc provided liquidity dollar value */
       getPoolTokensValues(myNotLockedAssets, myNotLockedLp),
-      /* calc total locked liquidity dollar value */
+      /* Calc total locked liquidity dollar value */
       getPoolTokensValues(totalLockedAssets),
-      /* calc provided liquidity dollar value */
+      /* Calc provided liquidity dollar value */
       getPoolTokensValues(myLockedAssets),
     ]
     let annualYieldPercentageReturn = 0
@@ -329,11 +331,9 @@ export const useQueryPoolsLiquidity = ({
     (pools ?? []).map((pool) => ({
       queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
       enabled:
-        Boolean(
-          !!cosmWasmClient && pool.pool_id && enabledGetTokenDollarValue
-        ) &&
+        Boolean(cosmWasmClient && pool.pool_id && enabledGetTokenDollarValue) &&
         tokenList.tokens.length > 0 &&
-        !!prices,
+        Boolean(prices),
       refetchOnMount: false as const,
       refetchInterval: refetchInBackground
         ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
@@ -378,7 +378,7 @@ export function calculateRewardsAnnualYieldRate({
   rewardsContracts,
   totalStakedDollarValue,
 }) {
-  if (!__POOL_REWARDS_ENABLED__) {
+  if (!POOL_REWARDS_ENABLED) {
     return 0
   }
 

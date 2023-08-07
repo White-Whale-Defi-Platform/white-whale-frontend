@@ -19,15 +19,18 @@ import {
   TransactionStatus,
   transactionStatusState,
 } from 'state/atoms/transactionAtoms'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState } from 'state/atoms/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
+import { useClients } from 'hooks/useClients'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
 
 type UseTokenSwapArgs = {
   tokenASymbol: string
   tokenBSymbol: string
-  /* token amount in denom */
+  /* Token amount in denom */
   tokenAmount: number
   tokenToTokenPrice: number
 }
@@ -38,7 +41,9 @@ export const useTokenSwap = ({
   tokenAmount: providedTokenAmount,
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
-  const { client, address, status } = useRecoilValue(chainState)
+  const { address, chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)
   const setTokenSwap = useSetRecoilState(tokenSwapAtom)
@@ -51,7 +56,7 @@ export const useTokenSwap = ({
   return useMutation(
     'swapTokens',
     async () => {
-      if (status !== WalletStatusType.connected) {
+      if (status !== WalletStatus.Connected) {
         throw new Error('Please connect your wallet.')
       }
 
@@ -77,15 +82,17 @@ export const useTokenSwap = ({
           : 'tokenBtoTokenA'
         const swapAddress =
           streamlinePoolAB?.swap_address ?? streamlinePoolBA?.swap_address
-        // TODO: Direct token swap
-        // return await directTokenSwap({
-        //   tokenA,
-        //   senderAddress: address,
-        //   swapAddress,
-        //   tokenAmount,
-        //   client,
-        //   msgs
-        // })
+        /*
+         * TODO: Direct token swap
+         * return await directTokenSwap({
+         *   tokenA,
+         *   senderAddress: address,
+         *   swapAddress,
+         *   tokenAmount,
+         *   client,
+         *   msgs
+         * })
+         */
       }
 
       return passThroughTokenSwap({
@@ -96,7 +103,7 @@ export const useTokenSwap = ({
         tokenA,
         swapAddress: baseTokenAPool.swap_address,
         outputSwapAddress: baseTokenBPool.swap_address,
-        client,
+        signingClient,
       })
     },
     {

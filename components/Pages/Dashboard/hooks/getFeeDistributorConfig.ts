@@ -1,7 +1,7 @@
 import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { Wallet } from 'util/wallet-adapters/index'
 
 import { Config } from './useDashboardData'
-import { Wallet } from 'util/wallet-adapters/index'
 
 export interface FeeDistributionConfig {
   owner: string

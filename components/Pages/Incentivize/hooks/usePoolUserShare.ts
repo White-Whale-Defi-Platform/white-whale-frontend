@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-import { Wallet } from 'util/wallet-adapters/index'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface AddressInfo {
   address: string
@@ -11,25 +11,26 @@ export interface AddressInfo {
 }
 
 export const usePoolUserShare = (
-  client: Wallet,
+  cosmWasmClient: CosmWasmClient,
   contractAddr: string,
   userAddr: string
 ): AddressInfo => {
   const { data } = useQuery({
     queryKey: ['poolUserShare', contractAddr, userAddr],
-    queryFn: async () => fetchPoolUserShare(client, contractAddr, userAddr),
-    enabled: !!client && !!contractAddr && !!userAddr,
+    queryFn: async () =>
+      fetchPoolUserShare(cosmWasmClient, contractAddr, userAddr),
+    enabled:
+      Boolean(cosmWasmClient) && Boolean(contractAddr) && Boolean(userAddr),
     refetchOnMount: 'always',
   })
   return { ...data }
 }
 
 export const fetchPoolUserShare = async (
-  client: Wallet,
+  client: CosmWasmClient,
   contractAddr: string,
   userAddr: string
-): Promise<AddressInfo> => {
-  return client.queryContractSmart(contractAddr, {
+): Promise<AddressInfo> =>
+  client.queryContractSmart(contractAddr, {
     current_epoch_rewards_share: { address: userAddr },
   })
-}

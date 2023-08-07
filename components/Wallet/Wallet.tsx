@@ -6,8 +6,7 @@ import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
-import { validChains } from 'constants/validChains'
+import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS } from 'constants/index'
 import { useChainInfo, useChains } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
@@ -35,7 +34,7 @@ const Wallet: any = () => {
   }
 
   useEffect(() => {
-    // onDisconnect()
+    // OnDisconnect()
 
     if (router.pathname === '/') {
       return
@@ -50,17 +49,16 @@ const Wallet: any = () => {
       currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'narwhal'
 
     if (
-      validChains[currentChainState.network][chainName] !==
+      ACTIVE_NETWORKS[currentChainState.network][chainName] !==
       currentChainState.chainId
     ) {
       setCurrentChainState({
         ...currentChainState,
-        chainId: validChains[currentChainState.network][chainName],
-        chainName: chainName,
+        chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
       })
     }
 
-    if (!validChains[currentChainState.network][chainName]) {
+    if (!ACTIVE_NETWORKS[currentChainState.network][chainName]) {
       setCurrentChainState({
         ...currentChainState,
         chainId: defaultChainId,
@@ -88,7 +86,7 @@ const Wallet: any = () => {
 
   const onChainChange = async (chain) => {
     if (
-      !BONDING_ENABLED_CHAIN_IDS.includes(chain.chainId) &&
+      !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
       router.pathname.includes('dashboard')
     ) {
       await router.push('/swap')
@@ -112,7 +110,7 @@ const Wallet: any = () => {
       router.push('/404')
     }
 
-    // update route
+    // Update route
     const sourceChain = chains.find(
       (row) => row.chainId.toLowerCase() === currentChainState.chainId
     )
@@ -130,7 +128,7 @@ const Wallet: any = () => {
           connected={connected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
-          currentWalletState={currentChainState}
+          currentChainState={currentChainState}
         />
         <Button
           variant="outline"
@@ -155,7 +153,7 @@ const Wallet: any = () => {
           connected={connected}
           denom={denom}
           onChainChange={onChainChange}
-          currentWalletState={currentChainState}
+          currentChainState={currentChainState}
         />
         <Box display={{ base: 'none', md: 'block' }}>
           <Divider

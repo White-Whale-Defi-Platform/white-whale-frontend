@@ -1,13 +1,11 @@
 import { createExecuteMessage } from 'util/messages'
-
 export const createFlashLoanMsg = ({
   senderAddress,
   contractAddress,
   message,
-}) => {
-  return createExecuteMessage({
+}) =>
+  createExecuteMessage({
     senderAddress,
     contractAddress,
     message,
   })
-}

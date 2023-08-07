@@ -8,7 +8,7 @@ function ChainSelectWithBalance({
   connected,
   denom,
   onChainChange,
-  currentWalletState,
+  currentChainState,
 }) {
   return (
     <HStack spacing="4">
@@ -17,7 +17,7 @@ function ChainSelectWithBalance({
         connected={connected}
         denom={denom?.coinDenom}
         onChange={onChainChange}
-        currentWalletState={currentWalletState}
+        currentChainState={currentChainState}
       />
     </HStack>
   )

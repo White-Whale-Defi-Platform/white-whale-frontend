@@ -4,7 +4,7 @@ import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
-} from 'constants/bondingContract'
+} from 'constants/index'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilValue } from 'recoil'

@@ -34,7 +34,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     matchingPools?.streamlinePoolAB?.lpOrder ||
     matchingPools?.streamlinePoolBA?.lpOrder
 
-  //const [pool] = usePoolFromListQueryById({ poolId })
+  // Const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({ bondingDays, poolId })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
@@ -46,7 +46,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
 
-  // const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
+  // Const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
 
   const [tokenA, tokenB, flipped] = useMemo(() => {
     if (!lpOrder) {
@@ -68,7 +68,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       : [lpTokenB, lpTokenA]
   }, [lpTokenA, lpTokenB, lpOrder])
 
-  //@ts-ignore
+  // @ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
 
   const tokenAAmount = toChainAmount(
@@ -180,7 +180,9 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const tx = useTransaction({
     poolId,
     enabled:
-      !!encodedMsgs && Number(tokenAAmount) > 0 && Number(tokenBAmount) > 0,
+      Boolean(encodedMsgs) &&
+      Number(tokenAAmount) > 0 &&
+      Number(tokenBAmount) > 0,
     swapAddress: bondingDays === 0 ? swapAddress : config?.frontend_helper,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,

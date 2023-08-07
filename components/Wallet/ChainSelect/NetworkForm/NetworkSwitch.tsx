@@ -1,10 +1,9 @@
 import React from 'react'
 import { useQueryClient } from 'react-query'
-
 import { Switch } from '@chakra-ui/react'
+import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/atoms/chainState'
-import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/bondingContract'
 import { useChain } from '@cosmos-kit/react-lite'
 
 function NetworkSwitch() {

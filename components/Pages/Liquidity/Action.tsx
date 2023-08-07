@@ -39,7 +39,6 @@ export const Action = ({ item, poolId }) => {
         Unbound
       </Button>
     )
-  } else {
-    ;<Box w="full" />
   }
+  ;<Box w="full" />
 }

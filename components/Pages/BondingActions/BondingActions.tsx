@@ -1,18 +1,11 @@
 import React, { useMemo } from 'react'
-
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bondingContract'
-import Loader from '../../Loader'
+import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/atoms/chainState'
-
 import { ActionType } from '../Dashboard/BondingOverview'
 import {
   Config,
@@ -27,6 +20,8 @@ import useTransaction, { TxStep } from './hooks/useTransaction'
 import usePrices from 'hooks/usePrices'
 import { useChain } from '@cosmos-kit/react-lite'
 import { WalletStatus } from '@cosmos-kit/core'
+import { ArrowBackIcon } from '@chakra-ui/icons'
+import Loader from 'components/Loader'
 
 export enum WhaleTokenType {
   ampWHALE,
@@ -92,9 +87,8 @@ const BondingActions = ({ globalAction }) => {
       globalAction === ActionType.withdraw
     ) {
       return 'No Withdrawals'
-    } else {
-      return ActionType[globalAction]
     }
+    return ActionType[globalAction]
   }, [isWalletConnected, currentBondState, globalAction, totalWithdrawable])
 
   const BondingActionButton = ({ action }) => {

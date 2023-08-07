@@ -81,7 +81,7 @@ export const useTransaction = ({
           debouncedMsgs,
           ''
         )
-        if (!!buttonLabel) {
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -119,7 +119,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!signingClient &&
+        Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -253,8 +253,8 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [msgs])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       simulate: refetch,
       fee,
       buttonLabel,
@@ -263,8 +263,9 @@ export const useTransaction = ({
       txInfo,
       txHash,
       error,
-    }
-  }, [txStep, txInfo, txHash, error, fee, buttonLabel, submit, refetch])
+    }),
+    [txStep, txInfo, txHash, error, fee, buttonLabel, submit, refetch]
+  )
 }
 
 export default useTransaction

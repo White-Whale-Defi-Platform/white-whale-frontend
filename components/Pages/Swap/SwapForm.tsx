@@ -19,13 +19,13 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { WalletStatusType } from 'state/atoms/chainState'
 import { TokenItemState } from 'types'
 
 import { Simulated } from './hooks/useSimulate'
+import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatusType
+  connected: WalletStatus
   tokenA: TokenItemState
   tokenB: TokenItemState
   onInputChange: (asset: TokenItemState, index: number) => void
@@ -81,25 +81,25 @@ const SwapForm: FC<Props> = ({
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
-  const isConnected = connected === `@wallet-state/connected`
+  const isConnected = connected === WalletStatus.Connected
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
 
   const buttonLabel = useMemo(() => {
-    if (connected !== `@wallet-state/connected`) {
+    if (connected !== WalletStatus.Connected) {
       return 'Connect Wallet'
     } else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol) {
       return 'Select Token'
     } else if (state?.error) {
       return state?.error
-    } else if (!!!amountA?.amount) {
+    } else if (!amountA?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Swap'
     }
+    return 'Swap'
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
@@ -141,7 +141,7 @@ const SwapForm: FC<Props> = ({
       return null
     }
 
-    const e = num(tokenA.amount).times(Math.pow(10, tokenBInfo.decimals))
+    const e = num(tokenA.amount).times(10 ** tokenBInfo.decimals)
     return num(simulated?.amount).div(e).toFixed(6)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, tokenA.amount])
@@ -182,13 +182,13 @@ const SwapForm: FC<Props> = ({
     } else {
       if (isReverse) {
         const asset = { ...tokenB }
-        if (!!!asset?.amount) {
+        if (!asset?.amount) {
           asset.amount = 0
           setValue('tokenA', asset, { shouldValidate: true })
         }
       } else {
         const asset = { ...tokenA }
-        if (!!!asset?.amount || state?.error) {
+        if (!asset?.amount || state?.error) {
           asset.amount = 0
           setValue('tokenB', asset, { shouldValidate: true })
         }
@@ -342,7 +342,7 @@ const SwapForm: FC<Props> = ({
               balance={tokenBBalance}
               disabled={isInputDisabled}
               showBalanceSlider={false}
-              // onInputFocus={() => setIsReverse(true)}
+              // OnInputFocus={() => setIsReverse(true)}
               onChange={(value, isTokenChange) => {
                 if (tokenB?.tokenSymbol && !isTokenChange) {
                   setReverse(true)
@@ -440,7 +440,7 @@ const SwapForm: FC<Props> = ({
           </>
         )}
 
-        {!!path?.length && (
+        {Boolean(path?.length) && (
           <HStack
             justifyContent="space-between"
             width="full"

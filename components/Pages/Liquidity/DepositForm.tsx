@@ -6,18 +6,18 @@ import Input from 'components/AssetInput/Input'
 import { BondingDaysSlider } from 'components/Pages/Liquidity/BondingDaysSlider'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
+import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
-import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 import { useRecoilState } from 'recoil'
 import { aprHelperState } from 'state/atoms/aprHelperState'
-import { WalletStatusType } from 'state/atoms/chainState'
 import { TokenItemState } from 'types/index'
 
 import Multiplicator from './Multiplicator'
+import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatusType
+  connected: WalletStatus
   tokenA: TokenItemState
   tokenB: TokenItemState
   tx: any
@@ -56,7 +56,7 @@ const DepositForm = ({
   })
 
   const incentivesEnabled = useMemo(
-    () => INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId),
+    () => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
     [chainId]
   )
   const [currentAprHelperState, _] = useRecoilState(aprHelperState)
@@ -78,9 +78,9 @@ const DepositForm = ({
           ) / 100,
     [bondingDays]
   )
-  // const [bondingDays, setBondingDays] = useState(0)
+  // Const [bondingDays, setBondingDays] = useState(0)
   const isInputDisabled = tx?.txStep == TxStep.Posting
-  const isConnected = connected === WalletStatusType.connected
+  const isConnected = connected === WalletStatus.Connected
   const amountA = getValues('token1')
 
   useEffect(() => {
@@ -100,11 +100,11 @@ const DepositForm = ({
       }
     } else {
       if (reverse) {
-        if (!!!tokenB.amount) {
+        if (!tokenB.amount) {
           setValue('token1', { ...tokenA, amount: undefined })
         }
       } else {
-        if (!!!tokenA.amount) {
+        if (!tokenA.amount) {
           setValue('token2', { ...tokenB, amount: undefined })
         }
       }
@@ -122,23 +122,22 @@ const DepositForm = ({
       setValue('token1', { ...tokenA, amount: 0 })
       setValue('token2', { ...tokenB, amount: 0 })
       clearForm()
-      // tx?.reset()
+      // Tx?.reset()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.txStep])
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatusType.connected) {
+    if (connected !== WalletStatus.Connected) {
       return 'Connect Wallet'
     } else if (!tokenB?.tokenSymbol) {
       return 'Select Token'
-    } else if (!!!amountA?.amount) {
+    } else if (!amountA?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Deposit'
     }
+    return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
   const apr = useMemo(
@@ -200,7 +199,10 @@ const DepositForm = ({
         }
       />
 
-      <ShowError show={tx?.error && !!!tx.buttonLabel} message={tx?.error} />
+      <ShowError
+        show={tx?.error && Boolean(!tx.buttonLabel)}
+        message={tx?.error}
+      />
     </VStack>
   )
 }

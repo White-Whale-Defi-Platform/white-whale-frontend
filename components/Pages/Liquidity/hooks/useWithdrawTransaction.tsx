@@ -53,7 +53,7 @@ export const useWithdrawTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) {
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -81,7 +81,7 @@ export const useWithdrawTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!client &&
+        Boolean(client) &&
         Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
@@ -97,16 +97,15 @@ export const useWithdrawTransaction = ({
   )
 
   const { mutate } = useMutation(
-    (data: any) => {
-      return isNative
+    (data: any) =>
+      isNative
         ? client.execute(
             senderAddress,
             swapAddress,
             { withdraw_liquidity: {} },
             [coin(amount, lpTokenAddress)]
           )
-        : client.post(senderAddress, encodedMsgs)
-    },
+        : client.post(senderAddress, encodedMsgs),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -228,8 +227,8 @@ export const useWithdrawTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       fee,
       buttonLabel,
       submit,
@@ -238,7 +237,8 @@ export const useWithdrawTransaction = ({
       txHash,
       error,
       reset,
-    }
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txStep, txInfo, txHash, error, reset, fee])
+    [txStep, txInfo, txHash, error, reset, fee]
+  )
 }

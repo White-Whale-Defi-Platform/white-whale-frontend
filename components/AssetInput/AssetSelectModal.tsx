@@ -8,8 +8,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { Asset } from 'types/blockchain'
 

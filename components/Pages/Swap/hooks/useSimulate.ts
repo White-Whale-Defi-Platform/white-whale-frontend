@@ -31,9 +31,8 @@ export type Simulated = {
   error?: string
 }
 
-const simulate = ({ client, msg, routerAddress }): Promise<any> => {
-  return client?.queryContractSmart(routerAddress, msg)
-}
+const simulate = ({ client, msg, routerAddress }): Promise<any> =>
+  client?.queryContractSmart(routerAddress, msg)
 
 const useSimulate = ({ client, msg, routerAddress }) => {
   const debounseMsg = useDebounceValue(msg, 300)
@@ -48,10 +47,12 @@ const useSimulate = ({ client, msg, routerAddress }) => {
       return simulate({ client, msg: debounseMsg, routerAddress })
     },
     {
-      enabled: !!client && !!msg && !!debounseMsg,
-      // onError: (err) => {
-      //     console.log({err : (err as any)?.code})
-      // }
+      enabled: Boolean(client) && Boolean(msg) && Boolean(debounseMsg),
+      /*
+       * OnError: (err) => {
+       *     console.log({err : (err as any)?.code})
+       * }
+       */
     }
   )
 
@@ -69,9 +70,8 @@ const useSimulate = ({ client, msg, routerAddress }) => {
       /codespace: wasm, code: 9: query wasm/i.test(error?.toString())
     ) {
       return 'Insufficient liquidity'
-    } else {
-      return null
     }
+    return null
   }, [error])
 
   return {

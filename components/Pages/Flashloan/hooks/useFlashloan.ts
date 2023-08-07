@@ -12,7 +12,7 @@ import { useClients } from 'hooks/useClients'
 const useFlashloan = ({ json }) => {
   const { chainName, chainId } = useRecoilValue(chainState)
   const { address } = useChain(chainName)
-  const { signingClient: client } = useClients(chainName)
+  const { signingClient } = useClients(chainName)
   const encodedMsgs = useMemo(() => {
     if (Object.keys(json).length === 0 || !chainId) {
       return null
@@ -26,9 +26,9 @@ const useFlashloan = ({ json }) => {
   }, [json, address, chainId])
 
   return useTransaction({
-    enabled: !!client && !!encodedMsgs,
+    enabled: Boolean(signingClient) && Boolean(encodedMsgs),
     msgs: json,
-    client,
+    signingClient,
     senderAddress: address,
     encodedMsgs: [encodedMsgs],
     contractAddress: flashLoanContract[chainId],

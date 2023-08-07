@@ -5,9 +5,9 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/atoms/chainState'
 import AssetInput from '../../AssetInput'
 import { bondingAtom } from './bondAtoms'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bondingContract'
 import { useChain } from '@cosmos-kit/react-lite'
 import { WalletStatus } from '@cosmos-kit/core'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 
 export interface LSDTokenBalances {
   ampWHALE: number
@@ -48,7 +48,7 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
     if (tokenSymbol) {
       setCurrentBondState({
         ...currentBondState,
-        tokenSymbol: tokenSymbol,
+        tokenSymbol,
         amount: Number(amount),
       })
     } else {
@@ -74,6 +74,7 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
 
   return (
     <VStack px={7} width="full">
+      {/* @ts-ignore*/}
       <Controller
         name="currentBondState"
         control={control}
@@ -108,7 +109,7 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken: lsdToken,
+                  lsdToken,
                 })
               } else {
                 setCurrentBondState({

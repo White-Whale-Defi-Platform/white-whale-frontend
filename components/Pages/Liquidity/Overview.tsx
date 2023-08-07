@@ -16,12 +16,14 @@ type Props = {
 const Overview = ({ poolId, dailyEmissions }: Props) => {
   const { rewards, totalValue } = useRewards(poolId)
   const { data: positionData = [] } = useLockedPositions(poolId)
-  const positions = useMemo(() => {
-    return positionData?.map((item) => ({
-      ...item,
-      action: <Action item={item} poolId={poolId} />,
-    }))
-  }, [positionData])
+  const positions = useMemo(
+    () =>
+      positionData?.map((item) => ({
+        ...item,
+        action: <Action item={item} poolId={poolId} />,
+      })),
+    [positionData]
+  )
 
   return (
     <VStack alignItems="flex-start" gap="16px" py={5}>

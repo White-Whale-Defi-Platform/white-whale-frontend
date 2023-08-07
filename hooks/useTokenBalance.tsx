@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
-import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
 import { useRecoilValue } from 'recoil'
 import { CW20 } from 'services/cw20'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState } from 'state/atoms/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
@@ -13,6 +13,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { WalletStatus } from '@cosmos-kit/core'
 
 async function fetchTokenBalance({
   cosmWasmClient,
@@ -36,7 +37,6 @@ async function fetchTokenBalance({
     const amount = coin ? Number(coin.amount) : 0
     return convertMicroDenomToDenom(amount, decimals)
   }
-
   if (token_address) {
     try {
       const balance = await CW20(cosmWasmClient, signingClient)
@@ -66,7 +66,6 @@ export const useTokenBalance = (tokenSymbol: string) => {
   const { network, chainName } = useRecoilValue(chainState)
   const { cosmWasmClient, signingClient } = useClients(chainName)
   const { address } = useChain(chainName)
-
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
   const {
@@ -76,26 +75,25 @@ export const useTokenBalance = (tokenSymbol: string) => {
   } = useQuery(
     ['tokenBalance', tokenSymbol, address, network],
     async () => {
-      return fetchTokenBalance({
+      return await fetchTokenBalance({
         cosmWasmClient,
         signingClient,
         address,
         token: tokenInfo || ibcAssetInfo,
       })
-      // }
     },
     {
       enabled:
-        !!tokenSymbol &&
-        !!address &&
-        !!cosmWasmClient &&
-        (!!tokenInfo || !!ibcAssetInfo),
+        Boolean(tokenSymbol) &&
+        Boolean(address) &&
+        Boolean(cosmWasmClient) &&
+        (Boolean(tokenInfo) || Boolean(ibcAssetInfo)),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
     }
   )
-  return { balance, isLoading: isLoading, refetch }
+  return { balance, isLoading, refetch }
 }
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
@@ -112,33 +110,29 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
 
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
-    async () => {
-      return Promise.all(
-        tokenSymbols
-          // .filter(Boolean)
-          .map((tokenSymbol) => {
-            return fetchTokenBalance({
-              cosmWasmClient,
-              signingClient,
-              address,
-              token:
-                getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
-                mapIbcTokenToNative(
-                  getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)
-                ) ||
-                {},
-            })
+    async () =>
+      await Promise.all(
+        tokenSymbols.map((tokenSymbol) => {
+          return fetchTokenBalance({
+            cosmWasmClient,
+            signingClient,
+            address,
+            token:
+              getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
+              mapIbcTokenToNative(
+                getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)
+              ) ||
+              {},
           })
-      )
-    },
+        })
+      ),
     {
       enabled: Boolean(
-        status === WalletStatusType.connected &&
+        status === WalletStatus.Connected &&
           tokenSymbols?.length &&
           tokenList?.tokens &&
           !!cosmWasmClient
       ),
-
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
@@ -148,6 +142,5 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
       },
     }
   )
-
   return [data, isLoading] as const
 }

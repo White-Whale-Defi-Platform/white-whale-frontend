@@ -10,7 +10,7 @@ export const getToken1ForToken2Price = async ({
   swapAddress,
   client,
 }: GetToken1ForToken2PriceInput) => {
-  //TODO make sure client is initialized to avoid type error in console
+  // TODO make sure client is initialized to avoid type error in console
   try {
     const { assets } = await client.queryContractSmart(swapAddress, {
       pool: {},

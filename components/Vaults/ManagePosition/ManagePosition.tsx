@@ -22,13 +22,15 @@ import { chainState } from 'state/atoms/chainState'
 import useVault, { useVaultDeposit } from '../hooks/useVaults'
 import DepositForm from './DepositForm'
 import WithdrawForm from './WithdrawForm'
+import { useChain } from '@cosmos-kit/react-lite'
 
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
   const chains: Array<any> = useChains()
   const params = new URLSearchParams(location.search)
-  const { chainId, address, status } = useRecoilValue(chainState)
+  const { chainId, address, chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
   const vaultId = params.get('vault') || 'JUNO'
 
   const vault = useMemo(
@@ -77,7 +79,7 @@ const ManagePosition = () => {
       width={{ base: '100%', md: '700px' }}
       alignItems="center"
       padding={5}
-      // margin="auto"
+      // Margin="auto"
     >
       <HStack
         justifyContent="space-between"

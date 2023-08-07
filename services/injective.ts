@@ -4,8 +4,8 @@ import {
   OfflineSigner,
 } from '@cosmjs/proto-signing'
 import {
-  getNetworkEndpoints,
   Network as InjectiveNetwork,
+  getNetworkEndpoints,
 } from '@injectivelabs/networks'
 import {
   BaseAccount,
@@ -13,11 +13,10 @@ import {
   ChainRestAuthApi,
   ChainRestBankApi,
   ChainRestTendermintApi,
-  createCosmosSignDocFromTransaction,
-  createTransaction,
-  createTxRawFromSigResponse,
   TxRaw,
   TxRestClient,
+  createTransaction,
+  createTxRawFromSigResponse,
 } from '@injectivelabs/sdk-ts'
 import { MsgExecuteContract } from '@injectivelabs/sdk-ts'
 import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
@@ -175,28 +174,6 @@ class Injective {
       )
       console.log({ messages })
 
-      // const [[action, msgs]] = Object.entries(messages)
-
-      //     const isLPMessage = action?.includes('provide')
-
-      //     const executeMessageJson = {
-      //         action,
-      //         msg: msgs as object
-      //     }
-      //     // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins
-      //     const params = {
-      //         funds: { denom: 'inj', amount: '100000000000000000'},
-      //         sender: this.account.address,
-      //         contractAddress: 'inj1hyja4uyjktpeh0fxzuw2fmjudr85rk2qxgqkvu',
-      //         exec: executeMessageJson,
-      //     };
-
-      //     console.log({executeMessageJson, params})
-
-      //     const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
-
-      //     console.log({MessageExecuteContract})
-
       const encodedExecuteMsg = messages.map((msg) => {
         const { contract, funds } = msg?.value || {}
         const msgString = Buffer.from(msg?.value?.msg).toString('utf8')
@@ -340,7 +317,7 @@ class Injective {
       this.txRaw = null
       return await this.txClient.broadcast(signTxRaw).then((result) => {
         console.log({ result })
-        if (!!result.code) {
+        if (result.code) {
           throw new Error(
             `Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
           )

@@ -16,7 +16,6 @@ import {
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
 import { useChains } from 'hooks/useChainInfo'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
@@ -26,8 +25,8 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { TxStep } from 'types/common'
 import { chainState } from 'state/atoms/chainState'
+import { TxStep } from 'types/common'
 
 import Claim from './Claim'
 import DepositForm from './DepositForm'
@@ -35,25 +34,28 @@ import useProvideLP from './hooks/useProvideLP'
 import { tokenLpAtom } from './lpAtoms'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
+import { useClients } from 'hooks/useClients'
+import { useChain } from '@cosmos-kit/react-lite'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
-  const { address, chainId, status, client } = useRecoilValue(chainState)
+  const { address, chainId, chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({ reverse, bondingDays })
-  const cosmwasmClient = useCosmwasmClient(chainId)
+  const { cosmWasmClient } = useClients(chainName)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(
       useQueryPoolsLiquidity({
         refetchInBackground: false,
         pools: poolList?.pools,
-        signingClient: cosmwasmClient,
+        cosmWasmClient,
       })
     )
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
@@ -65,7 +67,7 @@ const ManageLiquidity: FC = () => {
     [chains, chainId]
   )
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
-    client,
+    cosmWasmClient,
     pools,
     currentChainPrefix
   )
@@ -74,8 +76,12 @@ const ManageLiquidity: FC = () => {
     () => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
     [poolId, poolList]
   )
-  //TODO pool user share might be falsy
-  const poolUserShare = usePoolUserShare(client, pool?.staking_address, address)
+  // TODO pool user share might be falsy
+  const poolUserShare = usePoolUserShare(
+    cosmWasmClient,
+    pool?.staking_address,
+    address
+  )
 
   const dailyEmissionData = useMemo(() => {
     const incentivePoolInfo = incentivePoolInfos?.find(
@@ -89,7 +95,7 @@ const ManageLiquidity: FC = () => {
         const dailyEmission = data.dailyEmission * Number(poolUserShare.share)
         return {
           symbol: data.tokenSymbol,
-          dailyEmission: dailyEmission,
+          dailyEmission,
           dailyUsdEmission: dailyEmission * prices[data.tokenSymbol],
           denom: data.denom,
         }
@@ -99,7 +105,7 @@ const ManageLiquidity: FC = () => {
   const chainIdParam = router.query.chainId as string
   const currentChain = chains.find((row) => row.chainId === chainId)
 
-  //TODO default query param in url when no poolId is provided
+  // TODO default query param in url when no poolId is provided
   useEffect(() => {
     if (currentChain) {
       if (poolId) {
@@ -172,7 +178,7 @@ const ManageLiquidity: FC = () => {
 
     const newState: any = [tokenA, tokenB]
     newState[index] = {
-      tokenSymbol: tokenSymbol,
+      tokenSymbol,
       amount: Number(amount),
     }
     setTokenLPState(newState)

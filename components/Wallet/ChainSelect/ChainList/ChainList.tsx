@@ -5,37 +5,23 @@ import { useChains } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
 
-function ChainList({ onChange, onClose, currentWalletState }) {
+function ChainList({ onChange, onClose, currentChainState }) {
   const chains = useChains()
-
-  // if (currentWalletState.activeWallet === 'station') {
-  //   return chains.filter(
-  //     (chain) => chain.chainId !== 'comdex-1' && chain.chainId !== 'injective-1'
-  //   );
-  // }
-
-  // if (currentWalletState.activeWallet === 'station') {
-  //   return chains.filter(
-  //     (chain) => chain.chainId !== 'comdex-1' && chain.chainId !== 'injective-1'
-  //   );
-  // }
 
   return (
     <List spacing={1} color="white" width="full">
-      {chains.map((chain, index) => {
-        return (
-          <ChainItem
-            key={chain.chainId + chain?.chainName}
-            chain={chain}
-            index={index}
-            onChange={onChange}
-            onClose={onClose}
-            chainList={chains}
-            active={currentWalletState?.chainId === chain?.chainId}
-            walletState={currentWalletState}
-          />
-        )
-      })}
+      {chains.map((chain, index) => (
+        <ChainItem
+          key={chain.chainId + chain?.chainName}
+          chain={chain}
+          index={index}
+          onChange={onChange}
+          onClose={onClose}
+          chainList={chains}
+          active={currentChainState?.chainId === chain?.chainId}
+          currentChainState={currentChainState}
+        />
+      ))}
     </List>
   )
 }

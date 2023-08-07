@@ -3,16 +3,19 @@ import React, { FC, useMemo, useState } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState } from 'state/atoms/chainState'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
 
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =
     useState<boolean>(false)
-  const { status } = useRecoilValue(chainState)
-  const isWalletConnected = status === WalletStatusType.connected
+  const { chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
+  const isWalletConnected = status === WalletStatus.Connected
   const { vaults, isLoading } = useVault()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -32,12 +35,10 @@ const Vaults: FC = () => {
         vaultId: vault?.pool_id,
         tokenImage: vault.vault_assets?.logoURI,
         apr: 'coming soon',
-        totalDeposits: !!vault?.totalDeposit
+        totalDeposits: vault?.totalDeposit
           ? `$${vault?.totalDeposit?.dollarValue}`
           : 'n/a',
-        myDeposit: !!vault?.deposits
-          ? `$${vault?.deposits?.dollarValue}`
-          : 'n/a',
+        myDeposit: vault?.deposits ? `$${vault?.deposits?.dollarValue}` : 'n/a',
         cta: () => router.push(url),
         ctaLabel,
       }
@@ -49,7 +50,7 @@ const Vaults: FC = () => {
     <VStack
       width={{ base: '100%', md: '1160px' }}
       alignItems="center"
-      // margin="auto"
+      // Margin="auto"
     >
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>

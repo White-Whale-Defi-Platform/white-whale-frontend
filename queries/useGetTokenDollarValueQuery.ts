@@ -1,7 +1,8 @@
 /*
- * takes base token price, fetches the ratio of the token provided vs the base token
+ * Takes base token price, fetches the ratio of the token provided vs the base token
  * and calculates the dollar value of the provided token
- * */
+ *
+ */
 import { useCallback, useMemo } from 'react'
 import { useQuery } from 'react-query'
 
@@ -43,21 +44,20 @@ export const useWhalePrice = () => {
 
   const { data } = useQuery(
     'whale-price',
-    async (): Promise<PriceByTokenList> => {
-      return request(GRAPHQL_URL, query, {
+    async (): Promise<PriceByTokenList> =>
+      request(GRAPHQL_URL, query, {
         chain: 'terra2',
         tokenList:
           'ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB,ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
       })
-    }
   )
 
-  return useMemo(() => {
-    return (
+  return useMemo(
+    () =>
       num(data?.priceByTokenList?.content?.[0]?.priceInvertedUsd).toNumber() ||
-      0
-    )
-  }, [data])
+      0,
+    [data]
+  )
 }
 
 export const useGetTokenDollarValueQuery = () => {
@@ -88,11 +88,10 @@ export const useGetTokenDollarValueQuery = () => {
         id: tokenA?.id,
       })
 
-      if (tokenA?.id === tokenB?.id && !!tokenA?.id) {
+      if (tokenA?.id === tokenB?.id && tokenA?.id) {
         return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
-      } else {
-        return priceForOneToken
       }
+      return priceForOneToken
     },
     [
       tokenADollarPrice,

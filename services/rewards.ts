@@ -5,7 +5,7 @@ type Denom =
       native: string
     }
   | {
-      /* cw20 token_address */
+      /* Cw20 token_address */
       cw20: string
     }
 

@@ -5,13 +5,14 @@ import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState } from 'state/atoms/chainState'
 
 import { TxStep } from '../hooks/useTransaction'
 import useWithdraw from '../hooks/useWithdraw'
+import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatusType
+  connected: WalletStatus
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -55,18 +56,17 @@ const WithdrawForm = ({
   )
 
   const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
-  const isConnected = connected === `@wallet-state/connected`
+  const isConnected = connected === WalletStatus.Connected
 
   const buttonLabel = useMemo(() => {
-    if (connected !== `@wallet-state/connected`) {
+    if (connected !== WalletStatus.Connected) {
       return 'Connect Wallet'
-    } else if (!!!token?.amount) {
+    } else if (!token?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Withdraw'
     }
+    return 'Withdraw'
   }, [tx?.buttonLabel, connected, token])
 
   const onSubmit = (event) => {

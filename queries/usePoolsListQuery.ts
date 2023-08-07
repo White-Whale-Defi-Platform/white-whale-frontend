@@ -1,9 +1,8 @@
 import { useQuery } from 'react-query'
+import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/atoms/chainState'
-
-import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 
 export type TokenInfo = {
   id: string
@@ -61,14 +60,12 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
         ),
       }
     },
-    Object.assign(
-      {
-        retry: 5,
-        enabled: !!chainId,
-        refetchOnMount: false,
-      },
-      options || {}
-    )
+    {
+      retry: 5,
+      enabled: Boolean(chainId),
+      refetchOnMount: false,
+      ...(options || {}),
+    }
   )
 }
 

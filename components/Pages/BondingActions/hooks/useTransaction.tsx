@@ -68,8 +68,8 @@ export const useTransaction = () => {
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = 0 //await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) {
+        const response = 0 // Await client.simulate(senderAddress, debouncedMsgs, '')
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -93,15 +93,20 @@ export const useTransaction = () => {
           setTxStep(TxStep.Idle)
           setError(error?.message)
           throw Error(error?.message)
-          // setTxStep(TxStep.Idle)
-          // setError("Failed to execute transaction.")
-          // throw Error("Failed to execute transaction.")
+          /*
+           * SetTxStep(TxStep.Idle)
+           * setError("Failed to execute transaction.")
+           * throw Error("Failed to execute transaction.")
+           */
         }
       }
     },
     {
       enabled:
-        txStep == TxStep.Idle && error == null && !!signingClient && !!address,
+        txStep == TxStep.Idle &&
+        error == null &&
+        Boolean(signingClient) &&
+        Boolean(address),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -300,10 +305,10 @@ export const useTransaction = () => {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) //debouncedMsgs
+  }, []) // DebouncedMsgs
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       fee,
       buttonLabel,
       submit,
@@ -312,8 +317,9 @@ export const useTransaction = () => {
       txHash,
       error,
       reset,
-    }
-  }, [txStep, txInfo, txHash, error, reset, fee])
+    }),
+    [txStep, txInfo, txHash, error, reset, fee]
+  )
 }
 
 export default useTransaction

@@ -13,13 +13,16 @@ import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState } from 'state/atoms/chainState'
 import { TxStep } from 'types/common'
 
 import { useOpenFlow } from './hooks/useOpenFlow'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
+import { WHALE_TOKEN_SYMBOL } from 'constants/index'
 
 const defaultToken = {
-  tokenSymbol: 'WHALE',
+  tokenSymbol: WHALE_TOKEN_SYMBOL,
   amount: '',
 }
 
@@ -44,8 +47,9 @@ const Create = ({ poolId }: Props) => {
   })
   const formData = watch()
 
-  const { status } = useRecoilValue(chainState)
-  const isConnected = status === WalletStatusType.connected
+  const { chainName } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
+  const isConnected = status === WalletStatus.Connected
   const { txStep } = useRecoilValue(txAtom)
   const { simulate, submit } = useOpenFlow({ poolId, ...formData })
 
@@ -56,7 +60,6 @@ const Create = ({ poolId }: Props) => {
         control={control}
         token={token}
         showList={true}
-        // isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
           setToken({
             ...value,
@@ -86,7 +89,7 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 min={new Date().toISOString().slice(0, 16)}
-                // max="2017-06-30T16:30"
+                // Max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
               />
             </InputGroup>

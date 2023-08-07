@@ -12,7 +12,7 @@ import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 
 import 'theme/global.css'
 
-import { ChakraProvider, CSSReset } from '@chakra-ui/react'
+import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import {
   getChainOptions,
   StaticWalletProvider,
@@ -52,6 +52,7 @@ const MyApp: FC<AppProps> = ({
                 <ChainProvider
                   chains={chains} // supported chains
                   assetLists={assets} // supported asset lists
+                  // @ts-ignore
                   wallets={[
                     ...keplrWallets,
                     ...cosmoStationWallets,

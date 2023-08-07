@@ -9,7 +9,7 @@ const SelectChainModal = ({
   denom,
   onChange,
   connected,
-  currentWalletState,
+  currentChainState,
 }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
@@ -26,7 +26,7 @@ const SelectChainModal = ({
       <ChainSelectPopoverContent
         onChange={onChange}
         onClose={onClose}
-        currentWalletState={currentWalletState}
+        currentChainState={currentChainState}
       />
     </Popover>
   )

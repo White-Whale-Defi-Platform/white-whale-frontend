@@ -1,6 +1,6 @@
 import { coin } from '@cosmjs/stargate'
 
-import { TokenInfo } from '../../queries/usePoolsListQuery'
+import { TokenInfo } from 'queries/usePoolsListQuery'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -9,7 +9,7 @@ import {
 import { Wallet } from '../../util/wallet-adapters'
 
 type DirectTokenSwapArgs = {
-  // swapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
+  // SwapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
   tokenAmount: number
   senderAddress: string
   swapAddress: string

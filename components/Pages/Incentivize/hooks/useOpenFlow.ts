@@ -22,6 +22,7 @@ import {
 
 import useEpoch from './useEpoch'
 import useFactoryConfig from './useFactoryConfig'
+import { useClients } from 'hooks/useClients'
 
 interface Props {
   poolId: string
@@ -31,12 +32,13 @@ interface Props {
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
-  const { address, client, network, chainId } = useRecoilValue(chainState)
+  const { address, chainName, network, chainId } = useRecoilValue(chainState)
+  const { signingClient } = useClients(chainName)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
-    client,
+    signingClient,
   })
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
@@ -77,7 +79,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       .sort((a, b) => a.denom.localeCompare(b.denom))
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
-    /* increase allowance for each non-native token */
+    /* Increase allowance for each non-native token */
     if (!tokenInfo?.native) {
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
@@ -109,24 +111,26 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const simulate = useSimulate({
     msgs,
-    client: client,
+    signingClient,
     address,
-    connected: !!address,
+    connected: Boolean(address),
     amount,
   })
 
   const { mutate: submit, ...tx } = useMutation({
-    mutationFn: () => client.post(address, msgs),
+    mutationFn: () =>
+      signingClient.signAndBroadcast(address, msgs, 'auto', null),
     onError,
     onSuccess,
     onMutate,
   })
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       submit,
       simulate,
       tx,
-    }
-  }, [tx, submit, simulate])
+    }),
+    [tx, submit, simulate]
+  )
 }

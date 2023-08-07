@@ -8,16 +8,21 @@ import { useRecoilState } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
-const useTxStatus = ({ client, transactionType }) => {
+type Props = {
+  signingClient: SigningCosmWasmClient
+  transactionType: string
+}
+const useTxStatus = ({ signingClient, transactionType }: Props) => {
   const [txState, setTxState] = useRecoilState(txAtom)
   const toast = useToast()
-  const txInfo = useTxInfo({ txHash: txState.txHash, client })
+  const txInfo = useTxInfo({ txHash: txState.txHash, signingClient })
   const queryClient = useQueryClient()
 
   useEffect(() => {
     if (txInfo != null && txState.txHash != null) {
-      if (txInfo?.txResponse?.code) {
+      if (txInfo?.code) {
         setTxState({
           ...txState,
           txStep: TxStep.Failed,
@@ -31,8 +36,8 @@ const useTxStatus = ({ client, transactionType }) => {
     }
   }, [txInfo, txState.txHash])
 
-  const description = (hash: string) => (
-    <Finder txHash={hash} chainId={client.client.chainId}>
+  const description = async (hash: string) => (
+    <Finder txHash={hash} chainId={await signingClient.getChainId()}>
       {' '}
     </Finder>
   )

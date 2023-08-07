@@ -14,8 +14,8 @@ import {
   PopoverContent,
   PopoverTrigger,
   Text,
-  useBoolean,
   VStack,
+  useBoolean,
 } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
 
@@ -40,13 +40,13 @@ const SwapSettings = () => {
       setAuto.off()
     }
 
-    if (!!target?.value && Number(target?.value) < 100) {
+    if (target?.value && Number(target?.value) < 100) {
       if (error) {
         setError(false)
       }
       setSlippage(target?.value)
     } else {
-      if (!!target?.value) {
+      if (target?.value) {
         setError(true)
       }
       setSlippage(0)
@@ -104,7 +104,7 @@ const SwapSettings = () => {
                   borderRadius="30px"
                   placeholder="Custom"
                   color="brand.500"
-                  // borderColor="rgba(255, 255, 255, 0.1)"
+                  // BorderColor="rgba(255, 255, 255, 0.1)"
                   size="sm"
                   textAlign="right"
                   value={slippage === 0 ? '' : slippage}

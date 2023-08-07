@@ -42,7 +42,7 @@ const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
     isNative: tokenInfo?.native,
     denom: tokenInfo?.denom,
     contractAddress: vaultAddress,
-    enabled: !!encodedMsgs,
+    enabled: Boolean(encodedMsgs),
     client,
     senderAddress: address,
     msgs,

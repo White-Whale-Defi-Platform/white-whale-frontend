@@ -2,27 +2,11 @@ import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
 import { Wallet } from 'util/wallet-adapters'
 
-export enum WalletStatusType {
-  /* nothing happens to the wallet */
-  idle = '@wallet-state/idle',
-  /* restored wallets state from the cache */
-  restored = '@wallet-state/restored',
-  /* the wallet is fully connected */
-  connected = '@wallet-state/connected',
-  /* the wallet is fully connected */
-  disconnected = '@wallet-state/disconnected',
-  /* connecting to the wallet */
-  connecting = '@wallet-state/connecting',
-  /* error when tried to connect */
-  error = '@wallet-state/error',
-}
-
 type GeneratedWalletState<
   TClient extends any,
   TStateExtension extends {}
 > = TStateExtension & {
   client: TClient | null
-  status: WalletStatusType
   address: string
   chainId: string
   chainName: string
@@ -46,7 +30,6 @@ function createWalletState<TClient = any, TState = {}>({
   return atom<GeneratedWalletState<TClient, TState>>({
     key,
     default: {
-      status: WalletStatusType.idle,
       client: null,
       chainId: null,
       chainName: 'migaloo',
@@ -67,7 +50,6 @@ function createWalletState<TClient = any, TState = {}>({
               setSelf({
                 ...parsedSavedState,
                 client: null,
-                status: WalletStatusType.restored,
               })
             }
           } catch (e) {}
@@ -76,7 +58,7 @@ function createWalletState<TClient = any, TState = {}>({
         onSet((newValue, oldValue) => {
           localStorage.setItem(
             CACHE_KEY,
-            /* let's not store the client in the cache */
+            /* Let's not store the client in the cache */
             JSON.stringify({ ...newValue, client: null })
           )
           // }

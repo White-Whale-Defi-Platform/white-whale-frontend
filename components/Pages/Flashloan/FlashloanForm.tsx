@@ -85,11 +85,11 @@ function FlashloanForm({}: Props) {
   const buttonLabel = useMemo(() => {
     if (!isConnected) {
       return 'Connect Wallet'
-    } else if (!!error) {
+    } else if (error) {
       return error
-    } else {
-      return 'Flashloan'
     }
+    return 'Flashloan'
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, status, error])
 
@@ -168,10 +168,10 @@ function FlashloanForm({}: Props) {
             variant="primary"
             width={60}
             isLoading={
-              // tx?.txStep == TxStep.Estimating ||
+              // Tx?.txStep == TxStep.Estimating ||
               tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting
             }
-            disabled={!!error || !isConnected}
+            disabled={Boolean(error) || !isConnected}
           >
             {buttonLabel}
           </Button>

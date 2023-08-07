@@ -30,7 +30,7 @@ export const Incentives = ({ flows }) => {
     return { logos, more, hasIncentives }
   }, [flows])
 
-  //show dash if no incentives
+  // Show dash if no incentives
   if (!hasIncentives) {
     return <Text>-</Text>
   }
@@ -66,7 +66,7 @@ export const Incentives = ({ flows }) => {
               <Tbody>
                 {flows.map((flow, index) => (
                   <Tr
-                    key={flow?.tokenSymbol + '_' + index}
+                    key={`${flow?.tokenSymbol}_${index}`}
                     borderBottom={
                       index < flows.length - 1
                         ? '1px solid rgba(255, 255, 255, 0.1)'

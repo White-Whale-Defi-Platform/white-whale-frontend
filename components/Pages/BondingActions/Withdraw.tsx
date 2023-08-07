@@ -3,8 +3,9 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { useRecoilState } from 'recoil'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/atoms/chainState'
+
 import {
   calculateDurationString,
   convertMicroDenomToDenom,
@@ -13,6 +14,8 @@ import {
 
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
 import { WhaleTokenType } from './BondingActions'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletStatus } from '@cosmos-kit/core'
 
 const Withdraw = ({
   unbondingAmpWhale,
@@ -23,23 +26,22 @@ const Withdraw = ({
   unbondingPeriodInNano,
   whalePrice,
 }) => {
-  const [{ status, chainId, network }, _] = useRecoilState(chainState)
+  const { chainName, chainId, network } = useRecoilValue(chainState)
+  const { status } = useChain(chainName)
 
-  const isWalletConnected = status === WalletStatusType.connected
+  const isWalletConnected = status === WalletStatus.Connected
   const config: Config = useConfig(network, chainId)
-  const ProgressBar = ({ percent }) => {
-    return (
-      <Box
-        h="3px"
-        minW={450}
-        bg="whiteAlpha.400"
-        borderRadius="10px"
-        overflow="hidden"
-      >
-        <Box h="100%" bg="#7CFB7D" w={`${percent}%`} borderRadius="10px" />
-      </Box>
-    )
-  }
+  const ProgressBar = ({ percent }) => (
+    <Box
+      h="3px"
+      minW={450}
+      bg="whiteAlpha.400"
+      borderRadius="10px"
+      overflow="hidden"
+    >
+      <Box h="100%" bg="#7CFB7D" w={`${percent}%`} borderRadius="10px" />
+    </Box>
+  )
 
   const TokenBox = ({ label, ampWhale, bWhale }) => {
     const dollarValue = ((ampWhale + bWhale) * whalePrice).toFixed(2)

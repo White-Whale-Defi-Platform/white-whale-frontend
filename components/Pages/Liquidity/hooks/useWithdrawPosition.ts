@@ -6,13 +6,15 @@ import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/atoms/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
+import { useClients } from 'hooks/useClients'
 
 export const useWithdrawPosition = ({ poolId }) => {
-  const { address, client } = useRecoilValue(chainState)
+  const { address, chainName } = useRecoilValue(chainState)
+  const { signingClient } = useClients(chainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Open position',
-    client,
+    signingClient,
   })
 
   const executeAddLiquidityMessage = createExecuteMessage({
@@ -27,18 +29,20 @@ export const useWithdrawPosition = ({ poolId }) => {
   const msgs = [executeAddLiquidityMessage]
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: async () => {
-      return validateTransactionSuccess(await client.post(address, msgs))
-    },
+    mutationFn: async () =>
+      validateTransactionSuccess(
+        await signingClient.signAndBroadcast(address, msgs, 'auto', null)
+      ),
     onError,
     onSuccess,
   })
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       submit,
       ...state,
       ...tx,
-    }
-  }, [tx, state, submit])
+    }),
+    [tx, state, submit]
+  )
 }

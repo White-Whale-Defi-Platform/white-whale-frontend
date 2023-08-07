@@ -37,70 +37,56 @@ type TableProps = {
 
 const columnHelper = createColumnHelper<TableProps>()
 
-const columns = (totalValue, totalDollarValue) => {
-  return [
-    columnHelper.accessor('duration', {
-      header: () => (
-        <Text
-          as="span"
-          color="brand.50"
-          fontSize="sm"
-          textTransform="capitalize"
-        >
-          Duration
-        </Text>
-      ),
-      cell: (info) => <Text>{`${info.getValue()} days`}</Text>,
-      enableSorting: true,
-    }),
-    columnHelper.accessor('value', {
-      header: () => {
-        return (
-          <TooltipWithChildren
-            label={`Value($${totalDollarValue})`}
-            isHeading={true}
-          >
-            <AvailableRewards data={totalValue} />
-          </TooltipWithChildren>
-        )
-      },
-      cell: (info) => {
-        const assets = info?.row?.original?.assets || []
-        return (
-          <TooltipWithChildren label={`$${Number(info.getValue()).toFixed(2)}`}>
-            <AvailableRewards data={assets} />
-          </TooltipWithChildren>
-        )
-      },
-      enableSorting: true,
-    }),
-    columnHelper.accessor('weight', {
-      header: () => (
-        <TooltipWithChildren
-          label="Weight"
-          isHeading={true}
-          showTooltip={false}
-        />
-      ),
-      enableSorting: true,
-    }),
-    columnHelper.accessor('action', {
-      header: () => (
-        <Text
-          as="span"
-          color="brand.50"
-          fontSize="sm"
-          textTransform="capitalize"
-        >
-          Action
-        </Text>
-      ),
-      cell: (info) => info.getValue() || <Box w="full"></Box>,
-      enableSorting: false,
-    }),
-    columnHelper.accessor('state', {}),
-  ]
-}
+const columns = (totalValue, totalDollarValue) => [
+  columnHelper.accessor('duration', {
+    header: () => (
+      <Text as="span" color="brand.50" fontSize="sm" textTransform="capitalize">
+        Duration
+      </Text>
+    ),
+    cell: (info) => <Text>{`${info.getValue()} days`}</Text>,
+    enableSorting: true,
+  }),
+  columnHelper.accessor('value', {
+    header: () => (
+      <TooltipWithChildren
+        label={`Value($${totalDollarValue})`}
+        isHeading={true}
+      >
+        <AvailableRewards data={totalValue} />
+      </TooltipWithChildren>
+    ),
+    cell: (info) => {
+      const assets = info?.row?.original?.assets || []
+      return (
+        <TooltipWithChildren label={`$${Number(info.getValue()).toFixed(2)}`}>
+          <AvailableRewards data={assets} />
+        </TooltipWithChildren>
+      )
+    },
+    enableSorting: true,
+  }),
+  columnHelper.accessor('weight', {
+    header: () => (
+      <TooltipWithChildren
+        label="Weight"
+        isHeading={true}
+        showTooltip={false}
+      />
+    ),
+    enableSorting: true,
+  }),
+  columnHelper.accessor('action', {
+    header: () => (
+      <Text as="span" color="brand.50" fontSize="sm" textTransform="capitalize">
+        Action
+      </Text>
+    ),
+    cell: (info) => info.getValue() || <Box w="full"></Box>,
+    enableSorting: false,
+  }),
+  columnHelper.accessor('state', {}),
+]
 
 export const PositionsTable = ({ columnFilters, positions }) => {
   const [sorting, setSorting] = useState<any>([
@@ -115,12 +101,10 @@ export const PositionsTable = ({ columnFilters, positions }) => {
     const filteredPositions = positions.filter((p) =>
       filter ? p.state === filter : true
     )
-    return filteredPositions.reduce((acc, curr) => {
-      return acc + curr.value
-    }, 0)
+    return filteredPositions.reduce((acc, curr) => acc + curr.value, 0)
   }, [positions, columnFilters])
 
-  // loop through positions and get total value
+  // Loop through positions and get total value
   const assetsWithValue = useMemo(() => {
     const initialValue = { assetAmount: 0, dollarValue: 0 }
     const filter = columnFilters?.[0]?.value
@@ -149,9 +133,10 @@ export const PositionsTable = ({ columnFilters, positions }) => {
       }, [])
   }, [positions, columnFilters])
 
-  const customColumns = useMemo(() => {
-    return columns(assetsWithValue, totalDollarValue.toFixed(2))
-  }, [assetsWithValue, totalDollarValue])
+  const customColumns = useMemo(
+    () => columns(assetsWithValue, totalDollarValue.toFixed(2)),
+    [assetsWithValue, totalDollarValue]
+  )
 
   const table = useReactTable({
     data: positions || [],
@@ -227,13 +212,11 @@ export const PositionsTable = ({ columnFilters, positions }) => {
                 '1px solid rgba(255, 255, 255, 0.1)'
               }
             >
-              {row.getVisibleCells().map((cell) => {
-                return (
-                  <Td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                )
-              })}
+              {row.getVisibleCells().map((cell) => (
+                <Td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Td>
+              ))}
             </Tr>
           ))}
         </Tbody>

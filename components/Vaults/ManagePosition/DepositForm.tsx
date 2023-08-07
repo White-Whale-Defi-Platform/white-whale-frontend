@@ -4,13 +4,14 @@ import { Button, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { useRecoilValue } from 'recoil'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState } from 'state/atoms/chainState'
 
 import useDepost from '../hooks/useDeposit'
 import { TxStep } from '../hooks/useTransaction'
+import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatusType
+  connected: WalletStatus
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -35,7 +36,10 @@ const DepositForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(chainState)
-  const isConnected = connected === `@wallet-state/connected`
+  const isConnected = useMemo(
+    () => WalletStatus.Connected === connected,
+    [connected]
+  )
 
   const onSuccess = useCallback(
     (txHash) => {
@@ -61,15 +65,14 @@ const DepositForm = ({
 
   const buttonLabel = useMemo(() => {
     // TODO: Note for later, Select Token is commented
-    if (connected !== `@wallet-state/connected`) {
+    if (connected !== WalletStatus.Connected) {
       return 'Connect Wallet'
-    } else if (!!!token?.amount) {
+    } else if (!token?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Deposit'
     }
+    return 'Deposit'
   }, [tx?.buttonLabel, connected, token])
 
   const onSubmit = (event) => {

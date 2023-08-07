@@ -8,13 +8,13 @@ export type Expiration =
   | { readonly never: unknown }
 
 export interface AllowanceResponse {
-  readonly allowance: string // integer as string
+  readonly allowance: string // Integer as string
   readonly expires: Expiration
 }
 
 export interface AllowanceInfo {
-  readonly allowance: string // integer as string
-  readonly spender: string // bech32 address
+  readonly allowance: string // Integer as string
+  readonly spender: string // Bech32 address
   readonly expires: Expiration
 }
 
@@ -49,14 +49,14 @@ export interface Claims {
 }
 
 export interface AllAccountsResponse {
-  // list of bech32 address that have a balance
+  // List of bech32 address that have a balance
   readonly accounts: readonly string[]
 }
 
 export interface CW20Instance {
   readonly contractAddress: string
 
-  // queries
+  // Queries
   balance: (address: string) => Promise<string>
   allowance: (owner: string, spender: string) => Promise<AllowanceResponse>
   allAllowances: (
@@ -73,7 +73,7 @@ export interface CW20Instance {
   claims: (address: string) => Promise<Claims>
   minter: (sender: string) => Promise<any>
 
-  // actions
+  // Actions
   mint: (sender: string, recipient: string, amount: string) => Promise<string>
   transfer: (
     sender: string,
@@ -161,16 +161,14 @@ export const CW20 = (
     }
 
     const claims = async (address: string): Promise<Claims> => {
-      return cosmWasmClient.queryContractSmart(contractAddress, {
+      return await cosmWasmClient.queryContractSmart(contractAddress, {
         claims: { address },
       })
     }
-
     const minter = async (): Promise<any> => {
       return cosmWasmClient.queryContractSmart(contractAddress, { minter: {} })
     }
 
-    // mints tokens, returns transactionHash
     const mint = async (
       sender: string,
       recipient: string,
@@ -187,7 +185,7 @@ export const CW20 = (
       return result.transactionHash
     }
 
-    // transfers tokens, returns transactionHash
+    // Transfers tokens, returns transactionHash
     const transfer = async (
       sender: string,
       recipient: string,
@@ -204,7 +202,7 @@ export const CW20 = (
       return result.transactionHash
     }
 
-    // burns tokens, returns transactionHash
+    // Burns tokens, returns transactionHash
     const burn = async (sender: string, amount: string): Promise<string> => {
       const result = await signingClient.execute(
         sender,

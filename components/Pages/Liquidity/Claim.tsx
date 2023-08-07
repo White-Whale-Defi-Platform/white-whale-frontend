@@ -13,6 +13,7 @@ import { TxStep } from 'types/common'
 import ClaimTable from './ClaimTable'
 import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
+import { useClients } from 'hooks/useClients'
 
 const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
   <HStack
@@ -45,25 +46,31 @@ type Props = {
 const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
-  const { client, network, chainId } = useRecoilValue(chainState)
+  const { network, chainId, chainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(chainName)
 
   const config = useConfig(network, chainId)
-  // check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
-  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
-  const allSnapshotsTaken = useMemo(() => {
-    return noSnapshotTakenAddresses.length === 0
-  }, [noSnapshotTakenAddresses.length])
+  // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
+  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(
+    cosmWasmClient,
+    config
+  )
+  const allSnapshotsTaken = useMemo(
+    () => noSnapshotTakenAddresses.length === 0,
+    [noSnapshotTakenAddresses.length]
+  )
   const forceSnapshots = useForceEpochAndTakingSnapshots({
-    noSnapshotTakenAddresses: noSnapshotTakenAddresses,
-    config: config,
+    noSnapshotTakenAddresses,
+    config,
   })
   const { rewards = [], totalValue } = useRewards(poolId)
-
-  // check if there are rewards to claim
+  console.log('rewards', rewards)
+  // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce((acc, reward) => {
-      return acc + Number(reward.assetAmount)
-    }, 0)
+    const rewardsSum = rewards.reduce(
+      (acc, reward) => acc + Number(reward.amount),
+      0
+    )
     return rewardsSum > 0
   }, [rewards])
 

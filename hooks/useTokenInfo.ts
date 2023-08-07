@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
 
-import { TokenInfo } from '../queries/usePoolsListQuery'
+import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useTokenList } from './useTokenList'
 
-/* token selector functions */
+/* Token selector functions */
 export const getBaseTokenFromTokenList = (tokenList): TokenInfo | undefined =>
   tokenList?.base_token
 
@@ -13,7 +13,7 @@ export const getTokenInfoFromTokenList = (
 ): TokenInfo | undefined => tokensList?.find((x) => x.symbol === tokenSymbol)
 /* /token selector functions */
 
-/* returns a selector for getting multiple tokens info at once */
+/* Returns a selector for getting multiple tokens info at once */
 export const useGetMultipleTokenInfo = () => {
   const [tokenList] = useTokenList()
   return useCallback(
@@ -25,7 +25,7 @@ export const useGetMultipleTokenInfo = () => {
   )
 }
 
-/* hook for token info retrieval based on multiple `tokenSymbol` */
+/* Hook for token info retrieval based on multiple `tokenSymbol` */
 export const useMultipleTokenInfo = (tokenSymbols: Array<string>) => {
   const getMultipleTokenInfo = useGetMultipleTokenInfo()
   return useMemo(
@@ -34,12 +34,11 @@ export const useMultipleTokenInfo = (tokenSymbols: Array<string>) => {
   )
 }
 
-/* hook for token info retrieval based on `tokenSymbol` */
-export const useTokenInfo = (tokenSymbol: string) => {
-  return useMultipleTokenInfo(useMemo(() => [tokenSymbol], [tokenSymbol]))?.[0]
-}
+/* Hook for token info retrieval based on `tokenSymbol` */
+export const useTokenInfo = (tokenSymbol: string) =>
+  useMultipleTokenInfo(useMemo(() => [tokenSymbol], [tokenSymbol]))?.[0]
 
-/* hook for base token info retrieval */
+/* Hook for base token info retrieval */
 export const useBaseTokenInfo = () => {
   const [tokenList] = useTokenList()
   return useMemo(() => getBaseTokenFromTokenList(tokenList), [tokenList])

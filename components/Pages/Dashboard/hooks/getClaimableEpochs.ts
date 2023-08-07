@@ -60,9 +60,8 @@ export const getClaimableEpochs = async (
     return totalAmount / lastEpochs.length
   }
 
-  const extrapolateAnnualRewards = (dailyAverage: number): number => {
-    return convertMicroDenomToDenom(dailyAverage * 365, 6)
-  }
+  const extrapolateAnnualRewards = (dailyAverage: number): number =>
+    convertMicroDenomToDenom(dailyAverage * 365, 6)
 
   const dailyAverageRewards = data?.epochs
     ? getLastEpochsAverage(data.epochs)

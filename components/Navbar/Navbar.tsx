@@ -9,12 +9,13 @@ import {
   Flex,
   HStack,
   IconButton,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/icons/BurgerIcon'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/atoms/chainState'
+import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
 
 import Card from '../Card'
 import Wallet from '../Wallet/Wallet'
@@ -23,7 +24,6 @@ import Logo from './Logo'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bondingContract'
 
 export const links = [
   {
@@ -69,7 +69,7 @@ const Navbar = () => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
-          {(BONDING_ENABLED_CHAIN_IDS.includes(chainId)
+          {(ACTIVE_BONDING_NETWORKS.includes(chainId)
             ? menuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (

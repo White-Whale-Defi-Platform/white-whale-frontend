@@ -26,7 +26,7 @@ const fetchBonded = async (
   const result: JsonObject = await client.queryContractSmart(
     config.whale_lair,
     {
-      bonded: { address: address },
+      bonded: { address },
     }
   )
   return result as BondedInfo
