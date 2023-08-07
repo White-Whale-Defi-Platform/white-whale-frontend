@@ -11,11 +11,7 @@ import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import {
-  EnigmaPoolData,
-  getPairAprAndDailyVolume,
-  getPairAprAndDailyVolumeTerra,
-} from 'util/enigma'
+import { EnigmaPoolData, getPairAprAndDailyVolume } from 'util/enigma'
 
 export interface Flow {
   claimed_amount: string
@@ -63,10 +59,7 @@ export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
 
   useEffect(() => {
     const fetchPoolData = async () => {
-      const poolData =
-        currentChainPrefix === 'terra'
-          ? await getPairAprAndDailyVolumeTerra(pools)
-          : await getPairAprAndDailyVolume(pools, currentChainPrefix)
+      const poolData = await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)
     }
     if (pools?.length > 0 && currentChainPrefix) {
