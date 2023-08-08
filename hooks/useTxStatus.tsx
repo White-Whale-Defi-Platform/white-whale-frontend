@@ -11,7 +11,6 @@ import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 
 const useTxStatus = ({ client, transactionType }) => {
-  const { chainId } = useRecoilValue(walletState)
   const [txState, setTxState] = useRecoilState(txAtom)
   const toast = useToast()
   const txInfo = useTxInfo({ txHash: txState.txHash, client })

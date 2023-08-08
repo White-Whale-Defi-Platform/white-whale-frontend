@@ -47,7 +47,7 @@ export const getClaimable = async (
   }
 
   const data = await fetchClaimableData(client, address, config)
-  const daysSinceLastClaim = data.epochs.length
+  const daysSinceLastClaim = data?.epochs.length
 
   const claimableAmounts = data?.epochs
     .flatMap((e) => e.available.map((a) => a.amount))

@@ -61,7 +61,7 @@ export const RewardsTooltip = ({
                 {'Last Claimed'}
               </Text>
               <Text fontSize={14}>
-                {isWalletConnected ? lastClaimed() : 'n/a'}
+                {lastClaimed()}
               </Text>
             </HStack>
           </VStack>
