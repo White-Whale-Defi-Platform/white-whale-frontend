@@ -9,7 +9,7 @@ import {
 import { Wallet } from '../../util/wallet-adapters'
 
 type DirectTokenSwapArgs = {
-  // swapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
+  // SwapDirection: 'tokenAtoTokenB' | 'tokenBtoTokenA'
   tokenAmount: number
   senderAddress: string
   swapAddress: string

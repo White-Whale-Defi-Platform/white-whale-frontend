@@ -40,16 +40,15 @@ export const WhaleTooltip = ({
     },
   ].sort((a, b) => b.value - a.value)
 
-  const TokenDetail = ({ whaleType, value }) => {
-    return (
-      <HStack justify="space-between" direction="row" width="full" px={2}>
-        <Text color="whiteAlpha.600" fontSize={14}>
-          {WhaleType[whaleType]}
-        </Text>
-        <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
-      </HStack>
-    )
-  }
+  const TokenDetail = ({ whaleType, value }) => (
+    <HStack justify="space-between" direction="row" width="full" px={2}>
+      <Text color="whiteAlpha.600" fontSize={14}>
+        {WhaleType[whaleType]}
+      </Text>
+      <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
+    </HStack>
+  )
+
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 
@@ -99,25 +98,23 @@ export const WhaleTooltip = ({
                     />
                   </>
                 ) : null}
-                {lsdTokenDetails.map((e, index) => {
-                  return (
-                    <React.Fragment key={e.type}>
-                      <TokenDetail whaleType={e.type} value={e.value} />
-                      {index === 0 && (
-                        <Divider
-                          width="93%"
-                          borderWidth="0.1px"
-                          color="whiteAlpha.300"
-                        />
-                      )}
-                    </React.Fragment>
-                  )
-                })}
+                {lsdTokenDetails.map((e, index) => (
+                  <React.Fragment key={e.type}>
+                    <TokenDetail whaleType={e.type} value={e.value} />
+                    {index === 0 && (
+                      <Divider
+                        width="93%"
+                        borderWidth="0.1px"
+                        color="whiteAlpha.300"
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
               </>
             )}
           </VStack>
         ) : null
-      } //displaying nothing when wallet disconnected
+      } // Displaying nothing when wallet disconnected
       bg="transparent"
     >
       <VStack alignItems="flex-start" minW={100}>

@@ -4,7 +4,7 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import {
   calculateDurationString,
   convertMicroDenomToDenom,
@@ -27,19 +27,17 @@ const Withdraw = ({
 
   const isWalletConnected = status === WalletStatusType.connected
   const config: Config = useConfig(network, chainId)
-  const ProgressBar = ({ percent }) => {
-    return (
-      <Box
-        h="3px"
-        minW={450}
-        bg="whiteAlpha.400"
-        borderRadius="10px"
-        overflow="hidden"
-      >
-        <Box h="100%" bg="#7CFB7D" w={`${percent}%`} borderRadius="10px" />
-      </Box>
-    )
-  }
+  const ProgressBar = ({ percent }) => (
+    <Box
+      h="3px"
+      minW={450}
+      bg="whiteAlpha.400"
+      borderRadius="10px"
+      overflow="hidden"
+    >
+      <Box h="100%" bg="#7CFB7D" w={`${percent}%`} borderRadius="10px" />
+    </Box>
+  )
 
   const TokenBox = ({ label, ampWhale, bWhale }) => {
     const dollarValue = ((ampWhale + bWhale) * whalePrice).toFixed(2)

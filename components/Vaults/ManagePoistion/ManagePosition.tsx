@@ -77,7 +77,7 @@ const ManagePosition = () => {
       width={{ base: '100%', md: '700px' }}
       alignItems="center"
       padding={5}
-      // margin="auto"
+      // Margin="auto"
     >
       <HStack
         justifyContent="space-between"

@@ -3,17 +3,17 @@ import { atom } from 'recoil'
 import { Wallet } from 'util/wallet-adapters'
 
 export enum WalletStatusType {
-  /* nothing happens to the wallet */
+  /* Nothing happens to the wallet */
   idle = '@wallet-state/idle',
-  /* restored wallets state from the cache */
+  /* Restored wallets state from the cache */
   restored = '@wallet-state/restored',
-  /* the wallet is fully connected */
+  /* The wallet is fully connected */
   connected = '@wallet-state/connected',
-  /* the wallet is fully connected */
+  /* The wallet is fully connected */
   disconnected = '@wallet-state/disconnected',
-  /* connecting to the wallet */
+  /* Connecting to the wallet */
   connecting = '@wallet-state/connecting',
-  /* error when tried to connect */
+  /* Error when tried to connect */
   error = '@wallet-state/error',
 }
 
@@ -25,8 +25,12 @@ type GeneratedWalletState<
   status: WalletStatusType
   address: string
   chainId: string
-  network: Network
+  network: NetworkType
   activeWallet: string
+}
+export enum NetworkType {
+  testnet = 'testnet',
+  mainnet = 'mainnet',
 }
 
 type CreateWalletStateArgs<TState = {}> = {
@@ -43,10 +47,9 @@ function createWalletState<TClient = any, TState = {}>({
     default: {
       status: WalletStatusType.idle,
       client: null,
-      // chainId: 'juno-1',
       chainId: null,
       address: '',
-      network: 'mainnet',
+      network: NetworkType.mainnet,
       activeWallet: '',
       ...defaultState,
     },
@@ -69,14 +72,9 @@ function createWalletState<TClient = any, TState = {}>({
         }
 
         onSet((newValue, oldValue) => {
-          // const isReset = newValue.address !== (oldValue as any)?.address
-
-          // if (isReset) {
-          //   localStorage.removeItem(CACHE_KEY)
-          // } else {
           localStorage.setItem(
             CACHE_KEY,
-            /* let's not store the client in the cache */
+            /* Let's not store the client in the cache */
             JSON.stringify({ ...newValue, client: null })
           )
           // }
@@ -92,18 +90,3 @@ export const walletState = createWalletState<Wallet, { key?: Key }>({
     key: null,
   },
 })
-
-export const ibcWalletState = createWalletState<
-  Wallet,
-  {
-    /* ibc wallet is connected */
-    tokenSymbol?: string
-  }
->({
-  key: 'ibc-wallet',
-  default: {
-    tokenSymbol: null,
-  },
-})
-
-type Network = 'testnet' | 'mainnet'

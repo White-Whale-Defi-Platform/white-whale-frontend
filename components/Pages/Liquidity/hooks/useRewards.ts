@@ -5,7 +5,7 @@ import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -27,7 +27,7 @@ export type Reward = TokenInfo & {
 }
 
 export type RewardsResult = {
-  rewards: Reward[]
+  rewards: RewardData[]
   totalValue: number
 }
 
@@ -64,20 +64,19 @@ function aggregateRewards(rewards: RewardData[]): RewardData[] {
 const useRewards = (poolId) => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
-  const [{ staking_address } = {}] = useQueryPoolLiquidity({ poolId })
+  const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
   const { address, client } = useRecoilValue(walletState)
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
-    queryFn: async (): Promise<RewardData[]> => {
-      // return Promise.resolve(rewardsMock)
-      return client?.queryContractSmart(staking_address, {
+    queryFn: async (): Promise<RewardsResult> =>
+      // Return Promise.resolve(rewardsMock)
+      client?.queryContractSmart(staking_address, {
         rewards: { address },
-      })
-    },
+      }),
     select: (data) => data?.rewards || [],
-    enabled: !!staking_address && !!address,
+    enabled: Boolean(staking_address) && Boolean(address),
   })
   const aggregatedRewards = useMemo(() => aggregateRewards(rewards), [rewards])
 
@@ -85,7 +84,7 @@ const useRewards = (poolId) => {
     const rewardsWithToken = []
 
     aggregatedRewards?.forEach((reward) => {
-      //cw20 token
+      // Cw20 token
       if (reward.info.token) {
         const t = tokenList?.tokens.find(
           (token) => token.denom === reward.info.token.contract_addr
@@ -101,7 +100,7 @@ const useRewards = (poolId) => {
           dollarValue,
         })
       }
-      //native token
+      // Native token
       if (reward.info.native_token) {
         const t = tokenList?.tokens.find(
           (token) => token.denom === reward.info.native_token.denom

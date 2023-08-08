@@ -7,7 +7,7 @@ import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
 
 import useClaimableLP from './hooks/useClaimableLP'
@@ -36,7 +36,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
 
   const { tokenABalance, tokenBBalance } = useMemo(() => {
-    const [reserveA, reserveB] = liquidity?.reserves?.totalProvided || []
+    const [reserveA, reserveB] = liquidity?.reserves?.myNotLocked || []
 
     return {
       tokenABalance: fromChainAmount(reserveA),
@@ -65,8 +65,8 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
 
   const { lp, simulated } = useSimulateWithdraw({
     lp: liquidity?.available?.provided?.tokenAmount,
-    tokenA: liquidity?.reserves?.totalProvided?.[0],
-    tokenB: liquidity?.reserves?.totalProvided?.[1],
+    tokenA: liquidity?.reserves?.myNotLocked?.[0],
+    tokenB: liquidity?.reserves?.myNotLocked?.[1],
     amount: reverse
       ? toChainAmount(tokenB.amount)
       : toChainAmount(tokenA.amount),
@@ -101,15 +101,14 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) {
       return 'Connect Wallet'
-    } else if (!!!tokenA?.amount) {
+    } else if (!tokenA?.amount) {
       return 'Enter Amount'
     }
-    // else if (!isFinite(Number(lp)) || Number(lp) > lpBalance) return 'Insufficient funds'
+    // Else if (!isFinite(Number(lp)) || Number(lp) > lpBalance) return 'Insufficient funds'
     else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Withdraw'
     }
+    return 'Withdraw'
   }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
 
   useEffect(() => {
@@ -117,12 +116,12 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
       setValue('token1', { ...tokenA, amount: 0 })
       setValue('token2', { ...tokenB, amount: 0 })
       clearForm()
-      // tx?.reset()
+      // Tx?.reset()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.txStep])
 
-  // on input change reset input or update value
+  // On input change reset input or update value
   const onInputChange = (value, asset) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
       tx.reset()
@@ -135,7 +134,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
     }
   }
 
-  // reset form on success
+  // Reset form on success
   useEffect(() => {
     if (tx.txStep === TxStep.Success) {
       setValue('token1', {
@@ -195,7 +194,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
       />
 
       <ShowError
-        show={tx?.error && !!!tx.buttonLabel}
+        show={tx?.error && Boolean(!tx.buttonLabel)}
         message={tx?.error as string}
       />
     </VStack>

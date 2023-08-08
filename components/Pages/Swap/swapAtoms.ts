@@ -25,9 +25,11 @@ export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
             const B = { ...oldValue[0], amount: oldValue[1].amount }
             setSelf([A, B])
           })
-          // requestAnimationFrame(() => {
-          //   setSelf([oldValue[1], oldValue[0]])
-          // })
+          /*
+           * RequestAnimationFrame(() => {
+           *   setSelf([oldValue[1], oldValue[0]])
+           * })
+           */
         }
       })
     },
@@ -43,7 +45,7 @@ export const slippageAtom = atom<number>({
       setSelf(Number(slippage))
 
       onSet((newValue, oldValue) => {
-        const isReset = !!!newValue
+        const isReset = Boolean(!newValue)
 
         if (isReset) {
           localStorage.removeItem('slippage')

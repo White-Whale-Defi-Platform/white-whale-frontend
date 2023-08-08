@@ -3,6 +3,7 @@ import { useMutation } from 'react-query'
 
 import { useRefetchQueries } from 'hooks/useRefetchQueries'
 import { useTokenInfo } from 'hooks/useTokenInfo'
+// TODO: These should be deprecated in place of some other chakra component so we can remove the dep on junoblocks
 import {
   Button,
   ErrorIcon,
@@ -18,7 +19,7 @@ import {
   TransactionStatus,
   transactionStatusState,
 } from 'state/atoms/transactionAtoms'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
@@ -26,7 +27,7 @@ import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
 type UseTokenSwapArgs = {
   tokenASymbol: string
   tokenBSymbol: string
-  /* token amount in denom */
+  /* Token amount in denom */
   tokenAmount: number
   tokenToTokenPrice: number
 }
@@ -76,15 +77,17 @@ export const useTokenSwap = ({
           : 'tokenBtoTokenA'
         const swapAddress =
           streamlinePoolAB?.swap_address ?? streamlinePoolBA?.swap_address
-        // TODO: Direct token swap
-        // return await directTokenSwap({
-        //   tokenA,
-        //   senderAddress: address,
-        //   swapAddress,
-        //   tokenAmount,
-        //   client,
-        //   msgs
-        // })
+        /*
+         * TODO: Direct token swap
+         * return await directTokenSwap({
+         *   tokenA,
+         *   senderAddress: address,
+         *   swapAddress,
+         *   tokenAmount,
+         *   client,
+         *   msgs
+         * })
+         */
       }
 
       return passThroughTokenSwap({

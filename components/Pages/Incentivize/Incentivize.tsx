@@ -19,7 +19,7 @@ import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { useQueryMultiplePoolsLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolsLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -56,7 +56,7 @@ const Incentivize: FC = () => {
   }, [poolId, poolList, currentChain])
 
   const [pools] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
+    useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client,
@@ -74,8 +74,7 @@ const Incentivize: FC = () => {
 
   return (
     <VStack
-      width="auto"
-      minWidth={{ base: '100%', md: '800' }}
+      minWidth={{ base: '100%', md: '880' }}
       alignItems="center"
       padding={5}
     >

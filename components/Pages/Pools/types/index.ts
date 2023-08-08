@@ -12,8 +12,6 @@ export type Pool = {
   volume24hr: number | string
   totalLiq: number | string
   price?: number
-  isUSDPool?: boolean
-  isSubqueryNetwork?: boolean
   cta?: () => void
   incentives: React.ReactNode
   flows: FlowData[]

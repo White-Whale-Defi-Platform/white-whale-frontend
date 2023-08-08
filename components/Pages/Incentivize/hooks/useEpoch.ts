@@ -84,19 +84,19 @@ const useEpoch = () => {
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
     queryFn: async () =>
-      client?.queryContractSmart(contracts?.fee_distributor, {
+      await client?.queryContractSmart(contracts?.fee_distributor, {
         config: {},
       }),
-    enabled: !!contracts && !!client,
+    enabled: Boolean(contracts) && Boolean(client),
   })
 
   const { data } = useQuery<EpochData>({
     queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
     queryFn: async () =>
-      client?.queryContractSmart(contracts?.fee_distributor, {
+      await client?.queryContractSmart(contracts?.fee_distributor, {
         current_epoch: {},
       }),
-    enabled: !!contracts && !!client,
+    enabled: Boolean(contracts) && Boolean(client),
   })
 
   const checkLocalAndUTC = () => {
@@ -108,7 +108,7 @@ const useEpoch = () => {
 
     // Check if local date is still the same and UTC date is one day forward
     const isSameLocalDate = currentUTCDate.isSame(dayjs(), 'day')
-    // const isUTCOneDayForward = currentUTCDate.isAfter(currentLocalDate.add(1, 'day'), 'day');
+    // Const isUTCOneDayForward = currentUTCDate.isAfter(currentLocalDate.add(1, 'day'), 'day');
 
     // Get yesterday's date
     const yesterday = currentUTCDate.subtract(1, 'day')
@@ -134,7 +134,7 @@ const useEpoch = () => {
     // Convert the given date to a dayjs instance in local time
     const givenDateTime = dayjs(givenDate).utc()
 
-    // const timestampDiffNew = givenDateTime.valueOf() - now.valueOf();
+    // Const timestampDiffNew = givenDateTime.valueOf() - now.valueOf();
     const timestampDiffNew = givenDateTime.diff(now, 'millisecond')
 
     // Calculate the timestamp difference between the given date and epoch start time

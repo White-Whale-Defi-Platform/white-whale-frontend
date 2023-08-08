@@ -66,7 +66,7 @@ export const RewardsTooltip = ({
             </HStack>
           </VStack>
         ) : null
-      } //displaying nothing when wallet disconnected
+      } // Displaying nothing when wallet disconnected
       bg="transparent"
     >
       <VStack alignItems="flex-start" minW={50}>

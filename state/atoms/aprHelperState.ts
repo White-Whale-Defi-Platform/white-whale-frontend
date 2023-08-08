@@ -1,4 +1,4 @@
-import { atom, SetterOrUpdater } from 'recoil'
+import { SetterOrUpdater, atom } from 'recoil'
 
 type PoolAPR = {
   poolId: string
@@ -30,6 +30,9 @@ export function updateAPRHelperState(
       }
       return item
     })
+    if (!updatedAPR) {
+      return []
+    }
 
     const existingPool = updatedAPR.find((item) => item.poolId === poolId)
     if (!existingPool) {

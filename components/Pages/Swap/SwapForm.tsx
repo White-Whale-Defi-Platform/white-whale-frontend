@@ -5,8 +5,8 @@ import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
-  Hide,
   HStack,
+  Hide,
   IconButton,
   Text,
   Tooltip,
@@ -15,7 +15,7 @@ import {
 import AssetInput from 'components/AssetInput'
 import DoubleArrowsIcon from 'components/icons/DoubleArrowsIcon'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import { useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -35,7 +35,7 @@ type Props = {
   state: any
   minReceive: string
   onReverseDirection: () => void
-  setReverse: (valuse: boolean) => void
+  setReverse: (values: boolean) => void
   resetForm: boolean
   setResetForm: (value: boolean) => void
   path: string[]
@@ -57,7 +57,6 @@ const SwapForm: FC<Props> = ({
   setResetForm,
   path,
 }) => {
-  const baseToken = useBaseTokenInfo()
   const { data: poolList } = usePoolsListQuery()
 
   const { control, handleSubmit, setValue, getValues } = useForm({
@@ -82,25 +81,25 @@ const SwapForm: FC<Props> = ({
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
-  const isConnected = connected === `@wallet-state/connected`
+  const isConnected = connected === '@wallet-state/connected'
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
 
   const buttonLabel = useMemo(() => {
-    if (connected !== `@wallet-state/connected`) {
+    if (connected !== '@wallet-state/connected') {
       return 'Connect Wallet'
     } else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol) {
       return 'Select Token'
     } else if (state?.error) {
       return state?.error
-    } else if (!!!amountA?.amount) {
+    } else if (!amountA?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else {
-      return 'Swap'
     }
+    return 'Swap'
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
 
@@ -142,7 +141,7 @@ const SwapForm: FC<Props> = ({
       return null
     }
 
-    const e = num(tokenA.amount).times(Math.pow(10, tokenBInfo.decimals))
+    const e = num(tokenA.amount).times(10 ** tokenBInfo.decimals)
     return num(simulated?.amount).div(e).toFixed(6)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, tokenA.amount])
@@ -183,13 +182,13 @@ const SwapForm: FC<Props> = ({
     } else {
       if (isReverse) {
         const asset = { ...tokenB }
-        if (!!!asset?.amount) {
+        if (!asset?.amount) {
           asset.amount = 0
           setValue('tokenA', asset, { shouldValidate: true })
         }
       } else {
         const asset = { ...tokenA }
-        if (!!!asset?.amount || state?.error) {
+        if (!asset?.amount || state?.error) {
           asset.amount = 0
           setValue('tokenB', asset, { shouldValidate: true })
         }
@@ -205,7 +204,7 @@ const SwapForm: FC<Props> = ({
       paddingX={{ base: 6, md: 10 }}
       paddingY={{ base: 14, md: 10 }}
       width="full"
-      background="#1C1C1C"
+      background={'#1C1C1C'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       alignItems="flex-start"
@@ -264,7 +263,6 @@ const SwapForm: FC<Props> = ({
               token={tokenA}
               balance={tokenABalance}
               minMax={false}
-              // onInputFocus={() => setIsReverse(true)}
               disabled={isInputDisabled}
               onChange={(value, isTokenChange) => {
                 setReverse(false)
@@ -344,7 +342,7 @@ const SwapForm: FC<Props> = ({
               balance={tokenBBalance}
               disabled={isInputDisabled}
               showBalanceSlider={false}
-              // onInputFocus={() => setIsReverse(true)}
+              // OnInputFocus={() => setIsReverse(true)}
               onChange={(value, isTokenChange) => {
                 if (tokenB?.tokenSymbol && !isTokenChange) {
                   setReverse(true)
@@ -442,7 +440,7 @@ const SwapForm: FC<Props> = ({
           </>
         )}
 
-        {!!path?.length && (
+        {Boolean(path?.length) && (
           <HStack
             justifyContent="space-between"
             width="full"

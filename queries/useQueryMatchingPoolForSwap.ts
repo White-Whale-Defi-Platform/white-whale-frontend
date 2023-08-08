@@ -22,8 +22,9 @@ type FindPoolForSwapArgs = {
 }
 
 /*
- * assuming theres always a pool with `baseToken` including either a `tokenA` or `tokenB` pair
- * */
+ * Assuming theres always a pool with `baseToken` including either a `tokenA` or `tokenB` pair
+ *
+ */
 export function findPoolForSwap({
   baseToken,
   tokenA,
@@ -50,7 +51,6 @@ export function findPoolForSwap({
     if (
       result.streamlinePoolAB &&
       result.streamlinePoolBA &&
-      result.baseTokenBPool &&
       result.baseTokenBPool
     ) {
       return result
@@ -102,7 +102,7 @@ type GetMatchingPoolArgs = {
 
 export const useGetQueryMatchingPoolForSwap = () => {
   const baseToken = useBaseTokenInfo()
-  // const { chainId } = useRecoilValue(walletState)
+  // Const { chainId } = useRecoilValue(walletState)
   const { data: poolsListResponse, isLoading } = usePoolsListQuery()
 
   const getMatchingPool = useCallback(

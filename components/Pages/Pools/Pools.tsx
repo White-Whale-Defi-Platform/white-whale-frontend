@@ -3,9 +3,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
-  Checkbox,
-  FormControl,
-  FormLabel,
   HStack,
   Stack,
   Switch,
@@ -13,10 +10,14 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
-import { INCENTIVE_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
-import { STABLE_COIN_LIST } from 'constants/settings'
+import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -24,14 +25,14 @@ import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
-  useQueryMultiplePoolsLiquidity,
-} from 'queries/useQueryPools'
+  useQueryPoolsLiquidity,
+} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   aprHelperState,
   updateAPRHelperState,
 } from 'state/atoms/aprHelperState'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { EnigmaPoolData } from 'util/enigma'
 
 import { ActionCTAs } from './ActionCTAs'
@@ -50,14 +51,22 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status } = useRecoilValue(walletState)
+  const { chainId, status, network } = useRecoilValue(walletState)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
-    !INCENTIVE_ENABLED_CHAIN_IDS.includes(chainId)
+    !ACTIVE_INCENTIVE_NETWORKS.includes(chainId)
   )
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
+  const config: Config = useConfig(network, chainId)
+
+  const { data: currentEpochData } = useCurrentEpoch(cosmwasmClient, config)
+  const currentEpoch = useMemo(
+    () => Number(currentEpochData?.currentEpoch?.epoch.id),
+    [currentEpochData]
+  )
+
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
   const { data: poolList } = usePoolsListQuery()
@@ -66,7 +75,7 @@ const Pools = () => {
     boolean,
     boolean
   ] = useQueriesDataSelector(
-    useQueryMultiplePoolsLiquidity({
+    useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
       client: cosmwasmClient,
@@ -94,24 +103,12 @@ const Pools = () => {
     isLoading: isIncentivePoolInfoLoading,
   } = useIncentivePoolInfo(cosmwasmClient, pools, currentChainPrefix)
 
+  // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
   }
 
-  // const calcuateTotalLiq = (pool) => {
-  //   return pool?.usdLiquidity || pool.liquidity?.available?.total?.dollarValue
-  // }
-  //
-  // const calculateMyPosition = (pool) => {
-  //   const totalLiq = calcuateTotalLiq(pool)
-  //   const { provided, total } = pool.liquidity?.available || {}
-  //   return num(provided?.tokenAmount)
-  //     .times(totalLiq)
-  //     .div(total?.tokenAmount)
-  //     .dp(6)
-  //     .toNumber()
-  // }
   const calculateMyPosition = (pool) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
@@ -132,12 +129,10 @@ const Pools = () => {
     const initPools = async () => {
       setInitLoading(true)
 
-      const _pools: PoolData[] = pools.map((pool: any) => {
-        return {
-          ...pool,
-          ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
-        }
-      })
+      const _pools: PoolData[] = pools.map((pool: any) => ({
+        ...pool,
+        ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
+      }))
 
       const _allPools = await Promise.all(
         _pools.map(async (pool) => {
@@ -158,7 +153,7 @@ const Pools = () => {
             liquidity: pool?.liquidity,
             poolAssets: pool?.pool_assets,
             price: pool?.ratio,
-            isUSDPool: isUSDPool,
+            isUSDPool,
             flows: [],
             incentives: <Incentives key={pool.pool_id} flows={[]} />,
             action: (
@@ -168,7 +163,6 @@ const Pools = () => {
                 pool={pool}
               />
             ),
-            isSubqueryNetwork: false,
           }
         })
       )
@@ -191,13 +185,15 @@ const Pools = () => {
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
-      const flows =
+      const flows = (
         incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
           ?.flowData ?? []
+      ).filter((flow) => flow.endEpoch >= currentEpoch)
 
-      const incentiveBaseApr = flows.reduce((total, item) => {
-        return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-      }, 0)
+      const incentiveBaseApr = flows.reduce(
+        (total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
+        0
+      )
 
       updateAPRHelperState(
         pool?.poolId,
@@ -208,7 +204,7 @@ const Pools = () => {
       if (flows) {
         return {
           ...pool,
-          flows: flows,
+          flows,
           incentives: <Incentives key={pool.pool_id} flows={flows} />,
         }
       }
@@ -259,7 +255,7 @@ const Pools = () => {
       setMyPools(pools)
     }
   }, [allPools])
-  // get a list of all myPools pools
+  // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
   const allPoolsForShown = useMemo(
@@ -291,7 +287,6 @@ const Pools = () => {
           show={true}
           pools={myPools}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
-          allPools={showAllPools}
         />
         <MobilePools pools={myPools} />
       </Box>
@@ -302,9 +297,30 @@ const Pools = () => {
             All Pools
           </Text>
           <Stack direction="row">
-            <Tooltip label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown">
+            <Tooltip
+              label={
+                <Box
+                  maxWidth="250px"
+                  minWidth="fit-content"
+                  borderRadius="10px"
+                  bg="black"
+                  color="white"
+                  fontSize={14}
+                  p={4}
+                  whiteSpace="pre-wrap"
+                >
+                  By default, pools with less than $1.0k total liquidity will be
+                  hidden but optionally can be shown.
+                </Box>
+              }
+              bg="transparent"
+              hasArrow={false}
+              placement="bottom"
+              closeOnClick={false}
+              arrowSize={0}
+            >
               <Text as="h6" fontSize="14" fontWeight="700">
-                <InfoOutlineIcon marginRight={2} />
+                <InfoOutlineIcon marginRight={2} mb={1} />
                 Show All Pools
               </Text>
             </Tooltip>

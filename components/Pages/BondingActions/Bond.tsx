@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AssetInput from '../../AssetInput'
 import { bondingAtom } from './bondAtoms'
@@ -23,7 +23,7 @@ export enum LSDToken {
   ampWHALE,
   bWHALE,
 }
-const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
+export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
   const [{ status }, _] = useRecoilState(walletState)
@@ -44,7 +44,7 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
     if (tokenSymbol) {
       setCurrentBondState({
         ...currentBondState,
-        tokenSymbol: tokenSymbol,
+        tokenSymbol,
         amount: Number(amount),
       })
     } else {
@@ -80,7 +80,6 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
-            whalePrice={whalePrice}
             balance={(() => {
               switch (currentBondState.lsdToken) {
                 case LSDToken.ampWHALE:
@@ -105,7 +104,7 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken: lsdToken,
+                  lsdToken,
                 })
               } else {
                 setCurrentBondState({
@@ -120,5 +119,3 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
     </VStack>
   )
 }
-
-export default Bond

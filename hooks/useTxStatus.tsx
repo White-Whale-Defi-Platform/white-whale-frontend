@@ -34,7 +34,9 @@ const useTxStatus = ({ client, transactionType }) => {
   }, [txInfo, txState.txHash])
 
   const description = (hash: string) => (
-    <Finder txHash={hash} chainId={chainId} />
+    <Finder txHash={hash} chainId={client.client.chainId}>
+      {' '}
+    </Finder>
   )
 
   const onError = (error: Error) => {

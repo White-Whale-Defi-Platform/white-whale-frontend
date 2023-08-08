@@ -3,18 +3,21 @@ import {
   OfflineDirectSigner,
   OfflineSigner,
 } from '@cosmjs/proto-signing'
-import { getNetworkEndpoints, Network } from '@injectivelabs/networks'
+import {
+  Network as InjectiveNetwork,
+  getNetworkEndpoints,
+} from '@injectivelabs/networks'
 import {
   BaseAccount,
   ChainGrpcWasmApi,
   ChainRestAuthApi,
   ChainRestBankApi,
   ChainRestTendermintApi,
+  TxRaw,
+  TxRestClient,
   createCosmosSignDocFromTransaction,
   createTransaction,
   createTxRawFromSigResponse,
-  TxRaw,
-  TxRestClient,
 } from '@injectivelabs/sdk-ts'
 import { MsgExecuteContract } from '@injectivelabs/sdk-ts'
 import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
@@ -50,8 +53,10 @@ type SimulateResponse = {
 const getKey = async (wallet, chainId) => {
   switch (wallet) {
     case 'cosmostation':
+      // @ts-ignore
       return await window.cosmostation.providers.keplr.getKey(chainId)
     default:
+      // @ts-ignore
       return await window[wallet].getKey(chainId)
   }
 }
@@ -75,14 +80,14 @@ class Injective {
 
   txRaw: TxRaw
 
-  network: Network
+  network: InjectiveNetwork
 
   activeWallet: string
 
   constructor(
     offlineSigner: OfflineSigner & OfflineDirectSigner,
     activeWallet: string,
-    network: Network = Network.TestnetK8s
+    network: InjectiveNetwork = InjectiveNetwork.TestnetK8s
   ) {
     const endpoints = getNetworkEndpoints(network)
     this.offlineSigner = offlineSigner
@@ -92,7 +97,9 @@ class Injective {
       'https://ww-injective-rest.polkachu.com/'
     )
     this.chainId =
-      network === Network.TestnetK8s ? ChainId.Testnet : ChainId.Mainnet
+      network === InjectiveNetwork.TestnetK8s
+        ? ChainId.Testnet
+        : ChainId.Mainnet
     this.network = network
     this.activeWallet = activeWallet
     this.init()
@@ -169,27 +176,29 @@ class Injective {
       )
       console.log({ messages })
 
-      // const [[action, msgs]] = Object.entries(messages)
+      // Const [[action, msgs]] = Object.entries(messages)
 
-      //     const isLPMessage = action?.includes('provide')
+      //     Const isLPMessage = action?.includes('provide')
 
-      //     const executeMessageJson = {
-      //         action,
-      //         msg: msgs as object
-      //     }
-      //     // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins
-      //     const params = {
-      //         funds: { denom: 'inj', amount: '100000000000000000'},
-      //         sender: this.account.address,
-      //         contractAddress: 'inj1hyja4uyjktpeh0fxzuw2fmjudr85rk2qxgqkvu',
-      //         exec: executeMessageJson,
-      //     };
+      /*
+       *     Const executeMessageJson = {
+       *         action,
+       *         msg: msgs as object
+       *     }
+       *     // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins
+       *     const params = {
+       *         funds: { denom: 'inj', amount: '100000000000000000'},
+       *         sender: this.account.address,
+       *         contractAddress: 'inj1hyja4uyjktpeh0fxzuw2fmjudr85rk2qxgqkvu',
+       *         exec: executeMessageJson,
+       *     };
+       */
 
-      //     console.log({executeMessageJson, params})
+      //     Console.log({executeMessageJson, params})
 
-      //     const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
+      //     Const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
 
-      //     console.log({MessageExecuteContract})
+      //     Console.log({MessageExecuteContract})
 
       const encodedExecuteMsg = messages.map((msg) => {
         const { contract, funds } = msg?.value || {}
@@ -334,7 +343,7 @@ class Injective {
       this.txRaw = null
       return await this.txClient.broadcast(signTxRaw).then((result) => {
         console.log({ result })
-        if (!!result.code) {
+        if (result.code) {
           throw new Error(
             `Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
           )

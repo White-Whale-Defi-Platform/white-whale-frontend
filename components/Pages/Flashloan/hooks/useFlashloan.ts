@@ -23,7 +23,7 @@ const useFlashloan = ({ json }) => {
   }, [json, address, chainId])
 
   return useTransaction({
-    enabled: !!client && !!encodedMsgs,
+    enabled: Boolean(client) && Boolean(encodedMsgs),
     msgs: json,
     client,
     senderAddress: address,

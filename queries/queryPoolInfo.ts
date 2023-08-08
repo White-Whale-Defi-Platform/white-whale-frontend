@@ -1,0 +1,14 @@
+import { getPoolInfo } from 'services/swap'
+
+export async function queryPoolInfo({ context: { client }, swap_address }) {
+  const poolInfo = await getPoolInfo(swap_address, client)
+  const [asset1, asset2] = poolInfo?.assets || []
+
+  return {
+    ...poolInfo,
+    swap_address,
+    token1_reserve: Number(asset1?.amount),
+    token2_reserve: Number(asset2?.amount),
+    lp_token_supply: Number(poolInfo?.total_share),
+  }
+}

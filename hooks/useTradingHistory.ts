@@ -49,7 +49,7 @@ export const useTradingHistory = ({ pair, dateTime }) => {
     ['swapHistories', pair, dateTime],
     () => request(activeChain?.indexerUrl, query, { filter }),
     {
-      enabled: !!activeChain?.indexerUrl && !volume,
+      enabled: Boolean(activeChain?.indexerUrl) && !volume,
     }
   )
 
@@ -75,20 +75,19 @@ export const useTradingHistory = ({ pair, dateTime }) => {
       ? data?.tradingHistories?.nodes
       : []
 
+    // NULL POINTER CHECK for tradingHistories
+    if (!tradingHistories) {
+      return
+    }
+
     const swapAssets = Array.from(
-      new Set(
-        tradingHistories.map((row) => {
-          return row?.secondToken
-        })
-      )
+      new Set(tradingHistories.map((row) => row?.secondToken))
     )
 
     const historicalPricesArray = await Promise.all(
-      swapAssets.map(async (swapAsset: string) => {
-        return {
-          [swapAsset]: await getToken24hrPrice(swapAsset),
-        }
-      })
+      swapAssets.map(async (swapAsset: string) => ({
+        [swapAsset]: await getToken24hrPrice(swapAsset),
+      }))
     )
 
     let historicalPrices = {}

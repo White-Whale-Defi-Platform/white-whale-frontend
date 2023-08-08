@@ -20,7 +20,6 @@ import {
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
-import Volume from './components/Volume'
 import { Pool } from './types'
 
 const columnHelper = createColumnHelper<Pool>()
@@ -39,52 +38,39 @@ const columns = [
   columnHelper.accessor('price', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`RATIO`}
+        {'RATIO'}
       </Text>
     ),
-    cell: (info) => {
-      return <Text align="right">{info.getValue()}</Text>
-    },
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('apr', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`APR`}
+        {'APR'}
       </Text>
     ),
-    cell: (info) => {
-      return info.getValue() === 'n/a' ? (
+    cell: (info) =>
+      info.getValue() === 'n/a' ? (
         <Text>{info.getValue()}</Text>
       ) : (
         <Apr
           apr={info.getValue()?.toString()}
           flows={info.row.original.flows}
         />
-      )
-    },
+      ),
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`24hr Volume`}
+        {'24hr Volume'}
       </Text>
     ),
-    cell: (info) => {
-      return (
-        <>
-          {info.row.original.isSubqueryNetwork ? (
-            <Volume pairAddr={info.row.original.contract} />
-          ) : (
-            <Text align="right">{info.getValue()}</Text>
-          )}
-        </>
-      )
-    },
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('totalLiq', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`Total Liquidity`}
+        {'Total Liquidity'}
       </Text>
     ),
     cell: (info) => <Text align="right">{info.getValue()}</Text>,
@@ -92,7 +78,7 @@ const columns = [
   columnHelper.accessor('myPosition', {
     header: () => (
       <Text align="right" color="brand.50">
-        {`My Position`}
+        {'My Position'}
       </Text>
     ),
     cell: (info) => <Text align="right">${info.getValue()}</Text>,
@@ -103,9 +89,7 @@ const columns = [
         Incentives
       </Text>
     ),
-    cell: (info) => {
-      return info.getValue()
-    },
+    cell: (info) => info.getValue(),
   }),
   columnHelper.accessor('action', {
     header: () => (
@@ -113,9 +97,7 @@ const columns = [
         Action
       </Text>
     ),
-    cell: (info) => {
-      return info.getValue()
-    },
+    cell: (info) => info.getValue(),
   }),
 ]
 
@@ -163,7 +145,7 @@ const PoolsTable = ({
         justifyContent="center"
       >
         <Text py={10} color="white">
-          {`Your active liquidity positions will appear here.`}
+          {'Your active liquidity positions will appear here.'}
         </Text>
       </Flex>
     )

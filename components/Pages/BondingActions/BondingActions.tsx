@@ -7,20 +7,17 @@ import {
   HStack,
   IconButton,
   Text,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bonding_contract'
+import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import Loader from '../../Loader'
 import WalletModal from '../../Wallet/Modal/Modal'
@@ -30,12 +27,11 @@ import {
   useConfig,
   useDashboardData,
 } from '../Dashboard/hooks/useDashboardData'
-import Bond, { LSDTokenItemState } from './Bond'
+import { Bond, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
+import useTransaction, { TxStep } from './hooks/useTransaction'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
-
-import useTransaction, { TxStep } from './hooks/useTransaction'
 
 export enum WhaleTokenType {
   ampWHALE,
@@ -71,7 +67,9 @@ const BondingActions = ({ globalAction }) => {
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
+    // @ts-ignore
     if (prices && prices.WHALE) {
+      // @ts-ignore
       return prices.WHALE
     }
     return 0 // Default value
@@ -105,9 +103,8 @@ const BondingActions = ({ globalAction }) => {
       globalAction === ActionType.withdraw
     ) {
       return 'No Withdrawals'
-    } else {
-      return ActionType[globalAction]
     }
+    return ActionType[globalAction]
   }, [isWalletConnected, currentBondState, globalAction, totalWithdrawable])
 
   const BondingActionButton = ({ action }) => {
@@ -236,7 +233,6 @@ const BondingActions = ({ globalAction }) => {
                     <Bond
                       liquidAmpWhale={liquidAmpWhale}
                       liquidBWhale={liquidBWhale}
-                      whalePrice={whalePrice}
                     />
                   )
                 case ActionType.unbond:
@@ -244,7 +240,6 @@ const BondingActions = ({ globalAction }) => {
                     <Unbond
                       bondedAmpWhale={bondedAmpWhale}
                       bondedBWhale={bondedBWhale}
-                      whalePrice={whalePrice}
                     />
                   )
                 case ActionType.withdraw:

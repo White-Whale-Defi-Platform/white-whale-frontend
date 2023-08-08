@@ -5,12 +5,12 @@ import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
-} from 'constants/bonding_contract'
+} from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import { useDashboardData } from './hooks/useDashboardData'
@@ -110,8 +110,10 @@ const Dashboard: FC = () => {
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
-    if (prices && prices.WHALE) {
-      return prices.WHALE
+    // @ts-ignore
+    if (prices && prices?.WHALE) {
+      // @ts-ignore
+      return prices?.WHALE
     }
     return 0 // Default value
   }, [prices])

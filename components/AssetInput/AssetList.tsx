@@ -2,10 +2,7 @@ import { FC, useMemo } from 'react'
 
 import { Box, Button, HStack, Image, Text } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-} from 'constants/bonding_contract'
+import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
@@ -99,7 +96,7 @@ const AssetList: FC<AssetListProps> = ({
             onChange(
               {
                 tokenSymbol: item?.symbol,
-                amount: amount,
+                amount,
               },
               true
             )
@@ -109,7 +106,7 @@ const AssetList: FC<AssetListProps> = ({
             <Image
               src={item?.logoURI}
               alt="logo-small"
-              // boxSize="2rem"
+              // BoxSize="2rem"
               width="auto"
               maxW="1.5rem"
               maxH="1.5rem"

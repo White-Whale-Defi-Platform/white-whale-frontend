@@ -14,7 +14,7 @@ export const unbondTokens = (
         amount: amount.toString(),
         info: {
           native_token: {
-            denom: denom,
+            denom,
           },
         },
       },

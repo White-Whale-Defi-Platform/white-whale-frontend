@@ -9,8 +9,8 @@ import {
   usePoolsListQuery,
 } from 'queries/usePoolsListQuery'
 import {
-  findPoolForSwap,
   PoolMatchForSwap,
+  findPoolForSwap,
 } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -82,8 +82,8 @@ const getPrices = async ({
       if (Object.keys(matchingPools)?.length > 0) {
         const value = await tokenToTokenPriceQueryWithPools({
           matchingPools,
-          tokenA: !!streamlinePoolAB ? token : baseToken,
-          tokenB: !!streamlinePoolBA ? token : baseToken,
+          tokenA: streamlinePoolAB ? token : baseToken,
+          tokenB: streamlinePoolBA ? token : baseToken,
           client: client as Wallet | CosmWasmClient,
           amount: 1,
         })
@@ -117,7 +117,11 @@ const usePrices = () => {
         poolsList: poolsList?.pools,
         coingecko,
       }),
-    enabled: !!baseToken && !!tokensList && !!client && !!coingecko,
+    enabled:
+      Boolean(baseToken) &&
+      Boolean(tokensList) &&
+      Boolean(client) &&
+      Boolean(coingecko),
     refetchInterval: 30000,
   })
 

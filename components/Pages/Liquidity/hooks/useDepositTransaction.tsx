@@ -61,7 +61,7 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) {
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -90,9 +90,11 @@ export const useTransaction = ({
           setTxStep(TxStep.Idle)
           setError(error?.message)
           throw Error(error?.message)
-          // setTxStep(TxStep.Idle)
-          // setError("Failed to execute transaction.")
-          // throw Error("Failed to execute transaction.")
+          /*
+           * SetTxStep(TxStep.Idle)
+           * setError("Failed to execute transaction.")
+           * throw Error("Failed to execute transaction.")
+           */
         }
       }
     },
@@ -101,10 +103,10 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!client &&
-        !!senderAddress &&
+        Boolean(client) &&
+        Boolean(senderAddress) &&
         enabled &&
-        !!swapAddress &&
+        Boolean(swapAddress) &&
         Number(tokenAAmount) > 0 &&
         Number(tokenBAmount) > 0,
 
@@ -121,19 +123,18 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(
-    (data: any) => {
-      return executeAddLiquidity({
+    (data: any) =>
+      executeAddLiquidity({
         tokenA,
         tokenB,
-        tokenAAmount: tokenAAmount,
+        tokenAAmount,
         maxTokenBAmount: tokenBAmount,
         client,
         swapAddress:
           'migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa',
         senderAddress,
         msgs: encodedMsgs,
-      })
-    },
+      }),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -271,8 +272,8 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       fee,
       buttonLabel,
       submit,
@@ -281,8 +282,9 @@ export const useTransaction = ({
       txHash,
       error,
       reset,
-    }
-  }, [txStep, txInfo, txHash, error, reset, fee])
+    }),
+    [txStep, txInfo, txHash, error, reset, fee]
+  )
 }
 
 export default useTransaction

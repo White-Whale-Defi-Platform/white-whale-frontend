@@ -13,7 +13,10 @@ export const useCheckIncentiveSnapshots = (client: Wallet, config: Config) => {
     ['useCheckIncentiveSnapshots', incentiveAddresses, epochId],
     async () =>
       fetchCheckIncentiveSnapshots(client, epochId, incentiveAddresses),
-    { enabled: !!client && !!incentiveAddresses && !!epochId }
+    {
+      enabled:
+        Boolean(client) && Boolean(incentiveAddresses) && Boolean(epochId),
+    }
   )
   return data ?? []
 }
@@ -24,7 +27,7 @@ const fetchCheckIncentiveSnapshots = async (
   incentiveAddresses: Array<string>
 ) => {
   const noSnapshotTakenAddresses = []
-  // incentive contract aka staking address
+  // Incentive contract aka staking address
   incentiveAddresses.map(async (incentiveAddress) => {
     try {
       await client.queryContractSmart(incentiveAddress, {
@@ -39,7 +42,6 @@ const fetchCheckIncentiveSnapshots = async (
       )
       noSnapshotTakenAddresses.push(incentiveAddress)
     }
-    return
   })
   return noSnapshotTakenAddresses
 }

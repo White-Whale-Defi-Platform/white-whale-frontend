@@ -77,7 +77,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       .sort((a, b) => a.denom.localeCompare(b.denom))
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
-    /* increase allowance for each non-native token */
+    /* Increase allowance for each non-native token */
     if (!tokenInfo?.native) {
       increaseAllowanceMessages.push(
         createIncreaseAllowanceMessage({
@@ -109,9 +109,9 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const simulate = useSimulate({
     msgs,
-    client: client,
+    client,
     address,
-    connected: !!address,
+    connected: Boolean(address),
     amount,
   })
 
@@ -122,11 +122,12 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     onMutate,
   })
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       submit,
       simulate,
       tx,
-    }
-  }, [tx, submit, simulate])
+    }),
+    [tx, submit, simulate]
+  )
 }

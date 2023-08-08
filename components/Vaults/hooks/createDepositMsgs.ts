@@ -3,15 +3,12 @@ import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) => {
-  return Buffer.from(JSON.stringify(obj)).toString('base64')
-}
+export const toBase64 = (obj: object) =>
+  Buffer.from(JSON.stringify(obj)).toString('base64')
 
-export const createDepostMsg = ({ amount }) => {
-  return {
-    deposit: { amount },
-  }
-}
+export const createDepostMsg = ({ amount }) => ({
+  deposit: { amount },
+})
 
 export const createDepostExecuteMsgs = ({
   amount,

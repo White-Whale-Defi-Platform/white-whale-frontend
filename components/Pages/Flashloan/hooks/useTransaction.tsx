@@ -62,7 +62,7 @@ export const useTransaction = ({
   onError,
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
-  // const [tokenA, tokenB] = swapAssets
+  // Const [tokenA, tokenB] = swapAssets
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
@@ -77,7 +77,7 @@ export const useTransaction = ({
       setTxStep(TxStep.Estimating)
       try {
         const response = await client.simulate(senderAddress, debouncedMsgs, '')
-        if (!!buttonLabel) {
+        if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
@@ -115,7 +115,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        !!client &&
+        Boolean(client) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -130,14 +130,13 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(
-    (data: any) => {
-      return executeFlashloan({
+    (data: any) =>
+      executeFlashloan({
         msgs,
         client,
         contractAddress,
         senderAddress,
-      })
-    },
+      }),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -252,8 +251,8 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [msgs])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       simulate: refetch,
       fee,
       buttonLabel,
@@ -262,8 +261,9 @@ export const useTransaction = ({
       txInfo,
       txHash,
       error,
-    }
-  }, [txStep, txInfo, txHash, error, fee, buttonLabel, submit, refetch])
+    }),
+    [txStep, txInfo, txHash, error, fee, buttonLabel, submit, refetch]
+  )
 }
 
 export default useTransaction

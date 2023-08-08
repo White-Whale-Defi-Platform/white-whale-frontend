@@ -11,15 +11,15 @@ import {
   Flex,
   HStack,
   IconButton,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
-import { BONDING_ENABLED_CHAIN_IDS } from 'constants/bonding_contract'
+import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import Card from '../Card'
 import WalletModal from '../Wallet/Modal/Modal'
@@ -99,7 +99,7 @@ const Navbar = () => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
-          {(BONDING_ENABLED_CHAIN_IDS.includes(chainId)
+          {(ACTIVE_BONDING_NETWORKS.includes(chainId)
             ? menuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (
@@ -107,6 +107,7 @@ const Navbar = () => {
               key={menu.label}
               menu={menu}
               currentChainName={currentChainName}
+              chainId={chainId}
             />
           ))}
         </Card>

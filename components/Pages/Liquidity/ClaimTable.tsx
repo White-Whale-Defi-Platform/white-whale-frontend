@@ -6,38 +6,36 @@ type Props = {
   tokens: Reward[]
 }
 
-const TokenRow = ({ item, isLast }: { item: Reward; isLast: boolean }) => {
-  return (
-    <HStack
-      width="full"
-      justifyContent="space-between"
-      borderBottom={!isLast && '1px solid rgba(255, 255, 255, 0.1)'}
-      py={1}
-    >
-      <HStack gap={[1]} p={2}>
-        <Image
-          width="auto"
-          minW="1.5rem"
-          maxW="1.5rem"
-          maxH="1.5rem"
-          style={{ margin: 'unset' }}
-          src={item?.logoURI}
-          alt="logo-small"
-        />
-        <Text fontSize="16px" fontWeight="400">
-          {item?.symbol ?? 'Unknown'}
-        </Text>
-      </HStack>
-
-      <VStack alignItems="flex-end">
-        <Text>{item?.assetAmount}</Text>
-        <Text color="brand.50" style={{ margin: 'unset' }}>
-          =${Number(item?.dollarValue).toFixed(2)}
-        </Text>
-      </VStack>
+const TokenRow = ({ item, isLast }: { item: Reward; isLast: boolean }) => (
+  <HStack
+    width="full"
+    justifyContent="space-between"
+    borderBottom={!isLast && '1px solid rgba(255, 255, 255, 0.1)'}
+    py={1}
+  >
+    <HStack gap={[1]} p={2}>
+      <Image
+        width="auto"
+        minW="1.5rem"
+        maxW="1.5rem"
+        maxH="1.5rem"
+        style={{ margin: 'unset' }}
+        src={item?.logoURI}
+        alt="logo-small"
+      />
+      <Text fontSize="16px" fontWeight="400">
+        {item?.symbol ?? 'Unknown'}
+      </Text>
     </HStack>
-  )
-}
+
+    <VStack alignItems="flex-end">
+      <Text>{item?.assetAmount}</Text>
+      <Text color="brand.50" style={{ margin: 'unset' }}>
+        =${Number(item?.dollarValue).toFixed(2)}
+      </Text>
+    </VStack>
+  </HStack>
+)
 
 const ClaimTable = ({ tokens = [] }: Props) => {
   if (tokens.length === 0) {

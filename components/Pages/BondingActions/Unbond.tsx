@@ -2,15 +2,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useRecoilState } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AssetInput from '../../AssetInput'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 
-const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
+const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   const [{ status }] = useRecoilState(walletState)
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
@@ -31,7 +31,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
       if (tokenSymbol) {
         setCurrentBondState({
           ...currentBondState,
-          tokenSymbol: tokenSymbol,
+          tokenSymbol,
           amount: Number(amount),
         })
       } else {
@@ -75,7 +75,6 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
-            whalePrice={whalePrice}
             balance={(() => {
               switch (currentBondState.lsdToken) {
                 case LSDToken.ampWHALE:
@@ -83,7 +82,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
                 case LSDToken.bWHALE:
                   return tokenBalances?.bWHALE ?? 0
                 default:
-                  return 0 // or any other default value
+                  return 0 // Or any other default value
               }
             })()}
             minMax={false}
@@ -100,7 +99,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale, whalePrice }) => {
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken: lsdToken,
+                  lsdToken,
                 })
               } else {
                 setCurrentBondState({

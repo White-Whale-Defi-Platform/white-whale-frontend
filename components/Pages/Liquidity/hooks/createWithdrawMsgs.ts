@@ -3,27 +3,22 @@ import { coin } from '@cosmjs/stargate'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) => {
-  return Buffer.from(JSON.stringify(obj)).toString('base64')
-}
+export const toBase64 = (obj: object) =>
+  Buffer.from(JSON.stringify(obj)).toString('base64')
 
-export const createWithdrawMsg = ({ amount, swapAddress }) => {
-  return {
-    send: {
-      amount,
-      contract: swapAddress,
-      msg: toBase64({
-        withdraw_liquidity: {},
-      }),
-    },
-  }
-}
+export const createWithdrawMsg = ({ amount, swapAddress }) => ({
+  send: {
+    amount,
+    contract: swapAddress,
+    msg: toBase64({
+      withdraw_liquidity: {},
+    }),
+  },
+})
 
-export const createNativeWithdrawMsg = () => {
-  return {
-    withdraw_liquidity: {},
-  }
-}
+export const createNativeWithdrawMsg = () => ({
+  withdraw_liquidity: {},
+})
 
 export const createWithdrawExecuteMsgs = (
   {

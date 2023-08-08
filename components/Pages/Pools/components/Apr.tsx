@@ -25,9 +25,10 @@ type Props = {
 
 const Apr = ({ apr, flows }: Props) => {
   const totalApr = useMemo(() => {
-    const incentiveApr = flows.reduce((total, item) => {
-      return total + (isNaN(item.apr) ? 0 : Number(item.apr))
-    }, 0)
+    const incentiveApr = flows.reduce(
+      (total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
+      0
+    )
     return Number(apr?.replace('%', '')) + Number(incentiveApr)
   }, [flows, apr])
 
@@ -80,7 +81,7 @@ const Apr = ({ apr, flows }: Props) => {
                 </Tr>
                 {flows?.map((flowInfo, index) => (
                   <Tr
-                    key={flowInfo?.tokenSymbol + '_' + index}
+                    key={`${flowInfo?.tokenSymbol}_${index}`}
                     borderBottom={
                       index < flows.length - 1
                         ? '1px solid rgba(255, 255, 255, 0.1)'

@@ -17,7 +17,7 @@ import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
 
 type SwapProps = {
-  /* will be used if provided on first render instead of internal state */
+  /* Will be used if provided on first render instead of internal state */
   initialTokenPair?: readonly [string, string]
 }
 
@@ -44,15 +44,18 @@ const Swap: FC<SwapProps> = ({}) => {
         listObj = { ...listObj, [a.symbol]: a, [b.symbol]: b }
       })
 
-    return Object.keys(listObj).map((row) => {
-      return {
-        symbol: listObj[row].symbol,
-        decimals: listObj[row].decimals,
-        amount: 0,
-      }
-    })
+    return Object.keys(listObj).map((row) => ({
+      symbol: listObj[row].symbol,
+      decimals: listObj[row].decimals,
+      amount: 0,
+    }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
+
+  const tokenSymbols = useMemo(
+    () => tokenList.map((token) => token.symbol),
+    [tokenList]
+  )
 
   useEffect(() => {
     if (!currentChainId) {
@@ -73,27 +76,22 @@ const Swap: FC<SwapProps> = ({}) => {
         decimals: 6,
       },
     ]
-
-    if (
-      tokenList.find((row) => row.symbol === from) &&
-      tokenList.find((row) => row.symbol === to)
-    ) {
+    if (tokenSymbols.includes(from) && tokenSymbols.includes(to)) {
       return
-    } else {
-      newState = [
-        {
-          tokenSymbol: String(defaultFrom.tokenSymbol),
-          amount: 0,
-          decimals: 6,
-        },
-        {
-          tokenSymbol: String(defaultTo.tokenSymbol),
-          amount: 0,
-          decimals: 6,
-        },
-      ]
-      setResetForm(true)
     }
+    newState = [
+      {
+        tokenSymbol: String(defaultFrom.tokenSymbol),
+        amount: 0,
+        decimals: 6,
+      },
+      {
+        tokenSymbol: String(defaultTo.tokenSymbol),
+        amount: 0,
+        decimals: 6,
+      },
+    ]
+    setResetForm(true)
 
     setTokenSwapState(newState)
 
@@ -107,10 +105,10 @@ const Swap: FC<SwapProps> = ({}) => {
 
     if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
       if (
-        tokenList.find((row) => row.symbol === tokenA?.tokenSymbol) &&
-        tokenList.find((row) => row.symbol === tokenB?.tokenSymbol)
+        tokenSymbols.includes(tokenA.tokenSymbol) &&
+        tokenSymbols.includes(tokenB.tokenSymbol)
       ) {
-        const url = `/${currentChainId}/swap?from=${tokenA?.tokenSymbol}&to=${tokenB?.tokenSymbol}`
+        const url = `/${currentChainId}/swap?from=${tokenA.tokenSymbol}&to=${tokenB.tokenSymbol}`
         router.push(url)
       }
     }
@@ -132,7 +130,7 @@ const Swap: FC<SwapProps> = ({}) => {
 
     const newState: TokenItemState[] = [tokenA, tokenB]
     newState[index] = {
-      tokenSymbol: tokenSymbol,
+      tokenSymbol,
       amount: Number(amount),
       decimals: 6,
     }

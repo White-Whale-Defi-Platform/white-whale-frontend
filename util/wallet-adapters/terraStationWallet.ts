@@ -96,17 +96,15 @@ export class TerraStationWallet implements Wallet {
     return this.client
       .post({
         msgs: msgs.map((msg) => this.convertMsg(msg)),
-        memo: memo,
+        memo,
         chainID: this.chainID,
       })
-      .then((result) => {
-        return {
-          height: result.result.height.valueOf(),
-          code: result.success ? 0 : -1,
-          transactionHash: result.result.txhash,
-          rawLog: result.result.raw_log,
-        }
-      })
+      .then((result) => ({
+        height: result.result.height.valueOf(),
+        code: result.success ? 0 : -1,
+        transactionHash: result.result.txhash,
+        rawLog: result.result.raw_log,
+      }))
   }
 
   execute(
@@ -126,16 +124,14 @@ export class TerraStationWallet implements Wallet {
         msgs: [executeMsg],
         chainID: this.chainID,
       })
+      .then((result) => ({
+        height: result.result.height.valueOf(),
+        code: result.success ? 0 : -1,
+        transactionHash: result.result.txhash,
+        rawLog: result.result.raw_log,
+      }))
       .then((result) => {
-        return {
-          height: result.result.height.valueOf(),
-          code: result.success ? 0 : -1,
-          transactionHash: result.result.txhash,
-          rawLog: result.result.raw_log,
-        }
-      })
-      .then((result) => {
-        if (!!result.code) {
+        if (result.code) {
           throw new Error(
             `Error when broadcasting tx ${result.transactionHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
           )
@@ -143,12 +139,10 @@ export class TerraStationWallet implements Wallet {
           return result
         }
       })
-      .then((result) => {
-        return {
-          logs: parseRawLog(result.rawLog),
-          transactionHash: result.transactionHash,
-        }
-      })
+      .then((result) => ({
+        logs: parseRawLog(result.rawLog),
+        transactionHash: result.transactionHash,
+      }))
   }
 
   queryContractSmart(
@@ -180,15 +174,15 @@ export class TerraStationWallet implements Wallet {
           }
           return msg
         }),
-      memo: memo,
+      memo,
       chainID: this.chainID,
     }
 
     // @ts-ignore
     return this.lcdClient.auth
       .accountInfo(signerAddress)
-      .then((result) => {
-        return this.lcdClient.tx.estimateFee(
+      .then((result) =>
+        this.lcdClient.tx.estimateFee(
           [
             {
               publicKey: result.getPublicKey(),
@@ -197,10 +191,10 @@ export class TerraStationWallet implements Wallet {
           ],
           tx
         )
-      })
-      .then((result) => {
-        return result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
-      })
+      )
+      .then((result) =>
+        result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
+      )
       .catch((err) => {
         if (axios.isAxiosError(err)) {
           throw new Error(JSON.stringify(err.response.data))
@@ -219,7 +213,7 @@ export class TerraStationWallet implements Wallet {
 
   getBalance(address: string, searchDenom: string): Promise<Coin> {
     return this.lcdClient.bank.balance(address).then(([coins]) => {
-      // console.log(coins)
+      // Console.log(coins)
       const coin = coins.get(searchDenom)
       if (coin === undefined) {
         return {

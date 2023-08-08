@@ -1,17 +1,17 @@
 import { useQuery } from 'react-query'
 
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { fetchCurrentEpoch } from 'components/Pages/Dashboard/hooks/getCurrentEpoch'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { Wallet } from 'util/wallet-adapters/index'
 
-export const useCurrentEpoch = (client, config) => {
-  return useQuery(
-    ['useCurrentEpoch'],
-    async () => getCurrentEpoch(client, config),
-    { enabled: !!client && !!config }
-  )
-}
-export const getCurrentEpoch = async (client: Wallet, config: Config) => {
+export const useCurrentEpoch = (client, config) =>
+  useQuery(['useCurrentEpoch'], async () => getCurrentEpoch(client, config), {
+    enabled: Boolean(client) && Boolean(config),
+  })
+export const getCurrentEpoch = async (
+  client: CosmWasmClient,
+  config: Config
+) => {
   if (!client) {
     return null
   }

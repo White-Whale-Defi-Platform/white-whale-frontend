@@ -6,7 +6,7 @@ import {
 import { Coin } from '@cosmjs/launchpad'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
-import { Network } from '@injectivelabs/networks'
+import { Network as InjectiveNetwork } from '@injectivelabs/networks'
 import {
   AuthInfo,
   Fee,
@@ -20,6 +20,7 @@ import {
 } from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 import Injective from 'services/injective'
+import { NetworkType } from 'state/atoms/walletAtoms'
 
 import { TxResponse, Wallet } from './wallet'
 export class OfflineSigningWallet implements Wallet {
@@ -36,7 +37,7 @@ export class OfflineSigningWallet implements Wallet {
     chainId: string,
     endpoint: string,
     signer: any,
-    network: string,
+    network: NetworkType,
     options?: SigningStargateClientOptions,
     activeWallet?: string
   ): Promise<OfflineSigningWallet> {
@@ -44,7 +45,9 @@ export class OfflineSigningWallet implements Wallet {
       const injectiveClient = new Injective(
         signer,
         activeWallet,
-        chainId === 'injective-1' ? Network.MainnetK8s : Network.TestnetK8s
+        chainId === 'injective-1'
+          ? InjectiveNetwork.MainnetK8s
+          : InjectiveNetwork.TestnetK8s
       )
       return new Promise((resolve, reject) => {
         resolve(new OfflineSigningWallet(injectiveClient, network))
@@ -117,45 +120,41 @@ export class OfflineSigningWallet implements Wallet {
     // @ts-ignore
     const promise: Promise<GetTxResponse> =
       this.client.queryClient.tx.getTx(txHash)
-    return promise.then((result) => {
-      return {
-        height: result.txResponse.height.toNumber(),
-        txhash: result.txResponse.txhash.toString(),
-        raw_log: result.txResponse.rawLog,
-        logs: undefined,
-        gas_wanted: result.txResponse.gasWanted.toNumber(),
-        gas_used: result.txResponse.gasUsed.toNumber(),
-        tx: new Tx(
-          new TxBody(
-            [],
-            result.tx.body.memo,
-            result.tx.body.timeoutHeight.toNumber()
-          ),
-          new AuthInfo(
-            result.tx.authInfo.signerInfos.map(
-              (signerInfo) =>
-                new SignerInfo(
-                  new SimplePublicKey(
-                    String.fromCharCode.apply(null, signerInfo.publicKey.value)
-                  ),
-                  signerInfo.sequence.toNumber(),
-                  // @ts-ignore
-                  ModeInfo.fromData(signerInfo.modeInfo)
-                )
-            ),
-            new Fee(
-              result.tx.authInfo.fee.gasLimit.toNumber(),
-              result.tx.authInfo.fee.amount.map(
-                (coin) => new StationCoin(coin.denom, coin.amount)
+    return promise.then((result) => ({
+      height: result.txResponse.height.toNumber(),
+      txhash: result.txResponse.txhash.toString(),
+      raw_log: result.txResponse.rawLog,
+      logs: undefined,
+      gas_wanted: result.txResponse.gasWanted.toNumber(),
+      gas_used: result.txResponse.gasUsed.toNumber(),
+      tx: new Tx(
+        new TxBody(
+          [],
+          result.tx.body.memo,
+          result.tx.body.timeoutHeight.toNumber()
+        ),
+        new AuthInfo(
+          result.tx.authInfo.signerInfos.map(
+            (signerInfo) =>
+              new SignerInfo(
+                new SimplePublicKey(
+                  String.fromCharCode.apply(null, signerInfo.publicKey.value)
+                ),
+                signerInfo.sequence.toNumber(),
+                // @ts-ignore
+                ModeInfo.fromData(signerInfo.modeInfo)
               )
-            )
           ),
-          result.tx.signatures.map((sig) =>
-            String.fromCharCode.apply(null, sig)
+          new Fee(
+            result.tx.authInfo.fee.gasLimit.toNumber(),
+            result.tx.authInfo.fee.amount.map(
+              (coin) => new StationCoin(coin.denom, coin.amount)
+            )
           )
         ),
-        timestamp: result.txResponse.timestamp,
-      }
-    })
+        result.tx.signatures.map((sig) => String.fromCharCode.apply(null, sig))
+      ),
+      timestamp: result.txResponse.timestamp,
+    }))
   }
 }

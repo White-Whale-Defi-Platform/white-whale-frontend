@@ -3,11 +3,12 @@ import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
-import { fromChainAmount, num } from 'libs/num'
+import { fromChainAmount } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
-import { useQueryPoolLiquidity } from 'queries/useQueryPools'
+import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
+import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
 
 export type Position = {
@@ -24,30 +25,20 @@ export type Position = {
 }
 
 export const lpPositionToAssets = ({
-  totalReserve,
+  totalAssets,
   totalLpSupply,
-  providedLp,
-}) => {
-  return [
-    num(totalReserve?.[0])
-      .times(providedLp)
-      .div(totalLpSupply)
-      .dp(6)
-      .toNumber(),
-    num(totalReserve?.[1])
-      .times(providedLp)
-      .div(totalLpSupply)
-      .dp(6)
-      .toNumber(),
-  ]
-}
+  myLockedLp,
+}) => [
+  protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
+  protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
+]
 export const fetchPositions = async (
   client,
   prices,
   incentiveAddress,
   address,
   pool_assets,
-  totalReserve,
+  totalAssets,
   totalLpSupply
 ) => {
   const data = await client?.queryContractSmart(incentiveAddress, {
@@ -57,7 +48,7 @@ export const fetchPositions = async (
     .map((p) => {
       const positions = []
 
-      // open position
+      // Open position
       const open = { ...(p?.open_position || {}) }
       open.formatedTime = formatSeconds(open.unbonding_duration)
       open.isOpen = true
@@ -65,7 +56,7 @@ export const fetchPositions = async (
         positions.push(open)
       }
 
-      // closed position
+      // Closed position
       const close = { ...(p?.closed_position || {}) }
       const today = dayjs(new Date())
       const unbonding = dayjs.unix(close.unbonding_timestamp)
@@ -78,15 +69,13 @@ export const fetchPositions = async (
 
       return positions.map((position) => {
         const lpAssets = lpPositionToAssets({
-          totalReserve,
+          totalAssets,
           totalLpSupply,
-          providedLp: position.amount,
+          myLockedLp: position.amount,
         })
         const assets = pool_assets.map((asset, i) => {
           const assetAmount = fromChainAmount(lpAssets[i], asset.decimals)
-          const dollarValue = num(assetAmount)
-            .times(prices?.[asset.symbol] || 0)
-            .toNumber()
+          const dollarValue = Number(assetAmount) * prices?.[asset.symbol] || 0
           return {
             ...asset,
             assetAmount: parseFloat(assetAmount),
@@ -98,9 +87,10 @@ export const fetchPositions = async (
           duration: position.formatedTime,
           weight: position.weight,
           assets,
-          value: assets.reduce((acc, asset) => {
-            return acc + Number(asset.dollarValue)
-          }, 0),
+          value: assets.reduce(
+            (acc, asset) => acc + Number(asset.dollarValue),
+            0
+          ),
           state: position.isOpen
             ? 'active'
             : diff <= 0
@@ -115,7 +105,7 @@ export const fetchPositions = async (
 const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
     useQueryPoolLiquidity({ poolId })
-  const totalLpSupply = liquidity?.available?.total?.tokenAmount || 0
+  const totalLpSupply = liquidity?.available?.totalLpAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]
   const { address, client } = useRecoilValue(walletState)
   const tokens = useTokenList()
@@ -141,7 +131,7 @@ const useLockedPositions = (poolId: string) => {
         totalReserve,
         totalLpSupply
       ),
-    enabled: !!address && !!client && !!staking_address,
+    enabled: Boolean(address) && Boolean(client) && Boolean(staking_address),
   })
 }
 
