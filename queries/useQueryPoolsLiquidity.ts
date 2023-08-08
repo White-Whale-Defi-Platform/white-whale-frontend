@@ -4,8 +4,11 @@ import { useQueries } from 'react-query'
 import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
 import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
 import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
   POOL_REWARDS_ENABLED,
+  WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import usePrices from 'hooks/usePrices'
@@ -256,13 +259,15 @@ export const useQueryPoolsLiquidity = ({
      */
     function getPoolTokensValues(assets, lpTokenAmount = null) {
       const tokenASymbol =
-        tokenA.symbol === 'ampWHALE' || tokenA.symbol === 'bWHALE'
-          ? 'WHALE'
-          : tokenA.symbol
+        tokenA?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
+        tokenA?.symbol === B_WHALE_TOKEN_SYMBOL
+          ? WHALE_TOKEN_SYMBOL
+          : tokenA?.symbol
       const tokenBSymbol =
-        tokenB.symbol === 'ampWHALE' || tokenB.symbol === 'bWHALE'
-          ? 'WHALE'
-          : tokenB.symbol
+        tokenB?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
+        tokenB?.symbol === B_WHALE_TOKEN_SYMBOL
+          ? WHALE_TOKEN_SYMBOL
+          : tokenB?.symbol
       return {
         tokenAmount: lpTokenAmount ?? assets[1] + assets[0],
         dollarValue:
