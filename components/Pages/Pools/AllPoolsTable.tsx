@@ -24,6 +24,7 @@ import {
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
+import Liquidity from './components/liquidity'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
 
@@ -82,7 +83,12 @@ const columns = [
         {'Total Liquidity'}
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => (
+      <Liquidity
+        liquidity={info.getValue()?.toString()}
+        infos={info.row.original}
+      />
+    ),
   }),
   columnHelper.accessor('incentives', {
     header: () => (

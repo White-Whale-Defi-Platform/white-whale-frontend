@@ -43,8 +43,13 @@ const Token = ({ imgUrl, symbol }) => (
 )
 
 const PositionsOverview = ({ flows, poolId }: Props) => {
-  const [activeButton, setActiveButton] = useState('all')
-  const [columnFilters, setColumnFilters] = useState([])
+  const [activeButton, setActiveButton] = useState('active')
+  const [columnFilters, setColumnFilters] = useState([
+    {
+      id: 'state',
+      value: 'active',
+    },
+  ])
 
   const positions = useMemo(
     () =>

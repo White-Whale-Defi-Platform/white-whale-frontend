@@ -47,13 +47,14 @@ export const getClaimable = async (
   }
 
   const data = await fetchClaimableData(client, address, config)
+  const daysSinceLastClaim = data?.epochs.length
 
   const claimableAmounts = data?.epochs
     .flatMap((e) => e.available.map((a) => a.amount))
     .reduce((acc, amount) => acc + parseFloat(amount), 0)
 
   const totalGlobalClaimable = convertMicroDenomToDenom(claimableAmounts, 6)
-  return { totalGlobalClaimable }
+  return { totalGlobalClaimable, daysSinceLastClaim }
 }
 const fetchClaimableData = async (
   client: Wallet,

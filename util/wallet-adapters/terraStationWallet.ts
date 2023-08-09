@@ -197,8 +197,7 @@ export class TerraStationWallet implements Wallet {
       )
       .catch((err) => {
         if (axios.isAxiosError(err)) {
-          console.log(err)
-          throw new Error(err.response.data)
+          throw new Error(JSON.stringify(err.response.data))
         }
         throw err
       })
