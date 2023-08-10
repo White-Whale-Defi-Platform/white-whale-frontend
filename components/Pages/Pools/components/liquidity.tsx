@@ -1,6 +1,13 @@
 import React from 'react'
 
-import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  HStack,
+  Text,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
 
 type Props = {
   liquidity: string
