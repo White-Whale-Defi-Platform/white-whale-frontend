@@ -1,5 +1,6 @@
 import {
   Flex,
+  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -21,6 +22,7 @@ import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
+import { IncentiveTooltip } from '../../InfoTooltip'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -85,9 +87,12 @@ const columns = [
   }),
   columnHelper.accessor('incentives', {
     header: () => (
-      <Text align="left" color="brand.50">
-        Incentives
-      </Text>
+      <HStack paddingTop={'4'}>
+        <IncentiveTooltip IconSize={'3'} />
+        <Text align="left" color="brand.50">
+          {'Incentives'}
+        </Text>
+      </HStack>
     ),
     cell: (info) => info.getValue(),
   }),

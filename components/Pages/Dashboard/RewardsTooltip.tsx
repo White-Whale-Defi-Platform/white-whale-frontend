@@ -60,9 +60,7 @@ export const RewardsTooltip = ({
               <Text color="whiteAlpha.600" fontSize={14}>
                 {'Last Claimed'}
               </Text>
-              <Text fontSize={14}>
-                {lastClaimed()}
-              </Text>
+              <Text fontSize={14}>{lastClaimed()}</Text>
             </HStack>
           </VStack>
         ) : null
