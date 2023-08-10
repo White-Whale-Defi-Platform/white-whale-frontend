@@ -136,6 +136,7 @@ const Dashboard: FC = () => {
     annualRewards,
     currentEpoch,
     totalGlobalClaimable,
+    daysSinceLastClaim,
     globalAvailableRewards,
     isLoading,
   } = useDashboardData(client, address, network, chainId)
@@ -182,6 +183,7 @@ const Dashboard: FC = () => {
             annualRewards={annualRewards}
             globalAvailableRewards={globalAvailableRewards}
             totalGlobalClaimable={totalGlobalClaimable}
+            daysSinceLastClaim={daysSinceLastClaim}
             weightInfo={weightInfo}
           />
         </VStack>

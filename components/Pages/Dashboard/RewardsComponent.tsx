@@ -115,9 +115,10 @@ const RewardsComponent = ({
   annualRewards,
   globalAvailableRewards,
   totalGlobalClaimable,
+  daysSinceLastClaim,
   weightInfo,
 }) => {
-  const [{ network, chainId }] = useRecoilState(walletState)
+  const [{ chainId, network }, _] = useRecoilState(walletState)
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -284,6 +285,7 @@ const RewardsComponent = ({
                 }
                 isWalletConnected={isWalletConnected}
                 whale={claimableRewards.toFixed(6)}
+                daysSinceLastClaim={daysSinceLastClaim}
               />
             </HStack>
             <HStack>
