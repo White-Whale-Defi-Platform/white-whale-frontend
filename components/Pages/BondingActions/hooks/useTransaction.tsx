@@ -274,7 +274,7 @@ export const useTransaction = () => {
       if (fee == null) {
         return
       }
-      await setBondingAction(bondingAction)
+      setBondingAction(bondingAction)
 
       mutate({
         fee,
