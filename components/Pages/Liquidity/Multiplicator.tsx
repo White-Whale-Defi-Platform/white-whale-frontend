@@ -1,6 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
-import InfoTooltip, { IncentiveTooltip } from '../../InfoTooltip'
+import InfoTooltip from '../../InfoTooltip'
 
 type Props = {
   multiplicator: string
