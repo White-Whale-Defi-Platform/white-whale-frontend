@@ -14,16 +14,11 @@ import { useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 
 const Dashboard: FC = () => {
   const { chainId, chainName, network } = useRecoilValue(chainState)
 
-  const { status, address } = useChain(chainName)
-  const isWalletConnected = useMemo(
-    () => status === WalletStatus.Connected,
-    [status]
-  )
+  const { isWalletConnected, address } = useChain(chainName)
 
   const data: BondingData[] = [
     {

@@ -99,7 +99,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const { network, chainName, chainId } = useRecoilValue(chainState)
   const { cosmWasmClient, signingClient } = useClients(chainName)
-  const { address } = useChain(chainName)
+  const { address, isWalletConnected } = useChain(chainName)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
 
@@ -128,7 +128,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
       ),
     {
       enabled: Boolean(
-        status === WalletStatus.Connected &&
+        isWalletConnected &&
           tokenSymbols?.length &&
           tokenList?.tokens &&
           !!cosmWasmClient

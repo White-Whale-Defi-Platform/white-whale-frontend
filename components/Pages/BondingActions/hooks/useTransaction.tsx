@@ -53,7 +53,7 @@ export enum TxStep {
 export const useTransaction = () => {
   const toast = useToast()
   const { chainId, chainName, network } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
+  const { address, signAndBroadcast } = useChain(chainName)
   const { signingClient } = useClients(chainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
@@ -102,11 +102,7 @@ export const useTransaction = () => {
       }
     },
     {
-      enabled:
-        txStep == TxStep.Idle &&
-        error == null &&
-        Boolean(signingClient) &&
-        Boolean(address),
+      enabled: txStep == TxStep.Idle && error == null && Boolean(signingClient),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -124,7 +120,7 @@ export const useTransaction = () => {
       const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
       if (data.bondingAction === ActionType.bond) {
         return bondTokens(
-          signingClient,
+          signAndBroadcast,
           address,
           adjustedAmount,
           data.denom,
@@ -132,7 +128,7 @@ export const useTransaction = () => {
         )
       } else if (data.bondingAction === ActionType.unbond) {
         return unbondTokens(
-          signingClient,
+          signAndBroadcast,
           address,
           adjustedAmount,
           data.denom,

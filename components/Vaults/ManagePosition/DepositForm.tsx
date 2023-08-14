@@ -8,10 +8,9 @@ import { chainState } from 'state/atoms/chainState'
 
 import useDepost from '../hooks/useDeposit'
 import { TxStep } from '../hooks/useTransaction'
-import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatus
+  isWalletConnected: boolean
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -22,7 +21,7 @@ type Props = {
 }
 
 const DepositForm = ({
-  connected,
+  isWalletConnected,
   balance,
   defaultToken,
   edgeTokenList = [],
@@ -36,10 +35,6 @@ const DepositForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(chainState)
-  const isConnected = useMemo(
-    () => WalletStatus.Connected === connected,
-    [connected]
-  )
 
   const onSuccess = useCallback(
     (txHash) => {
@@ -65,7 +60,7 @@ const DepositForm = ({
 
   const buttonLabel = useMemo(() => {
     // TODO: Note for later, Select Token is commented
-    if (connected !== WalletStatus.Connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!token?.amount) {
       return 'Enter Amount'
@@ -73,7 +68,7 @@ const DepositForm = ({
       return tx?.buttonLabel
     }
     return 'Deposit'
-  }, [tx?.buttonLabel, connected, token])
+  }, [tx?.buttonLabel, isWalletConnected, token])
 
   const onSubmit = (event) => {
     event?.preventDefault()
@@ -118,7 +113,7 @@ const DepositForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isConnected}
+        disabled={tx.txStep != TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

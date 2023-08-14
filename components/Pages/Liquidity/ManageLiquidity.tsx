@@ -41,7 +41,7 @@ const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
   const { address, chainId, chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
+  const { isWalletConnected } = useChain(chainName)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
@@ -242,7 +242,7 @@ const ManageLiquidity: FC = () => {
                     bondingDays={bondingDays}
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={status}
+                    isWalletConnected={isWalletConnected}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -256,7 +256,7 @@ const ManageLiquidity: FC = () => {
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  connected={status}
+                  isWalletConnected={isWalletConnected}
                   clearForm={clearForm}
                   poolId={poolId}
                 />

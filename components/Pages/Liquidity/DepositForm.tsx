@@ -17,7 +17,7 @@ import Multiplicator from './Multiplicator'
 import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatus
+  isWalletConnected: boolean
   tokenA: TokenItemState
   tokenB: TokenItemState
   tx: any
@@ -36,7 +36,7 @@ const DepositForm = ({
   tokenA,
   tokenB,
   onInputChange,
-  connected,
+  isWalletConnected,
   tx,
   simulated,
   setReverse,
@@ -80,7 +80,6 @@ const DepositForm = ({
   )
   // Const [bondingDays, setBondingDays] = useState(0)
   const isInputDisabled = tx?.txStep == TxStep.Posting
-  const isConnected = connected === WalletStatus.Connected
   const amountA = getValues('token1')
 
   useEffect(() => {
@@ -128,7 +127,7 @@ const DepositForm = ({
   }, [tx?.txStep])
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatus.Connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!tokenB?.tokenSymbol) {
       return 'Select Token'
@@ -138,7 +137,7 @@ const DepositForm = ({
       return tx?.buttonLabel
     }
     return 'Deposit'
-  }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
+  }, [tx?.buttonLabel, tokenB.tokenSymbol, isWalletConnected, amountA])
 
   const apr = useMemo(
     () =>
@@ -192,10 +191,10 @@ const DepositForm = ({
 
       <SubmitButton
         label={buttonLabel}
-        isConnected={isConnected}
+        isConnected={isWalletConnected}
         txStep={tx?.txStep}
         isDisabled={
-          tx.txStep != TxStep.Ready || simulated == null || !isConnected
+          tx.txStep != TxStep.Ready || simulated == null || !isWalletConnected
         }
       />
 

@@ -48,8 +48,7 @@ const Create = ({ poolId }: Props) => {
   const formData = watch()
 
   const { chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
-  const isConnected = status === WalletStatus.Connected
+  const { isWalletConnected } = useChain(chainName)
   const { txStep } = useRecoilValue(txAtom)
   const { simulate, submit } = useOpenFlow({ poolId, ...formData })
 
@@ -133,7 +132,7 @@ const Create = ({ poolId }: Props) => {
           txStep === TxStep.Posting ||
           txStep === TxStep.Broadcasting
         }
-        isDisabled={!isValid || txStep !== TxStep.Ready || !isConnected}
+        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
       />
     </Stack>
   )

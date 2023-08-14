@@ -15,11 +15,11 @@ import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
   poolId: string
-  connected: WalletStatus
+  isWalletConnected: boolean
   clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
+const WithdrawForm = ({ poolId, isWalletConnected, clearForm }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -95,11 +95,10 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
     stakingAddress: staking_address,
   })
 
-  const isConnected = connected === WalletStatus.Connected
   const isInputDisabled = tx?.txStep == TxStep.Posting
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatus.Connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!tokenA?.amount) {
       return 'Enter Amount'
@@ -109,7 +108,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
       return tx?.buttonLabel
     }
     return 'Withdraw'
-  }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
+  }, [tx?.buttonLabel, isWalletConnected, tokenA, tokenB, lp, lpBalance])
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
@@ -188,9 +187,9 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
 
       <SubmitButton
         label={buttonLabel as string}
-        isConnected={isConnected}
+        isConnected={isWalletConnected}
         txStep={tx?.txStep}
-        isDisabled={tx.txStep != TxStep.Ready || !isConnected}
+        isDisabled={tx.txStep != TxStep.Ready || !isWalletConnected}
       />
 
       <ShowError

@@ -27,9 +27,8 @@ const Withdraw = ({
   whalePrice,
 }) => {
   const { chainName, chainId, network } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
+  const { isWalletConnected } = useChain(chainName)
 
-  const isWalletConnected = status === WalletStatus.Connected
   const config: Config = useConfig(network, chainId)
   const ProgressBar = ({ percent }) => (
     <Box

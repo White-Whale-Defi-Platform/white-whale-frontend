@@ -2,7 +2,7 @@ import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export const unbondTokens = (
-  signingClient: SigningCosmWasmClient,
+  signAndBroadcast: any,
   address: string,
   amount: number,
   denom: string,
@@ -20,5 +20,5 @@ export const unbondTokens = (
       },
     },
   }
-  return signingClient.execute(address, config.whale_lair, handleMsg, 'auto')
+  return signAndBroadcast(address, config.whale_lair, handleMsg, 'auto')
 }

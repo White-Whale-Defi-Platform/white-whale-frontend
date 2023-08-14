@@ -14,8 +14,7 @@ const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =
     useState<boolean>(false)
   const { chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
-  const isWalletConnected = status === WalletStatus.Connected
+  const { isWalletConnected } = useChain(chainName)
   const { vaults, isLoading } = useVault()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string

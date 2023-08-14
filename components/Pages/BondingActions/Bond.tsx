@@ -27,12 +27,7 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
   const { chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
-
-  const isWalletConnected = useMemo(
-    () => status === WalletStatus.Connected,
-    [status]
-  )
+  const { isWalletConnected } = useChain(chainName)
 
   const [tokenBalances, setLSDTokenBalances] = useState<LSDTokenBalances>(null)
 

@@ -18,7 +18,7 @@ const NewPosition = () => {
   const params = new URLSearchParams(location.search)
   const chains: Array<any> = useChains()
   const { chainId, address, chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
+  const { isWalletConnected } = useChain(chainName)
   const vaultId = params.get('vault') || 'JUNOX'
 
   const vault = useMemo(
@@ -99,7 +99,7 @@ const NewPosition = () => {
           {vault?.vault_assets?.symbol && (
             <DepositForm
               vaultAddress={vault?.vault_address}
-              connected={status}
+              isWalletConnected={isWalletConnected}
               isLoading={tokenBalanceLoading}
               balance={tokenBalance}
               defaultToken={vault?.vault_assets?.symbol}

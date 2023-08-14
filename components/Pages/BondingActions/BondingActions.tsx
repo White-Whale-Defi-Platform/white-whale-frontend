@@ -30,12 +30,7 @@ export enum WhaleTokenType {
 
 const BondingActions = ({ globalAction }) => {
   const { chainId, network, chainName } = useRecoilValue(chainState)
-  const { address, status, openView } = useChain(chainName)
-
-  const isWalletConnected: boolean = useMemo(
-    () => status === WalletStatus.Connected,
-    [status]
-  )
+  const { address, isWalletConnected, openView } = useChain(chainName)
 
   const router = useRouter()
 

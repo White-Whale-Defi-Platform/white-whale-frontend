@@ -40,9 +40,7 @@ function FlashloanForm({}: Props) {
   const [error, setError] = useState(null)
   const [json, setJson] = useState(defaultJson)
   const { chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
-
-  const isConnected = useMemo(() => status === WalletStatus.Connected, [status])
+  const { isWalletConnected } = useChain(chainName)
 
   const tx = useFlashloan({ json })
 
@@ -83,7 +81,7 @@ function FlashloanForm({}: Props) {
   }, [containerRef, editorRef, options])
 
   const buttonLabel = useMemo(() => {
-    if (!isConnected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (error) {
       return error
@@ -171,7 +169,7 @@ function FlashloanForm({}: Props) {
               // Tx?.txStep == TxStep.Estimating ||
               tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting
             }
-            disabled={Boolean(error) || !isConnected}
+            disabled={Boolean(error) || !isWalletConnected}
           >
             {buttonLabel}
           </Button>

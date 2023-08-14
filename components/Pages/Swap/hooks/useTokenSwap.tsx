@@ -25,7 +25,6 @@ import { convertDenomToMicroDenom } from 'util/conversion'
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
 import { useClients } from 'hooks/useClients'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 
 type UseTokenSwapArgs = {
   tokenASymbol: string
@@ -42,7 +41,7 @@ export const useTokenSwap = ({
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
   const { address, chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
+  const { isWalletConnected } = useChain(chainName)
   const { signingClient } = useClients(chainName)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)
@@ -56,7 +55,7 @@ export const useTokenSwap = ({
   return useMutation(
     'swapTokens',
     async () => {
-      if (status !== WalletStatus.Connected) {
+      if (!isWalletConnected) {
         throw new Error('Please connect your wallet.')
       }
 

@@ -13,11 +13,9 @@ import { WalletStatus } from '@cosmos-kit/core'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   const { chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
+  const { isWalletConnected } = useChain(chainName)
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingAtom)
-
-  const isWalletConnected = status === WalletStatus.Connected
 
   const [tokenBalances, setLSDTokenBalances] = useState<LSDTokenBalances>(null)
 

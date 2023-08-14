@@ -1,9 +1,21 @@
 import { useQueries } from 'react-query'
 import { useChain } from '@cosmos-kit/react-lite'
+import { useMemo } from 'react'
+import { WalletType } from 'components/Wallet/Modal/WalletModal'
 
 export function useClients(chainName) {
-  const { getCosmWasmClient, getSigningCosmWasmClient } = useChain(chainName)
+  const {
+    getCosmWasmClient,
+    getSigningCosmWasmClient,
+    isWalletConnected,
+    signAndBroadcast,
+    wallet,
+  } = useChain(chainName)
 
+  const isStation = useMemo(
+    () => wallet?.name === WalletType.terraExtension,
+    [wallet]
+  )
   const queries = useQueries([
     {
       queryKey: 'cosmWasmClient',
@@ -12,6 +24,7 @@ export function useClients(chainName) {
     {
       queryKey: 'signingClient',
       queryFn: async () => await getSigningCosmWasmClient(),
+      enabled: isWalletConnected,
     },
   ])
 

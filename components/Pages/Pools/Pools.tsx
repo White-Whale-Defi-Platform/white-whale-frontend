@@ -53,12 +53,8 @@ const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
   const { chainId, network, chainName } = useRecoilValue(chainState)
-  const { status } = useChain(chainName)
+  const { isWalletConnected } = useChain(chainName)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
-  const isWalletConnected: boolean = useMemo(
-    () => status === WalletStatus.Connected,
-    [status]
-  )
 
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
     !ACTIVE_INCENTIVE_NETWORKS.includes(chainId)

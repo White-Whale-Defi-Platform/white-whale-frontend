@@ -25,7 +25,7 @@ import { Simulated } from './hooks/useSimulate'
 import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatus
+  isWalletConnected: boolean
   tokenA: TokenItemState
   tokenB: TokenItemState
   onInputChange: (asset: TokenItemState, index: number) => void
@@ -42,7 +42,7 @@ type Props = {
 }
 
 const SwapForm: FC<Props> = ({
-  connected,
+  isWalletConnected,
   tokenA,
   tokenB,
   onInputChange,
@@ -81,13 +81,12 @@ const SwapForm: FC<Props> = ({
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
-  const isConnected = connected === WalletStatus.Connected
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatus.Connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol) {
       return 'Select Token'
@@ -101,7 +100,13 @@ const SwapForm: FC<Props> = ({
     return 'Swap'
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
+  }, [
+    tx?.buttonLabel,
+    tokenB.tokenSymbol,
+    isWalletConnected,
+    amountA,
+    state?.error,
+  ])
 
   const onReverse = () => {
     const A = {
@@ -368,7 +373,7 @@ const SwapForm: FC<Props> = ({
           state?.isLoading
         }
         disabled={
-          tx?.txStep != TxStep.Ready || simulated == null || !isConnected
+          tx?.txStep != TxStep.Ready || simulated == null || !isWalletConnected
         }
       >
         {buttonLabel}

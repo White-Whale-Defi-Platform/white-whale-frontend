@@ -12,7 +12,7 @@ import useWithdraw from '../hooks/useWithdraw'
 import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
-  connected: WalletStatus
+  isWalletConnected: boolean
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -23,7 +23,7 @@ type Props = {
 }
 
 const WithdrawForm = ({
-  connected,
+  isWalletConnected,
   balance,
   defaultToken,
   vaultAddress,
@@ -56,10 +56,9 @@ const WithdrawForm = ({
   )
 
   const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
-  const isConnected = connected === WalletStatus.Connected
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatus.Connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!token?.amount) {
       return 'Enter Amount'
@@ -67,7 +66,7 @@ const WithdrawForm = ({
       return tx?.buttonLabel
     }
     return 'Withdraw'
-  }, [tx?.buttonLabel, connected, token])
+  }, [tx?.buttonLabel, isWalletConnected, token])
 
   const onSubmit = (event) => {
     event?.preventDefault()
@@ -110,7 +109,7 @@ const WithdrawForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isConnected}
+        disabled={tx.txStep != TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

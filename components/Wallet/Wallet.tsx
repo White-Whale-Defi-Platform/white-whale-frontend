@@ -13,19 +13,18 @@ import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/atoms/chainState'
 import { getPathName } from 'util/route'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 import { useQueryClient } from 'react-query'
 
 const Wallet: any = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
-
   const chains: Array<any> = useChains()
   const router = useRouter()
   const chainName = router.query.chainId as string
   const [chainInfo] = useChainInfo(currentChainState.chainId)
-  const { status, disconnect, openView } = useChain(currentChainState.chainName)
-  const connected = useMemo(() => status === WalletStatus.Connected, [status])
+  const { isWalletConnected, disconnect, openView } = useChain(
+    currentChainState.chainName
+  )
   const queryClient = useQueryClient()
 
   const resetWallet = () => {
@@ -121,11 +120,11 @@ const Wallet: any = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChainState.chainId, isInitialized])
 
-  if (!connected && status !== WalletStatus.Connected) {
+  if (!isWalletConnected) {
     return (
       <>
         <SelectChainModal
-          connected={connected}
+          connected={isWalletConnected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
           currentChainState={currentChainState}
@@ -150,7 +149,7 @@ const Wallet: any = () => {
     <>
       <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
         <ChainSelectWithBalance
-          connected={connected}
+          connected={isWalletConnected}
           denom={denom}
           onChainChange={onChainChange}
           currentChainState={currentChainState}
@@ -162,7 +161,7 @@ const Wallet: any = () => {
           />
         </Box>
         <ConnectedWalletWithDisconnect
-          connected={connected}
+          connected={isWalletConnected}
           onDisconnect={resetWallet}
         />
       </Card>
