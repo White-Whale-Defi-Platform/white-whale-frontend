@@ -31,6 +31,7 @@ export const RewardsTooltip = ({
       </HStack>
     )
   }
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 
@@ -54,6 +55,9 @@ export const RewardsTooltip = ({
             border="none"
             justifyContent="center"
             alignItems="center"
+            onMouseEnter={() => setIsLabelOpen(true)}
+            onMouseLeave={() => setIsLabelOpen(false)}
+            onClick={() => setIsLabelOpen(!isLabelOpen)}
           >
             <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
             <HStack justify="space-between" direction="row" width="full" px={2}>
@@ -66,6 +70,7 @@ export const RewardsTooltip = ({
         ) : null
       } // Displaying nothing when wallet disconnected
       bg="transparent"
+      isOpen={isLabelOpen}
     >
       <VStack alignItems="flex-start" minW={50}>
         <Text ref={textRef} mb="-0.3rem" color="white">

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Button, useToast, VStack } from '@chakra-ui/react'
+import { Button, useMediaQuery, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { useRecoilValue } from 'recoil'
@@ -35,6 +35,8 @@ const DepositForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(chainState)
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
+ 
 
   const onSuccess = useCallback(
     (txHash) => {
@@ -101,6 +103,7 @@ const DepositForm = ({
           showList={showList}
           edgeTokenList={edgeTokenList}
           onChange={(value) => setToken(value)}
+          mobile={isMobile}
         />
       </VStack>
 

@@ -1,4 +1,11 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Stack,
+  Text,
+  useMediaQuery,
+  VStack,
+} from '@chakra-ui/react'
 import {
   Config,
   useConfig,
@@ -100,7 +107,7 @@ const Withdraw = ({
 
   return (
     <VStack spacing={5} mb={35}>
-      <HStack spacing={7}>
+      <Stack direction={['column', 'column', 'row']} spacing={7}>
         <TokenBox
           label="Unbonding"
           ampWhale={unbondingAmpWhale}
@@ -111,7 +118,7 @@ const Withdraw = ({
           ampWhale={withdrawableAmpWhale}
           bWhale={withdrawableBWhale}
         />
-      </HStack>
+      </Stack>
       {isWalletConnected &&
         filteredUnbondingRequests !== null &&
         filteredUnbondingRequests?.length > 0 && (

@@ -1,7 +1,15 @@
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
-import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  HStack,
+  Text,
+  Tooltip,
+  VStack,
+  useMediaQuery,
+} from '@chakra-ui/react'
 
 import { TokenType, WhaleType } from './BondingOverview'
 import { BondingData } from './types/BondingData'
@@ -51,7 +59,7 @@ export const WhaleTooltip = ({
 
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
-
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
   useEffect(() => {
     setTextWidth(textRef.current.offsetWidth)
   }, [whale, ampWhale, bWhale])
@@ -116,8 +124,15 @@ export const WhaleTooltip = ({
         ) : null
       } // Displaying nothing when wallet disconnected
       bg="transparent"
+      isOpen={isLabelOpen}
     >
-      <VStack alignItems="flex-start" minW={100}>
+      <VStack
+        alignItems="flex-start"
+        minW={100}
+        onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}
+      >
         <Text ref={textRef} mb="-0.3rem" color="white">
           {label}
         </Text>

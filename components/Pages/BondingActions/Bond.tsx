@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { VStack } from '@chakra-ui/react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
+
+import { useMediaQuery, VStack } from '@chakra-ui/react'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+import { useRecoilState } from 'recoil'
+
+
 import AssetInput from '../../AssetInput'
 import { bondingState } from 'state/bondingState'
 import { useChain } from '@cosmos-kit/react-lite'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
+
 
 export interface LSDTokenBalances {
   ampWHALE: number
@@ -22,7 +25,8 @@ export enum LSDToken {
   ampWHALE,
   bWHALE,
 }
-export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
+const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingState)
   const { chainName } = useRecoilValue(chainState)
@@ -75,6 +79,7 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
         rules={{ required: true }}
         render={({ field }) => (
           <AssetInput
+            mobile={isMobile}
             isBonding={true}
             hideToken={currentBondState.tokenSymbol}
             {...field}

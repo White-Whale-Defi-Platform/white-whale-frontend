@@ -7,6 +7,7 @@ import {
   HStack,
   InputGroup,
   Stack,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import SubmitButton from 'components/SubmitButton'
@@ -49,6 +50,7 @@ const Create = ({ poolId }: Props) => {
   const { chainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(chainName)
   const { txStep } = useRecoilValue(txRecoilState)
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
   const { simulate, submit } = useOpenFlow({ poolId, ...formData })
 
   return (
@@ -58,6 +60,8 @@ const Create = ({ poolId }: Props) => {
         control={control}
         token={token}
         showList={true}
+        mobile={isMobile}
+        // isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
           setToken({
             ...value,
@@ -86,6 +90,7 @@ const Create = ({ poolId }: Props) => {
                 placeholder="Enter amount"
                 h="50px"
                 type="date"
+                paddingEnd={'2px'}
                 min={new Date().toISOString().slice(0, 16)}
                 // Max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
@@ -114,6 +119,7 @@ const Create = ({ poolId }: Props) => {
                 placeholder="Enter amount"
                 h="50px"
                 type="date"
+                paddingEnd={'2px'}
                 min={new Date().toISOString().slice(0, 16)}
                 focusBorderColor="brand.500"
               />

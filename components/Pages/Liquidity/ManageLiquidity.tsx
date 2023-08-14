@@ -1,10 +1,14 @@
+import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Tab,
   TabList,
   TabPanel,
@@ -12,6 +16,7 @@ import {
   Tabs,
   Text,
   VStack,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
@@ -38,6 +43,7 @@ import { useClients } from 'hooks/useClients'
 import { useChain } from '@cosmos-kit/react-lite'
 
 const ManageLiquidity: FC = () => {
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
   const { address, chainId, chainName } = useRecoilValue(chainState)
@@ -213,7 +219,6 @@ const ManageLiquidity: FC = () => {
       <Box
         background={'#1C1C1C'}
         padding={[6, 12]}
-        paddingTop={[10]}
         borderRadius="30px"
         width={['full']}
       >
@@ -224,8 +229,13 @@ const ManageLiquidity: FC = () => {
           pt="8"
           maxH="fit-content"
         >
-          <Tabs variant="brand">
-            <TabList justifyContent="center" background={'#1C1C1C'}>
+          <Tabs variant={'brand'}>
+            <TabList
+              display={['flex']}
+              flexWrap={['wrap']}
+              justifyContent="center"
+              background={'#1C1C1C'}
+            >
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
@@ -251,6 +261,7 @@ const ManageLiquidity: FC = () => {
                     clearForm={clearForm}
                     chainId={chainId}
                     poolId={poolId}
+                    mobile={isMobile}
                   />
                 )}
               </TabPanel>
@@ -259,6 +270,7 @@ const ManageLiquidity: FC = () => {
                   isWalletConnected={isWalletConnected}
                   clearForm={clearForm}
                   poolId={poolId}
+                  mobile={isMobile}
                 />
               </TabPanel>
               <TabPanel padding={4}>

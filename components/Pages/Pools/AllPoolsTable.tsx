@@ -132,7 +132,7 @@ const AllPoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', '1160px']}
+        width={['full']}
         background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
@@ -147,7 +147,7 @@ const AllPoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', '1160px']}
+        width={['full']}
         background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
@@ -167,7 +167,7 @@ const AllPoolsTable = ({
       background={'#1C1C1C'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
-      display={['none', 'flex']}
+      display={['none', 'none', 'none', 'flex']}
       flexDirection="column"
     >
       <TableContainer width="full">

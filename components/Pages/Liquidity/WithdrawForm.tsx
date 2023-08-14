@@ -10,15 +10,18 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 
 import useClaimableLP from './hooks/useClaimableLP'
+import { AddIcon } from '@chakra-ui/icons'
+
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
 
 type Props = {
   poolId: string
   isWalletConnected: boolean
+  mobile?: boolean
   clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, isWalletConnected, clearForm }: Props) => {
+const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -161,6 +164,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm }: Props) => {
         isDisabled={isInputDisabled}
         balance={num(tokenABalance).toNumber()}
         fetchBalance={false}
+        mobile={mobile}
         onChange={(value) => {
           if (reverse) {
             setReverse(false)
@@ -168,7 +172,6 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm }: Props) => {
           onInputChange(value, 1)
         }}
       />
-
       <Input
         control={control}
         name="token2"
@@ -176,6 +179,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm }: Props) => {
         isDisabled={isInputDisabled}
         balance={num(tokenBBalance).toNumber()}
         fetchBalance={false}
+        mobile={mobile}
         onChange={(value) => {
           if (!reverse) {
             setReverse(true)

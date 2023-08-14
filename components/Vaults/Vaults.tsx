@@ -8,6 +8,7 @@ import { chainState } from 'state/chainState'
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
 import { useChain } from '@cosmos-kit/react-lite'
+import MobileVaults from './MobileVaults'
 
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =
@@ -45,14 +46,10 @@ const Vaults: FC = () => {
   }, [vaults, allVaultsInitialized])
 
   return (
-    <VStack
-      width={{ base: '100%', md: '1160px' }}
-      alignItems="center"
-      // Margin="auto"
-    >
-      <Box>
+    <VStack width={{ base: '100%' }} alignItems="center" margin="auto">
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             Vaults
           </Text>
         </HStack>
@@ -60,6 +57,7 @@ const Vaults: FC = () => {
           vaults={allVaults}
           isLoading={isLoading || !allVaultsInitialized}
         />
+        <MobileVaults vaults={allVaults} ctaLabel="New Position" />
       </Box>
     </VStack>
   )

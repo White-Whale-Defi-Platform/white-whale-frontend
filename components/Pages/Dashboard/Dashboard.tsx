@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
+
+import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
@@ -8,7 +9,9 @@ import {
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilValue } from 'recoil'
+
 import { chainState } from 'state/chainState'
+
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import { useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
@@ -19,6 +22,8 @@ const Dashboard: FC = () => {
   const { chainId, chainName, network } = useRecoilValue(chainState)
 
   const { isWalletConnected, address } = useChain(chainName)
+  
+  const currentChainName = chainName.toLowerCase()
 
   const data: BondingData[] = [
     {
@@ -64,6 +69,7 @@ const Dashboard: FC = () => {
   ]
 
   const [updatedData, setData] = useState(null)
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
 
   const setValues = (
     tokenType: TokenType,
@@ -143,16 +149,16 @@ const Dashboard: FC = () => {
   }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale])
 
   return (
-    <VStack alignSelf="center">
+    <VStack width={'full'} alignSelf="center" paddingLeft={10}>
       <Flex
         direction={{ base: 'column', xl: 'row' }}
-        gap={10}
+        gap={5}
         justifyContent="space-between"
         alignItems="flex-end"
       >
-        <VStack>
-          <HStack width="full" paddingY={5}>
-            <Text as="h2" fontSize="24" fontWeight="900">
+        <VStack width="flex">
+          <HStack width="full" paddingY={{ base: 3, md: 5 }}>
+            <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding
             </Text>
           </HStack>
@@ -161,7 +167,8 @@ const Dashboard: FC = () => {
             isLoading={isLoading && isWalletConnected}
             data={updatedData}
             whalePrice={whalePrice}
-            currentChainName={chainName}
+            currentChainName={currentChainName}
+            mobile={isMobile}
           />
         </VStack>
         <VStack alignSelf={{ base: 'center', xl: 'end' }}>

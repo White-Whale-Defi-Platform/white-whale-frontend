@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 
-import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Text,
+  VStack,
+  Stack,
+} from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -128,14 +136,14 @@ function FlashloanForm({}: Props) {
   return (
     <Flex
       padding={10}
-      width={['full', '900px']}
-      height="600px"
-      background={'#1C1C1C'}
+      width={'flex'}
+      height={'600'}
+      background="#1C1C1C"
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
-      display={['none', 'flex']}
+      display={'flex'}
     >
-      <VStack width="full">
+      <VStack width={['300px', 'full']} height={'full'}>
         <HStack
           width="full"
           justifyContent="space-between"
@@ -148,9 +156,10 @@ function FlashloanForm({}: Props) {
           {/* <Error message={error || tx?.error} /> */}
         </HStack>
         <Editor containerRef={containerRef} />
-        <HStack justify="space-between" width="full" p={4} alignItems="center">
-          <HStack>
+        <HStack width="full" p={4}>
+          <Stack direction={['column', 'row']} align={'center'}>
             <Button
+              width={[60, 120]}
               leftIcon={<MdOutlineFormatIndentDecrease size={16} />}
               variant="outline"
               onClick={format}
@@ -158,20 +167,21 @@ function FlashloanForm({}: Props) {
               Format
             </Button>
             <UploadFile handleChange={handleChange} />
-          </HStack>
 
-          <Button
-            onClick={tx?.submit}
-            variant="primary"
-            width={60}
-            isLoading={
-              // Tx?.txStep == TxStep.Estimating ||
-              tx?.txStep == TxStep.Posting || tx?.txStep == TxStep.Broadcasting
-            }
-            disabled={Boolean(error) || !isWalletConnected}
-          >
-            {buttonLabel}
-          </Button>
+            <Button
+              onClick={tx?.submit}
+              variant="primary"
+              width={60}
+              isLoading={
+                // tx?.txStep == TxStep.Estimating ||
+                tx?.txStep == TxStep.Posting ||
+                tx?.txStep == TxStep.Broadcasting
+              }
+              disabled={!!error || !isConnected}
+            >
+              {buttonLabel}
+            </Button>
+          </Stack>
         </HStack>
       </VStack>
     </Flex>

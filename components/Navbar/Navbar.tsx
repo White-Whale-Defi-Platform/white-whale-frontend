@@ -25,39 +25,46 @@ import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
 
-export const links = [
-  {
-    label: 'Swap',
-    link: '/swap',
-  },
-  {
-    label: 'Pools',
-    link: '/pools',
-  },
-  {
-    label: 'Flashloan',
-    link: '/flashloan',
-  },
-  {
-    label: 'Vaults',
-    link: '/vaults',
-  },
-  {
-    label: 'Dashboard',
-    link: '/dashboard',
-  },
-  {
-    label: 'Bridge',
-    link: 'https://tfm.com/bridge',
-  },
-]
 const Navbar = () => {
   const { chainId, chainName } = useRecoilValue(chainState)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChainName = currentChain?.label.toLowerCase()
+
+  const links = [
+    {
+      label: 'Dashboard',
+      link: `/${currentChainName}/dashboard`,
+    },
+    {
+      label: 'Swap',
+      link: `/${currentChainName}/swap`,
+    },
+    {
+      label: 'Pools',
+      link: `/${currentChainName}/pools`,
+    },
+    {
+      label: 'Vaults',
+      link: `/${currentChainName}/vaults`,
+    },
+    {
+      label: 'Flashloan',
+      link: `/${currentChainName}/flashloan`,
+    },
+    {
+      label: 'Bridge',
+      link: 'https://tfm.com/bridge',
+    },
+  ]
 
   return (
-    <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
+    <Box
+      width={'full'}
+      py={{ base: '2', md: '10' }}
+      px={{ base: '2', md: '10' }}
+    >
       <Flex
         justifyContent="space-between"
         mx="auto"
@@ -88,16 +95,18 @@ const Navbar = () => {
       <Flex
         justify="space-between"
         align="center"
-        py="4"
+        py="2"
+        px="1"
         display={{ base: 'flex', md: 'none' }}
       >
         <Logo />
         <Wallet />
         <IconButton
           aria-label="Open drawer"
+          align="right"
           variant="ghost"
           color="white"
-          icon={<BurgerIcon width="1rem" height="1rem" />}
+          icon={<BurgerIcon width="3rem" height="1rem" />}
           onClick={onOpen}
           display={{ base: 'block', md: 'none' }}
           _focus={{
@@ -113,7 +122,6 @@ const Navbar = () => {
           Open
         </IconButton>
       </Flex>
-
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
@@ -134,5 +142,4 @@ const Navbar = () => {
     </Box>
   )
 }
-
 export default Navbar

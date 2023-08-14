@@ -103,7 +103,7 @@ const BondingActions = ({ globalAction }) => {
         color={globalAction === action ? 'white' : 'grey'}
         bg={'#1C1C1C'}
         fontSize={20}
-        px={5}
+        px={3}
         transform="translate(0%, -55%)"
         style={{ textTransform: 'capitalize' }}
         onClick={onClick}
@@ -195,7 +195,7 @@ const BondingActions = ({ globalAction }) => {
             border="0.5px solid grey"
             borderRadius="30px"
             minH={160}
-            minW={570}
+            width={{ base: 390, md: 570 }}
             alignSelf="center"
             mt={'50px'}
           >

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
+import { useMediaQuery, VStack } from '@chakra-ui/react'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
+import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import AssetInput from '../../AssetInput'
@@ -13,6 +14,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   const { chainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(chainName)
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingState)
 
@@ -70,6 +72,7 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
         rules={{ required: true }}
         render={({ field }) => (
           <AssetInput
+            mobile={isMobile}
             isBonding={true}
             unbondingBalances={unbondingBalances}
             hideToken={currentBondState.tokenSymbol}

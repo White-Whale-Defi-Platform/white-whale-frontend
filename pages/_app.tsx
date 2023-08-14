@@ -30,14 +30,25 @@ import WalletModal from 'components/Wallet/Modal/WalletModal'
 import { endpointOptions } from 'constants/endpointOptions'
 import { signerOptions } from 'constants/signerOptions'
 
+const ConnectedView = ({ onClose, onReturn, wallet }: WalletViewProps) => {
+  const {
+    walletInfo: { prettyName },
+    username,
+    address,
+  } = wallet
+
+  return <div>{`${prettyName}/${username}/${address}`}</div>
+}
+
 const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
   defaultNetwork,
 }: AppProps & WalletControllerChainOptions) => {
   const [mounted, setMounted] = useState<boolean>(false)
-
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <>
