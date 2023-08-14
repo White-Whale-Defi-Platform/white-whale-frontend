@@ -14,8 +14,6 @@ type Props = {
 const MobilePools = ({ pools, ctaLabel }: Props) => {
   const router = useRouter()
   const {chainName } = useRecoilValue(chainState)
-  const currentChain = chainName
-  const currentChainName = currentChain?.label.toLowerCase()
   return (
     <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
       {pools &&
@@ -40,7 +38,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Text color="brand.50">{` ${Number(pool?.apr).toFixed(2)}`}</Text>
+              <Text color="brand.50">{` ${pool?.apr}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -51,10 +49,8 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
-              <Text>{`$ ${Number(
-                pool?.liquidity.available.total.dollarValue
-              ).toFixed(2)}`}</Text>
-              <Text>{` ${Number(pool?.volume24hr).toFixed()}`}</Text>
+              <Text>{` ${pool?.totalLiq}`}</Text>
+              <Text>{` ${pool?.volume24hr}`}</Text>
             </HStack>
 
             <HStack height="24px" />
@@ -65,7 +61,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               width="full"
               onClick={() =>
                 router.push(
-                  `/${currentChainName}/pools/manage_liquidity?poolId=${pool?.poolId}`
+                  `/${chainName}/pools/manage_liquidity?poolId=${pool?.poolId}`
                 )
               }
             >
@@ -77,7 +73,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               width="full"
               onClick={() =>
                 router.push(
-                  `/${currentChainName}/pools/incentivize?poolId=${pool?.poolId}`
+                  `/${chainName}/pools/incentivize?poolId=${pool?.poolId}`
                 )
               }
             >

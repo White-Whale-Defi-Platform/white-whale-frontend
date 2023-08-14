@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMediaQuery, VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/bonding_contract'
-import { useRecoilState } from 'recoil'
+import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
 
 import AssetInput from '../../AssetInput'
 import { bondingState } from 'state/bondingState'
@@ -25,7 +26,7 @@ export enum LSDToken {
   ampWHALE,
   bWHALE,
 }
-const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
+export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<LSDTokenItemState>(bondingState)
@@ -71,7 +72,7 @@ const Bond = ({ liquidAmpWhale, liquidBWhale, whalePrice }) => {
   })
 
   return (
-    <VStack px={7} width="full">
+    <VStack px={7} width="full" >
       {/* @ts-ignore*/}
       <Controller
         name="currentBondState"

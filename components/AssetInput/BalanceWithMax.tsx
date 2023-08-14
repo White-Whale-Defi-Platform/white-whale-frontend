@@ -141,15 +141,16 @@ const BalanceWithMaxNHalf = ({
   hideDollarValue,
   mobile,
 }: BalanceWithMaxProps) => {
-  if (!mobile) {
-    return (
+  if (!mobile){
+    return ( 
+      <>
       <HStack width="full" px={5}>
         <TokenToPrice
           numberOfTokens={numberOfTokens}
           dollarValue={dollarValue}
           hide={hideDollarValue}
         />
-        <Balance balance={balance} mobile={mobile} />
+        <Balance balance={balance} mobile={false} />
         <HalfButton
           disabled={maxDisabled}
           onClick={onHalfClick}
@@ -165,6 +166,7 @@ const BalanceWithMaxNHalf = ({
           size={'xs'}
         />
       </HStack>
+      </>
     )
   } else {
     return (
@@ -178,7 +180,7 @@ const BalanceWithMaxNHalf = ({
           />
           <Balance balance={balance} mobile={mobile} />
         </HStack>
-        <HStack justifyContent="center" spacing={2} width={'full'}>
+        <HStack justifyContent="center" spacing={2} width={'full'} paddingTop={1} paddingBottom={4}>
           <HalfButton
             disabled={hideMax}
             onClick={onHalfClick}

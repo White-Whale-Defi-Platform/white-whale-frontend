@@ -29,8 +29,7 @@ const Navbar = () => {
   const { chainId, chainName } = useRecoilValue(chainState)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const currentChain = chains.find((row) => row.chainId === chainId)
-  const currentChainName = currentChain?.label.toLowerCase()
+  const currentChainName = chainName
 
   const links = [
     {

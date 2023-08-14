@@ -177,7 +177,7 @@ function FlashloanForm({}: Props) {
                 tx?.txStep == TxStep.Posting ||
                 tx?.txStep == TxStep.Broadcasting
               }
-              disabled={!!error || !isConnected}
+              disabled={!!error || !isWalletConnected}
             >
               {buttonLabel}
             </Button>

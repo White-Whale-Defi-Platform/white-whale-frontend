@@ -1,8 +1,8 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState, WalletStatusType } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { useRecoilValue } from 'recoil'
 
 import { Vault } from './AllVaultsTable'
 import VaultName from './VaultName'
@@ -14,12 +14,7 @@ type Props = {
 
 const MobileVaults = ({ vaults, ctaLabel }: Props) => {
   const router = useRouter()
-  const { chainId, status } = useRecoilValue(walletState)
-  const chains: Array<any> = useChains()
-  const currentChain = chains.find(
-    (row: { chainId: string }) => row.chainId === chainId
-  )
-  const currentChainName = currentChain?.label.toLowerCase()
+  const {chainName } = useRecoilValue(chainState)
   return (
     <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
       {vaults &&
@@ -68,7 +63,7 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
               width="full"
               onClick={() =>
                 router.push(
-                  `/${currentChainName}/vaults/new_position?vault=${vault?.vaultId}`
+                  `/${chainName}/vaults/new_position?vault=${vault?.vaultId}`
                 )
               }
             >
