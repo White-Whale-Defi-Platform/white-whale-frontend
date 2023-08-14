@@ -3,7 +3,7 @@ import { MdOutlineFormatIndentDecrease } from 'react-icons/md'
 
 import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import Editor from './Editor'
 import useFlashloan from './hooks/useFlashloan'

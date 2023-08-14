@@ -6,15 +6,19 @@ import { num, toChainAmount } from 'libs/num'
 import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import useRoute from './useRoute'
 import useSimulate from './useSimulate'
 import useTransaction from './useTransaction'
+import { useClients } from 'hooks/useClients'
+import { useChain } from '@cosmos-kit/react-lite'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
-  const { address, client } = useRecoilValue(chainState)
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient, cosmWasmClient } = useClients(chainName)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
   const slippage = useRecoilValue(slippageAtom)
@@ -39,7 +43,7 @@ const useSwap = ({ reverse }) => {
   })
 
   const { simulated, error, isLoading } = useSimulate({
-    client,
+    cosmWasmClient,
     msg: simulateMsg,
     routerAddress,
   })
@@ -61,7 +65,7 @@ const useSwap = ({ reverse }) => {
     swapAddress: routerAddress,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
-    client,
+    signingClient,
     msgs: executeMsg,
     encodedMsgs: encodedExecuteMsg,
     amount: reverse ? simulated?.amount : amount,

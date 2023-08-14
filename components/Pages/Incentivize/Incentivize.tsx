@@ -19,7 +19,7 @@ import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryPoolsLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import Create from './Create'
 import { useClients } from 'hooks/useClients'

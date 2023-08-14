@@ -4,7 +4,7 @@ import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 
 type CreateIncreaseAllowanceMessageArgs = {
   senderAddress: string
-  tokenAmount: number
+  tokenAmount: string
   tokenAddress: string
   swapAddress: string
 }
@@ -22,7 +22,7 @@ export const createIncreaseAllowanceMessage = ({
     msg: toUtf8(
       JSON.stringify({
         increase_allowance: {
-          amount: `${tokenAmount}`,
+          amount: `${Number(tokenAmount)}`,
           spender: `${swapAddress}`,
         },
       })

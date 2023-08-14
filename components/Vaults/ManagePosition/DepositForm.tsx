@@ -4,7 +4,7 @@ import { Button, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import useDepost from '../hooks/useDeposit'
 import { TxStep } from '../hooks/useTransaction'

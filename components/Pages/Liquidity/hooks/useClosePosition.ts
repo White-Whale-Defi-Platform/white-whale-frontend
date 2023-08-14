@@ -4,19 +4,23 @@ import { useMutation } from 'react-query'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 type OpenPosition = {
   poolId: string
 }
 
 export const useClosePosition = ({ poolId }: OpenPosition) => {
-  const { address, client } = useRecoilValue(chainState)
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Close Position',
-    client,
+    signingClient,
   })
 
   const createClosPositionMessage = (unbonding_duration: number) => {
@@ -42,7 +46,9 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     }) => {
       const msgs = createClosPositionMessage(unbonding_duration)
 
-      return validateTransactionSuccess(await client.post(address, msgs))
+      return validateTransactionSuccess(
+        await signingClient.signAndBroadcast(address, msgs, 'auto', null)
+      )
     },
     onError,
     onSuccess,

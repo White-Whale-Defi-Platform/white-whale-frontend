@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
 

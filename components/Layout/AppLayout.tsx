@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect'
 import { Flex, useMediaQuery } from '@chakra-ui/react'
 import Navbar from 'components/Navbar'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import Status from '../Status'
 import MobileNotSupportedModal from '../Wallet/Modal/MobileNotSupportedModal'

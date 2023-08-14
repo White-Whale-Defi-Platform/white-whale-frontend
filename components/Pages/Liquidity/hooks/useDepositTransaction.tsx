@@ -6,18 +6,17 @@ import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { executeAddLiquidity } from 'services/liquidity'
 import { TxStep } from 'types/common'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 type Params = {
   enabled: boolean
   swapAddress: string
   swapAssets: any[]
   price?: number
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
-  poolId: string
   msgs: any | null
   encodedMsgs: any | null
-  amount?: string
   gasAdjustment?: number
   estimateEnabled?: boolean
   tokenAAmount?: string
@@ -28,15 +27,13 @@ type Params = {
 }
 
 export const useTransaction = ({
-  poolId,
   enabled,
   swapAddress,
   swapAssets,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
-  amount,
   price,
   tokenAAmount,
   tokenBAmount,
@@ -60,7 +57,11 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          ''
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -103,7 +104,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        Boolean(client) &&
+        Boolean(signingClient) &&
         Boolean(senderAddress) &&
         enabled &&
         Boolean(swapAddress) &&
@@ -129,9 +130,8 @@ export const useTransaction = ({
         tokenB,
         tokenAAmount,
         maxTokenBAmount: tokenBAmount,
-        client,
-        swapAddress:
-          'migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa',
+        signingClient,
+        swapAddress: swapAddress,
         senderAddress,
         msgs: encodedMsgs,
       }),
@@ -139,7 +139,7 @@ export const useTransaction = ({
       onMutate: () => {
         setTxStep(TxStep.Posting)
       },
-      onError: (e) => {
+      onError: async (e) => {
         let message: any = ''
         console.error(e?.toString())
         setTxStep(TxStep.Failed)
@@ -169,7 +169,10 @@ export const useTransaction = ({
         ) {
           setError(e?.toString())
           message = (
-            <Finder txHash={txInfo?.txHash} chainId={client?.client?.chainId}>
+            <Finder
+              txHash={txInfo?.hash}
+              chainId={await signingClient.getChainId()}
+            >
               {' '}
             </Finder>
           )
@@ -189,22 +192,26 @@ export const useTransaction = ({
 
         onError?.()
       },
-      onSuccess: (data: any) => {
+      onSuccess: async (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash || data?.txHash)
 
-        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
-        queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-        queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-        queryClient.invalidateQueries({ queryKey: ['positions'] })
+        await queryClient.invalidateQueries({
+          queryKey: [
+            '@pool-liquidity',
+            'multipleTokenBalances',
+            'multipleTokenBalances',
+            'positions',
+          ],
+        })
 
         toast({
           title: 'Add Liquidity Success.',
           description: (
             <Finder
               txHash={data.transactionHash || data?.txHash}
-              chainId={client?.client?.chainId}
+              chainId={await signingClient.getChainId()}
             >
               {' '}
             </Finder>
@@ -224,7 +231,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash != null,
@@ -251,7 +258,7 @@ export const useTransaction = ({
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {

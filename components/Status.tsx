@@ -5,7 +5,7 @@ import { useQuery } from 'react-query'
 import { HStack, Icon, Text } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 const Status = () => {
   const chains: Array<any> = useChains()

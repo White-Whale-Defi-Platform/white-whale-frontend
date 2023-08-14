@@ -5,7 +5,7 @@ import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { ActionType } from '../Dashboard/BondingOverview'
 import {
   Config,
@@ -13,7 +13,7 @@ import {
   useDashboardData,
 } from '../Dashboard/hooks/useDashboardData'
 import { Bond, LSDTokenItemState } from './Bond'
-import { bondingAtom } from './bondAtoms'
+import { bondingState } from 'state/bondingState'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
 import useTransaction, { TxStep } from './hooks/useTransaction'
@@ -36,7 +36,7 @@ const BondingActions = ({ globalAction }) => {
   const { txStep, submit } = useTransaction()
 
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<LSDTokenItemState>(bondingAtom)
+    useRecoilState<LSDTokenItemState>(bondingState)
 
   const { balance: liquidAmpWhale } = useTokenBalance(AMP_WHALE_TOKEN_SYMBOL)
 

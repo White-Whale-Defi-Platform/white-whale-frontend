@@ -7,7 +7,7 @@ import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { TokenItemState } from 'types'
 
 import defaultTokens from './defaultTokens.json'

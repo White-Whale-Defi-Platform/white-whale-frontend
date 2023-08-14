@@ -8,13 +8,14 @@ import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { TokenInfo } from './usePoolsListQuery'
 import { PoolMatchForSwap } from './useQueryMatchingPoolForSwap'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 type TokenToTokenPriceQueryArgs = {
   matchingPools: PoolMatchForSwap
   tokenA: TokenInfo
   tokenB: TokenInfo
   amount: number
-  client: any
+  cosmWasmClient: CosmWasmClient
   id?: string
 }
 
@@ -23,14 +24,14 @@ export async function tokenToTokenPriceQueryWithPools({
   tokenA,
   tokenB,
   amount,
-  client,
+  cosmWasmClient,
   id,
 }: TokenToTokenPriceQueryArgs): Promise<number | undefined> {
   if (tokenA?.symbol === tokenB?.symbol) {
     return 1
   }
 
-  if (!client) {
+  if (!cosmWasmClient) {
     return
   }
 
@@ -47,14 +48,14 @@ export async function tokenToTokenPriceQueryWithPools({
   if (streamlinePoolAB) {
     return getToken1ForToken2Price({
       swapAddress: streamlinePoolAB.swap_address,
-      client,
+      cosmWasmClient,
     })
   }
 
   if (streamlinePoolBA) {
     return getToken2ForToken1Price({
       swapAddress: streamlinePoolBA.swap_address,
-      client,
+      cosmWasmClient,
     })
   }
 
@@ -63,7 +64,7 @@ export async function tokenToTokenPriceQueryWithPools({
     tokenAmount: convertedTokenAmount,
     swapAddress: baseTokenAPool.swap_address,
     outputSwapAddress: baseTokenBPool.swap_address,
-    client,
+    cosmWasmClient,
   })
   // )
 }

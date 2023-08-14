@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/icons/BurgerIcon'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
 
 import Card from '../Card'

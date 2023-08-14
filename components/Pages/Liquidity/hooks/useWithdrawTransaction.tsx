@@ -6,13 +6,13 @@ import { coin } from '@cosmjs/stargate'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/common'
-import { Wallet } from 'util/wallet-adapters/index'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 type Params = {
   lpTokenAddress: string
   swapAddress: string
   enabled: boolean
-  client: Wallet
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -27,7 +27,7 @@ export const useWithdrawTransaction = ({
   lpTokenAddress,
   enabled,
   swapAddress,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -52,7 +52,11 @@ export const useWithdrawTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          ''
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -81,7 +85,7 @@ export const useWithdrawTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        Boolean(client) &&
+        Boolean(signingClient) &&
         Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
@@ -99,13 +103,20 @@ export const useWithdrawTransaction = ({
   const { mutate } = useMutation(
     (data: any) =>
       isNative
-        ? client.execute(
+        ? signingClient.execute(
             senderAddress,
             swapAddress,
             { withdraw_liquidity: {} },
+            'auto',
+            null,
             [coin(amount, lpTokenAddress)]
           )
-        : client.post(senderAddress, encodedMsgs),
+        : signingClient.signAndBroadcast(
+            senderAddress,
+            encodedMsgs,
+            'auto',
+            null
+          ),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -146,11 +157,15 @@ export const useWithdrawTransaction = ({
       onSuccess: async (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash || data?.txHash)
-        const chainId = await client.getChainId()
-        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
-        queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-        queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-        queryClient.invalidateQueries({ queryKey: ['positions'] })
+        const chainId = await signingClient.getChainId()
+        await queryClient.invalidateQueries({
+          queryKey: [
+            '@pool-liquidity',
+            'multipleTokenBalances',
+            'tokenBalance',
+            'positions',
+          ],
+        })
 
         onBroadcasting?.(data.transactionHash || data?.txHash)
         toast({
@@ -179,7 +194,7 @@ export const useWithdrawTransaction = ({
         return
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash != null,

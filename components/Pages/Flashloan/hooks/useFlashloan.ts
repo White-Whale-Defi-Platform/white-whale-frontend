@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import flashLoanContract from 'constants/vaultRouterAddresses.json'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import { createFlashLoanMsg } from './createFlashLoanMsg'
 import useTransaction from './useTransaction'

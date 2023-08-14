@@ -13,7 +13,7 @@ import { getWeight } from 'components/Pages/Dashboard/hooks/getWeight'
 import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { debounce } from 'lodash'
-import { NetworkType } from 'state/atoms/chainState'
+import { NetworkType } from 'state/chainState'
 import { useClients } from 'hooks/useClients'
 
 export interface TokenDetails {
@@ -152,7 +152,6 @@ export const useDashboardData = (address, network, chainId, chainName) => {
     const claimableEpochsData = queries[7].data
     const claimableRewardsData = queries[8].data
     const bondingConfigData = queries[9].data
-
     return {
       ...bondedData,
       ...unbondingData,

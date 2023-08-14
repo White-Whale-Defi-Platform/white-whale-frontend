@@ -42,7 +42,6 @@ type Params = {
   enabled: boolean
   swapAddress: string
   swapAssets: any[]
-  price: number
   client: any
   senderAddress: string
   msgs: any | null
@@ -55,6 +54,7 @@ type Params = {
   onError?: (txHash?: string, txInfo?: any) => void
 }
 
+//TODO make this useTx base version and remove the duplicate code
 export const useTransaction = ({
   enabled,
   swapAddress,
@@ -64,7 +64,6 @@ export const useTransaction = ({
   msgs,
   encodedMsgs,
   amount,
-  price,
   onBroadcasting,
   onSuccess,
   onError,
@@ -188,14 +187,14 @@ export const useTransaction = ({
 
         onError?.()
       },
-      onSuccess: (data: any) => {
+      onSuccess: async (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash)
         onBroadcasting?.(data.transactionHash)
         const queryPath = `multipleTokenBalances/${swapAssets
           .map(({ symbol }) => symbol)
           ?.join('+')}`
-        queryClient.invalidateQueries([queryPath])
+        await queryClient.invalidateQueries([queryPath])
         toast({
           title: 'Swap Success.',
           description: (
@@ -283,5 +282,3 @@ export const useTransaction = ({
     [txStep, txInfo, txHash, error, reset, fee]
   )
 }
-
-export default useTransaction

@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { LCDClient } from '@terra-money/feather.js'
 import { Connection, ConnectType } from '@terra-money/wallet-provider'
 import { useRecoilState } from 'recoil'
-import { chainState, WalletStatusType } from 'state/atoms/chainState'
+import { chainState, WalletStatusType } from 'state/chainState'
 export const useTerraStation = (onCloseModal) => {
   //const { connect } = useWallet()
   //const connectedWallet = useConnectedWallet()

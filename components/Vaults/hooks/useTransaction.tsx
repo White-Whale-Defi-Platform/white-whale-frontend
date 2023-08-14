@@ -6,6 +6,7 @@ import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 
 import { executeVault } from './executeVault'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export enum TxStep {
   /**
@@ -43,7 +44,7 @@ type Params = {
   isNative: boolean
   denom: string
   enabled: boolean
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   contractAddress: string
   msgs: any | null
@@ -65,7 +66,7 @@ export const useTransaction = ({
   contractAddress,
   // PoolId,
   enabled,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -91,7 +92,7 @@ export const useTransaction = ({
         return
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash != null,
@@ -105,7 +106,11 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          ''
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -143,7 +148,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        Boolean(client) &&
+        Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -163,7 +168,7 @@ export const useTransaction = ({
         amount,
         isNative,
         denom,
-        client,
+        signingClient,
         contractAddress,
         senderAddress,
         msgs,
@@ -173,7 +178,7 @@ export const useTransaction = ({
       onMutate: () => {
         setTxStep(TxStep.Posting)
       },
-      onError: (e) => {
+      onError: async (e) => {
         let message: any = ''
         console.error(e?.toString())
         setTxStep(TxStep.Failed)
@@ -203,7 +208,10 @@ export const useTransaction = ({
         ) {
           setError(e?.toString())
           message = (
-            <Finder txHash={txInfo?.txHash} chainId={client?.chainId}>
+            <Finder
+              txHash={txInfo?.hash}
+              chainId={await signingClient.getChainId()}
+            >
               {' '}
             </Finder>
           )
@@ -257,7 +265,7 @@ export const useTransaction = ({
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {

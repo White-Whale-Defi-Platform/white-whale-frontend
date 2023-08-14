@@ -18,8 +18,8 @@ import { passThroughTokenSwap } from 'services/swap'
 import {
   TransactionStatus,
   transactionStatusState,
-} from 'state/atoms/transactionAtoms'
-import { chainState } from 'state/atoms/chainState'
+} from 'state/transactionStatusState'
+import { chainState } from 'state/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'

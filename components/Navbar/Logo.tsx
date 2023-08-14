@@ -3,7 +3,7 @@ import React from 'react'
 import { HStack, Image, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRecoilState } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 const Logo = () => {
   const [currentWalletState, setCurrentWalletState] = useRecoilState(chainState)

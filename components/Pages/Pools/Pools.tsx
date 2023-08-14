@@ -26,11 +26,8 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import {
-  aprHelperState,
-  updateAPRHelperState,
-} from 'state/atoms/aprHelperState'
-import { chainState } from 'state/atoms/chainState'
+import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
+import { chainState } from 'state/chainState'
 import { EnigmaPoolData } from 'util/enigma'
 
 import { ActionCTAs } from './ActionCTAs'

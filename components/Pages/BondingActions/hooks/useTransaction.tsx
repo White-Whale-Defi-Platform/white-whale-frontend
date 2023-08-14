@@ -9,7 +9,7 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { ActionType } from '../../Dashboard/BondingOverview'
@@ -120,7 +120,7 @@ export const useTransaction = () => {
       const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
       if (data.bondingAction === ActionType.bond) {
         return bondTokens(
-          signAndBroadcast,
+          signingClient,
           address,
           adjustedAmount,
           data.denom,
@@ -128,7 +128,7 @@ export const useTransaction = () => {
         )
       } else if (data.bondingAction === ActionType.unbond) {
         return unbondTokens(
-          signAndBroadcast,
+          signingClient,
           address,
           adjustedAmount,
           data.denom,
@@ -270,7 +270,7 @@ export const useTransaction = () => {
       if (fee == null) {
         return
       }
-      await setBondingAction(bondingAction)
+      setBondingAction(bondingAction)
 
       mutate({
         fee,

@@ -3,13 +3,15 @@ import { useMemo } from 'react'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import {
   createWithdrawExecuteMsgs,
   createWithdrawMsg,
 } from './createWithdrawMsgs'
 import useTransaction from './useTransaction'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 type DepostProps = {
   token: {
@@ -27,7 +29,9 @@ const useWithdraw = ({
   token,
   onSuccess,
 }: DepostProps) => {
-  const { address, client } = useRecoilValue(chainState)
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -55,7 +59,7 @@ const useWithdraw = ({
     denom: tokenInfo?.denom,
     contractAddress: lpToken,
     enabled: Boolean(encodedMsgs),
-    client,
+    signingClient,
     senderAddress: address,
     msgs,
     encodedMsgs,

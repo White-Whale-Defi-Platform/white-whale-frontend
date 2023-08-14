@@ -4,8 +4,9 @@ import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useTokenList } from './useTokenList'
 
 /* Token selector functions */
-export const getBaseTokenFromTokenList = (tokenList): TokenInfo | undefined =>
-  tokenList?.base_token
+export const getBaseTokenFromTokenList = (
+  tokenList: any
+): TokenInfo | undefined => tokenList?.base_token
 
 export const getTokenInfoFromTokenList = (
   tokenSymbol: string,

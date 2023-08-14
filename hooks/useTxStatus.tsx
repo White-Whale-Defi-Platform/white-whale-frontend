@@ -5,7 +5,7 @@ import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useTxInfo from 'hooks/useTxInfo'
 import { useRecoilState } from 'recoil'
-import { txAtom } from 'state/atoms/tx'
+import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
@@ -15,7 +15,7 @@ type Props = {
   transactionType: string
 }
 const useTxStatus = ({ signingClient, transactionType }: Props) => {
-  const [txState, setTxState] = useRecoilState(txAtom)
+  const [txState, setTxState] = useRecoilState(txRecoilState)
   const toast = useToast()
   const txInfo = useTxInfo({ txHash: txState.txHash, signingClient })
   const queryClient = useQueryClient()
@@ -92,12 +92,17 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
       isClosable: true,
     })
 
-    queryClient.invalidateQueries({ queryKey: '@pool-liquidity' })
-    queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-    queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-    queryClient.invalidateQueries({ queryKey: ['positions'] })
-    queryClient.invalidateQueries({ queryKey: ['rewards'] })
-    queryClient.refetchQueries()
+    await queryClient.invalidateQueries({
+      queryKey: [
+        '@pool-liquidity',
+        'multipleTokenBalances',
+        'tokenBalance',
+        'positions',
+        'rewards',
+      ],
+    })
+
+    await queryClient.refetchQueries()
   }
 
   return {

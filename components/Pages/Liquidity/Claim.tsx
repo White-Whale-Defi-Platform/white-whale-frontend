@@ -7,7 +7,7 @@ import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/us
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
 
 import ClaimTable from './ClaimTable'
@@ -15,7 +15,7 @@ import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
 import { useClients } from 'hooks/useClients'
 
-const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
+const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   <HStack
     justifyContent="space-between"
     width="full"
@@ -64,7 +64,6 @@ const Claim = ({ poolId }: Props) => {
     config,
   })
   const { rewards = [], totalValue } = useRewards(poolId)
-  console.log('rewards', rewards)
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
     const rewardsSum = rewards.reduce(

@@ -10,7 +10,7 @@ import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 import { useRecoilState } from 'recoil'
-import { aprHelperState } from 'state/atoms/aprHelperState'
+import { aprHelperState } from 'state/aprHelperState'
 import { TokenItemState } from 'types/index'
 
 import Multiplicator from './Multiplicator'

@@ -20,7 +20,7 @@ import {
 } from '@terra-money/feather.js'
 import { GetTxResponse } from 'cosmjs-types/cosmos/tx/v1beta1/service'
 import Injective from 'services/injective'
-import { NetworkType } from 'state/atoms/chainState'
+import { NetworkType } from 'state/chainState'
 import { TxResponse, Wallet } from './wallet'
 
 export class OfflineSigningWallet implements Wallet {

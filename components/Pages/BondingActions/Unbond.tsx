@@ -4,17 +4,17 @@ import { Controller, useForm } from 'react-hook-form'
 import { VStack } from '@chakra-ui/react'
 import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import AssetInput from '../../AssetInput'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
-import { bondingAtom } from './bondAtoms'
+import { bondingState } from 'state/bondingState'
 import { useChain } from '@cosmos-kit/react-lite'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   const { chainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(chainName)
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<LSDTokenItemState>(bondingAtom)
+    useRecoilState<LSDTokenItemState>(bondingState)
 
   const [tokenBalances, setLSDTokenBalances] = useState<LSDTokenBalances>(null)
 

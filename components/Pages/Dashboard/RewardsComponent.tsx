@@ -18,7 +18,7 @@ import {
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import Loader from '../../Loader'
@@ -114,6 +114,7 @@ const RewardsComponent = ({
   annualRewards,
   globalAvailableRewards,
   totalGlobalClaimable,
+  daysSinceLastClaim,
   weightInfo,
 }) => {
   const { network, chainId, chainName } = useRecoilValue(chainState)
@@ -283,6 +284,7 @@ const RewardsComponent = ({
                 }
                 isWalletConnected={isWalletConnected}
                 whale={claimableRewards.toFixed(6)}
+                daysSinceLastClaim={daysSinceLastClaim}
               />
             </HStack>
             <HStack>

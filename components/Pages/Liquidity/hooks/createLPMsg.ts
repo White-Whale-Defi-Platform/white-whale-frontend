@@ -86,7 +86,9 @@ export const createLPExecuteMsgs = (
       funds: [
         tokenA?.native && coin(amountA, tokenA?.denom),
         tokenB?.native && coin(amountB, tokenB?.denom),
-      ].filter(Boolean),
+      ]
+        .filter(Boolean)
+        .sort((a, b) => a.denom.localeCompare(b.denom)),
     }),
   ]
 }

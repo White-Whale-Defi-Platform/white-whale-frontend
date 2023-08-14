@@ -25,13 +25,13 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
 
 import Claim from './Claim'
 import DepositForm from './DepositForm'
 import useProvideLP from './hooks/useProvideLP'
-import { tokenLpAtom } from './lpAtoms'
+import { tokenItemState } from 'state/tokenItemState'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
 import { useClients } from 'hooks/useClients'
@@ -45,7 +45,7 @@ const ManageLiquidity: FC = () => {
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
-  const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
+  const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenItemState)
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({ reverse, bondingDays })
   const { cosmWasmClient } = useClients(chainName)

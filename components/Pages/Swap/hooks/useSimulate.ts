@@ -2,26 +2,6 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
 import useDebounceValue from 'hooks/useDebounceValue'
-import { Wallet } from 'util/wallet-adapters'
-
-type QuerySimulate = {
-  client: Wallet
-  token: string
-  isNative: boolean
-  amount: string
-  reverse: boolean
-  swapAddress: string
-}
-
-type SwapSimulate = {
-  client: Wallet
-  token: string
-  isNative: boolean
-  amount: string
-  reverse: boolean
-  swapAddress: string
-  enabled: boolean
-}
 
 export type Simulated = {
   amount: string
@@ -31,10 +11,10 @@ export type Simulated = {
   error?: string
 }
 
-const simulate = ({ client, msg, routerAddress }): Promise<any> =>
-  client?.queryContractSmart(routerAddress, msg)
+const simulate = async ({ cosmWasmClient, msg, routerAddress }): Promise<any> =>
+  await cosmWasmClient?.queryContractSmart(routerAddress, msg)
 
-const useSimulate = ({ client, msg, routerAddress }) => {
+const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
   const debounseMsg = useDebounceValue(msg, 300)
 
   const { data, isLoading, error } = useQuery<any>(
@@ -44,10 +24,10 @@ const useSimulate = ({ client, msg, routerAddress }) => {
         return
       }
 
-      return simulate({ client, msg: debounseMsg, routerAddress })
+      return simulate({ cosmWasmClient, msg: debounseMsg, routerAddress })
     },
     {
-      enabled: Boolean(client) && Boolean(msg) && Boolean(debounseMsg),
+      enabled: Boolean(cosmWasmClient) && Boolean(msg) && Boolean(debounseMsg),
       /*
        * OnError: (err) => {
        *     console.log({err : (err as any)?.code})

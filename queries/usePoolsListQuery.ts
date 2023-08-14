@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 export type TokenInfo = {
   id: string

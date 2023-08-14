@@ -14,7 +14,7 @@ import { num, toChainAmount } from 'libs/num'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,

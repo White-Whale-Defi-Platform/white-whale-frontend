@@ -17,7 +17,7 @@ import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import useVault, { useVaultDeposit } from '../hooks/useVaults'
 import DepositForm from './DepositForm'

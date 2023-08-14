@@ -3,7 +3,7 @@ import React, { FC, useMemo, useState } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'

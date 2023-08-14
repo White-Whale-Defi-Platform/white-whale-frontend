@@ -1,5 +1,5 @@
 import { TokenInfo } from 'queries/usePoolsListQuery'
-import { Wallet } from 'util/wallet-adapters'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 type ExecuteAddLiquidityArgs = {
   tokenA: TokenInfo
@@ -13,15 +13,13 @@ type ExecuteAddLiquidityArgs = {
   maxTokenBAmount: string
   senderAddress: string
   swapAddress: string
-  client: Wallet
+  signingClient: SigningCosmWasmClient
   msgs: any
 }
 
 export const executeAddLiquidity = async ({
-  client,
+  signingClient,
   senderAddress,
   msgs,
 }: ExecuteAddLiquidityArgs): Promise<any> =>
-  // If (!tokenA.native || !tokenB.native) {
-
-  client.post(senderAddress, msgs)
+  await signingClient.signAndBroadcast(senderAddress, msgs, 'auto', null)

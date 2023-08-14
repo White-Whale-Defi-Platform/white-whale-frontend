@@ -7,10 +7,22 @@ import { fromChainAmount } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
+type Params = {
+  cosmWasmClient: CosmWasmClient
+  prices: any
+  incentiveAddress: string
+  address: string
+  pool_assets: TokenInfo[]
+  totalAssets: number[]
+  totalLpSupply: number
+}
 export type Position = {
   amount: number
   weight: string
@@ -36,16 +48,16 @@ export const lpPositionToAssets = ({
   protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
   protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
 ]
-export const fetchPositions = async (
-  client,
+export const fetchPositions = async ({
+  cosmWasmClient,
   prices,
   incentiveAddress,
   address,
   pool_assets,
   totalAssets,
-  totalLpSupply
-) => {
-  const data = await client?.queryContractSmart(incentiveAddress, {
+  totalLpSupply,
+}: Params) => {
+  const data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
     positions: { address },
   })
   return data.positions
@@ -110,8 +122,10 @@ const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
     useQueryPoolLiquidity({ poolId })
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
-  const totalReserve = liquidity?.reserves?.total || [0, 0]
-  const { address, client } = useRecoilValue(chainState)
+  const totalAssets = liquidity?.reserves?.total || [0, 0]
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { cosmWasmClient } = useClients(chainName)
   const tokens = useTokenList()
   const prices = usePrices()
 
@@ -126,16 +140,17 @@ const useLockedPositions = (poolId: string) => {
       prices,
     ],
     queryFn: (): Promise<Position[]> =>
-      fetchPositions(
-        client,
+      fetchPositions({
+        cosmWasmClient,
         prices,
-        staking_address,
+        incentiveAddress: staking_address,
         address,
         pool_assets,
-        totalReserve,
-        totalLpSupply
-      ),
-    enabled: Boolean(address) && Boolean(client) && Boolean(staking_address),
+        totalAssets,
+        totalLpSupply,
+      }),
+    enabled:
+      Boolean(address) && Boolean(cosmWasmClient) && Boolean(staking_address),
   })
 }
 

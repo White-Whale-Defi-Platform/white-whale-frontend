@@ -4,7 +4,7 @@ import { useMutation } from 'react-query'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
 import { useClients } from 'hooks/useClients'
 

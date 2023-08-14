@@ -4,7 +4,7 @@ import {
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import {
   calculateDurationString,

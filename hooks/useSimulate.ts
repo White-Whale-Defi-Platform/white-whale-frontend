@@ -2,10 +2,10 @@ import { useQuery } from 'react-query'
 
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { useRecoilState } from 'recoil'
-import { txAtom } from 'state/atoms/tx'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { txRecoilState } from 'state/txRecoilState'
 
 type Simulate = {
   msgs: EncodeObject[]
@@ -26,7 +26,7 @@ const useSimulate = ({
   onError,
   onSuccess,
 }: Simulate) => {
-  const [txState, setTxState] = useRecoilState(txAtom)
+  const [txState, setTxState] = useRecoilState(txRecoilState)
 
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],

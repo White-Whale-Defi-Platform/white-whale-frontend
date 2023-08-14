@@ -16,7 +16,7 @@ import { protectAgainstNaN } from 'junoblocks'
 import { fromChainAmount } from 'libs/num'
 import { queryPoolInfo } from 'queries/queryPoolInfo'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { TokenInfo } from 'types'
 
 import { queryMyLiquidity } from './queryMyLiquidity'
@@ -250,15 +250,15 @@ export const useQueryPoolsLiquidity = ({
 
     function getPoolTokensValues(assets, lpTokenAmount = null) {
       const tokenASymbol =
-        tokenA.symbol === AMP_WHALE_TOKEN_SYMBOL ||
-        tokenA.symbol === B_WHALE_TOKEN_SYMBOL
+        tokenA?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
+        tokenA?.symbol === B_WHALE_TOKEN_SYMBOL
           ? WHALE_TOKEN_SYMBOL
-          : tokenA.symbol
+          : tokenA?.symbol
       const tokenBSymbol =
-        tokenB.symbol === AMP_WHALE_TOKEN_SYMBOL ||
-        tokenB.symbol === B_WHALE_TOKEN_SYMBOL
+        tokenB?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
+        tokenB?.symbol === B_WHALE_TOKEN_SYMBOL
           ? WHALE_TOKEN_SYMBOL
-          : tokenB.symbol
+          : tokenB?.symbol
       return {
         tokenAmount: lpTokenAmount ?? assets[1] + assets[0],
         dollarValue:

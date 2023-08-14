@@ -6,7 +6,7 @@ import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 type UseTokenPairsPricesArgs = {
   tokenASymbol: TokenInfo['symbol']

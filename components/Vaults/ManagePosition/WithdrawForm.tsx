@@ -5,7 +5,7 @@ import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import { TxStep } from '../hooks/useTransaction'
 import useWithdraw from '../hooks/useWithdraw'
@@ -67,9 +67,9 @@ const WithdrawForm = ({
     return 'Withdraw'
   }, [tx?.buttonLabel, isWalletConnected, token])
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event?.preventDefault()
-    tx?.submit()
+    await tx?.submit()
   }
 
   useEffect(() => {

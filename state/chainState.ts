@@ -1,12 +1,7 @@
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
-import { Wallet } from 'util/wallet-adapters'
 
-type GeneratedWalletState<
-  TClient extends any,
-  TStateExtension extends {}
-> = TStateExtension & {
-  client: TClient | null
+type GeneratedWalletState<TStateExtension extends {}> = TStateExtension & {
   address: string
   chainId: string
   chainName: string
@@ -23,14 +18,13 @@ type CreateWalletStateArgs<TState = {}> = {
   default: TState
 }
 
-function createWalletState<TClient = any, TState = {}>({
+function createWalletState<TState = {}>({
   key,
   default: defaultState,
 }: CreateWalletStateArgs<TState>) {
-  return atom<GeneratedWalletState<TClient, TState>>({
+  return atom<GeneratedWalletState<TState>>({
     key,
     default: {
-      client: null,
       chainId: null,
       chainName: 'migaloo',
       address: '',
@@ -49,7 +43,6 @@ function createWalletState<TClient = any, TState = {}>({
             if (parsedSavedState?.address) {
               setSelf({
                 ...parsedSavedState,
-                client: null,
               })
             }
           } catch (e) {}
@@ -68,7 +61,7 @@ function createWalletState<TClient = any, TState = {}>({
   })
 }
 
-export const chainState = createWalletState<Wallet, { key?: Key }>({
+export const chainState = createWalletState<{ key?: Key }>({
   key: 'internal-wallet',
   default: {
     key: null,

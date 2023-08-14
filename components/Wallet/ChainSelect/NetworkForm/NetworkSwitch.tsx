@@ -3,7 +3,7 @@ import { useQueryClient } from 'react-query'
 import { Switch } from '@chakra-ui/react'
 import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/index'
 import { useRecoilState } from 'recoil'
-import { NetworkType, chainState } from 'state/atoms/chainState'
+import { NetworkType, chainState } from 'state/chainState'
 import { useChain } from '@cosmos-kit/react-lite'
 
 function NetworkSwitch() {
@@ -12,7 +12,7 @@ function NetworkSwitch() {
   const { disconnect } = useChain(currentWalletState.chainName)
 
   const changeNetwork = async () => {
-    await queryClient.clear()
+    queryClient.clear()
 
     const updatedChainId =
       MAINNET_TESTNET_MAP?.[currentWalletState.chainId] ??

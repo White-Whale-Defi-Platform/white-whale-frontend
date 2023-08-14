@@ -4,7 +4,7 @@ import { Button, HStack, useToast } from '@chakra-ui/react'
 import ConnectedWalletIcon from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWalletIcon'
 import TruncatedAddress from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/TruncatedAddress'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { useChain } from '@cosmos-kit/react-lite'
 
 function ConnectedWallet({ connected }) {

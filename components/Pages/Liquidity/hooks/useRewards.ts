@@ -7,10 +7,13 @@ import { fromChainAmount, num } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
-export type RewardData = {
-  amount: string
+export type RewardInfo = {
+  amount: number
+  dollarValue: number
   info: {
     token?: {
       contract_addr: string
@@ -21,17 +24,14 @@ export type RewardData = {
   }
 }
 
-export type Reward = TokenInfo & {
-  assetAmount: number
-  dollarValue: number
-}
+export type RewardData = TokenInfo & RewardInfo
 
 export type RewardsResult = {
   rewards: RewardData[]
-  totalValue: number
+  totalValue: string
 }
 
-function aggregateRewards(rewards: RewardData[]): RewardData[] {
+function aggregateRewards(rewards: RewardData[]): RewardInfo[] {
   // Use reduce to create the aggregates
   const aggregates = rewards.reduce((acc: { [id: string]: number }, reward) => {
     // Use contract_addr if it exists, otherwise use denom
@@ -43,7 +43,7 @@ function aggregateRewards(rewards: RewardData[]): RewardData[] {
       return acc
     }
 
-    const amount = parseInt(reward.amount)
+    const amount = reward.amount
     acc[denom] = (acc[denom] || 0) + amount
     return acc
   }, {})
@@ -54,24 +54,27 @@ function aggregateRewards(rewards: RewardData[]): RewardData[] {
     const isContract = id.startsWith('contract:')
 
     return {
-      amount: amount.toString(),
+      amount: amount,
+      dollarValue: 0,
       info: isContract
         ? { token: { contract_addr: id } }
         : { native_token: { denom: id } },
     }
   })
 }
-const useRewards = (poolId) => {
+const useRewards = (poolId: string): RewardsResult => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
   const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
-  const { address, client } = useRecoilValue(chainState)
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { cosmWasmClient } = useClients(chainName)
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
     queryFn: async (): Promise<RewardsResult> =>
-      await client?.queryContractSmart(staking_address, {
+      await cosmWasmClient?.queryContractSmart(staking_address, {
         rewards: { address },
       }),
     select: (data) => data?.rewards || [],
@@ -80,7 +83,7 @@ const useRewards = (poolId) => {
   const aggregatedRewards = useMemo(() => aggregateRewards(rewards), [rewards])
 
   return useMemo(() => {
-    const rewardsWithToken = []
+    const rewardsWithToken: RewardData[] = []
 
     aggregatedRewards?.forEach((reward) => {
       // Cw20 token
@@ -95,7 +98,8 @@ const useRewards = (poolId) => {
           .toNumber()
         rewardsWithToken.push({
           ...t,
-          assetAmount: parseFloat(amount),
+          ...reward,
+          amount: parseFloat(amount),
           dollarValue,
         })
       }
@@ -111,7 +115,8 @@ const useRewards = (poolId) => {
           .toNumber()
         rewardsWithToken.push({
           ...t,
-          assetAmount: parseFloat(amount),
+          ...reward,
+          amount: parseFloat(amount),
           dollarValue,
         })
       }

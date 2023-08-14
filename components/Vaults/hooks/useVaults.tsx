@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import { formatPrice, fromChainAmount } from 'libs/num'
 import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export type TokenInfo = {
   id: string
@@ -47,16 +49,25 @@ export type VaultsResponse = {
   tags: Record<string, { name: string; description: string }>
 }
 
-const queryShare = (client, contract, amount) => {
+const queryShare = (
+  cosmWasmClient: CosmWasmClient,
+  contractAddress: string,
+  amount: string
+) => {
   if (!amount) {
     return null
   }
-  return client.queryContractSmart(contract, {
+  return cosmWasmClient.queryContractSmart(contractAddress, {
     share: { amount },
   })
 }
-const queryVault = async (client, contract, tokenInfo, getTokenDollarValue) => {
-  const info = await client.queryContractSmart(contract, {
+const queryVault = async (
+  cosmWasmClient: CosmWasmClient,
+  contractAddress: string,
+  tokenInfo: TokenInfo,
+  getTokenDollarValue: any
+) => {
+  const info = await cosmWasmClient.queryContractSmart(contractAddress, {
     token_info: {},
   })
 
@@ -69,18 +80,22 @@ const queryVault = async (client, contract, tokenInfo, getTokenDollarValue) => {
 }
 
 const queryBalance = async (
-  client,
-  contract,
-  address,
-  vault,
-  tokenInfo,
-  getTokenDollarValue
+  cosmWasmClient: CosmWasmClient,
+  contractAddress: string,
+  address: string,
+  vaultAddress: string,
+  tokenInfo: TokenInfo,
+  getTokenDollarValue: any
 ) => {
-  const lpBalance = await client.queryContractSmart(contract, {
+  const lpBalance = await cosmWasmClient.queryContractSmart(contractAddress, {
     balance: { address },
   })
 
-  const underlyingAsset = await queryShare(client, vault, lpBalance?.balance)
+  const underlyingAsset = await queryShare(
+    cosmWasmClient,
+    vaultAddress,
+    lpBalance?.balance
+  )
   const dollarValue = await getTokenDollarValue({
     tokenA: tokenInfo,
     tokenAmountInDenom: fromChainAmount(underlyingAsset),
@@ -93,8 +108,14 @@ const queryBalance = async (
   }
 }
 
-export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
-  const { chainId, client, address } = useRecoilValue(chainState)
+export const useVaultDeposit = (
+  lpToken: string,
+  vaultAddress: string,
+  tokenInfo: TokenInfo
+) => {
+  const { chainName, chainId } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { cosmWasmClient } = useClients(chainName)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -105,7 +126,7 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
     ['vaultsDeposit', lpToken, chainId],
     async () =>
       queryBalance(
-        client,
+        cosmWasmClient,
         lpToken,
         address,
         vaultAddress,
@@ -115,7 +136,7 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
     {
       enabled:
         Boolean(chainId) &&
-        Boolean(client) &&
+        Boolean(cosmWasmClient) &&
         Boolean(lpToken) &&
         Boolean(getTokenDollarValue),
     }
@@ -124,7 +145,9 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
   return { balance, isLoading, refetch }
 }
 export const useVaultMultiDeposit = (lpTokens: any[]) => {
-  const { chainId, client, address } = useRecoilValue(chainState)
+  const { chainId, chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { cosmWasmClient } = useClients(chainName)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -137,7 +160,7 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
       Promise.all(
         lpTokens.map(({ lp_token, vault_address, vault_assets }) =>
           queryBalance(
-            client,
+            cosmWasmClient,
             lp_token,
             address,
             vault_address,
@@ -147,23 +170,26 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
         )
       ),
     {
-      enabled: Boolean(chainId) && Boolean(client) && Boolean(lpTokens?.length),
+      enabled:
+        Boolean(chainId) &&
+        Boolean(cosmWasmClient) &&
+        Boolean(lpTokens?.length),
     }
   )
 
   return { balance, isLoading, refetch }
 }
 export const useVaultTotal = (lpTokenIds: any[]) => {
-  const { chainId } = useRecoilValue(chainState)
+  const { chainId, chainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(chainName)
   const [getTokenDollarValue, isQueryLoading] = useGetTokenDollarValueQuery()
-  const cosmwasmClient = useCosmwasmClient(chainId)
   const { data: balance, isLoading } = useQuery(
     ['vaultsInfo', lpTokenIds, chainId, isQueryLoading],
     async () =>
       Promise.all(
         lpTokenIds.map(({ lp_token, vault_assets }) =>
           queryVault(
-            cosmwasmClient,
+            cosmWasmClient,
             lp_token,
             vault_assets,
             getTokenDollarValue

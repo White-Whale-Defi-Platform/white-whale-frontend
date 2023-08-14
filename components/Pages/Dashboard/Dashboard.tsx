@@ -8,7 +8,7 @@ import {
 import usePrices from 'hooks/usePrices'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import { useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
@@ -129,6 +129,7 @@ const Dashboard: FC = () => {
     annualRewards,
     currentEpoch,
     totalGlobalClaimable,
+    daysSinceLastClaim,
     globalAvailableRewards,
     isLoading,
   } = useDashboardData(address, network, chainId, chainName)
@@ -175,6 +176,7 @@ const Dashboard: FC = () => {
             annualRewards={annualRewards}
             globalAvailableRewards={globalAvailableRewards}
             totalGlobalClaimable={totalGlobalClaimable}
+            daysSinceLastClaim={daysSinceLastClaim}
             weightInfo={weightInfo}
           />
         </VStack>

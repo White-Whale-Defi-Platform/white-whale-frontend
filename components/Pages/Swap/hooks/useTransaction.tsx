@@ -6,6 +6,7 @@ import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 
 import { directTokenSwap } from './directTokenSwap'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export enum TxStep {
   /**
@@ -43,7 +44,7 @@ type Params = {
   swapAddress: string
   swapAssets: any[]
   price: number
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -59,7 +60,7 @@ export const useTransaction = ({
   enabled,
   swapAddress,
   swapAssets,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -85,7 +86,11 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          ''
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -150,7 +155,7 @@ export const useTransaction = ({
         senderAddress,
         msgs,
         tokenAmount: amount,
-        client,
+        signingClient,
       }),
     {
       onMutate: () => {
@@ -190,17 +195,20 @@ export const useTransaction = ({
 
         onError?.()
       },
-      onSuccess: (data: any) => {
+      onSuccess: async (data: any) => {
         setTxStep(TxStep.Broadcasting)
         setTxHash(data.transactionHash || data?.txHash)
         onBroadcasting?.(data.transactionHash)
-        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+        await queryClient.invalidateQueries([
+          'multipleTokenBalances',
+          'tokenBalance',
+        ])
         toast({
           title: 'Swap Success.',
           description: (
             <Finder
               txHash={data.transactionHash || data?.txHash}
-              chainId={client?.client?.chainId || client?.chainID}
+              chainId={await signingClient?.getChainId()}
             >
               {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
@@ -221,7 +229,7 @@ export const useTransaction = ({
       if (txHash == null) {
         return
       }
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash != null,
@@ -248,7 +256,7 @@ export const useTransaction = ({
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {

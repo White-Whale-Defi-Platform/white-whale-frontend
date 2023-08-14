@@ -1,8 +1,8 @@
 import { atom } from 'recoil'
-import { TokenItemState } from 'types'
+import { TokenItemState } from 'types/index'
 
-export const tokenLpAtom = atom<[TokenItemState, TokenItemState]>({
-  key: 'tokenLP',
+export const tokenItemState = atom<[TokenItemState, TokenItemState]>({
+  key: 'tokenLPState',
   default: [
     {
       tokenSymbol: null,

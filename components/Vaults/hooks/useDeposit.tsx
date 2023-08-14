@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import { createDepostExecuteMsgs, createDepostMsg } from './createDepositMsgs'
 import useTransaction from './useTransaction'

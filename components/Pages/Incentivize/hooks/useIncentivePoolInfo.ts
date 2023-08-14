@@ -9,7 +9,7 @@ import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEp
 import { fetchTotalPoolSupply } from 'components/Pages/Pools/hooks/fetchTotalPoolLp'
 import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 import {
   EnigmaPoolData,

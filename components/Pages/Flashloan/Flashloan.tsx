@@ -4,7 +4,7 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChains } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 
 import FlashloanForm from './FlashloanForm'
 

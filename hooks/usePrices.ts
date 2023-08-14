@@ -13,7 +13,7 @@ import {
   findPoolForSwap,
 } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 import asyncForEach from 'util/asyncForEach'
 import { Wallet } from 'util/wallet-adapters'
 
@@ -85,7 +85,7 @@ const getPrices = async ({
 
           tokenA: streamlinePoolAB ? token : baseToken,
           tokenB: streamlinePoolBA ? token : baseToken,
-          client: cosmWasmClient as Wallet | CosmWasmClient,
+          cosmWasmClient,
           amount: 1,
         })
         const price = value * baseTokenPrice

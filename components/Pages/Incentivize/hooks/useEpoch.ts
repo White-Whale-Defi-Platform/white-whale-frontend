@@ -8,7 +8,7 @@ import {
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/atoms/chainState'
+import { chainState } from 'state/chainState'
 dayjs.extend(utc)
 interface Epoch {
   available: {
