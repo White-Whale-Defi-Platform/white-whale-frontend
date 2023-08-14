@@ -264,7 +264,14 @@ const Pools = () => {
   )
   const parseLiquidity = (liqString) => {
     const value = parseFloat(liqString.replace(/[^\d.-]/g, ''))
-    return liqString.toUpperCase().includes('K') ? value * 1000 : value
+    // We do this mutation because by now we already have modified the string to include a letter abbreviation
+    // if the liquidity goes over 1000
+    // If its in the thousands, multiple the value by 1000, if the millions 1000000
+    return liqString.toUpperCase().includes('K')
+      ? value * 1000
+      : liqString.toUpperCase().includes('M')
+      ? value * 1000000
+      : value
   }
   const showAllPoolsList = useMemo(() => {
     const pools = allPoolsForShown
