@@ -20,7 +20,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Close Position',
-    client,
+    signingClient,
   })
 
   const createClosPositionMessage = (flow_id: number) => {
@@ -44,7 +44,9 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
 
       console.log({ msgs, flowId, poolId })
 
-      return validateTransactionSuccess(await client.post(address, msgs))
+      return validateTransactionSuccess(
+        await signingClient.signAndBroadcast(address, msgs, 'auto', null)
+      )
     },
     onError,
     onSuccess,

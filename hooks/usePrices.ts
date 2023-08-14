@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import {
   PoolEntityType,
@@ -15,7 +14,6 @@ import {
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import asyncForEach from 'util/asyncForEach'
-import { Wallet } from 'util/wallet-adapters'
 
 import useCoinGecko from './useCoinGecko'
 import { useBaseTokenInfo } from './useTokenInfo'

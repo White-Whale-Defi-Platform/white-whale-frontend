@@ -53,7 +53,7 @@ export enum TxStep {
 export const useTransaction = () => {
   const toast = useToast()
   const { chainId, chainName, network } = useRecoilValue(chainState)
-  const { address, signAndBroadcast } = useChain(chainName)
+  const { address } = useChain(chainName)
   const { signingClient } = useClients(chainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)

@@ -3,7 +3,7 @@
  * and calculates the dollar value of the provided token
  *
  */
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useRecoilValue } from 'recoil'
