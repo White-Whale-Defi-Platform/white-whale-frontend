@@ -9,7 +9,6 @@ import AssetInput from '../../AssetInput'
 import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 
 const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   const { chainName } = useRecoilValue(chainState)

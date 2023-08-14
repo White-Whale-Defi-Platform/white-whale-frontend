@@ -22,7 +22,6 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { TokenItemState } from 'types'
 
 import { Simulated } from './hooks/useSimulate'
-import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
   isWalletConnected: boolean

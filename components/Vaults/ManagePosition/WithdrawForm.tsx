@@ -9,7 +9,6 @@ import { chainState } from 'state/atoms/chainState'
 
 import { TxStep } from '../hooks/useTransaction'
 import useWithdraw from '../hooks/useWithdraw'
-import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
   isWalletConnected: boolean

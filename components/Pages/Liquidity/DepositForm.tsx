@@ -14,7 +14,6 @@ import { aprHelperState } from 'state/atoms/aprHelperState'
 import { TokenItemState } from 'types/index'
 
 import Multiplicator from './Multiplicator'
-import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
   isWalletConnected: boolean

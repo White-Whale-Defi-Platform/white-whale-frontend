@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { VStack } from '@chakra-ui/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -6,7 +6,6 @@ import { chainState } from 'state/atoms/chainState'
 import AssetInput from '../../AssetInput'
 import { bondingAtom } from './bondAtoms'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
 
 export interface LSDTokenBalances {

@@ -18,7 +18,6 @@ import { TxStep } from 'types/common'
 
 import { useOpenFlow } from './hooks/useOpenFlow'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
 
 const defaultToken = {

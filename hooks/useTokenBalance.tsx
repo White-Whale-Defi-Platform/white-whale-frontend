@@ -13,7 +13,6 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { WalletStatus } from '@cosmos-kit/core'
 
 async function fetchTokenBalance({
   cosmWasmClient,

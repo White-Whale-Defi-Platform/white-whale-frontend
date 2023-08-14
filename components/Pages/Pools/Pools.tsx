@@ -38,7 +38,6 @@ import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 import { useClients } from 'hooks/useClients'
 
 type PoolData = PoolEntityTypeWithLiquidity &

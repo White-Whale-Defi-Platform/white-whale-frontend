@@ -8,7 +8,6 @@ import { chainState } from 'state/atoms/chainState'
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =

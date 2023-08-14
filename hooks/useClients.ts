@@ -3,12 +3,11 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { useMemo } from 'react'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 
-export function useClients(chainName) {
+export function useClients(chainName: string) {
   const {
     getCosmWasmClient,
     getSigningCosmWasmClient,
     isWalletConnected,
-    signAndBroadcast,
     wallet,
   } = useChain(chainName)
 

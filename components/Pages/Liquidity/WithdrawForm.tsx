@@ -11,7 +11,6 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 
 import useClaimableLP from './hooks/useClaimableLP'
 import useWithdraw, { useSimulateWithdraw } from './hooks/useWithdraw'
-import { WalletStatus } from '@cosmos-kit/core'
 
 type Props = {
   poolId: string

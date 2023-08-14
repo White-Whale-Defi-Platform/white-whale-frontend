@@ -15,7 +15,6 @@ import {
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
 import { WhaleTokenType } from './BondingActions'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 
 const Withdraw = ({
   unbondingAmpWhale,

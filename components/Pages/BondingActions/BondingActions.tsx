@@ -19,7 +19,6 @@ import Withdraw from './Withdraw'
 import useTransaction, { TxStep } from './hooks/useTransaction'
 import usePrices from 'hooks/usePrices'
 import { useChain } from '@cosmos-kit/react-lite'
-import { WalletStatus } from '@cosmos-kit/core'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import Loader from 'components/Loader'
 
