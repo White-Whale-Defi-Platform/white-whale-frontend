@@ -191,8 +191,8 @@ export const useTransaction = ({
       },
       onSuccess: (data: any) => {
         setTxStep(TxStep.Broadcasting)
-        setTxHash(data.transactionHash || data?.txHash)
-        onBroadcasting?.(data.transactionHash || data?.txHash)
+        setTxHash(data?.transactionHash || data?.txHash)
+        onBroadcasting?.(data?.transactionHash || data?.txHash)
 
         queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
         queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
@@ -203,7 +203,7 @@ export const useTransaction = ({
           title: 'Add Liquidity Success.',
           description: (
             <Finder
-              txHash={data.transactionHash || data?.txHash}
+              txHash={data?.transactionHash || data?.txHash}
               chainId={client?.client?.chainId}
             >
               {' '}
