@@ -195,7 +195,7 @@ const BondingActions = ({ globalAction }) => {
             border="0.5px solid grey"
             borderRadius="30px"
             minH={160}
-            width={{ base: 390, md: 570 }}
+            width={'90%'}
             alignSelf="center"
             mt={'50px'}
           >
@@ -239,7 +239,7 @@ const BondingActions = ({ globalAction }) => {
             alignSelf="center"
             bg="#6ACA70"
             borderRadius="full"
-            width="100%"
+            width="80%"
             variant="primary"
             disabled={
               txStep == TxStep.Estimating ||

@@ -56,7 +56,8 @@ const Withdraw = ({
         borderColor="whiteAlpha.400"
         borderRadius="10px"
         p={4}
-        minW={240}
+        width={['200px','200px','240px']}
+        
       >
         <WhaleTooltip
           label={label}
@@ -107,7 +108,7 @@ const Withdraw = ({
 
   return (
     <VStack spacing={5} mb={35}>
-      <Stack direction={['column', 'column', 'row']} spacing={7}>
+      <Stack direction={['column', 'row', 'row', 'row']} spacing={7}>
         <TokenBox
           label="Unbonding"
           ampWhale={unbondingAmpWhale}
