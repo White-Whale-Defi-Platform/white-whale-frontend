@@ -8,7 +8,7 @@ import { chainState } from 'state/chainState'
 const Logo = () => {
   const [currentWalletState, setCurrentWalletState] = useRecoilState(chainState)
   return (
-    <HStack alignItems="center">
+    <HStack alignItems="center" paddingTop={['1.5','1.5','0']}>
       <Link href="/">
         <a
           onClick={() =>
@@ -25,7 +25,7 @@ const Logo = () => {
           />
         </a>
       </Link>
-      <HStack display={['none', 'flex']}>
+      <HStack display={['none', 'flex', 'none','flex']} >
         <Text pl={2} fontSize="26" fontWeight="400">
           White
         </Text>

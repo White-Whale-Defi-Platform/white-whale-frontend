@@ -114,13 +114,13 @@ const BondingOverview = ({
         <HStack
           alignItems="center"
           justifyContent="flex-start"
-          pl={4}
+          paddingLeft={4}
           pt={5}
-          spacing={'5'}
+          spacing={['2','5']}
         >
           {piechart()}
           <VStack alignItems="start" alignSelf="flex-start">
-            <Text paddingBottom={4} color="whiteAlpha.600">
+            <Text paddingBottom={[2,4]} color="whiteAlpha.600">
               Tokens
             </Text>
             {data?.map((e) => (
@@ -131,7 +131,7 @@ const BondingOverview = ({
             ))}
           </VStack>
           <VStack alignItems="start" spacing={8} alignSelf="flex-start">
-            <Text marginBottom={-2} paddingEnd={10} color="whiteAlpha.600">
+            <Text marginBottom={['-3.5', '-2']} paddingEnd={['5','10']} color="whiteAlpha.600">
               {`Value($${(aggregatedAssets * Number(whalePrice)).toFixed(2)})`}
             </Text>
             {/* Value equals the amount of the specific token type (liquid, bonded, unbonding, withdrawable)*/}
@@ -159,6 +159,7 @@ const BondingOverview = ({
             alignItems="flex-start"
             justify="flex-start"
             alignSelf="flex-start"
+            paddingLeft={3}
             paddingRight={5}
             spacing={8}
           >

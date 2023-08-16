@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Box, Button, Divider } from '@chakra-ui/react'
+import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
@@ -122,7 +122,7 @@ const Wallet: any = () => {
 
   if (!isWalletConnected) {
     return (
-      <>
+      <><HStack align='right' size={"flex"} paddingLeft={"1"} spacing={"2"} paddingTop={['2','2','0']}>
         <SelectChainModal
           connected={isWalletConnected}
           denom={denom?.coinDenom}
@@ -138,9 +138,10 @@ const Wallet: any = () => {
           borderRadius="full"
           onClick={openView}
         >
-          <WalletIcon />
-          Connect wallet
-        </Button>
+          <WalletIcon/>
+          <Text>Connect</Text>
+          <Text display={['none','none','contents']}>Wallet</Text>
+        </Button></HStack>
       </>
     )
   }
@@ -154,7 +155,7 @@ const Wallet: any = () => {
           onChainChange={onChainChange}
           currentChainState={currentChainState}
         />
-        <Box display={{ base: 'none', md: 'block' }}>
+        <Box display={{ base: 'block', md: 'block' }}>
           <Divider
             orientation="vertical"
             borderColor="rgba(255, 255, 255, 0.1);"

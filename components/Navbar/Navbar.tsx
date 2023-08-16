@@ -61,8 +61,9 @@ const Navbar = () => {
   return (
     <Box
       width={'full'}
-      py={{ base: '2', md: '10' }}
-      px={{ base: '2', md: '10' }}
+      paddingLeft={{base: '1', md: '5'}}
+      paddingRight={{base: '0', md: '5'}}
+      paddingTop={{base: '2', md: '10'}}
     >
       <Flex
         justifyContent="space-between"
@@ -93,16 +94,16 @@ const Navbar = () => {
       </Flex>
       <Flex
         justify="space-between"
-        align="center"
-        py="2"
-        px="1"
+        py={['0',"2"]}
+        px={['0',"1"]}
         display={{ base: 'flex', md: 'none' }}
       >
         <Logo />
         <Wallet />
         <IconButton
-          aria-label="Open drawer"
+          paddingTop={['3','3','0']}
           align="right"
+          aria-label="Open drawer"
           variant="ghost"
           color="white"
           icon={<BurgerIcon width="3rem" height="1rem" />}

@@ -59,7 +59,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       onClose={onClose}
     >
       <PopoverTrigger>
-        <HStack as={Button} variant="unstyled">
+        <HStack as={Button} variant="unstyled" >
           <Text
             fontSize={['14px', '16px']}
             color={isActiveLink ? 'white' : 'brand.50'}

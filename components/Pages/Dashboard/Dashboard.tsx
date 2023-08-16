@@ -149,7 +149,7 @@ const Dashboard: FC = () => {
   }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale])
 
   return (
-    <VStack width={'full'} alignSelf="center" paddingLeft={10}>
+    <VStack width={'full'} alignSelf="center" paddingLeft={['0','5','10']}>
       <Flex
         direction={{ base: 'column', xl: 'row' }}
         gap={5}

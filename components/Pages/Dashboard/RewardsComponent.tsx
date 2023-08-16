@@ -79,7 +79,7 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
   return (
     <Box
       h="7px"
-      width={'calc(100vw)'}
+      width={[280, 380]}
       maxWidth={390}
       bg={
         percent === 100 && currentEpochStartTimeInNano > 0
@@ -217,19 +217,19 @@ const RewardsComponent = ({
         </VStack>
       ) : (
         <VStack
+          px={4}
           background={boxBg}
           borderRadius={borderRadius}
           alignItems="center"
           minH={320}
-          minWidth={420}
-          maxWidth={'calc(40vw)'}
+          width='flex'
           gap={4}
           overflow="hidden"
           position="relative"
           display="flex"
           justifyContent="flex-start"
         >
-          <HStack spacing={170} align="stretch" mt={7}>
+          <HStack spacing={['100','170']} align="stretch" mt={7}>
             <HStack flex="1">
               <a>
                 <Image
@@ -245,7 +245,7 @@ const RewardsComponent = ({
             </Text>
           </HStack>
           <VStack>
-            <HStack justifyContent="space-between" minW={390}>
+            <HStack justifyContent="space-between" minWidth={["280","380"]}>
               <Text color="whiteAlpha.600">Next rewards in</Text>
               <Text>{durationString}</Text>
             </HStack>
@@ -261,7 +261,7 @@ const RewardsComponent = ({
             borderColor="whiteAlpha.400"
             borderRadius="10px"
             p={4}
-            minW={390}
+            minW={['290','390']}
           >
             <HStack justifyContent="space-between">
               <HStack>
@@ -296,7 +296,7 @@ const RewardsComponent = ({
               </Text>
             </HStack>
           </Box>
-          <HStack w={390}>
+          <HStack w={[290,390]}>
             <Button
               alignSelf="center"
               bg="#6ACA70"
