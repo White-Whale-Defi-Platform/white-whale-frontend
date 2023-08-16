@@ -1,0 +1,24 @@
+{
+  "factory": "",
+  "vaults": [
+    {
+      "pool_id": "SEI",
+      "vault_assets": {
+        "id": "sei-network",
+        "chain_id": "pacific-1",
+        "token_address": "usei",
+        "symbol": "SEI",
+        "name": "Sei",
+        "decimals": 6,
+        "logoURI": "/logos/sei.svg",
+        "tags": ["native"],
+        "native": true,
+        "denom": "usei"
+      },
+      "lp_token": "",
+      "vault_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

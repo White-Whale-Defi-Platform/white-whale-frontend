@@ -1,0 +1,65 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": ["special tokens"],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2023-08-16T00:00:00+00:00",
+  "base_token": {
+    "id": "sei-network",
+    "chain_id": "pacific-1",
+    "token_address": "",
+    "symbol": "SEI",
+    "name": "Sei",
+    "decimals": 6,
+    "logoURI": "/logos/sei.svg",
+    "tags": ["native"],
+    "native": true,
+    "denom": "usei"
+  },
+  "routerAddress": "",
+  "pools": [
+    {
+      "pool_id": "WHALE-SEI",
+      "lpOrder": ["WHALE", "SEI"],
+      "assetOrder": ["WHALE", "SEI"],
+      "displayName": "WHALE-SEI",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/sei.svg",
+      "pool_assets": [
+        {
+          "id" : "white-whale",
+          "chain_id": "pacific-1",
+          "token_address": "",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": ""
+        },
+        {
+          "id": "sei-network",
+          "chain_id": "pacific-1",
+          "token_address": "usei",
+          "symbol": "SEI",
+          "name": "Sei",
+          "decimals": 6,
+          "logoURI": "/logos/sei.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "usei"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

@@ -47,6 +47,53 @@
     "features": ["cosmwasm"]
   },
   {
+    "chain_name": "SEI Mainnet",
+    "rpc": "https://sei-rpc.polkachu.com/",
+    "rest":"https://sei-api.polkachu.com/",
+    "icon": "/logos/sei.svg",
+    "website": "https://www.sei.io/",
+    "network_type": "mainnet",
+    "pretty_name": "Sei",
+    "chain_id": "pacific-1",
+    "bech32_prefix": "sei",
+    "daemon_name": "seid",
+    "node_home": "$HOME/.sei",
+    "key_algos": [
+      "secp256k1"
+    ],
+    "stakeCurrency": {
+      "coinDenom": "SEI",
+      "coinMinimalDenom": "usei",
+      "coinDecimals": 6
+    },
+    "slip44": 118,
+    "gasPriceStep": {
+      "low": 0.1,
+      "average": 0.1,
+      "high": 0.25
+    },
+    "feeCurrencies": [
+      {
+        "coinDenom": "SEI",
+        "coinMinimalDenom": "usei",
+        "coinDecimals": 6,
+        "coinGeckoId": "sei-network"
+      }
+    ],
+    "features": ["cosmwasm"],
+    "fees": {
+      "fee_tokens": [
+        {
+          "denom": "usei",
+          "fixed_min_gas_price": 0.1,
+          "low_gas_price": 0.1,
+          "average_gas_price": 0.1,
+          "high_gas_price": 0.25
+        }
+      ]
+    }
+  },
+  {
     "chainId": "juno-1",
     "chainName": "Juno Mainnet",
     "label": "Juno",
