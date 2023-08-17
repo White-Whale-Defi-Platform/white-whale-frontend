@@ -13,7 +13,7 @@
   "timestamp": "2023-08-16T00:00:00+00:00",
   "base_token": {
     "id": "sei-network",
-    "chain_id": "pacific-1",
+    "chain_id": "sei-devnet-1",
     "token_address": "",
     "symbol": "SEI",
     "name": "Sei",
@@ -25,7 +25,7 @@
     "native": true,
     "denom": "usei"
   },
-  "routerAddress": "sei1f5utu2sx9f43cxl6c37ur5z57x6n3qmvpzse38hmhz6mspp4krsqccyu80",
+  "routerAddress": "sei1lxansfc8vkujy997e3xksd3ugsppv6a9jt32pjtgaxr0zkcnkznqernkea",
   "pools": [
     {
       "pool_id": "WHALE-SEI",
@@ -41,23 +41,10 @@
       "displayLogo1": "/logos/whale.svg",
       "displayLogo2": "/logos/sei.svg",
       "pool_assets": [
-        {
-          "id": "white-whale",
-          "chain_id": "pacific-1",
-          "token_address": "ibc/6ACE79F5ABD607D2075FAD4ABE284CBC5BB6A96C16555FFB901644E9D17411AC",
-          "symbol": "WHALE",
-          "name": "Whale",
-          "decimals": 6,
-          "logoURI": "/logos/whale.svg",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/6ACE79F5ABD607D2075FAD4ABE284CBC5BB6A96C16555FFB901644E9D17411AC"
-        },
+
         {
           "id": "sei-network",
-          "chain_id": "pacific-1",
+          "chain_id": "sei-devnet-1",
           "token_address": "usei",
           "symbol": "SEI",
           "name": "Sei",
@@ -68,10 +55,22 @@
           ],
           "native": true,
           "denom": "usei"
+        },
+        {
+          "id": "token",
+          "chain_id": "sei-devnet-1",
+          "token_address": "sei1ntq7vz509nt4fx3yngltgt4svrggsgaept7tzpsmzeh8mek5utwsgdrean",
+          "symbol": "TOKEN",
+          "name": "Token",
+          "decimals": 6,
+          "logoURI": "/logos/atom.png",
+          "tags": [],
+          "native": false,
+          "denom": "sei1ntq7vz509nt4fx3yngltgt4svrggsgaept7tzpsmzeh8mek5utwsgdrean"
         }
       ],
-      "lp_token": "sei1zq2mleg8r9l9sa7x350wtvqety0l5crvv9a6znz634cwdjpec36slquzlx",
-      "swap_address": "sei155lc2utpd66unfhyh533yu729ltmrd8eeqw0qq5r7jws9pfc9k0sp65zul",
+      "lp_token": "sei1jqdzmf3dd9zurkyn0t2uj8sp7775n8nuuq2cnrjnlckwfrjhzeuse7ngpa",
+      "swap_address": "sei1leewphkx87lq2yuz8pmxw4yqlenfm25ruahj75p6vhf2cfk7p82qxgp7yk",
       "staking_address": "",
       "rewards_tokens": []
     }

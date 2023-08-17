@@ -12,8 +12,8 @@ function NetworkSwitch() {
   const [currentWalletState, setWalletState] = useRecoilState(walletState)
   const { disconnect } = useWallet()
 
-  const changeNetwork = async () => {
-    await queryClient.clear()
+  const changeNetwork = () => {
+    queryClient.clear()
 
     const updatedChainId =
       MAINNET_TESTNET_MAP?.[currentWalletState.chainId] ??

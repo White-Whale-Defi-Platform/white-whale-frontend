@@ -21,6 +21,8 @@ const backgrounds = {
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(82, 206, 252, 0.50) 97.47%)',
   'comdex-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 64, 74, 0.50) 97.47%)',
+  'pacific-1':
+    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 64, 74, 0.50) 97.47%)',
   'comdex-test2':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 64, 74, 0.50) 97.47%)',
   'narwhal-1':

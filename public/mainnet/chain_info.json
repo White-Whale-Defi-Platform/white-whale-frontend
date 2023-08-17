@@ -44,34 +44,48 @@
       "average": 0.05,
       "high": 0.1
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
-    "chain_name": "SEI Mainnet",
+    "chainId": "pacific-1",
+    "chainName": "SEI Mainnet",
     "rpc": "https://sei-rpc.polkachu.com/",
-    "rest":"https://sei-api.polkachu.com/",
+    "rest": "https://sei-api.polkachu.com/",
     "icon": "/logos/sei.svg",
-    "website": "https://www.sei.io/",
     "network_type": "mainnet",
-    "pretty_name": "Sei",
-    "chain_id": "pacific-1",
-    "bech32_prefix": "sei",
-    "daemon_name": "seid",
-    "node_home": "$HOME/.sei",
-    "key_algos": [
-      "secp256k1"
-    ],
+    "label": "Sei",
     "stakeCurrency": {
       "coinDenom": "SEI",
       "coinMinimalDenom": "usei",
       "coinDecimals": 6
     },
-    "slip44": 118,
+    "bip44": {
+      "coinType": 118
+    },
+    "coinType": 118,
     "gasPriceStep": {
       "low": 0.1,
       "average": 0.1,
       "high": 0.25
     },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "sei",
+      "bech32PrefixAccPub": "seipub",
+      "bech32PrefixValAddr": "seivaloper",
+      "bech32PrefixValPub": "seivaloperpub",
+      "bech32PrefixConsAddr": "seivalcons",
+      "bech32PrefixConsPub": "seivalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "SEI",
+        "coinMinimalDenom": "usei",
+        "coinDecimals": 6,
+        "coinGeckoId": "sei-network"
+      }
+    ],
     "feeCurrencies": [
       {
         "coinDenom": "SEI",
@@ -80,18 +94,9 @@
         "coinGeckoId": "sei-network"
       }
     ],
-    "features": ["cosmwasm"],
-    "fees": {
-      "fee_tokens": [
-        {
-          "denom": "usei",
-          "fixed_min_gas_price": 0.1,
-          "low_gas_price": 0.1,
-          "average_gas_price": 0.1,
-          "high_gas_price": 0.25
-        }
-      ]
-    }
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "juno-1",
@@ -139,7 +144,9 @@
       "average": 0.0,
       "high": 0.0
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "phoenix-1",
@@ -186,7 +193,9 @@
       "average": 0.15,
       "high": 0.2
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "chihuahua-1",
@@ -233,7 +242,9 @@
       "average": 5,
       "high": 10
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "injective-1",
@@ -289,7 +300,12 @@
       "high": 80000000000
     },
     "coinType": 60,
-    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+    "features": [
+      "ibc-transfer",
+      "ibc-go",
+      "eth-address-gen",
+      "eth-key-sign"
+    ]
   },
   {
     "rpc": "https://rpc.comdex.one",
@@ -342,7 +358,10 @@
       "high": 1.0
     },
     "coinType": 60,
-    "features": ["ibc-transfer", "ibc-go"],
+    "features": [
+      "ibc-transfer",
+      "ibc-go"
+    ],
     "beta": true
   }
 ]

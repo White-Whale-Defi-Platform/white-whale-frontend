@@ -6,6 +6,7 @@ export const ACTIVE_NETWORKS = {
     juno: 'juno-1',
     migaloo: 'migaloo-1',
     terra: 'phoenix-1',
+    sei: 'pacific-1',
   },
   testnet: {
     comdex: 'comdex-test2',
@@ -13,6 +14,7 @@ export const ACTIVE_NETWORKS = {
     juno: 'uni-6',
     narwhal: 'narwhal-1',
     terra: 'pisco-1',
+    sei: 'sei-devnet-1',
   },
 }
 
@@ -36,6 +38,7 @@ export const MAINNET_TESTNET_MAP = {
   'narwhal-1': 'migaloo-1',
   'phoenix-1': 'pisco-1',
   'pisco-1': 'phoenix-1',
+  'pacific-1': 'sei-devnet-1',
 }
 
 export const NETWORK_MAP = {
