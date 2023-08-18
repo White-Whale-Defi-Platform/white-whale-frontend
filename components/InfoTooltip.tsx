@@ -30,7 +30,7 @@ export const IncentiveTooltip = ({ IconSize }) => (
   <InfoTooltip
     IconSize={IconSize}
     description={
-      'The Incentive Flow Creator can close their flows anytime after the set timeframe. All unclaimed tokens will be clawed back. '
+      'The Incentive Flow Creator can close their flows anytime. All unclaimed tokens will be clawed back.'
     }
   />
 )

@@ -127,13 +127,6 @@ const DepositForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.txStep])
 
-  const errorButtonMessage = () => {
-    if (tx?.error) {
-      if (tx.error.includes('sentFunds: invalid coins')) {
-        return 'Insufficient Funds'
-      }
-    }
-  }
 
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) {
@@ -144,9 +137,7 @@ const DepositForm = ({
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    } else if (errorButtonMessage()) {
-      return errorButtonMessage()
-    }
+    } 
     return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 

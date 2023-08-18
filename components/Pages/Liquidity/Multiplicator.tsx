@@ -15,7 +15,7 @@ const incentiveDisclaimer = (incentivized) => {
       <InfoTooltip
         IconSize={'3'}
         description={
-          'This Pool is currently incentivized. After the incentivized Timeframe, the creator can clawback all unclaimed rewards at anytime. '
+          'This Pool is currently incentivized. The creator can clawback all unclaimed rewards at anytime. Claim them regularly.'
         }
       />
     )
