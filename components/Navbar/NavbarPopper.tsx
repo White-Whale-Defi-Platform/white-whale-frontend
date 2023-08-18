@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { BRIDGE_NETWORK_DEFAULTS } from 'constants/index'
 import { useRouter } from 'next/router'
+import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 
 import NavbarLink from './NavbarLink'
 
@@ -66,6 +67,10 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
             color={isActiveLink ? 'white' : 'brand.50'}
           >
             {menu.label}
+            {menu.children ? <ChevronDownIcon /> : null}
+            {menu.isExternal ? (
+              <ExternalLinkIcon paddingLeft={''} paddingBottom={'1'} />
+            ) : null}
           </Text>
         </HStack>
       </PopoverTrigger>
@@ -82,6 +87,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
           style={{ boxShadow: 'unset' }}
           sx={{ '--popper-arrow-shadow-color': '#1C1C1C' }}
         />
+        {console.log(menu)}
         <PopoverBody px="unset">
           <VStack overflow="hidden">
             {menu.children?.map(({ label, link }, index: number) => (
