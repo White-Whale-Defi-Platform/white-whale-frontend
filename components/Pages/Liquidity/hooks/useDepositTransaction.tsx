@@ -130,8 +130,7 @@ export const useTransaction = ({
         tokenAAmount,
         maxTokenBAmount: tokenBAmount,
         client,
-        swapAddress:
-          'migaloo1epam4fazfduqrn3w23ta3aduam20gkx0kj3vdgx8lzfa7zujhnds325pxa',
+        swapAddress: swapAddress,
         senderAddress,
         msgs: encodedMsgs,
       }),
