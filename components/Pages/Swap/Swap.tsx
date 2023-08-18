@@ -22,6 +22,7 @@ type SwapProps = {
 }
 
 const Swap: FC<SwapProps> = ({}) => {
+  const router = useRouter()
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const [reverse, setReverse] = useState<boolean>(false)
@@ -30,35 +31,34 @@ const Swap: FC<SwapProps> = ({}) => {
   const { chainId, address, network, status } = useRecoilValue(walletState)
   const chains: Array<any> = useChains()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
-  const { data: poolList } = usePoolsListQuery()
-  const router = useRouter()
+  const { 'data': poolList } = usePoolsListQuery()
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
   const tokenList = useMemo(() => {
     let listObj = {}
     const { pools = [] } = poolList || {}
-    pools
-      .map(({ pool_assets }) => pool_assets)
-      .map(([a, b]) => {
-        listObj = { ...listObj, [a.symbol]: a, [b.symbol]: b }
+    pools.
+      map(({ pool_assets }) => pool_assets).
+      map(([a, b]) => {
+        listObj = { ...listObj,
+          [a.symbol]: a,
+          [b.symbol]: b }
       })
 
     return Object.keys(listObj).map((row) => ({
-      symbol: listObj[row].symbol,
-      decimals: listObj[row].decimals,
-      amount: 0,
+      'symbol': listObj[row].symbol,
+      'decimals': listObj[row].decimals,
+      'amount': 0
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
 
-  const tokenSymbols = useMemo(
-    () => tokenList.map((token) => token.symbol),
-    [tokenList]
-  )
+  const tokenSymbols = useMemo(() => tokenList.map((token) => token.symbol),
+    [tokenList])
 
   useEffect(() => {
-    if (!currentChainId) {
+    if (!currentChainId || tokenList.length === 0) {
       return
     }
     const { from, to } = router.query
@@ -66,59 +66,68 @@ const Swap: FC<SwapProps> = ({}) => {
 
     let newState: TokenItemState[] = [
       {
-        tokenSymbol: String(from),
-        amount: 0,
-        decimals: 6,
+        'tokenSymbol': String(from),
+        'amount': 0,
+        'decimals': 6
       },
       {
-        tokenSymbol: String(to),
-        amount: 0,
-        decimals: 6,
-      },
+        'tokenSymbol': String(to),
+        'amount': 0,
+        'decimals': 6
+      }
     ]
-    if (tokenSymbols.includes(from) && tokenSymbols.includes(to)) {
-      return
+    
+    if (!from || !to) {
+      if (tokenA.tokenSymbol && tokenB.tokenSymbol) {
+        const url = `/${currentChainId}/swap?from=${tokenA.tokenSymbol}&to=${tokenB.tokenSymbol}`
+        router.push(url) 
+      } else {
+        newState = [
+          {
+            'tokenSymbol': String(defaultFrom.tokenSymbol),
+            'amount': 0,
+            'decimals': 6
+          },
+          {
+            'tokenSymbol': String(defaultTo.tokenSymbol),
+            'amount': 0,
+            'decimals': 6
+          }
+        ]
+        const url = `/${currentChainId}/swap?from=${defaultFrom.tokenSymbol}&to=${defaultTo.tokenSymbol}`
+        router.push(url)
+        setTokenSwapState(newState)
+        setResetForm(true)
+      }
+    } else if (tokenSymbols.includes(String(from)) && tokenSymbols.includes(String(to))) {
+      setTokenSwapState(newState)
+    } else {
+      newState = [
+        {
+          'tokenSymbol': String(defaultFrom.tokenSymbol),
+          'amount': 0,
+          'decimals': 6
+        },
+        {
+          'tokenSymbol': String(defaultTo.tokenSymbol),
+          'amount': 0,
+          'decimals': 6
+        }
+      ]
+      setResetForm(true)
+      setTokenSwapState(newState)
     }
-    newState = [
-      {
-        tokenSymbol: String(defaultFrom.tokenSymbol),
-        amount: 0,
-        decimals: 6,
-      },
-      {
-        tokenSymbol: String(defaultTo.tokenSymbol),
-        amount: 0,
-        decimals: 6,
-      },
-    ]
-    setResetForm(true)
-
-    setTokenSwapState(newState)
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, currentChainId, tokenList])
 
-  useEffect(() => {
-    if (!currentChainId) {
-      return
-    }
-
-    if (tokenA?.tokenSymbol !== null && tokenB?.tokenSymbol !== null) {
-      if (
-        tokenSymbols.includes(tokenA.tokenSymbol) &&
-        tokenSymbols.includes(tokenB.tokenSymbol)
-      ) {
-        const url = `/${currentChainId}/swap?from=${tokenA.tokenSymbol}&to=${tokenB.tokenSymbol}`
-        router.push(url)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenA, tokenB])
+ 
 
   const clearForm = (reset) => {
     setTokenSwapState([
-      { ...tokenA, amount: 0 },
-      { ...tokenB, amount: 0 },
+      { ...tokenA,
+        'amount': 0 },
+      { ...tokenB,
+        'amount': 0 }
     ])
     setResetForm(reset)
   }
@@ -127,12 +136,11 @@ const Swap: FC<SwapProps> = ({}) => {
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
       tx.reset()
     }
-
     const newState: TokenItemState[] = [tokenA, tokenB]
     newState[index] = {
       tokenSymbol,
-      amount: Number(amount),
-      decimals: 6,
+      'amount': Number(amount),
+      'decimals': 6
     }
     setTokenSwapState(newState)
   }
@@ -140,11 +148,11 @@ const Swap: FC<SwapProps> = ({}) => {
   const onReverseDirection = () => {
     const A = {
       ...tokenB,
-      amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      'amount': tokenA.amount || parseFloat(fromChainAmount(simulated?.amount))
     }
     const B = {
       ...tokenA,
-      amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      'amount': tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))
     }
 
     setTokenSwapState([A, B])
@@ -152,7 +160,8 @@ const Swap: FC<SwapProps> = ({}) => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '650px' }}
+      width={{ 'base': '100%',
+        'md': '650px' }}
       alignItems="center"
       padding={5}
       margin="0px auto"
@@ -161,7 +170,7 @@ const Swap: FC<SwapProps> = ({}) => {
         justifyContent="space-between"
         width="full"
         paddingY={5}
-        paddingX={{ base: 4 }}
+        paddingX={{ 'base': 4 }}
       >
         <Text as="h2" fontSize="24" fontWeight="900">
           Swap
