@@ -1,11 +1,11 @@
 {
-  "whale_lair": "",
-  "incentive_factory": "",
-  "fee_distributor": "",
-  "frontend_helper": "",
+  "whale_lair": "sei1u52l9n8jwcjdt9t3het7zyu0j38st2u0fwg7ntakjp4jp0m03qaqvnl3tr",
+  "incentive_factory": "sei18gc92uh8xnkzysxm2rj0262vdpp66j695qce5kyd66mkppmr4u2s5jd0pa",
+  "fee_distributor": "sei10n6x0a9cmvmkar088j7fa46xq5ykx5mfl86jmxgjjew8rt0ceeqqrzc5w9",
+  "frontend_helper": "sei1gpk097wjqtrtgcdmv04keee59rfpg0ldlhp5kv2r5hf4apn5e6qsxzzl8g",
   "whale_base_token": {
     "name": "WHALE",
-    "denom": "",
+    "denom": "ibc/6ACE79F5ABD607D2075FAD4ABE284CBC5BB6A96C16555FFB901644E9D17411AC",
     "decimals": 6
   },
   "lsd_token": {
