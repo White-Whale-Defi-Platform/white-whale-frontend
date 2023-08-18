@@ -1,0 +1,24 @@
+{
+  "factory": "sei1xmklc5umaeu52mas5rp7x9u8k7wdw9eqnh64v67ku7vd87cy9gash82279",
+  "vaults": [
+    {
+      "pool_id": "SEI",
+      "vault_assets": {
+        "id": "sei-network",
+        "chain_id": "pacific-1",
+        "token_address": "usei",
+        "symbol": "SEI",
+        "name": "Sei",
+        "decimals": 6,
+        "logoURI": "/logos/sei.svg",
+        "tags": ["native"],
+        "native": true,
+        "denom": "usei"
+      },
+      "lp_token": "sei1j9qyhqf29hgze9p2gdh5uyq44v8yy5cnwf7mdln8ud5sva0khy4syjrwjl",
+      "vault_address": "sei153ww606x9h6ft7nq5h4fl4jq3n2sx4936m53xtrmag236j8n2rnqv6hgd3",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

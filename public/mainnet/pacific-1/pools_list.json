@@ -1,0 +1,79 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": [
+    "special tokens"
+  ],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2023-08-16T00:00:00+00:00",
+  "base_token": {
+    "id": "sei-network",
+    "chain_id": "pacific-1",
+    "token_address": "",
+    "symbol": "SEI",
+    "name": "Sei",
+    "decimals": 6,
+    "logoURI": "/logos/sei.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "usei"
+  },
+  "routerAddress": "sei1f5utu2sx9f43cxl6c37ur5z57x6n3qmvpzse38hmhz6mspp4krsqccyu80",
+  "pools": [
+    {
+      "pool_id": "WHALE-SEI",
+      "lpOrder": [
+        "WHALE",
+        "SEI"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "SEI"
+      ],
+      "displayName": "WHALE-SEI",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/sei.svg",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "pacific-1",
+          "token_address": "ibc/6ACE79F5ABD607D2075FAD4ABE284CBC5BB6A96C16555FFB901644E9D17411AC",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/6ACE79F5ABD607D2075FAD4ABE284CBC5BB6A96C16555FFB901644E9D17411AC"
+        },
+        {
+          "id": "sei-network",
+          "chain_id": "pacific-1",
+          "token_address": "usei",
+          "symbol": "SEI",
+          "name": "Sei",
+          "decimals": 6,
+          "logoURI": "/logos/sei.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "usei"
+        }
+      ],
+      "lp_token": "sei1zq2mleg8r9l9sa7x350wtvqety0l5crvv9a6znz634cwdjpec36slquzlx",
+      "swap_address": "sei155lc2utpd66unfhyh533yu729ltmrd8eeqw0qq5r7jws9pfc9k0sp65zul",
+      "staking_address": "sei1suwp7tt0tfzmjytus6clx64zx8tz3e8pd0vjuqjvy233um8v6nuqu9qhdt",
+      "rewards_tokens": []
+    }
+  ]
+}

@@ -59,6 +59,16 @@
         "tokenSymbol": "ampWHALE",
         "amount": 0
       }
+    ],
+    "sei": [
+      {
+        "tokenSymbol": "WHALE",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "SEI",
+        "amount": 0
+      }
     ]
   },
   "testnet": {
