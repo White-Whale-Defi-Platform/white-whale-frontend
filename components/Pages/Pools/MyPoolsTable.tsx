@@ -21,6 +21,7 @@ import Loader from '../../Loader'
 import Apr from './components/Apr'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
+import Liquidity from './components/liquidity'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -73,7 +74,12 @@ const columns = [
         {'Total Liquidity'}
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => (
+      <Liquidity
+        liquidity={info.getValue()?.toString()}
+        infos={info.row.original}
+      />
+    ),
   }),
   columnHelper.accessor('myPosition', {
     header: () => (
