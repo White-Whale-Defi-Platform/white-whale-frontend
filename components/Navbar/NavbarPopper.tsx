@@ -87,7 +87,6 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
           style={{ boxShadow: 'unset' }}
           sx={{ '--popper-arrow-shadow-color': '#1C1C1C' }}
         />
-        {console.log(menu)}
         <PopoverBody px="unset">
           <VStack overflow="hidden">
             {menu.children?.map(({ label, link }, index: number) => (
