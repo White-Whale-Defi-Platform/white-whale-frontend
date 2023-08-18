@@ -32,6 +32,8 @@ const getUrl = (chainId, txHash) => {
       return `https://explorer.injective.network/transaction/${txHash}`
     case 'comdex-1':
       return `https://mintscan.io/comdex/txs/${txHash}`
+    case 'pacific-1':
+      return `https://www.seiscan.app/pacific-1/txs/${txHash}`
     default:
       return null
   }
