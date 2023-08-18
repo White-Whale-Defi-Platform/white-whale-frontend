@@ -16,6 +16,11 @@ import {
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
+import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
 
 export interface Flow {
   claimed_amount: string
@@ -155,13 +160,16 @@ const getPoolFlowData = async (
             lockedLpShare = 1
           }
 
-          const flowList = flows.map((flow) => ({
-            denom:
-              flow.flow_asset.info?.native_token?.denom ??
-              flow.flow_asset.info.token.contract_addr,
-            dailyEmission: 0,
-            endEpoch: Number(flow.end_epoch),
-          }))
+          const flowList = flows
+            .map((flow) => ({
+              denom:
+                flow.flow_asset.info?.native_token?.denom ??
+                flow.flow_asset.info.token.contract_addr,
+              dailyEmission: 0,
+              endEpoch: Number(flow.end_epoch),
+            }))
+            .filter((flow) => flow.endEpoch >= currentEpochId)
+
           const uniqueFlowList = flowList.reduce((acc, current) => {
             if (!acc.some((item) => item.denom === current.denom)) {
               acc.push(current)
@@ -207,13 +215,17 @@ const getPoolFlowData = async (
             )
             const tokenSymbol = poolAsset?.symbol
             const logoURI = poolAsset?.logoURI
-
+            const price =
+              tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
+              tokenSymbol === B_WHALE_TOKEN_SYMBOL
+                ? prices[WHALE_TOKEN_SYMBOL]
+                : prices[tokenSymbol]
             return {
               ...flow,
               tokenSymbol,
               logoURI,
               apr:
-                ((flow.dailyEmission * Number(prices[tokenSymbol]) * 365.25) /
+                ((flow.dailyEmission * price * 365.25) /
                   (totalLiquidity * lockedLpShare)) *
                 100,
             }
