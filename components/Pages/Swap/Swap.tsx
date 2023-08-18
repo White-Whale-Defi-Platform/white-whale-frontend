@@ -35,6 +35,11 @@ const Swap: FC<SwapProps> = ({}) => {
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
+  const changeUrl = (tokenSymbol1:string, tokenSymbol2:string) => {
+    const url = `/${currentChainId}/swap?from=${tokenSymbol1}&to=${tokenSymbol2}`
+    router.push(url)
+  }
+
   const tokenList = useMemo(() => {
     let listObj = {}
     const { pools = [] } = poolList || {}
@@ -79,8 +84,7 @@ const Swap: FC<SwapProps> = ({}) => {
     
     if (!from || !to) {
       if (tokenA.tokenSymbol && tokenB.tokenSymbol) {
-        const url = `/${currentChainId}/swap?from=${tokenA.tokenSymbol}&to=${tokenB.tokenSymbol}`
-        router.push(url) 
+        changeUrl(tokenA.tokenSymbol,tokenB.tokenSymbol)
       } else {
         newState = [
           {
@@ -94,8 +98,7 @@ const Swap: FC<SwapProps> = ({}) => {
             'decimals': 6
           }
         ]
-        const url = `/${currentChainId}/swap?from=${defaultFrom.tokenSymbol}&to=${defaultTo.tokenSymbol}`
-        router.push(url)
+        changeUrl(defaultFrom.tokenSymbol,defaultTo.tokenSymbol)
         setTokenSwapState(newState)
         setResetForm(true)
       }
@@ -129,6 +132,7 @@ const Swap: FC<SwapProps> = ({}) => {
       { ...tokenB,
         'amount': 0 }
     ])
+    changeUrl(tokenA.tokenSymbol,tokenB.tokenSymbol)
     setResetForm(reset)
   }
 
@@ -143,6 +147,7 @@ const Swap: FC<SwapProps> = ({}) => {
       'decimals': 6
     }
     setTokenSwapState(newState)
+    changeUrl(newState[0].tokenSymbol,newState[1].tokenSymbol)
   }
 
   const onReverseDirection = () => {
@@ -154,7 +159,7 @@ const Swap: FC<SwapProps> = ({}) => {
       ...tokenA,
       'amount': tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))
     }
-
+    changeUrl(tokenB.tokenSymbol,tokenA.tokenSymbol)
     setTokenSwapState([A, B])
   }
 
