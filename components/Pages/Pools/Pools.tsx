@@ -10,11 +10,6 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import {
-  Config,
-  useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
@@ -51,7 +46,7 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status, network } = useRecoilValue(walletState)
+  const { chainId, status } = useRecoilValue(walletState)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
@@ -59,13 +54,6 @@ const Pools = () => {
   )
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
-  const config: Config = useConfig(network, chainId)
-
-  const { data: currentEpochData } = useCurrentEpoch(cosmwasmClient, config)
-  const currentEpoch = useMemo(
-    () => Number(currentEpochData?.currentEpoch?.epoch.id),
-    [currentEpochData]
-  )
 
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -185,10 +173,9 @@ const Pools = () => {
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
-      const flows = (
+      const flows =
         incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
           ?.flowData ?? []
-      ).filter((flow) => flow.endEpoch >= currentEpoch)
 
       const incentiveBaseApr = flows.reduce(
         (total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
