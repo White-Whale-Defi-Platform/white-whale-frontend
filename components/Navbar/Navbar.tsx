@@ -61,7 +61,7 @@ const Navbar = () => {
   return (
     <Box
       width={'full'}
-      paddingLeft={{base: '1', md: '5'}}
+      paddingLeft={{base: '3', md: '5'}}
       paddingRight={{base: '0', md: '5'}}
       paddingTop={{base: '2', md: '10'}}
     >

@@ -118,8 +118,9 @@ const BondingActions = ({ globalAction }) => {
     <VStack
       width={{ base: '100%', md: '650px' }}
       alignItems="flex-start"
-      top={200}
+      top={{base: '80px', md:'200'}}
       gap={4}
+      paddingRight={'5'}
       position="absolute"
     >
       <HStack justifyContent="space-between" width="full" paddingY={5}>

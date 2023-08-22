@@ -160,7 +160,7 @@ const BondingOverview = ({
             justify="flex-start"
             alignSelf="flex-start"
             paddingLeft={3}
-            paddingRight={5}
+            paddingRight={6}
             spacing={8}
           >
             <Text mb={-2} color="whiteAlpha.600">
