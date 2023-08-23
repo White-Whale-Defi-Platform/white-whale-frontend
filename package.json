@@ -52,7 +52,6 @@
     "framer-motion": "^6",
     "graphql": "^16.6.0",
     "graphql-request": "^5.2.0",
-    "gsap": "^3.7.1",
     "injectivejs": "^1.4.0",
     "intercept-stdout": "^0.1.2",
     "isomorphic-unfetch": "^3.1.0",
