@@ -97,11 +97,14 @@ const MyApp: FC<AppProps> = ({
   )
 }
 
-MyApp.getInitialProps = async () => {
-  const chainOptions = await getChainOptions()
-  return {
-    ...chainOptions,
-  }
-}
+// TODO: Removed this for now to improve page load, Failed to fetch chains.json TypeError: fetch failed is currently returned in alot of cases
+// Instead the page loads and we get the chainOptions after
+// In future we should use ServerStaticProps rather than InitialProps, InitialProps is deprecated
+// MyApp.getInitialProps = async () => {
+//   const chainOptions = await getChainOptions()
+//   return {
+//     ...chainOptions,
+//   }
+// }
 
 export default MyApp
