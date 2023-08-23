@@ -18,9 +18,7 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": [
-    "eslint-plugin-import-helpers"
-  ],
+  "plugins": [],
   "rules": {
     // Possible Problems
     "array-callback-return": [
@@ -408,7 +406,7 @@
     "require-await": "error",
     "require-unicode-regexp": "error",
     "require-yield": "error",
-    "sort-imports": "off", // We use "eslint-plugin-import-helpers".
+    "sort-imports": "off", // We use "import-helpers".
     "sort-keys": "error",
     "sort-vars": "error",
     "spaced-comment": "error",
@@ -499,7 +497,7 @@
     "wrap-iife": "error",
     "wrap-regex": "error",
     "yield-star-spacing": "error",
-    // Plugin: eslint-plugin-import-helpers
+    //
     "import-helpers/order-imports": [
       "error",
       {
