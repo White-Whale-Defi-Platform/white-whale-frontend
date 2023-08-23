@@ -25,7 +25,6 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@injectivelabs/sdk-ts": "^1.0.299",
-    "@keplr-wallet/wc-qrcode-modal": "^0.10.13",
     "@next/bundle-analyzer": "^12.2.4",
     "@tanstack/react-table": "^8.5.11",
     "@terra-money/feather.js": "^1.0.8",
