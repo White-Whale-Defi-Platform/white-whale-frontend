@@ -110,13 +110,14 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       connectKeplr()
     } else if (currentWalletState.activeWallet === 'cosmostation') {
       connectCosmostation()
-    } else if (currentWalletState.activeWallet === 'station') {
-      const [{ type = null, identifier = null } = {}] =
-        availableConnections.filter(filterForStation)
-      if (type && identifier) {
-        connectTerraAndCloseModal(type, identifier)
-      }
     }
+    // } else if (currentWalletState.activeWallet === 'station') {
+    //   const [{ type = null, identifier = null } = {}] =
+    //     availableConnections.filter(filterForStation)
+    //   if (type && identifier) {
+    //     connectTerraAndCloseModal(type, identifier)
+    //   }
+    // }
 
     // Update route
     const sourceChain = chains.find(
