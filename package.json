@@ -19,7 +19,6 @@
     "@chakra-ui/react": "2.2.1",
     "@cosmjs/cosmwasm": "^0.25.6",
     "@cosmjs/cosmwasm-stargate": "0.31.0",
-    "@cosmjs/crypto": "0.31.0",
     "@cosmjs/encoding": "0.31.0",
     "@cosmjs/launchpad": "0.27.1",
     "@cosmjs/proto-signing": "0.31.0",
