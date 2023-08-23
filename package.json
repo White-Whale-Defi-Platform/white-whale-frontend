@@ -49,7 +49,6 @@
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "focus-visible": "^5.2.0",
     "framer-motion": "^6",
     "graphql": "^16.6.0",
     "graphql-request": "^5.2.0",
