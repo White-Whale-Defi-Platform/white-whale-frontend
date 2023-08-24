@@ -37,7 +37,7 @@ const Apr = ({ apr, flows }: Props) => {
       <PopoverTrigger>
         <Button variant="unstyled">
           <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)">
-            <Text align="right" >{totalApr.toFixed(2)}%</Text>
+            <Text align="right">{totalApr.toFixed(2)}%</Text>
           </HStack>
         </Button>
       </PopoverTrigger>

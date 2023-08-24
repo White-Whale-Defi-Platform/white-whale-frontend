@@ -19,9 +19,9 @@ import {
 
 import Loader from '../../Loader'
 import Apr from './components/Apr'
+import Liquidity from './components/liquidity'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
-import Liquidity from './components/liquidity'
 
 const columnHelper = createColumnHelper<Pool>()
 

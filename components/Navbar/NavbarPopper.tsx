@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -15,7 +16,6 @@ import {
 } from '@chakra-ui/react'
 import { BRIDGE_NETWORK_DEFAULTS } from 'constants/index'
 import { useRouter } from 'next/router'
-import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 
 import NavbarLink from './NavbarLink'
 

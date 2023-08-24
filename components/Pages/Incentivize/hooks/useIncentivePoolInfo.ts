@@ -7,6 +7,11 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { fetchTotalPoolSupply } from 'components/Pages/Pools/hooks/fetchTotalPoolLp'
+import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
 import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -16,11 +21,6 @@ import {
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-  WHALE_TOKEN_SYMBOL,
-} from 'constants/index'
 
 export interface Flow {
   claimed_amount: string

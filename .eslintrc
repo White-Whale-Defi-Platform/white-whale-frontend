@@ -1,5 +1,4 @@
 {
-  
   "extends": [
     "next",
     "next/core-web-vitals",
@@ -18,7 +17,9 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": [],
+  "plugins": [
+    "eslint-plugin-import-helpers"
+  ],
   "rules": {
     // Possible Problems
     "array-callback-return": [
@@ -466,7 +467,10 @@
     "no-whitespace-before-property": "error",
     "nonblock-statement-body-position": "error",
     "object-curly-newline": "off",
-    "object-curly-spacing": ["error", "always"],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
     "object-property-newline": "error",
     "operator-linebreak": "off",
     "padded-blocks": [
