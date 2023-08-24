@@ -45,8 +45,6 @@ export const getUnbonding = async (
   const unbondingInfos = await fetchUnbonding(client, address, config)
   const bondingContractConfig = await fetchConfig(client, config)
 
-  console.log('unbondingInfos', unbondingInfos)
-
   const unbondingPeriodInNano = Number(bondingContractConfig?.unbonding_period)
   const currentTimeInNano = Date.now() * 1_000_000
 

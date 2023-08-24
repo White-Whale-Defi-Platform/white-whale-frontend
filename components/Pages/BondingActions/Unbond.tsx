@@ -21,7 +21,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
-    const newBalances = bondedAssets.map((asset: BondedData) => {
+    const newBalances = bondedAssets?.map((asset: BondedData) => {
       return { amount: asset.amount, tokenSymbol: asset.tokenSymbol }
     })
     setBondedBalances(newBalances)

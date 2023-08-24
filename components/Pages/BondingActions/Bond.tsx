@@ -31,7 +31,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
 
   useEffect(() => {
     if (balances && tokenSymbols) {
-      const newBalances = balances.map((balance: number, idx: number) => {
+      const newBalances = balances?.map((balance: number, idx: number) => {
         return { amount: balance, tokenSymbol: tokenSymbols[idx] }
       })
       setTokenBalances(newBalances)
