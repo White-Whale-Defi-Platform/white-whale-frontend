@@ -288,7 +288,7 @@
     "no-lone-blocks": "error",
     "no-lonely-if": "off",
     "no-loop-func": "error",
-    "no-magic-numbers": "error",
+    "no-magic-numbers": "off",
     "no-mixed-operators": "error",
     "no-multi-assign": "error",
     "no-multi-str": "error",
@@ -398,7 +398,7 @@
     "prefer-template": "error",
     "quote-props": [
       "error",
-      "always"
+      "as-needed"
     ],
     "radix": [
       "error",
@@ -408,7 +408,7 @@
     "require-unicode-regexp": "error",
     "require-yield": "error",
     "sort-imports": "off", // We use "import-helpers".
-    "sort-keys": "error",
+    "sort-keys": "off",
     "sort-vars": "error",
     "spaced-comment": "error",
     "strict": "error",
@@ -423,7 +423,10 @@
     "arrow-spacing": "error",
     "block-spacing": "error",
     "brace-style": "error",
-    "comma-dangle": "error",
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
     "comma-spacing": "error",
     "comma-style": "error",
     "computed-property-spacing": "error",
@@ -529,7 +532,7 @@
       }
     ],
     "@typescript-eslint/no-explicit-any": "off",
-    "import/prefer-default-export": "off",
+    "import/prefer-default-export": "error",
     "react/destructuring-assignment": [
       "warn",
       "always",
