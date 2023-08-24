@@ -19,11 +19,11 @@ const getUrl = (chainId, txHash) => {
     case 'narwhal-1':
       return `https://testnet.migaloo.explorers.guru/transaction/${txHash}`
     case 'pisco-1':
-      return `https://finder.terra.money/testnet/tx/${txHash}`
+      return `https://finder.station.money/testnet/tx/${txHash}`
     case 'juno-1':
       return `https://mintscan.io/juno/txs/${txHash}`
     case 'phoenix-1':
-      return `https://finder.terra.money/mainnet/tx/${txHash}`
+      return `https://finder.station.money/mainnet/tx/${txHash}`
     case 'chihuahua-1':
       return `https://www.mintscan.io/chihuahua/txs/${txHash}`
     case 'injective-888':
