@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
   chakra,
+  HStack,
 } from '@chakra-ui/react'
 import {
   SortingState,
@@ -27,6 +28,7 @@ import Apr from './components/Apr'
 import Liquidity from './components/liquidity'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
+import { IncentiveTooltip } from '../../InfoTooltip'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -92,9 +94,12 @@ const columns = [
   }),
   columnHelper.accessor('incentives', {
     header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        Incentives
-      </Text>
+      <HStack paddingTop={'4'}>
+        <IncentiveTooltip IconSize={'3'} />
+        <Text align="left" color="brand.50">
+          {'Incentives'}
+        </Text>
+      </HStack>
     ),
     cell: (info) => info.getValue(),
   }),
