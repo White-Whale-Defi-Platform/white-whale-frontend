@@ -1,8 +1,7 @@
-import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
+import { convertMicroDenomToDenom } from 'util/conversion'
 import { Wallet } from 'util/wallet-adapters'
 
 import { Config } from './useDashboardData'
-import { UnbondingRequest } from 'components/Pages/Dashboard/hooks/getUnbonding'
 
 export interface WithdrawableInfo {
   amount: number

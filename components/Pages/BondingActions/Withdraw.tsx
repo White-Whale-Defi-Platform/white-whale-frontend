@@ -24,7 +24,7 @@ const Withdraw = ({
   withdrawableInfos,
   unbondingPeriodInNano,
 }: Props) => {
-  const { status, chainId, network } = useRecoilValue(walletState)
+  const { status } = useRecoilValue(walletState)
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
