@@ -17,7 +17,7 @@ import { debounce } from 'lodash'
 import { NetworkType } from 'state/atoms/walletAtoms'
 
 export interface TokenDetails {
-  name: string
+  tokenSymbol: string
   denom: string
   decimals: number
 }
@@ -27,12 +27,8 @@ export interface Config {
   fee_distributor: string
   incentive_factory: string
   frontend_helper: string
-
   whale_base_token: TokenDetails
-  lsd_token: {
-    ampWHALE: TokenDetails
-    bWHALE: TokenDetails
-  }
+  bonding_tokens: TokenDetails[]
 }
 
 export const useConfig = (network: NetworkType, chainId: string) => {

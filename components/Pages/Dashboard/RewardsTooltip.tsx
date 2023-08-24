@@ -2,15 +2,20 @@ import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { WHALE_TOKEN_SYMBOL } from 'constants/index'
 
-import { WhaleType } from './BondingOverview'
-
+type Props = {
+  dollarValue: string
+  amount: string
+  isWalletConnected: boolean
+  daysSinceLastClaim: number
+}
 export const RewardsTooltip = ({
-  value,
-  whale,
+  dollarValue,
+  amount,
   isWalletConnected,
   daysSinceLastClaim,
-}) => {
+}: Props) => {
   const lastClaimed = () => {
     if (daysSinceLastClaim >= 21) {
       return '21+ days ago'
@@ -21,13 +26,13 @@ export const RewardsTooltip = ({
       return `${daysSinceLastClaim} day${multiple} ago`
     }
   }
-  const TokenDetail = ({ whaleType, value }) => {
+  const TokenDetail = () => {
     return (
       <HStack justify="space-between" direction="row" width="full" px={2}>
         <Text color="whiteAlpha.600" fontSize={14}>
-          {WhaleType[whaleType]}
+          {WHALE_TOKEN_SYMBOL}
         </Text>
-        <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
+        <Text fontSize={14}>{isWalletConnected ? amount : 'n/a'}</Text>
       </HStack>
     )
   }
@@ -36,7 +41,7 @@ export const RewardsTooltip = ({
 
   useEffect(() => {
     setTextWidth(textRef.current.offsetWidth)
-  }, [whale])
+  }, [amount])
 
   return (
     <Tooltip
@@ -55,14 +60,12 @@ export const RewardsTooltip = ({
             justifyContent="center"
             alignItems="center"
           >
-            <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
+            <TokenDetail />
             <HStack justify="space-between" direction="row" width="full" px={2}>
               <Text color="whiteAlpha.600" fontSize={14}>
                 {'Last Claimed'}
               </Text>
-              <Text fontSize={14}>
-                {lastClaimed()}
-              </Text>
+              <Text fontSize={14}>{lastClaimed()}</Text>
             </HStack>
           </VStack>
         ) : null
@@ -71,10 +74,10 @@ export const RewardsTooltip = ({
     >
       <VStack alignItems="flex-start" minW={50}>
         <Text ref={textRef} mb="-0.3rem" color="white">
-          {value}
+          {dollarValue}
         </Text>
         <Box pb={1}>
-          {value !== 'n/a' && (
+          {dollarValue !== 'n/a' && (
             <div
               style={{
                 width: `${textWidth}px`,

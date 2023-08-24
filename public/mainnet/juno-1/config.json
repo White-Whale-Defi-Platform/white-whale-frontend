@@ -8,17 +8,17 @@
     "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",
     "decimals": 6
   },
-  "lsd_token": {
-    "ampWHALE": {
-      "name": "ampWHALE",
+  "bonding_tokens": [
+    {
+      "tokenSymbol": "ampWHALE",
       "denom": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
       "decimals": 6
     },
-    "bWHALE": {
-      "name": "bWHALE",
+    {
+      "tokenSymbol": "bWHALE",
       "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF",
       "decimals": 6
     }
-  }
+  ]
 }
 

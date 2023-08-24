@@ -1,10 +1,13 @@
-import { convertMicroDenomToDenom } from 'util/conversion'
+import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
 import { Wallet } from 'util/wallet-adapters'
 
 import { Config } from './useDashboardData'
+import { UnbondingRequest } from 'components/Pages/Dashboard/hooks/getUnbonding'
 
-interface WithdrawableInfo {
-  withdrawable_amount: number
+export interface WithdrawableInfo {
+  amount: number
+  denom: string
+  tokenSymbol: string
 }
 
 export const getWithdrawable = async (
@@ -16,18 +19,23 @@ export const getWithdrawable = async (
     return null
   }
 
-  const withdrawableInfos = await fetchWithdrawable(client, address, config)
+  const withdrawableData = await fetchWithdrawable(client, address, config)
 
-  const withdrawableAmpWhale = convertMicroDenomToDenom(
-    withdrawableInfos?.[0]?.withdrawable_amount,
-    6
-  )
-  const withdrawableBWhale = convertMicroDenomToDenom(
-    withdrawableInfos?.[1]?.withdrawable_amount,
-    6
-  )
+  const withdrawableInfos: WithdrawableInfo[] = withdrawableData
+    ?.flatMap((item) => item)
+    .map((item) => {
+      const tokenSymbol = config.bonding_tokens.find(
+        (token) => token.denom === item.denom
+      )?.tokenSymbol
 
-  return { withdrawableAmpWhale, withdrawableBWhale }
+      return {
+        amount: convertMicroDenomToDenom(item.amount, 6),
+        denom: item.denom,
+        tokenSymbol: tokenSymbol,
+      }
+    })
+
+  return { withdrawableInfos }
 }
 
 const fetchWithdrawable = async (
@@ -36,11 +44,19 @@ const fetchWithdrawable = async (
   config: Config
 ): Promise<WithdrawableInfo[]> => {
   const results = await Promise.all(
-    Object.entries(config.lsd_token).map(async ([key, token]) =>
-      client.queryContractSmart(config.whale_lair, {
-        withdrawable: { address, denom: token.denom },
-      })
-    )
+    Object.entries(config.bonding_tokens).map(async ([key, token]) => {
+      const withdrawableInfo: { withdrawable_amount: string } =
+        await client.queryContractSmart(config.whale_lair, {
+          withdrawable: { address, denom: token.denom },
+        })
+      return {
+        amount: convertMicroDenomToDenom(
+          withdrawableInfo.withdrawable_amount,
+          token.decimals
+        ),
+        denom: token.denom,
+      }
+    })
   )
 
   return results as WithdrawableInfo[]

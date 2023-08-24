@@ -7,6 +7,12 @@ import { num } from 'libs/num'
 
 import BalanceWithMaxNHalf from './BalanceWithMax'
 import WhaleInput from './WhaleInput'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
 
 interface AssetInputProps {
   image?: boolean
@@ -27,7 +33,7 @@ interface AssetInputProps {
   hideDollarValue?: boolean
   showBalanceSlider?: boolean
   isBonding?: boolean
-  unbondingBalances?: { [key: string]: number }
+  unbondingBalances?: TokenBalance[]
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, ref) => {
@@ -64,7 +70,7 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     [balance, disabled, isSingleInput, tokenInfo]
   )
 
-  const formatNumber = (num, decimalPlaces) => {
+  const formatNumber = (num: number, decimalPlaces: number) => {
     const parts = num.toString().split('.')
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     parts[1] = parts[1]?.substring(0, decimalPlaces).replace(/0+$/, '')
@@ -78,8 +84,9 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
   const prices = usePrices()
   const tokenSymbol = useMemo(
     () =>
-      token?.tokenSymbol === 'ampWHALE' || token?.tokenSymbol === 'ampWHALE'
-        ? 'WHALE'
+      token?.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
+      token?.tokenSymbol === B_WHALE_TOKEN_SYMBOL
+        ? WHALE_TOKEN_SYMBOL
         : token?.tokenSymbol,
     [token]
   )

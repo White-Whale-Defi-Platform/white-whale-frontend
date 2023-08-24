@@ -2,10 +2,13 @@ import { FC, useMemo } from 'react'
 
 import { Box, Button, HStack, Image, Text } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
-import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { walletState } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -14,7 +17,7 @@ type AssetListProps = {
   edgeTokenList: string[]
   amount?: number
   isBonding?: boolean
-  unbondingBalances?: { [key: string]: number }
+  unbondingBalances?: TokenBalance[]
 }
 
 const AssetList: FC<AssetListProps> = ({
@@ -28,15 +31,26 @@ const AssetList: FC<AssetListProps> = ({
 }) => {
   const [tokenList] = useTokenList()
 
+  const { network, chainId } = useRecoilValue(walletState)
+
+  const config = useConfig(network, chainId)
+
   const tokens = isBonding
-    ? tokenList.tokens.filter((t) =>
-        [AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL].includes(t.symbol)
+    ? tokenList?.tokens?.filter((t) =>
+        config?.bonding_tokens
+          ?.map((token) => token.tokenSymbol)
+          .includes(t.symbol)
       )
-    : tokenList.tokens
+    : tokenList?.tokens
 
   const [tokenBalance = []] =
     unbondingBalances !== null
-      ? [tokens?.map(({ symbol }) => unbondingBalances[symbol])]
+      ? [
+          tokens?.map(
+            ({ symbol }) =>
+              unbondingBalances.find((b) => b.tokenSymbol === symbol)?.amount
+          ),
+        ]
       : useMultipleTokenBalance(tokens?.map(({ symbol }) => symbol))
 
   const tokensWithBalance = useMemo(() => {

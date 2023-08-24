@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
-import { TokenInfo, usePoolsListQuery } from '../queries/usePoolsListQuery'
+import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 export type TokenList = {
   base_token: TokenInfo
