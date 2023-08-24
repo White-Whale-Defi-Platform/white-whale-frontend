@@ -11,10 +11,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
-import { AMP_WHALE_TOKEN_SYMBOL, B_WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
-import usePrices from 'hooks/usePrices'
-import { useTokenBalance } from 'hooks/useTokenBalance'
+import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
@@ -27,16 +25,12 @@ import {
   useConfig,
   useDashboardData,
 } from '../Dashboard/hooks/useDashboardData'
-import { Bond, LSDTokenItemState } from './Bond'
+import { Bond, BondingTokenState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 import useTransaction, { TxStep } from './hooks/useTransaction'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
-
-export enum WhaleTokenType {
-  ampWHALE,
-  bWHALE,
-}
+import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 
 const BondingActions = ({ globalAction }) => {
   const [{ chainId, client, address, status, network }, _] =
@@ -55,40 +49,33 @@ const BondingActions = ({ globalAction }) => {
 
   const router = useRouter()
 
+  const config: Config = useConfig(network, chainId)
+
+  const symbols = useMemo(
+    () => config?.bonding_tokens.map((token) => token.tokenSymbol),
+    [config]
+  )
+
   const { txStep, submit } = useTransaction()
 
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<LSDTokenItemState>(bondingAtom)
+    useRecoilState<BondingTokenState>(bondingAtom)
 
-  const { balance: liquidAmpWhale } = useTokenBalance(AMP_WHALE_TOKEN_SYMBOL)
-
-  const { balance: liquidBWhale } = useTokenBalance(B_WHALE_TOKEN_SYMBOL)
-
-  const prices = usePrices()
-
-  const whalePrice = useMemo(() => {
-    // @ts-ignore
-    if (prices && prices.WHALE) {
-      // @ts-ignore
-      return prices.WHALE
-    }
-    return 0 // Default value
-  }, [prices])
+  const [liquidBalances, __] = useMultipleTokenBalance(symbols)
 
   const {
-    bondedAmpWhale,
-    bondedBWhale,
-    unbondingAmpWhale,
-    unbondingBWhale,
-    withdrawableAmpWhale,
-    withdrawableBWhale,
+    bondedAssets,
+    withdrawableInfos,
     bondingConfig,
-    filteredUnbondingRequests,
+    unbondingRequests,
     isLoading,
   } = useDashboardData(client, address, network, chainId)
 
   const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)
-  const totalWithdrawable = withdrawableAmpWhale + withdrawableBWhale
+  const totalWithdrawable = withdrawableInfos?.reduce(
+    (acc, e) => acc + e?.amount,
+    0
+  )
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
@@ -134,7 +121,19 @@ const BondingActions = ({ globalAction }) => {
       </Button>
     )
   }
-  const config: Config = useConfig(network, chainId)
+
+  function getFirstDenomWithPositiveAmount(
+    withdrawableInfos: WithdrawableInfo[],
+    config: Config
+  ) {
+    const foundToken = config?.bonding_tokens
+      ?.map((tokenConfig) =>
+        withdrawableInfos.find((info) => info.denom === tokenConfig.denom)
+      )
+      .find((info) => info && info.amount > 0)
+
+    return foundToken?.denom
+  }
 
   return (
     <VStack
@@ -230,28 +229,16 @@ const BondingActions = ({ globalAction }) => {
               switch (globalAction) {
                 case ActionType.bond:
                   return (
-                    <Bond
-                      liquidAmpWhale={liquidAmpWhale}
-                      liquidBWhale={liquidBWhale}
-                    />
+                    <Bond balances={liquidBalances} tokenSymbols={symbols} />
                   )
                 case ActionType.unbond:
-                  return (
-                    <Unbond
-                      bondedAmpWhale={bondedAmpWhale}
-                      bondedBWhale={bondedBWhale}
-                    />
-                  )
+                  return <Unbond bondedAssets={bondedAssets} />
                 case ActionType.withdraw:
                   return (
                     <Withdraw
-                      withdrawableAmpWhale={withdrawableAmpWhale}
-                      withdrawableBWhale={withdrawableBWhale}
-                      unbondingAmpWhale={unbondingAmpWhale}
-                      unbondingBWhale={unbondingBWhale}
-                      filteredUnbondingRequests={filteredUnbondingRequests}
+                      withdrawableInfos={withdrawableInfos}
+                      unbondingRequests={unbondingRequests}
                       unbondingPeriodInNano={unbondingPeriodInNano}
-                      whalePrice={whalePrice}
                     />
                   )
               }
@@ -270,8 +257,7 @@ const BondingActions = ({ globalAction }) => {
               (currentBondState.amount <= 0 &&
                 globalAction !== ActionType.withdraw &&
                 isWalletConnected) ||
-              (withdrawableBWhale + withdrawableAmpWhale === 0 &&
-                ActionType.withdraw === globalAction)
+              (totalWithdrawable === 0 && ActionType.withdraw === globalAction)
             }
             maxWidth={570}
             isLoading={
@@ -281,13 +267,14 @@ const BondingActions = ({ globalAction }) => {
             }
             onClick={async () => {
               if (isWalletConnected) {
-                let denom =
-                  config.lsd_token[currentBondState.tokenSymbol]?.denom
+                let denom = config.bonding_tokens.find(
+                  (token) => token.tokenSymbol === currentBondState.tokenSymbol
+                ).denom
                 if (globalAction === ActionType.withdraw) {
-                  denom =
-                    withdrawableAmpWhale > 0
-                      ? config.lsd_token.ampWHALE.denom
-                      : config.lsd_token.bWHALE.denom
+                  denom = getFirstDenomWithPositiveAmount(
+                    withdrawableInfos,
+                    config
+                  )
                 }
                 await submit(globalAction, currentBondState.amount, denom)
               } else {

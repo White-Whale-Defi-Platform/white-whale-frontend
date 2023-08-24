@@ -278,13 +278,13 @@ const RewardsComponent = ({
                 <BondingActionTooltip action={ActionType.claim} />
               </HStack>
               <RewardsTooltip
-                value={
+                dollarValue={
                   isWalletConnected
                     ? `$${(claimableRewards * whalePrice).toFixed(2)}`
                     : 'n/a'
                 }
                 isWalletConnected={isWalletConnected}
-                whale={claimableRewards.toFixed(6)}
+                amount={claimableRewards.toFixed(6)}
                 daysSinceLastClaim={daysSinceLastClaim}
               />
             </HStack>

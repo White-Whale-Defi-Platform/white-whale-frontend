@@ -4,6 +4,8 @@ import { Cell, Pie, PieChart } from 'recharts'
 
 import Loader from '../../Loader'
 import { WhaleTooltip } from './WhaleTooltip'
+import { BondingData } from 'components/Pages/Dashboard/types/BondingData'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 export enum TokenType {
   bonded,
@@ -20,11 +22,12 @@ export enum ActionType {
   claim,
   createNewEpoch,
 }
-
-export enum WhaleType {
-  ampWHALE,
-  bWHALE,
-  WHALE,
+type Props = {
+  isWalletConnected: boolean
+  isLoading: boolean
+  data: BondingData[]
+  whalePrice: number
+  currentChainName: string
 }
 
 const BondingOverview = ({
@@ -33,7 +36,7 @@ const BondingOverview = ({
   data,
   whalePrice,
   currentChainName,
-}) => {
+}: Props) => {
   const borderRadius = '30px'
   const router = useRouter()
   const TokenBox = ({ tokenType }) => {
@@ -45,7 +48,6 @@ const BondingOverview = ({
         <WhaleTooltip
           key={`${tokenType}${color}`}
           label={label}
-          data={null}
           isWalletConnected={isWalletConnected}
           tokenType={tokenType}
         />
@@ -129,19 +131,24 @@ const BondingOverview = ({
                 value: number | string
                 actionType: ActionType
                 tokenType: TokenType
-              }) => (
-                <WhaleTooltip
-                  key={`${e.tokenType}${e.actionType}`}
-                  label={
-                    e?.value !== null && isWalletConnected
-                      ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
-                      : 'n/a'
-                  }
-                  tokenType={e.tokenType}
-                  data={data}
-                  isWalletConnected={isWalletConnected}
-                />
-              )
+                tokenBalances: TokenBalance[]
+              }) => {
+                return (
+                  <WhaleTooltip
+                    key={`${e.tokenType}${e.actionType}`}
+                    label={
+                      e?.value !== null && isWalletConnected
+                        ? `$${(Number(e.value) * Number(whalePrice)).toFixed(
+                            2
+                          )}`
+                        : 'n/a'
+                    }
+                    tokenType={e.tokenType}
+                    data={data}
+                    isWalletConnected={isWalletConnected}
+                  />
+                )
+              }
             )}
           </VStack>
           <VStack

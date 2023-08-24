@@ -1,44 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AssetInput from '../../AssetInput'
 import { bondingAtom } from './bondAtoms'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
-export interface LSDTokenBalances {
-  ampWHALE: number
-  bWHALE: number
-}
-export interface LSDTokenItemState {
+export interface BondingTokenState {
   tokenSymbol: string
   amount: number
   decimals: number
-  lsdToken: LSDToken
+  denom: string
 }
-export enum LSDToken {
-  ampWHALE,
-  bWHALE,
+export interface TokenBalance {
+  amount: number
+  tokenSymbol: string
 }
-export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
+
+export const Bond = ({ balances, tokenSymbols }) => {
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<LSDTokenItemState>(bondingAtom)
-  const [{ status }, _] = useRecoilState(walletState)
+    useRecoilState<BondingTokenState>(bondingAtom)
+  const { status, network, chainId } = useRecoilValue(walletState)
 
   const isWalletConnected = status === WalletStatusType.connected
 
-  const [tokenBalances, setLSDTokenBalances] = useState<LSDTokenBalances>(null)
+  const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
-    const newBalances: LSDTokenBalances = {
-      ampWHALE: liquidAmpWhale,
-      bWHALE: liquidBWhale,
+    if (balances && tokenSymbols) {
+      const newBalances = balances?.map((balance: number, idx: number) => {
+        return { amount: balance, tokenSymbol: tokenSymbols[idx] }
+      })
+      setTokenBalances(newBalances)
     }
-    setLSDTokenBalances(newBalances)
-  }, [liquidAmpWhale, liquidBWhale])
+  }, [balances, tokenSymbols])
 
   const onInputChange = (tokenSymbol: string | null, amount: number) => {
     if (tokenSymbol) {
@@ -51,15 +49,18 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
       setCurrentBondState({ ...currentBondState, amount: Number(amount) })
     }
   }
+  const config = useConfig(network, chainId)
 
   useEffect(() => {
-    setCurrentBondState({
-      tokenSymbol: AMP_WHALE_TOKEN_SYMBOL,
-      amount: 0,
-      decimals: 6,
-      lsdToken: LSDToken.ampWHALE,
-    })
-  }, [isWalletConnected])
+    if (config) {
+      setCurrentBondState({
+        tokenSymbol: config.bonding_tokens[0].tokenSymbol,
+        amount: 0,
+        decimals: 6,
+        denom: config.bonding_tokens[0].denom,
+      })
+    }
+  }, [isWalletConnected, config])
 
   const { control } = useForm({
     mode: 'onChange',
@@ -67,7 +68,13 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
       currentBondState,
     },
   })
-
+  const currentTokenBalance = useMemo(
+    () =>
+      tokenBalances?.find(
+        (balance) => balance.tokenSymbol === currentBondState.tokenSymbol
+      ).amount,
+    [tokenBalances, currentBondState.tokenSymbol]
+  )
   return (
     <VStack px={7} width="full">
       <Controller
@@ -80,31 +87,17 @@ export const Bond = ({ liquidAmpWhale, liquidBWhale }) => {
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
-            balance={(() => {
-              switch (currentBondState.lsdToken) {
-                case LSDToken.ampWHALE:
-                  return tokenBalances?.ampWHALE ?? 0
-                case LSDToken.bWHALE:
-                  return tokenBalances?.bWHALE ?? 0
-                default:
-                  return 0
-              }
-            })()}
+            balance={currentTokenBalance}
             minMax={false}
             disabled={false}
             onChange={(value, isTokenChange) => {
               onInputChange(value, 0)
               field.onChange(value)
               if (isTokenChange) {
-                const lsdToken =
-                  value.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL
-                    ? LSDToken.ampWHALE
-                    : LSDToken.bWHALE
                 setCurrentBondState({
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken,
                 })
               } else {
                 setCurrentBondState({

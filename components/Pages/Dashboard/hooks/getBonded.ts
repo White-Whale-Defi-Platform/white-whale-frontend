@@ -1,7 +1,6 @@
 import { JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 import { Wallet } from 'util/wallet-adapters'
-
 import { Config } from './useDashboardData'
 
 interface NativeTokenInfo {
@@ -18,6 +17,12 @@ interface Asset {
 interface BondedInfo {
   bonded_assets: Asset[]
   total_bonded: string
+}
+
+export interface BondedData {
+  denom: string
+  amount: number
+  tokenSymbol: string
 }
 
 const fetchBonded = async (
@@ -45,29 +50,19 @@ export const getBonded = async (
 
   const bondedInfo = await fetchBonded(client, address, config)
 
-  const totalBonded = bondedInfo?.total_bonded ?? 0
+  const localTotalBonded = Number(bondedInfo?.total_bonded ?? 0)
 
-  const localTotalBonded = Number(totalBonded)
+  const bondedAssets: BondedData[] = bondedInfo?.bonded_assets.map((asset) => {
+    const denom = asset.info.native_token.denom
+    const tokenSymbol = config.bonding_tokens.find(
+      (token) => token.denom === denom
+    )?.tokenSymbol
 
-  const bondedAmpWhale = bondedInfo
-    ? convertMicroDenomToDenom(
-        bondedInfo?.bonded_assets.find(
-          (asset) =>
-            asset.info.native_token.denom === config.lsd_token.ampWHALE.denom
-        )?.amount,
-        config.lsd_token.ampWHALE.decimals
-      )
-    : null
-
-  const bondedBWhale = bondedInfo
-    ? convertMicroDenomToDenom(
-        bondedInfo?.bonded_assets.find(
-          (asset) =>
-            asset.info.native_token.denom === config.lsd_token.bWHALE.denom
-        )?.amount,
-        config.lsd_token.bWHALE.decimals
-      )
-    : null
-
-  return { bondedAmpWhale, bondedBWhale, localTotalBonded }
+    return {
+      amount: convertMicroDenomToDenom(asset.amount, 6),
+      denom: asset.info.native_token.denom,
+      tokenSymbol: tokenSymbol,
+    }
+  })
+  return { bondedAssets, localTotalBonded }
 }

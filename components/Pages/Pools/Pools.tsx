@@ -273,17 +273,19 @@ const Pools = () => {
       alignItems="center"
       margin="auto"
     >
-      <Box width={{ base: '100%' }}>
-        <Text as="h2" fontSize="24" fontWeight="700">
-          My Pools
-        </Text>
-        <MyPoolsTable
-          show={true}
-          pools={myPools}
-          isLoading={isLoading || isInitLoading || pairInfos.length === 0}
-        />
-        <MobilePools pools={myPools} />
-      </Box>
+      {myPools?.length > 0 && (
+        <Box width={{ base: '100%' }}>
+          <Text as="h2" fontSize="24" fontWeight="700" pb={5}>
+            My Pools
+          </Text>
+          <MyPoolsTable
+            show={true}
+            pools={myPools}
+            isLoading={isLoading || isInitLoading || pairInfos.length === 0}
+          />
+          <MobilePools pools={myPools} />
+        </Box>
+      )}
 
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>

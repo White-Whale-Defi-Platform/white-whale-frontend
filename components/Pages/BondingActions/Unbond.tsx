@@ -2,29 +2,30 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
-import { AMP_WHALE_TOKEN_SYMBOL } from 'constants/index'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AssetInput from '../../AssetInput'
-import { LSDToken, LSDTokenBalances, LSDTokenItemState } from './Bond'
+import { BondingTokenState, TokenBalance } from './Bond'
 import { bondingAtom } from './bondAtoms'
+import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
-const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
-  const [{ status }] = useRecoilState(walletState)
+const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
+  const { status, chainId, network } = useRecoilValue(walletState)
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<LSDTokenItemState>(bondingAtom)
-
+    useRecoilState<BondingTokenState>(bondingAtom)
+  const config = useConfig(network, chainId)
   const isWalletConnected = status === WalletStatusType.connected
 
-  const [tokenBalances, setLSDTokenBalances] = useState<LSDTokenBalances>(null)
+  const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
-    setLSDTokenBalances({
-      ampWHALE: bondedAmpWhale,
-      bWHALE: bondedBWhale,
+    const newBalances = bondedAssets?.map((asset: BondedData) => {
+      return { amount: asset.amount, tokenSymbol: asset.tokenSymbol }
     })
-  }, [bondedAmpWhale, bondedBWhale])
+    setBondedBalances(newBalances)
+  }, [bondedAssets])
 
   const onInputChange = useCallback(
     (tokenSymbol: string | null, amount: number) => {
@@ -42,13 +43,16 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
   )
 
   useEffect(() => {
-    setCurrentBondState({
-      tokenSymbol: AMP_WHALE_TOKEN_SYMBOL,
-      amount: 0,
-      decimals: 6,
-      lsdToken: LSDToken.ampWHALE,
-    })
-  }, [isWalletConnected])
+    if (config) {
+      const firstToken = config.bonding_tokens[0]
+      setCurrentBondState({
+        tokenSymbol: firstToken.tokenSymbol,
+        amount: 0,
+        decimals: 6,
+        denom: firstToken.denom,
+      })
+    }
+  }, [isWalletConnected, config])
 
   const { control } = useForm({
     mode: 'onChange',
@@ -57,9 +61,12 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
     },
   })
 
-  const unbondingBalances = useMemo(
-    () => ({ ampWHALE: bondedAmpWhale, bWHALE: bondedBWhale }),
-    [bondedAmpWhale, bondedBWhale]
+  const currentTokenBalance = useMemo(
+    () =>
+      bondedBalances?.find(
+        (balance) => balance.tokenSymbol === currentBondState.tokenSymbol
+      )?.amount,
+    [bondedBalances, currentBondState.tokenSymbol]
   )
 
   return (
@@ -71,35 +78,21 @@ const Unbond = ({ bondedAmpWhale, bondedBWhale }) => {
         render={({ field }) => (
           <AssetInput
             isBonding={true}
-            unbondingBalances={unbondingBalances}
+            unbondingBalances={bondedBalances}
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
-            balance={(() => {
-              switch (currentBondState.lsdToken) {
-                case LSDToken.ampWHALE:
-                  return tokenBalances?.ampWHALE ?? 0
-                case LSDToken.bWHALE:
-                  return tokenBalances?.bWHALE ?? 0
-                default:
-                  return 0 // Or any other default value
-              }
-            })()}
+            balance={currentTokenBalance}
             minMax={false}
             disabled={false}
             onChange={(value, isTokenChange) => {
               onInputChange(value, 0)
               field.onChange(value)
               if (isTokenChange) {
-                const lsdToken =
-                  value.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL
-                    ? LSDToken.ampWHALE
-                    : LSDToken.bWHALE
                 setCurrentBondState({
                   ...currentBondState,
                   tokenSymbol: value.tokenSymbol,
                   amount: value.amount,
-                  lsdToken,
                 })
               } else {
                 setCurrentBondState({
