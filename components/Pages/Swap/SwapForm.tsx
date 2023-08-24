@@ -198,7 +198,15 @@ const SwapForm: FC<Props> = ({
   }, [simulated])
 
   const isInputDisabled = tx?.txStep == TxStep.Posting
-
+  // @ts-ignore
+  if (window.debugLogsEnabled) {
+    console.log(
+      'Disabled conditions: ',
+      tx?.txStep != TxStep.Ready,
+      simulated == null,
+      !isConnected
+    )
+  }
   return (
     <VStack
       paddingX={{ base: 6, md: 10 }}

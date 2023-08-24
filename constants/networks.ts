@@ -24,6 +24,7 @@ export const ACTIVE_BONDING_NETWORKS = [
   'migaloo-1',
   'narwhal-1',
   'phoenix-1',
+  'pacific-1',
 ]
 export const ACTIVE_INCENTIVE_NETWORKS = [
   'chihuahua-1',

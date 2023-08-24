@@ -23,4 +23,5 @@ jobs:
         run: yarn install
       - run: yarn build
       - run: yarn prettier
+      - run: yarn unimported
       # - run: yarn test

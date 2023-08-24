@@ -11,11 +11,9 @@ import {
   forwardRef,
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
-import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import { useTokenList } from 'hooks/useTokenList'
-
 import AssetSelectModal from './AssetSelectModal'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 interface AssetInputProps {
   image?: boolean
@@ -26,24 +24,19 @@ interface AssetInputProps {
   onInputFocus?: () => void
   balance?: number
   disabled?: boolean
-  minMax?: boolean
   isSingleInput?: boolean
   hideToken?: string
   edgeTokenList?: string[]
-  ignoreSlack?: boolean
   isBonding?: boolean
-  unbondingBalances?: { [key: string]: number }
+  unbondingBalances?: TokenBalance[]
 }
 
 const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
   const formatSymbol = symbol?.replace('-', '/')
 
-  // If (!tokenInfo && !symbol) return null
-
   if (!tokenInfo?.symbol && !symbol) {
     return (
       <Text
-        // PaddingLeft="10px"
         width="fit-content"
         fontSize="18px"
         fontWeight="400"
@@ -80,25 +73,19 @@ const AssetInput: FC<AssetInputProps> = forwardRef(
     {
       image = true,
       token,
-      balance,
       onChange,
       value,
       showList = true,
       disabled,
-      minMax = true,
       isSingleInput = false,
       hideToken,
       edgeTokenList,
-      ignoreSlack = false,
       isBonding = false,
       unbondingBalances = null,
     },
     ref
   ) => {
     const tokenInfo = useTokenInfo(token?.tokenSymbol)
-
-    const [tokenList] = useTokenList()
-    useMultipleTokenBalance(tokenList?.tokens?.map(({ symbol }) => symbol))
 
     return (
       <Stack

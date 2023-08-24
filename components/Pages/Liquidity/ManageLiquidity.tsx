@@ -35,6 +35,7 @@ import useProvideLP from './hooks/useProvideLP'
 import { tokenLpAtom } from './lpAtoms'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
+import PositionsOverview from '../Incentivize/PositionsOverview'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -178,6 +179,15 @@ const ManageLiquidity: FC = () => {
     setTokenLPState(newState)
   }
 
+  const myFlows = useMemo(() => {
+    if (!pools || !poolId) {
+      return []
+    }
+
+    const flows = pools.find((p) => p.pool_id === poolId)
+    return flows?.liquidity?.myFlows || []
+  }, [pools, poolId])
+
   return (
     <VStack
       w="auto"
@@ -224,6 +234,7 @@ const ManageLiquidity: FC = () => {
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
+              {dailyEmissionData.length > 0 ? <Tab>Incentives</Tab> : null}
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
@@ -258,6 +269,11 @@ const ManageLiquidity: FC = () => {
               <TabPanel padding={4}>
                 <Claim poolId={poolId} />
               </TabPanel>
+              {dailyEmissionData.length > 0 ? (
+                <TabPanel padding={4}>
+                  <PositionsOverview flows={myFlows} poolId={poolId} />
+                </TabPanel>
+              ) : null}
             </TabPanels>
           </Tabs>
         </Box>

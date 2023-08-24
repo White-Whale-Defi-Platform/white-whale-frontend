@@ -3,64 +3,76 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 
-import { TokenType, WhaleType } from './BondingOverview'
+import { TokenType } from './BondingOverview'
 import { BondingData } from './types/BondingData'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 export interface WhaleTooltipProps {
-  data: BondingData[]
+  data?: BondingData[]
   withdrawableAmpWhale?: number
   withdrawableBWhale?: number
   label: string
   isWalletConnected: boolean
-  tokenType: TokenType
+  tokenType?: TokenType
+  tokens?: TokenBalance[]
 }
 
 export const WhaleTooltip = ({
-  data,
   label,
   isWalletConnected,
   tokenType,
-  withdrawableAmpWhale,
-  withdrawableBWhale,
+  data,
+  tokens,
 }: WhaleTooltipProps) => {
-  const {
-    whale = null,
-    ampWhale = null,
-    bWhale = null,
-  } = data?.find((e) => e.tokenType == tokenType) || {}
+  const sortedTokens = tokens
+    ? tokens
+    : data
+    ? data
+        .find((type) => type.tokenType === tokenType)
+        .tokenBalances.sort((a, b) => b.amount - a.amount)
+    : []
+  const summedBalancesObject = sortedTokens.reduce((acc, balance) => {
+    if (acc[balance.tokenSymbol]) {
+      acc[balance.tokenSymbol] += balance.amount
+    } else {
+      acc[balance.tokenSymbol] = balance.amount
+    }
+    return acc
+  }, {} as Record<string, number>)
 
-  const lsdTokenDetails = [
-    {
-      type: WhaleType.bWHALE,
-      value: withdrawableBWhale ?? bWhale,
-    },
-    {
-      type: WhaleType.ampWHALE,
-      value: withdrawableAmpWhale ?? ampWhale,
-    },
-  ].sort((a, b) => b.value - a.value)
+  const summedBalanceList: TokenBalance[] = Object.keys(
+    summedBalancesObject
+  ).map((key) => ({
+    amount: summedBalancesObject[key],
+    tokenSymbol: key,
+  }))
 
-  const TokenDetail = ({ whaleType, value }) => (
-    <HStack justify="space-between" direction="row" width="full" px={2}>
-      <Text color="whiteAlpha.600" fontSize={14}>
-        {WhaleType[whaleType]}
-      </Text>
-      <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
-    </HStack>
-  )
+  const TokenDetail = ({ token }: { token: TokenBalance }) => {
+    return (
+      <HStack justify="space-between" direction="row" width="full" px={2}>
+        <Text color="whiteAlpha.600" fontSize={14}>
+          {token.tokenSymbol}
+        </Text>
+        <Text fontSize={14}>{isWalletConnected ? token.amount : 'n/a'}</Text>
+      </HStack>
+    )
+  }
 
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 
   useEffect(() => {
     setTextWidth(textRef.current.offsetWidth)
-  }, [whale, ampWhale, bWhale])
+  }, [sortedTokens])
 
   return (
     <Tooltip
       sx={{ boxShadow: 'none' }}
       label={
-        isWalletConnected ? (
+        (isWalletConnected &&
+          !(!data && !tokens) &&
+          summedBalanceList.length > 0) ||
+        (!data && !tokens) ? (
           <VStack
             minW="250px"
             minH="fit-content"
@@ -73,35 +85,24 @@ export const WhaleTooltip = ({
             justifyContent="center"
             alignItems="center"
           >
-            {ampWhale === null && withdrawableAmpWhale == null ? (
+            {!data && !tokens ? (
               <Text>
                 {tokenType === TokenType.liquid
-                  ? 'Liquid WHALE and LSD-WHALE Token Balances'
+                  ? 'Liquid bonding token balances'
                   : tokenType === TokenType.bonded
-                  ? 'Current amount of bonded LSD-WHALE token'
+                  ? 'Current bonded balances'
                   : tokenType === TokenType.unbonding
-                  ? 'Current amount of unbonding LSD-WHALE token'
+                  ? 'Current unbonding balances'
                   : tokenType === TokenType.withdrawable
-                  ? 'Current amount of withdrawable LSD-WHALE token'
+                  ? 'Current withdrawable balances'
                   : null}
               </Text>
             ) : (
               <>
-                {tokenType === TokenType.liquid ? (
-                  <>
-                    {' '}
-                    <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
-                    <Divider
-                      width="93%"
-                      borderWidth="0.1px"
-                      color="whiteAlpha.300"
-                    />
-                  </>
-                ) : null}
-                {lsdTokenDetails.map((e, index) => (
-                  <React.Fragment key={e.type}>
-                    <TokenDetail whaleType={e.type} value={e.value} />
-                    {index === 0 && (
+                {summedBalanceList?.map((token, index) => (
+                  <React.Fragment key={token.tokenSymbol}>
+                    <TokenDetail token={token} />
+                    {index === 0 && summedBalanceList.length > 1 && (
                       <Divider
                         width="93%"
                         borderWidth="0.1px"

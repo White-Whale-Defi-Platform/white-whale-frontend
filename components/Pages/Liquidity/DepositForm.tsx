@@ -127,6 +127,7 @@ const DepositForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.txStep])
 
+
   const buttonLabel = useMemo(() => {
     if (connected !== WalletStatusType.connected) {
       return 'Connect Wallet'
@@ -136,7 +137,7 @@ const DepositForm = ({
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
-    }
+    } 
     return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
 
@@ -188,6 +189,7 @@ const DepositForm = ({
         multiplicator={String(multiplicator)}
         apr={apr}
         show={incentivesEnabled}
+        incentivized={poolAPRs?.incentives !== 0}
       />
 
       <SubmitButton

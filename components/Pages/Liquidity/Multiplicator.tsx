@@ -1,13 +1,28 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import InfoTooltip from '../../InfoTooltip'
 
 type Props = {
   multiplicator: string
   apr: string
   show: boolean
+  incentivized: boolean
 }
 
-const Multiplicator = ({ multiplicator, apr, show }: Props) => {
+const incentiveDisclaimer = (incentivized) => {
+  if (incentivized) {
+    return (
+      <InfoTooltip
+        IconSize={'3'}
+        description={
+          'This Pool is currently incentivized. The creator can clawback all unclaimed rewards at anytime. Claim them regularly.'
+        }
+      />
+    )
+  }
+}
+
+const Multiplicator = ({ multiplicator, apr, show, incentivized }: Props) => {
   if (!show) {
     return null
   }
@@ -46,12 +61,14 @@ const Multiplicator = ({ multiplicator, apr, show }: Props) => {
           isHeading
           fontSize="16"
         />
-
-        <TooltipWithChildren
-          label={`${apr}%`}
-          fontSize="16"
-          showTooltip={false}
-        />
+        <HStack>
+          {incentiveDisclaimer(incentivized)}
+          <TooltipWithChildren
+            label={`${apr}%`}
+            fontSize="16"
+            showTooltip={false}
+          />
+        </HStack>
       </HStack>
     </VStack>
   )

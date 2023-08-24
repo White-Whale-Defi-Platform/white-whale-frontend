@@ -15,6 +15,7 @@ import { Asset } from 'types/blockchain'
 
 import AssetList from './AssetList'
 import SearchInput from './SearchInput'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 interface AssetSelectModalProps {
   children: ReactNode
@@ -24,7 +25,7 @@ interface AssetSelectModalProps {
   disabled: boolean
   amount?: number
   isBonding?: boolean
-  unbondingBalances?: { [key: string]: number }
+  unbondingBalances?: TokenBalance[]
 }
 
 const AssetSelectModal: FC<AssetSelectModalProps> = ({
@@ -58,7 +59,6 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
       >
         {children}
       </HStack>
-
       <Modal
         onClose={onClose}
         isOpen={isOpen}
