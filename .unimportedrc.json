@@ -13,7 +13,8 @@
     "next",
     "react",
     "react-dom",
-    "@typescript-eslint/eslint-plugin"
+    "@typescript-eslint/eslint-plugin",
+    "eslint-plugin-import-helpers"
   ],
   "ignoreUnresolved": [
     "webpack-node-externals"
