@@ -25,9 +25,7 @@ export default function useConnectShell() {
     if (chainInfo !== undefined) {
       await window.shellwallet?.experimentalSuggestChain(chainInfo)
       await window.shellwallet.enable(currentWalletState.chainId)
-      const offlineSigner = await window.getOfflineSignerAutoShell(
-        currentWalletState.chainId
-      )
+      const offlineSigner = await window.getOfflineSignerAutoShell(currentWalletState.chainId)
 
       const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
         currentWalletState.chainId,
@@ -35,11 +33,9 @@ export default function useConnectShell() {
         offlineSigner,
         currentWalletState.network,
         {
-          gasPrice: GasPrice.fromString(
-            `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
-          ),
+          gasPrice: GasPrice.fromString(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`),
         },
-        'shellwallet'
+        'shellwallet',
       )
       const [{ address }] = await offlineSigner.getAccounts()
       const key = await window.shellwallet.getKey(currentWalletState.chainId)
@@ -65,5 +61,6 @@ export default function useConnectShell() {
     await connectShell()
   }
 
-  return { connectShell, setShellAndConnect }
+  return { connectShell,
+    setShellAndConnect }
 }

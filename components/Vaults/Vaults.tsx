@@ -45,7 +45,8 @@ const Vaults: FC = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '1160px' }}
+      width={{ base: '100%',
+        md: '1160px' }}
       alignItems="center"
       // Margin="auto"
     >

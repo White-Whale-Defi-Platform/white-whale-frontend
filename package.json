@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "npx eslint . --fix",
     "unimported": "npx unimported",
     "prettier:write": "prettier --write .",
     "prettier": "prettier \"**/*.{ts,md}\" --list-different",

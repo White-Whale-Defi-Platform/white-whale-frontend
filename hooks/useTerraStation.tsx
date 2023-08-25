@@ -20,14 +20,13 @@ export const useTerraStation = (onCloseModal) => {
     useRecoilState(walletState)
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
 
-  const filterForStation = (connection: Connection) =>
-    connection.identifier === 'station'
-  const filterForWalletConnect = (connection: Connection) =>
-    connection.type === 'WALLETCONNECT'
+  const filterForStation = (connection: Connection) => connection.identifier === 'station'
+  const filterForWalletConnect = (connection: Connection) => connection.type === 'WALLETCONNECT'
 
   const connectTerraAndCloseModal = (type: ConnectType, identifier: string) => {
     const activeWallet = type === 'WALLETCONNECT' ? 'walletconnect' : 'station'
-    setCurrentWalletState({ ...currentWalletState, activeWallet })
+    setCurrentWalletState({ ...currentWalletState,
+      activeWallet })
     connect(type, identifier)
     onCloseModal()
   }
@@ -77,25 +76,23 @@ export const useTerraStation = (onCloseModal) => {
       },
     })
 
-    return { mainnet, testnet }
+    return { mainnet,
+      testnet }
   }, [])
 
-  const wasmChainClient = useMemo(
-    () =>
-      new TerraStationWallet(
-        connectedWallet,
-        currentWalletState.network === 'mainnet' ? mainnet : testnet,
-        currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
-        currentWalletState.chainId
-      ),
-    [
-      connectedWallet,
-      currentWalletState.network,
-      mainnet,
-      testnet,
-      currentWalletState.chainId,
-    ]
-  )
+  const wasmChainClient = useMemo(() => new TerraStationWallet(
+    connectedWallet,
+    currentWalletState.network === 'mainnet' ? mainnet : testnet,
+    currentWalletState.network === 'mainnet' ? 'mainnet' : 'testnet',
+    currentWalletState.chainId,
+  ),
+  [
+    connectedWallet,
+    currentWalletState.network,
+    mainnet,
+    testnet,
+    currentWalletState.chainId,
+  ])
 
   useEffect(() => {
     if (currentWalletState?.activeWallet !== 'station') {
@@ -127,5 +124,7 @@ export const useTerraStation = (onCloseModal) => {
     currentWalletState.chainId,
   ])
 
-  return { connectTerraAndCloseModal, filterForStation, filterForWalletConnect }
+  return { connectTerraAndCloseModal,
+    filterForStation,
+    filterForWalletConnect }
 }

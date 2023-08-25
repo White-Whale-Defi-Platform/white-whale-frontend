@@ -2,13 +2,13 @@ import { FC, useMemo } from 'react'
 
 import { Box, Button, HStack, Image, Text } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { walletState } from 'state/atoms/walletAtoms'
 import { useRecoilValue } from 'recoil'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { walletState } from 'state/atoms/walletAtoms'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -36,21 +36,16 @@ const AssetList: FC<AssetListProps> = ({
   const config = useConfig(network, chainId)
 
   const tokens = isBonding
-    ? tokenList?.tokens?.filter((t) =>
-        config?.bonding_tokens
-          ?.map((token) => token.tokenSymbol)
-          .includes(t.symbol)
-      )
+    ? tokenList?.tokens?.filter((t) => config?.bonding_tokens?.
+      map((token) => token.tokenSymbol).
+      includes(t.symbol))
     : tokenList?.tokens
 
   const [tokenBalance = []] =
     unbondingBalances !== null
       ? [
-          tokens?.map(
-            ({ symbol }) =>
-              unbondingBalances.find((b) => b.tokenSymbol === symbol)?.amount
-          ),
-        ]
+        tokens?.map(({ symbol }) => unbondingBalances.find((b) => b.tokenSymbol === symbol)?.amount),
+      ]
       : useMultipleTokenBalance(tokens?.map(({ symbol }) => symbol))
 
   const tokensWithBalance = useMemo(() => {
@@ -58,19 +53,19 @@ const AssetList: FC<AssetListProps> = ({
       return tokens
     }
 
-    return tokens
-      ?.map((token, index) => ({
+    return tokens?.
+      map((token, index) => ({
         ...token,
         balance: tokenBalance?.[index],
-      }))
-      .filter(({ symbol }) =>
-        edgeTokenList?.length > 0
-          ? edgeTokenList.includes(symbol)
-          : !currentToken?.includes(symbol)
-      )
+      })).
+      filter(({ symbol }) => (edgeTokenList?.length > 0
+        ? edgeTokenList.includes(symbol)
+        : !currentToken?.includes(symbol)))
   }, [tokenList, tokenBalance])
 
-  const filterAssets = useFilter<any>(tokensWithBalance, 'symbol', search)
+  const filterAssets = useFilter<any>(
+    tokensWithBalance, 'symbol', search,
+  )
 
   return (
     <Box
@@ -106,14 +101,11 @@ const AssetList: FC<AssetListProps> = ({
               ? 'unset'
               : '1px solid rgba(0, 0, 0, 0.5)'
           }
-          onClick={() =>
-            onChange(
-              {
-                tokenSymbol: item?.symbol,
-                amount,
-              },
-              true
-            )
+          onClick={() => onChange({
+            tokenSymbol: item?.symbol,
+            amount,
+          },
+          true)
           }
         >
           <HStack>

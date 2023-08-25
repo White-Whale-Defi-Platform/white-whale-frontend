@@ -37,7 +37,7 @@ export class TerraStationWallet implements Wallet {
     client: ConnectedWallet,
     lcdClient: LCDClient,
     network: string,
-    chainID: string
+    chainID: string,
   ) {
     this.client = client
     this.lcdClient = lcdClient
@@ -61,9 +61,7 @@ export class TerraStationWallet implements Wallet {
           msg.value.sender,
           msg.value.contract,
           JSON.parse(String.fromCharCode.apply(null, msg.value.msg)),
-          msg.value.funds.map(
-            (coin) => new StationCoin(coin.denom, coin.amount)
-          )
+          msg.value.funds.map((coin) => new StationCoin(coin.denom, coin.amount)),
         )
       case '/ibc.applications.transfer.v1.MsgTransfer':
         // This needs testing when there are IBC functions in the application
@@ -75,7 +73,7 @@ export class TerraStationWallet implements Wallet {
           msg.value.senderAddress,
           msg.value.receiver,
           msg.value.timeoutHeight,
-          msg.value.timeoutTimestamp
+          msg.value.timeoutTimestamp,
         )
       default:
         // This needs testing when there are other message types in the application
@@ -91,15 +89,15 @@ export class TerraStationWallet implements Wallet {
   post(
     senderAddress: string,
     msgs: EncodeObject[],
-    memo: string | undefined
+    memo: string | undefined,
   ): Promise<TxResponse> {
-    return this.client
-      .post({
+    return this.client.
+      post({
         msgs: msgs.map((msg) => this.convertMsg(msg)),
         memo,
         chainID: this.chainID,
-      })
-      .then((result) => ({
+      }).
+      then((result) => ({
         height: result.result.height.valueOf(),
         code: result.success ? 0 : -1,
         transactionHash: result.result.txhash,
@@ -111,66 +109,58 @@ export class TerraStationWallet implements Wallet {
     senderAddress: string,
     contractAddress: string,
     msg: Record<string, unknown>,
-    funds: readonly Coin[] | undefined
+    funds: readonly Coin[] | undefined,
   ): Promise<ExecuteResult> {
     const executeMsg = new MsgExecuteContract(
       senderAddress,
       contractAddress,
       msg,
-      funds?.map((coin) => new StationCoin(coin.denom, coin.amount))
+      funds?.map((coin) => new StationCoin(coin.denom, coin.amount)),
     )
-    return this.client
-      .post({
+    return this.client.
+      post({
         msgs: [executeMsg],
         chainID: this.chainID,
-      })
-      .then((result) => ({
+      }).
+      then((result) => ({
         height: result.result.height.valueOf(),
         code: result.success ? 0 : -1,
         transactionHash: result.result.txhash,
         rawLog: result.result.raw_log,
-      }))
-      .then((result) => {
+      })).
+      then((result) => {
         if (result.code) {
-          throw new Error(
-            `Error when broadcasting tx ${result.transactionHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
-          )
+          throw new Error(`Error when broadcasting tx ${result.transactionHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`)
         } else {
           return result
         }
-      })
-      .then((result) => ({
+      }).
+      then((result) => ({
         logs: parseRawLog(result.rawLog),
         transactionHash: result.transactionHash,
       }))
   }
 
-  queryContractSmart(
-    address: string,
-    queryMsg: Record<string, unknown>
-  ): Promise<JsonObject> {
+  queryContractSmart(address: string,
+    queryMsg: Record<string, unknown>): Promise<JsonObject> {
     return this.lcdClient.wasm.contractQuery(address, queryMsg)
   }
 
   simulate(
     signerAddress: string,
     messages: readonly EncodeObject[],
-    memo: string | undefined
+    memo: string | undefined,
   ): Promise<number> {
     const tx = {
-      msgs: messages
-        .map((msg) =>
-          Msg.fromAmino({
-            // @ts-ignore
-            type: this.convertType(msg.typeUrl),
-            value: msg.value,
-          })
-        )
-        .map((msg) => {
+      msgs: messages.
+        map((msg) => Msg.fromAmino({
+          // @ts-ignore
+          type: this.convertType(msg.typeUrl),
+          value: msg.value,
+        })).
+        map((msg) => {
           if (msg instanceof MsgExecuteContract) {
-            msg.execute_msg = JSON.parse(
-              String.fromCharCode.apply(null, msg.execute_msg)
-            )
+            msg.execute_msg = JSON.parse(String.fromCharCode.apply(null, msg.execute_msg))
           }
           return msg
         }),
@@ -179,23 +169,17 @@ export class TerraStationWallet implements Wallet {
     }
 
     // @ts-ignore
-    return this.lcdClient.auth
-      .accountInfo(signerAddress)
-      .then((result) =>
-        this.lcdClient.tx.estimateFee(
-          [
-            {
-              publicKey: result.getPublicKey(),
-              sequenceNumber: result.getSequenceNumber(),
-            },
-          ],
-          tx
-        )
-      )
-      .then((result) =>
-        result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()
-      )
-      .catch((err) => {
+    return this.lcdClient.auth.
+      accountInfo(signerAddress).
+      then((result) => this.lcdClient.tx.estimateFee([
+        {
+          publicKey: result.getPublicKey(),
+          sequenceNumber: result.getSequenceNumber(),
+        },
+      ],
+      tx)).
+      then((result) => result.amount.get(TX_MAAP.get(this.chainID)).amount.toNumber()).
+      catch((err) => {
         if (axios.isAxiosError(err)) {
           throw new Error(JSON.stringify(err.response.data))
         }

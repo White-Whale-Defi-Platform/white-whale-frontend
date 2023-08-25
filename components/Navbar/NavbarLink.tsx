@@ -13,7 +13,8 @@ const NavbarLink: FC<Props> = ({ text, href }) => {
   const { asPath } = useRouter()
 
   const wrapperStyle = asPath.startsWith(href)
-    ? { color: 'white', borderBottomColor: 'white' }
+    ? { color: 'white',
+      borderBottomColor: 'white' }
     : { color: 'brand.50' }
 
   return (

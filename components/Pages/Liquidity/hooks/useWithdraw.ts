@@ -39,17 +39,15 @@ const useWithdraw = ({
         amount,
         swapAddress,
       }),
-      encodedMsgs: createWithdrawExecuteMsgs(
-        {
-          swapAddress,
-          contract,
-          amount,
-          claimIncentive,
-          stakingAddress,
-          isNative: isNativeToken(contract),
-        },
-        address
-      ),
+      encodedMsgs: createWithdrawExecuteMsgs({
+        swapAddress,
+        contract,
+        amount,
+        claimIncentive,
+        stakingAddress,
+        isNative: isNativeToken(contract),
+      },
+      address),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, contract, swapAddress, stakingAddress, claimIncentive, address])
@@ -75,11 +73,15 @@ const simulate = ({ reverse, amount, lp, tokenA, tokenB }) => {
         ? tokenA
         : (tokenA * (lp - lpTokensForPartialB)) / lp
     return {
-      lp: num(lpTokensForPartialB).dp(0).toString(),
+      lp: num(lpTokensForPartialB).dp(0).
+        toString(),
       simulated:
         lpTokensForPartialB === lp
-          ? num(tokenAForLP).dp(0).toString()
-          : num(tokenA).minus(tokenAForLP).dp(0).toString(),
+          ? num(tokenAForLP).dp(0).
+            toString()
+          : num(tokenA).minus(tokenAForLP).
+            dp(0).
+            toString(),
     }
   }
   const lpTokensForPartialA = lp * (amount / tokenA)
@@ -88,25 +90,27 @@ const simulate = ({ reverse, amount, lp, tokenA, tokenB }) => {
       ? tokenB
       : (tokenB * (lp - lpTokensForPartialA)) / lp
   return {
-    lp: num(protectAgainstNaN(lpTokensForPartialA)).dp(0).toString(),
+    lp: num(protectAgainstNaN(lpTokensForPartialA)).dp(0).
+      toString(),
     simulated:
       lpTokensForPartialA === lp
-        ? num(tokenBForLP).dp(0).toString()
-        : num(tokenB).minus(tokenBForLP).dp(0).toString(),
+        ? num(tokenBForLP).dp(0).
+          toString()
+        : num(tokenB).minus(tokenBForLP).
+          dp(0).
+          toString(),
   }
 }
 
-export const useSimulateWithdraw = ({ lp, tokenA, tokenB, amount, reverse }) =>
-  useMemo(
-    () =>
-      simulate({
-        reverse,
-        amount,
-        lp,
-        tokenA: num(tokenA).dp(0).toPrecision(),
-        tokenB: num(tokenB).dp(0).toPrecision(),
-      }),
-    [amount, lp, tokenA, tokenB]
-  )
+export const useSimulateWithdraw = ({ lp, tokenA, tokenB, amount, reverse }) => useMemo(() => simulate({
+  reverse,
+  amount,
+  lp,
+  tokenA: num(tokenA).dp(0).
+    toPrecision(),
+  tokenB: num(tokenB).dp(0).
+    toPrecision(),
+}),
+[amount, lp, tokenA, tokenB])
 
 export default useWithdraw

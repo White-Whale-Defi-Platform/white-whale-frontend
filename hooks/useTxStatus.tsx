@@ -12,7 +12,8 @@ import { parseError } from 'util/parseError'
 const useTxStatus = ({ client, transactionType }) => {
   const [txState, setTxState] = useRecoilState(txAtom)
   const toast = useToast()
-  const txInfo = useTxInfo({ txHash: txState.txHash, client })
+  const txInfo = useTxInfo({ txHash: txState.txHash,
+    client })
   const queryClient = useQueryClient()
 
   useEffect(() => {

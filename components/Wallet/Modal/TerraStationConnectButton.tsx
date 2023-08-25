@@ -11,9 +11,9 @@ function TerraStationConnectButton({ onCloseModal }) {
 
   return (
     <>
-      {availableConnections
-        .filter(filterForStation)
-        .map(({ type, identifier, name, icon }) => (
+      {availableConnections.
+        filter(filterForStation).
+        map(({ type, identifier, name, icon }) => (
           <Button
             variant="wallet"
             key={identifier}
@@ -25,9 +25,9 @@ function TerraStationConnectButton({ onCloseModal }) {
             </HStack>
           </Button>
         ))}
-      {availableInstallations
-        .filter(filterForStation)
-        .map(({ identifier, name, icon, url }) => (
+      {availableInstallations.
+        filter(filterForStation).
+        map(({ identifier, name, icon, url }) => (
           <Button
             colorScheme="black"
             key={identifier}
@@ -36,7 +36,8 @@ function TerraStationConnectButton({ onCloseModal }) {
             <img
               src={icon}
               alt={name}
-              style={{ width: '1em', height: '1em' }}
+              style={{ width: '1em',
+                height: '1em' }}
             />
             Install {name} [{identifier}]
           </Button>

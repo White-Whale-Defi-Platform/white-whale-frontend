@@ -4,10 +4,12 @@ import { Wallet } from 'util/wallet-adapters'
 export const claimRewards = (
   client: Wallet,
   address: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     claim: {},
   }
-  return client.execute(address, config.fee_distributor, handleMsg)
+  return client.execute(
+    address, config.fee_distributor, handleMsg,
+  )
 }

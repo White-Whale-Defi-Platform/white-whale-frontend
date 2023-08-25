@@ -35,26 +35,27 @@ const WithdrawForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(walletState)
-  const onSuccess = useCallback(
-    (txHash) => {
-      refetch?.()
-      toast({
-        title: 'Withdraw from Vault Success.',
-        description: (
-          <Finder txHash={txHash} chainId={chainId}>
-            {' '}
-          </Finder>
-        ),
-        status: 'success',
-        duration: 9000,
-        position: 'top-right',
-        isClosable: true,
-      })
-    },
-    [refetch, chainId, toast]
-  )
+  const onSuccess = useCallback((txHash) => {
+    refetch?.()
+    toast({
+      title: 'Withdraw from Vault Success.',
+      description: (
+        <Finder txHash={txHash} chainId={chainId}>
+          {' '}
+        </Finder>
+      ),
+      status: 'success',
+      duration: 9000,
+      position: 'top-right',
+      isClosable: true,
+    })
+  },
+  [refetch, chainId, toast])
 
-  const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
+  const { tx } = useWithdraw({ vaultAddress,
+    lpToken,
+    token,
+    onSuccess })
   const isConnected = connected === '@wallet-state/connected'
 
   const buttonLabel = useMemo(() => {
@@ -75,7 +76,8 @@ const WithdrawForm = ({
 
   useEffect(() => {
     if (tx.txStep === TxStep.Success) {
-      setToken({ ...token, amount: 0 })
+      setToken({ ...token,
+        amount: 0 })
       tx?.reset()
     }
   }, [tx, token, setToken])

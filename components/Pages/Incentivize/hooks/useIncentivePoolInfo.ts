@@ -7,6 +7,11 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useCurrentEpoch } from 'components/Pages/Incentivize/hooks/useCurrentEpoch'
 import { fetchTotalPoolSupply } from 'components/Pages/Pools/hooks/fetchTotalPoolLp'
+import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
 import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
@@ -16,11 +21,6 @@ import {
   getPairAprAndDailyVolume,
   getPairAprAndDailyVolumeTerra,
 } from 'util/enigma'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-  WHALE_TOKEN_SYMBOL,
-} from 'constants/index'
 
 export interface Flow {
   claimed_amount: string
@@ -57,7 +57,9 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
-export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
+export const useIncentivePoolInfo = (
+  client, pools, currentChainPrefix,
+) => {
   const { chainId, network } = useRecoilValue(walletState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
@@ -82,21 +84,22 @@ export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
   let poolAssets = []
 
   if (Array.isArray(pools)) {
-    poolAssets = []
-      .concat(...pools.map((pool) => pool.pool_assets))
-      .filter((v, i, a) => a.findIndex((t) => t.denom === v.denom) === i)
+    poolAssets = [].
+      concat(...pools.map((pool) => pool.pool_assets)).
+      filter((
+        v, i, a,
+      ) => a.findIndex((t) => t.denom === v.denom) === i)
   }
   const { data: flowPoolData, isLoading } = useQuery(
     ['apr', currentEpochData, pools, poolsWithAprAnd24HrVolume],
-    () =>
-      getPoolFlowData(
-        client,
-        pools,
-        currentEpochData,
-        poolAssets,
-        prices,
-        poolsWithAprAnd24HrVolume
-      ),
+    () => getPoolFlowData(
+      client,
+      pools,
+      currentEpochData,
+      poolAssets,
+      prices,
+      poolsWithAprAnd24HrVolume,
+    ),
     {
       enabled:
         Boolean(client) &&
@@ -104,13 +107,14 @@ export const useIncentivePoolInfo = (client, pools, currentChainPrefix) => {
         Boolean(pools) &&
         Boolean(prices) &&
         Boolean(poolsWithAprAnd24HrVolume),
-    }
+    },
   )
-  return { flowPoolData, poolsWithAprAnd24HrVolume, isLoading }
+  return { flowPoolData,
+    poolsWithAprAnd24HrVolume,
+    isLoading }
 }
 
-const fetchFlows = async (client, address): Promise<Flow[]> =>
-  await client?.queryContractSmart(address, { flows: {} })
+const fetchFlows = async (client, address): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
 
 const getPoolFlowData = async (
   client,
@@ -118,123 +122,106 @@ const getPoolFlowData = async (
   currentEpochData,
   poolAssets,
   prices,
-  poolsWithAprAnd24HrVolume
-): Promise<IncentivePoolInfo[]> =>
-  pools
-    ? Promise.all(
-        pools.map(async (pool) => {
-          if (pool.staking_address === '') {
-            return {
-              poolId: pool.pool_id,
-              flowData: null,
-            } // Skip this iteration and continue with the next one.
-          }
-          // TODO replace with own total liq calc
-          const totalLiquidity = poolsWithAprAnd24HrVolume.find(
-            (p) => p.pool_id === pool.pool_id
-          )?.totalLiquidity
+  poolsWithAprAnd24HrVolume,
+): Promise<IncentivePoolInfo[]> => (pools
+  ? Promise.all(pools.map(async (pool) => {
+    if (pool.staking_address === '') {
+      return {
+        poolId: pool.pool_id,
+        flowData: null,
+      } // Skip this iteration and continue with the next one.
+    }
+    // TODO replace with own total liq calc
+    const totalLiquidity = poolsWithAprAnd24HrVolume.find((p) => p.pool_id === pool.pool_id)?.totalLiquidity
 
-          const totalPoolLp = await fetchTotalPoolSupply(
-            pool.swap_address,
-            client
-          )
+    const totalPoolLp = await fetchTotalPoolSupply(pool.swap_address,
+      client)
 
-          const flows = await fetchFlows(client, pool.staking_address)
-          const currentEpochId: number =
+    const flows = await fetchFlows(client, pool.staking_address)
+    const currentEpochId: number =
             Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
-          let lockedLpShare
-          try {
-            const weight = await client.queryContractSmart(
-              pool.staking_address,
-              {
-                global_weight: { epoch_id: currentEpochId },
-              }
-            )
-            const globalWeight = Number(weight?.global_weight)
-            lockedLpShare =
+    let lockedLpShare
+    try {
+      const weight = await client.queryContractSmart(pool.staking_address,
+        {
+          global_weight: { epoch_id: currentEpochId },
+        })
+      const globalWeight = Number(weight?.global_weight)
+      lockedLpShare =
               isNaN(globalWeight) || globalWeight === 0
                 ? 1
                 : globalWeight / totalPoolLp
-          } catch {
-            lockedLpShare = 1
-          }
+    } catch {
+      lockedLpShare = 1
+    }
 
-          const flowList = flows
-            .map((flow) => ({
-              denom:
+    const flowList = flows.
+      map((flow) => ({
+        denom:
                 flow.flow_asset.info?.native_token?.denom ??
                 flow.flow_asset.info.token.contract_addr,
-              dailyEmission: 0,
-              endEpoch: Number(flow.end_epoch),
-            }))
-            .filter((flow) => flow.endEpoch >= currentEpochId)
+        dailyEmission: 0,
+        endEpoch: Number(flow.end_epoch),
+      })).
+      filter((flow) => flow.endEpoch >= currentEpochId)
 
-          const uniqueFlowList = flowList.reduce((acc, current) => {
-            if (!acc.some((item) => item.denom === current.denom)) {
-              acc.push(current)
-            }
-            return acc
-          }, [])
-          if (flows.length > 0) {
-            flows?.forEach((flow) => {
-              if (
-                flow.end_epoch >= currentEpochId &&
+    const uniqueFlowList = flowList.reduce((acc, current) => {
+      if (!acc.some((item) => item.denom === current.denom)) {
+        acc.push(current)
+      }
+      return acc
+    }, [])
+    if (flows.length > 0) {
+      flows?.forEach((flow) => {
+        if (
+          flow.end_epoch >= currentEpochId &&
                 flow.start_epoch <= currentEpochId
-              ) {
-                // Every new entry contains overall emitted token value
-                const emittedTokens: number =
+        ) {
+          // Every new entry contains overall emitted token value
+          const emittedTokens: number =
                   flow.emitted_tokens &&
                   Object.keys(flow.emitted_tokens).length !== 0
-                    ? Math.max(
-                        ...Object.values(flow.emitted_tokens).map(Number)
-                      )
+                    ? Math.max(...Object.values(flow.emitted_tokens).map(Number))
                     : 0
 
-                const flowDenom =
+          const flowDenom =
                   flow.flow_asset.info?.token?.contract_addr ??
                   flow.flow_asset.info?.native_token?.denom
 
-                const emission = convertMicroDenomToDenom(
-                  (Number(flow.flow_asset.amount) - emittedTokens) /
+          const emission = convertMicroDenomToDenom((Number(flow.flow_asset.amount) - emittedTokens) /
                     (flow.start_epoch +
                       (flow.end_epoch - flow.start_epoch) -
                       Number(currentEpochData.currentEpoch.epoch.id)),
-                  6
-                )
-                const uniqueFlow = uniqueFlowList.find(
-                  (f) => f.denom === flowDenom
-                )
-                uniqueFlow.dailyEmission += emission
-              }
-            })
-          }
-          const uniqueFlowsWithEmissionAndApr = uniqueFlowList.map((flow) => {
-            const poolAsset = poolAssets.find(
-              (asset) => asset.denom === flow.denom
-            )
-            const tokenSymbol = poolAsset?.symbol
-            const logoURI = poolAsset?.logoURI
-            const price =
+          6)
+          const uniqueFlow = uniqueFlowList.find((f) => f.denom === flowDenom)
+          uniqueFlow.dailyEmission += emission
+        }
+      })
+    }
+    const uniqueFlowsWithEmissionAndApr = uniqueFlowList.map((flow) => {
+      const poolAsset = poolAssets.find((asset) => asset.denom === flow.denom)
+      const tokenSymbol = poolAsset?.symbol
+      const logoURI = poolAsset?.logoURI
+      const price =
               tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
               tokenSymbol === B_WHALE_TOKEN_SYMBOL
                 ? prices[WHALE_TOKEN_SYMBOL]
                 : prices[tokenSymbol]
-            return {
-              ...flow,
-              tokenSymbol,
-              logoURI,
-              apr:
+      return {
+        ...flow,
+        tokenSymbol,
+        logoURI,
+        apr:
                 ((flow.dailyEmission * price * 365.25) /
                   (totalLiquidity * lockedLpShare)) *
                 100,
-            }
-          })
+      }
+    })
 
-          return {
-            poolId: pool.pool_id,
-            flowData: uniqueFlowsWithEmissionAndApr,
-          }
-        })
-      )
-    : []
+    return {
+      poolId: pool.pool_id,
+      flowData: uniqueFlowsWithEmissionAndApr,
+    }
+  }))
+  : [])

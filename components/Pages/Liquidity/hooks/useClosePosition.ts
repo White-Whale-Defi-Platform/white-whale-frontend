@@ -48,12 +48,10 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     onSuccess,
   })
 
-  return useMemo(
-    () => ({
-      submit,
-      ...state,
-      ...tx,
-    }),
-    [tx, state, submit]
-  )
+  return useMemo(() => ({
+    submit,
+    ...state,
+    ...tx,
+  }),
+  [tx, state, submit])
 }

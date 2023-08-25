@@ -3,9 +3,7 @@ import { useQuery } from 'react-query'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChains } from 'hooks/useChainInfo'
 
-export const useCosmwasmClient = (
-  chainId?: string
-): CosmWasmClient | undefined => {
+export const useCosmwasmClient = (chainId?: string): CosmWasmClient | undefined => {
   const chainInfo = useChains()
 
   const { data: client } = useQuery(
@@ -16,7 +14,7 @@ export const useCosmwasmClient = (
     },
     {
       enabled: Boolean(chainId),
-    }
+    },
   )
 
   return client

@@ -9,13 +9,13 @@ import {
   Tfoot,
   Th,
   Thead,
-  Tr
+  Tr,
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 
 import { IncentiveTooltip } from '../../InfoTooltip'
@@ -29,69 +29,69 @@ const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
   columnHelper.accessor('pool', {
-    'header': () => <Text color="brand.50">Pool</Text>,
-    'cell': (info) => (
+    header: () => <Text color="brand.50">Pool</Text>,
+    cell: (info) => (
       <PoolName
         poolId={info.getValue()}
         token1Img={info.row.original?.token1Img}
         token2Img={info.row.original?.token2Img}
       />
-    )
+    ),
   }),
   columnHelper.accessor('price', {
-    'header': () => (
+    header: () => (
       <Text align="right" color="brand.50">
         {'RATIO'}
       </Text>
     ),
-    'cell': (info) => <Text align="right">{info.getValue()}</Text>
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('apr', {
-    'header': () => (
+    header: () => (
       <Text align="right" color="brand.50">
         {'APR'}
       </Text>
     ),
-    'cell': (info) => (info.getValue() === 'n/a' ? (
+    cell: (info) => (info.getValue() === 'n/a' ? (
       <Text>{info.getValue()}</Text>
     ) : (
       <Apr
         apr={info.getValue()?.toString()}
         flows={info.row.original.flows}
       />
-    ))
+    )),
   }),
   columnHelper.accessor('volume24hr', {
-    'header': () => (
+    header: () => (
       <Text align="right" color="brand.50">
         {'24hr Volume'}
       </Text>
     ),
-    'cell': (info) => <Text align="right">{info.getValue()}</Text>
+    cell: (info) => <Text align="right">{info.getValue()}</Text>,
   }),
   columnHelper.accessor('totalLiq', {
-    'header': () => (
+    header: () => (
       <Text align="right" color="brand.50">
         {'Total Liquidity'}
       </Text>
     ),
-    'cell': (info) => (
+    cell: (info) => (
       <Liquidity
         liquidity={info.getValue()?.toString()}
         infos={info.row.original}
       />
-    )
+    ),
   }),
   columnHelper.accessor('myPosition', {
-    'header': () => (
+    header: () => (
       <Text align="right" color="brand.50">
         {'My Position'}
       </Text>
     ),
-    'cell': (info) => <Text align="right">${info.getValue()}</Text>
+    cell: (info) => <Text align="right">${info.getValue()}</Text>,
   }),
   columnHelper.accessor('incentives', {
-    'header': () => (
+    header: () => (
       <HStack paddingTop={'4'}>
         <IncentiveTooltip IconSize={'3'} />
         <Text align="left" color="brand.50">
@@ -99,22 +99,22 @@ const columns = [
         </Text>
       </HStack>
     ),
-    'cell': (info) => info.getValue()
+    cell: (info) => info.getValue(),
   }),
   columnHelper.accessor('action', {
-    'header': () => (
+    header: () => (
       <Text align="left" color="brand.50">
         Action
       </Text>
     ),
-    'cell': (info) => info.getValue()
-  })
+    cell: (info) => info.getValue(),
+  }),
 ]
 
 const PoolsTable = ({
   show,
   pools,
-  isLoading
+  isLoading,
 }: {
   show: boolean
   pools: Pool[]
@@ -124,9 +124,9 @@ const PoolsTable = ({
     return null
   }
   const table = useReactTable({
-    'data': pools,
+    data: pools,
     columns,
-    'getCoreRowModel': getCoreRowModel()
+    getCoreRowModel: getCoreRowModel(),
   })
 
   if (isLoading || !pools) {

@@ -5,12 +5,14 @@ export const withdrawTokens = (
   client: Wallet,
   address: string,
   denom: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     withdraw: {
       denom,
     },
   }
-  return client.execute(address, config.whale_lair, handleMsg)
+  return client.execute(
+    address, config.whale_lair, handleMsg,
+  )
 }

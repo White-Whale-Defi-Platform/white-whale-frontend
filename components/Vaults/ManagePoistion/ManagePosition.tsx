@@ -31,10 +31,8 @@ const ManagePosition = () => {
   const { chainId, address, status } = useRecoilValue(walletState)
   const vaultId = params.get('vault') || 'JUNO'
 
-  const vault = useMemo(
-    () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
-    [vaults, vaultId]
-  )
+  const vault = useMemo(() => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
+    [vaults, vaultId])
 
   useEffect(() => {
     if (chainId) {
@@ -43,9 +41,7 @@ const ManagePosition = () => {
         if (!vault) {
           router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
         } else {
-          router.push(
-            `/${currenChain.label.toLowerCase()}/vaults/manage_position?vault=${vaultId}`
-          )
+          router.push(`/${currenChain.label.toLowerCase()}/vaults/manage_position?vault=${vaultId}`)
         }
       }
     }
@@ -59,7 +55,7 @@ const ManagePosition = () => {
   } = useVaultDeposit(
     vault?.lp_token,
     vault?.vault_address,
-    vault?.vault_assets
+    vault?.vault_assets,
   )
   const {
     balance: tokenBalance,
@@ -74,7 +70,8 @@ const ManagePosition = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '700px' }}
+      width={{ base: '100%',
+        md: '700px' }}
       alignItems="center"
       padding={5}
       // Margin="auto"

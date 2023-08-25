@@ -37,27 +37,27 @@ const DepositForm = ({
   const { chainId } = useRecoilValue(walletState)
   const isConnected = connected === '@wallet-state/connected'
 
-  const onSuccess = useCallback(
-    (txHash) => {
-      refetch?.()
-      toast({
-        title: 'Deposit to Vault Success.',
-        description: (
-          <Finder txHash={txHash} chainId={chainId}>
-            {' '}
-          </Finder>
-        ),
-        status: 'success',
-        duration: 9000,
-        position: 'top-right',
-        isClosable: true,
-      })
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [token]
-  )
+  const onSuccess = useCallback((txHash) => {
+    refetch?.()
+    toast({
+      title: 'Deposit to Vault Success.',
+      description: (
+        <Finder txHash={txHash} chainId={chainId}>
+          {' '}
+        </Finder>
+      ),
+      status: 'success',
+      duration: 9000,
+      position: 'top-right',
+      isClosable: true,
+    })
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [token])
 
-  const { tx } = useDepost({ vaultAddress, token, onSuccess })
+  const { tx } = useDepost({ vaultAddress,
+    token,
+    onSuccess })
 
   const buttonLabel = useMemo(() => {
     // TODO: Note for later, Select Token is commented
@@ -78,7 +78,8 @@ const DepositForm = ({
 
   useEffect(() => {
     if (tx.txStep === TxStep.Success) {
-      setToken({ ...token, amount: 0 })
+      setToken({ ...token,
+        amount: 0 })
       tx?.reset()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

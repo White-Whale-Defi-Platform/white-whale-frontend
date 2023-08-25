@@ -25,16 +25,16 @@ export interface EnigmaPoolData {
   ratio?: number | string
 }
 
-export const getPairInfos = async (
-  chain: string
-): Promise<EnigmaPoolResponse[]> => {
+export const getPairInfos = async (chain: string): Promise<EnigmaPoolResponse[]> => {
   if (!chain) {
     return []
   }
   chain = chain === 'inj' ? 'injective' : chain
   const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
 
-  async function fetchWithRetry(url, retries = 5, interval = 3000) {
+  async function fetchWithRetry(
+    url, retries = 5, interval = 3000,
+  ) {
     while (retries) {
       const response = await fetch(url)
 
@@ -59,9 +59,9 @@ export const getPairInfos = async (
   return []
 }
 export const getPairInfosTerra = async (): Promise<any> => {
-  const swapAddresses = terraPoolConfig.pools
-    .map((pool: any) => pool.swap_address)
-    .join(',')
+  const swapAddresses = terraPoolConfig.pools.
+    map((pool: any) => pool.swap_address).
+    join(',')
   const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses}`
   const chainDataResponse = await fetch(url)
   const data = await chainDataResponse.json()
@@ -71,10 +71,8 @@ export const getPairInfosTerra = async (): Promise<any> => {
   }
   return []
 }
-export const getPairAprAndDailyVolume = async (
-  pools: any[],
-  chainPrefix: any
-): Promise<EnigmaPoolData[]> => {
+export const getPairAprAndDailyVolume = async (pools: any[],
+  chainPrefix: any): Promise<EnigmaPoolData[]> => {
   const poolIds = pools?.map((pool: any) => pool.pool_id)
 
   const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chainPrefix)
@@ -103,20 +101,14 @@ export const getPairAprAndDailyVolume = async (
     ratio: 'n/a',
   }))
 }
-export const getPairAprAndDailyVolumeTerra = async (
-  pools: any[]
-): Promise<EnigmaPoolData[]> => {
+export const getPairAprAndDailyVolumeTerra = async (pools: any[]): Promise<EnigmaPoolData[]> => {
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
   const pairInfos: any = await getPairInfosTerra()
 
   if (pairInfos && pairInfos.pools?.length > 0 && pools) {
     return swapAddresses?.map((swapAddress: string) => {
-      const pairInfo = pairInfos.pools.find(
-        (row: any) => row.id === swapAddress
-      )
-      const poolId = terraPoolConfig.pools.find(
-        (pool: any) => pool.swap_address === swapAddress
-      )?.pool_id
+      const pairInfo = pairInfos.pools.find((row: any) => row.id === swapAddress)
+      const poolId = terraPoolConfig.pools.find((pool: any) => pool.swap_address === swapAddress)?.pool_id
       const asset0Symbol = poolId?.split('-')[0]
       const chRatio =
         pairInfo?.assets[0].symbol === asset0Symbol
@@ -149,9 +141,7 @@ export const getPairAprAndDailyVolumeTerra = async (
   }
   console.log('No pair infos found')
   return swapAddresses?.map((swapAddress: any) => {
-    const poolId = terraPoolConfig.pools.find(
-      (pool: any) => pool.swap_address === swapAddress
-    ).pool_id
+    const poolId = terraPoolConfig.pools.find((pool: any) => pool.swap_address === swapAddress).pool_id
     return {
       pool_id: poolId,
       TVL: 'n/a',

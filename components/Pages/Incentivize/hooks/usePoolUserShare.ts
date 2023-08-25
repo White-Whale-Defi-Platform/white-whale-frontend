@@ -13,11 +13,13 @@ export interface AddressInfo {
 export const usePoolUserShare = (
   client: Wallet,
   contractAddr: string,
-  userAddr: string
+  userAddr: string,
 ): AddressInfo => {
   const { data } = useQuery({
     queryKey: ['poolUserShare', contractAddr, userAddr],
-    queryFn: async () => fetchPoolUserShare(client, contractAddr, userAddr),
+    queryFn: async () => fetchPoolUserShare(
+      client, contractAddr, userAddr,
+    ),
     enabled: Boolean(client) && Boolean(contractAddr) && Boolean(userAddr),
     refetchOnMount: 'always',
   })
@@ -27,8 +29,7 @@ export const usePoolUserShare = (
 export const fetchPoolUserShare = async (
   client: Wallet,
   contractAddr: string,
-  userAddr: string
-): Promise<AddressInfo> =>
-  client.queryContractSmart(contractAddr, {
-    current_epoch_rewards_share: { address: userAddr },
-  })
+  userAddr: string,
+): Promise<AddressInfo> => client.queryContractSmart(contractAddr, {
+  current_epoch_rewards_share: { address: userAddr },
+})

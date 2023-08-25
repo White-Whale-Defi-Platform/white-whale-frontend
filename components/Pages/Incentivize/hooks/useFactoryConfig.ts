@@ -18,19 +18,18 @@ const useFactoryConfig = (incentiveFactory: string) => {
 
   const { data: config } = useQuery<FactoryConfig>({
     queryKey: ['factoryConfig', incentiveFactory],
-    queryFn: () =>
-      client
-        ?.queryContractSmart(incentiveFactory, {
-          config: {},
-        })
-        .then((data) => ({
-          createFlowFee: {
-            amount: data?.create_flow_fee?.amount,
-            denom: data?.create_flow_fee?.info?.native_token?.denom,
-          },
-          minUnbondingDuration: data?.min_unbonding_duration,
-          maxUnbondingDuration: data?.max_unbonding_duration,
-        })),
+    queryFn: () => client?.
+      queryContractSmart(incentiveFactory, {
+        config: {},
+      }).
+      then((data) => ({
+        createFlowFee: {
+          amount: data?.create_flow_fee?.amount,
+          denom: data?.create_flow_fee?.info?.native_token?.denom,
+        },
+        minUnbondingDuration: data?.min_unbonding_duration,
+        maxUnbondingDuration: data?.max_unbonding_duration,
+      })),
     enabled: Boolean(incentiveFactory) && Boolean(client),
   })
 

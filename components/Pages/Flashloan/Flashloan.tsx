@@ -20,7 +20,8 @@ const Flashloan: FC = () => {
   }
 
   return (
-    <VStack width={{ base: '100%', md: '722px' }} alignItems="center">
+    <VStack width={{ base: '100%',
+      md: '722px' }} alignItems="center">
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
           <Text as="h2" fontSize="24" fontWeight="700">

@@ -11,6 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
+import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import { useChains } from 'hooks/useChainInfo'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
@@ -30,16 +31,13 @@ import { bondingAtom } from './bondAtoms'
 import useTransaction, { TxStep } from './hooks/useTransaction'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
-import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 
 const BondingActions = ({ globalAction }) => {
   const [{ chainId, client, address, status, network }, _] =
     useRecoilState(walletState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
-  const currentChain = chains.find(
-    (row: { chainId: string }) => row.chainId === chainId
-  )
+  const currentChain = chains.find((row: { chainId: string }) => row.chainId === chainId)
   const currentChainName = currentChain?.label.toLowerCase()
   const {
     isOpen: isOpenModal,
@@ -51,10 +49,8 @@ const BondingActions = ({ globalAction }) => {
 
   const config: Config = useConfig(network, chainId)
 
-  const symbols = useMemo(
-    () => config?.bonding_tokens.map((token) => token.tokenSymbol),
-    [config]
-  )
+  const symbols = useMemo(() => config?.bonding_tokens.map((token) => token.tokenSymbol),
+    [config])
 
   const { txStep, submit } = useTransaction()
 
@@ -69,13 +65,13 @@ const BondingActions = ({ globalAction }) => {
     bondingConfig,
     unbondingRequests,
     isLoading,
-  } = useDashboardData(client, address, network, chainId)
+  } = useDashboardData(
+    client, address, network, chainId,
+  )
 
   const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)
-  const totalWithdrawable = withdrawableInfos?.reduce(
-    (acc, e) => acc + e?.amount,
-    0
-  )
+  const totalWithdrawable = withdrawableInfos?.reduce((acc, e) => acc + e?.amount,
+    0)
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
@@ -97,7 +93,8 @@ const BondingActions = ({ globalAction }) => {
   const BondingActionButton = ({ action }) => {
     const actionString = ActionType[action].toString()
     const onClick = async () => {
-      setCurrentBondState({ ...currentBondState, amount: 0 })
+      setCurrentBondState({ ...currentBondState,
+        amount: 0 })
       await router.push(`/${currentChainName}/dashboard/${actionString}`)
     }
 
@@ -122,22 +119,19 @@ const BondingActions = ({ globalAction }) => {
     )
   }
 
-  function getFirstDenomWithPositiveAmount(
-    withdrawableInfos: WithdrawableInfo[],
-    config: Config
-  ) {
-    const foundToken = config?.bonding_tokens
-      ?.map((tokenConfig) =>
-        withdrawableInfos.find((info) => info.denom === tokenConfig.denom)
-      )
-      .find((info) => info && info.amount > 0)
+  function getFirstDenomWithPositiveAmount(withdrawableInfos: WithdrawableInfo[],
+    config: Config) {
+    const foundToken = config?.bonding_tokens?.
+      map((tokenConfig) => withdrawableInfos.find((info) => info.denom === tokenConfig.denom)).
+      find((info) => info && info.amount > 0)
 
     return foundToken?.denom
   }
 
   return (
     <VStack
-      width={{ base: '100%', md: '650px' }}
+      width={{ base: '100%',
+        md: '650px' }}
       alignItems="flex-start"
       top={200}
       gap={4}
@@ -152,7 +146,8 @@ const BondingActions = ({ globalAction }) => {
           icon={<ArrowBackIcon />}
           onClick={async () => {
             await router.push(`/${currentChainName}/dashboard`)
-            setCurrentBondState({ ...currentBondState, amount: 0 })
+            setCurrentBondState({ ...currentBondState,
+              amount: 0 })
           }}
         />
         <HStack>
@@ -161,7 +156,8 @@ const BondingActions = ({ globalAction }) => {
             as="h2"
             fontSize="24"
             fontWeight="900"
-            style={{ textTransform: 'capitalize', position: 'relative' }}
+            style={{ textTransform: 'capitalize',
+              position: 'relative' }}
           >
             {ActionType[globalAction]}
           </Text>
@@ -267,16 +263,14 @@ const BondingActions = ({ globalAction }) => {
             }
             onClick={async () => {
               if (isWalletConnected) {
-                let denom = config.bonding_tokens.find(
-                  (token) => token.tokenSymbol === currentBondState.tokenSymbol
-                ).denom
+                let { denom } = config.bonding_tokens.find((token) => token.tokenSymbol === currentBondState.tokenSymbol)
                 if (globalAction === ActionType.withdraw) {
-                  denom = getFirstDenomWithPositiveAmount(
-                    withdrawableInfos,
-                    config
-                  )
+                  denom = getFirstDenomWithPositiveAmount(withdrawableInfos,
+                    config)
                 }
-                await submit(globalAction, currentBondState.amount, denom)
+                await submit(
+                  globalAction, currentBondState.amount, denom,
+                )
               } else {
                 onOpenModal()
               }

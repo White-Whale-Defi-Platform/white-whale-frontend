@@ -1,29 +1,28 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
-import usePrices from 'hooks/usePrices'
-import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
-import { useRecoilState } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
-import BondingOverview, { ActionType, TokenType } from './BondingOverview'
-import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
-import RewardsComponent from './RewardsComponent'
-import { BondingData } from './types/BondingData'
 import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
+import { useChains } from 'hooks/useChainInfo'
+import usePrices from 'hooks/usePrices'
+import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
+import { useRecoilState } from 'recoil'
+import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+
+import BondingOverview, { ActionType, TokenType } from './BondingOverview'
+import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
+import RewardsComponent from './RewardsComponent'
+import { BondingData } from './types/BondingData'
 
 const Dashboard: FC = () => {
   const [{ chainId, status, client, address, network }] =
     useRecoilState(walletState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
   const chains: Array<any> = useChains()
-  const currentChain = chains.find(
-    (row: { chainId: string }) => row.chainId === chainId
-  )
+  const currentChain = chains.find((row: { chainId: string }) => row.chainId === chainId)
   const currentChainName = currentChain?.label.toLowerCase()
 
   const data: BondingData[] = [
@@ -66,51 +65,50 @@ const Dashboard: FC = () => {
   const setValues = (
     tokenType: TokenType,
     value: number,
-    tokenBalances: TokenBalance[]
+    tokenBalances: TokenBalance[],
   ) => {
     const specificBondingData = data?.find((e) => e.tokenType == tokenType)
     specificBondingData.value = value ?? 0
     specificBondingData.tokenBalances = tokenBalances ?? []
   }
   const setBondedTokens = function (bondedAssets: BondedData[]) {
-    const tokenBalances = bondedAssets?.map((asset: BondedData) => {
-      return { amount: asset.amount, tokenSymbol: asset.tokenSymbol }
-    })
+    const tokenBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
+      tokenSymbol: asset.tokenSymbol }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
-    setValues(TokenType.bonded, total, tokenBalances)
+    setValues(
+      TokenType.bonded, total, tokenBalances,
+    )
   }
-  const setLiquidTokens = function (
-    liquidBalances: number[],
-    symbols: string[]
-  ) {
-    const tokenBalances = symbols?.map((symbol, idx) => {
-      return {
-        amount: liquidBalances?.[idx] ?? 0,
-        tokenSymbol: symbol,
-      }
-    })
+  const setLiquidTokens = function (liquidBalances: number[],
+    symbols: string[]) {
+    const tokenBalances = symbols?.map((symbol, idx) => ({
+      amount: liquidBalances?.[idx] ?? 0,
+      tokenSymbol: symbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
-    setValues(TokenType.liquid, total, tokenBalances)
+    setValues(
+      TokenType.liquid, total, tokenBalances,
+    )
   }
 
   const setUnbondingTokens = function (unbondingRequests: UnbondingData[]) {
-    const tokenBalances = unbondingRequests?.map((req) => {
-      return { amount: req.amount, tokenSymbol: req.tokenSymbol }
-    })
+    const tokenBalances = unbondingRequests?.map((req) => ({ amount: req.amount,
+      tokenSymbol: req.tokenSymbol }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
 
-    setValues(TokenType.unbonding, total, tokenBalances)
+    setValues(
+      TokenType.unbonding, total, tokenBalances,
+    )
   }
 
-  const setWithdrawableTokens = function (
-    withdrawableInfos: WithdrawableInfo[]
-  ) {
-    const tokenBalances = withdrawableInfos?.map((info) => {
-      return { amount: info.amount, tokenSymbol: info.tokenSymbol }
-    })
+  const setWithdrawableTokens = function (withdrawableInfos: WithdrawableInfo[]) {
+    const tokenBalances = withdrawableInfos?.map((info) => ({ amount: info.amount,
+      tokenSymbol: info.tokenSymbol }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
 
-    setValues(TokenType.withdrawable, total, tokenBalances)
+    setValues(
+      TokenType.withdrawable, total, tokenBalances,
+    )
   }
 
   const prices = usePrices()
@@ -126,13 +124,11 @@ const Dashboard: FC = () => {
 
   const config: Config = useConfig(network, chainId)
 
-  const symbols = useMemo(
-    () => [
-      ...(config?.bonding_tokens?.map((token) => token.tokenSymbol) ?? []),
-      WHALE_TOKEN_SYMBOL,
-    ],
-    [config]
-  )
+  const symbols = useMemo(() => [
+    ...(config?.bonding_tokens?.map((token) => token.tokenSymbol) ?? []),
+    WHALE_TOKEN_SYMBOL,
+  ],
+  [config])
 
   const [liquidBalances, _] = useMultipleTokenBalance(symbols)
 
@@ -150,7 +146,9 @@ const Dashboard: FC = () => {
     daysSinceLastClaim,
     globalAvailableRewards,
     isLoading,
-  } = useDashboardData(client, address, network, chainId)
+  } = useDashboardData(
+    client, address, network, chainId,
+  )
 
   useEffect(() => {
     setBondedTokens(bondedAssets)
@@ -171,7 +169,8 @@ const Dashboard: FC = () => {
   return (
     <VStack alignSelf="center">
       <Flex
-        direction={{ base: 'column', xl: 'row' }}
+        direction={{ base: 'column',
+          xl: 'row' }}
         gap={10}
         justifyContent="space-between"
         alignItems="flex-end"
@@ -190,7 +189,8 @@ const Dashboard: FC = () => {
             currentChainName={currentChainName}
           />
         </VStack>
-        <VStack alignSelf={{ base: 'center', xl: 'end' }}>
+        <VStack alignSelf={{ base: 'center',
+          xl: 'end' }}>
           <RewardsComponent
             isWalletConnected={isWalletConnected}
             whalePrice={whalePrice}

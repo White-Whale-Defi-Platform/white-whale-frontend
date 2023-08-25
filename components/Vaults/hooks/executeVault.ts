@@ -25,12 +25,12 @@ export const executeVault = async ({
   senderAddress,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
   if (!isNative) {
-    return validateTransactionSuccess(
-      await client.post(senderAddress, encodedMsgs)
-    )
+    return validateTransactionSuccess(await client.post(senderAddress, encodedMsgs))
   }
 
   const funds = [coin(amount, denom)]
 
-  return client.execute(senderAddress, contractAddress, msgs, funds)
+  return client.execute(
+    senderAddress, contractAddress, msgs, funds,
+  )
 }

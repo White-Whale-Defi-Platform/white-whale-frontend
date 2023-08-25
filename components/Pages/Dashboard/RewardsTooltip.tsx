@@ -21,21 +21,18 @@ export const RewardsTooltip = ({
       return '21+ days ago'
     } else if (daysSinceLastClaim === 0) {
       return 'Today'
-    } else {
-      const multiple = daysSinceLastClaim === 1 ? '' : 's'
-      return `${daysSinceLastClaim} day${multiple} ago`
     }
+    const multiple = daysSinceLastClaim === 1 ? '' : 's'
+    return `${daysSinceLastClaim} day${multiple} ago`
   }
-  const TokenDetail = () => {
-    return (
-      <HStack justify="space-between" direction="row" width="full" px={2}>
-        <Text color="whiteAlpha.600" fontSize={14}>
-          {WHALE_TOKEN_SYMBOL}
-        </Text>
-        <Text fontSize={14}>{isWalletConnected ? amount : 'n/a'}</Text>
-      </HStack>
-    )
-  }
+  const TokenDetail = () => (
+    <HStack justify="space-between" direction="row" width="full" px={2}>
+      <Text color="whiteAlpha.600" fontSize={14}>
+        {WHALE_TOKEN_SYMBOL}
+      </Text>
+      <Text fontSize={14}>{isWalletConnected ? amount : 'n/a'}</Text>
+    </HStack>
+  )
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 

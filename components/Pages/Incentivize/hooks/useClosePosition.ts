@@ -38,7 +38,9 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     mutationFn: async ({ flowId }: { flowId: number }) => {
       const msgs = createClosPositionMessage(flowId)
 
-      console.log({ msgs, flowId, poolId })
+      console.log({ msgs,
+        flowId,
+        poolId })
 
       return validateTransactionSuccess(await client.post(address, msgs))
     },
@@ -46,12 +48,10 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     onSuccess,
   })
 
-  return useMemo(
-    () => ({
-      submit,
-      ...state,
-      ...tx,
-    }),
-    [tx, state, submit]
-  )
+  return useMemo(() => ({
+    submit,
+    ...state,
+    ...tx,
+  }),
+  [tx, state, submit])
 }

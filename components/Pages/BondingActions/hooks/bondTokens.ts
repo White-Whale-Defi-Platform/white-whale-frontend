@@ -7,7 +7,7 @@ export const bondTokens = async (
   address: string,
   amount: number,
   denom: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     bond: {
@@ -21,7 +21,9 @@ export const bondTokens = async (
       },
     },
   }
-  return client.execute(address, config.whale_lair, handleMsg, [
-    coin(amount, denom),
-  ])
+  return client.execute(
+    address, config.whale_lair, handleMsg, [
+      coin(amount, denom),
+    ],
+  )
 }

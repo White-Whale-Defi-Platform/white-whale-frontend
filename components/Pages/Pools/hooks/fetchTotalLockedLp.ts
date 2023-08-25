@@ -4,7 +4,7 @@ import { isNativeToken } from 'services/asset'
 export const fetchTotalLockedLp = async (
   incentiveAddress: string,
   lpAddress: string,
-  client: CosmWasmClient
+  client: CosmWasmClient,
 ) => {
   if (!client || !incentiveAddress || !lpAddress) {
     return null
@@ -13,8 +13,8 @@ export const fetchTotalLockedLp = async (
   const { balance, amount } = isNativeToken(lpAddress)
     ? await client.getBalance(incentiveAddress, lpAddress)
     : await client.queryContractSmart(lpAddress, {
-        balance: { address: incentiveAddress },
-      })
+      balance: { address: incentiveAddress },
+    })
 
   return Number(balance || amount)
 }

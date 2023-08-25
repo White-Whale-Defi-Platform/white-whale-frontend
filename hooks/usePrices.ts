@@ -75,7 +75,9 @@ const getPrices = async ({
     if (token?.id) {
       prices[symbol] = coingecko?.[token?.id]?.usd || 0
     } else {
-      const matchingPools = getMatchingPool({ token, poolsList, baseToken })
+      const matchingPools = getMatchingPool({ token,
+        poolsList,
+        baseToken })
 
       const { streamlinePoolBA, streamlinePoolAB } = matchingPools
 
@@ -100,23 +102,20 @@ const usePrices = () => {
   const { data: poolsList } = usePoolsListQuery()
   const baseToken = useBaseTokenInfo()
   const [tokensList]: readonly [TokenList, boolean] = useTokenList()
-  const coingeckoIds = useMemo(
-    () => tokensList?.tokens.map((token) => token.id),
-    [tokensList?.tokens]
-  )
+  const coingeckoIds = useMemo(() => tokensList?.tokens.map((token) => token.id),
+    [tokensList?.tokens])
   const coingecko = useCoinGecko(coingeckoIds)
   const client = useCosmwasmClient(chainId)
 
   const { data: prices } = useQuery<Promise<Prices>>({
     queryKey: ['prices', baseToken?.symbol, chainId],
-    queryFn: async () =>
-      getPrices({
-        baseToken,
-        tokens: tokensList?.tokens,
-        client,
-        poolsList: poolsList?.pools,
-        coingecko,
-      }),
+    queryFn: async () => getPrices({
+      baseToken,
+      tokens: tokensList?.tokens,
+      client,
+      poolsList: poolsList?.pools,
+      coingecko,
+    }),
     enabled:
       Boolean(baseToken) &&
       Boolean(tokensList) &&

@@ -60,7 +60,9 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await client.simulate(
+          senderAddress, debouncedMsgs, '',
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -68,19 +70,19 @@ export const useTransaction = ({
         return response
       } catch (error) {
         if (
-          /insufficient funds/i.test(error.toString()) ||
-          /Overflow: Cannot Sub with/i.test(error.toString())
+          (/insufficient funds/i).test(error.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(error.toString())
         ) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/account sequence mismatch/i.test(error?.toString())) {
+        } else if ((/account sequence mismatch/i).test(error?.toString())) {
           setError('You have pending transaction')
           setButtonLabel('You have pending transaction')
           throw new Error('You have pending transaction')
-        } else if (/Max spread assertion/i.test(error.toString())) {
+        } else if ((/Max spread assertion/i).test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -119,103 +121,98 @@ export const useTransaction = ({
       onError: () => {
         setTxStep(TxStep.Idle)
       },
-    }
+    },
   )
 
-  const { mutate } = useMutation(
-    (data: any) =>
-      executeAddLiquidity({
-        tokenA,
-        tokenB,
-        tokenAAmount,
-        maxTokenBAmount: tokenBAmount,
-        client,
-        swapAddress: swapAddress,
-        senderAddress,
-        msgs: encodedMsgs,
-      }),
-    {
-      onMutate: () => {
-        setTxStep(TxStep.Posting)
-      },
-      onError: (e) => {
-        let message: any = ''
-        console.error(e?.toString())
-        setTxStep(TxStep.Failed)
+  const { mutate } = useMutation((data: any) => executeAddLiquidity({
+    tokenA,
+    tokenB,
+    tokenAAmount,
+    maxTokenBAmount: tokenBAmount,
+    client,
+    swapAddress,
+    senderAddress,
+    msgs: encodedMsgs,
+  }),
+  {
+    onMutate: () => {
+      setTxStep(TxStep.Posting)
+    },
+    onError: (e) => {
+      let message: any = ''
+      console.error(e?.toString())
+      setTxStep(TxStep.Failed)
 
-        if (
-          /insufficient funds/i.test(e?.toString()) ||
-          /Overflow: Cannot Sub with/i.test(e?.toString())
-        ) {
-          setError('Insufficient Funds')
-          message = 'Insufficient Funds'
-        } else if (/Max spread assertion/i.test(e?.toString())) {
-          setError('Try increasing slippage')
-          message = 'Try increasing slippage'
-        } else if (/Request rejected/i.test(e?.toString())) {
-          setError('User Denied')
-          message = 'User Denied'
-        } else if (/account sequence mismatch/i.test(e?.toString())) {
-          setError('You have pending transaction')
-          message = 'You have pending transaction'
-        } else if (/out of gas/i.test(e?.toString())) {
-          setError('Out of gas, try increasing gas limit on wallet.')
-          message = 'Out of gas, try increasing gas limit on wallet.'
-        } else if (
-          /was submitted but was not yet found on the chain/i.test(
-            e?.toString()
-          )
-        ) {
-          setError(e?.toString())
-          message = (
-            <Finder txHash={txInfo?.txHash} chainId={client?.client?.chainId}>
-              {' '}
-            </Finder>
-          )
-        } else {
-          setError('Failed to execute transaction.')
-          message = 'Failed to execute transaction.'
-        }
+      if (
+        (/insufficient funds/i).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(e?.toString())
+      ) {
+        setError('Insufficient Funds')
+        message = 'Insufficient Funds'
+      } else if ((/Max spread assertion/i).test(e?.toString())) {
+        setError('Try increasing slippage')
+        message = 'Try increasing slippage'
+      } else if ((/Request rejected/i).test(e?.toString())) {
+        setError('User Denied')
+        message = 'User Denied'
+      } else if ((/account sequence mismatch/i).test(e?.toString())) {
+        setError('You have pending transaction')
+        message = 'You have pending transaction'
+      } else if ((/out of gas/i).test(e?.toString())) {
+        setError('Out of gas, try increasing gas limit on wallet.')
+        message = 'Out of gas, try increasing gas limit on wallet.'
+      } else if (
+        (/was submitted but was not yet found on the chain/i).test(e?.toString())
+      ) {
+        setError(e?.toString())
+        message = (
+          <Finder txHash={txInfo?.txHash} chainId={client?.client?.chainId}>
+            {' '}
+          </Finder>
+        )
+      } else {
+        setError('Failed to execute transaction.')
+        message = 'Failed to execute transaction.'
+      }
 
-        toast({
-          title: 'Add Liquidity Failed.',
-          description: message,
-          status: 'error',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
+      toast({
+        title: 'Add Liquidity Failed.',
+        description: message,
+        status: 'error',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
 
-        onError?.()
-      },
-      onSuccess: (data: any) => {
-        setTxStep(TxStep.Broadcasting)
-        setTxHash(data?.transactionHash || data?.txHash)
-        onBroadcasting?.(data?.transactionHash || data?.txHash)
+      onError?.()
+    },
+    onSuccess: (data: any) => {
+      setTxStep(TxStep.Broadcasting)
+      setTxHash(data?.transactionHash || data?.txHash)
+      onBroadcasting?.(data?.transactionHash || data?.txHash)
 
-        queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
-        queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-        queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-        queryClient.invalidateQueries({ queryKey: ['positions'] })
+      queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
+      queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
+      queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
+      queryClient.invalidateQueries({ queryKey: ['positions'] })
 
-        toast({
-          title: 'Add Liquidity Success.',
-          description: (
-            <Finder
-              txHash={data?.transactionHash || data?.txHash}
-              chainId={client?.client?.chainId}
-            >
-              {' '}
-            </Finder>
-          ),
-          status: 'success',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
-      },
-    }
-  )
+      toast({
+        title: 'Add Liquidity Success.',
+        description: (
+          <Finder
+            txHash={data?.transactionHash || data?.txHash}
+            chainId={client?.client?.chainId}
+          >
+            {' '}
+          </Finder>
+        ),
+        status: 'success',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
+    },
+  })
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
@@ -228,7 +225,7 @@ export const useTransaction = ({
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   const reset = () => {
@@ -271,19 +268,17 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(
-    () => ({
-      fee,
-      buttonLabel,
-      submit,
-      txStep,
-      txInfo,
-      txHash,
-      error,
-      reset,
-    }),
-    [txStep, txInfo, txHash, error, reset, fee]
-  )
+  return useMemo(() => ({
+    fee,
+    buttonLabel,
+    submit,
+    txStep,
+    txInfo,
+    txHash,
+    error,
+    reset,
+  }),
+  [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

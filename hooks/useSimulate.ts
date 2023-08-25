@@ -42,7 +42,9 @@ const useSimulate = ({
         buttonLabel: null,
       })
 
-      return client?.simulate(address, msgs!, undefined)
+      return client?.simulate(
+        address, msgs!, undefined,
+      )
     },
     onSuccess: (data) => {
       onSuccess?.(data)

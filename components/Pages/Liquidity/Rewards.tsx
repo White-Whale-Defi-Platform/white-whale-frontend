@@ -6,15 +6,9 @@ import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { AvailableRewards } from './AvailableRewards'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
-  const totalUsdValue = useMemo(
-    () =>
-      dailyEmissions.reduce(
-        (total, item) =>
-          total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission),
-        0
-      ),
-    [dailyEmissions]
-  )
+  const totalUsdValue = useMemo(() => dailyEmissions.reduce((total, item) => total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission),
+    0),
+  [dailyEmissions])
 
   return (
     <VStack

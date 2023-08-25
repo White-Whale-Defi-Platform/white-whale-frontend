@@ -39,13 +39,13 @@ export const fetchPositions = async (
   address,
   pool_assets,
   totalAssets,
-  totalLpSupply
+  totalLpSupply,
 ) => {
   const data = await client?.queryContractSmart(incentiveAddress, {
     positions: { address },
   })
-  return data.positions
-    .map((p) => {
+  return data.positions.
+    map((p) => {
       const positions = []
 
       // Open position
@@ -87,20 +87,18 @@ export const fetchPositions = async (
           duration: position.formatedTime,
           weight: position.weight,
           assets,
-          value: assets.reduce(
-            (acc, asset) => acc + Number(asset.dollarValue),
-            0
-          ),
+          value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
+            0),
           state: position.isOpen
             ? 'active'
             : diff <= 0
-            ? 'unbound'
-            : 'unbonding',
+              ? 'unbound'
+              : 'unbonding',
           action: null,
         }
       })
-    })
-    .flat()
+    }).
+    flat()
 }
 const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
@@ -121,16 +119,15 @@ const useLockedPositions = (poolId: string) => {
       pool_assets,
       prices,
     ],
-    queryFn: (): Promise<Position[]> =>
-      fetchPositions(
-        client,
-        prices,
-        staking_address,
-        address,
-        pool_assets,
-        totalReserve,
-        totalLpSupply
-      ),
+    queryFn: (): Promise<Position[]> => fetchPositions(
+      client,
+      prices,
+      staking_address,
+      address,
+      pool_assets,
+      totalReserve,
+      totalLpSupply,
+    ),
     enabled: Boolean(address) && Boolean(client) && Boolean(staking_address),
   })
 }

@@ -39,7 +39,7 @@ export class OfflineSigningWallet implements Wallet {
     signer: any,
     network: NetworkType,
     options?: SigningStargateClientOptions,
-    activeWallet?: string
+    activeWallet?: string,
   ): Promise<OfflineSigningWallet> {
     if (chainId.includes('injective')) {
       const injectiveClient = new Injective(
@@ -47,7 +47,7 @@ export class OfflineSigningWallet implements Wallet {
         activeWallet,
         chainId === 'injective-1'
           ? InjectiveNetwork.MainnetK8s
-          : InjectiveNetwork.TestnetK8s
+          : InjectiveNetwork.TestnetK8s,
       )
       return new Promise((resolve, reject) => {
         resolve(new OfflineSigningWallet(injectiveClient, network))
@@ -57,23 +57,25 @@ export class OfflineSigningWallet implements Wallet {
     return SigningCosmWasmClient.connectWithSigner(
       endpoint,
       signer,
-      options
+      options,
     ).then((client) => new OfflineSigningWallet(client, network))
   }
 
   post(
     senderAddress: string,
     msgs: EncodeObject[],
-    memo?: string
+    memo?: string,
   ): Promise<TxResponse> {
-    return this.client.signAndBroadcast(senderAddress, msgs, 'auto', memo)
+    return this.client.signAndBroadcast(
+      senderAddress, msgs, 'auto', memo,
+    )
   }
 
   execute(
     senderAddress: string,
     contractAddress: string,
     msg: Record<string, unknown>,
-    funds: readonly Coin[] | undefined
+    funds: readonly Coin[] | undefined,
   ): Promise<ExecuteResult> {
     return this.client.execute(
       senderAddress,
@@ -81,23 +83,23 @@ export class OfflineSigningWallet implements Wallet {
       msg,
       'auto',
       undefined,
-      funds
+      funds,
     )
   }
 
-  queryContractSmart(
-    address: string,
-    queryMsg: Record<string, unknown>
-  ): Promise<JsonObject> {
+  queryContractSmart(address: string,
+    queryMsg: Record<string, unknown>): Promise<JsonObject> {
     return this.client.queryContractSmart(address, queryMsg)
   }
 
   simulate(
     signerAddress: string,
     messages: readonly EncodeObject[] | Record<string, unknown>,
-    memo: string | undefined
+    memo: string | undefined,
   ): Promise<number> {
-    return this.client.simulate(signerAddress, messages, memo)
+    return this.client.simulate(
+      signerAddress, messages, memo,
+    )
   }
 
   getChainId(): Promise<string> {
@@ -131,28 +133,17 @@ export class OfflineSigningWallet implements Wallet {
         new TxBody(
           [],
           result.tx.body.memo,
-          result.tx.body.timeoutHeight.toNumber()
+          result.tx.body.timeoutHeight.toNumber(),
         ),
-        new AuthInfo(
-          result.tx.authInfo.signerInfos.map(
-            (signerInfo) =>
-              new SignerInfo(
-                new SimplePublicKey(
-                  String.fromCharCode.apply(null, signerInfo.publicKey.value)
-                ),
-                signerInfo.sequence.toNumber(),
-                // @ts-ignore
-                ModeInfo.fromData(signerInfo.modeInfo)
-              )
-          ),
-          new Fee(
-            result.tx.authInfo.fee.gasLimit.toNumber(),
-            result.tx.authInfo.fee.amount.map(
-              (coin) => new StationCoin(coin.denom, coin.amount)
-            )
-          )
-        ),
-        result.tx.signatures.map((sig) => String.fromCharCode.apply(null, sig))
+        new AuthInfo(result.tx.authInfo.signerInfos.map((signerInfo) => new SignerInfo(
+          new SimplePublicKey(String.fromCharCode.apply(null, signerInfo.publicKey.value)),
+          signerInfo.sequence.toNumber(),
+          // @ts-ignore
+          ModeInfo.fromData(signerInfo.modeInfo),
+        )),
+        new Fee(result.tx.authInfo.fee.gasLimit.toNumber(),
+          result.tx.authInfo.fee.amount.map((coin) => new StationCoin(coin.denom, coin.amount)))),
+        result.tx.signatures.map((sig) => String.fromCharCode.apply(null, sig)),
       ),
       timestamp: result.txResponse.timestamp,
     }))

@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react'
 
 import { VStack, forwardRef } from '@chakra-ui/react'
-import usePrices from 'hooks/usePrices'
-import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
-import { num } from 'libs/num'
-
-import BalanceWithMaxNHalf from './BalanceWithMax'
-import WhaleInput from './WhaleInput'
 import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
+import usePrices from 'hooks/usePrices'
+import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import { num } from 'libs/num'
+
+import BalanceWithMaxNHalf from './BalanceWithMax'
+import WhaleInput from './WhaleInput'
 
 interface AssetInputProps {
   image?: boolean
@@ -65,10 +65,8 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
       amount: num(balance === 0 ? 0 : balance / 2).toFixed(6),
     })
   }
-  const maxDisabled = useMemo(
-    () => disabled || (!isSingleInput && !tokenInfo?.symbol),
-    [balance, disabled, isSingleInput, tokenInfo]
-  )
+  const maxDisabled = useMemo(() => disabled || (!isSingleInput && !tokenInfo?.symbol),
+    [balance, disabled, isSingleInput, tokenInfo])
 
   const formatNumber = (num: number, decimalPlaces: number) => {
     const parts = num.toString().split('.')
@@ -77,31 +75,23 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     return parts[1] ? parts.join('.') : parts[0]
   }
 
-  const numberOfTokens = useMemo(
-    () => `${formatNumber(token?.amount, 6)} ${token?.tokenSymbol}`,
-    [token]
-  )
+  const numberOfTokens = useMemo(() => `${formatNumber(token?.amount, 6)} ${token?.tokenSymbol}`,
+    [token])
   const prices = usePrices()
-  const tokenSymbol = useMemo(
-    () =>
-      token?.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
+  const tokenSymbol = useMemo(() => (token?.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
       token?.tokenSymbol === B_WHALE_TOKEN_SYMBOL
-        ? WHALE_TOKEN_SYMBOL
-        : token?.tokenSymbol,
-    [token]
-  )
-  const dollarValue = useMemo(
-    () => num(prices?.[tokenSymbol]).times(token?.amount).dp(6).toFixed(2),
-    [tokenSymbol, prices, token?.amount]
-  )
+    ? WHALE_TOKEN_SYMBOL
+    : token?.tokenSymbol),
+  [token])
+  const dollarValue = useMemo(() => num(prices?.[tokenSymbol]).times(token?.amount).
+    dp(6).
+    toFixed(2),
+  [tokenSymbol, prices, token?.amount])
 
-  const balanceWithDecimals = useMemo(
-    () =>
-      num(balance)
-        .dp(token?.decimals || 6)
-        .toString(),
-    [balance, token?.decimals]
-  )
+  const balanceWithDecimals = useMemo(() => num(balance).
+    dp(token?.decimals || 6).
+    toString(),
+  [balance, token?.decimals])
 
   return (
     <VStack width="full">

@@ -31,7 +31,7 @@ const Swap: FC<SwapProps> = ({}) => {
   const { chainId, address, network, status } = useRecoilValue(walletState)
   const chains: Array<any> = useChains()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
-  const { 'data': poolList } = usePoolsListQuery()
+  const { data: poolList } = usePoolsListQuery()
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
@@ -52,9 +52,9 @@ const Swap: FC<SwapProps> = ({}) => {
       })
 
     return Object.keys(listObj).map((row) => ({
-      'symbol': listObj[row].symbol,
-      'decimals': listObj[row].decimals,
-      'amount': 0
+      symbol: listObj[row].symbol,
+      decimals: listObj[row].decimals,
+      amount: 0,
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
@@ -71,34 +71,34 @@ const Swap: FC<SwapProps> = ({}) => {
 
     let newState: TokenItemState[] = [
       {
-        'tokenSymbol': String(from),
-        'amount': 0,
-        'decimals': 6
+        tokenSymbol: String(from),
+        amount: 0,
+        decimals: 6,
       },
       {
-        'tokenSymbol': String(to),
-        'amount': 0,
-        'decimals': 6
-      }
+        tokenSymbol: String(to),
+        amount: 0,
+        decimals: 6,
+      },
     ]
-    
+
     if (!from || !to) {
       if (tokenA.tokenSymbol && tokenB.tokenSymbol) {
-        changeUrl(tokenA.tokenSymbol,tokenB.tokenSymbol)
+        changeUrl(tokenA.tokenSymbol, tokenB.tokenSymbol)
       } else {
         newState = [
           {
-            'tokenSymbol': String(defaultFrom.tokenSymbol),
-            'amount': 0,
-            'decimals': 6
+            tokenSymbol: String(defaultFrom.tokenSymbol),
+            amount: 0,
+            decimals: 6,
           },
           {
-            'tokenSymbol': String(defaultTo.tokenSymbol),
-            'amount': 0,
-            'decimals': 6
-          }
+            tokenSymbol: String(defaultTo.tokenSymbol),
+            amount: 0,
+            decimals: 6,
+          },
         ]
-        changeUrl(defaultFrom.tokenSymbol,defaultTo.tokenSymbol)
+        changeUrl(defaultFrom.tokenSymbol, defaultTo.tokenSymbol)
         setTokenSwapState(newState)
         setResetForm(true)
       }
@@ -107,15 +107,15 @@ const Swap: FC<SwapProps> = ({}) => {
     } else {
       newState = [
         {
-          'tokenSymbol': String(defaultFrom.tokenSymbol),
-          'amount': 0,
-          'decimals': 6
+          tokenSymbol: String(defaultFrom.tokenSymbol),
+          amount: 0,
+          decimals: 6,
         },
         {
-          'tokenSymbol': String(defaultTo.tokenSymbol),
-          'amount': 0,
-          'decimals': 6
-        }
+          tokenSymbol: String(defaultTo.tokenSymbol),
+          amount: 0,
+          decimals: 6,
+        },
       ]
       setResetForm(true)
       setTokenSwapState(newState)
@@ -123,16 +123,14 @@ const Swap: FC<SwapProps> = ({}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, currentChainId, tokenList])
 
- 
-
   const clearForm = (reset) => {
     setTokenSwapState([
       { ...tokenA,
-        'amount': 0 },
+        amount: 0 },
       { ...tokenB,
-        'amount': 0 }
+        amount: 0 },
     ])
-    changeUrl(tokenA.tokenSymbol,tokenB.tokenSymbol)
+    changeUrl(tokenA.tokenSymbol, tokenB.tokenSymbol)
     setResetForm(reset)
   }
 
@@ -143,30 +141,30 @@ const Swap: FC<SwapProps> = ({}) => {
     const newState: TokenItemState[] = [tokenA, tokenB]
     newState[index] = {
       tokenSymbol,
-      'amount': Number(amount),
-      'decimals': 6
+      amount: Number(amount),
+      decimals: 6,
     }
     setTokenSwapState(newState)
-    changeUrl(newState[0].tokenSymbol,newState[1].tokenSymbol)
+    changeUrl(newState[0].tokenSymbol, newState[1].tokenSymbol)
   }
 
   const onReverseDirection = () => {
     const A = {
       ...tokenB,
-      'amount': tokenA.amount || parseFloat(fromChainAmount(simulated?.amount))
+      amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)),
     }
     const B = {
       ...tokenA,
-      'amount': tokenB.amount || parseFloat(fromChainAmount(simulated?.amount))
+      amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)),
     }
-    changeUrl(tokenB.tokenSymbol,tokenA.tokenSymbol)
+    changeUrl(tokenB.tokenSymbol, tokenA.tokenSymbol)
     setTokenSwapState([A, B])
   }
 
   return (
     <VStack
-      width={{ 'base': '100%',
-        'md': '650px' }}
+      width={{ base: '100%',
+        md: '650px' }}
       alignItems="center"
       padding={5}
       margin="0px auto"
@@ -175,7 +173,7 @@ const Swap: FC<SwapProps> = ({}) => {
         justifyContent="space-between"
         width="full"
         paddingY={5}
-        paddingX={{ 'base': 4 }}
+        paddingX={{ base: 4 }}
       >
         <Text as="h2" fontSize="24" fontWeight="900">
           Swap

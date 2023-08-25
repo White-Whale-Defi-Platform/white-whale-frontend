@@ -1,4 +1,10 @@
+import { useMemo } from 'react'
+
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
+import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import usePrices from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import {
@@ -8,11 +14,6 @@ import {
 } from 'util/conversion'
 
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
-import usePrices from 'hooks/usePrices'
-import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
-import { useTokenList } from 'hooks/useTokenList'
-import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import { useMemo } from 'react'
 
 type Props = {
   unbondingRequests: UnbondingData[]
@@ -39,12 +40,10 @@ const Withdraw = ({
   const isWalletConnected = status === WalletStatusType.connected
   const [tokenList, _] = useTokenList()
   const unbondingTokens = unbondingRequests?.map((row) => {
-    const tokenSymbol = tokenList.tokens.find(
-      (token) => token.denom === row.denom
-    )?.symbol
+    const tokenSymbol = tokenList.tokens.find((token) => token.denom === row.denom)?.symbol
     return {
       amount: row.amount,
-      tokenSymbol: tokenSymbol,
+      tokenSymbol,
       dollarValue: (prices?.[tokenSymbol] ?? whalePrice) * row.amount,
       timestamp: row.timestamp,
     }
@@ -127,31 +126,31 @@ const Withdraw = ({
       {isWalletConnected &&
         unbondingRequests !== null &&
         unbondingRequests?.length > 0 && (
-          <Box
-            overflowY="scroll"
-            maxHeight={340}
-            minW={510}
-            backgroundColor="black"
-            padding="4"
-            borderRadius="10px"
-            mt={10}
-          >
-            {unbondingTokens.map((token, index) => {
-              const currentTimeInMilli = Date.now()
-              const timeUntilUnbondingInMilli =
+        <Box
+          overflowY="scroll"
+          maxHeight={340}
+          minW={510}
+          backgroundColor="black"
+          padding="4"
+          borderRadius="10px"
+          mt={10}
+        >
+          {unbondingTokens.map((token, index) => {
+            const currentTimeInMilli = Date.now()
+            const timeUntilUnbondingInMilli =
                 nanoToMilli(Number(token.timestamp) + unbondingPeriodInNano) -
                 currentTimeInMilli
-              return (
-                <BoxComponent
-                  key={index}
-                  tokenSymbol={token.tokenSymbol}
-                  amount={token.amount}
-                  timeUntilUnbondingInMilli={timeUntilUnbondingInMilli}
-                />
-              )
-            })}
-          </Box>
-        )}
+            return (
+              <BoxComponent
+                key={index}
+                tokenSymbol={token.tokenSymbol}
+                amount={token.amount}
+                timeUntilUnbondingInMilli={timeUntilUnbondingInMilli}
+              />
+            )
+          })}
+        </Box>
+      )}
     </VStack>
   )
 }

@@ -40,15 +40,15 @@ export const directTokenSwap = async ({
       message: msgs,
     })
 
-    return validateTransactionSuccess(
-      await client.post(senderAddress, [
-        increaseAllowanceMessage,
-        executeMessage,
-      ])
-    )
+    return validateTransactionSuccess(await client.post(senderAddress, [
+      increaseAllowanceMessage,
+      executeMessage,
+    ]))
   }
 
-  return client.execute(senderAddress, swapAddress, msgs, [
-    coin(tokenAmount, tokenA.denom),
-  ])
+  return client.execute(
+    senderAddress, swapAddress, msgs, [
+      coin(tokenAmount, tokenA.denom),
+    ],
+  )
 }

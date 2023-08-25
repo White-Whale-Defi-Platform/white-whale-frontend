@@ -54,15 +54,15 @@ export const passThroughTokenSwap = async ({
       message: swapMessage,
     })
 
-    return validateTransactionSuccess(
-      await client.post(senderAddress, [
-        increaseAllowanceMessage,
-        executeMessage,
-      ])
-    )
+    return validateTransactionSuccess(await client.post(senderAddress, [
+      increaseAllowanceMessage,
+      executeMessage,
+    ]))
   }
 
-  return client.execute(senderAddress, swapAddress, swapMessage, [
-    coin(tokenAmount, tokenA.denom),
-  ])
+  return client.execute(
+    senderAddress, swapAddress, swapMessage, [
+      coin(tokenAmount, tokenA.denom),
+    ],
+  )
 }

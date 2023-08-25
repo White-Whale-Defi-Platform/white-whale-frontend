@@ -17,15 +17,13 @@ export const useQueryIncentiveContracts = (client: Wallet): Array<string> => {
     {
       enabled:
         Boolean(client) && Boolean(config) && Boolean(config.incentive_factory),
-    }
+    },
   )
   return data
 }
 
-const fetchIncentiveContracts = async (
-  client,
-  config: Config
-): Promise<Array<string>> => {
+const fetchIncentiveContracts = async (client,
+  config: Config): Promise<Array<string>> => {
   const data = await client.queryContractSmart(config.incentive_factory, {
     incentives: {},
   })

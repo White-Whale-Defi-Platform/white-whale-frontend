@@ -3,8 +3,7 @@ import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) =>
-  Buffer.from(JSON.stringify(obj)).toString('base64')
+export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
 
 export const createDepostMsg = ({ amount }) => ({
   deposit: { amount },
@@ -19,14 +18,12 @@ export const createDepostExecuteMsgs = ({
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
   if (!tokenInfo?.native) {
-    increaseAllowanceMessages.push(
-      createIncreaseAllowanceMessage({
-        tokenAmount: amount,
-        tokenAddress: tokenInfo?.denom,
-        senderAddress,
-        swapAddress: vaultAddress,
-      })
-    )
+    increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
+      tokenAmount: amount,
+      tokenAddress: tokenInfo?.denom,
+      senderAddress,
+      swapAddress: vaultAddress,
+    }))
   }
 
   return [
@@ -35,9 +32,7 @@ export const createDepostExecuteMsgs = ({
       senderAddress,
       contractAddress: vaultAddress,
       message: createDepostMsg({ amount }),
-      funds: [tokenInfo?.native && coin(amount, tokenInfo.denom)].filter(
-        Boolean
-      ),
+      funds: [tokenInfo?.native && coin(amount, tokenInfo.denom)].filter(Boolean),
     }),
   ]
 }
