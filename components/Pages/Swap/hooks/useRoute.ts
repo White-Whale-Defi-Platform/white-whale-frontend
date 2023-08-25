@@ -7,10 +7,11 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { toAssetInfo } from 'services/asset'
 import { createExecuteMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) =>
-  Buffer.from(JSON.stringify(obj)).toString('base64')
+export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
 
-const buildRoute = (graph, start, end) => {
+const buildRoute = (
+  graph, start, end,
+) => {
   if (!start || !end) {
     return []
   }
@@ -32,7 +33,9 @@ const buildRoute = (graph, start, end) => {
   }
 }
 
-const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
+const createRouteMessage = (
+  route, amount, token, reverse, routerAddress,
+) => {
   if (!amount || !route.length || !routerAddress) {
     return {}
   }
@@ -41,7 +44,8 @@ const createRouteMessage = (route, amount, token, reverse, routerAddress) => {
     const offer_asset_info = toAssetInfo(offerAsset?.denom, offerAsset?.native)
     const ask_asset_info = toAssetInfo(askAsset?.denom, askAsset?.native)
     return {
-      terra_swap: { offer_asset_info, ask_asset_info },
+      terra_swap: { offer_asset_info,
+        ask_asset_info },
     }
   })
 
@@ -81,7 +85,7 @@ const executeMessage = (
   amount,
   token,
   routerAddress,
-  senderAddress
+  senderAddress,
 ) => {
   if (!message || !routerAddress) {
     return null
@@ -145,7 +149,9 @@ const useRoute = ({
       graph[b]?.push(a)
     })
 
-    const path = buildRoute(graph, tokenA?.symbol, tokenB.symbol)
+    const path = buildRoute(
+      graph, tokenA?.symbol, tokenB.symbol,
+    )
     const route = []
     if (path?.length > 0) {
       path.reduce((prev, curr) => {
@@ -157,7 +163,11 @@ const useRoute = ({
       })
     }
 
-    return { pools, tokens, graph, path, route }
+    return { pools,
+      tokens,
+      graph,
+      path,
+      route }
   }, [poolsList, tokenList, tokenA?.symbol, tokenB?.symbol])
 
   const { simulateMsg, executeMsg, encodedExecuteMsg } = useMemo(() => {
@@ -170,14 +180,14 @@ const useRoute = ({
       amount,
       tokenA,
       reverse,
-      routerAddress
+      routerAddress,
     )
     const encodedMsgs = executeMessage(
       executeMsg,
       num(amount).toFixed(0),
       tokenA,
       routerAddress,
-      senderAddress
+      senderAddress,
     )
 
     return {
@@ -187,7 +197,10 @@ const useRoute = ({
     }
   }, [route, amount, reverse, slippage])
 
-  return { path, simulateMsg, encodedExecuteMsg, executeMsg }
+  return { path,
+    simulateMsg,
+    encodedExecuteMsg,
+    executeMsg }
 }
 
 export default useRoute

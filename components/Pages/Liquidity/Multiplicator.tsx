@@ -1,5 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
+
 import InfoTooltip from '../../InfoTooltip'
 
 type Props = {

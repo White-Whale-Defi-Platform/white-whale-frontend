@@ -54,30 +54,22 @@ export const useTxRates = ({
       typeof tokenToTokenPrice === 'number') ||
     (oneTokenToTokenPrice && tokenAAmount === 0)
 
-  const conversionRate = usePersistance(
-    isLoading || fetchingTokenDollarPrice || !shouldShowRates
-      ? undefined
-      : protectAgainstNaN(
-          calculateTokenToTokenConversionRate({
-            tokenAAmount,
-            tokenToTokenPrice,
-            oneTokenToTokenPrice,
-          })
-        )
-  )
+  const conversionRate = usePersistance(isLoading || fetchingTokenDollarPrice || !shouldShowRates
+    ? undefined
+    : protectAgainstNaN(calculateTokenToTokenConversionRate({
+      tokenAAmount,
+      tokenToTokenPrice,
+      oneTokenToTokenPrice,
+    })))
 
-  const conversionRateInDollar = usePersistance(
-    isLoading || fetchingTokenDollarPrice || !shouldShowRates
-      ? undefined
-      : protectAgainstNaN(
-          calculateTokenToTokenConversionDollarRate({
-            tokenAAmount,
-            conversionRate,
-            tokenADollarPrice,
-            oneTokenToTokenPrice,
-          })
-        )
-  )
+  const conversionRateInDollar = usePersistance(isLoading || fetchingTokenDollarPrice || !shouldShowRates
+    ? undefined
+    : protectAgainstNaN(calculateTokenToTokenConversionDollarRate({
+      tokenAAmount,
+      conversionRate,
+      tokenADollarPrice,
+      oneTokenToTokenPrice,
+    })))
 
   return {
     isShowing: Boolean(shouldShowRates),

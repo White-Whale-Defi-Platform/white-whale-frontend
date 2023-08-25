@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 
 export const protectAgainstNaN = (value: number) => (isNaN(value) ? 0 : value)
 
-export function convertMicroDenomToDenom(
-  value: number | string,
-  decimals: number
-): number {
+export function convertMicroDenomToDenom(value: number | string,
+  decimals: number): number {
   if (decimals === 0) {
     return Number(value)
   }
@@ -13,10 +11,8 @@ export function convertMicroDenomToDenom(
   return protectAgainstNaN(Number(value) / 10 ** decimals)
 }
 
-export function convertDenomToMicroDenom(
-  value: number | string,
-  decimals: number
-): number {
+export function convertDenomToMicroDenom(value: number | string,
+  decimals: number): number {
   if (decimals === 0) {
     return Number(value)
   }
@@ -39,10 +35,8 @@ export const formatTokenName = (name: string) => {
   }
   return ''
 }
-export const calculateRewardDurationString = (
-  durationInMilli: number,
-  genesisStartTimeInNano: number
-): string => {
+export const calculateRewardDurationString = (durationInMilli: number,
+  genesisStartTimeInNano: number): string => {
   const [isImminent, setImminent] = useState<boolean>(false)
   const nowInMilli = Date.now()
   const adjustedDurationInMilli =

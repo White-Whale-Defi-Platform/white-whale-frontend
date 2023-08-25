@@ -34,16 +34,14 @@ export const Positions = ({ positions }: Props) => {
             size="sm"
             onClick={() => {
               setActiveButton(item)
-              setColumnFilters(
-                item === 'all'
-                  ? []
-                  : [
-                      {
-                        id: 'state',
-                        value: item,
-                      },
-                    ]
-              )
+              setColumnFilters(item === 'all'
+                ? []
+                : [
+                  {
+                    id: 'state',
+                    value: item,
+                  },
+                ])
             }}
             textTransform="capitalize"
           >

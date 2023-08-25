@@ -1,11 +1,11 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { BondingData } from 'components/Pages/Dashboard/types/BondingData'
 import { useRouter } from 'next/router'
 import { Cell, Pie, PieChart } from 'recharts'
 
 import Loader from '../../Loader'
 import { WhaleTooltip } from './WhaleTooltip'
-import { BondingData } from 'components/Pages/Dashboard/types/BondingData'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 export enum TokenType {
   bonded,
@@ -126,30 +126,24 @@ const BondingOverview = ({
               {`Value($${(aggregatedAssets * Number(whalePrice)).toFixed(2)})`}
             </Text>
             {/* Value equals the amount of the specific token type (liquid, bonded, unbonding, withdrawable)*/}
-            {data?.map(
-              (e: {
+            {data?.map((e: {
                 value: number | string
                 actionType: ActionType
                 tokenType: TokenType
                 tokenBalances: TokenBalance[]
-              }) => {
-                return (
-                  <WhaleTooltip
-                    key={`${e.tokenType}${e.actionType}`}
-                    label={
-                      e?.value !== null && isWalletConnected
-                        ? `$${(Number(e.value) * Number(whalePrice)).toFixed(
-                            2
-                          )}`
-                        : 'n/a'
-                    }
-                    tokenType={e.tokenType}
-                    data={data}
-                    isWalletConnected={isWalletConnected}
-                  />
-                )
-              }
-            )}
+              }) => (
+              <WhaleTooltip
+                key={`${e.tokenType}${e.actionType}`}
+                label={
+                  e?.value !== null && isWalletConnected
+                    ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
+                    : 'n/a'
+                }
+                tokenType={e.tokenType}
+                data={data}
+                isWalletConnected={isWalletConnected}
+              />
+            ))}
           </VStack>
           <VStack
             alignItems="flex-start"
@@ -172,11 +166,9 @@ const BondingOverview = ({
                   if (e.actionType === ActionType.buy) {
                     await router.push(`/${currentChainName}/swap`)
                   } else {
-                    await router.push(
-                      `/${currentChainName}/dashboard/${
-                        ActionType[e.actionType]
-                      }`
-                    )
+                    await router.push(`/${currentChainName}/dashboard/${
+                      ActionType[e.actionType]
+                    }`)
                   }
                 }}
               >

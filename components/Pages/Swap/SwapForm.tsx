@@ -69,8 +69,10 @@ const SwapForm: FC<Props> = ({
 
   useEffect(() => {
     if (resetForm || tx?.txStep === TxStep.Success) {
-      setValue('tokenA', { ...tokenA, amount: 0 })
-      setValue('tokenB', { ...tokenB, amount: 0 })
+      setValue('tokenA', { ...tokenA,
+        amount: 0 })
+      setValue('tokenB', { ...tokenB,
+        amount: 0 })
       setResetForm(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,29 +111,29 @@ const SwapForm: FC<Props> = ({
       amount:
         tokenA.amount ||
         parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
-      decimals: poolList.pools
-        .map(({ pool_assets }) => pool_assets)
-        .map(([a, b]) =>
-          a?.symbol == (tokenA.tokenSymbol as string)
-            ? a?.decimals
-            : b?.decimals
-        )[0],
+      decimals: poolList.pools.
+        map(({ pool_assets }) => pool_assets).
+        map(([a, b]) => (a?.symbol == (tokenA.tokenSymbol as string)
+          ? a?.decimals
+          : b?.decimals))[0],
     }
     const B = {
       ...tokenA,
       amount:
         tokenB.amount ||
         parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
-      decimals: poolList.pools
-        .map(({ pool_assets }) => pool_assets)
-        .map(([a, b]) =>
-          a?.symbol == (tokenB.tokenSymbol as string)
-            ? a?.decimals
-            : b?.decimals
-        )[0],
+      decimals: poolList.pools.
+        map(({ pool_assets }) => pool_assets).
+        map(([a, b]) => (a?.symbol == (tokenB.tokenSymbol as string)
+          ? a?.decimals
+          : b?.decimals))[0],
     }
-    setValue('tokenA', A, { shouldValidate: true })
-    setValue('tokenB', B, { shouldValidate: true })
+    setValue(
+      'tokenA', A, { shouldValidate: true },
+    )
+    setValue(
+      'tokenB', B, { shouldValidate: true },
+    )
 
     onReverseDirection()
   }
@@ -142,7 +144,8 @@ const SwapForm: FC<Props> = ({
     }
 
     const e = num(tokenA.amount).times(10 ** tokenBInfo.decimals)
-    return num(simulated?.amount).div(e).toFixed(6)
+    return num(simulated?.amount).div(e).
+      toFixed(6)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, tokenA.amount])
 
@@ -150,47 +153,39 @@ const SwapForm: FC<Props> = ({
     if (simulated) {
       if (isReverse) {
         const asset = { ...tokenA }
-        asset.amount = parseFloat(
-          fromChainAmount(simulated?.amount, tokenAInfo?.decimals)
-        )
+        asset.amount = parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals))
         setValue('tokenA', asset)
-        onInputChange(
-          {
-            ...tokenA,
-            amount: parseFloat(
-              fromChainAmount(simulated?.amount, tokenAInfo?.decimals)
-            ),
-          },
-          0
-        )
+        onInputChange({
+          ...tokenA,
+          amount: parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
+        },
+        0)
       } else {
         const asset = { ...tokenB }
-        asset.amount = parseFloat(
-          fromChainAmount(simulated?.amount, tokenBInfo?.decimals)
-        )
+        asset.amount = parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals))
         setValue('tokenB', asset)
-        onInputChange(
-          {
-            ...tokenB,
-            amount: parseFloat(
-              fromChainAmount(simulated?.amount, tokenBInfo?.decimals)
-            ),
-          },
-          1
-        )
+        onInputChange({
+          ...tokenB,
+          amount: parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
+        },
+        1)
       }
     } else {
       if (isReverse) {
         const asset = { ...tokenB }
         if (!asset?.amount) {
           asset.amount = 0
-          setValue('tokenA', asset, { shouldValidate: true })
+          setValue(
+            'tokenA', asset, { shouldValidate: true },
+          )
         }
       } else {
         const asset = { ...tokenA }
         if (!asset?.amount || state?.error) {
           asset.amount = 0
-          setValue('tokenB', asset, { shouldValidate: true })
+          setValue(
+            'tokenB', asset, { shouldValidate: true },
+          )
         }
       }
     }
@@ -204,20 +199,23 @@ const SwapForm: FC<Props> = ({
       'Disabled conditions: ',
       tx?.txStep != TxStep.Ready,
       simulated == null,
-      !isConnected
+      !isConnected,
     )
   }
   return (
     <VStack
-      paddingX={{ base: 6, md: 10 }}
-      paddingY={{ base: 14, md: 10 }}
+      paddingX={{ base: 6,
+        md: 10 }}
+      paddingY={{ base: 14,
+        md: 10 }}
       width="full"
       background={'#1C1C1C'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
       alignItems="flex-start"
       minH={400}
-      maxWidth={{ base: 'full', md: 650 }}
+      maxWidth={{ base: 'full',
+        md: 650 }}
       gap={4}
       as="form"
       onSubmit={handleSubmit(tx?.submit)}
@@ -226,18 +224,21 @@ const SwapForm: FC<Props> = ({
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={2}>
         <HStack justifyContent="space-between" width="full">
-          <HStack visibility={{ base: 'visible', md: 'hidden' }}>
+          <HStack visibility={{ base: 'visible',
+            md: 'hidden' }}>
             <Button
               variant="outline"
               size="xs"
               maxW="fit-content"
               onClick={() => {
                 setReverse(false)
-                onInputChange({ ...tokenA, amount: tokenABalance / 2 }, 0)
+                onInputChange({ ...tokenA,
+                  amount: tokenABalance / 2 }, 0)
                 setValue(
                   'tokenA',
-                  { ...tokenA, amount: tokenABalance / 2 },
-                  { shouldValidate: true }
+                  { ...tokenA,
+                    amount: tokenABalance / 2 },
+                  { shouldValidate: true },
                 )
               }}
             >
@@ -248,11 +249,13 @@ const SwapForm: FC<Props> = ({
               size="xs"
               onClick={() => {
                 setReverse(false)
-                onInputChange({ ...tokenA, amount: tokenABalance }, 0)
+                onInputChange({ ...tokenA,
+                  amount: tokenABalance }, 0)
                 setValue(
                   'tokenA',
-                  { ...tokenA, amount: tokenABalance },
-                  { shouldValidate: true }
+                  { ...tokenA,
+                    amount: tokenABalance },
+                  { shouldValidate: true },
                 )
               }}
             >
@@ -288,7 +291,8 @@ const SwapForm: FC<Props> = ({
           color="brand.500"
           _focus={{ boxShadow: 'none' }}
           _active={{ background: 'transparent' }}
-          _hover={{ background: 'transparent', color: 'brand.300' }}
+          _hover={{ background: 'transparent',
+            color: 'brand.300' }}
           icon={<DoubleArrowsIcon width="2rem" height="2rem" />}
           disabled={isInputDisabled}
           onClick={onReverse}
@@ -308,11 +312,13 @@ const SwapForm: FC<Props> = ({
                 size="xs"
                 onClick={() => {
                   setReverse(true)
-                  onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 1)
+                  onInputChange({ ...tokenB,
+                    amount: tokenBBalance / 2 }, 1)
                   setValue(
                     'tokenB',
-                    { ...tokenB, amount: tokenBBalance / 2 },
-                    { shouldValidate: true }
+                    { ...tokenB,
+                      amount: tokenBBalance / 2 },
+                    { shouldValidate: true },
                   )
                 }}
               >
@@ -323,11 +329,13 @@ const SwapForm: FC<Props> = ({
                 size="xs"
                 onClick={() => {
                   setReverse(true)
-                  onInputChange({ ...tokenB, amount: tokenBBalance / 2 }, 1)
+                  onInputChange({ ...tokenB,
+                    amount: tokenBBalance / 2 }, 1)
                   setValue(
                     'tokenB',
-                    { ...tokenB, amount: tokenBBalance },
-                    { shouldValidate: true }
+                    { ...tokenB,
+                      amount: tokenBBalance },
+                    { shouldValidate: true },
                   )
                 }}
               >

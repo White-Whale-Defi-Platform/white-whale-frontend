@@ -92,12 +92,13 @@ const fetchMyLockedLp = async ({ pool, client, address }) => {
       positions: { address },
     })) || []
   return (
-    positions
-      ?.map((p) => {
+    positions?.
+      map((p) => {
         const { open_position = {}, closed_position = {} } = p
-        return { ...open_position, ...closed_position }
-      })
-      .reduce((acc, p) => acc + Number(p.amount), 0) || 0
+        return { ...open_position,
+          ...closed_position }
+      }).
+      reduce((acc, p) => acc + Number(p.amount), 0) || 0
   )
 }
 
@@ -119,9 +120,7 @@ export const useQueryPoolsLiquidity = ({
     getTokenDollarValue,
   }
 
-  async function queryPoolLiquidity(
-    pool: PoolEntityType
-  ): Promise<PoolEntityTypeWithLiquidity | any> {
+  async function queryPoolLiquidity(pool: PoolEntityType): Promise<PoolEntityTypeWithLiquidity | any> {
     if (!client) {
       return pool
     }
@@ -131,18 +130,12 @@ export const useQueryPoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-    const tokenA = pool.pool_assets.find(
-      (asset) =>
-        asset.denom ===
+    const tokenA = pool.pool_assets.find((asset) => asset.denom ===
         (poolInfo?.assets[0]?.info?.native_token?.denom ??
-          poolInfo?.assets[0]?.info?.token?.contract_addr)
-    )
-    const tokenB = pool.pool_assets.find(
-      (asset) =>
-        asset.denom ===
+          poolInfo?.assets[0]?.info?.token?.contract_addr))
+    const tokenB = pool.pool_assets.find((asset) => asset.denom ===
         (poolInfo?.assets[1]?.info?.native_token?.denom ??
-          poolInfo?.assets[1]?.info?.token?.contract_addr)
-    )
+          poolInfo?.assets[1]?.info?.token?.contract_addr))
 
     const getFlows = async ({ client }) => {
       if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) {
@@ -163,11 +156,11 @@ export const useQueryPoolsLiquidity = ({
       if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) {
         return []
       }
-      return client
-        ?.queryContractSmart(pool.staking_address, {
+      return client?.
+        queryContractSmart(pool.staking_address, {
           flows: {},
-        })
-        .then((flows) => {
+        }).
+        then((flows) => {
           const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch
             const endEpoch = flow.end_epoch
@@ -215,11 +208,13 @@ export const useQueryPoolsLiquidity = ({
     }
 
     const flows = await getFlows({ client })
-    const myLockedLp = await fetchMyLockedLp({ pool, client, address })
+    const myLockedLp = await fetchMyLockedLp({ pool,
+      client,
+      address })
     const totalLockedLp = await fetchTotalLockedLp(
       pool.staking_address,
       pool.lp_token,
-      client
+      client,
     )
 
     const {
@@ -230,7 +225,8 @@ export const useQueryPoolsLiquidity = ({
       myNotLockedLp,
     } = await queryMyLiquidity({
       context,
-      swap: { ...poolInfo, ...pool },
+      swap: { ...poolInfo,
+        ...pool },
       address,
       totalLockedLp,
       myLockedLp,
@@ -300,7 +296,8 @@ export const useQueryPoolsLiquidity = ({
       })
     }
 
-    const myFlows = await getMyFlows({ client, address })
+    const myFlows = await getMyFlows({ client,
+      address })
     const liquidity = {
       available: {
         totalLpAmount: poolInfo.lp_token_supply,
@@ -336,27 +333,25 @@ export const useQueryPoolsLiquidity = ({
     }
   }
 
-  return useQueries(
-    (pools ?? []).map((pool) => ({
-      queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
-      enabled:
+  return useQueries((pools ?? []).map((pool) => ({
+    queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
+    enabled:
         Boolean(client && pool.pool_id && enabledGetTokenDollarValue) &&
         tokenList.tokens.length > 0 &&
         Boolean(prices),
-      refetchOnMount: false as const,
-      refetchInterval: refetchInBackground
-        ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
-        : undefined,
-      refetchIntervalInBackground: refetchInBackground,
+    refetchOnMount: false as const,
+    refetchInterval: refetchInBackground
+      ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
+      : undefined,
+    refetchIntervalInBackground: refetchInBackground,
 
-      async queryFn() {
-        if (!client) {
-          return pool
-        }
-        return queryPoolLiquidity(pool)
-      },
-    }))
-  )
+    async queryFn() {
+      if (!client) {
+        return pool
+      }
+      return queryPoolLiquidity(pool)
+    },
+  })))
 }
 
 export const useQueryPoolLiquidity = ({ poolId }) => {
@@ -391,12 +386,8 @@ export function calculateRewardsAnnualYieldRate({
     return 0
   }
 
-  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce(
-    (value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
-    0
-  )
+  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce((value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
+    0)
 
-  return protectAgainstNaN(
-    (totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100
-  )
+  return protectAgainstNaN((totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100)
 }

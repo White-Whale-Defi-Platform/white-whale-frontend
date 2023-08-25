@@ -72,11 +72,10 @@ function createWalletState<TClient = any, TState = {}>({
         }
 
         onSet((newValue, oldValue) => {
-          localStorage.setItem(
-            CACHE_KEY,
+          localStorage.setItem(CACHE_KEY,
             /* Let's not store the client in the cache */
-            JSON.stringify({ ...newValue, client: null })
-          )
+            JSON.stringify({ ...newValue,
+              client: null }))
           // }
         })
       },

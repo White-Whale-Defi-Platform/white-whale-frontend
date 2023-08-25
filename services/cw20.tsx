@@ -115,59 +115,54 @@ export const CW20 = (client: Wallet): CW20Contract => {
       return result?.balance
     }
 
-    const allowance = async (
-      owner: string,
-      spender: string
-    ): Promise<AllowanceResponse> =>
-      client.queryContractSmart(contractAddress, {
-        allowance: { owner, spender },
-      })
+    const allowance = async (owner: string,
+      spender: string): Promise<AllowanceResponse> => client.queryContractSmart(contractAddress, {
+      allowance: { owner,
+        spender },
+    })
 
     const allAllowances = async (
       owner: string,
       startAfter?: string,
-      limit?: number
-    ): Promise<AllAllowancesResponse> =>
-      client.queryContractSmart(contractAddress, {
-        all_allowances: { owner, start_after: startAfter, limit },
-      })
+      limit?: number,
+    ): Promise<AllAllowancesResponse> => client.queryContractSmart(contractAddress, {
+      all_allowances: { owner,
+        start_after: startAfter,
+        limit },
+    })
 
-    const allAccounts = async (
-      startAfter?: string,
-      limit?: number
-    ): Promise<readonly string[]> => {
-      const accounts: AllAccountsResponse = await client.queryContractSmart(
-        contractAddress,
+    const allAccounts = async (startAfter?: string,
+      limit?: number): Promise<readonly string[]> => {
+      const accounts: AllAccountsResponse = await client.queryContractSmart(contractAddress,
         {
-          all_accounts: { start_after: startAfter, limit },
-        }
-      )
+          all_accounts: { start_after: startAfter,
+            limit },
+        })
       return accounts.accounts
     }
 
-    const tokenInfo = async (): Promise<CW20TokenInfo> =>
-      client.queryContractSmart(contractAddress, { token_info: {} })
+    const tokenInfo = async (): Promise<CW20TokenInfo> => client.queryContractSmart(contractAddress, { token_info: {} })
 
-    const investment = async (): Promise<Investment> =>
-      client.queryContractSmart(contractAddress, { investment: {} })
+    const investment = async (): Promise<Investment> => client.queryContractSmart(contractAddress, { investment: {} })
 
-    const claims = async (address: string): Promise<Claims> =>
-      client.queryContractSmart(contractAddress, {
-        claims: { address },
-      })
+    const claims = async (address: string): Promise<Claims> => client.queryContractSmart(contractAddress, {
+      claims: { address },
+    })
 
-    const minter = async (): Promise<any> =>
-      client.queryContractSmart(contractAddress, { minter: {} })
+    const minter = async (): Promise<any> => client.queryContractSmart(contractAddress, { minter: {} })
 
     // Mints tokens, returns transactionHash
     const mint = async (
       sender: string,
       recipient: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        mint: { recipient, amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          mint: { recipient,
+            amount },
+        },
+      )
       return result.transactionHash
     }
 
@@ -175,41 +170,52 @@ export const CW20 = (client: Wallet): CW20Contract => {
     const transfer = async (
       sender: string,
       recipient: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        transfer: { recipient, amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          transfer: { recipient,
+            amount },
+        },
+      )
       return result.transactionHash
     }
 
     // Burns tokens, returns transactionHash
     const burn = async (sender: string, amount: string): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        burn: { amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          burn: { amount },
+        },
+      )
       return result.transactionHash
     }
 
     const increaseAllowance = async (
       sender: string,
       spender: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        increase_allowance: { spender, amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          increase_allowance: { spender,
+            amount },
+        },
+      )
       return result.transactionHash
     }
 
     const decreaseAllowance = async (
       sender: string,
       spender: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        decrease_allowance: { spender, amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          decrease_allowance: { spender,
+            amount },
+        },
+      )
       return result.transactionHash
     }
 
@@ -217,11 +223,15 @@ export const CW20 = (client: Wallet): CW20Contract => {
       sender: string,
       owner: string,
       recipient: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        transfer_from: { owner, recipient, amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          transfer_from: { owner,
+            recipient,
+            amount },
+        },
+      )
       return result.transactionHash
     }
 
@@ -230,22 +240,26 @@ export const CW20 = (client: Wallet): CW20Contract => {
         sender,
         contractAddress,
         { bond: {} },
-        [coin]
+        [coin],
       )
       return result.transactionHash
     }
 
     const unbond = async (sender: string, amount: string): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        unbond: { amount },
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          unbond: { amount },
+        },
+      )
       return result.transactionHash
     }
 
     const claim = async (sender: string): Promise<string> => {
-      const result = await client.execute(sender, contractAddress, {
-        claim: {},
-      })
+      const result = await client.execute(
+        sender, contractAddress, {
+          claim: {},
+        },
+      )
       return result.transactionHash
     }
 

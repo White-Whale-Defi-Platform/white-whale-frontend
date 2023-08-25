@@ -19,14 +19,12 @@ export const createIncreaseAllowanceMessage = ({
   value: MsgExecuteContract.fromPartial({
     sender: senderAddress,
     contract: tokenAddress,
-    msg: toUtf8(
-      JSON.stringify({
-        increase_allowance: {
-          amount: `${tokenAmount}`,
-          spender: `${swapAddress}`,
-        },
-      })
-    ),
+    msg: toUtf8(JSON.stringify({
+      increase_allowance: {
+        amount: `${tokenAmount}`,
+        spender: `${swapAddress}`,
+      },
+    })),
     funds: [],
   }),
 })

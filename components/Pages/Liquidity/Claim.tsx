@@ -50,10 +50,8 @@ const Claim = ({ poolId }: Props) => {
   const config = useConfig(network, chainId)
   // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
   const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
-  const allSnapshotsTaken = useMemo(
-    () => noSnapshotTakenAddresses.length === 0,
-    [noSnapshotTakenAddresses.length]
-  )
+  const allSnapshotsTaken = useMemo(() => noSnapshotTakenAddresses.length === 0,
+    [noSnapshotTakenAddresses.length])
   const forceSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses,
     config,
@@ -62,10 +60,8 @@ const Claim = ({ poolId }: Props) => {
 
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce(
-      (acc, reward) => acc + Number(reward.assetAmount),
-      0
-    )
+    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.assetAmount),
+      0)
     return rewardsSum > 0
   }, [rewards])
 

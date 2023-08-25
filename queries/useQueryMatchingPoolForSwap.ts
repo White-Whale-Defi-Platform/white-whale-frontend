@@ -44,7 +44,8 @@ export function findPoolForSwap({
     const matchingBA =
       poolTokenA.symbol === tokenB.symbol && poolTokenB.symbol === tokenA.symbol
 
-    return { matchingAB, matchingBA }
+    return { matchingAB,
+      matchingBA }
   }
 
   return poolsList.reduce((result, pool) => {
@@ -105,21 +106,19 @@ export const useGetQueryMatchingPoolForSwap = () => {
   // Const { chainId } = useRecoilValue(walletState)
   const { data: poolsListResponse, isLoading } = usePoolsListQuery()
 
-  const getMatchingPool = useCallback(
-    ({ tokenA, tokenB }: GetMatchingPoolArgs) => {
-      if (!poolsListResponse?.pools || !tokenA || !tokenB) {
-        return undefined
-      }
+  const getMatchingPool = useCallback(({ tokenA, tokenB }: GetMatchingPoolArgs) => {
+    if (!poolsListResponse?.pools || !tokenA || !tokenB) {
+      return undefined
+    }
 
-      return findPoolForSwap({
-        baseToken,
-        tokenA,
-        tokenB,
-        poolsList: poolsListResponse.pools,
-      })
-    },
-    [baseToken, poolsListResponse]
-  )
+    return findPoolForSwap({
+      baseToken,
+      tokenA,
+      tokenB,
+      poolsList: poolsListResponse.pools,
+    })
+  },
+  [baseToken, poolsListResponse])
 
   return [getMatchingPool, isLoading] as const
 }
@@ -130,15 +129,12 @@ export const useQueryMatchingPoolForSwap = ({
 }: GetMatchingPoolArgs) => {
   const [getMatchingPool, isLoading] = useGetQueryMatchingPoolForSwap()
 
-  return useMemo(
-    () =>
-      [
-        getMatchingPool({
-          tokenA,
-          tokenB,
-        }),
-        isLoading,
-      ] as const,
-    [getMatchingPool, isLoading, tokenA, tokenB]
-  )
+  return useMemo(() => [
+    getMatchingPool({
+      tokenA,
+      tokenB,
+    }),
+    isLoading,
+  ] as const,
+  [getMatchingPool, isLoading, tokenA, tokenB])
 }

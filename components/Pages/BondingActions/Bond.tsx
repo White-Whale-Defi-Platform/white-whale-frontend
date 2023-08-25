@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AssetInput from '../../AssetInput'
 import { bondingAtom } from './bondAtoms'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 export interface BondingTokenState {
   tokenSymbol: string
@@ -31,9 +31,8 @@ export const Bond = ({ balances, tokenSymbols }) => {
 
   useEffect(() => {
     if (balances && tokenSymbols) {
-      const newBalances = balances?.map((balance: number, idx: number) => {
-        return { amount: balance, tokenSymbol: tokenSymbols[idx] }
-      })
+      const newBalances = balances?.map((balance: number, idx: number) => ({ amount: balance,
+        tokenSymbol: tokenSymbols[idx] }))
       setTokenBalances(newBalances)
     }
   }, [balances, tokenSymbols])
@@ -46,7 +45,8 @@ export const Bond = ({ balances, tokenSymbols }) => {
         amount: Number(amount),
       })
     } else {
-      setCurrentBondState({ ...currentBondState, amount: Number(amount) })
+      setCurrentBondState({ ...currentBondState,
+        amount: Number(amount) })
     }
   }
   const config = useConfig(network, chainId)
@@ -68,13 +68,8 @@ export const Bond = ({ balances, tokenSymbols }) => {
       currentBondState,
     },
   })
-  const currentTokenBalance = useMemo(
-    () =>
-      tokenBalances?.find(
-        (balance) => balance.tokenSymbol === currentBondState.tokenSymbol
-      ).amount,
-    [tokenBalances, currentBondState.tokenSymbol]
-  )
+  const currentTokenBalance = useMemo(() => tokenBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol).amount,
+    [tokenBalances, currentBondState.tokenSymbol])
   return (
     <VStack px={7} width="full">
       <Controller

@@ -19,10 +19,8 @@ export interface FeeDistributionConfig {
   }
 }
 
-export const getFeeDistributorConfig = async (
-  client: CosmWasmClient | Wallet,
-  config: Config
-) => {
+export const getFeeDistributorConfig = async (client: CosmWasmClient | Wallet,
+  config: Config) => {
   if (!client) {
     return null
   }
@@ -31,16 +29,12 @@ export const getFeeDistributorConfig = async (
   return { feeDistributionConfig }
 }
 
-const fetchConfig = async (
-  client: CosmWasmClient | Wallet,
-  config: Config
-): Promise<FeeDistributionConfig> => {
-  const result: JsonObject = await client.queryContractSmart(
-    config.fee_distributor,
+const fetchConfig = async (client: CosmWasmClient | Wallet,
+  config: Config): Promise<FeeDistributionConfig> => {
+  const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
     {
       config: {},
-    }
-  )
+    })
 
   return result as FeeDistributionConfig
 }

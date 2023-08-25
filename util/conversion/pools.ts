@@ -7,11 +7,8 @@ export const calcPoolTokenValue = ({
   tokenSupply,
   tokenReserves,
   tokenDecimals = POOL_TOKENS_DECIMALS,
-}) =>
-  convertMicroDenomToDenom(
-    (tokenAmountInMicroDenom / tokenSupply) * tokenReserves,
-    tokenDecimals
-  )
+}) => convertMicroDenomToDenom((tokenAmountInMicroDenom / tokenSupply) * tokenReserves,
+  tokenDecimals)
 
 export const calcPoolTokenDollarValue = ({
   tokenAmountInMicroDenom,
@@ -19,12 +16,11 @@ export const calcPoolTokenDollarValue = ({
   tokenReserves,
   tokenDollarPrice,
   tokenDecimals,
-}) =>
-  calcPoolTokenValue({
-    tokenAmountInMicroDenom,
-    tokenSupply,
-    tokenReserves,
-    tokenDecimals,
-  }) *
+}) => calcPoolTokenValue({
+  tokenAmountInMicroDenom,
+  tokenSupply,
+  tokenReserves,
+  tokenDecimals,
+}) *
   tokenDollarPrice *
   2

@@ -27,6 +27,6 @@
       "": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "webpack.functions.js", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"] // *** The files to not type check ***,
 }

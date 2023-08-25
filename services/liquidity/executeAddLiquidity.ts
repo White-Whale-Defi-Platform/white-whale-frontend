@@ -22,7 +22,7 @@ export const executeAddLiquidity = async ({
   senderAddress,
   msgs,
 }: ExecuteAddLiquidityArgs): Promise<any> =>
-  // If (!tokenA.native || !tokenB.native) {
+// If (!tokenA.native || !tokenB.native) {
 
   client.post(senderAddress, msgs)
 // Const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []

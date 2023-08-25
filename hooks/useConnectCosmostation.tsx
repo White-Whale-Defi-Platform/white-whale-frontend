@@ -23,32 +23,22 @@ export default function useConnectCosmostation() {
 
     try {
       if (chainInfo !== undefined) {
-        await window.cosmostation.providers.keplr?.experimentalSuggestChain(
-          chainInfo
-        )
-        await window.cosmostation.providers.keplr.enable(
-          currentWalletState.chainId
-        )
+        await window.cosmostation.providers.keplr?.experimentalSuggestChain(chainInfo)
+        await window.cosmostation.providers.keplr.enable(currentWalletState.chainId)
         const offlineSigner =
-          await window.cosmostation.providers.keplr.getOfflineSigner(
-            currentWalletState.chainId
-          )
+          await window.cosmostation.providers.keplr.getOfflineSigner(currentWalletState.chainId)
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           currentWalletState.chainId,
           chainInfo.rpc,
           offlineSigner,
           currentWalletState.network,
           {
-            gasPrice: GasPrice.fromString(
-              `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
-            ),
+            gasPrice: GasPrice.fromString(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`),
           },
-          'cosmostation'
+          'cosmostation',
         )
         const [{ address }] = await offlineSigner.getAccounts()
-        const key = await window.cosmostation.providers.keplr.getKey(
-          currentWalletState.chainId
-        )
+        const key = await window.cosmostation.providers.keplr.getKey(currentWalletState.chainId)
         /* Successfully update the wallet state */
         setCurrentWalletState({
           key,
@@ -74,5 +64,6 @@ export default function useConnectCosmostation() {
     connectCosmostation()
   }
 
-  return { connectCosmostation, setCosmostationAndConnect }
+  return { connectCosmostation,
+    setCosmostationAndConnect }
 }

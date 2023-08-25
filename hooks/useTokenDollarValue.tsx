@@ -18,13 +18,10 @@ export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
   const { data, isLoading } = useQuery(
     `tokenDollarValue/${tokenSymbols?.join('/')}`,
     async (): Promise<Array<number>> => {
-      const tokenIds = tokenSymbols?.map(
-        (tokenSymbol) =>
-          (
-            getMultipleTokenInfo([tokenSymbol])?.[0] ||
+      const tokenIds = tokenSymbols?.map((tokenSymbol) => (
+        getMultipleTokenInfo([tokenSymbol])?.[0] ||
             getMultipleIBCAssetInfo([tokenSymbol])?.[0]
-          )?.id
-      )
+      )?.id)
 
       if (tokenIds) {
         return tokenDollarValueQuery(tokenIds)
@@ -35,7 +32,7 @@ export const useTokenDollarValueQuery = (tokenSymbols?: Array<string>) => {
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
-    }
+    },
   )
 
   return [data || [], isLoading] as const
@@ -50,18 +47,14 @@ export const useTokenDollarValue = (tokenSymbol?: string) => {
     : baseTokenSymbol
 
   const [[tokenDollarPrice], fetchingTokenDollarPrice] =
-    useTokenDollarValueQuery(
-      tokenSymbolToLookupDollarValueFor
-        ? [tokenSymbolToLookupDollarValueFor]
-        : null
-    )
+    useTokenDollarValueQuery(tokenSymbolToLookupDollarValueFor
+      ? [tokenSymbolToLookupDollarValueFor]
+      : null)
 
-  const [oneTokenToTokenPrice, fetchingTokenToTokenPrice] = usePriceForOneToken(
-    {
-      tokenASymbol: tokenSymbol,
-      tokenBSymbol: baseTokenSymbol,
-    }
-  )
+  const [oneTokenToTokenPrice, fetchingTokenToTokenPrice] = usePriceForOneToken({
+    tokenASymbol: tokenSymbol,
+    tokenBSymbol: baseTokenSymbol,
+  })
 
   /* If the token has an id or it's the baseToken then let's return pure price from the api */
   const shouldRenderPureDollarPrice =

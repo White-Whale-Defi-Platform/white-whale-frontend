@@ -31,7 +31,8 @@ const UploadFile = ({ handleChange }: Props) => {
         id="upload"
         type="file"
         onChange={handleChange}
-        style={{ visibility: 'hidden', width: 0 }}
+        style={{ visibility: 'hidden',
+          width: 0 }}
       />
     </>
   )

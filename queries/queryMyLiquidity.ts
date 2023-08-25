@@ -13,11 +13,11 @@ export async function queryMyLiquidity({
   const isNative = isNativeToken(swap.lp_token)
   const myNotLockedLp = address
     ? await queryLiquidityBalance({
-        tokenAddress: swap.lp_token,
-        client,
-        address,
-        isNative,
-      })
+      tokenAddress: swap.lp_token,
+      client,
+      address,
+      isNative,
+    })
     : 0
 
   /* Provide dollar value for reserves as well */
@@ -56,12 +56,8 @@ export const getLockedLpAssets = (poolInfo, myLockedLp) => {
   ]
 
   const myLockedLpAssets: [number, number] = [
-    protectAgainstNaN(
-      totalLpAssets[0] * (myLockedLp / poolInfo.lp_token_supply)
-    ),
-    protectAgainstNaN(
-      totalLpAssets[1] * (myLockedLp / poolInfo.lp_token_supply)
-    ),
+    protectAgainstNaN(totalLpAssets[0] * (myLockedLp / poolInfo.lp_token_supply)),
+    protectAgainstNaN(totalLpAssets[1] * (myLockedLp / poolInfo.lp_token_supply)),
   ]
 
   return {

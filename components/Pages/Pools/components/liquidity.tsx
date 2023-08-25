@@ -6,7 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
-  VStack
+  VStack,
 } from '@chakra-ui/react'
 
 type Props = {
@@ -20,7 +20,7 @@ const Liquidity = ({ liquidity, infos }: Props) => {
   return (
     <Tooltip
       isDisabled={ttDisabled}
-      sx={{ 'boxShadow': 'none' }}
+      sx={{ boxShadow: 'none' }}
       label={
         <VStack
           minW="250px"
@@ -79,15 +79,15 @@ const Liquidity = ({ liquidity, infos }: Props) => {
           {
             <div
               style={{
-                'width': '0px',
-                'height': '1px',
-                'background': `repeating-linear-gradient(
+                width: '0px',
+                height: '1px',
+                background: `repeating-linear-gradient(
             to right,
             white,
             white 1px,
             transparent 1px,
             transparent 5px
-          )`
+          )`,
               }}
             />
           }

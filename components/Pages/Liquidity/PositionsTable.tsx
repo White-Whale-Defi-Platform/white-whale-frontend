@@ -98,23 +98,20 @@ export const PositionsTable = ({ columnFilters, positions }) => {
 
   const totalDollarValue = useMemo(() => {
     const filter = columnFilters?.[0]?.value
-    const filteredPositions = positions.filter((p) =>
-      filter ? p.state === filter : true
-    )
+    const filteredPositions = positions.filter((p) => (filter ? p.state === filter : true))
     return filteredPositions.reduce((acc, curr) => acc + curr.value, 0)
   }, [positions, columnFilters])
 
   // Loop through positions and get total value
   const assetsWithValue = useMemo(() => {
-    const initialValue = { assetAmount: 0, dollarValue: 0 }
+    const initialValue = { assetAmount: 0,
+      dollarValue: 0 }
     const filter = columnFilters?.[0]?.value
-    const filteredPositions = positions.filter((p) =>
-      filter ? p.state === filter : true
-    )
+    const filteredPositions = positions.filter((p) => (filter ? p.state === filter : true))
 
-    return filteredPositions
-      ?.map((p) => p?.assets || [])
-      .reduce((acc, curr) => {
+    return filteredPositions?.
+      map((p) => p?.assets || []).
+      reduce((acc, curr) => {
         const [a1 = initialValue, a2 = initialValue] = acc
         const [c1 = initialValue, c2 = initialValue] = curr
 
@@ -133,10 +130,8 @@ export const PositionsTable = ({ columnFilters, positions }) => {
       }, [])
   }, [positions, columnFilters])
 
-  const customColumns = useMemo(
-    () => columns(assetsWithValue, totalDollarValue.toFixed(2)),
-    [assetsWithValue, totalDollarValue]
-  )
+  const customColumns = useMemo(() => columns(assetsWithValue, totalDollarValue.toFixed(2)),
+    [assetsWithValue, totalDollarValue])
 
   const table = useReactTable({
     data: positions || [],
@@ -172,10 +167,8 @@ export const PositionsTable = ({ columnFilters, positions }) => {
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   <HStack>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                    {flexRender(header.column.columnDef.header,
+                      header.getContext())}
 
                     {header?.column?.columnDef?.enableSorting && (
                       <VStack width="fit-content" p="0" m="0" spacing="0">

@@ -3,8 +3,7 @@ import { coin } from '@cosmjs/stargate'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) =>
-  Buffer.from(JSON.stringify(obj)).toString('base64')
+export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
 
 export const createWithdrawMsg = ({ amount, swapAddress }) => ({
   send: {
@@ -20,29 +19,25 @@ export const createNativeWithdrawMsg = () => ({
   withdraw_liquidity: {},
 })
 
-export const createWithdrawExecuteMsgs = (
-  {
-    contract,
-    amount,
-    swapAddress,
-    claimIncentive,
-    stakingAddress,
-    isNative = false,
-  },
-  senderAddress
-) => {
+export const createWithdrawExecuteMsgs = ({
+  contract,
+  amount,
+  swapAddress,
+  claimIncentive,
+  stakingAddress,
+  isNative = false,
+},
+senderAddress) => {
   const msgs = []
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
   if (!isNative) {
-    increaseAllowanceMessages.push(
-      createIncreaseAllowanceMessage({
-        tokenAmount: amount,
-        tokenAddress: contract,
-        senderAddress,
-        swapAddress,
-      })
-    )
+    increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
+      tokenAmount: amount,
+      tokenAddress: contract,
+      senderAddress,
+      swapAddress,
+    }))
   }
 
   const inventiveMsg = createExecuteMessage({
@@ -66,7 +61,8 @@ export const createWithdrawExecuteMsgs = (
       contractAddress: isNative ? swapAddress : contract,
       message: isNative
         ? createNativeWithdrawMsg()
-        : createWithdrawMsg({ amount, swapAddress }),
+        : createWithdrawMsg({ amount,
+          swapAddress }),
       funds: isNative ? [coin(amount, contract)] : [],
     }),
   ]

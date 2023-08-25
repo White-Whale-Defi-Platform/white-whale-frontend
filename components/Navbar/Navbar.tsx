@@ -87,12 +87,15 @@ const Navbar = () => {
   const currentChainName = currentChain?.label.toLowerCase()
 
   return (
-    <Box py={{ base: '4', md: '10' }} px={{ base: '4', md: '10' }}>
+    <Box py={{ base: '4',
+      md: '10' }} px={{ base: '4',
+      md: '10' }}>
       <Flex
         justifyContent="space-between"
         mx="auto"
         maxWidth="container.xl"
-        display={{ base: 'none', md: 'flex' }}
+        display={{ base: 'none',
+          md: 'flex' }}
         alignItems="center"
       >
         <Box flex="1">
@@ -133,7 +136,8 @@ const Navbar = () => {
         justify="space-between"
         align="center"
         py="4"
-        display={{ base: 'flex', md: 'none' }}
+        display={{ base: 'flex',
+          md: 'none' }}
       >
         <Logo />
         <Wallet
@@ -149,7 +153,8 @@ const Navbar = () => {
           color="white"
           icon={<BurgerIcon width="1rem" height="1rem" />}
           onClick={onOpen}
-          display={{ base: 'block', md: 'none' }}
+          display={{ base: 'block',
+            md: 'none' }}
           _focus={{
             bg: 'none',
           }}

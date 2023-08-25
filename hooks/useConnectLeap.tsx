@@ -31,20 +31,16 @@ export default function useConnectLeap() {
         isConnecting = true
         await window.leap.experimentalSuggestChain(chainInfo)
         await window.leap.enable(currentWalletState.chainId)
-        const offlineSigner = await window.leap.getOfflineSigner(
-          currentWalletState.chainId
-        )
+        const offlineSigner = await window.leap.getOfflineSigner(currentWalletState.chainId)
         const wasmChainClient = await OfflineSigningWallet.connectWithSigner(
           currentWalletState.chainId,
           chainInfo.rpc,
           offlineSigner,
           currentWalletState.network,
           {
-            gasPrice: GasPrice.fromString(
-              `${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`
-            ),
+            gasPrice: GasPrice.fromString(`${chainInfo?.gasPriceStep?.low}${chainInfo?.feeCurrencies?.[0].coinMinimalDenom}`),
           },
-          'leap'
+          'leap',
         )
         const [{ address }] = await offlineSigner.getAccounts()
         const key = await window.leap.getKey(currentWalletState.chainId)
@@ -67,10 +63,12 @@ export default function useConnectLeap() {
   }
 
   const setLeapAndConnect = () => {
-    setCurrentWalletState({ ...currentWalletState, activeWallet: 'leap' })
+    setCurrentWalletState({ ...currentWalletState,
+      activeWallet: 'leap' })
     localStorage.removeItem('__terra_extension_router_session__')
     connectLeap()
   }
 
-  return { connectLeap, setLeapAndConnect }
+  return { connectLeap,
+    setLeapAndConnect }
 }

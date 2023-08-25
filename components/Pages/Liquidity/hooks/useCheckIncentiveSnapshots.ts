@@ -11,12 +11,13 @@ export const useCheckIncentiveSnapshots = (client: Wallet, config: Config) => {
   const incentiveAddresses = useQueryIncentiveContracts(client)
   const { data } = useQuery(
     ['useCheckIncentiveSnapshots', incentiveAddresses, epochId],
-    async () =>
-      fetchCheckIncentiveSnapshots(client, epochId, incentiveAddresses),
+    async () => fetchCheckIncentiveSnapshots(
+      client, epochId, incentiveAddresses,
+    ),
     {
       enabled:
         Boolean(client) && Boolean(incentiveAddresses) && Boolean(epochId),
-    }
+    },
   )
   return data ?? []
 }
@@ -24,7 +25,7 @@ export const useCheckIncentiveSnapshots = (client: Wallet, config: Config) => {
 const fetchCheckIncentiveSnapshots = async (
   client: Wallet,
   epochId: string,
-  incentiveAddresses: Array<string>
+  incentiveAddresses: Array<string>,
 ) => {
   const noSnapshotTakenAddresses = []
   // Incentive contract aka staking address
@@ -38,7 +39,7 @@ const fetchCheckIncentiveSnapshots = async (
         'error fetching global_weight for incentiveAddress ',
         incentiveAddress,
         ' epochId ',
-        epochId
+        epochId,
       )
       noSnapshotTakenAddresses.push(incentiveAddress)
     }

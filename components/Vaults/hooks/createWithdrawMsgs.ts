@@ -2,8 +2,7 @@ import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { createExecuteMessage } from 'util/messages'
 import { createIncreaseAllowanceMessage } from 'util/messages'
 
-export const toBase64 = (obj: object) =>
-  Buffer.from(JSON.stringify(obj)).toString('base64')
+export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
 
 export const createWithdrawMsg = ({ amount, vaultAddress }) => ({
   send: {
@@ -23,21 +22,20 @@ export const createWithdrawExecuteMsgs = ({
 }) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
-  increaseAllowanceMessages.push(
-    createIncreaseAllowanceMessage({
-      tokenAmount: amount,
-      tokenAddress: lpToken,
-      senderAddress,
-      swapAddress: vaultAddress,
-    })
-  )
+  increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
+    tokenAmount: amount,
+    tokenAddress: lpToken,
+    senderAddress,
+    swapAddress: vaultAddress,
+  }))
 
   return [
     ...increaseAllowanceMessages,
     createExecuteMessage({
       senderAddress,
       contractAddress: lpToken,
-      message: createWithdrawMsg({ amount, vaultAddress }),
+      message: createWithdrawMsg({ amount,
+        vaultAddress }),
     }),
   ]
 }

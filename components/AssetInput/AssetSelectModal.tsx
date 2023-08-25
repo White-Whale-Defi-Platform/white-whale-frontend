@@ -11,11 +11,11 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 import { Asset } from 'types/blockchain'
 
 import AssetList from './AssetList'
 import SearchInput from './SearchInput'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 
 interface AssetSelectModalProps {
   children: ReactNode
@@ -43,7 +43,8 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
 
   const onAssetChange = (asset, isTokenChange) => {
     setSearch(asset?.asset)
-    const newAsset = { ...asset, amount }
+    const newAsset = { ...asset,
+      amount }
     onChange(newAsset, isTokenChange)
     onClose()
   }
@@ -63,7 +64,8 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
         onClose={onClose}
         isOpen={isOpen}
         isCentered
-        size={{ base: 'full', md: '2xl' }}
+        size={{ base: 'full',
+          md: '2xl' }}
       >
         <ModalOverlay />
         <ModalContent backgroundColor="#212121">

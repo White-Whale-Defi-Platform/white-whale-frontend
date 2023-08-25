@@ -49,9 +49,7 @@ const Pools = () => {
   const { chainId, status } = useRecoilValue(walletState)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
   const isWalletConnected: boolean = status === WalletStatusType.connected
-  const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
-    !ACTIVE_INCENTIVE_NETWORKS.includes(chainId)
-  )
+  const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(!ACTIVE_INCENTIVE_NETWORKS.includes(chainId))
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const cosmwasmClient = useCosmwasmClient(chainId)
 
@@ -62,34 +60,26 @@ const Pools = () => {
     PoolEntityTypeWithLiquidity[],
     boolean,
     boolean
-  ] = useQueriesDataSelector(
-    useQueryPoolsLiquidity({
-      refetchInBackground: false,
-      pools: poolList?.pools,
-      client: cosmwasmClient,
-    })
-  )
-  const myPoolsLength = useMemo(
-    () =>
-      pools?.filter(
-        ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
-      )?.length,
-    [pools]
-  )
+  ] = useQueriesDataSelector(useQueryPoolsLiquidity({
+    refetchInBackground: false,
+    pools: poolList?.pools,
+    client: cosmwasmClient,
+  }))
+  const myPoolsLength = useMemo(() => pools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)?.length,
+    [pools])
 
   const chains: any = useChains()
-  const currentChainPrefix = useMemo(
-    () =>
-      chains.find((row) => row.chainId === chainId)?.bech32Config
-        ?.bech32PrefixAccAddr,
-    [chains, chainId]
-  )
+  const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
+    bech32PrefixAccAddr,
+  [chains, chainId])
 
   const {
     flowPoolData: incentivePoolInfos,
     poolsWithAprAnd24HrVolume: pairInfos,
     isLoading: isIncentivePoolInfoLoading,
-  } = useIncentivePoolInfo(cosmwasmClient, pools, currentChainPrefix)
+  } = useIncentivePoolInfo(
+    cosmwasmClient, pools, currentChainPrefix,
+  )
 
   // @ts-ignore
   if (window.debugLogsEnabled) {
@@ -122,38 +112,36 @@ const Pools = () => {
         ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
       }))
 
-      const _allPools = await Promise.all(
-        _pools.map(async (pool) => {
-          const isUSDPool =
+      const _allPools = await Promise.all(_pools.map(async (pool) => {
+        const isUSDPool =
             STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
             STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
 
-          return {
-            contract: pool?.swap_address,
-            pool: pool?.displayName,
-            poolId: pool?.pool_id,
-            token1Img: pool?.displayLogo1,
-            token2Img: pool?.displayLogo2,
-            apr: pool?.apr7d,
-            volume24hr: pool?.usdVolume24h,
-            totalLiq: pool?.TVL,
-            myPosition: calculateMyPosition(pool),
-            liquidity: pool?.liquidity,
-            poolAssets: pool?.pool_assets,
-            price: pool?.ratio,
-            isUSDPool,
-            flows: [],
-            incentives: <Incentives key={pool.pool_id} flows={[]} />,
-            action: (
-              <ActionCTAs
-                chainIdParam={chainIdParam}
-                chainId={chainId}
-                pool={pool}
-              />
-            ),
-          }
-        })
-      )
+        return {
+          contract: pool?.swap_address,
+          pool: pool?.displayName,
+          poolId: pool?.pool_id,
+          token1Img: pool?.displayLogo1,
+          token2Img: pool?.displayLogo2,
+          apr: pool?.apr7d,
+          volume24hr: pool?.usdVolume24h,
+          totalLiq: pool?.TVL,
+          myPosition: calculateMyPosition(pool),
+          liquidity: pool?.liquidity,
+          poolAssets: pool?.pool_assets,
+          price: pool?.ratio,
+          isUSDPool,
+          flows: [],
+          incentives: <Incentives key={pool.pool_id} flows={[]} />,
+          action: (
+            <ActionCTAs
+              chainIdParam={chainIdParam}
+              chainId={chainId}
+              pool={pool}
+            />
+          ),
+        }
+      }))
       setAllPools(_allPools)
       if (_allPools.length > 0) {
         setInitLoading(false)
@@ -163,30 +151,25 @@ const Pools = () => {
     initPools()
   }, [pools, incentivePoolInfos, incentivePoolsLoaded, pairInfos])
 
-  const flowLength = useMemo(
-    () =>
-      incentivePoolInfos
-        ?.map((info) => info.flowData?.length ?? 0)
-        .reduce((a, b) => a + b, 0) ?? 0,
-    [incentivePoolInfos]
-  )
+  const flowLength = useMemo(() => incentivePoolInfos?.
+    map((info) => info.flowData?.length ?? 0).
+    reduce((a, b) => a + b, 0) ?? 0,
+  [incentivePoolInfos])
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
       const flows =
-        incentivePoolInfos?.find((info) => info.poolId === pool.poolId)
-          ?.flowData ?? []
+        incentivePoolInfos?.find((info) => info.poolId === pool.poolId)?.
+          flowData ?? []
 
-      const incentiveBaseApr = flows.reduce(
-        (total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
-        0
-      )
+      const incentiveBaseApr = flows.reduce((total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
+        0)
 
       updateAPRHelperState(
         pool?.poolId,
         pool?.apr,
         incentiveBaseApr,
-        setAprHelperState
+        setAprHelperState,
       )
       if (flows) {
         return {
@@ -202,16 +185,14 @@ const Pools = () => {
 
   useEffect(() => {
     if (myPoolsLength > 0) {
-      const myPools = pools.filter(
-        ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
-      )
+      const myPools = pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       const myPoolIds = myPools.map((pool) => pool.pool_id)
       const updatedPools = allPools.map((pool) => {
         if (myPoolIds.includes(pool.poolId)) {
           return {
             ...pool,
-            liquidity: myPools.find((row) => row.pool_id === pool.poolId)
-              .liquidity,
+            liquidity: myPools.find((row) => row.pool_id === pool.poolId).
+              liquidity,
           }
         }
         return pool
@@ -236,29 +217,27 @@ const Pools = () => {
 
   useEffect(() => {
     if (allPools && isWalletConnected) {
-      const pools = allPools.filter(
-        ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
-      )
+      const pools = allPools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       setMyPools(pools)
     }
   }, [allPools])
   // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
-  const allPoolsForShown = useMemo(
-    () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
-    [allPools, myPoolsId]
-  )
+  const allPoolsForShown = useMemo(() => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
+    [allPools, myPoolsId])
   const parseLiquidity = (liqString) => {
     const value = parseFloat(liqString.replace(/[^\d.-]/g, ''))
-    // We do this mutation because by now we already have modified the string to include a letter abbreviation
-    // if the liquidity goes over 1000
-    // If its in the thousands, multiple the value by 1000, if the millions 1000000
+    /*
+     * We do this mutation because by now we already have modified the string to include a letter abbreviation
+     * if the liquidity goes over 1000
+     * If its in the thousands, multiple the value by 1000, if the millions 1000000
+     */
     return liqString.toUpperCase().includes('K')
       ? value * 1000
       : liqString.toUpperCase().includes('M')
-      ? value * 1000000
-      : value
+        ? value * 1000000
+        : value
   }
   const showAllPoolsList = useMemo(() => {
     const pools = allPoolsForShown
@@ -269,7 +248,8 @@ const Pools = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: 'auto' }}
+      width={{ base: '100%',
+        md: 'auto' }}
       alignItems="center"
       margin="auto"
     >

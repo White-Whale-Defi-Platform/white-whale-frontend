@@ -20,7 +20,7 @@ const useTxInfo = ({ txHash, client }) => {
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   return txInfo

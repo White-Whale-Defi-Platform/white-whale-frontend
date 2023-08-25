@@ -85,7 +85,9 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(senderAddress, debouncedMsgs, '')
+        const response = await client.simulate(
+          senderAddress, debouncedMsgs, '',
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -93,15 +95,15 @@ export const useTransaction = ({
         return response
       } catch (error) {
         if (
-          /insufficient funds/i.test(error.toString()) ||
-          /Overflow: Cannot Sub with/i.test(error.toString())
+          (/insufficient funds/i).test(error.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(error.toString())
         ) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/Max spread assertion/i.test(error.toString())) {
+        } else if ((/Max spread assertion/i).test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -139,81 +141,78 @@ export const useTransaction = ({
       onError: () => {
         setTxStep(TxStep.Idle)
       },
-    }
+    },
   )
 
-  const { mutate } = useMutation(
-    (data: any) =>
-      directTokenSwap({
-        tokenA,
-        swapAddress,
-        senderAddress,
-        msgs,
-        tokenAmount: amount,
-        client,
-      }),
-    {
-      onMutate: () => {
-        setTxStep(TxStep.Posting)
-      },
-      onError: (e: any) => {
-        let message = ''
-        console.error({ message: e?.message() })
-        console.error(e?.toString())
-        if (
-          /insufficient funds/i.test(e?.toString()) ||
-          /Overflow: Cannot Sub with/i.test(e?.toString())
-        ) {
-          setError('Insufficient Funds')
-          message = 'Insufficient Funds'
-        } else if (/Max spread assertion/i.test(e?.toString())) {
-          setError('Try increasing slippage')
-          message = 'Try increasing slippage'
-        } else if (/Request rejected/i.test(e?.toString())) {
-          setError('User Denied')
-          message = 'User Denied'
-        } else {
-          setError('Failed to execute transaction.')
-          message = 'Failed to execute transaction.'
-        }
+  const { mutate } = useMutation((data: any) => directTokenSwap({
+    tokenA,
+    swapAddress,
+    senderAddress,
+    msgs,
+    tokenAmount: amount,
+    client,
+  }),
+  {
+    onMutate: () => {
+      setTxStep(TxStep.Posting)
+    },
+    onError: (e: any) => {
+      let message = ''
+      console.error({ message: e?.message() })
+      console.error(e?.toString())
+      if (
+        (/insufficient funds/i).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(e?.toString())
+      ) {
+        setError('Insufficient Funds')
+        message = 'Insufficient Funds'
+      } else if ((/Max spread assertion/i).test(e?.toString())) {
+        setError('Try increasing slippage')
+        message = 'Try increasing slippage'
+      } else if ((/Request rejected/i).test(e?.toString())) {
+        setError('User Denied')
+        message = 'User Denied'
+      } else {
+        setError('Failed to execute transaction.')
+        message = 'Failed to execute transaction.'
+      }
 
-        toast({
-          title: 'Swap Failed.',
-          description: message,
-          status: 'error',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
+      toast({
+        title: 'Swap Failed.',
+        description: message,
+        status: 'error',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
 
-        setTxStep(TxStep.Failed)
+      setTxStep(TxStep.Failed)
 
-        onError?.()
-      },
-      onSuccess: (data: any) => {
-        setTxStep(TxStep.Broadcasting)
-        setTxHash(data.transactionHash || data?.txHash)
-        onBroadcasting?.(data.transactionHash)
-        queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
-        toast({
-          title: 'Swap Success.',
-          description: (
-            <Finder
-              txHash={data.transactionHash || data?.txHash}
-              chainId={client?.client?.chainId || client?.chainID}
-            >
-              {' '}
+      onError?.()
+    },
+    onSuccess: (data: any) => {
+      setTxStep(TxStep.Broadcasting)
+      setTxHash(data.transactionHash || data?.txHash)
+      onBroadcasting?.(data.transactionHash)
+      queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+      toast({
+        title: 'Swap Success.',
+        description: (
+          <Finder
+            txHash={data.transactionHash || data?.txHash}
+            chainId={client?.client?.chainId || client?.chainID}
+          >
+            {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
-            </Finder>
-          ),
-          status: 'success',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
-      },
-    }
-  )
+          </Finder>
+        ),
+        status: 'success',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
+    },
+  })
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
@@ -226,7 +225,7 @@ export const useTransaction = ({
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   const reset = () => {
@@ -269,19 +268,17 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(
-    () => ({
-      fee,
-      buttonLabel,
-      submit,
-      txStep,
-      txInfo,
-      txHash,
-      error,
-      reset,
-    }),
-    [txStep, txInfo, txHash, error, reset, fee]
-  )
+  return useMemo(() => ({
+    fee,
+    buttonLabel,
+    submit,
+    txStep,
+    txInfo,
+    txHash,
+    error,
+    reset,
+  }),
+  [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

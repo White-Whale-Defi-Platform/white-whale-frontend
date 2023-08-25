@@ -1,9 +1,8 @@
 import { useQuery } from 'react-query'
 
+import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
 
 export type TokenList = {
   base_token: TokenInfo
@@ -40,7 +39,7 @@ export const useTokenList = () => {
       onError(e) {
         console.error('Error generating token list:', e)
       },
-    }
+    },
   )
 
   const isLoading = !poolsListResponse?.pools

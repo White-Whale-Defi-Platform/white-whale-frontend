@@ -45,7 +45,8 @@ export const useTokenSwap = ({
 
   const tokenA = useTokenInfo(tokenASymbol)
   const tokenB = useTokenInfo(tokenBSymbol)
-  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
+  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA,
+    tokenB })
   const refetchQueries = useRefetchQueries(['tokenBalance'])
 
   return useMutation(
@@ -57,10 +58,8 @@ export const useTokenSwap = ({
 
       setTransactionState(TransactionStatus.EXECUTING)
 
-      const tokenAmount = convertDenomToMicroDenom(
-        providedTokenAmount,
-        tokenA.decimals
-      )
+      const tokenAmount = convertDenomToMicroDenom(providedTokenAmount,
+        tokenA.decimals)
 
       const price = convertDenomToMicroDenom(tokenToTokenPrice, tokenB.decimals)
 
@@ -124,9 +123,7 @@ export const useTokenSwap = ({
       onError(e) {
         const errorMessage =
           String(e).length > 300
-            ? `${String(e).substring(0, 150)} ... ${String(e).substring(
-                String(e).length - 150
-              )}`
+            ? `${String(e).substring(0, 150)} ... ${String(e).substring(String(e).length - 150)}`
             : String(e)
 
         toast.custom((t) => (
@@ -152,6 +149,6 @@ export const useTokenSwap = ({
       onSettled() {
         setTransactionState(TransactionStatus.IDLE)
       },
-    }
+    },
   )
 }

@@ -47,7 +47,9 @@ export type VaultsResponse = {
   tags: Record<string, { name: string; description: string }>
 }
 
-const queryShare = (client, contract, amount) => {
+const queryShare = (
+  client, contract, amount,
+) => {
   if (!amount) {
     return null
   }
@@ -55,7 +57,9 @@ const queryShare = (client, contract, amount) => {
     share: { amount },
   })
 }
-const queryVault = async (client, contract, tokenInfo, getTokenDollarValue) => {
+const queryVault = async (
+  client, contract, tokenInfo, getTokenDollarValue,
+) => {
   const info = await client.queryContractSmart(contract, {
     token_info: {},
   })
@@ -65,7 +69,8 @@ const queryVault = async (client, contract, tokenInfo, getTokenDollarValue) => {
     tokenAmountInDenom: fromChainAmount(info?.total_supply),
   })
 
-  return { ...info, dollarValue: formatPrice(dollarValue) }
+  return { ...info,
+    dollarValue: formatPrice(dollarValue) }
 }
 
 const queryBalance = async (
@@ -74,13 +79,15 @@ const queryBalance = async (
   address,
   vault,
   tokenInfo,
-  getTokenDollarValue
+  getTokenDollarValue,
 ) => {
   const lpBalance = await client.queryContractSmart(contract, {
     balance: { address },
   })
 
-  const underlyingAsset = await queryShare(client, vault, lpBalance?.balance)
+  const underlyingAsset = await queryShare(
+    client, vault, lpBalance?.balance,
+  )
   const dollarValue = await getTokenDollarValue({
     tokenA: tokenInfo,
     tokenAmountInDenom: fromChainAmount(underlyingAsset),
@@ -93,7 +100,9 @@ const queryBalance = async (
   }
 }
 
-export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
+export const useVaultDeposit = (
+  lpToken: string, vaultAddress, tokenInfo,
+) => {
   const { chainId, client, address } = useRecoilValue(walletState)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
@@ -103,25 +112,26 @@ export const useVaultDeposit = (lpToken: string, vaultAddress, tokenInfo) => {
     refetch,
   } = useQuery(
     ['vaultsDeposit', lpToken, chainId],
-    async () =>
-      queryBalance(
-        client,
-        lpToken,
-        address,
-        vaultAddress,
-        tokenInfo,
-        getTokenDollarValue
-      ),
+    async () => queryBalance(
+      client,
+      lpToken,
+      address,
+      vaultAddress,
+      tokenInfo,
+      getTokenDollarValue,
+    ),
     {
       enabled:
         Boolean(chainId) &&
         Boolean(client) &&
         Boolean(lpToken) &&
         Boolean(getTokenDollarValue),
-    }
+    },
   )
 
-  return { balance, isLoading, refetch }
+  return { balance,
+    isLoading,
+    refetch }
 }
 export const useVaultMultiDeposit = (lpTokens: any[]) => {
   const { chainId, client, address } = useRecoilValue(walletState)
@@ -133,25 +143,22 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     refetch,
   } = useQuery(
     ['vaultsDeposits', lpTokens, chainId],
-    async () =>
-      Promise.all(
-        lpTokens.map(({ lp_token, vault_address, vault_assets }) =>
-          queryBalance(
-            client,
-            lp_token,
-            address,
-            vault_address,
-            vault_assets,
-            getTokenDollarValue
-          )
-        )
-      ),
+    async () => Promise.all(lpTokens.map(({ lp_token, vault_address, vault_assets }) => queryBalance(
+      client,
+      lp_token,
+      address,
+      vault_address,
+      vault_assets,
+      getTokenDollarValue,
+    ))),
     {
       enabled: Boolean(chainId) && Boolean(client) && Boolean(lpTokens?.length),
-    }
+    },
   )
 
-  return { balance, isLoading, refetch }
+  return { balance,
+    isLoading,
+    refetch }
 }
 export const useVaultTotal = (lpTokenIds: any[]) => {
   const { chainId } = useRecoilValue(walletState)
@@ -159,24 +166,20 @@ export const useVaultTotal = (lpTokenIds: any[]) => {
   const cosmwasmClient = useCosmwasmClient(chainId)
   const { data: balance, isLoading } = useQuery(
     ['vaultsInfo', lpTokenIds, chainId, isQueryLoading],
-    async () =>
-      Promise.all(
-        lpTokenIds.map(({ lp_token, vault_assets }) =>
-          queryVault(
-            cosmwasmClient,
-            lp_token,
-            vault_assets,
-            getTokenDollarValue
-          )
-        )
-      ),
+    async () => Promise.all(lpTokenIds.map(({ lp_token, vault_assets }) => queryVault(
+      cosmwasmClient,
+      lp_token,
+      vault_assets,
+      getTokenDollarValue,
+    ))),
     {
       enabled:
         Boolean(chainId) && Boolean(lpTokenIds) && Boolean(getTokenDollarValue),
       refetchOnMount: false,
-    }
+    },
   )
-  return { balance, isLoading }
+  return { balance,
+    isLoading }
 }
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
@@ -192,23 +195,19 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
       ...options,
       enabled: Boolean(chainId) && Boolean(network),
       refetchOnMount: false,
-    }
+    },
   )
 
   // Const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
-  const { balance, refetch } = useVaultMultiDeposit(
-    vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
-      lp_token,
-      vault_address,
-      vault_assets,
-    }))
-  )
-  const { balance: vaultInfo } = useVaultTotal(
-    vaults?.vaults?.map(({ lp_token, vault_assets }) => ({
-      lp_token,
-      vault_assets,
-    }))
-  )
+  const { balance, refetch } = useVaultMultiDeposit(vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
+    lp_token,
+    vault_address,
+    vault_assets,
+  })))
+  const { balance: vaultInfo } = useVaultTotal(vaults?.vaults?.map(({ lp_token, vault_assets }) => ({
+    lp_token,
+    vault_assets,
+  })))
 
   const withBalance = useMemo(() => {
     if (!vaults) {
@@ -222,10 +221,13 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
       totalDeposit: vaultInfo?.[index],
     }))
 
-    return { ...vaults, vaults: _vaults }
+    return { ...vaults,
+      vaults: _vaults }
   }, [balance, vaults, vaultInfo])
 
-  return { vaults: withBalance, isLoading, refetch }
+  return { vaults: withBalance,
+    isLoading,
+    refetch }
 }
 
 export default useVaults

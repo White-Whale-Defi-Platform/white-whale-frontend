@@ -32,9 +32,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { connectKeplr } = useConnectKeplr()
   const { connectLeap } = useConnectLeap()
   const { connectCosmostation } = useConnectCosmostation()
-  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(
-    () => {}
-  )
+  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(() => {})
   const { availableConnections } = useWallet()
 
   useEffect(() => {
@@ -91,7 +89,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     ) {
       await router.push('/swap')
     }
-    setCurrentWalletState({ ...currentWalletState, chainId: chain.chainId })
+    setCurrentWalletState({ ...currentWalletState,
+      chainId: chain.chainId })
   }
 
   useEffect(() => {
@@ -119,9 +118,7 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     }
 
     // Update route
-    const sourceChain = chains.find(
-      (row) => row.chainId.toLowerCase() === currentWalletState.chainId
-    )
+    const sourceChain = chains.find((row) => row.chainId.toLowerCase() === currentWalletState.chainId)
     if (sourceChain && !router.pathname.includes('/404')) {
       const path = getPathName(router, sourceChain.label)
       router.push(path)
@@ -163,7 +160,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           onChainChange={onChainChange}
           currentWalletState={currentWalletState}
         />
-        <Box display={{ base: 'none', md: 'block' }}>
+        <Box display={{ base: 'none',
+          md: 'block' }}>
           <Divider
             orientation="vertical"
             borderColor="rgba(255, 255, 255, 0.1);"

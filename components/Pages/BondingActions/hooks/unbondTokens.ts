@@ -6,7 +6,7 @@ export const unbondTokens = (
   address: string,
   amount: number,
   denom: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     unbond: {
@@ -20,5 +20,7 @@ export const unbondTokens = (
       },
     },
   }
-  return client.execute(address, config.whale_lair, handleMsg)
+  return client.execute(
+    address, config.whale_lair, handleMsg,
+  )
 }

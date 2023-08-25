@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
+import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
 import AssetInput from '../../AssetInput'
 import { BondingTokenState, TokenBalance } from './Bond'
 import { bondingAtom } from './bondAtoms'
-import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   const { status, chainId, network } = useRecoilValue(walletState)
@@ -21,26 +21,24 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
-    const newBalances = bondedAssets?.map((asset: BondedData) => {
-      return { amount: asset.amount, tokenSymbol: asset.tokenSymbol }
-    })
+    const newBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
+      tokenSymbol: asset.tokenSymbol }))
     setBondedBalances(newBalances)
   }, [bondedAssets])
 
-  const onInputChange = useCallback(
-    (tokenSymbol: string | null, amount: number) => {
-      if (tokenSymbol) {
-        setCurrentBondState({
-          ...currentBondState,
-          tokenSymbol,
-          amount: Number(amount),
-        })
-      } else {
-        setCurrentBondState({ ...currentBondState, amount: Number(amount) })
-      }
-    },
-    [currentBondState]
-  )
+  const onInputChange = useCallback((tokenSymbol: string | null, amount: number) => {
+    if (tokenSymbol) {
+      setCurrentBondState({
+        ...currentBondState,
+        tokenSymbol,
+        amount: Number(amount),
+      })
+    } else {
+      setCurrentBondState({ ...currentBondState,
+        amount: Number(amount) })
+    }
+  },
+  [currentBondState])
 
   useEffect(() => {
     if (config) {
@@ -61,13 +59,8 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
     },
   })
 
-  const currentTokenBalance = useMemo(
-    () =>
-      bondedBalances?.find(
-        (balance) => balance.tokenSymbol === currentBondState.tokenSymbol
-      )?.amount,
-    [bondedBalances, currentBondState.tokenSymbol]
-  )
+  const currentTokenBalance = useMemo(() => bondedBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol)?.amount,
+    [bondedBalances, currentBondState.tokenSymbol])
 
   return (
     <VStack px={7} width="full">

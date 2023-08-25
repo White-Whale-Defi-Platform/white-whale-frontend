@@ -56,7 +56,8 @@ async function fetchTokenBalance({
    */
   if (token_address) {
     try {
-      const balance = await CW20(client).use(token_address).balance(address)
+      const balance = await CW20(client).use(token_address).
+        balance(address)
       return convertMicroDenomToDenom(Number(balance), decimals)
     } catch (err) {
       return 0
@@ -124,9 +125,11 @@ export const useTokenBalance = (tokenSymbol: string) => {
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
-    }
+    },
   )
-  return { balance, isLoading, refetch }
+  return { balance,
+    isLoading,
+    refetch }
 }
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
@@ -135,36 +138,25 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
 
-  const queryKey = useMemo(
-    () => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
-    [tokenSymbols]
-  )
+  const queryKey = useMemo(() => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
+    [tokenSymbols])
 
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
-    async () =>
-      Promise.all(
-        tokenSymbols
-          // .filter(Boolean)
-          .map((tokenSymbol) =>
-            fetchTokenBalance({
-              client,
-              address,
-              token:
+    async () => Promise.all(tokenSymbols.
+    // .filter(Boolean)
+      map((tokenSymbol) => fetchTokenBalance({
+        client,
+        address,
+        token:
                 getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
-                mapIbcTokenToNative(
-                  getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)
-                ) ||
+                mapIbcTokenToNative(getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)) ||
                 {},
-            })
-          )
-      ),
+      }))),
     {
-      enabled: Boolean(
-        status === WalletStatusType.connected &&
+      enabled: Boolean(status === WalletStatusType.connected &&
           tokenSymbols?.length &&
-          tokenList?.tokens
-      ),
+          tokenList?.tokens),
 
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
@@ -173,7 +165,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
       onError(error) {
         console.error('Cannot fetch token balance bc:', error)
       },
-    }
+    },
   )
 
   return [data, isLoading] as const

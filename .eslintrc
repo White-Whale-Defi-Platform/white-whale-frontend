@@ -1,5 +1,4 @@
 {
-  
   "extends": [
     "next",
     "next/core-web-vitals",
@@ -18,7 +17,10 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": [],
+  "plugins": [
+    "eslint-plugin-import-helpers",
+    "@typescript-eslint"
+  ],
   "rules": {
     // Possible Problems
     "array-callback-return": [
@@ -287,7 +289,7 @@
     "no-lone-blocks": "error",
     "no-lonely-if": "off",
     "no-loop-func": "error",
-    "no-magic-numbers": "error",
+    "no-magic-numbers": "off",
     "no-mixed-operators": "error",
     "no-multi-assign": "error",
     "no-multi-str": "error",
@@ -325,7 +327,7 @@
     "no-return-await": "off",
     "no-script-url": "error",
     "no-sequences": "error",
-    "no-shadow": [
+    "@typescript-eslint/no-shadow": [
       "error",
       {
         "builtinGlobals": true,
@@ -397,7 +399,7 @@
     "prefer-template": "error",
     "quote-props": [
       "error",
-      "always"
+      "as-needed"
     ],
     "radix": [
       "error",
@@ -407,7 +409,7 @@
     "require-unicode-regexp": "error",
     "require-yield": "error",
     "sort-imports": "off", // We use "import-helpers".
-    "sort-keys": "error",
+    "sort-keys": "off",
     "sort-vars": "error",
     "spaced-comment": "error",
     "strict": "error",
@@ -422,7 +424,10 @@
     "arrow-spacing": "error",
     "block-spacing": "error",
     "brace-style": "error",
-    "comma-dangle": "error",
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
     "comma-spacing": "error",
     "comma-style": "error",
     "computed-property-spacing": "error",
@@ -432,13 +437,16 @@
     "function-call-argument-newline": "off",
     "function-paren-newline": [
       "error",
-      "never"
+      { "minItems": 3 }
     ],
     "generator-star-spacing": "error",
     "implicit-arrow-linebreak": "error",
     "indent": [
       "error",
-      2
+      2,
+      {
+        "SwitchCase": 1
+      }
     ],
     "jsx-quotes": "error",
     "key-spacing": "error",
@@ -466,7 +474,10 @@
     "no-whitespace-before-property": "error",
     "nonblock-statement-body-position": "error",
     "object-curly-newline": "off",
-    "object-curly-spacing": ["error", "always"],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
     "object-property-newline": "error",
     "operator-linebreak": "off",
     "padded-blocks": [
@@ -485,7 +496,11 @@
     "space-before-blocks": "error",
     "space-before-function-paren": [
       "error",
-      "never"
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
     ],
     "space-in-parens": "error",
     "space-infix-ops": "error",
@@ -525,7 +540,7 @@
       }
     ],
     "@typescript-eslint/no-explicit-any": "off",
-    "import/prefer-default-export": "off",
+    "import/prefer-default-export": "error",
     "react/destructuring-assignment": [
       "warn",
       "always",

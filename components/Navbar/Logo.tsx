@@ -12,11 +12,10 @@ const Logo = () => {
     <HStack alignItems="center">
       <Link href="/">
         <a
-          onClick={() =>
-            setCurrentWalletState({
-              ...currentWalletState,
-              chainId: 'migaloo-1',
-            })
+          onClick={() => setCurrentWalletState({
+            ...currentWalletState,
+            chainId: 'migaloo-1',
+          })
           }
         >
           <Image src="/img/logo.svg" alt="WhiteWhale Logo" boxSize={[8, 12]} />

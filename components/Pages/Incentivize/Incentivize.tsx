@@ -32,10 +32,8 @@ const Incentivize: FC = () => {
   const { chainId } = useRecoilValue(walletState)
   const { data: poolList } = usePoolsListQuery()
 
-  const poolId = useMemo(
-    () => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
-    [poolList]
-  )
+  const poolId = useMemo(() => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
+    [poolList])
   const chainIdParam = router.query.chainId as string
   const currentChain = chains.find((row) => row.chainId === chainId)
 
@@ -47,21 +45,17 @@ const Incentivize: FC = () => {
       if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
         router.push(`/${currentChain.label.toLowerCase()}/pools`)
       } else {
-        router.push(
-          `/${currentChain.label.toLowerCase()}/pools/incentivize?poolId=${poolId}`
-        )
+        router.push(`/${currentChain.label.toLowerCase()}/pools/incentivize?poolId=${poolId}`)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolId, poolList, currentChain])
 
-  const [pools] = useQueriesDataSelector(
-    useQueryPoolsLiquidity({
-      refetchInBackground: false,
-      pools: poolList?.pools,
-      client,
-    })
-  )
+  const [pools] = useQueriesDataSelector(useQueryPoolsLiquidity({
+    refetchInBackground: false,
+    pools: poolList?.pools,
+    client,
+  }))
 
   const myFlows = useMemo(() => {
     if (!pools || !poolId) {
@@ -74,7 +68,8 @@ const Incentivize: FC = () => {
 
   return (
     <VStack
-      minWidth={{ base: '100%', md: '880' }}
+      minWidth={{ base: '100%',
+        md: '880' }}
       alignItems="center"
       padding={5}
     >

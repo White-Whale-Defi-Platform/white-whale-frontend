@@ -29,13 +29,13 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
 
+import PositionsOverview from '../Incentivize/PositionsOverview'
 import Claim from './Claim'
 import DepositForm from './DepositForm'
 import useProvideLP from './hooks/useProvideLP'
 import { tokenLpAtom } from './lpAtoms'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
-import PositionsOverview from '../Incentivize/PositionsOverview'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()
@@ -46,42 +46,36 @@ const ManageLiquidity: FC = () => {
   const { data: poolList } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
   const [bondingDays, setBondingDays] = useState(0)
-  const { simulated, tx } = useProvideLP({ reverse, bondingDays })
+  const { simulated, tx } = useProvideLP({ reverse,
+    bondingDays })
   const cosmwasmClient = useCosmwasmClient(chainId)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
-    useQueriesDataSelector(
-      useQueryPoolsLiquidity({
-        refetchInBackground: false,
-        pools: poolList?.pools,
-        client: cosmwasmClient,
-      })
-    )
+    useQueriesDataSelector(useQueryPoolsLiquidity({
+      refetchInBackground: false,
+      pools: poolList?.pools,
+      client: cosmwasmClient,
+    }))
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
-  const currentChainPrefix = useMemo(
-    () =>
-      chains.find((row) => row.chainId === chainId)?.bech32Config
-        ?.bech32PrefixAccAddr,
-    [chains, chainId]
-  )
+  const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
+    bech32PrefixAccAddr,
+  [chains, chainId])
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
     client,
     pools,
-    currentChainPrefix
+    currentChainPrefix,
   )
 
-  const pool = useMemo(
-    () => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
-    [poolId, poolList]
-  )
+  const pool = useMemo(() => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
+    [poolId, poolList])
   // TODO pool user share might be falsy
-  const poolUserShare = usePoolUserShare(client, pool?.staking_address, address)
+  const poolUserShare = usePoolUserShare(
+    client, pool?.staking_address, address,
+  )
 
   const dailyEmissionData = useMemo(() => {
-    const incentivePoolInfo = incentivePoolInfos?.find(
-      (info) => info.poolId === poolId
-    )
+    const incentivePoolInfo = incentivePoolInfos?.find((info) => info.poolId === poolId)
     if (!poolUserShare) {
       return null
     }
@@ -108,9 +102,7 @@ const ManageLiquidity: FC = () => {
         if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
           router.push(`/${currentChain.label.toLowerCase()}/pools`)
         } else {
-          router.push(
-            `/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
-          )
+          router.push(`/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`)
         }
       }
     }
@@ -191,7 +183,8 @@ const ManageLiquidity: FC = () => {
   return (
     <VStack
       w="auto"
-      minWidth={{ base: '100%', md: '800' }}
+      minWidth={{ base: '100%',
+        md: '800' }}
       alignItems="center"
       padding={5}
     >

@@ -19,13 +19,11 @@ export const queryLiquidityBalance = async ({
     if (isNative) {
       balance = Number((await client.getBalance(address, tokenAddress)).amount)
     } else {
-      balance = Number(
-        (
-          await client.queryContractSmart(tokenAddress, {
-            balance: { address },
-          })
-        ).balance
-      )
+      balance = Number((
+        await client.queryContractSmart(tokenAddress, {
+          balance: { address },
+        })
+      ).balance)
     }
 
     return protectAgainstNaN(balance)

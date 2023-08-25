@@ -53,32 +53,38 @@ export const useConfig = (network: NetworkType, chainId: string) => {
   return config
 }
 
-export const useDashboardData = (client, address, network, chainId) => {
-  const debouncedRefetch = useMemo(
-    () => debounce((refetchFunc) => refetchFunc(), 500),
-    []
-  )
+export const useDashboardData = (
+  client, address, network, chainId,
+) => {
+  const debouncedRefetch = useMemo(() => debounce((refetchFunc) => refetchFunc(), 500),
+    [])
   const config: Config = useConfig(network, chainId)
   const queryClient = useCosmwasmClient(chainId)
 
   const queries = useQueries([
     {
       queryKey: ['bonded', address, network, chainId],
-      queryFn: () => getBonded(client, address, config),
+      queryFn: () => getBonded(
+        client, address, config,
+      ),
       enabled: Boolean(client) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['unbonding', address, network, chainId],
-      queryFn: () => getUnbonding(client, address, config),
+      queryFn: () => getUnbonding(
+        client, address, config,
+      ),
       enabled: Boolean(client) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['withdrawable', address, network, chainId],
-      queryFn: () => getWithdrawable(client, address, config),
+      queryFn: () => getWithdrawable(
+        client, address, config,
+      ),
       enabled: Boolean(client) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
@@ -90,7 +96,9 @@ export const useDashboardData = (client, address, network, chainId) => {
     },
     {
       queryKey: ['weightInfo', address, network, chainId],
-      queryFn: () => getWeight(client, address, config),
+      queryFn: () => getWeight(
+        client, address, config,
+      ),
       enabled: Boolean(client) && Boolean(address) && Boolean(config),
     },
     {
@@ -110,7 +118,9 @@ export const useDashboardData = (client, address, network, chainId) => {
     },
     {
       queryKey: ['claimableRewards', address, network, chainId],
-      queryFn: () => getClaimable(client, address, config),
+      queryFn: () => getClaimable(
+        client, address, config,
+      ),
       enabled: Boolean(client) && Boolean(address) && Boolean(config),
     },
     {
@@ -120,14 +130,8 @@ export const useDashboardData = (client, address, network, chainId) => {
     },
   ])
 
-  const isLoading = useMemo(
-    () =>
-      queries.some(
-        (query) =>
-          query.isLoading || query.data === null || query.data === undefined
-      ),
-    [queries]
-  )
+  const isLoading = useMemo(() => queries.some((query) => query.isLoading || query.data === null || query.data === undefined),
+    [queries])
 
   const refetchAll = () => {
     queries.forEach((query) => {
@@ -160,5 +164,7 @@ export const useDashboardData = (client, address, network, chainId) => {
     }
   }, [queries])
 
-  return { ...data, isLoading, refetch: refetchAll }
+  return { ...data,
+    isLoading,
+    refetch: refetchAll }
 }
