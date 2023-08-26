@@ -1,0 +1,78 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": [
+    "special tokens"
+  ],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2023-08-16T00:00:00+00:00",
+  "base_token": {
+    "id": "terra-classic",
+    "chain_id": "columbus-5",
+    "token_address": "",
+    "symbol": "LUNC",
+    "name": "Lunc",
+    "decimals": 6,
+    "logoURI": "/logos/lunc.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": ""
+  },
+  "routerAddress": "",
+  "pools": [
+    {
+      "pool_id": "WHALE-SEI",
+      "lpOrder": [
+        "WHALE",
+        "LUNC"
+      ],
+      "assetOrder": [
+        "LUNC","WHALE"
+      ],
+      "displayName": "LUNC-WHALE",
+      "displayLogo1": "/logos/lunc.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "terra-classic",
+          "chain_id": "columbus-5",
+          "token_address": "",
+          "symbol": "LUNC",
+          "name": "Lunc",
+          "decimals": 6,
+          "logoURI": "/logos/lunc.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": ""
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "columbus-5",
+          "token_address": "",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": ""
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "whale_lair": "",
+  "incentive_factory": "",
+  "fee_distributor": "",
+  "frontend_helper": "",
+  "whale_base_token": {
+    "name": "WHALE",
+    "denom": "",
+    "decimals": 6
+  },
+  "bonding_tokens": [
+    {
+      "tokenSymbol": "WHALE",
+      "denom": "",
+      "decimals": 6
+    }
+  ]
+}
+
