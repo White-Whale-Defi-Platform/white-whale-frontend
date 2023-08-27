@@ -35,7 +35,6 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { availableConnections } = useWallet()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
 
-
   useEffect(() => {
     if (!router.query.chainId) {
       return
@@ -44,7 +43,6 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   }, [router.query.chainId])
 
   useEffect(() => {
-
     if (router.pathname === '/') {
       return
     }
@@ -71,7 +69,6 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       })
     }
     setInitialized(true)
-
   }, [chainIdParam])
 
   const denom = useMemo(() => {
