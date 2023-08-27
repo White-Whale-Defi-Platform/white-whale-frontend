@@ -1,8 +1,0 @@
-[[plugins]]
-package = "@netlify/plugin-nextjs"
-
-[[redirects]]
-  from = "/"
-  to = "/migaloo/swap"
-  status = 302
-  force = true # COMMENT: ensure that we always redirect

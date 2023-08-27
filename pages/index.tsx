@@ -5,12 +5,9 @@ import { NextRouter, useRouter } from 'next/router'
 const Index = () => {
   const router: NextRouter = useRouter()
 
-  /*
-   * UseEffect(() => {
-   *   router.replace('/migaloo/swap')
-   *   // eslint-disable-next-line react-hooks/exhaustive-deps
-   * }, [])
-   */
+   useEffect(() => {
+     router.replace('/migaloo/swap')
+    }, [])
 
   return <div></div>
 }
