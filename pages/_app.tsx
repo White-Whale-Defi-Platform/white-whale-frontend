@@ -9,8 +9,7 @@ import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import {
   StaticWalletProvider,
   WalletControllerChainOptions,
-  WalletProvider,
-  getChainOptions,
+  WalletProvider
 } from '@terra-money/wallet-provider'
 import AppLoading from 'components/AppLoading'
 import AppLayout from 'components/Layout/AppLayout'
