@@ -26,6 +26,7 @@ import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
+import luncMenuLinks from './LUNCNavMenu.json'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
@@ -102,7 +103,7 @@ const Navbar = () => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
-          {(ACTIVE_BONDING_NETWORKS.includes(chainId)
+          {(chainId === 'columbus-5' ? luncMenuLinks : ACTIVE_BONDING_NETWORKS.includes(chainId)
             ? menuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (

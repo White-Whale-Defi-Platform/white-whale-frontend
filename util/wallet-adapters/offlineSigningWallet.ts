@@ -3,7 +3,7 @@ import {
   ExecuteResult,
   SigningCosmWasmClient,
 } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { Coin } from '@cosmjs/launchpad'
+import { Coin, StdFee } from '@cosmjs/launchpad'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { SigningStargateClientOptions } from '@cosmjs/stargate/build/signingstargateclient'
 import { Network as InjectiveNetwork } from '@injectivelabs/networks'
@@ -65,9 +65,10 @@ export class OfflineSigningWallet implements Wallet {
     senderAddress: string,
     msgs: EncodeObject[],
     memo?: string,
+    fee?: StdFee,
   ): Promise<TxResponse> {
     return this.client.signAndBroadcast(
-      senderAddress, msgs, 'auto', memo,
+      senderAddress, msgs, fee || 'auto', memo,
     )
   }
 
@@ -76,13 +77,14 @@ export class OfflineSigningWallet implements Wallet {
     contractAddress: string,
     msg: Record<string, unknown>,
     funds: readonly Coin[] | undefined,
+    fee?: StdFee,
   ): Promise<ExecuteResult> {
     return this.client.execute(
       senderAddress,
       contractAddress,
       msg,
-      'auto',
-      undefined,
+      fee || 'auto',
+      null,
       funds,
     )
   }

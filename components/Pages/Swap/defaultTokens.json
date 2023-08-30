@@ -69,6 +69,16 @@
         "tokenSymbol": "SEI",
         "amount": 0
       }
+    ],
+    "terra-classic": [
+      {
+        "tokenSymbol": "LUNC",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "WHALE",
+        "amount": 0
+      }
     ]
   },
   "testnet": {

@@ -7,6 +7,7 @@ export const ACTIVE_NETWORKS = {
     migaloo: 'migaloo-1',
     terra: 'phoenix-1',
     sei: 'pacific-1',
+    'terra-classic': 'columbus-5',
   },
   testnet: {
     comdex: 'comdex-test2',
@@ -15,6 +16,7 @@ export const ACTIVE_NETWORKS = {
     narwhal: 'narwhal-1',
     terra: 'pisco-1',
     sei: 'sei-devnet-1',
+    'terra-classic': 'rebel-2',
   },
 }
 
@@ -25,6 +27,7 @@ export const ACTIVE_BONDING_NETWORKS = [
   'narwhal-1',
   'phoenix-1',
   'pacific-1',
+  'columbus-5',
 ]
 export const ACTIVE_INCENTIVE_NETWORKS = [
   'chihuahua-1',
@@ -41,6 +44,7 @@ export const MAINNET_TESTNET_MAP = {
   'phoenix-1': 'pisco-1',
   'pisco-1': 'phoenix-1',
   'pacific-1': 'sei-devnet-1',
+  'columbus-5': 'rebel-2',
 }
 
 export const NETWORK_MAP = {

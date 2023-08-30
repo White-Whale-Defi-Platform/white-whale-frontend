@@ -103,16 +103,16 @@
     "chainName": "Terra Classic Mainnet",
     "rpc": "https://rpc-terra-ia.cosmosia.notional.ventures/",
     "rest": "https://api-terra-ia.cosmosia.notional.ventures/",
-    "icon": "/logos/lunc.svg",
+    "icon": "/logos/lunac.png",
     "network_type": "mainnet",
-    "label": "Terra Classic",
+    "label": "Terra-Classic",
     "stakeCurrency": {
       "coinDenom": "LUNC",
       "coinMinimalDenom": "uluna",
       "coinDecimals": 6
     },
     "bip44": {
-      "coinType": 118
+      "coinType": 330
     },
     "gasPriceStep": {
       "low": 28.325,

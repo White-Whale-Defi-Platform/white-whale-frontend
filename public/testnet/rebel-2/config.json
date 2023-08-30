@@ -1,0 +1,22 @@
+{
+  "whale_lair": "terra12qrx84qut6ht0yvjw2cqa4vhrpah3ys5e35gpyq9duw8vhetw2cs04zl7x",
+  "fee_distributor": "terra1l2pnsghruf0fdv37200qzl7038jly7xvektz8l6neqvn3ppmac4qnas7wr",
+  "incentive_factory": "terra1g8k0n2xgzaeaw79vx2tcyq0cdaew64206h3wq8yscmfna57cygrsk29tpc",
+  "frontend_helper": "terra1adc4snchrn92zu6y3nxmxxzp0jlg287d7nx00q0j6hfxnjhpzs4q4pujj8",
+  "whale_base_token": {
+    "name": "WHALE",
+    "denom": "",
+    "decimals": 6
+  },
+  "bonding_tokens": [
+    {
+      "tokenSymbol": "WHALE",
+      "denom": "",
+      "decimals": 6
+    }
+  ]
+}
+
+
+}
+

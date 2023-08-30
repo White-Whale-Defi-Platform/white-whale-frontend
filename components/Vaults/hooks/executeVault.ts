@@ -1,7 +1,6 @@
 import { coin } from '@cosmjs/stargate'
 import { validateTransactionSuccess } from 'util/messages'
-
-import { Wallet } from '../../../util/wallet-adapters'
+import { Wallet } from 'util/wallet-adapters'
 
 type ExecuteAddLiquidityArgs = {
   isNative: boolean

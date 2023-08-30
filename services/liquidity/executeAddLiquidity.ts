@@ -1,30 +1,45 @@
 import { TokenInfo } from 'queries/usePoolsListQuery'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { Wallet } from 'util/wallet-adapters'
 
 type ExecuteAddLiquidityArgs = {
   tokenA: TokenInfo
   tokenB: TokenInfo
   tokenAAmount: string
+  tokenBAmount: string
   /*
    * The contract calculates `tokenBAmount` automatically.
    * However, the user needs to set max amount of `tokenB` they're willing to spend.
    * If the calculated amount exceeds the max amount, the transaction then fails.
    */
-  maxTokenBAmount: string
   senderAddress: string
   swapAddress: string
   client: Wallet
   msgs: any
+  chainId?: string
 }
 
 export const executeAddLiquidity = async ({
+  tokenA,
+  tokenB,
+  tokenAAmount,
+  tokenBAmount,
   client,
   senderAddress,
   msgs,
-}: ExecuteAddLiquidityArgs): Promise<any> =>
-// If (!tokenA.native || !tokenB.native) {
-
-  client.post(senderAddress, msgs)
+  chainId,
+}: ExecuteAddLiquidityArgs): Promise<any> => {
+  let fee = null
+  if (chainId === 'columbus-5') {
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFeeForDeposit(
+      tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom,
+    )
+  }
+  console.log('fee', fee)
+  return client.post(
+    senderAddress, msgs, null, fee,
+  )
+}
 // Const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
 
 // /* increase allowance for each non-native token */

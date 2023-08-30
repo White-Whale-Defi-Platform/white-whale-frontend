@@ -1,19 +1,19 @@
 {
-  "factory": "",
+  "factory": "terra1mzswuxkycf2pmvcxnzf4y7g5eaelzqqc9d3twkech5yrpw8ztd0q7wdmf7",
   "vaults": [
     {
       "pool_id": "LUNC",
       "vault_assets": {
-        "id": "terra-luna",
-        "chain_id": "columbus-5",
-        "token_address": "",
+        "id": "terra-classic",
+        "chain_id": "rebel-2",
+        "token_address": "uluna",
         "symbol": "LUNC",
-        "name": "Lunc",
+        "name": "LUNC",
         "decimals": 6,
-        "logoURI": "/logos/lunc.svg",
+        "logoURI": "/img/lunc.svg",
         "tags": ["native"],
         "native": true,
-        "denom": ""
+        "denom": "uluna"
       },
       "lp_token": "",
       "vault_address": "",

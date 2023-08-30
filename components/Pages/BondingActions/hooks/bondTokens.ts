@@ -1,5 +1,6 @@
 import { coin } from '@cosmjs/stargate'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { Wallet } from 'util/wallet-adapters'
 
 export const bondTokens = async (
@@ -8,6 +9,7 @@ export const bondTokens = async (
   amount: number,
   denom: string,
   config: Config,
+  chainId?: string,
 ) => {
   const handleMsg = {
     bond: {
@@ -21,9 +23,13 @@ export const bondTokens = async (
       },
     },
   }
+  let fee = null
+  if (chainId === 'columbus-5') {
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom)
+  }
   return client.execute(
     address, config.whale_lair, handleMsg, [
       coin(amount, denom),
-    ],
+    ], fee,
   )
 }

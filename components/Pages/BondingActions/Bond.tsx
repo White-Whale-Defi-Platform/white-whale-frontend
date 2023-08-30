@@ -68,7 +68,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
       currentBondState,
     },
   })
-  const currentTokenBalance = useMemo(() => tokenBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol).amount,
+  const currentTokenBalance = useMemo(() => tokenBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol)?.amount,
     [tokenBalances, currentBondState.tokenSymbol])
   return (
     <VStack px={7} width="full">
