@@ -36,7 +36,6 @@ export const ACTIVE_INCENTIVE_NETWORKS = [
   'narwhal-1',
   'phoenix-1',
   'pacific-1',
-  'columbus-5',
 ]
 
 export const MAINNET_TESTNET_MAP = {
