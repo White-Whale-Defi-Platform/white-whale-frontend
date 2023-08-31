@@ -62,7 +62,7 @@ export class TerraTreasuryService extends FCDBaseClient {
       },
     ]
     return {
-      amount: aggregateTaxAmounts(amounts),
+      amount: denom=== 'uusd'? aggregateTaxAmounts(amounts).sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount)): aggregateTaxAmounts(amounts).sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)),
       gas: '1000000',
     }
   }

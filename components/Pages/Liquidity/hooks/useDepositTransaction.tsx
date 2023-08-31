@@ -186,15 +186,12 @@ export const useTransaction = ({
 
       onError?.()
     },
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data?.transactionHash || data?.txHash)
       onBroadcasting?.(data?.transactionHash || data?.txHash)
 
-      queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
-      queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-      queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-      queryClient.invalidateQueries({ queryKey: ['positions'] })
+      await queryClient.invalidateQueries({ queryKey: ['@pool-liquidity','multipleTokenBalances','tokenBalance', 'positions'] })
 
       toast({
         title: 'Add Liquidity Success.',

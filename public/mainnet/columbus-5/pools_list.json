@@ -93,7 +93,7 @@
           "symbol": "LUNC",
           "name": "Lunc",
           "decimals": 6,
-          "logoURI": "/logos/lunc.svg",
+          "logoURI": "/logos/lunc.png",
           "tags": [
             "native"
           ],
@@ -101,18 +101,17 @@
           "denom": "uluna"
         },
         {
-          "id": "white-whale",
           "chain_id": "columbus-5",
-          "token_address": "ustc",
+          "token_address": "uusd",
           "symbol": "USTC",
           "name": "TerraClassicUSD",
           "decimals": 6,
-          "logoURI": "/logos/ustc.svg",
+          "logoURI": "/logos/ustc.png",
           "tags": [
             "native"
           ],
           "native": true,
-          "denom": "ustc"
+          "denom": "uusd"
         }
       ],
       "lp_token": "terra1tlg8cvzfhc9z5d4lyr8c6gvy555a8wtat3mj3nmf69nl3ypndj7sfvr0au",
