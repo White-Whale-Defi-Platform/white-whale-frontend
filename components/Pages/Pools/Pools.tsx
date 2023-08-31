@@ -85,6 +85,7 @@ const Pools = () => {
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
+    console.log('Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0)
   }
 
   const calculateMyPosition = (pool) => {
