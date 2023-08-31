@@ -6,7 +6,8 @@ import {
   validateTransactionSuccess,
 } from 'util/messages'
 
-import { Wallet } from '../../../../util/wallet-adapters'
+import { Wallet } from 'util/wallet-adapters'
+import { TerraTreasuryService } from 'services/treasuryService'
 
 type DirectTokenSwapArgs = {
   tokenAmount: string
@@ -15,6 +16,7 @@ type DirectTokenSwapArgs = {
   tokenA: TokenInfo
   client: Wallet
   msgs: Record<string, any>
+  chainId?: string
 }
 
 export const directTokenSwap = async ({
@@ -24,6 +26,7 @@ export const directTokenSwap = async ({
   tokenAmount,
   client,
   msgs,
+  chainId,
 }: DirectTokenSwapArgs) => {
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
@@ -44,10 +47,13 @@ export const directTokenSwap = async ({
       executeMessage,
     ]))
   }
-
+  let fee = null
+  if (chainId === 'columbus-5') {
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(tokenAmount, tokenA.denom)
+  }
   return client.execute(
     senderAddress, swapAddress, msgs, [
       coin(tokenAmount, tokenA.denom),
-    ],
+    ],fee
   )
 }

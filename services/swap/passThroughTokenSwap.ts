@@ -1,12 +1,11 @@
 import { coin } from '@cosmjs/stargate'
-
-import { TokenInfo } from '../../queries/usePoolsListQuery'
+import { TokenInfo } from 'queries/usePoolsListQuery'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
-} from '../../util/messages'
-import { Wallet } from '../../util/wallet-adapters'
+} from 'util/messages'
+import { Wallet } from 'util/wallet-adapters'
 
 type PassThroughTokenSwapArgs = {
   tokenAmount: number

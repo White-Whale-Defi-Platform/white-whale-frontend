@@ -94,7 +94,7 @@ const columns = [
   columnHelper.accessor('incentives', {
     header: () => (
       <HStack paddingTop={'4'}>
-        <IncentiveTooltip IconSize={'3'} />
+        <IncentiveTooltip iconSize={'3'} />
         <Text align="left" color="brand.50">
           {'Incentives'}
         </Text>

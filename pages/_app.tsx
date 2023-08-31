@@ -10,7 +10,6 @@ import {
   StaticWalletProvider,
   WalletControllerChainOptions,
   WalletProvider,
-  getChainOptions,
 } from '@terra-money/wallet-provider'
 import AppLoading from 'components/AppLoading'
 import AppLayout from 'components/Layout/AppLayout'

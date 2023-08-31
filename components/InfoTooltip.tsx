@@ -1,7 +1,7 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { Box, Icon, Tooltip } from '@chakra-ui/react'
 
-const InfoTooltip = ({ IconSize, description }) => (
+const InfoTooltip = ({ iconSize, description }) => (
   <Tooltip
     label={
       <Box
@@ -23,14 +23,14 @@ const InfoTooltip = ({ IconSize, description }) => (
     closeOnClick={false}
     arrowSize={0}
   >
-    <Icon as={InfoOutlineIcon} blockSize={IconSize} color={'white'} />
+    <Icon as={InfoOutlineIcon} blockSize={iconSize} color={'white'} />
   </Tooltip>
 )
-export const IncentiveTooltip = ({ IconSize }) => (
+export const IncentiveTooltip = ({ iconSize }) => (
   <InfoTooltip
-    IconSize={IconSize}
+    iconSize={iconSize}
     description={
-      'The Incentive Flow Creator can close their flows anytime. All unclaimed tokens will be clawed back.'
+      'The incentive flow creator can close their flows anytime. All unclaimed tokens will be clawed back.'
     }
   />
 )

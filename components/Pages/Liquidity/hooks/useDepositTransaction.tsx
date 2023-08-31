@@ -4,7 +4,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
+import { useRecoilValue } from 'recoil'
 import { executeAddLiquidity } from 'services/liquidity'
+import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
 
 type Params = {
@@ -28,7 +30,6 @@ type Params = {
 }
 
 export const useTransaction = ({
-  poolId,
   enabled,
   swapAddress,
   swapAssets,
@@ -36,8 +37,6 @@ export const useTransaction = ({
   senderAddress,
   msgs,
   encodedMsgs,
-  amount,
-  price,
   tokenAAmount,
   tokenBAmount,
   onBroadcasting,
@@ -47,7 +46,7 @@ export const useTransaction = ({
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
-
+  const { chainId } = useRecoilValue(walletState)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
@@ -124,15 +123,16 @@ export const useTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => executeAddLiquidity({
+  const { mutate } = useMutation(() => executeAddLiquidity({
     tokenA,
     tokenB,
     tokenAAmount,
-    maxTokenBAmount: tokenBAmount,
+    tokenBAmount,
     client,
     swapAddress,
     senderAddress,
     msgs: encodedMsgs,
+    chainId,
   }),
   {
     onMutate: () => {
@@ -186,15 +186,12 @@ export const useTransaction = ({
 
       onError?.()
     },
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data?.transactionHash || data?.txHash)
       onBroadcasting?.(data?.transactionHash || data?.txHash)
 
-      queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
-      queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-      queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-      queryClient.invalidateQueries({ queryKey: ['positions'] })
+      await queryClient.invalidateQueries({ queryKey: ['@pool-liquidity','multipleTokenBalances','tokenBalance', 'positions'] })
 
       toast({
         title: 'Add Liquidity Success.',
@@ -239,11 +236,8 @@ export const useTransaction = ({
       return
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
-  }, [msgs, fee, mutate, price])
+    mutate()
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {

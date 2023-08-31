@@ -22,6 +22,7 @@ import {
 
 import useEpoch from './useEpoch'
 import useFactoryConfig from './useFactoryConfig'
+import { TerraTreasuryService } from 'services/treasuryService'
 
 interface Props {
   poolId: string
@@ -81,7 +82,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     /* Increase allowance for each non-native token */
     if (!tokenInfo?.native) {
       increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
-        tokenAmount: Number(amount),
+        tokenAmount: amount,
         tokenAddress: tokenInfo?.denom,
         senderAddress: address,
         swapAddress: pool?.staking_address,
@@ -115,7 +116,13 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   })
 
   const { mutate: submit, ...tx } = useMutation({
-    mutationFn: () => client.post(address, msgs),
+    mutationFn: async() => {
+      let fee = null
+      if (chainId === 'columbus-5') {
+        fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(amount, tokenInfo?.denom)
+      }
+      return await client.post(address, msgs, fee)
+    },
     onError,
     onSuccess,
     onMutate,

@@ -29,6 +29,11 @@ const backgrounds = {
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(43, 68, 46, 0.50) 97.47%)',
   'migaloo-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(43, 68, 46, 0.50) 97.47%)',
+  'columbus-5':
+    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 255, 0, 0.25) 50%, rgba(0, 117, 255, 0.25) 97.47%)',
+  'rebel-2':
+    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 255, 0, 0.25) 50%, rgba(0, 117, 255, 0.25) 97.47%)',
+
 }
 
 const RadialGradient: FC = () => {

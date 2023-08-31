@@ -25,7 +25,6 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const chains: Array<any> = useChains()
   const router = useRouter()
-  const chainIdParam = router.query.chainId as string
   const connectedWallet = useConnectedWallet()
   const [chainInfo] = useChainInfo(currentWalletState.chainId)
 
@@ -34,10 +33,16 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
   const { connectCosmostation } = useConnectCosmostation()
   const { connectTerraAndCloseModal, filterForStation } = useTerraStation(() => {})
   const { availableConnections } = useWallet()
+  const [chainIdParam, setChainIdParam] = useState<string>(null)
 
   useEffect(() => {
-    // OnDisconnect()
+    if (!router.query.chainId) {
+      return
+    }
+    setChainIdParam(router.query.chainId as string)
+  }, [router.query.chainId])
 
+  useEffect(() => {
     if (router.pathname === '/') {
       return
     }
@@ -57,15 +62,14 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
       })
     }
 
-    if (!ACTIVE_NETWORKS[currentWalletState.network][chainIdParam]) {
+    if (!ACTIVE_NETWORKS[currentWalletState.network][chainIdParam] && chainIdParam) {
       setCurrentWalletState({
         ...currentWalletState,
         chainId: defaultChainId,
       })
     }
     setInitialized(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [chainIdParam])
 
   const denom = useMemo(() => {
     if (!chainInfo) {

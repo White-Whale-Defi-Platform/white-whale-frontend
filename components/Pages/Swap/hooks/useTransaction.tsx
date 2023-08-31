@@ -6,6 +6,8 @@ import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 
 import { directTokenSwap } from './directTokenSwap'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
 
 export enum TxStep {
   /**
@@ -64,7 +66,6 @@ export const useTransaction = ({
   msgs,
   encodedMsgs,
   amount,
-  price,
   onBroadcasting,
   onSuccess,
   onError,
@@ -73,6 +74,7 @@ export const useTransaction = ({
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
   const queryClient = useQueryClient()
+  const {chainId} = useRecoilValue(walletState)
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -144,13 +146,14 @@ export const useTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => directTokenSwap({
+  const { mutate } = useMutation(() => directTokenSwap({
     tokenA,
     swapAddress,
     senderAddress,
     msgs,
     tokenAmount: amount,
     client,
+    chainId
   }),
   {
     onMutate: () => {
@@ -190,11 +193,11 @@ export const useTransaction = ({
 
       onError?.()
     },
-    onSuccess: (data: any) => {
+    onSuccess: async(data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data.transactionHash || data?.txHash)
       onBroadcasting?.(data.transactionHash)
-      queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+      await queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
       toast({
         title: 'Swap Success.',
         description: (
@@ -239,11 +242,8 @@ export const useTransaction = ({
       return
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
-  }, [msgs, fee, mutate, price])
+    mutate()
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {

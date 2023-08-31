@@ -1,0 +1,81 @@
+{
+  "name": "Pools list on testnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": [
+    "special tokens"
+  ],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2021-06-12T00:00:00+00:00",
+  "base_token": {
+    "id": "terra-luna",
+    "chain_id": "rebel-2",
+    "token_address": "uwhale",
+    "symbol": "WHALE",
+    "name": "Whale",
+    "decimals": 6,
+    "logoURI": "/logos/migaloo.png",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "uwhale"
+  },
+  "routerAddress": "migaloo1zwv6feuzhy6a9wekh96cd57lsarmqlwxdypdsplw6zhfncqw6ftqqhavvl",
+  "pools": [
+    {
+      "pool_id": "LUNC-WILLYF",
+      "lpOrder": [
+        "LUNC",
+        "WILLYF"
+      ],
+      "displayName": "LUNC-WILLYF",
+      "displayLogo1": "/logos/lunc.svg",
+      "displayLogo2": "/logos/atom.png",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "rebel-2",
+          "token_address": "uluna",
+          "symbol": "LUNC",
+          "name": "Lunc",
+          "decimals": 6,
+          "logoURI": "/logos/lunc.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "rebel-2",
+          "token_address": "willyf",
+          "symbol": "WILLYF",
+          "name": "Willyf",
+          "decimals": 6,
+          "logoURI": "/logos/atom.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "willyf"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  }
+}
+

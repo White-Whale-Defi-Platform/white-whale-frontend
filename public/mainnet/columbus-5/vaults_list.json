@@ -1,0 +1,24 @@
+{
+  "factory": "",
+  "vaults": [
+    {
+      "pool_id": "LUNC",
+      "vault_assets": {
+        "id": "terra-luna",
+        "chain_id": "columbus-5",
+        "token_address": "",
+        "symbol": "LUNC",
+        "name": "Lunc",
+        "decimals": 6,
+        "logoURI": "/logos/lunc.svg",
+        "tags": ["native"],
+        "native": true,
+        "denom": ""
+      },
+      "lp_token": "",
+      "vault_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
+import { claimRewards } from 'components/Pages/BondingActions/hooks/claimRewards'
 import { createNewEpoch } from 'components/Pages/BondingActions/hooks/createNewEpoch'
 import {
   Config,
@@ -13,7 +14,6 @@ import { walletState } from 'state/atoms/walletAtoms'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { ActionType } from '../../Dashboard/BondingOverview'
-import { claimRewards } from '../../Dashboard/hooks/claimRewards'
 import { bondTokens } from './bondTokens'
 import { unbondTokens } from './unbondTokens'
 import { withdrawTokens } from './withdrawTokens'
@@ -130,6 +130,7 @@ export const useTransaction = () => {
         adjustedAmount,
         data.denom,
         config,
+        chainId,
       )
     } else if (data.bondingAction === ActionType.unbond) {
       return unbondTokens(

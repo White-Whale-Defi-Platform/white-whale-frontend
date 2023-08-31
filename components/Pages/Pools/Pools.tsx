@@ -85,6 +85,9 @@ const Pools = () => {
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
+    console.log('Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0)
+    console.log('Pools: ', pools)
+    console.log('Pair Infos: ', pairInfos)
   }
 
   const calculateMyPosition = (pool) => {
@@ -227,16 +230,16 @@ const Pools = () => {
   const allPoolsForShown = useMemo(() => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId])
   const parseLiquidity = (liqString) => {
-    const value = parseFloat(liqString.replace(/[^\d.-]/g, ''))
+    const value = parseFloat(liqString?.replace(/[^\d.-]/g, ''))
     /*
      * We do this mutation because by now we already have modified the string to include a letter abbreviation
      * if the liquidity goes over 1000
-     * If its in the thousands, multiple the value by 1000, if the millions 1000000
+     * If it's in the thousands, multiply the value by 1000, if millions 1000000
      */
-    return liqString.toUpperCase().includes('K')
-      ? value * 1000
-      : liqString.toUpperCase().includes('M')
-        ? value * 1000000
+    return liqString?.toUpperCase().includes('K')
+      ? value * 1_000
+      : liqString?.toUpperCase().includes('M')
+        ? value * 1_000_000
         : value
   }
   const showAllPoolsList = useMemo(() => {
