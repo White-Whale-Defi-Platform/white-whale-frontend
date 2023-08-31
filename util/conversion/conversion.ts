@@ -88,7 +88,7 @@ export const calculateDurationString = (durationInMilli: number): string => {
 export const nanoToMilli = (nano: number) => nano / 1_000_000
 
 
-export const aggregateTaxAmounts = (amounts: { denom: string, amount: string }[])=>amounts.reduce((acc, cur) => {
+export const aggregateAndSortTaxAmounts = (amounts: { denom: string, amount: string }[])=>amounts.reduce((acc, cur) => {
     const existingAmount = acc.find((a) => a.denom === cur.denom);
     if (existingAmount) {
       existingAmount.amount = (parseFloat(existingAmount.amount) + parseFloat(cur.amount)).toString();
@@ -96,5 +96,5 @@ export const aggregateTaxAmounts = (amounts: { denom: string, amount: string }[]
       acc.push(cur);
     }
     return acc;
-  }, [] as { denom: string, amount: string }[]);
+  }, [] as { denom: string, amount: string }[]).sort((a,b)=> a.denom.localeCompare(b.denom));
 

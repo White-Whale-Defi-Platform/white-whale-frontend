@@ -1,6 +1,6 @@
 import axios from 'axios';
 import chains from 'public/mainnet/chain_info.json'
-import { aggregateTaxAmounts } from 'util/conversion/index'
+import { aggregateAndSortTaxAmounts, aggregateTaxAmounts } from 'util/conversion/index'
 class FCDBaseClient {
   private readonly baseURL: string = 'https://fcd.terra.dev';
 
@@ -62,7 +62,7 @@ export class TerraTreasuryService extends FCDBaseClient {
       },
     ]
     return {
-      amount: denom=== 'uusd'? aggregateTaxAmounts(amounts).sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount)): aggregateTaxAmounts(amounts).sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)),
+      amount: aggregateAndSortTaxAmounts(amounts),
       gas: '1000000',
     }
   }
@@ -85,7 +85,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ];
 
     return {
-      amount: aggregateTaxAmounts(amounts).sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)),
+      amount: aggregateAndSortTaxAmounts(amounts),
       gas: '1000000',
     };
   }
