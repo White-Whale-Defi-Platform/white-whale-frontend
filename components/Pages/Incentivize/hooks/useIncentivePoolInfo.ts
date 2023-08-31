@@ -76,6 +76,7 @@ export const useIncentivePoolInfo = (
           : await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)
     }
+    console.log('useeffect ', pools, currentChainPrefix)
     if (pools?.length > 0 && currentChainPrefix) {
       fetchPoolData()
     }
