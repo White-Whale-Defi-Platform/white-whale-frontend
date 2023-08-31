@@ -87,7 +87,7 @@ const Pools = () => {
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
     console.log('Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0)
     console.log('Pools: ', pools)
-    console.log('Pairinfos: ', pairInfos)
+    console.log('Pair Infos: ', pairInfos)
   }
 
   const calculateMyPosition = (pool) => {

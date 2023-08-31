@@ -73,9 +73,7 @@ export const getPairInfosTerra = async (): Promise<any> => {
 }
 export const getPairAprAndDailyVolume = async (pools: any[],
   chainPrefix: any): Promise<EnigmaPoolData[]> => {
-  console.log('pooll', pools)
   const poolIds = pools?.map((pool: any) => pool.pool_id)
-  console.log('poolIds', poolIds)
   const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chainPrefix)
 
   if (pairInfos.length > 0) {

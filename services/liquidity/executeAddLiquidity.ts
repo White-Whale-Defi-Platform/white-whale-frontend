@@ -35,7 +35,6 @@ export const executeAddLiquidity = async ({
       tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom,
     )
   }
-  console.log('fee', fee)
   return client.post(
     senderAddress, msgs, null, fee,
   )
