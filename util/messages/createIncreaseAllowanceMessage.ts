@@ -4,7 +4,7 @@ import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 
 type CreateIncreaseAllowanceMessageArgs = {
   senderAddress: string
-  tokenAmount: number
+  tokenAmount: string
   tokenAddress: string
   swapAddress: string
 }

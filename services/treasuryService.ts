@@ -1,5 +1,6 @@
 import axios from 'axios';
 import chains from 'public/mainnet/chain_info.json'
+import { aggregateTaxAmounts } from 'util/conversion/index'
 class FCDBaseClient {
   private readonly baseURL: string = 'https://fcd.terra.dev';
 
@@ -51,17 +52,17 @@ export class TerraTreasuryService extends FCDBaseClient {
   async getTerraClassicFee(amount:number|string, denom: string): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5');
     const tax = await this.getTerraTax(amount);
-
-    return {
-      amount: [{
-        denom,
-        amount: tax.toString(),
-      },
+    const amounts = [{
+      denom,
+      amount: tax.toString(),
+    },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
         amount: (Number(terraClassic.gasPriceStep.average) * 10 ** 6).toString(),
       },
-      ],
+    ]
+    return {
+      amount: aggregateTaxAmounts(amounts),
       gas: '1000000',
     }
   }
@@ -83,18 +84,8 @@ export class TerraTreasuryService extends FCDBaseClient {
       },
     ];
 
-    const aggregatedAmounts = amounts.reduce((acc, cur) => {
-      const existingAmount = acc.find((a) => a.denom === cur.denom);
-      if (existingAmount) {
-        existingAmount.amount = (parseFloat(existingAmount.amount) + parseFloat(cur.amount)).toString();
-      } else {
-        acc.push(cur);
-      }
-      return acc;
-    }, [] as { denom: string, amount: string }[]);
-
     return {
-      amount: aggregatedAmounts.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)),
+      amount: aggregateTaxAmounts(amounts).sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)),
       gas: '1000000',
     };
   }
