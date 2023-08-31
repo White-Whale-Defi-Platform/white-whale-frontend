@@ -45,7 +45,7 @@ export class TerraTreasuryService extends FCDBaseClient {
       return 0
     }
     const taxRate = this.taxRate || (await this.getTaxRate())
-    const taxCap = '60_000_000_000_000_000' // This.taxCap?.[denom] || (await this.getTaxCap(denom));
+    const taxCap = '60000000000000000' // This.taxCap?.[denom] || (await this.getTaxCap(denom));
     /*
      *If(taxCap===''){
      *return Math.ceil(+amount * +taxRate)
@@ -68,7 +68,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '1_000_000'
+      gas: '1000000'
     }
   }
 
@@ -81,7 +81,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     },
       {
         denom: columbusConfig.whale_base_token.denom,
-        amount: '1_000_000_000'
+        amount: '1000000000'
       },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
@@ -90,7 +90,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '1_000_000'
+      gas: '1000000'
     }
   }
 
