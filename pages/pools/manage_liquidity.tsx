@@ -1,4 +1,4 @@
-import ManageLiquidity from 'components/Pages/Liquidity'
+import ManageLiquidity from 'components/Pages/Trade/Liquidity'
 
 const ManageLiquidityPage = () => <ManageLiquidity />
 

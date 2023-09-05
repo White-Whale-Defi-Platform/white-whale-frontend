@@ -11,20 +11,20 @@ import {
   keyframes,
   useDisclosure,
 } from '@chakra-ui/react'
-import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
+import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingAcionTooltip'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
-import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { useRecoilState } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import Loader from '../../Loader'
 import WalletModal from '../../Wallet/Modal/Modal'
-import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
+import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import { ActionType } from './BondingOverview'
 
 const pulseAnimation = keyframes`

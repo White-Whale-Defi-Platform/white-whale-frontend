@@ -1,4 +1,4 @@
-import Vaults from 'components/Vaults'
+import Vaults from 'components/Pages/Flashloan/Vaults'
 
 const VaultsPage = () => <Vaults />
 

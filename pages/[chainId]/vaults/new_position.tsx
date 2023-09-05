@@ -1,4 +1,4 @@
-import NewPoistion from 'components/Vaults/NewPosition'
+import NewPoistion from 'components/Pages/Flashloan/Vaults/NewPosition'
 
 const NewPositionPage = () => <NewPoistion />
 
