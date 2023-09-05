@@ -71,7 +71,7 @@
       ],
       "lp_token": "terra1cfjnwpjswp9a94y5he2tz0e9rhlcd8rslydsrrfes6xafrx0wzrsaerydc",
       "swap_address": "terra1t02akvjklp7h8swg7vhdjryegj9z7q83hjhyq8xssc4v0qv7a67s6um6up",
-      "staking_address": "terra1q5sllf7rw9ftnw2epvsdkvuaukwlf9ht7ccvvh9uej4y0a6w3klqndsetr",
+      "staking_address": "terra174njy7232hrzx80cfrktl6s24f2xcusyu3mf986yfatrmrv3ryask45wl9",
       "rewards_tokens": []
     },{
       "pool_id": "LUNC-USTC",
@@ -116,7 +116,7 @@
       ],
       "lp_token": "terra1tlg8cvzfhc9z5d4lyr8c6gvy555a8wtat3mj3nmf69nl3ypndj7sfvr0au",
       "swap_address": "terra1wm3jtcq0fuftvmfq0skmqyxnl3x3j42x8ae56q7eg7v6jsf5eg4qmz36ts",
-      "staking_address": "terra14890k8rl6y4lpmuu39x8w2dkhd2dsajz3ucthedh8fnhg5sx89vqswx7cy",
+      "staking_address": "terra1w088w23xywkfndukqgcj3d9j73tsr459l370suycmvsj6yedr6qqfn2w7g",
       "rewards_tokens": []
     }
   ]
