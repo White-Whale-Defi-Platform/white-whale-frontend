@@ -121,7 +121,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       if (chainId === 'columbus-5') {
         fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(amount, tokenInfo?.denom)
       }
-      return await client.post(address, msgs, fee)
+      return await client.post(address, msgs,null, fee)
     },
     onError,
     onSuccess,
