@@ -17,7 +17,8 @@ export const getToken1ForToken2Price = async ({
       pool: {},
     })
     const [asset1, asset2] = assets
-    return num(asset2.amount).div(asset1.amount).toNumber()
+    return num(asset2.amount).div(asset1.amount).
+      toNumber()
   } catch (e) {
     console.error('err(getToken1ForToken2Price):', e)
   }
@@ -37,7 +38,8 @@ export const getToken2ForToken1Price = async ({
       pool: {},
     })
     const [asset1, asset2] = assets
-    return num(asset1.amount).div(asset2.amount).toNumber()
+    return num(asset1.amount).div(asset2.amount).
+      toNumber()
   } catch (e) {
     console.error('err(getToken2ForToken1Price):', e)
   }
@@ -50,9 +52,7 @@ export interface GetTokenForTokenPriceInput {
   cosmWasmClient: CosmWasmClient
 }
 
-export const getTokenForTokenPrice = async (
-  input: GetTokenForTokenPriceInput
-) => {
+export const getTokenForTokenPrice = async (input: GetTokenForTokenPriceInput) => {
   try {
     return await getToken1ForToken2Price({
       swapAddress: input.outputSwapAddress,
@@ -69,10 +69,8 @@ export type PoolInfoResponse = {
   assets: any
 }
 
-export const getPoolInfo = async (
-  swapAddress: string,
-  client: Wallet
-): Promise<PoolInfoResponse> => {
+export const getPoolInfo = async (swapAddress: string,
+  client: Wallet): Promise<PoolInfoResponse> => {
   if (!swapAddress || !client) {
     return null
   }

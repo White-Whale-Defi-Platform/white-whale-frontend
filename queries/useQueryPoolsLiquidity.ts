@@ -93,12 +93,13 @@ const fetchMyLockedLp = async ({ pool, cosmWasmClient, address }) => {
       positions: { address },
     })) || []
   return (
-    positions
-      ?.map((p) => {
+    positions?.
+      map((p) => {
         const { open_position = {}, closed_position = {} } = p
-        return { ...open_position, ...closed_position }
-      })
-      .reduce((acc, p) => acc + Number(p.amount), 0) || 0
+        return { ...open_position,
+          ...closed_position }
+      }).
+      reduce((acc, p) => acc + Number(p.amount), 0) || 0
   )
 }
 
@@ -132,18 +133,12 @@ export const useQueryPoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-    const tokenA = pool.pool_assets.find(
-      (asset) =>
-        asset.denom ===
+    const tokenA = pool.pool_assets.find((asset) => asset.denom ===
         (poolInfo?.assets[0]?.info?.native_token?.denom ??
-          poolInfo?.assets[0]?.info?.token?.contract_addr)
-    )
-    const tokenB = pool.pool_assets.find(
-      (asset) =>
-        asset.denom ===
+          poolInfo?.assets[0]?.info?.token?.contract_addr))
+    const tokenB = pool.pool_assets.find((asset) => asset.denom ===
         (poolInfo?.assets[1]?.info?.native_token?.denom ??
-          poolInfo?.assets[1]?.info?.token?.contract_addr)
-    )
+          poolInfo?.assets[1]?.info?.token?.contract_addr))
 
     const getFlows = async ({ cosmWasmClient }) => {
       if (
@@ -178,8 +173,8 @@ export const useQueryPoolsLiquidity = ({
       return cosmWasmClient
         ?.queryContractSmart(pool.staking_address, {
           flows: {},
-        })
-        .then((flows) => {
+        }).
+        then((flows) => {
           const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch
             const endEpoch = flow.end_epoch
@@ -242,7 +237,8 @@ export const useQueryPoolsLiquidity = ({
       myNotLockedLp,
     } = await queryMyLiquidity({
       context,
-      swap: { ...poolInfo, ...pool },
+      swap: { ...poolInfo,
+        ...pool },
       address,
       totalLockedLp,
       myLockedLp,
@@ -334,11 +330,11 @@ export const useQueryPoolsLiquidity = ({
         Boolean(cosmWasmClient && pool.pool_id && enabledGetTokenDollarValue) &&
         tokenList.tokens.length > 0 &&
         Boolean(prices),
-      refetchOnMount: false as const,
-      refetchInterval: refetchInBackground
-        ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
-        : undefined,
-      refetchIntervalInBackground: refetchInBackground,
+    refetchOnMount: false as const,
+    refetchInterval: refetchInBackground
+      ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
+      : undefined,
+    refetchIntervalInBackground: refetchInBackground,
 
       async queryFn() {
         if (!cosmWasmClient) {
@@ -382,12 +378,8 @@ export function calculateRewardsAnnualYieldRate({
     return 0
   }
 
-  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce(
-    (value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
-    0
-  )
+  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce((value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
+    0)
 
-  return protectAgainstNaN(
-    (totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100
-  )
+  return protectAgainstNaN((totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100)
 }

@@ -25,10 +25,8 @@ type Props = {
 
 const Apr = ({ apr, flows }: Props) => {
   const totalApr = useMemo(() => {
-    const incentiveApr = flows.reduce(
-      (total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
-      0
-    )
+    const incentiveApr = flows.reduce((total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
+      0)
     return Number(apr?.replace('%', '')) + Number(incentiveApr)
   }, [flows, apr])
 
@@ -36,8 +34,8 @@ const Apr = ({ apr, flows }: Props) => {
     <Popover trigger="hover">
       <PopoverTrigger>
         <Button variant="unstyled">
-          <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)" h="30px">
-            <Text align="right">{totalApr.toFixed(2)}%</Text>
+          <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)">
+            <Text align="right" >{totalApr.toFixed(2)}%</Text>
           </HStack>
         </Button>
       </PopoverTrigger>

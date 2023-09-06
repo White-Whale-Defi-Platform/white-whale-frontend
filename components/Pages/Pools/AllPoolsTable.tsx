@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
   chakra,
+  HStack,
 } from '@chakra-ui/react'
 import {
   SortingState,
@@ -22,6 +23,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
+import { IncentiveTooltip } from '../../InfoTooltip'
 import Loader from '../../Loader'
 import Apr from './components/Apr'
 import Liquidity from './components/liquidity'
@@ -59,15 +61,14 @@ const columns = [
         {'APR'}
       </Text>
     ),
-    cell: (info) =>
-      info.getValue() === 'n/a' ? (
-        <Text>{info.getValue()}</Text>
-      ) : (
-        <Apr
-          apr={info.getValue()?.toString()}
-          flows={info.row.original.flows}
-        />
-      ),
+    cell: (info) => (info.getValue() === 'n/a' ? (
+      <Text>{info.getValue()}</Text>
+    ) : (
+      <Apr
+        apr={info.getValue()?.toString()}
+        flows={info.row.original.flows}
+      />
+    )),
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
@@ -92,9 +93,12 @@ const columns = [
   }),
   columnHelper.accessor('incentives', {
     header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        Incentives
-      </Text>
+      <HStack paddingTop={'4'}>
+        <IncentiveTooltip iconSize={'3'} />
+        <Text align="left" color="brand.50">
+          {'Incentives'}
+        </Text>
+      </HStack>
     ),
     cell: (info) => info.getValue(),
   }),
@@ -187,10 +191,8 @@ const AllPoolsTable = ({
                   >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header,
+                        header.getContext())}
                     <chakra.span pl="2">
                       {header.column.getIsSorted() ? (
                         header.column.getIsSorted() === 'desc' ? (

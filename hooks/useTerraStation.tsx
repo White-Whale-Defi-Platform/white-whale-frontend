@@ -66,7 +66,8 @@ export const useTerraStation = (onCloseModal) => {
       },
     })
 
-    return { mainnet, testnet }
+    return { mainnet,
+      testnet }
   }, [])
 
   // const wasmChainClient = useMemo(() => {
@@ -102,5 +103,7 @@ export const useTerraStation = (onCloseModal) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWalletState.network, mainnet, testnet, currentWalletState.chainId])
 
-  return { connectTerraAndCloseModal, filterForStation, filterForWalletConnect }
+  return { connectTerraAndCloseModal,
+    filterForStation,
+    filterForWalletConnect }
 }

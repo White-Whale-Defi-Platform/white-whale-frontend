@@ -83,19 +83,17 @@ const useEpoch = () => {
 
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
-    queryFn: async () =>
-      await client?.queryContractSmart(contracts?.fee_distributor, {
-        config: {},
-      }),
+    queryFn: async () => await client?.queryContractSmart(contracts?.fee_distributor, {
+      config: {},
+    }),
     enabled: Boolean(contracts) && Boolean(client),
   })
 
   const { data } = useQuery<EpochData>({
     queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
-    queryFn: async () =>
-      await client?.queryContractSmart(contracts?.fee_distributor, {
-        current_epoch: {},
-      }),
+    queryFn: async () => await client?.queryContractSmart(contracts?.fee_distributor, {
+      current_epoch: {},
+    }),
     enabled: Boolean(contracts) && Boolean(client),
   })
 
@@ -156,12 +154,12 @@ const useEpoch = () => {
     const currentEpoch = Number(data?.epoch?.id)
 
     // Set the start time of the epoch to 15:00:00 UTC
-    const startTime = dayjs()
-      .utc()
-      .set('hour', 15)
-      .set('minute', 0)
-      .set('second', 0)
-      .set('millisecond', 0)
+    const startTime = dayjs().
+      utc().
+      set('hour', 15).
+      set('minute', 0).
+      set('second', 0).
+      set('millisecond', 0)
 
     // Calculate the duration of each epoch in milliseconds
     const epochDuration = Number(config?.epoch_config?.duration) / 1_000_000

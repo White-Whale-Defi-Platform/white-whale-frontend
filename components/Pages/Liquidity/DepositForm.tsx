@@ -56,29 +56,20 @@ const DepositForm = ({
     },
   })
 
-  const incentivesEnabled = useMemo(
-    () => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
-    [chainId]
-  )
+  const incentivesEnabled = useMemo(() => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
+    [chainId])
   const [currentAprHelperState, _] = useRecoilState(aprHelperState)
 
-  const poolAPRs = useMemo(
-    () => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
-    [currentAprHelperState, poolId]
-  )
+  const poolAPRs = useMemo(() => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
+    [currentAprHelperState, poolId])
 
-  const multiplicator = useMemo(
-    () =>
-      bondingDays == 0
-        ? bondingDays
-        : Math.round(
-            100 *
+  const multiplicator = useMemo(() => (bondingDays == 0
+    ? bondingDays
+    : Math.round(100 *
               (0.997132 +
                 0.0027633 * bondingDays +
-                0.000105042 * bondingDays ** 2)
-          ) / 100,
-    [bondingDays]
-  )
+                0.000105042 * bondingDays ** 2)) / 100),
+  [bondingDays])
   // Const [bondingDays, setBondingDays] = useState(0)
   const isInputDisabled = tx?.txStep == TxStep.Posting
   const amountA = getValues('token1')
@@ -86,32 +77,41 @@ const DepositForm = ({
   useEffect(() => {
     if (simulated) {
       if (reverse) {
-        onInputChange({ ...tokenA, amount: num(simulated).dp(6).toNumber() }, 0)
+        onInputChange({ ...tokenA,
+          amount: num(simulated).dp(6).
+            toNumber() }, 0)
         setValue('token1', {
           ...tokenA,
-          amount: num(simulated).dp(6).toNumber(),
+          amount: num(simulated).dp(6).
+            toNumber(),
         })
       } else {
-        onInputChange({ ...tokenB, amount: num(simulated).dp(6).toNumber() }, 1)
+        onInputChange({ ...tokenB,
+          amount: num(simulated).dp(6).
+            toNumber() }, 1)
         setValue('token2', {
           ...tokenA,
-          amount: num(simulated).dp(6).toNumber(),
+          amount: num(simulated).dp(6).
+            toNumber(),
         })
       }
     } else {
       if (reverse) {
         if (!tokenB.amount) {
-          setValue('token1', { ...tokenA, amount: undefined })
+          setValue('token1', { ...tokenA,
+            amount: undefined })
         }
       } else {
         if (!tokenA.amount) {
-          setValue('token2', { ...tokenB, amount: undefined })
+          setValue('token2', { ...tokenB,
+            amount: undefined })
         }
       }
     }
 
     return () => {
-      onInputChange({ ...tokenA, amount: 0 }, 0)
+      onInputChange({ ...tokenA,
+        amount: 0 }, 0)
       tx?.reset()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,8 +119,10 @@ const DepositForm = ({
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
-      setValue('token1', { ...tokenA, amount: 0 })
-      setValue('token2', { ...tokenB, amount: 0 })
+      setValue('token1', { ...tokenA,
+        amount: 0 })
+      setValue('token2', { ...tokenB,
+        amount: 0 })
       clearForm()
       // Tx?.reset()
     }
@@ -140,13 +142,8 @@ const DepositForm = ({
     return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, isWalletConnected, amountA])
 
-  const apr = useMemo(
-    () =>
-      `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(
-        2
-      )}`,
-    [poolAPRs, multiplicator]
-  )
+  const apr = useMemo(() => `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(2)}`,
+    [poolAPRs, multiplicator])
 
   return (
     <VStack
@@ -190,6 +187,7 @@ const DepositForm = ({
         multiplicator={String(multiplicator)}
         apr={apr}
         show={incentivesEnabled}
+        incentivized={poolAPRs?.incentives !== 0}
       />
 
       <SubmitButton

@@ -35,41 +35,37 @@ export async function queryRewardsContracts({
 
   const currentHeight = await cosmWasmClient.getHeight()
 
-  return Promise.all(
-    rewardsContractsInfo.map(async (contractInfo, index) => {
-      const tokenInfo = rewardsTokens[index]
-      const expired = currentHeight > contractInfo.reward.period_finish
+  return Promise.all(rewardsContractsInfo.map(async (contractInfo, index) => {
+    const tokenInfo = rewardsTokens[index]
+    const expired = currentHeight > contractInfo.reward.period_finish
 
-      const rewardRatePerBlockInTokens = expired
-        ? 0
-        : convertMicroDenomToDenom(
-            contractInfo.reward.reward_rate,
-            tokenInfo.decimals
-          )
+    const rewardRatePerBlockInTokens = expired
+      ? 0
+      : convertMicroDenomToDenom(contractInfo.reward.reward_rate,
+        tokenInfo.decimals)
 
-      const rewardRatePerBlockInDollarValue = expired
-        ? 0
-        : await getTokenDollarValue({
-            tokenInfo,
-            tokenAmountInDenom: rewardRatePerBlockInTokens,
-          })
-
-      const rewardRate = {
-        ratePerBlock: {
-          tokenAmount: rewardRatePerBlockInTokens,
-          dollarValue: rewardRatePerBlockInDollarValue,
-        },
-        ratePerYear: {
-          tokenAmount: rewardRatePerBlockInTokens * blocksPerYear,
-          dollarValue: rewardRatePerBlockInDollarValue * blocksPerYear,
-        },
-      }
-
-      return {
-        contract: contractInfo,
-        rewardRate,
+    const rewardRatePerBlockInDollarValue = expired
+      ? 0
+      : await getTokenDollarValue({
         tokenInfo,
-      }
-    })
-  )
+        tokenAmountInDenom: rewardRatePerBlockInTokens,
+      })
+
+    const rewardRate = {
+      ratePerBlock: {
+        tokenAmount: rewardRatePerBlockInTokens,
+        dollarValue: rewardRatePerBlockInDollarValue,
+      },
+      ratePerYear: {
+        tokenAmount: rewardRatePerBlockInTokens * blocksPerYear,
+        dollarValue: rewardRatePerBlockInDollarValue * blocksPerYear,
+      },
+    }
+
+    return {
+      contract: contractInfo,
+      rewardRate,
+      tokenInfo,
+    }
+  }))
 }

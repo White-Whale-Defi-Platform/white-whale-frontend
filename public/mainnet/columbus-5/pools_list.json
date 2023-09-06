@@ -1,0 +1,123 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": [
+    "special tokens"
+  ],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2023-08-16T00:00:00+00:00",
+  "base_token": {
+    "id": "terra-luna",
+    "chain_id": "columbus-5",
+    "token_address": "uluna",
+    "symbol": "LUNC",
+    "name": "Lunc",
+    "decimals": 6,
+    "logoURI": "/logos/lunc.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "uluna"
+  },
+  "routerAddress": "terra1prptgzfnpahp7fl9f7um7npkt9xw3mve9cfnxkglu60x840qaw9qpk2cqn",
+  "pools": [
+    {
+      "pool_id": "LUNC-WHALE",
+      "lpOrder": [
+        "LUNC",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "LUNC","WHALE"
+      ],
+      "displayName": "LUNC-WHALE",
+      "displayLogo1": "/logos/lunac.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "terra-luna",
+          "chain_id": "columbus-5",
+          "token_address": "uluna",
+          "symbol": "LUNC",
+          "name": "Lunc",
+          "decimals": 6,
+          "logoURI": "/logos/lunc.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "columbus-5",
+          "token_address": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB"
+        }
+      ],
+      "lp_token": "terra1cfjnwpjswp9a94y5he2tz0e9rhlcd8rslydsrrfes6xafrx0wzrsaerydc",
+      "swap_address": "terra1t02akvjklp7h8swg7vhdjryegj9z7q83hjhyq8xssc4v0qv7a67s6um6up",
+      "staking_address": "terra1q5sllf7rw9ftnw2epvsdkvuaukwlf9ht7ccvvh9uej4y0a6w3klqndsetr",
+      "rewards_tokens": []
+    },{
+      "pool_id": "LUNC-USTC",
+      "lpOrder": [
+        "LUNC",
+        "USTC"
+      ],
+      "assetOrder": [
+        "LUNC","USTC"
+      ],
+      "displayName": "LUNC-USTC",
+      "displayLogo1": "/logos/lunac.png",
+      "displayLogo2": "/logos/ustc.png",
+      "pool_assets": [
+        {
+          "id": "terra-classic",
+          "chain_id": "columbus-5",
+          "token_address": "uluna",
+          "symbol": "LUNC",
+          "name": "Lunc",
+          "decimals": 6,
+          "logoURI": "/logos/lunc.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "chain_id": "columbus-5",
+          "token_address": "uusd",
+          "symbol": "USTC",
+          "name": "TerraClassicUSD",
+          "decimals": 6,
+          "logoURI": "/logos/ustc.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uusd"
+        }
+      ],
+      "lp_token": "terra1tlg8cvzfhc9z5d4lyr8c6gvy555a8wtat3mj3nmf69nl3ypndj7sfvr0au",
+      "swap_address": "terra1wm3jtcq0fuftvmfq0skmqyxnl3x3j42x8ae56q7eg7v6jsf5eg4qmz36ts",
+      "staking_address": "terra14890k8rl6y4lpmuu39x8w2dkhd2dsajz3ucthedh8fnhg5sx89vqswx7cy",
+      "rewards_tokens": []
+    }
+  ]
+}

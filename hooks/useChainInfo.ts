@@ -8,13 +8,10 @@ import { NetworkType, chainState } from 'state/chainState'
 export const useChains = () => {
   const { network } = useRecoilValue(chainState)
 
-  return useMemo(
-    () =>
-      network === NetworkType.testnet
-        ? testnetChainInfo || []
-        : mainnetChainInfo || [],
-    [network]
-  )
+  return useMemo(() => (network === NetworkType.testnet
+    ? testnetChainInfo || []
+    : mainnetChainInfo || []),
+  [network])
 }
 
 export const useChainInfo = (id = null) => {

@@ -33,6 +33,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
 
+import PositionsOverview from '../Incentivize/PositionsOverview'
 import Claim from './Claim'
 import DepositForm from './DepositForm'
 import useProvideLP from './hooks/useProvideLP'
@@ -66,22 +67,17 @@ const ManageLiquidity: FC = () => {
     )
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
-  const currentChainPrefix = useMemo(
-    () =>
-      chains.find((row) => row.chainId === chainId)?.bech32Config
-        ?.bech32PrefixAccAddr,
-    [chains, chainId]
-  )
+  const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
+    bech32PrefixAccAddr,
+  [chains, chainId])
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
     cosmWasmClient,
     pools,
-    currentChainPrefix
+    currentChainPrefix,
   )
 
-  const pool = useMemo(
-    () => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
-    [poolId, poolList]
-  )
+  const pool = useMemo(() => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
+    [poolId, poolList])
   // TODO pool user share might be falsy
   const poolUserShare = usePoolUserShare(
     cosmWasmClient,
@@ -90,9 +86,7 @@ const ManageLiquidity: FC = () => {
   )
 
   const dailyEmissionData = useMemo(() => {
-    const incentivePoolInfo = incentivePoolInfos?.find(
-      (info) => info.poolId === poolId
-    )
+    const incentivePoolInfo = incentivePoolInfos?.find((info) => info.poolId === poolId)
     if (!poolUserShare) {
       return null
     }
@@ -119,9 +113,7 @@ const ManageLiquidity: FC = () => {
         if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
           router.push(`/${currentChain.label.toLowerCase()}/pools`)
         } else {
-          router.push(
-            `/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`
-          )
+          router.push(`/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`)
         }
       }
     }
@@ -190,10 +182,20 @@ const ManageLiquidity: FC = () => {
     setTokenLPState(newState)
   }
 
+  const myFlows = useMemo(() => {
+    if (!pools || !poolId) {
+      return []
+    }
+
+    const flows = pools.find((p) => p.pool_id === poolId)
+    return flows?.liquidity?.myFlows || []
+  }, [pools, poolId])
+
   return (
     <VStack
       w="auto"
-      minWidth={{ base: '100%', md: '800' }}
+      minWidth={{ base: '100%',
+        md: '800' }}
       alignItems="center"
       padding={5}
     >
@@ -240,6 +242,7 @@ const ManageLiquidity: FC = () => {
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
+              {dailyEmissionData.length > 0 ? <Tab>Incentives</Tab> : null}
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
@@ -276,6 +279,11 @@ const ManageLiquidity: FC = () => {
               <TabPanel padding={4}>
                 <Claim poolId={poolId} />
               </TabPanel>
+              {dailyEmissionData.length > 0 ? (
+                <TabPanel padding={4}>
+                  <PositionsOverview flows={myFlows} poolId={poolId} />
+                </TabPanel>
+              ) : null}
             </TabPanels>
           </Tabs>
         </Box>

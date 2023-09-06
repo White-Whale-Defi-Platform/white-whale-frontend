@@ -13,7 +13,7 @@ export interface AddressInfo {
 export const usePoolUserShare = (
   cosmWasmClient: CosmWasmClient,
   contractAddr: string,
-  userAddr: string
+  userAddr: string,
 ): AddressInfo => {
   const { data } = useQuery({
     queryKey: ['poolUserShare', contractAddr, userAddr],
@@ -29,8 +29,7 @@ export const usePoolUserShare = (
 export const fetchPoolUserShare = async (
   client: CosmWasmClient,
   contractAddr: string,
-  userAddr: string
-): Promise<AddressInfo> =>
-  client.queryContractSmart(contractAddr, {
-    current_epoch_rewards_share: { address: userAddr },
-  })
+  userAddr: string,
+): Promise<AddressInfo> => client.queryContractSmart(contractAddr, {
+  current_epoch_rewards_share: { address: userAddr },
+})

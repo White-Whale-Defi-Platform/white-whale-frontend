@@ -1,9 +1,7 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
-export const fetchTotalPoolSupply = async (
-  swapAddress: string,
-  client: CosmWasmClient
-) => {
+export const fetchTotalPoolSupply = async (swapAddress: string,
+  client: CosmWasmClient) => {
   if (!client || !swapAddress) {
     return null
   }

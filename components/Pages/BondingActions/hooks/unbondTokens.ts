@@ -6,7 +6,7 @@ export const unbondTokens = (
   address: string,
   amount: number,
   denom: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     unbond: {

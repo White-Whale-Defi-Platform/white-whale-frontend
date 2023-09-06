@@ -86,15 +86,13 @@ class Injective {
   constructor(
     offlineSigner: OfflineSigner & OfflineDirectSigner,
     activeWallet: string,
-    network: InjectiveNetwork = InjectiveNetwork.TestnetK8s
+    network: InjectiveNetwork = InjectiveNetwork.TestnetK8s,
   ) {
     const endpoints = getNetworkEndpoints(network)
     this.offlineSigner = offlineSigner
     this.txClient = new TxRestClient('https://ww-injective-rest.polkachu.com/')
     this.wasmApi = new ChainGrpcWasmApi(endpoints.grpc)
-    this.bankApi = new ChainRestBankApi(
-      'https://ww-injective-rest.polkachu.com/'
-    )
+    this.bankApi = new ChainRestBankApi('https://ww-injective-rest.polkachu.com/')
     this.chainId =
       network === InjectiveNetwork.TestnetK8s
         ? ChainId.Testnet
@@ -142,10 +140,8 @@ class Injective {
         chainId: this.chainId,
       })
 
-      const directSignResponse = await this.offlineSigner?.signDirect(
-        this.account.address,
-        signDoc
-      )
+      const directSignResponse = await this.offlineSigner?.signDirect(this.account.address,
+        signDoc)
       const signTxRaw = createTxRawFromSigResponse(directSignResponse)
       this.txRaw = null
       const res = await this.txClient.broadcast(signTxRaw)
@@ -170,9 +166,7 @@ class Injective {
       const chainRestTendermintApi = new ChainRestTendermintApi(restEndpoint)
       const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
       const latestHeight = latestBlock.header.height
-      const timeoutHeight = new BigNumberInBase(latestHeight).plus(
-        DEFAULT_BLOCK_TIMEOUT_HEIGHT
-      )
+      const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
       console.log({ messages })
 
       const encodedExecuteMsg = messages.map((msg) => {
@@ -230,9 +224,9 @@ class Injective {
       const { txRaw } = await this.prepair(messages)
       this.txRaw = txRaw
       txRaw.addSignatures('')
-      return await this.txClient
-        .simulate(txRaw)
-        .then(({ gasInfo }: SimulateResponse) => gasInfo.gasUsed)
+      return await this.txClient.
+        simulate(txRaw).
+        then(({ gasInfo }: SimulateResponse) => gasInfo.gasUsed)
     } catch (error) {
       console.log({ error })
       const errorMessage =
@@ -242,27 +236,23 @@ class Injective {
   }
 
   async queryContractSmart(address: string, queryMsg: Record<string, unknown>) {
-    return this.wasmApi
-      .fetchSmartContractState(
-        address,
-        Buffer.from(JSON.stringify(queryMsg)).toString('base64')
-      )
-      .then(({ data }) => base64ToJson(data as string))
+    return this.wasmApi.
+      fetchSmartContractState(address,
+        Buffer.from(JSON.stringify(queryMsg)).toString('base64')).
+      then(({ data }) => base64ToJson(data as string))
   }
 
   async getTxRawFromJson(
     message: Record<string, unknown>,
     contractAddress,
-    funds
+    funds,
   ) {
     await this.init()
     const restEndpoint = getNetworkEndpoints(this.network).rest
     const chainRestTendermintApi = new ChainRestTendermintApi(restEndpoint)
     const latestBlock = await chainRestTendermintApi.fetchLatestBlock()
     const latestHeight = latestBlock.header.height
-    const timeoutHeight = new BigNumberInBase(latestHeight).plus(
-      DEFAULT_BLOCK_TIMEOUT_HEIGHT
-    )
+    const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
     const [[action, msgs]] = Object.entries(message)
 
     const executeMessageJson = {
@@ -296,10 +286,12 @@ class Injective {
   async execute(
     senderAddress: string,
     contractAddress: string,
-    msg: Record<string, unknown>
+    msg: Record<string, unknown>,
   ) {
     if (!this.txRaw) {
-      const { txRaw } = await this.getTxRawFromJson(msg, contractAddress, [])
+      const { txRaw } = await this.getTxRawFromJson(
+        msg, contractAddress, [],
+      )
       this.txRaw = txRaw
     }
 
@@ -310,18 +302,14 @@ class Injective {
         chainId: this.chainId,
       })
 
-      const directSignResponse = await this.offlineSigner?.signDirect(
-        this.account.address,
-        signDoc
-      )
+      const directSignResponse = await this.offlineSigner?.signDirect(this.account.address,
+        signDoc)
       const signTxRaw = createTxRawFromSigResponse(directSignResponse)
       this.txRaw = null
       return await this.txClient.broadcast(signTxRaw).then((result) => {
         console.log({ result })
         if (result.code) {
-          throw new Error(
-            `Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`
-          )
+          throw new Error(`Error when broadcasting tx ${result.txHash} at height ${result.height}. Code: ${result.code}; Raw log: ${result.rawLog}`)
         } else {
           return result
         }

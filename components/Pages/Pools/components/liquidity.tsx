@@ -9,8 +9,10 @@ type Props = {
 
 const Liquidity = ({ liquidity, infos }: Props) => {
   const assets = infos.poolAssets
+  const ttDisabled = liquidity === 'n/a'
   return (
     <Tooltip
+      isDisabled={ttDisabled}
       sx={{ boxShadow: 'none' }}
       label={
         <VStack
@@ -23,48 +25,45 @@ const Liquidity = ({ liquidity, infos }: Props) => {
           position="relative"
           border="none"
           justifyContent="center"
-          alignItems="center"
-        >
+          alignItems="center">
           <>
             {<> </>}
-            {assets.map((name, index) => {
-              return (
-                <React.Fragment key={name.name}>
-                  <HStack
-                    justify="space-between"
-                    direction="row"
-                    width="full"
-                    px={2}
-                  >
-                    <Text color="whiteAlpha.600" fontSize={14}>
-                      {name.name}
-                    </Text>
-                    <Text fontSize={14}>
-                      {(
-                        infos.liquidity.reserves.total[index] /
-                        Math.pow(10, infos.poolAssets[index].decimals)
-                      ).toFixed(2)}
-                    </Text>
-                  </HStack>
-                  {index !== assets.length - 1 && (
-                    <Divider
-                      width="93%"
-                      borderWidth="0.1px"
-                      color="whiteAlpha.300"
-                    />
-                  )}
-                </React.Fragment>
-              )
-            })}
+            {assets.map((name, index) => (
+              <React.Fragment key={name.name}>
+                <HStack
+                  justify="space-between"
+                  direction="row"
+                  width="full"
+                  px={2}
+                >
+                  <Text color="whiteAlpha.600" fontSize={14}>
+                    {name.name}
+                  </Text>
+                  <Text fontSize={14}>
+                    {(
+                      infos.liquidity.reserves.total[index] /
+                        10 ** infos.poolAssets[index].decimals
+                    ).toFixed(2)}
+                  </Text>
+                </HStack>
+                {index !== assets.length - 1 && (
+                  <Divider
+                    width="93%"
+                    borderWidth="0.1px"
+                    color="whiteAlpha.300"
+                  />
+                )}
+              </React.Fragment>
+            ))}
           </>
         </VStack>
-      } //displaying nothing when wallet disconnected
+      } // Displaying nothing when wallet disconnected
       bg="transparent"
     >
       <VStack alignItems="flex-start" minW={100}>
         <Text mb="-0.3rem" color="white">
           {
-            <HStack borderBottom="1px dotted rgba(255, 255, 255, 0.5)" h="30px">
+            <HStack borderBottom={!ttDisabled ? '1px dotted rgba(255, 255, 255, 0.5)' : 'InactiveBorder'} paddingTop={'2'}>
               <Text align="right">{liquidity}</Text>
             </HStack>
           }
@@ -73,7 +72,7 @@ const Liquidity = ({ liquidity, infos }: Props) => {
           {
             <div
               style={{
-                width: `0px`,
+                width: '0px',
                 height: '1px',
                 background: `repeating-linear-gradient(
             to right,

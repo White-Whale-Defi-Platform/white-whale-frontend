@@ -44,7 +44,108 @@
       "average": 0.05,
       "high": 0.1
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
+  },
+  {
+    "chainId": "pacific-1",
+    "chainName": "SEI Mainnet",
+    "rpc": "https://sei-rpc.polkachu.com/",
+    "rest": "https://sei-api.polkachu.com/",
+    "icon": "/logos/sei.svg",
+    "network_type": "mainnet",
+    "label": "Sei",
+    "stakeCurrency": {
+      "coinDenom": "SEI",
+      "coinMinimalDenom": "usei",
+      "coinDecimals": 6
+    },
+    "bip44": {
+      "coinType": 118
+    },
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 0.1,
+      "average": 0.1,
+      "high": 0.25
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "sei",
+      "bech32PrefixAccPub": "seipub",
+      "bech32PrefixValAddr": "seivaloper",
+      "bech32PrefixValPub": "seivaloperpub",
+      "bech32PrefixConsAddr": "seivalcons",
+      "bech32PrefixConsPub": "seivalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "SEI",
+        "coinMinimalDenom": "usei",
+        "coinDecimals": 6,
+        "coinGeckoId": "sei-network"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "SEI",
+        "coinMinimalDenom": "usei",
+        "coinDecimals": 6,
+        "coinGeckoId": "sei-network"
+      }
+    ],
+    "features": [
+      "cosmwasm"
+    ]
+  },
+  {
+    "chainId": "columbus-5",
+    "chainName": "Terra Classic Mainnet",
+    "rpc": "https://rpc-terra-ia.cosmosia.notional.ventures/",
+    "rest": "https://api-terra-ia.cosmosia.notional.ventures/",
+    "icon": "/logos/lunac.png",
+    "network_type": "mainnet",
+    "label": "Terra-Classic",
+    "stakeCurrency": {
+      "coinDenom": "LUNC",
+      "coinMinimalDenom": "uluna",
+      "coinDecimals": 6
+    },
+    "bip44": {
+      "coinType": 330
+    },
+    "gasPriceStep": {
+      "low": 28.325,
+      "average": 28.325,
+      "high": 50
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "terra",
+      "bech32PrefixAccPub": "terrapub",
+      "bech32PrefixValAddr": "terravaloper",
+      "bech32PrefixValPub": "terravaloperpub",
+      "bech32PrefixConsAddr": "terravalcons",
+      "bech32PrefixConsPub": "terravalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "LUNC",
+        "coinMinimalDenom": "uluna",
+        "coinDecimals": 6,
+        "coinGeckoId": "terra-luna"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "LUNC",
+        "coinMinimalDenom": "uluna",
+        "coinDecimals": 6,
+        "coinGeckoId": "terra-luna"
+      }
+    ],
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "juno-1",
@@ -92,7 +193,9 @@
       "average": 0.0,
       "high": 0.0
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "phoenix-1",
@@ -139,7 +242,9 @@
       "average": 0.15,
       "high": 0.2
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "chihuahua-1",
@@ -186,7 +291,9 @@
       "average": 5,
       "high": 10
     },
-    "features": ["cosmwasm"]
+    "features": [
+      "cosmwasm"
+    ]
   },
   {
     "chainId": "injective-1",
@@ -242,7 +349,12 @@
       "high": 80000000000
     },
     "coinType": 60,
-    "features": ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"]
+    "features": [
+      "ibc-transfer",
+      "ibc-go",
+      "eth-address-gen",
+      "eth-key-sign"
+    ]
   },
   {
     "rpc": "https://rpc.comdex.one",
@@ -295,7 +407,10 @@
       "high": 1.0
     },
     "coinType": 60,
-    "features": ["ibc-transfer", "ibc-go"],
+    "features": [
+      "ibc-transfer",
+      "ibc-go"
+    ],
     "beta": true
   }
 ]

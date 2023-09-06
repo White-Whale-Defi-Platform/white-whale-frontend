@@ -7,6 +7,8 @@ import useDebounceValue from 'hooks/useDebounceValue'
 
 import { directTokenSwap } from './directTokenSwap'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { useRecoilValue } from 'recoil'
+
 
 export enum TxStep {
   /**
@@ -65,7 +67,6 @@ export const useTransaction = ({
   msgs,
   encodedMsgs,
   amount,
-  price,
   onBroadcasting,
   onSuccess,
   onError,
@@ -74,6 +75,7 @@ export const useTransaction = ({
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
   const queryClient = useQueryClient()
+  const {chainId} = useRecoilValue(walletState)
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -98,15 +100,15 @@ export const useTransaction = ({
         return response
       } catch (error) {
         if (
-          /insufficient funds/i.test(error.toString()) ||
-          /Overflow: Cannot Sub with/i.test(error.toString())
+          (/insufficient funds/i).test(error.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(error.toString())
         ) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/Max spread assertion/i.test(error.toString())) {
+        } else if ((/Max spread assertion/i).test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -144,7 +146,7 @@ export const useTransaction = ({
       onError: () => {
         setTxStep(TxStep.Idle)
       },
-    }
+    },
   )
 
   const { mutate } = useMutation(
@@ -182,16 +184,16 @@ export const useTransaction = ({
           message = 'Failed to execute transaction.'
         }
 
-        toast({
-          title: 'Swap Failed.',
-          description: message,
-          status: 'error',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
+      toast({
+        title: 'Swap Failed.',
+        description: message,
+        status: 'error',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
 
-        setTxStep(TxStep.Failed)
+      setTxStep(TxStep.Failed)
 
         onError?.()
       },
@@ -212,16 +214,15 @@ export const useTransaction = ({
             >
               {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
-            </Finder>
-          ),
-          status: 'success',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
-      },
-    }
-  )
+          </Finder>
+        ),
+        status: 'success',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
+    },
+  })
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
@@ -234,7 +235,7 @@ export const useTransaction = ({
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   const reset = () => {
@@ -248,11 +249,8 @@ export const useTransaction = ({
       return
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
-  }, [msgs, fee, mutate, price])
+    mutate()
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -277,19 +275,17 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(
-    () => ({
-      fee,
-      buttonLabel,
-      submit,
-      txStep,
-      txInfo,
-      txHash,
-      error,
-      reset,
-    }),
-    [txStep, txInfo, txHash, error, reset, fee]
-  )
+  return useMemo(() => ({
+    fee,
+    buttonLabel,
+    submit,
+    txStep,
+    txInfo,
+    txHash,
+    error,
+    reset,
+  }),
+  [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

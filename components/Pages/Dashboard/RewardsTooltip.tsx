@@ -2,42 +2,44 @@ import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { WHALE_TOKEN_SYMBOL } from 'constants/index'
 
-import { WhaleType } from './BondingOverview'
-
+type Props = {
+  dollarValue: string
+  amount: string
+  isWalletConnected: boolean
+  daysSinceLastClaim: number
+}
 export const RewardsTooltip = ({
-  value,
-  whale,
+  dollarValue,
+  amount,
   isWalletConnected,
   daysSinceLastClaim,
-}) => {
+}: Props) => {
   const lastClaimed = () => {
     if (daysSinceLastClaim >= 21) {
       return '21+ days ago'
     } else if (daysSinceLastClaim === 0) {
       return 'Today'
-    } else {
-      const multiple = daysSinceLastClaim === 1 ? '' : 's'
-      return `${daysSinceLastClaim} day${multiple} ago`
     }
+    const multiple = daysSinceLastClaim === 1 ? '' : 's'
+    return `${daysSinceLastClaim} day${multiple} ago`
   }
-  const TokenDetail = ({ whaleType, value }) => {
-    return (
-      <HStack justify="space-between" direction="row" width="full" px={2}>
-        <Text color="whiteAlpha.600" fontSize={14}>
-          {WhaleType[whaleType]}
-        </Text>
-        <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
-      </HStack>
-    )
-  }
+  const TokenDetail = () => (
+    <HStack justify="space-between" direction="row" width="full" px={2}>
+      <Text color="whiteAlpha.600" fontSize={14}>
+        {WHALE_TOKEN_SYMBOL}
+      </Text>
+      <Text fontSize={14}>{isWalletConnected ? amount : 'n/a'}</Text>
+    </HStack>
+  )
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 
   useEffect(() => {
     setTextWidth(textRef.current.offsetWidth)
-  }, [whale])
+  }, [amount])
 
   return (
     <Tooltip
@@ -59,7 +61,7 @@ export const RewardsTooltip = ({
             onMouseLeave={() => setIsLabelOpen(false)}
             onClick={() => setIsLabelOpen(!isLabelOpen)}
           >
-            <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
+            <TokenDetail />
             <HStack justify="space-between" direction="row" width="full" px={2}>
               <Text color="whiteAlpha.600" fontSize={14}>
                 {'Last Claimed'}
@@ -74,10 +76,10 @@ export const RewardsTooltip = ({
     >
       <VStack alignItems="flex-start" minW={50}>
         <Text ref={textRef} mb="-0.3rem" color="white">
-          {value}
+          {dollarValue}
         </Text>
         <Box pb={1}>
-          {value !== 'n/a' && (
+          {dollarValue !== 'n/a' && (
             <div
               style={{
                 width: `${textWidth}px`,

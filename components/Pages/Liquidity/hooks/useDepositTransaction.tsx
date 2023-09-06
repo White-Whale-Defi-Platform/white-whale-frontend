@@ -4,7 +4,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
+import { useRecoilValue } from 'recoil'
 import { executeAddLiquidity } from 'services/liquidity'
+import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
@@ -34,7 +36,6 @@ export const useTransaction = ({
   senderAddress,
   msgs,
   encodedMsgs,
-  price,
   tokenAAmount,
   tokenBAmount,
   onBroadcasting,
@@ -44,7 +45,7 @@ export const useTransaction = ({
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
-
+  const { chainId } = useRecoilValue(walletState)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
@@ -69,19 +70,19 @@ export const useTransaction = ({
         return response
       } catch (error) {
         if (
-          /insufficient funds/i.test(error.toString()) ||
-          /Overflow: Cannot Sub with/i.test(error.toString())
+          (/insufficient funds/i).test(error.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(error.toString())
         ) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if (/account sequence mismatch/i.test(error?.toString())) {
+        } else if ((/account sequence mismatch/i).test(error?.toString())) {
           setError('You have pending transaction')
           setButtonLabel('You have pending transaction')
           throw new Error('You have pending transaction')
-        } else if (/Max spread assertion/i.test(error.toString())) {
+        } else if ((/Max spread assertion/i).test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -120,21 +121,22 @@ export const useTransaction = ({
       onError: () => {
         setTxStep(TxStep.Idle)
       },
-    }
+    },
   )
 
   const { mutate } = useMutation(
     (data: any) =>
-      executeAddLiquidity({
-        tokenA,
-        tokenB,
-        tokenAAmount,
-        maxTokenBAmount: tokenBAmount,
-        signingClient,
-        swapAddress: swapAddress,
-        senderAddress,
-        msgs: encodedMsgs,
-      }),
+    executeAddLiquidity({
+      tokenA,
+      tokenB,
+      tokenAAmount,
+      tokenBAmount,
+      signingClient,
+      swapAddress,
+      senderAddress,
+      msgs: encodedMsgs,
+      chainId,
+    }),
     {
       onMutate: () => {
         setTxStep(TxStep.Posting)
@@ -181,14 +183,14 @@ export const useTransaction = ({
           message = 'Failed to execute transaction.'
         }
 
-        toast({
-          title: 'Add Liquidity Failed.',
-          description: message,
-          status: 'error',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
+      toast({
+        title: 'Add Liquidity Failed.',
+        description: message,
+        status: 'error',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
 
         onError?.()
       },
@@ -236,7 +238,7 @@ export const useTransaction = ({
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   const reset = () => {
@@ -250,11 +252,8 @@ export const useTransaction = ({
       return
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
-  }, [msgs, fee, mutate, price])
+    mutate()
+  }, [msgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo != null && txHash != null) {
@@ -279,19 +278,17 @@ export const useTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(
-    () => ({
-      fee,
-      buttonLabel,
-      submit,
-      txStep,
-      txInfo,
-      txHash,
-      error,
-      reset,
-    }),
-    [txStep, txInfo, txHash, error, reset, fee]
-  )
+  return useMemo(() => ({
+    fee,
+    buttonLabel,
+    submit,
+    txStep,
+    txInfo,
+    txHash,
+    error,
+    reset,
+  }),
+  [txStep, txInfo, txHash, error, reset, fee])
 }
 
 export default useTransaction

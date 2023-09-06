@@ -172,7 +172,7 @@ export const CW20 = (
     const mint = async (
       sender: string,
       recipient: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
       const result = await signingClient.execute(
         sender,
@@ -189,7 +189,7 @@ export const CW20 = (
     const transfer = async (
       sender: string,
       recipient: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
       const result = await signingClient.execute(
         sender,
@@ -218,7 +218,7 @@ export const CW20 = (
     const increaseAllowance = async (
       sender: string,
       spender: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
       const result = await signingClient.execute(
         sender,
@@ -234,7 +234,7 @@ export const CW20 = (
     const decreaseAllowance = async (
       sender: string,
       spender: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
       const result = await signingClient.execute(
         sender,
@@ -251,7 +251,7 @@ export const CW20 = (
       sender: string,
       owner: string,
       recipient: string,
-      amount: string
+      amount: string,
     ): Promise<string> => {
       const result = await signingClient.execute(
         sender,

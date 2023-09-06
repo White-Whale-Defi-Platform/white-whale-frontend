@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query'
-
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -40,7 +39,7 @@ export const useTokenList = () => {
       onError(e) {
         console.error('Error generating token list:', e)
       },
-    }
+    },
   )
 
   const isLoading = !poolsListResponse?.pools

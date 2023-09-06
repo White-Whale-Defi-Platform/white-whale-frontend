@@ -21,10 +21,8 @@ const NewPosition = () => {
   const { isWalletConnected } = useChain(chainName)
   const vaultId = params.get('vault') || 'JUNOX'
 
-  const vault = useMemo(
-    () => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
-    [vaults, vaultId]
-  )
+  const vault = useMemo(() => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
+    [vaults, vaultId])
 
   useEffect(() => {
     if (chainId) {
@@ -33,23 +31,19 @@ const NewPosition = () => {
         if (!vault) {
           router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
         } else {
-          router.push(
-            `/${currenChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`
-          )
+          router.push(`/${currenChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`)
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, address, chains, vault])
 
-  const edgeTokenList = useMemo(
-    () => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
-    [vaults]
-  )
+  const edgeTokenList = useMemo(() => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
+    [vaults])
   const { refetch: lpRefetch } = useVaultDeposit(
     vault?.lp_token,
     vault?.vault_address,
-    vault?.vault_assets
+    vault?.vault_assets,
   )
   const {
     balance: tokenBalance,
@@ -65,7 +59,8 @@ const NewPosition = () => {
 
   return (
     <VStack
-      width={{ base: '100%', md: '700px' }}
+      width={{ base: '100%',
+        md: '700px' }}
       alignItems="center"
       padding={5}
       // Margin="auto"

@@ -2,8 +2,6 @@ import { FC, useEffect, useMemo, useState } from 'react'
 
 import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
 import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
 import usePrices from 'hooks/usePrices'
@@ -11,9 +9,17 @@ import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilValue } from 'recoil'
 
 import { chainState } from 'state/chainState'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
+import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
+import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+
+
+import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
+
 
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
-import { useDashboardData } from './hooks/useDashboardData'
+import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 import { useChain } from '@cosmos-kit/react-lite'
@@ -29,9 +35,7 @@ const Dashboard: FC = () => {
     {
       tokenType: TokenType.liquid,
       value: null,
-      whale: null,
-      ampWhale: null,
-      bWhale: null,
+      tokenBalances: [],
       color: '#244228',
       label: 'Liquid',
       actionType: ActionType.buy,
@@ -39,9 +43,7 @@ const Dashboard: FC = () => {
     {
       tokenType: TokenType.bonded,
       value: null,
-      whale: null,
-      ampWhale: null,
-      bWhale: null,
+      tokenBalances: [],
       color: '#7CFB7D',
       label: 'Bonded',
       actionType: ActionType.bond,
@@ -49,9 +51,7 @@ const Dashboard: FC = () => {
     {
       tokenType: TokenType.unbonding,
       value: null,
-      whale: null,
-      ampWhale: null,
-      bWhale: null,
+      tokenBalances: [],
       color: '#3273F6',
       label: 'Unbonding',
       actionType: ActionType.unbond,
@@ -59,9 +59,7 @@ const Dashboard: FC = () => {
     {
       tokenType: TokenType.withdrawable,
       value: null,
-      whale: null,
-      ampWhale: null,
-      bWhale: null,
+      tokenBalances: [],
       color: '#173E84',
       label: 'Withdrawable',
       actionType: ActionType.withdraw,
@@ -74,36 +72,50 @@ const Dashboard: FC = () => {
   const setValues = (
     tokenType: TokenType,
     value: number,
-    whale: number,
-    ampWhale: number,
-    bWhale: number
+    tokenBalances: TokenBalance[],
   ) => {
-    const specificBondingData = data.find((e) => e.tokenType == tokenType)
-    specificBondingData.value = value
-    specificBondingData.whale = whale
-    specificBondingData.ampWhale = ampWhale
-    specificBondingData.bWhale = bWhale
+    const specificBondingData = data?.find((e) => e.tokenType == tokenType)
+    specificBondingData.value = value ?? 0
+    specificBondingData.tokenBalances = tokenBalances ?? []
   }
-
-  const setBondedTokens = function (ampWhale, bWhale) {
-    setValues(TokenType.bonded, ampWhale + bWhale, null, ampWhale, bWhale)
-  }
-  const setLiquidTokens = function (whale, ampWhale, bWhale) {
+  const setBondedTokens = function (bondedAssets: BondedData[]) {
+    const tokenBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
+      tokenSymbol: asset.tokenSymbol }))
+    const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
     setValues(
-      TokenType.liquid,
-      whale + ampWhale + bWhale,
-      whale,
-      ampWhale,
-      bWhale
+      TokenType.bonded, total, tokenBalances,
+    )
+  }
+  const setLiquidTokens = function (liquidBalances: number[],
+    symbols: string[]) {
+    const tokenBalances = symbols?.map((symbol, idx) => ({
+      amount: liquidBalances?.[idx] ?? 0,
+      tokenSymbol: symbol,
+    }))
+    const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
+    setValues(
+      TokenType.liquid, total, tokenBalances,
     )
   }
 
-  const setUnbondingTokens = function (ampWhale, bWhale) {
-    setValues(TokenType.unbonding, ampWhale + bWhale, null, ampWhale, bWhale)
+  const setUnbondingTokens = function (unbondingRequests: UnbondingData[]) {
+    const tokenBalances = unbondingRequests?.map((req) => ({ amount: req.amount,
+      tokenSymbol: req.tokenSymbol }))
+    const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
+
+    setValues(
+      TokenType.unbonding, total, tokenBalances,
+    )
   }
 
-  const setWithdrawableTokens = function (ampWhale, bWhale) {
-    setValues(TokenType.withdrawable, ampWhale + bWhale, null, ampWhale, bWhale)
+  const setWithdrawableTokens = function (withdrawableInfos: WithdrawableInfo[]) {
+    const tokenBalances = withdrawableInfos?.map((info) => ({ amount: info.amount,
+      tokenSymbol: info.tokenSymbol }))
+    const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
+
+    setValues(
+      TokenType.withdrawable, total, tokenBalances,
+    )
   }
 
   const prices = usePrices()
@@ -117,20 +129,23 @@ const Dashboard: FC = () => {
     return 0 // Default value
   }, [prices])
 
-  const { balance: liquidWhale } = useTokenBalance(WHALE_TOKEN_SYMBOL)
-  const { balance: liquidAmpWhale } = useTokenBalance(AMP_WHALE_TOKEN_SYMBOL)
-  const { balance: liquidBWhale } = useTokenBalance(B_WHALE_TOKEN_SYMBOL)
+  const config: Config = useConfig(network, chainId)
+
+  const symbols = useMemo(() => [
+    ...(config?.bonding_tokens?.map((token) => token.tokenSymbol) ?? []),
+    WHALE_TOKEN_SYMBOL,
+  ],
+  [config])
+
+  const [liquidBalances, _] = useMultipleTokenBalance(symbols)
 
   const {
     feeDistributionConfig,
     globalTotalBonded,
     localTotalBonded,
-    bondedAmpWhale,
-    bondedBWhale,
-    unbondingAmpWhale,
-    unbondingBWhale,
-    withdrawableAmpWhale,
-    withdrawableBWhale,
+    bondedAssets,
+    withdrawableInfos,
+    unbondingRequests,
     weightInfo,
     annualRewards,
     currentEpoch,
@@ -141,12 +156,20 @@ const Dashboard: FC = () => {
   } = useDashboardData(address, network, chainId, chainName)
 
   useEffect(() => {
-    setBondedTokens(bondedAmpWhale, bondedBWhale)
-    setLiquidTokens(liquidWhale, liquidAmpWhale, liquidBWhale)
-    setUnbondingTokens(unbondingAmpWhale, unbondingBWhale)
-    setWithdrawableTokens(withdrawableAmpWhale, withdrawableBWhale)
+    setBondedTokens(bondedAssets)
+    setLiquidTokens(liquidBalances, symbols)
+    setUnbondingTokens(unbondingRequests)
+    setWithdrawableTokens(withdrawableInfos)
     setData(data)
-  }, [isWalletConnected, isLoading, liquidWhale, liquidAmpWhale, liquidBWhale])
+  }, [
+    isWalletConnected,
+    isLoading,
+    unbondingRequests,
+    bondedAssets,
+    withdrawableInfos,
+    liquidBalances,
+    symbols,
+  ])
 
   return (
     <VStack width={'full'} alignSelf="center" paddingLeft={['0','5','10']}>
@@ -171,7 +194,8 @@ const Dashboard: FC = () => {
             mobile={isMobile}
           />
         </VStack>
-        <VStack alignSelf={{ base: 'center', xl: 'end' }}>
+        <VStack alignSelf={{ base: 'center',
+          xl: 'end' }}>
           <RewardsComponent
             isWalletConnected={isWalletConnected}
             whalePrice={whalePrice}

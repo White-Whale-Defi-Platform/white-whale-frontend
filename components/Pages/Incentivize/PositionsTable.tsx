@@ -118,10 +118,8 @@ const PositionsTable = ({ positions, columnFilters }: Props) => {
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   <HStack>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                    {flexRender(header.column.columnDef.header,
+                      header.getContext())}
 
                     {header?.column?.columnDef?.enableSorting && (
                       <VStack width="fit-content" p="0" m="0" spacing="0">

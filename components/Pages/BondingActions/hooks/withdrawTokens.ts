@@ -5,7 +5,7 @@ export const withdrawTokens = (
   signingClient: SigningCosmWasmClient,
   address: string,
   denom: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     withdraw: {

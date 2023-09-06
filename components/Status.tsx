@@ -11,10 +11,8 @@ const Status = () => {
   const chains: Array<any> = useChains()
   const { chainId } = useRecoilValue(chainState)
 
-  const url = useMemo(
-    () => chains?.find((c) => c?.chainId === chainId)?.rpc,
-    [chainId, chains]
-  )
+  const url = useMemo(() => chains?.find((c) => c?.chainId === chainId)?.rpc,
+    [chainId, chains])
 
   const { data: status } = useQuery(
     ['status', chainId],
@@ -29,7 +27,7 @@ const Status = () => {
     {
       refetchInterval: 6000,
       enabled: Boolean(url),
-    }
+    },
   )
 
   return (

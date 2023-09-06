@@ -54,10 +54,8 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
       const tokenList = await response.json()
       return {
         ...tokenList,
-        poolsById: tokenList.pools.reduce(
-          (poolsById, pool) => ((poolsById[pool.pool_id] = pool), poolsById),
-          {}
-        ),
+        poolsById: tokenList.pools.reduce((poolsById, pool) => ((poolsById[pool.pool_id] = pool), poolsById),
+          {}),
       }
     },
     {
@@ -65,7 +63,7 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
       enabled: Boolean(chainId),
       refetchOnMount: false,
       ...(options || {}),
-    }
+    },
   )
 }
 

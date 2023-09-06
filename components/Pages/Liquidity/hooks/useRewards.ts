@@ -88,14 +88,12 @@ const useRewards = (poolId: string): RewardsResult => {
     aggregatedRewards?.forEach((reward) => {
       // Cw20 token
       if (reward.info.token) {
-        const t = tokenList?.tokens.find(
-          (token) => token.denom === reward.info.token.contract_addr
-        )
+        const t = tokenList?.tokens.find((token) => token.denom === reward.info.token.contract_addr)
         const amount = fromChainAmount(reward.amount, t?.decimals)
-        const dollarValue = num(amount)
-          .times(prices?.[t?.symbol] || 0)
-          .dp(2)
-          .toNumber()
+        const dollarValue = num(amount).
+          times(prices?.[t?.symbol] || 0).
+          dp(2).
+          toNumber()
         rewardsWithToken.push({
           ...t,
           ...reward,
@@ -105,14 +103,12 @@ const useRewards = (poolId: string): RewardsResult => {
       }
       // Native token
       if (reward.info.native_token) {
-        const t = tokenList?.tokens.find(
-          (token) => token.denom === reward.info.native_token.denom
-        )
+        const t = tokenList?.tokens.find((token) => token.denom === reward.info.native_token.denom)
         const amount = fromChainAmount(reward.amount, t?.decimals)
-        const dollarValue = num(amount)
-          .times(prices?.[t?.symbol] || 0)
-          .dp(4)
-          .toNumber()
+        const dollarValue = num(amount).
+          times(prices?.[t?.symbol] || 0).
+          dp(4).
+          toNumber()
         rewardsWithToken.push({
           ...t,
           ...reward,
@@ -124,9 +120,9 @@ const useRewards = (poolId: string): RewardsResult => {
 
     return {
       rewards: rewardsWithToken,
-      totalValue: rewardsWithToken
-        ?.reduce((acc, reward) => acc + reward.dollarValue, 0)
-        ?.toFixed(2),
+      totalValue: rewardsWithToken?.
+        reduce((acc, reward) => acc + reward.dollarValue, 0)?.
+        toFixed(2),
     } as RewardsResult
   }, [aggregatedRewards, tokenList, prices])
 }

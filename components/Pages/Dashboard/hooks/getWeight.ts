@@ -13,13 +13,15 @@ export interface WeightInfo {
 export const getWeight = async (
   client: CosmWasmClient,
   address: string,
-  config: Config
+  config: Config,
 ) => {
   if (!client || !address) {
     return null
   }
   try {
-    const weightInfo = await fetchWeight(client, address, config)
+    const weightInfo = await fetchWeight(
+      client, address, config,
+    )
 
     return { weightInfo }
   } catch (e) {
@@ -30,14 +32,12 @@ export const getWeight = async (
 const fetchWeight = async (
   client: CosmWasmClient,
   address: string,
-  config: Config
+  config: Config,
 ): Promise<WeightInfo> => {
-  const result: JsonObject = await client.queryContractSmart(
-    config.whale_lair,
+  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
     {
       weight: { address },
-    }
-  )
+    })
 
   return result as WeightInfo
 }

@@ -114,8 +114,10 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
-      setValue('token1', { ...tokenA, amount: 0 })
-      setValue('token2', { ...tokenB, amount: 0 })
+      setValue('token1', { ...tokenA,
+        amount: 0 })
+      setValue('token2', { ...tokenB,
+        amount: 0 })
       clearForm()
       // Tx?.reset()
     }

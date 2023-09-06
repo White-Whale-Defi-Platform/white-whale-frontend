@@ -76,7 +76,8 @@ const queryVault = async (
     tokenAmountInDenom: fromChainAmount(info?.total_supply),
   })
 
-  return { ...info, dollarValue: formatPrice(dollarValue) }
+  return { ...info,
+    dollarValue: formatPrice(dollarValue) }
 }
 
 const queryBalance = async (
@@ -139,10 +140,12 @@ export const useVaultDeposit = (
         Boolean(cosmWasmClient) &&
         Boolean(lpToken) &&
         Boolean(getTokenDollarValue),
-    }
+    },
   )
 
-  return { balance, isLoading, refetch }
+  return { balance,
+    isLoading,
+    refetch }
 }
 export const useVaultMultiDeposit = (lpTokens: any[]) => {
   const { chainId, chainName } = useRecoilValue(chainState)
@@ -177,7 +180,9 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     }
   )
 
-  return { balance, isLoading, refetch }
+  return { balance,
+    isLoading,
+    refetch }
 }
 export const useVaultTotal = (lpTokenIds: any[]) => {
   const { chainId, chainName } = useRecoilValue(chainState)
@@ -200,9 +205,10 @@ export const useVaultTotal = (lpTokenIds: any[]) => {
       enabled:
         Boolean(chainId) && Boolean(lpTokenIds) && Boolean(getTokenDollarValue),
       refetchOnMount: false,
-    }
+    },
   )
-  return { balance, isLoading }
+  return { balance,
+    isLoading }
 }
 
 export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
@@ -218,23 +224,19 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
       ...options,
       enabled: Boolean(chainId) && Boolean(network),
       refetchOnMount: false,
-    }
+    },
   )
 
   // Const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
-  const { balance, refetch } = useVaultMultiDeposit(
-    vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
-      lp_token,
-      vault_address,
-      vault_assets,
-    }))
-  )
-  const { balance: vaultInfo } = useVaultTotal(
-    vaults?.vaults?.map(({ lp_token, vault_assets }) => ({
-      lp_token,
-      vault_assets,
-    }))
-  )
+  const { balance, refetch } = useVaultMultiDeposit(vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
+    lp_token,
+    vault_address,
+    vault_assets,
+  })))
+  const { balance: vaultInfo } = useVaultTotal(vaults?.vaults?.map(({ lp_token, vault_assets }) => ({
+    lp_token,
+    vault_assets,
+  })))
 
   const withBalance = useMemo(() => {
     if (!vaults) {
@@ -248,10 +250,13 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
       totalDeposit: vaultInfo?.[index],
     }))
 
-    return { ...vaults, vaults: _vaults }
+    return { ...vaults,
+      vaults: _vaults }
   }, [balance, vaults, vaultInfo])
 
-  return { vaults: withBalance, isLoading, refetch }
+  return { vaults: withBalance,
+    isLoading,
+    refetch }
 }
 
 export default useVaults

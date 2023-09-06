@@ -74,7 +74,8 @@ const WithdrawForm = ({
 
   useEffect(() => {
     if (tx.txStep === TxStep.Success) {
-      setToken({ ...token, amount: 0 })
+      setToken({ ...token,
+        amount: 0 })
       tx?.reset()
     }
   }, [tx, token, setToken])

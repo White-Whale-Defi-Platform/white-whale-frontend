@@ -1,3 +1,5 @@
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+
 import { ActionType, TokenType } from '../BondingOverview'
 
 export type BondingData = {
@@ -5,8 +7,6 @@ export type BondingData = {
   actionType: ActionType
   tokenType: TokenType
   value: number
-  whale: number
-  ampWhale: number
-  bWhale: number
+  tokenBalances: TokenBalance[]
   label: string
 }

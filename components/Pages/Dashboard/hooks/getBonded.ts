@@ -18,54 +18,49 @@ interface BondedInfo {
   total_bonded: string
 }
 
+export interface BondedData {
+  denom: string
+  amount: number
+  tokenSymbol: string
+}
+
 const fetchBonded = async (
   client: CosmWasmClient,
   address: string,
-  config: Config
+  config: Config,
 ): Promise<BondedInfo> => {
-  const result: JsonObject = await client.queryContractSmart(
-    config.whale_lair,
+  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
     {
       bonded: { address },
-    }
-  )
+    })
   return result as BondedInfo
 }
 
 export const getBonded = async (
   client: CosmWasmClient | null,
   address: string | null,
-  config: Config
+  config: Config,
 ) => {
   if (!client || !address) {
     return null
   }
 
-  const bondedInfo = await fetchBonded(client, address, config)
+  const bondedInfo = await fetchBonded(
+    client, address, config,
+  )
 
-  const totalBonded = bondedInfo?.total_bonded ?? 0
+  const localTotalBonded = Number(bondedInfo?.total_bonded ?? 0)
 
-  const localTotalBonded = Number(totalBonded)
+  const bondedAssets: BondedData[] = bondedInfo?.bonded_assets.map((asset) => {
+    const { denom } = asset.info.native_token
+    const tokenSymbol = config.bonding_tokens.find((token) => token.denom === denom)?.tokenSymbol
 
-  const bondedAmpWhale = bondedInfo
-    ? convertMicroDenomToDenom(
-        bondedInfo?.bonded_assets.find(
-          (asset) =>
-            asset.info.native_token.denom === config.lsd_token.ampWHALE.denom
-        )?.amount,
-        config.lsd_token.ampWHALE.decimals
-      )
-    : null
-
-  const bondedBWhale = bondedInfo
-    ? convertMicroDenomToDenom(
-        bondedInfo?.bonded_assets.find(
-          (asset) =>
-            asset.info.native_token.denom === config.lsd_token.bWHALE.denom
-        )?.amount,
-        config.lsd_token.bWHALE.decimals
-      )
-    : null
-
-  return { bondedAmpWhale, bondedBWhale, localTotalBonded }
+    return {
+      amount: convertMicroDenomToDenom(asset.amount, 6),
+      denom: asset.info.native_token.denom,
+      tokenSymbol,
+    }
+  })
+  return { bondedAssets,
+    localTotalBonded }
 }

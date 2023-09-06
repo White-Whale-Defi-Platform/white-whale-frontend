@@ -11,6 +11,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 import { Asset } from 'types/blockchain'
 
 import AssetList from './AssetList'
@@ -24,7 +25,7 @@ interface AssetSelectModalProps {
   disabled: boolean
   amount?: number
   isBonding?: boolean
-  unbondingBalances?: { [key: string]: number }
+  unbondingBalances?: TokenBalance[]
 }
 
 const AssetSelectModal: FC<AssetSelectModalProps> = ({
@@ -42,7 +43,8 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
 
   const onAssetChange = (asset, isTokenChange) => {
     setSearch(asset?.asset)
-    const newAsset = { ...asset, amount }
+    const newAsset = { ...asset,
+      amount }
     onChange(newAsset, isTokenChange)
     onClose()
   }
@@ -58,12 +60,12 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
       >
         {children}
       </HStack>
-
       <Modal
         onClose={onClose}
         isOpen={isOpen}
         isCentered
-        size={{ base: 'full', md: '2xl' }}
+        size={{ base: 'full',
+          md: '2xl' }}
       >
         <ModalOverlay />
         <ModalContent backgroundColor="#212121">

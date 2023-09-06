@@ -1,5 +1,6 @@
 import { JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { ExecuteResult } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { StdFee } from '@cosmjs/launchpad'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { Coin } from '@cosmjs/stargate'
 import { TxInfo } from '@terra-money/feather.js'
@@ -16,13 +17,15 @@ export interface Wallet {
   post: (
     senderAddress: string,
     msgs: EncodeObject[],
-    memo?: string
+    memo?: string,
+    fee?: StdFee
   ) => Promise<TxResponse>
   execute: (
     senderAddress: string,
     contractAddress: string,
     msg: Record<string, unknown>,
-    funds?: readonly Coin[]
+    funds?: readonly Coin[],
+    fee?: StdFee
   ) => Promise<ExecuteResult>
   queryContractSmart: (
     address: string,

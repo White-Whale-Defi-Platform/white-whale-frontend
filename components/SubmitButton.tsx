@@ -19,11 +19,8 @@ const SubmitButton = ({
   isLoading = false,
   onClick,
 }: Props) => {
-  const _isLoading = useMemo(
-    () =>
-      [TxStep.Estimating, TxStep.Posting, TxStep.Broadcasting].includes(txStep),
-    [txStep]
-  )
+  const _isLoading = useMemo(() => [TxStep.Estimating, TxStep.Posting, TxStep.Broadcasting].includes(txStep),
+    [txStep])
   return (
     <Button
       type="submit"

@@ -154,10 +154,8 @@ const AllVaultsTable = ({
                   <Th key={header.id} color="brand.50">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header,
+                        header.getContext())}
                   </Th>
                 ))}
               </Tr>

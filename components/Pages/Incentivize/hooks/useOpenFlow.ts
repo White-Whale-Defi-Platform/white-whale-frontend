@@ -23,6 +23,7 @@ import {
 import useEpoch from './useEpoch'
 import useFactoryConfig from './useFactoryConfig'
 import { useClients } from 'hooks/useClients'
+import { TerraTreasuryService } from 'services/treasuryService'
 
 interface Props {
   poolId: string
@@ -57,38 +58,37 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       return null
     }
 
-    const flow_asset = createAsset(amount, tokenInfo.denom, tokenInfo?.native)
+    const flow_asset = createAsset(
+      amount, tokenInfo.denom, tokenInfo?.native,
+    )
     const start_epoch = dateToEpoch(startDate)
     const end_epoch = dateToEpoch(endDate)
 
     const nativeAmount =
       tokenInfo?.denom === flowFeeDenom
-        ? num(amount).plus(factoryConfig?.createFlowFee?.amount).toString()
+        ? num(amount).plus(factoryConfig?.createFlowFee?.amount).
+          toString()
         : amount
 
     const funds = [
       factoryConfig &&
         tokenInfo?.denom !== flowFeeDenom &&
-        coin(
-          factoryConfig?.createFlowFee?.amount,
-          factoryConfig?.createFlowFee?.denom
-        ),
+        coin(factoryConfig?.createFlowFee?.amount,
+          factoryConfig?.createFlowFee?.denom),
       tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
-    ]
-      .filter(Boolean)
-      .sort((a, b) => a.denom.localeCompare(b.denom))
+    ].
+      filter(Boolean).
+      sort((a, b) => a.denom.localeCompare(b.denom))
 
     const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
     /* Increase allowance for each non-native token */
     if (!tokenInfo?.native) {
-      increaseAllowanceMessages.push(
-        createIncreaseAllowanceMessage({
-          tokenAmount: Number(amount),
-          tokenAddress: tokenInfo?.denom,
-          senderAddress: address,
-          swapAddress: pool?.staking_address,
-        })
-      )
+      increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
+        tokenAmount: amount,
+        tokenAddress: tokenInfo?.denom,
+        senderAddress: address,
+        swapAddress: pool?.staking_address,
+      }))
     }
 
     return [
@@ -118,19 +118,22 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   })
 
   const { mutate: submit, ...tx } = useMutation({
-    mutationFn: () =>
-      signingClient.signAndBroadcast(address, msgs, 'auto', null),
+    mutationFn: async () =>{
+      let fee = null
+      if (chainId === 'columbus-5') {
+        fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(amount, tokenInfo?.denom)
+      }
+      return await signingClient.signAndBroadcast(address, msgs, 'auto', null)
+    },
     onError,
     onSuccess,
     onMutate,
   })
 
-  return useMemo(
-    () => ({
-      submit,
-      simulate,
-      tx,
-    }),
-    [tx, submit, simulate]
-  )
+  return useMemo(() => ({
+    submit,
+    simulate,
+    tx,
+  }),
+  [tx, submit, simulate])
 }

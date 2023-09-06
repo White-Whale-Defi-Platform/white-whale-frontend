@@ -26,15 +26,20 @@ const Wallet: any = () => {
     currentChainState.chainName
   )
   const queryClient = useQueryClient()
-
+  const [chainIdParam, setChainIdParam] = useState<string>(null)
   const resetWallet = () => {
     queryClient.clear()
     disconnect()
   }
 
   useEffect(() => {
-    // OnDisconnect()
+    if (!router.query.chainId) {
+      return
+    }
+    setChainIdParam(router.query.chainId as string)
+  }, [router.query.chainId])
 
+  useEffect(() => {
     if (router.pathname === '/') {
       return
     }
@@ -65,8 +70,7 @@ const Wallet: any = () => {
       })
     }
     setInitialized(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [chainIdParam])
 
   const denom = useMemo(() => {
     if (!chainInfo) {

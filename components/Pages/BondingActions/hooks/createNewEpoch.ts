@@ -4,7 +4,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 export const createNewEpoch = async (
   signingClient: SigningCosmWasmClient,
   config: Config,
-  address: string
+  address: string,
 ) => {
   const handleMsg = {
     new_epoch: {},

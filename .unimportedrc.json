@@ -1,0 +1,28 @@
+{
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts"
+  ],
+  "ignoreUnimported": [],
+  "ignoreUnused": [
+    "next",
+    "react",
+    "react-dom",
+    "@typescript-eslint/eslint-plugin",
+    "eslint-plugin-import-helpers"
+  ],
+  "ignoreUnresolved": [
+    "webpack-node-externals"
+  ],
+  "entry": [
+    "pages/**",
+    "next.config.js",
+    "public/logs.js",
+    "webpack.functions.js"
+  ]
+}

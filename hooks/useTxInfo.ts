@@ -20,7 +20,7 @@ const useTxInfo = ({ txHash, signingClient }: TxInfo) => {
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   return txInfo

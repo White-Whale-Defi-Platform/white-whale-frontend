@@ -8,52 +8,57 @@ import {
   Text,
   Tooltip,
   VStack,
-  useMediaQuery,
 } from '@chakra-ui/react'
 
-import { TokenType, WhaleType } from './BondingOverview'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+
+import { TokenType } from './BondingOverview'
 import { BondingData } from './types/BondingData'
 
 export interface WhaleTooltipProps {
-  data: BondingData[]
+  data?: BondingData[]
   withdrawableAmpWhale?: number
   withdrawableBWhale?: number
   label: string
   isWalletConnected: boolean
-  tokenType: TokenType
+  tokenType?: TokenType
+  tokens?: TokenBalance[]
 }
 
 export const WhaleTooltip = ({
-  data,
   label,
   isWalletConnected,
   tokenType,
-  withdrawableAmpWhale,
-  withdrawableBWhale,
+  data,
+  tokens,
 }: WhaleTooltipProps) => {
-  const {
-    whale = null,
-    ampWhale = null,
-    bWhale = null,
-  } = data?.find((e) => e.tokenType == tokenType) || {}
+  const sortedTokens = tokens
+    ? tokens
+    : data
+      ? data.
+        find((type) => type.tokenType === tokenType).
+        tokenBalances.sort((a, b) => b.amount - a.amount)
+      : []
+  const summedBalancesObject = sortedTokens.reduce((acc, balance) => {
+    if (acc[balance.tokenSymbol]) {
+      acc[balance.tokenSymbol] += balance.amount
+    } else {
+      acc[balance.tokenSymbol] = balance.amount
+    }
+    return acc
+  }, {} as Record<string, number>)
 
-  const lsdTokenDetails = [
-    {
-      type: WhaleType.bWHALE,
-      value: withdrawableBWhale ?? bWhale,
-    },
-    {
-      type: WhaleType.ampWHALE,
-      value: withdrawableAmpWhale ?? ampWhale,
-    },
-  ].sort((a, b) => b.value - a.value)
+  const summedBalanceList: TokenBalance[] = Object.keys(summedBalancesObject).map((key) => ({
+    amount: summedBalancesObject[key],
+    tokenSymbol: key,
+  }))
 
-  const TokenDetail = ({ whaleType, value }) => (
+  const TokenDetail = ({ token }: { token: TokenBalance }) => (
     <HStack justify="space-between" direction="row" width="full" px={2}>
       <Text color="whiteAlpha.600" fontSize={14}>
-        {WhaleType[whaleType]}
+        {token.tokenSymbol}
       </Text>
-      <Text fontSize={14}>{isWalletConnected ? value : 'n/a'}</Text>
+      <Text fontSize={14}>{isWalletConnected ? token.amount : 'n/a'}</Text>
     </HStack>
   )
 
@@ -62,66 +67,58 @@ export const WhaleTooltip = ({
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   useEffect(() => {
     setTextWidth(textRef.current.offsetWidth)
-  }, [whale, ampWhale, bWhale])
+  }, [sortedTokens])
 
   return (
     <Tooltip
       sx={{ boxShadow: 'none' }}
       label={
-        isWalletConnected ? (
-          <VStack
-            minW="250px"
-            minH="fit-content"
-            borderRadius="10px"
-            bg="blackAlpha.900"
-            px="4"
-            py="4"
-            position="relative"
-            border="none"
-            justifyContent="center"
-            alignItems="center"
-          >
-            {ampWhale === null && withdrawableAmpWhale == null ? (
-              <Text>
-                {tokenType === TokenType.liquid
-                  ? 'Liquid WHALE and LSD-WHALE Token Balances'
-                  : tokenType === TokenType.bonded
-                  ? 'Current amount of bonded LSD-WHALE token'
-                  : tokenType === TokenType.unbonding
-                  ? 'Current amount of unbonding LSD-WHALE token'
-                  : tokenType === TokenType.withdrawable
-                  ? 'Current amount of withdrawable LSD-WHALE token'
-                  : null}
-              </Text>
-            ) : (
-              <>
-                {tokenType === TokenType.liquid ? (
-                  <>
-                    {' '}
-                    <TokenDetail whaleType={WhaleType.WHALE} value={whale} />
-                    <Divider
-                      width="93%"
-                      borderWidth="0.1px"
-                      color="whiteAlpha.300"
-                    />
-                  </>
-                ) : null}
-                {lsdTokenDetails.map((e, index) => (
-                  <React.Fragment key={e.type}>
-                    <TokenDetail whaleType={e.type} value={e.value} />
-                    {index === 0 && (
-                      <Divider
-                        width="93%"
-                        borderWidth="0.1px"
-                        color="whiteAlpha.300"
-                      />
-                    )}
-                  </React.Fragment>
-                ))}
-              </>
-            )}
-          </VStack>
-        ) : null
+        (isWalletConnected &&
+          !(!data && !tokens) &&
+          summedBalanceList.length > 0) ||
+        (!data && !tokens) ? (
+            <VStack
+              minW="250px"
+              minH="fit-content"
+              borderRadius="10px"
+              bg="blackAlpha.900"
+              px="4"
+              py="4"
+              position="relative"
+              border="none"
+              justifyContent="center"
+              alignItems="center"
+            >
+              {!data && !tokens ? (
+                <Text>
+                  {tokenType === TokenType.liquid
+                    ? 'Liquid bonding token balances'
+                    : tokenType === TokenType.bonded
+                      ? 'Current bonded balances'
+                      : tokenType === TokenType.unbonding
+                        ? 'Current unbonding balances'
+                        : tokenType === TokenType.withdrawable
+                          ? 'Current withdrawable balances'
+                          : null}
+                </Text>
+              ) : (
+                <>
+                  {summedBalanceList?.map((token, index) => (
+                    <React.Fragment key={token.tokenSymbol}>
+                      <TokenDetail token={token} />
+                      {index === 0 && summedBalanceList.length > 1 && (
+                        <Divider
+                          width="93%"
+                          borderWidth="0.1px"
+                          color="whiteAlpha.300"
+                        />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
+            </VStack>
+          ) : null
       } // Displaying nothing when wallet disconnected
       bg="transparent"
       isOpen={isLabelOpen}

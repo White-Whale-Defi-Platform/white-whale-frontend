@@ -90,9 +90,11 @@ export const useTokenBalance = (tokenSymbol: string) => {
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,
-    }
+    },
   )
-  return { balance, isLoading, refetch }
+  return { balance,
+    isLoading,
+    refetch }
 }
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
@@ -102,10 +104,8 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
 
-  const queryKey = useMemo(
-    () => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
-    [tokenSymbols]
-  )
+  const queryKey = useMemo(() => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
+    [tokenSymbols])
 
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
@@ -139,7 +139,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
       onError(error) {
         console.error('Cannot fetch token balance bc:', error)
       },
-    }
+    },
   )
   return [data, isLoading] as const
 }

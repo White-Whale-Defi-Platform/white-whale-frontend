@@ -1,3 +1,4 @@
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
 
@@ -13,6 +14,13 @@ export interface UnbondingRequest {
   asset: Asset
   timestamp: string
   weight: string
+}
+
+export interface UnbondingData {
+  amount: number
+  denom: string
+  timestamp: number
+  tokenSymbol: string
 }
 
 interface Asset {
@@ -31,77 +39,50 @@ interface NativeToken {
 export const getUnbonding = async (
   client: CosmWasmClient,
   address: string,
-  config: Config
+  config: Config,
 ) => {
   if (!client || !address) {
     return null
   }
-
-  const unbondingInfos = await fetchUnbonding(client, address, config)
+  const unbondingInfos = await fetchUnbonding(
+    client, address, config,
+  )
   const bondingContractConfig = await fetchConfig(client, config)
 
   const unbondingPeriodInNano = Number(bondingContractConfig?.unbonding_period)
   const currentTimeInNano = Date.now() * 1_000_000
 
   // Filtering out unbonding requests which have already finished, so they won't get shown
-  const filterUnbondingRequests = (unbondingRequests) => {
-    if (!unbondingRequests) {
+  const filterAndBundleUnbondingRequests = (unbondingInfos) => {
+    const allUnbondingRequests = unbondingInfos?.flatMap((item) => item.unbonding_requests)
+
+    if (!allUnbondingRequests) {
       return []
     }
-    return unbondingRequests.filter(
-      (req) => Number(req.timestamp) + unbondingPeriodInNano > currentTimeInNano
-    )
+    return allUnbondingRequests.filter((req) => Number(req.timestamp) + unbondingPeriodInNano > currentTimeInNano)
   }
-  const filteredAmpWhaleUnbondingRequests = filterUnbondingRequests(
-    unbondingInfos?.[0]?.unbonding_requests
-  )
-  const filteredBWhaleUnbondingRequests = filterUnbondingRequests(
-    unbondingInfos?.[1]?.unbonding_requests
-  )
+  const unbondingRequests: UnbondingData[] = filterAndBundleUnbondingRequests(unbondingInfos).
+    sort((a, b) => new Date(nanoToMilli(Number(a.timestamp))).getTime() -
+        new Date(nanoToMilli(Number(b.timestamp))).getTime()).
+    map((req) => {
+      const tokenSymbol = config.bonding_tokens.find((token) => token.denom === req.asset.info.native_token.denom)?.tokenSymbol
 
-  const filteredUnbondingRequests: UnbondingRequest[] = [
-    ...(filteredAmpWhaleUnbondingRequests || []),
-    ...(filteredBWhaleUnbondingRequests || []),
-  ].sort(
-    (a, b) =>
-      new Date(nanoToMilli(Number(a.timestamp))).getTime() -
-      new Date(nanoToMilli(Number(b.timestamp))).getTime()
-  )
+      return {
+        denom: req.asset.info.native_token.denom,
+        timestamp: req.timestamp,
+        amount: convertMicroDenomToDenom(req.asset.amount, 6),
+        tokenSymbol,
+      }
+    })
 
-  const unbondingAmpWhale = convertMicroDenomToDenom(
-    filteredAmpWhaleUnbondingRequests
-      ?.map((req) => req.asset.amount)
-      .reduce(
-        (accumulator: number, currentValue: string) =>
-          accumulator + parseFloat(currentValue),
-        0
-      ) || 0,
-    config.lsd_token.ampWHALE.decimals
-  )
-
-  const unbondingBWhale = convertMicroDenomToDenom(
-    filteredBWhaleUnbondingRequests
-      ?.map((req) => req.asset.amount)
-      .reduce(
-        (accumulator: number, currentValue: string) =>
-          accumulator + parseFloat(currentValue),
-        0
-      ) || 0,
-    config.lsd_token.bWHALE.decimals
-  )
-
-  return { unbondingAmpWhale, unbondingBWhale, filteredUnbondingRequests }
+  return { unbondingRequests }
 }
 
 const fetchUnbonding = async (
   client: CosmWasmClient,
   address: string,
-  config: Config
-): Promise<UnbondingInfo[]> =>
-  Promise.all(
-    Object.entries(config.lsd_token).map(async ([key, token]) =>
-      client.queryContractSmart(config.whale_lair, {
-        unbonding: { address, denom: token.denom },
-      })
-    )
-  )
+  config: Config,
+): Promise<UnbondingInfo[]> => Promise.all(Object.entries(config.bonding_tokens).map(async ([key, token]) => client.queryContractSmart(config.whale_lair, {
+  unbonding: { address,
+    denom: token.denom },
+})))

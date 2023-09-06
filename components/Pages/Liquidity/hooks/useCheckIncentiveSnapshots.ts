@@ -29,7 +29,7 @@ export const useCheckIncentiveSnapshots = (
 const fetchCheckIncentiveSnapshots = async (
   cosmWasmClient: CosmWasmClient,
   epochId: string,
-  incentiveAddresses: Array<string>
+  incentiveAddresses: Array<string>,
 ) => {
   const noSnapshotTakenAddresses = []
   // Incentive contract aka staking address
@@ -43,7 +43,7 @@ const fetchCheckIncentiveSnapshots = async (
         'error fetching global_weight for incentiveAddress ',
         incentiveAddress,
         ' epochId ',
-        epochId
+        epochId,
       )
       noSnapshotTakenAddresses.push(incentiveAddress)
     }

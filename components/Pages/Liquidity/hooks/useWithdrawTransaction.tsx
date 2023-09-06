@@ -64,8 +64,8 @@ export const useWithdrawTransaction = ({
         return response
       } catch (e) {
         if (
-          /insufficient funds/i.test(e.toString()) ||
-          /Overflow: Cannot Sub with/i.test(e.toString())
+          (/insufficient funds/i).test(e.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(e.toString())
         ) {
           console.error(e)
           setTxStep(TxStep.Idle)
@@ -97,7 +97,7 @@ export const useWithdrawTransaction = ({
       onError: () => {
         setTxStep(TxStep.Idle)
       },
-    }
+    },
   )
 
   const { mutate } = useMutation(
@@ -141,16 +141,16 @@ export const useWithdrawTransaction = ({
           message = 'Failed to execute transaction.'
         }
 
-        toast({
-          title: 'Withdraw Failed.',
-          description: message,
-          status: 'error',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
+      toast({
+        title: 'Withdraw Failed.',
+        description: message,
+        status: 'error',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
 
-        setTxStep(TxStep.Failed)
+      setTxStep(TxStep.Failed)
 
         onError?.()
       },
@@ -167,25 +167,24 @@ export const useWithdrawTransaction = ({
           ],
         })
 
-        onBroadcasting?.(data.transactionHash || data?.txHash)
-        toast({
-          title: 'Withdraw Liquidity Success.',
-          description: (
-            <Finder
-              txHash={data.transactionHash || data?.txHash}
-              chainId={chainId.toString()}
-            >
-              {' '}
-            </Finder>
-          ),
-          status: 'success',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
-      },
-    }
-  )
+      onBroadcasting?.(data.transactionHash || data?.txHash)
+      toast({
+        title: 'Withdraw Liquidity Success.',
+        description: (
+          <Finder
+            txHash={data.transactionHash || data?.txHash}
+            chainId={chainId.toString()}
+          >
+            {' '}
+          </Finder>
+        ),
+        status: 'success',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
+    },
+  })
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
@@ -199,7 +198,7 @@ export const useWithdrawTransaction = ({
     {
       enabled: txHash != null,
       retry: true,
-    }
+    },
   )
 
   const reset = () => {
@@ -242,18 +241,16 @@ export const useWithdrawTransaction = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
 
-  return useMemo(
-    () => ({
-      fee,
-      buttonLabel,
-      submit,
-      txStep,
-      txInfo,
-      txHash,
-      error,
-      reset,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [txStep, txInfo, txHash, error, reset, fee]
-  )
+  return useMemo(() => ({
+    fee,
+    buttonLabel,
+    submit,
+    txStep,
+    txInfo,
+    txHash,
+    error,
+    reset,
+  }),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [txStep, txInfo, txHash, error, reset, fee])
 }

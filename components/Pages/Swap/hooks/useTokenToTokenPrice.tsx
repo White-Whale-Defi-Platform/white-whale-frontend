@@ -28,7 +28,8 @@ export const useTokenToTokenPriceQuery = ({
   const tokenA = useTokenInfo(tokenASymbol)
   const tokenB = useTokenInfo(tokenBSymbol)
 
-  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA, tokenB })
+  const [matchingPools] = useQueryMatchingPoolForSwap({ tokenA,
+    tokenB })
 
   return useQuery({
     queryKey: [
@@ -46,15 +47,13 @@ export const useTokenToTokenPriceQuery = ({
         })
       }
     },
-    enabled: Boolean(
-      enabled &&
+    enabled: Boolean(enabled &&
         client &&
         matchingPools &&
         tokenA &&
         tokenB &&
         tokenAmount > 0 &&
-        tokenBSymbol !== tokenASymbol
-    ),
+        tokenBSymbol !== tokenASymbol),
     refetchOnMount: 'always' as const,
     refetchInterval: refetchInBackground
       ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL

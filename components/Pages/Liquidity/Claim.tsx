@@ -66,10 +66,8 @@ const Claim = ({ poolId }: Props) => {
   const { rewards = [], totalValue } = useRewards(poolId)
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce(
-      (acc, reward) => acc + Number(reward.amount),
-      0
-    )
+    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.assetAmount),
+      0)
     return rewardsSum > 0
   }, [rewards])
 

@@ -15,8 +15,7 @@ export const Action = ({ item, poolId }) => {
         variant="outline"
         size="sm"
         isLoading={close?.isLoading}
-        onClick={() =>
-          close?.submit({ unbonding_duration: item?.unbonding_duration })
+        onClick={() => close?.submit({ unbonding_duration: item?.unbonding_duration })
         }
       >
         Close
@@ -43,4 +42,5 @@ export const Action = ({ item, poolId }) => {
   } else {
     return <Box w="full" />
   }
+  <Box w="full" />
 }

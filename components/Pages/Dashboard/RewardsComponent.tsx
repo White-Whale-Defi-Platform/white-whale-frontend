@@ -57,9 +57,7 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
   const currentDate: Date = new Date()
   currentDate.setDate(currentDate.getDate() - 1)
   const currentDateTimeMinusOneDay = currentDate.getTime()
-  const epochStartDateTime = new Date(
-    nanoToMilli(currentEpochStartTimeInNano)
-  ).getTime()
+  const epochStartDateTime = new Date(nanoToMilli(currentEpochStartTimeInNano)).getTime()
 
   useEffect(() => {
     if (!isImminent) {
@@ -122,25 +120,17 @@ const RewardsComponent = ({
 
   const { openView } = useChain(chainName)
 
-  const claimableRewards = useMemo(
-    () => totalGlobalClaimable * Number(weightInfo?.share || 0),
-    [totalGlobalClaimable, weightInfo]
-  )
+  const claimableRewards = useMemo(() => totalGlobalClaimable * Number(weightInfo?.share || 0),
+    [totalGlobalClaimable, weightInfo])
 
-  const epochDurationInMilli = nanoToMilli(
-    Number(feeDistributionConfig?.epoch_config?.duration)
-  )
+  const epochDurationInMilli = nanoToMilli(Number(feeDistributionConfig?.epoch_config?.duration))
 
-  const genesisStartTimeInNano = Number(
-    feeDistributionConfig?.epoch_config?.genesis_epoch ?? 0
-  )
+  const genesisStartTimeInNano = Number(feeDistributionConfig?.epoch_config?.genesis_epoch ?? 0)
 
   const localWeight = Number(weightInfo?.weight)
 
-  const multiplierRatio = Math.max(
-    (localWeight || 0) / (localTotalBonded || 1),
-    1
-  )
+  const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
+    1)
 
   const apr = useMemo(
     () =>
@@ -162,9 +152,7 @@ const RewardsComponent = ({
   // TODO global constant ?
   const borderRadius = '30px'
 
-  const currentEpochStartDateTimeInMilli = new Date(
-    nanoToMilli(Number(currentEpoch?.epoch?.start_time))
-  ).getTime()
+  const currentEpochStartDateTimeInMilli = new Date(nanoToMilli(Number(currentEpoch?.epoch?.start_time))).getTime()
 
   const passedTimeSinceCurrentEpochStartedInMilli =
     Date.now() - currentEpochStartDateTimeInMilli
@@ -178,20 +166,14 @@ const RewardsComponent = ({
     return 'Claim'
   }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
-  const durationString = calculateRewardDurationString(
-    epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
-    genesisStartTimeInNano
-  )
+  const durationString = calculateRewardDurationString(epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
+    genesisStartTimeInNano)
 
-  const progress = Math.min(
-    (passedTimeSinceCurrentEpochStartedInMilli / epochDurationInMilli) * 100,
-    100
-  )
+  const progress = Math.min((passedTimeSinceCurrentEpochStartedInMilli / epochDurationInMilli) * 100,
+    100)
 
-  const bondingHasStarted: boolean = useMemo(
-    () => genesisStartTimeInNano / 1_000_000 < Date.now(),
-    [genesisStartTimeInNano]
-  )
+  const bondingHasStarted: boolean = useMemo(() => genesisStartTimeInNano / 1_000_000 < Date.now(),
+    [genesisStartTimeInNano])
 
   return (
     <>
@@ -251,9 +233,7 @@ const RewardsComponent = ({
             </HStack>
             <ProgressBar
               progress={progress}
-              currentEpochStartTimeInNano={Number(
-                currentEpoch?.epoch?.start_time
-              )}
+              currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)}
             />
           </VStack>
           <Box
@@ -269,13 +249,13 @@ const RewardsComponent = ({
                 <BondingActionTooltip action={ActionType.claim} />
               </HStack>
               <RewardsTooltip
-                value={
+                dollarValue={
                   isWalletConnected
                     ? `$${(claimableRewards * whalePrice).toFixed(2)}`
                     : 'n/a'
                 }
                 isWalletConnected={isWalletConnected}
-                whale={claimableRewards.toFixed(6)}
+                amount={claimableRewards.toFixed(6)}
                 daysSinceLastClaim={daysSinceLastClaim}
               />
             </HStack>
@@ -317,7 +297,9 @@ const RewardsComponent = ({
               }
               onClick={async () => {
                 if (isWalletConnected) {
-                  await submit(ActionType.claim, null, null)
+                  await submit(
+                    ActionType.claim, null, null,
+                  )
                 } else {
                   openView()
                 }

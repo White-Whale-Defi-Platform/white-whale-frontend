@@ -17,7 +17,7 @@ import { NetworkType } from 'state/chainState'
 import { useClients } from 'hooks/useClients'
 
 export interface TokenDetails {
-  name: string
+  tokenSymbol: string
   denom: string
   decimals: number
 }
@@ -27,12 +27,8 @@ export interface Config {
   fee_distributor: string
   incentive_factory: string
   frontend_helper: string
-
   whale_base_token: TokenDetails
-  lsd_token: {
-    ampWHALE: TokenDetails
-    bWHALE: TokenDetails
-  }
+  bonding_tokens: TokenDetails[]
 }
 
 export const useConfig = (network: NetworkType, chainId: string) => {
@@ -70,21 +66,21 @@ export const useDashboardData = (address, network, chainId, chainName) => {
     {
       queryKey: ['bonded', address, network, chainId],
       queryFn: () => getBonded(queryClient, address, config),
-      enabled: !!queryClient && !!address && !!config,
+      enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['unbonding', address, network, chainId],
       queryFn: () => getUnbonding(queryClient, address, config),
-      enabled: !!queryClient && !!address && !!config,
+      enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['withdrawable', address, network, chainId],
       queryFn: () => getWithdrawable(queryClient, address, config),
-      enabled: !!queryClient && !!address && !!config,
+      enabled:  Boolean(queryClient) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
@@ -96,7 +92,7 @@ export const useDashboardData = (address, network, chainId, chainName) => {
     {
       queryKey: ['weightInfo', address, network, chainId],
       queryFn: () => getWeight(queryClient, address, config),
-      enabled: !!queryClient && !!address && !!config,
+      enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
     },
     {
       queryKey: ['feeDistributionConfig', network, chainId],
@@ -116,7 +112,7 @@ export const useDashboardData = (address, network, chainId, chainName) => {
     {
       queryKey: ['claimableRewards', address, network, chainId],
       queryFn: () => getClaimable(queryClient, address, config),
-      enabled: !!queryClient && !!address && !!config,
+      enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
     },
     {
       queryKey: ['bondingConfig', network, chainId],
@@ -125,15 +121,8 @@ export const useDashboardData = (address, network, chainId, chainName) => {
     },
   ])
 
-  const isLoading = useMemo(
-    () =>
-      queries.some((query) => {
-        return (
-          query.isLoading || query.data === null || query.data === undefined
-        )
-      }),
-    [queries]
-  )
+  const isLoading = useMemo(() => queries.some((query) => query.isLoading || query.data === null || query.data === undefined),
+    [queries])
 
   const refetchAll = () => {
     queries.forEach((query) => {
@@ -166,5 +155,7 @@ export const useDashboardData = (address, network, chainId, chainName) => {
     }
   }, [queries])
 
-  return { ...data, isLoading, refetch: refetchAll }
+  return { ...data,
+    isLoading,
+    refetch: refetchAll }
 }

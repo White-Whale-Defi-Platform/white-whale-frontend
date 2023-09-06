@@ -37,7 +37,7 @@ export const useIBCAssetList = () => {
       refetchOnMount: false,
       refetchIntervalInBackground: true,
       refetchInterval: 1000 * 60,
-    }
+    },
   )
 
   return [data, isLoading] as const

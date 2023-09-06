@@ -33,7 +33,7 @@ const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
        *     console.log({err : (err as any)?.code})
        * }
        */
-    }
+    },
   )
 
   const simulatedError = useMemo(() => {
@@ -41,13 +41,11 @@ const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
       return null
     }
 
-    if (/Operation disabled, swap/i.test(error?.toString())) {
+    if ((/Operation disabled, swap/i).test(error?.toString())) {
       return 'Pair is disabled for swap'
     } else if (
-      /unreachable: query wasm contract failed: invalid request/i.test(
-        error?.toString()
-      ) ||
-      /codespace: wasm, code: 9: query wasm/i.test(error?.toString())
+      (/unreachable: query wasm contract failed: invalid request/i).test(error?.toString()) ||
+      (/codespace: wasm, code: 9: query wasm/i).test(error?.toString())
     ) {
       return 'Insufficient liquidity'
     }

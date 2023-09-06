@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -29,15 +30,12 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
     const [linkInAsPath] =
       menu?.children === undefined
         ? [asPath.includes(menu.link)]
-        : (menu.children ?? []).filter((item: { link: string }) =>
-            asPath.includes(item.link)
-          )
+        : (menu.children ?? []).filter((item: { link: string }) => asPath.includes(item.link))
     return Boolean(linkInAsPath)
   }, [asPath, menu])
 
   const openLink =
-    (url: string): (() => void) =>
-    () => {
+    (url: string): (() => void) => () => {
       window.open(url, '_blank')
     }
 
@@ -49,12 +47,10 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       // Children defining sub menu items
       onOpen={
         menu.isExternal
-          ? openLink(
-              `${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`
-            )
+          ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
           : menu?.children === undefined
-          ? () => window.location.assign(`/${currentChainName}${menu.link}`)
-          : onOpen
+            ? () => window.location.assign(`/${currentChainName}${menu.link}`)
+            : onOpen
       }
       onClose={onClose}
     >
@@ -65,6 +61,10 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
             color={isActiveLink ? 'white' : 'brand.50'}
           >
             {menu.label}
+            {menu.children ? <ChevronDownIcon /> : null}
+            {menu.isExternal ? (
+              <ExternalLinkIcon paddingLeft={''} paddingBottom={'1'} />
+            ) : null}
           </Text>
         </HStack>
       </PopoverTrigger>

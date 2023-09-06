@@ -29,13 +29,15 @@ const useSwap = ({ reverse }) => {
       ? toChainAmount(swapTokenB?.amount, tokenB?.decimals)
       : ''
     : swapTokenA?.amount > 0
-    ? toChainAmount(swapTokenA?.amount, tokenA?.decimals)
-    : ''
+      ? toChainAmount(swapTokenA?.amount, tokenA?.decimals)
+      : ''
   const { routerAddress } = poolsList || {}
   const slippageToDecimal = slippage / 100
   const { simulateMsg, encodedExecuteMsg, executeMsg, path } = useRoute({
-    tokenA: { ...tokenA, ...swapTokenA },
-    tokenB: { ...tokenB, ...swapTokenB },
+    tokenA: { ...tokenA,
+      ...swapTokenA },
+    tokenB: { ...tokenB,
+      ...swapTokenB },
     amount,
     reverse,
     senderAddress: address,
@@ -54,10 +56,10 @@ const useSwap = ({ reverse }) => {
 
     const rate1 = num(1).minus(slippageToDecimal)
     const rate2 = num(1).minus(0.001)
-    return fromChainAmount(
-      num(simulated.amount).times(rate1).times(rate2).toFixed(tokenB?.decimals),
-      tokenB?.decimals
-    )
+    return fromChainAmount(num(simulated.amount).times(rate1).
+      times(rate2).
+      toFixed(tokenB?.decimals),
+    tokenB?.decimals)
   }, [simulated, slippageToDecimal, tokenB?.decimals])
 
   const tx = useTransaction({
@@ -69,20 +71,20 @@ const useSwap = ({ reverse }) => {
     msgs: executeMsg,
     encodedMsgs: encodedExecuteMsg,
     amount: reverse ? simulated?.amount : amount,
-    price: num(simulated?.price).dp(6).toNumber(),
+    price: num(simulated?.price).dp(6).
+      toNumber(),
     onSuccess: () => {},
     onError: () => {},
   })
-  return useMemo(
-    () => ({
-      path,
-      tx,
-      simulated,
-      minReceive,
-      state: { error, isLoading },
-    }),
-    [tx, simulated, error, isLoading, minReceive, path]
-  )
+  return useMemo(() => ({
+    path,
+    tx,
+    simulated,
+    minReceive,
+    state: { error,
+      isLoading },
+  }),
+  [tx, simulated, error, isLoading, minReceive, path])
 }
 
 export default useSwap

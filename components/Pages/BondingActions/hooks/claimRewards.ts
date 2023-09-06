@@ -4,7 +4,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 export const claimRewards = (
   signingClient: SigningCosmWasmClient,
   address: string,
-  config: Config
+  config: Config,
 ) => {
   const handleMsg = {
     claim: {},

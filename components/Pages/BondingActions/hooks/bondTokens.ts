@@ -7,7 +7,8 @@ export const bondTokens = async (
   address: string,
   amount: number,
   denom: string,
-  config: Config
+  config: Config,
+  chainId?: string,
 ) => {
   const handleMsg = {
     bond: {

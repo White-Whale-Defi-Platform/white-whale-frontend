@@ -1,0 +1,26 @@
+[
+  {
+    "label": "Dashboard",
+    "isExternal" : false,
+    "link": "/dashboard"
+  },
+  {
+    "label": "Trade",
+    "isExternal" : false,
+    "children": [
+      {
+        "label": "Swap",
+        "link": "/swap"
+      },
+      {
+        "label": "Pools",
+        "link": "/pools"
+      }
+    ]
+  },
+  {
+    "label": "Bridge",
+    "isExternal" : true,
+    "link": "https://tfm.com/bridge"
+  }
+]

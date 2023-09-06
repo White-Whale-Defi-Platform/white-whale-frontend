@@ -21,6 +21,7 @@ import Card from '../Card'
 import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
+import luncMenuLinks from './LUNCNavMenu.json'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
@@ -69,14 +70,15 @@ const Navbar = () => {
         justifyContent="space-between"
         mx="auto"
         maxWidth="container.xl"
-        display={{ base: 'none', md: 'flex' }}
+        display={{ base: 'none',
+          md: 'flex' }}
         alignItems="center"
       >
         <Box flex="1">
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
-          {(ACTIVE_BONDING_NETWORKS.includes(chainId)
+          {(chainId === 'columbus-5' ? luncMenuLinks : ACTIVE_BONDING_NETWORKS.includes(chainId)
             ? menuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (
@@ -108,7 +110,8 @@ const Navbar = () => {
           color="white"
           icon={<BurgerIcon width="3rem" height="1rem" />}
           onClick={onOpen}
-          display={{ base: 'block', md: 'none' }}
+          display={{ base: 'block',
+            md: 'none' }}
           _focus={{
             bg: 'none',
           }}

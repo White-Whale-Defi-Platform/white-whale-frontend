@@ -60,8 +60,8 @@ export const fetchPositions = async ({
   const data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
     positions: { address },
   })
-  return data.positions
-    .map((p) => {
+  return data.positions.
+    map((p) => {
       const positions = []
 
       // Open position
@@ -103,20 +103,18 @@ export const fetchPositions = async ({
           duration: position.formatedTime,
           weight: position.weight,
           assets,
-          value: assets.reduce(
-            (acc, asset) => acc + Number(asset.dollarValue),
-            0
-          ),
+          value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
+            0),
           state: position.isOpen
             ? PositionState.active
             : diff <= 0
-            ? PositionState.unbonded
-            : PositionState.unbonding,
+              ? 'unbound'
+              : 'unbonding',
           action: null,
         }
       })
-    })
-    .flat()
+    }).
+    flat()
 }
 const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
@@ -139,8 +137,7 @@ const useLockedPositions = (poolId: string) => {
       pool_assets,
       prices,
     ],
-    queryFn: (): Promise<Position[]> =>
-      fetchPositions({
+    queryFn: (): Promise<Position[]> => fetchPositions({
         cosmWasmClient,
         prices,
         incentiveAddress: staking_address,

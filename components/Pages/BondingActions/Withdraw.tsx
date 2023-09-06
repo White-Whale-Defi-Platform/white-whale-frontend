@@ -6,13 +6,17 @@ import {
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react'
+import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
+import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import usePrices from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
+import { useRecoilValue } from 'recoil'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { chainState } from 'state/chainState'
-
 import {
   calculateDurationString,
   convertMicroDenomToDenom,
@@ -21,20 +25,21 @@ import {
 
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
 import { WhaleTokenType } from './BondingActions'
-import { useChain } from '@cosmos-kit/react-lite'
 
+type Props = {
+  unbondingRequests: UnbondingData[]
+  withdrawableInfos: WithdrawableInfo[]
+  unbondingPeriodInNano: number
+}
 const Withdraw = ({
-  unbondingAmpWhale,
-  unbondingBWhale,
-  withdrawableAmpWhale,
-  withdrawableBWhale,
-  filteredUnbondingRequests,
+  unbondingRequests,
+  withdrawableInfos,
   unbondingPeriodInNano,
   whalePrice,
 }) => {
-  const { chainName, chainId, network } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const [{ status, chainId, network }, _] = useRecoilState(walletState)
 
+  const isWalletConnected = status === WalletStatusType.connected
   const config: Config = useConfig(network, chainId)
   const ProgressBar = ({ percent }) => (
     <Box
@@ -48,8 +53,8 @@ const Withdraw = ({
     </Box>
   )
 
-  const TokenBox = ({ label, ampWhale, bWhale }) => {
-    const dollarValue = ((ampWhale + bWhale) * whalePrice).toFixed(2)
+  const TokenBox = ({ label, tokens }) => {
+    const dollarValue = tokens?.reduce((acc, cur) => acc + cur.dollarValue, 0)
     return (
       <Box
         border="0.5px solid"
@@ -61,24 +66,17 @@ const Withdraw = ({
       >
         <WhaleTooltip
           label={label}
-          data={null}
-          withdrawableAmpWhale={ampWhale}
-          withdrawableBWhale={bWhale}
+          tokens={tokens}
           isWalletConnected={isWalletConnected}
-          tokenType={null}
         />
         <Text mb="-0.2rem" fontSize={23} fontWeight="bold">
-          {isWalletConnected ? `$${dollarValue}` : 'n/a'}
+          {isWalletConnected ? `$${dollarValue.toLocaleString()}` : 'n/a'}
         </Text>
       </Box>
     )
   }
 
-  const BoxComponent = ({
-    whaleTokenType,
-    value,
-    timeUntilUnbondingInMilli,
-  }) => {
+  const BoxComponent = ({ tokenSymbol, amount, timeUntilUnbondingInMilli }) => {
     const durationString = calculateDurationString(timeUntilUnbondingInMilli)
     return (
       <VStack justifyContent="center" alignItems="center" mb={30}>
@@ -89,7 +87,7 @@ const Withdraw = ({
           px={4}
         >
           <Text>
-            {value.toLocaleString()} {WhaleTokenType[whaleTokenType]}
+            {amount.toLocaleString()} {tokenSymbol}
           </Text>
           <HStack spacing={4}>
             <Text>~ {durationString}</Text>
@@ -108,7 +106,7 @@ const Withdraw = ({
 
   return (
     <VStack spacing={5} mb={35}>
-      <Stack direction={['column', 'row', 'row', 'row']} spacing={7}>
+      <HStack spacing={7}>
         <TokenBox
           label="Unbonding"
           ampWhale={unbondingAmpWhale}
@@ -119,40 +117,35 @@ const Withdraw = ({
           ampWhale={withdrawableAmpWhale}
           bWhale={withdrawableBWhale}
         />
-      </Stack>
+      </HStack>
       {isWalletConnected &&
-        filteredUnbondingRequests !== null &&
-        filteredUnbondingRequests?.length > 0 && (
-          <Box
-            overflowY="scroll"
-            maxHeight={340}
-            minW={510}
-            backgroundColor="black"
-            padding="4"
-            borderRadius="10px"
-            mt={10}
-          >
-            {filteredUnbondingRequests.map((type, index) => {
-              const currentTimeInMilli = Date.now()
-              const timeUntilUnbondingInMilli =
-                nanoToMilli(Number(type.timestamp) + unbondingPeriodInNano) -
+        unbondingRequests !== null &&
+        unbondingRequests?.length > 0 && (
+        <Box
+          overflowY="scroll"
+          maxHeight={340}
+          minW={510}
+          backgroundColor="black"
+          padding="4"
+          borderRadius="10px"
+          mt={10}
+        >
+          {unbondingTokens.map((token, index) => {
+            const currentTimeInMilli = Date.now()
+            const timeUntilUnbondingInMilli =
+                nanoToMilli(Number(token.timestamp) + unbondingPeriodInNano) -
                 currentTimeInMilli
-              return (
-                <BoxComponent
-                  key={index}
-                  whaleTokenType={
-                    type.asset.info.native_token.denom ===
-                    config?.lsd_token.ampWHALE.denom
-                      ? WhaleTokenType.ampWHALE
-                      : WhaleTokenType.bWHALE
-                  }
-                  value={convertMicroDenomToDenom(Number(type.asset.amount), 6)}
-                  timeUntilUnbondingInMilli={timeUntilUnbondingInMilli}
-                />
-              )
-            })}
-          </Box>
-        )}
+            return (
+              <BoxComponent
+                key={index}
+                tokenSymbol={token.tokenSymbol}
+                amount={token.amount}
+                timeUntilUnbondingInMilli={timeUntilUnbondingInMilli}
+              />
+            )
+          })}
+        </Box>
+      )}
     </VStack>
   )
 }

@@ -26,10 +26,8 @@ export const useQueryIncentiveContracts = (
   return data
 }
 
-const fetchIncentiveContracts = async (
-  client,
-  config: Config
-): Promise<Array<string>> => {
+const fetchIncentiveContracts = async (client,
+  config: Config): Promise<Array<string>> => {
   const data = await client.queryContractSmart(config.incentive_factory, {
     incentives: {},
   })

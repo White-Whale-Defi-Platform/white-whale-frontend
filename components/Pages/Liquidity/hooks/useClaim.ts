@@ -39,12 +39,10 @@ export const useClaim = ({ poolId }: Props) => {
     onSuccess,
   })
 
-  return useMemo(
-    () => ({
-      submit,
-      ...state,
-      ...tx,
-    }),
-    [tx, state, submit]
-  )
+  return useMemo(() => ({
+    submit,
+    ...state,
+    ...tx,
+  }),
+  [tx, state, submit])
 }

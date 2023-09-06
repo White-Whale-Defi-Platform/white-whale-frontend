@@ -1,5 +1,6 @@
 import {
   Flex,
+  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -17,8 +18,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
+import { IncentiveTooltip } from '../../InfoTooltip'
 import Loader from '../../Loader'
 import Apr from './components/Apr'
+import Liquidity from './components/liquidity'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
 
@@ -49,15 +52,14 @@ const columns = [
         {'APR'}
       </Text>
     ),
-    cell: (info) =>
-      info.getValue() === 'n/a' ? (
-        <Text>{info.getValue()}</Text>
-      ) : (
-        <Apr
-          apr={info.getValue()?.toString()}
-          flows={info.row.original.flows}
-        />
-      ),
+    cell: (info) => (info.getValue() === 'n/a' ? (
+      <Text>{info.getValue()}</Text>
+    ) : (
+      <Apr
+        apr={info.getValue()?.toString()}
+        flows={info.row.original.flows}
+      />
+    )),
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
@@ -73,7 +75,12 @@ const columns = [
         {'Total Liquidity'}
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => (
+      <Liquidity
+        liquidity={info.getValue()?.toString()}
+        infos={info.row.original}
+      />
+    ),
   }),
   columnHelper.accessor('myPosition', {
     header: () => (
@@ -85,9 +92,12 @@ const columns = [
   }),
   columnHelper.accessor('incentives', {
     header: () => (
-      <Text align="left" color="brand.50">
-        Incentives
-      </Text>
+      <HStack>
+        <IncentiveTooltip iconSize={'3'} />
+        <Text align="left" color="brand.50">
+          {'Incentives'}
+        </Text>
+      </HStack>
     ),
     cell: (info) => info.getValue(),
   }),
@@ -189,10 +199,8 @@ const PoolsTable = ({
                   >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header,
+                        header.getContext())}
                   </Th>
                 ))}
               </Tr>

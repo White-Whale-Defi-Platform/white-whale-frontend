@@ -27,7 +27,9 @@ export const Incentives = ({ flows }) => {
     const logos = flows.slice(0, 2).map((flow) => flow?.logoURI)
     const more = flows.slice(3).length
     const hasIncentives = flows.length > 0
-    return { logos, more, hasIncentives }
+    return { logos,
+      more,
+      hasIncentives }
   }, [flows])
 
   // Show dash if no incentives
