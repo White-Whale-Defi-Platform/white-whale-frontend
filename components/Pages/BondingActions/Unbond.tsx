@@ -15,12 +15,12 @@ import { useChain } from '@cosmos-kit/react-lite'
 
 const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   const { chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { isWalletConnected, chain } = useChain(chainName)
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingAtom)
-  const config = useConfig(network, chainId)
-  const isWalletConnected = status === WalletStatusType.connected
+  const config = useConfig(chain.network_type, chain.chain_id)
+  
 
   const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
 
