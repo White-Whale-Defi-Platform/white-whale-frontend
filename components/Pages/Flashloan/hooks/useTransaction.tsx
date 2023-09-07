@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 
@@ -40,7 +41,7 @@ export enum TxStep {
 
 type Params = {
   enabled: boolean
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   encodedMsgs: any | null
   contractAddress: string | undefined
@@ -52,7 +53,7 @@ type Params = {
 
 export const useTransaction = ({
   enabled,
-  client,
+  signingClient,
   senderAddress,
   encodedMsgs,
   msgs,
@@ -62,7 +63,6 @@ export const useTransaction = ({
   onError,
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
-  // Const [tokenA, tokenB] = swapAssets
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
@@ -76,8 +76,10 @@ export const useTransaction = ({
     async () => {
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(
-          senderAddress, debouncedMsgs, '',
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
         )
         if (buttonLabel) {
           setButtonLabel(null)
@@ -115,7 +117,7 @@ export const useTransaction = ({
         debouncedMsgs != null &&
         txStep == TxStep.Idle &&
         error == null &&
-        Boolean(client) &&
+        Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -129,9 +131,9 @@ export const useTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => executeFlashloan({
+  const { mutate } = useMutation(() => executeFlashloan({
     msgs,
-    client,
+    signingClient,
     contractAddress,
     senderAddress,
   }),
@@ -158,7 +160,6 @@ export const useTransaction = ({
         setError('Failed to execute transaction.')
         message = 'Failed to execute transaction.'
       }
-
       toast({
         title: 'Flashloan Failed.',
         description: message,
@@ -167,16 +168,14 @@ export const useTransaction = ({
         position: 'top-right',
         isClosable: true,
       })
-
       setTxStep(TxStep.Failed)
-
       onError?.()
     },
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       console.log({ data })
       setTxHash(data.transactionHash || data?.txHash)
-      queryClient.invalidateQueries([
+      await queryClient.invalidateQueries([
         '@pool-liquidity',
         'multipleTokenBalances',
         'tokenBalance',
@@ -187,7 +186,7 @@ export const useTransaction = ({
         description: (
           <Finder
             txHash={data?.transactionHash || data?.txHash}
-            chainId={client?.client?.chainId}
+            chainId={await signingClient.getChainId()}
           >
             {' '}
           </Finder>
@@ -203,31 +202,28 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
 
-  const submit = useCallback(async () => {
-    if (msgs == null || msgs.length < 1) {
+  const submit = useCallback(() => {
+    if (msgs === null || msgs.length < 1) {
       return
     }
-
-    mutate({
-      msgs,
-    })
+    mutate()
   }, [msgs, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+    if (txInfo !== null && txHash !== null) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
@@ -242,7 +238,7 @@ export const useTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -27,7 +27,6 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
   const { asPath } = useRouter()
 
   const isActiveLink = useMemo(() => {
-    // Children defining sub menu items
     const [linkInAsPath] =
       menu?.children === undefined
         ? [asPath.includes(menu.link)]
@@ -56,7 +55,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       onClose={onClose}
     >
       <PopoverTrigger>
-        <HStack as={Button} variant="unstyled">
+        <HStack as={Button} variant="unstyled" >
           <Text
             fontSize={['14px', '16px']}
             color={isActiveLink ? 'white' : 'brand.50'}

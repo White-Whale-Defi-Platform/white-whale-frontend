@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { isNativeToken } from 'services/asset'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 
 import {
@@ -11,6 +11,8 @@ import {
   createWithdrawMsg,
 } from './createWithdrawMsgs'
 import { useWithdrawTransaction } from './useWithdrawTransaction'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 type Props = {
   amount: string
@@ -27,10 +29,12 @@ const useWithdraw = ({
   claimIncentive,
   stakingAddress,
 }: Props) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (parseFloat(amount) === 0 || contract === null || !client) {
+    if (parseFloat(amount) === 0 || contract === null || !signingClient) {
       return {}
     }
 
@@ -60,7 +64,7 @@ const useWithdraw = ({
     encodedMsgs,
     amount,
     senderAddress: address,
-    client,
+    signingClient,
     isNative: isNativeToken(contract),
   })
 }

@@ -6,15 +6,16 @@ import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/use
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
 
 import ClaimTable from './ClaimTable'
 import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
 
-const AvailableRewards = ({ totalValue }: { totalValue: number }) => (
+const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   <HStack
     justifyContent="space-between"
     width="full"
@@ -45,11 +46,13 @@ type Props = {
 const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
-  const { client, network, chainId } = useRecoilValue(walletState)
+  const { network, chainId, chainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(chainName)
 
   const config = useConfig(network, chainId)
   // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
-  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(client, config)
+  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(cosmWasmClient,
+    config)
   const allSnapshotsTaken = useMemo(() => noSnapshotTakenAddresses.length === 0,
     [noSnapshotTakenAddresses.length])
   const forceSnapshots = useForceEpochAndTakingSnapshots({
@@ -57,10 +60,9 @@ const Claim = ({ poolId }: Props) => {
     config,
   })
   const { rewards = [], totalValue } = useRewards(poolId)
-
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.assetAmount),
+    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.amount),
       0)
     return rewardsSum > 0
   }, [rewards])

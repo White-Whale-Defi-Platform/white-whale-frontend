@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 
@@ -43,7 +44,7 @@ type Params = {
   isNative: boolean
   denom: string
   enabled: boolean
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   contractAddress: string
   msgs: any | null
@@ -65,7 +66,7 @@ export const useTransaction = ({
   contractAddress,
   // PoolId,
   enabled,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -87,14 +88,14 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -105,8 +106,10 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(
-          senderAddress, debouncedMsgs, '',
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
         )
         if (buttonLabel) {
           setButtonLabel(null)
@@ -142,10 +145,10 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
-        Boolean(client) &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
+        Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -159,11 +162,11 @@ export const useTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => executeVault({
+  const { mutate } = useMutation(() => executeVault({
     amount,
     isNative,
     denom,
-    client,
+    signingClient,
     contractAddress,
     senderAddress,
     msgs,
@@ -173,7 +176,7 @@ export const useTransaction = ({
     onMutate: () => {
       setTxStep(TxStep.Posting)
     },
-    onError: (e) => {
+    onError: async (e) => {
       let message: any = ''
       console.error(e?.toString())
       setTxStep(TxStep.Failed)
@@ -201,7 +204,10 @@ export const useTransaction = ({
       ) {
         setError(e?.toString())
         message = (
-          <Finder txHash={txInfo?.txHash} chainId={client?.chainId}>
+          <Finder
+            txHash={txInfo?.hash}
+            chainId={await signingClient.getChainId()}
+          >
             {' '}
           </Finder>
         )
@@ -242,19 +248,16 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
-      return
+    if (fee === null || msgs === null || msgs.length < 1) {
+      return null
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
+    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+    if (txInfo !== null && txHash !== null) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
@@ -269,7 +272,7 @@ export const useTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

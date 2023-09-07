@@ -1,12 +1,12 @@
 import { HStack, Image, Text, VStack } from '@chakra-ui/react'
 
-import { Reward } from './hooks/useRewards'
+import { RewardData } from './hooks/useRewards'
 
 type Props = {
-  tokens: Reward[]
+  tokens: RewardData[]
 }
 
-const TokenRow = ({ item, isLast }: { item: Reward; isLast: boolean }) => (
+const TokenRow = ({ item, isLast }: { item: RewardData; isLast: boolean }) => (
   <HStack
     width="full"
     justifyContent="space-between"
@@ -27,9 +27,8 @@ const TokenRow = ({ item, isLast }: { item: Reward; isLast: boolean }) => (
         {item?.symbol ?? 'Unknown'}
       </Text>
     </HStack>
-
     <VStack alignItems="flex-end">
-      <Text>{item?.assetAmount}</Text>
+      <Text>{item?.amount}</Text>
       <Text color="brand.50" style={{ margin: 'unset' }}>
         =${Number(item?.dollarValue).toFixed(2)}
       </Text>
@@ -41,7 +40,6 @@ const ClaimTable = ({ tokens = [] }: Props) => {
   if (tokens.length === 0) {
     return <Text color="whiteAlpha.700">No rewards available</Text>
   }
-
   return (
     <VStack
       width="full"
@@ -61,15 +59,18 @@ const ClaimTable = ({ tokens = [] }: Props) => {
       px="5"
       py="4"
     >
-      {/* <Text color="red">Note: It's mock data, rewards are not implemented yet. </Text> */}
-
-      {tokens?.map((item, index) => (
-        <TokenRow
-          key={item?.denom + index}
-          item={item}
-          isLast={index === tokens.length - 1}
-        />
-      ))}
+      {tokens?.map((item, index) => {
+        return (
+          <TokenRow
+            key={
+              (item?.info?.native_token?.denom ??
+                item.info.token.contract_addr) + index
+            }
+            item={item}
+            isLast={index === tokens.length - 1}
+          />
+        )
+      })}
     </VStack>
   )
 }

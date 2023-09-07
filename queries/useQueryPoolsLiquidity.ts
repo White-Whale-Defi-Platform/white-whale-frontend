@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
 import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
 import {
@@ -10,14 +11,14 @@ import {
   POOL_REWARDS_ENABLED,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { protectAgainstNaN } from 'junoblocks'
 import { fromChainAmount } from 'libs/num'
 import { queryPoolInfo } from 'queries/queryPoolInfo'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { TokenInfo } from 'types'
 
 import { queryMyLiquidity } from './queryMyLiquidity'
@@ -79,16 +80,29 @@ export type PoolEntityTypeWithLiquidity = PoolEntityType & {
 export type QueryMultiplePoolsArgs = {
   pools: Array<PoolEntityTypeWithLiquidity>
   refetchInBackground?: boolean
-  client: any
+  cosmWasmClient: CosmWasmClient
+}
+export const calculateRewardsAnnualYieldRate = ({
+  rewardsContracts,
+  totalStakedDollarValue,
+}) => {
+  if (!POOL_REWARDS_ENABLED) {
+    return 0
+  }
+
+  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce((value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
+    0)
+
+  return protectAgainstNaN((totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100)
 }
 
-const fetchMyLockedLp = async ({ pool, client, address }) => {
-  if (!address || !client || !pool.staking_address) {
-    return
+const fetchMyLockedLp = async ({ pool, cosmWasmClient, address }) => {
+  if (!address || !cosmWasmClient || !pool.staking_address) {
+    return null
   }
 
   const { positions = [] } =
-    (await client?.queryContractSmart(pool.staking_address, {
+    (await cosmWasmClient.queryContractSmart(pool.staking_address, {
       positions: { address },
     })) || []
   return (
@@ -105,23 +119,23 @@ const fetchMyLockedLp = async ({ pool, client, address }) => {
 export const useQueryPoolsLiquidity = ({
   pools,
   refetchInBackground = false,
-  client,
+  cosmWasmClient,
 }: QueryMultiplePoolsArgs) => {
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
   const prices = usePrices()
-  const { address } = useRecoilValue(walletState)
+  const { address } = useRecoilValue(chainState)
 
   const [tokenList] = useTokenList()
   const { epochToDate, currentEpoch } = useEpoch()
 
   const context = {
-    client,
+    cosmWasmClient,
     getTokenDollarValue,
   }
 
-  async function queryPoolLiquidity(pool: PoolEntityType): Promise<PoolEntityTypeWithLiquidity | any> {
-    if (!client) {
+  const queryPoolLiquidity = async (pool: PoolEntityType): Promise<PoolEntityTypeWithLiquidity | any> => {
+    if (!cosmWasmClient) {
       return pool
     }
 
@@ -137,13 +151,18 @@ export const useQueryPoolsLiquidity = ({
         (poolInfo?.assets[1]?.info?.native_token?.denom ??
           poolInfo?.assets[1]?.info?.token?.contract_addr))
 
-    const getFlows = async ({ client }) => {
-      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) {
+    const getFlows = async ({ cosmWasmClient }) => {
+      if (
+        !cosmWasmClient ||
+        !pool?.staking_address ||
+        !(tokenList.tokens.length > 0)
+      ) {
         return []
       }
-      const flows = await client?.queryContractSmart(pool.staking_address, {
-        flows: {},
-      })
+      const flows = await cosmWasmClient?.queryContractSmart(pool.staking_address,
+        {
+          flows: {},
+        })
       return flows?.map((flow) => {
         const denom =
           flow?.flow_asset?.info?.token?.contract_addr ||
@@ -152,11 +171,15 @@ export const useQueryPoolsLiquidity = ({
         return tokenList?.tokens?.find((t) => t?.denom === denom)
       })
     }
-    const getMyFlows = ({ client, address }) => {
-      if (!client || !pool?.staking_address || !(tokenList.tokens.length > 0)) {
+    const getMyFlows = ({ cosmWasmClient, address }) => {
+      if (
+        !cosmWasmClient ||
+        !pool?.staking_address ||
+        !(tokenList.tokens.length > 0)
+      ) {
         return []
       }
-      return client?.
+      return cosmWasmClient?.
         queryContractSmart(pool.staking_address, {
           flows: {},
         }).
@@ -207,14 +230,14 @@ export const useQueryPoolsLiquidity = ({
         })
     }
 
-    const flows = await getFlows({ client })
+    const flows = await getFlows({ cosmWasmClient })
     const myLockedLp = await fetchMyLockedLp({ pool,
-      client,
+      cosmWasmClient,
       address })
     const totalLockedLp = await fetchTotalLockedLp(
       pool.staking_address,
       pool.lp_token,
-      client,
+      cosmWasmClient,
     )
 
     const {
@@ -231,28 +254,7 @@ export const useQueryPoolsLiquidity = ({
       totalLockedLp,
       myLockedLp,
     })
-    /*
-     *
-     * Const tokenADollarPrice = await getTokenDollarValue({
-     *   tokenA,
-     *   tokenAmountInDenom: 1,
-     *   tokenB,
-     * })
-     *
-     * function getPoolTokensValue({ tokenAmountInMicroDenom }) {
-     *   return {
-     *     tokenAmount: tokenAmountInMicroDenom,
-     *     dollarValue:
-     *       calcPoolTokenDollarValue({
-     *         tokenAmountInMicroDenom,
-     *         tokenSupply:  poolInfo.lp_token_supply,
-     *         tokenReserves: totalAssets[0],
-     *         tokenDollarPrice: tokenADollarPrice,
-     *         tokenDecimals: tokenA?.decimals,
-     *       }) || 0,
-     *   }
-     * }
-     */
+
     function getPoolTokensValues(assets, lpTokenAmount = null) {
       const tokenASymbol =
         tokenA?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
@@ -296,7 +298,7 @@ export const useQueryPoolsLiquidity = ({
       })
     }
 
-    const myFlows = await getMyFlows({ client,
+    const myFlows = await getMyFlows({ cosmWasmClient,
       address })
     const liquidity = {
       available: {
@@ -336,7 +338,7 @@ export const useQueryPoolsLiquidity = ({
   return useQueries((pools ?? []).map((pool) => ({
     queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
     enabled:
-        Boolean(client && pool.pool_id && enabledGetTokenDollarValue) &&
+        Boolean(cosmWasmClient && pool.pool_id && enabledGetTokenDollarValue) &&
         tokenList.tokens.length > 0 &&
         Boolean(prices),
     refetchOnMount: false as const,
@@ -346,10 +348,10 @@ export const useQueryPoolsLiquidity = ({
     refetchIntervalInBackground: refetchInBackground,
 
     async queryFn() {
-      if (!client) {
+      if (!cosmWasmClient) {
         return pool
       }
-      return queryPoolLiquidity(pool)
+      return await queryPoolLiquidity(pool)
     },
   })))
 }
@@ -357,8 +359,8 @@ export const useQueryPoolsLiquidity = ({
 export const useQueryPoolLiquidity = ({ poolId }) => {
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
     usePoolsListQuery()
-  const { chainId } = useRecoilValue(walletState)
-  const client = useCosmwasmClient(chainId)
+  const { chainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(chainName)
 
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]
@@ -368,7 +370,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   const [poolResponse] = useQueryPoolsLiquidity({
     pools: poolToFetch,
     refetchInBackground: true,
-    client,
+    cosmWasmClient,
   })
 
   return [
@@ -378,16 +380,3 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
   ] as const
 }
 
-export function calculateRewardsAnnualYieldRate({
-  rewardsContracts,
-  totalStakedDollarValue,
-}) {
-  if (!POOL_REWARDS_ENABLED) {
-    return 0
-  }
-
-  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce((value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
-    0)
-
-  return protectAgainstNaN((totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100)
-}

@@ -1,8 +1,8 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { Wallet } from 'util/wallet-adapters'
 
-export const withdrawTokens = (
-  client: Wallet,
+export const withdrawTokens = async (
+  signingClient: SigningCosmWasmClient,
   address: string,
   denom: string,
   config: Config,
@@ -12,7 +12,7 @@ export const withdrawTokens = (
       denom,
     },
   }
-  return client.execute(
-    address, config.whale_lair, handleMsg,
+  return await signingClient.execute(
+    address, config.whale_lair, handleMsg, 'auto',
   )
 }

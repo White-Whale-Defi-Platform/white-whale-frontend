@@ -10,11 +10,12 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -23,11 +24,8 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import {
-  aprHelperState,
-  updateAPRHelperState,
-} from 'state/atoms/aprHelperState'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
+import { chainState } from 'state/chainState'
 import { EnigmaPoolData } from 'util/enigma'
 
 import { ActionCTAs } from './ActionCTAs'
@@ -46,12 +44,14 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status } = useRecoilValue(walletState)
+
+  const { chainId, chainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
-  const isWalletConnected: boolean = status === WalletStatusType.connected
+
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(!ACTIVE_INCENTIVE_NETWORKS.includes(chainId))
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
-  const cosmwasmClient = useCosmwasmClient(chainId)
+  const { cosmWasmClient } = useClients(chainName)
 
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -63,13 +63,13 @@ const Pools = () => {
   ] = useQueriesDataSelector(useQueryPoolsLiquidity({
     refetchInBackground: false,
     pools: poolList?.pools,
-    client: cosmwasmClient,
+    cosmWasmClient,
   }))
   const myPoolsLength = useMemo(() => pools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)?.length,
     [pools])
 
   const chains: any = useChains()
-  const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
+  const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
   [chains, chainId])
 
@@ -78,19 +78,21 @@ const Pools = () => {
     poolsWithAprAnd24HrVolume: pairInfos,
     isLoading: isIncentivePoolInfoLoading,
   } = useIncentivePoolInfo(
-    cosmwasmClient, pools, currentChainPrefix,
+    cosmWasmClient, pools, currentChainPrefix,
   )
 
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
-    console.log('Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0)
+    console.log(
+      'Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0,
+    )
     console.log('Pools: ', pools)
     console.log('Pair Infos: ', pairInfos)
   }
 
-  const calculateMyPosition = (pool) => {
+  const calculateMyPosition = (pool: PoolData) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
   }
@@ -227,9 +229,11 @@ const Pools = () => {
   // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+
   const allPoolsForShown = useMemo(() => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId])
-  const parseLiquidity = (liqString) => {
+  const parseLiquidity = (liqString: string) => {
     const value = parseFloat(liqString?.replace(/[^\d.-]/g, ''))
     /*
      * We do this mutation because by now we already have modified the string to include a letter abbreviation
@@ -250,56 +254,37 @@ const Pools = () => {
   }, [allPoolsForShown, showAllPools])
 
   return (
-    <VStack
-      width={{ base: '100%',
-        md: 'auto' }}
-      alignItems="center"
-      margin="auto"
-    >
-      {myPools?.length > 0 && (
-        <Box width={{ base: '100%' }}>
-          <Text as="h2" fontSize="24" fontWeight="700" pb={5}>
-            My Pools
-          </Text>
-          <MyPoolsTable
-            show={true}
-            pools={myPools}
-            isLoading={isLoading || isInitLoading || pairInfos.length === 0}
-          />
-          <MobilePools pools={myPools} />
-        </Box>
-      )}
-
-      <Box>
+    <VStack width={{ base: '100%' }} alignItems="center" margin="auto">
+      <Box width={{ base: '100%' }}>
+        <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
+          My Pools
+        </Text>
+        <MyPoolsTable
+          show={true}
+          pools={myPools}
+          isLoading={isLoading || isInitLoading || pairInfos.length === 0}
+        />
+        <MobilePools pools={myPools} />
+      </Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             All Pools
           </Text>
           <Stack direction="row">
             <Tooltip
-              label={
-                <Box
-                  maxWidth="250px"
-                  minWidth="fit-content"
-                  borderRadius="10px"
-                  bg="black"
-                  color="white"
-                  fontSize={14}
-                  p={4}
-                  whiteSpace="pre-wrap"
-                >
-                  By default, pools with less than $1.0k total liquidity will be
-                  hidden but optionally can be shown.
-                </Box>
-              }
-              bg="transparent"
-              hasArrow={false}
-              placement="bottom"
-              closeOnClick={false}
-              arrowSize={0}
+              label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown"
+              isOpen={isLabelOpen}
             >
-              <Text as="h6" fontSize="14" fontWeight="700">
-                <InfoOutlineIcon marginRight={2} mb={1} />
+              <Text
+                as="h6"
+                fontSize="14"
+                fontWeight="700"
+                onMouseEnter={() => setIsLabelOpen(true)}
+                onMouseLeave={() => setIsLabelOpen(false)}
+                onClick={() => setIsLabelOpen(!isLabelOpen)}
+              >
+                <InfoOutlineIcon marginRight={2} />
                 Show All Pools
               </Text>
             </Tooltip>
@@ -316,7 +301,7 @@ const Pools = () => {
           pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
         />
-        <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
+        <MobilePools pools={showAllPoolsList} ctaLabel="Manage" />
       </Box>
     </VStack>
   )

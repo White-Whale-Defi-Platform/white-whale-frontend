@@ -7,7 +7,7 @@ import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { TokenItemState } from 'types'
 
 import defaultTokens from './defaultTokens.json'
@@ -15,6 +15,7 @@ import useSwap from './hooks/useSwap'
 import { tokenSwapAtom } from './swapAtoms'
 import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
+import { useChain } from '@cosmos-kit/react-lite'
 
 type SwapProps = {
   /* Will be used if provided on first render instead of internal state */
@@ -28,7 +29,8 @@ const Swap: FC<SwapProps> = ({}) => {
   const [reverse, setReverse] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
 
-  const { chainId, address, network, status } = useRecoilValue(walletState)
+  const { chainId, address, network, chainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
   const chains: Array<any> = useChains()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
@@ -181,7 +183,7 @@ const Swap: FC<SwapProps> = ({}) => {
         <SwapSettings />
       </HStack>
       <SwapForm
-        connected={status}
+        isWalletConnected={isWalletConnected}
         tokenA={tokenA}
         tokenB={tokenB}
         onReverseDirection={onReverseDirection}

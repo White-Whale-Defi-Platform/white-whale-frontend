@@ -1,8 +1,6 @@
 import BigNumber from 'bignumber.js'
 import numeral from 'numeral'
 
-const ONE_TOKEN = 1000000
-
 BigNumber.config({
   ROUNDING_MODE: BigNumber.ROUND_DOWN,
   EXPONENTIAL_AT: [-10, 20],

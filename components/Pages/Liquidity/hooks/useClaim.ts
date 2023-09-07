@@ -4,19 +4,23 @@ import { useMutation } from 'react-query'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 interface Props {
   poolId: string
 }
 
 export const useClaim = ({ poolId }: Props) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Claim',
-    client,
+    signingClient,
   })
 
   const msg = createExecuteMessage({
@@ -29,7 +33,8 @@ export const useClaim = ({ poolId }: Props) => {
   })
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: () => client.post(address, [msg]),
+    mutationFn: () =>
+      signingClient.signAndBroadcast(address, [msg], 'auto', null),
     onError,
     onSuccess,
   })

@@ -15,7 +15,6 @@ import {
   ChainRestTendermintApi,
   TxRaw,
   TxRestClient,
-  createCosmosSignDocFromTransaction,
   createTransaction,
   createTxRawFromSigResponse,
 } from '@injectivelabs/sdk-ts'
@@ -169,30 +168,6 @@ class Injective {
       const latestHeight = latestBlock.header.height
       const timeoutHeight = new BigNumberInBase(latestHeight).plus(DEFAULT_BLOCK_TIMEOUT_HEIGHT)
       console.log({ messages })
-
-      // Const [[action, msgs]] = Object.entries(messages)
-
-      //     Const isLPMessage = action?.includes('provide')
-
-      /*
-       *     Const executeMessageJson = {
-       *         action,
-       *         msg: msgs as object
-       *     }
-       *     // Provide LP: Funds isint being handled proper, before we were sending 1 coin, now we are sending it all but getting invalid coins
-       *     const params = {
-       *         funds: { denom: 'inj', amount: '100000000000000000'},
-       *         sender: this.account.address,
-       *         contractAddress: 'inj1hyja4uyjktpeh0fxzuw2fmjudr85rk2qxgqkvu',
-       *         exec: executeMessageJson,
-       *     };
-       */
-
-      //     Console.log({executeMessageJson, params})
-
-      //     Const MessageExecuteContract = MsgExecuteContract.fromJSON(params)
-
-      //     Console.log({MessageExecuteContract})
 
       const encodedExecuteMsg = messages.map((msg) => {
         const { contract, funds } = msg?.value || {}

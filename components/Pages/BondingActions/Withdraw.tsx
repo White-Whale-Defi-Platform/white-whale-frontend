@@ -1,12 +1,24 @@
-import { useMemo } from 'react'
 
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react';
+
+import {
+  Box,
+  HStack,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import {
+  Config,
+  useConfig,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import {
   calculateDurationString,
   convertMicroDenomToDenom,
@@ -25,7 +37,9 @@ const Withdraw = ({
   withdrawableInfos,
   unbondingPeriodInNano,
 }: Props) => {
-  const { status } = useRecoilValue(walletState)
+  const { chainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
+
   const prices = usePrices()
 
   const whalePrice = useMemo(() => {
@@ -37,7 +51,6 @@ const Withdraw = ({
     return 0 // Default value
   }, [prices])
 
-  const isWalletConnected = status === WalletStatusType.connected
   const [tokenList, _] = useTokenList()
   const unbondingTokens = unbondingRequests?.map((row) => {
     const tokenSymbol = tokenList.tokens.find((token) => token.denom === row.denom)?.symbol
@@ -75,7 +88,7 @@ const Withdraw = ({
         borderColor="whiteAlpha.400"
         borderRadius="10px"
         p={4}
-        minW={240}
+        width={['200px', '200px', '240px']}
       >
         <WhaleTooltip
           label={label}
@@ -119,10 +132,10 @@ const Withdraw = ({
 
   return (
     <VStack spacing={5} mb={35}>
-      <HStack spacing={7}>
+      <Stack direction={['column', 'row', 'row', 'row']} spacing={7}>
         <TokenBox label="Unbonding" tokens={unbondingTokens} />
         <TokenBox label="Withdrawable" tokens={withdrawableTokens} />
-      </HStack>
+      </Stack>
       {isWalletConnected &&
         unbondingRequests !== null &&
         unbondingRequests?.length > 0 && (

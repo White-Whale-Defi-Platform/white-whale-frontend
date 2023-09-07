@@ -5,7 +5,7 @@ import { useChains } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
 
-function ChainList({ onChange, onClose, currentWalletState }) {
+function ChainList({ onChange, onClose, currentChainState }) {
   const chains = useChains()
 
   return (
@@ -18,8 +18,8 @@ function ChainList({ onChange, onClose, currentWalletState }) {
           onChange={onChange}
           onClose={onClose}
           chainList={chains}
-          active={currentWalletState?.chainId === chain?.chainId}
-          walletState={currentWalletState}
+          active={currentChainState?.chainId === chain?.chainId}
+          currentChainState={currentChainState}
         />
       ))}
     </List>

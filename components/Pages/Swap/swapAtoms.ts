@@ -27,11 +27,6 @@ export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
               amount: oldValue[1].amount }
             setSelf([A, B])
           })
-          /*
-           * RequestAnimationFrame(() => {
-           *   setSelf([oldValue[1], oldValue[0]])
-           * })
-           */
         }
       })
     },

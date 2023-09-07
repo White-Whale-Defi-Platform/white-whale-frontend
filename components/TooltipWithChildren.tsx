@@ -1,4 +1,5 @@
 import { Text, Tooltip } from '@chakra-ui/react'
+import { useState } from 'react'
 
 export const TooltipWithChildren = ({
   children = null,
@@ -6,28 +7,35 @@ export const TooltipWithChildren = ({
   isHeading = false,
   fontSize = 'sm',
   showTooltip = true,
-}) => (
-  <Tooltip
-    label={children}
-    hasArrow
-    px="15px"
-    py="10px"
-    borderRadius="5px"
-    bg="blackAlpha.900"
-    maxW="330px"
-    isDisabled={!showTooltip}
-  >
-    <Text
-      as="span"
-      color={isHeading ? 'brand.50' : 'white'}
-      borderBottom={
-        showTooltip ? '1px dashed rgba(255, 255, 255, 0.5)' : 'none'
-      }
-      width="fit-content"
-      fontSize={fontSize}
-      textTransform="capitalize"
+}) => {
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+  return (
+    <Tooltip
+      label={children}
+      hasArrow
+      px="15px"
+      py="10px"
+      borderRadius="5px"
+      bg="blackAlpha.900"
+      maxW="330px"
+      isDisabled={!showTooltip}
+      isOpen={showTooltip && isLabelOpen}
     >
-      {label}
-    </Text>
-  </Tooltip>
-)
+      <Text
+        as="span"
+        color={isHeading ? 'brand.50' : 'white'}
+        borderBottom={
+          showTooltip ? '1px dashed rgba(255, 255, 255, 0.5)' : 'none'
+        }
+        width="fit-content"
+        fontSize={fontSize}
+        textTransform="capitalize"
+        onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}
+      >
+        {label}
+      </Text>
+    </Tooltip>
+  )
+}

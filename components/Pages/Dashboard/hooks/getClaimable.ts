@@ -1,6 +1,5 @@
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
-import { Wallet } from 'util/wallet-adapters'
 
 import { Config } from './useDashboardData'
 
@@ -38,7 +37,7 @@ interface Data {
 }
 
 export const getClaimable = async (
-  client: Wallet | null,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ) => {
@@ -60,7 +59,7 @@ export const getClaimable = async (
     daysSinceLastClaim }
 }
 const fetchClaimableData = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ): Promise<Data> => {

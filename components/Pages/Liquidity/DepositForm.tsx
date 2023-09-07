@@ -10,14 +10,13 @@ import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
 import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 import { useRecoilState } from 'recoil'
-import { aprHelperState } from 'state/atoms/aprHelperState'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
+import { aprHelperState } from 'state/aprHelperState'
 import { TokenItemState } from 'types/index'
 
 import Multiplicator from './Multiplicator'
 
 type Props = {
-  connected: WalletStatusType
+  isWalletConnected: boolean
   tokenA: TokenItemState
   tokenB: TokenItemState
   tx: any
@@ -29,6 +28,7 @@ type Props = {
   bondingDays: number
   clearForm: () => void
   chainId: string
+  mobile?: boolean
   poolId: string
 }
 
@@ -36,7 +36,7 @@ const DepositForm = ({
   tokenA,
   tokenB,
   onInputChange,
-  connected,
+  isWalletConnected,
   tx,
   simulated,
   setReverse,
@@ -45,6 +45,7 @@ const DepositForm = ({
   setBondingDays,
   clearForm,
   chainId,
+  mobile,
   poolId,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
@@ -71,7 +72,6 @@ const DepositForm = ({
   [bondingDays])
   // Const [bondingDays, setBondingDays] = useState(0)
   const isInputDisabled = tx?.txStep == TxStep.Posting
-  const isConnected = connected === WalletStatusType.connected
   const amountA = getValues('token1')
 
   useEffect(() => {
@@ -130,7 +130,7 @@ const DepositForm = ({
   }, [tx?.txStep])
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatusType.connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!tokenB?.tokenSymbol) {
       return 'Select Token'
@@ -140,7 +140,7 @@ const DepositForm = ({
       return tx?.buttonLabel
     }
     return 'Deposit'
-  }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA])
+  }, [tx?.buttonLabel, tokenB.tokenSymbol, isWalletConnected, amountA])
 
   const apr = useMemo(() => `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(2)}`,
     [poolAPRs, multiplicator])
@@ -157,6 +157,7 @@ const DepositForm = ({
         name="token1"
         control={control}
         token={tokenA}
+        mobile={mobile}
         isDisabled={isInputDisabled}
         onChange={(value) => {
           setReverse(false)
@@ -169,6 +170,7 @@ const DepositForm = ({
         control={control}
         token={tokenB}
         isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
+        mobile={mobile}
         onChange={(value) => {
           setReverse(true)
           onInputChange(value, 1)
@@ -190,10 +192,10 @@ const DepositForm = ({
 
       <SubmitButton
         label={buttonLabel}
-        isConnected={isConnected}
+        isConnected={isWalletConnected}
         txStep={tx?.txStep}
         isDisabled={
-          tx.txStep != TxStep.Ready || simulated == null || !isConnected
+          tx.txStep != TxStep.Ready || simulated == null || !isWalletConnected
         }
       />
 

@@ -9,17 +9,21 @@ import { num, toChainAmount } from 'libs/num'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 import useFactoryConfig from '../../Incentivize/hooks/useFactoryConfig'
-import { tokenLpAtom } from '../lpAtoms'
+import { tokenItemState } from 'state/tokenItemState'
 import createLpMsg, { createLPExecuteMsgs } from './createLPMsg'
 import useTransaction from './useDepositTransaction'
 import useIsNewPosition from './useIsNewPosition'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
-  const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
-  const { address, client, network, chainId } = useRecoilValue(walletState)
+  const [lpTokenA, lpTokenB] = useRecoilValue(tokenItemState)
+  const { chainId, chainName, network } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const config: Config = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
@@ -174,7 +178,6 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   ])
 
   const tx = useTransaction({
-    poolId,
     enabled:
       Boolean(encodedMsgs) &&
       Number(tokenAAmount) > 0 &&
@@ -182,7 +185,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     swapAddress: bondingDays === 0 ? swapAddress : config?.frontend_helper,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
-    client,
+    signingClient,
     msgs,
     encodedMsgs,
     tokenAAmount: reverse

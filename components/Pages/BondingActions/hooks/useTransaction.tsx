@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import Finder from 'components/Finder'
 import { claimRewards } from 'components/Pages/BondingActions/hooks/claimRewards'
 import { createNewEpoch } from 'components/Pages/BondingActions/hooks/createNewEpoch'
@@ -9,14 +10,16 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { ActionType } from '../../Dashboard/BondingOverview'
 import { bondTokens } from './bondTokens'
 import { unbondTokens } from './unbondTokens'
 import { withdrawTokens } from './withdrawTokens'
+
 
 export enum TxStep {
   /**
@@ -50,12 +53,9 @@ export enum TxStep {
 }
 export const useTransaction = () => {
   const toast = useToast()
-  const {
-    chainId,
-    client,
-    address: senderAddress,
-    network,
-  } = useRecoilValue(walletState)
+  const { chainId, chainName, network } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -65,7 +65,7 @@ export const useTransaction = () => {
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', error],
-    async () => {
+    () => {
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
@@ -103,11 +103,7 @@ export const useTransaction = () => {
       }
     },
     {
-      enabled:
-        txStep == TxStep.Idle &&
-        error == null &&
-        Boolean(client) &&
-        Boolean(senderAddress),
+      enabled: txStep === TxStep.Idle && error === null && Boolean(signingClient),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -117,41 +113,40 @@ export const useTransaction = () => {
       onError: () => {
         setTxStep(TxStep.Idle)
       },
-    },
+    }
   )
 
   const { mutate } = useMutation((data: any) => {
     const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
-    setBondingAction(data.bondingAction)
     if (data.bondingAction === ActionType.bond) {
       return bondTokens(
-        client,
-        senderAddress,
+        signingClient,
+        address,
         adjustedAmount,
         data.denom,
         config,
-        chainId,
       )
     } else if (data.bondingAction === ActionType.unbond) {
       return unbondTokens(
-        client,
-        senderAddress,
+        signingClient,
+        address,
         adjustedAmount,
         data.denom,
         config,
       )
     } else if (data.bondingAction === ActionType.withdraw) {
       return withdrawTokens(
-        client, senderAddress, data.denom, config,
+        signingClient, address, data.denom, config,
       )
     } else if (data.bondingAction === ActionType.claim) {
       return claimRewards(
-        client, senderAddress, config,
+        signingClient, address, config,
+      )
+    } else {
+      return createNewEpoch(
+        signingClient, config, address,
       )
     }
-    return createNewEpoch(
-      client, config, senderAddress,
-    )
   },
   {
     onMutate: () => {
@@ -252,13 +247,13 @@ export const useTransaction = () => {
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -274,7 +269,7 @@ export const useTransaction = () => {
     amount: number | null,
     denom: string | null,
   ) => {
-    if (fee == null) {
+    if (fee === null) {
       return
     }
     setBondingAction(bondingAction)
@@ -289,7 +284,7 @@ export const useTransaction = () => {
   [fee, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
+    if (txInfo !== null && txHash !== null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
       } else {
@@ -303,7 +298,7 @@ export const useTransaction = () => {
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

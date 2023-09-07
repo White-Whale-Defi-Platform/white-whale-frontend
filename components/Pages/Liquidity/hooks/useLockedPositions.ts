@@ -1,16 +1,28 @@
 import { useQuery } from 'react-query'
 
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useChain } from '@cosmos-kit/react-lite'
 import dayjs from 'dayjs'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
 
+type Params = {
+  cosmWasmClient: CosmWasmClient
+  prices: any
+  incentiveAddress: string
+  address: string
+  pool_assets: TokenInfo[]
+  totalAssets: number[]
+  totalLpSupply: number
+}
 export type Position = {
   amount: number
   weight: string
@@ -23,7 +35,11 @@ export type Position = {
   isOpen: boolean
   formattedTime: string
 }
-
+export enum PositionState {
+  unbonding = 'unbonding',
+  active = 'active',
+  unbonded = 'unbonded',
+}
 export const lpPositionToAssets = ({
   totalAssets,
   totalLpSupply,
@@ -32,16 +48,16 @@ export const lpPositionToAssets = ({
   protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
   protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
 ]
-export const fetchPositions = async (
-  client,
+export const fetchPositions = async ({
+  cosmWasmClient,
   prices,
   incentiveAddress,
   address,
   pool_assets,
   totalAssets,
   totalLpSupply,
-) => {
-  const data = await client?.queryContractSmart(incentiveAddress, {
+}: Params) => {
+  const data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
     positions: { address },
   })
   return data.positions.
@@ -90,10 +106,10 @@ export const fetchPositions = async (
           value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
             0),
           state: position.isOpen
-            ? 'active'
+            ? PositionState.active
             : diff <= 0
-              ? 'unbound'
-              : 'unbonding',
+              ? PositionState.unbonded
+              : PositionState.unbonding,
           action: null,
         }
       })
@@ -104,8 +120,10 @@ const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
     useQueryPoolLiquidity({ poolId })
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
-  const totalReserve = liquidity?.reserves?.total || [0, 0]
-  const { address, client } = useRecoilValue(walletState)
+  const totalAssets = liquidity?.reserves?.total || [0, 0]
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { cosmWasmClient } = useClients(chainName)
   const tokens = useTokenList()
   const prices = usePrices()
 
@@ -119,16 +137,17 @@ const useLockedPositions = (poolId: string) => {
       pool_assets,
       prices,
     ],
-    queryFn: (): Promise<Position[]> => fetchPositions(
-      client,
+    queryFn: (): Promise<Position[]> => fetchPositions({
+      cosmWasmClient,
       prices,
-      staking_address,
+      incentiveAddress: staking_address,
       address,
       pool_assets,
-      totalReserve,
+      totalAssets,
       totalLpSupply,
-    ),
-    enabled: Boolean(address) && Boolean(client) && Boolean(staking_address),
+    }),
+    enabled: Boolean(address) && Boolean(cosmWasmClient) && Boolean(staking_address),
+
   })
 }
 

@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Button, VStack, useToast } from '@chakra-ui/react'
+import { Button, useMediaQuery, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { useRecoilValue } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 import useDepost from '../hooks/useDeposit'
 import { TxStep } from '../hooks/useTransaction'
 
 type Props = {
-  connected: WalletStatusType
+  isWalletConnected: boolean
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -21,7 +21,7 @@ type Props = {
 }
 
 const DepositForm = ({
-  connected,
+  isWalletConnected,
   balance,
   defaultToken,
   edgeTokenList = [],
@@ -34,8 +34,9 @@ const DepositForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
-  const isConnected = connected === '@wallet-state/connected'
+  const { chainId } = useRecoilValue(chainState)
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
+ 
 
   const onSuccess = useCallback((txHash) => {
     refetch?.()
@@ -61,7 +62,7 @@ const DepositForm = ({
 
   const buttonLabel = useMemo(() => {
     // TODO: Note for later, Select Token is commented
-    if (connected !== '@wallet-state/connected') {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!token?.amount) {
       return 'Enter Amount'
@@ -69,7 +70,7 @@ const DepositForm = ({
       return tx?.buttonLabel
     }
     return 'Deposit'
-  }, [tx?.buttonLabel, connected, token])
+  }, [tx?.buttonLabel, isWalletConnected, token])
 
   const onSubmit = (event) => {
     event?.preventDefault()
@@ -103,6 +104,7 @@ const DepositForm = ({
           showList={showList}
           edgeTokenList={edgeTokenList}
           onChange={(value) => setToken(value)}
+          mobile={isMobile}
         />
       </VStack>
 
@@ -115,7 +117,7 @@ const DepositForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isConnected}
+        disabled={tx.txStep != TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

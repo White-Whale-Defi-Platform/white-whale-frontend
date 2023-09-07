@@ -1,15 +1,18 @@
 import { useMemo } from 'react'
 
-import flashLoanContract from 'components/Pages/Flashloan/hooks/vaultRouterAddresses.json'
+import flashLoanContract from 'constants/vaultRouterAddresses.json'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 import { createFlashLoanMsg } from './createFlashLoanMsg'
 import useTransaction from './useTransaction'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 
 const useFlashloan = ({ json }) => {
-  const { address, client, chainId } = useRecoilValue(walletState)
-
+  const { chainName, chainId } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const encodedMsgs = useMemo(() => {
     if (Object.keys(json).length === 0 || !chainId) {
       return null
@@ -23,9 +26,9 @@ const useFlashloan = ({ json }) => {
   }, [json, address, chainId])
 
   return useTransaction({
-    enabled: Boolean(client) && Boolean(encodedMsgs),
+    enabled: Boolean(signingClient) && Boolean(encodedMsgs),
     msgs: json,
-    client,
+    signingClient,
     senderAddress: address,
     encodedMsgs: [encodedMsgs],
     contractAddress: flashLoanContract[chainId],

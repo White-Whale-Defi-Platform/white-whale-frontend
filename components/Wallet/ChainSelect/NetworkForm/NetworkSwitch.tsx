@@ -1,18 +1,17 @@
-import React from 'react'
 import { useQueryClient } from 'react-query'
 
 import { Switch } from '@chakra-ui/react'
-import { useWallet } from '@terra-money/wallet-provider'
+import { useChain } from '@cosmos-kit/react-lite'
 import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/index'
 import { useRecoilState } from 'recoil'
-import { NetworkType, walletState } from 'state/atoms/walletAtoms'
+import { NetworkType, chainState } from 'state/chainState'
 
-function NetworkSwitch() {
+export const NetworkSwitch = () => {
   const queryClient = useQueryClient()
-  const [currentWalletState, setWalletState] = useRecoilState(walletState)
-  const { disconnect } = useWallet()
+  const [currentWalletState, setWalletState] = useRecoilState(chainState)
+  const { disconnect } = useChain(currentWalletState.chainName)
 
-  const changeNetwork = () => {
+  const changeNetwork = async () => {
     queryClient.clear()
 
     const updatedChainId =
@@ -28,7 +27,7 @@ function NetworkSwitch() {
       network: NetworkType[updatedNetwork],
       chainId: updatedChainId,
     })
-    disconnect()
+    await disconnect()
   }
 
   return (

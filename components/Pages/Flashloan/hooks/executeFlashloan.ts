@@ -1,17 +1,17 @@
-import { Wallet } from 'util/wallet-adapters'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 type ExecuteFlashloanArgs = {
   senderAddress: string
   contractAddress: string
-  client: Wallet
+  signingClient: SigningCosmWasmClient
   msgs: any
 }
 
 export const executeFlashloan = async ({
   msgs,
-  client,
+  signingClient,
   contractAddress,
   senderAddress,
-}: ExecuteFlashloanArgs): Promise<any> => client.execute(
-  senderAddress, contractAddress, msgs, [],
+}: ExecuteFlashloanArgs): Promise<any> => await signingClient.execute(
+  senderAddress, contractAddress, msgs, 'auto',
 )

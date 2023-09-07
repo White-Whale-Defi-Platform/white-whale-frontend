@@ -1,7 +1,10 @@
 import { getPoolInfo } from 'services/swap'
 
-export async function queryPoolInfo({ context: { client }, swap_address }) {
-  const poolInfo = await getPoolInfo(swap_address, client)
+export async function queryPoolInfo({
+  context: { cosmWasmClient },
+  swap_address,
+}) {
+  const poolInfo = await getPoolInfo(swap_address, cosmWasmClient)
   const [asset1, asset2] = poolInfo?.assets || []
 
   return {

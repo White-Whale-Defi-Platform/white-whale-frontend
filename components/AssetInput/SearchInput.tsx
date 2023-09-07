@@ -29,7 +29,7 @@ const SearchInput: FC<Props> = ({ onChange }) => {
           placeholder="Search Token"
           variant="unstyled"
           color="brand.500"
-          onChange={({ target: { value } }) => setSearch(value)}
+          onChange={({ target: { value } }) => setSearch(value.toLowerCase())}
         />
         <SearchIcon color="green.500" />
       </HStack>

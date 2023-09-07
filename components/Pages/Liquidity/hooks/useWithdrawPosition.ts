@@ -1,18 +1,20 @@
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
+import { useClients } from 'hooks/useClients';
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
 
 export const useWithdrawPosition = ({ poolId }) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, chainName } = useRecoilValue(chainState)
+  const { signingClient } = useClients(chainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Open position',
-    client,
+    signingClient,
   })
 
   const executeAddLiquidityMessage = createExecuteMessage({
@@ -27,7 +29,9 @@ export const useWithdrawPosition = ({ poolId }) => {
   const msgs = [executeAddLiquidityMessage]
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: async () => validateTransactionSuccess(await client.post(address, msgs)),
+    mutationFn: async () => validateTransactionSuccess(await signingClient.signAndBroadcast(
+      address, msgs, 'auto', null,
+    )),
     onError,
     onSuccess,
   })

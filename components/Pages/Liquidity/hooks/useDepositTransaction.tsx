@@ -2,24 +2,21 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { useRecoilValue } from 'recoil'
 import { executeAddLiquidity } from 'services/liquidity'
-import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
 
 type Params = {
   enabled: boolean
   swapAddress: string
-  swapAssets: any[]
+  swapAssets?: any[]
   price?: number
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
-  poolId: string
   msgs: any | null
   encodedMsgs: any | null
-  amount?: string
   gasAdjustment?: number
   estimateEnabled?: boolean
   tokenAAmount?: string
@@ -32,8 +29,7 @@ type Params = {
 export const useTransaction = ({
   enabled,
   swapAddress,
-  swapAssets,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -44,9 +40,7 @@ export const useTransaction = ({
   onError,
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
-  const [tokenA, tokenB] = swapAssets
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
@@ -59,8 +53,10 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(
-          senderAddress, debouncedMsgs, '',
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
         )
         if (buttonLabel) {
           setButtonLabel(null)
@@ -101,10 +97,10 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
-        Boolean(client) &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
+        Boolean(signingClient) &&
         Boolean(senderAddress) &&
         enabled &&
         Boolean(swapAddress) &&
@@ -124,21 +120,15 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(() => executeAddLiquidity({
-    tokenA,
-    tokenB,
-    tokenAAmount,
-    tokenBAmount,
-    client,
-    swapAddress,
+    signingClient,
     senderAddress,
     msgs: encodedMsgs,
-    chainId,
   }),
   {
     onMutate: () => {
       setTxStep(TxStep.Posting)
     },
-    onError: (e) => {
+    onError: async (e) => {
       let message: any = ''
       console.error(e?.toString())
       setTxStep(TxStep.Failed)
@@ -166,7 +156,10 @@ export const useTransaction = ({
       ) {
         setError(e?.toString())
         message = (
-          <Finder txHash={txInfo?.txHash} chainId={client?.client?.chainId}>
+          <Finder
+            txHash={txInfo?.hash}
+            chainId={await signingClient.getChainId()}
+          >
             {' '}
           </Finder>
         )
@@ -174,7 +167,6 @@ export const useTransaction = ({
         setError('Failed to execute transaction.')
         message = 'Failed to execute transaction.'
       }
-
       toast({
         title: 'Add Liquidity Failed.',
         description: message,
@@ -183,22 +175,28 @@ export const useTransaction = ({
         position: 'top-right',
         isClosable: true,
       })
-
       onError?.()
     },
     onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
-      setTxHash(data?.transactionHash || data?.txHash)
-      onBroadcasting?.(data?.transactionHash || data?.txHash)
+      setTxHash(data.transactionHash || data?.txHash)
+      onBroadcasting?.(data.transactionHash || data?.txHash)
 
-      await queryClient.invalidateQueries({ queryKey: ['@pool-liquidity','multipleTokenBalances','tokenBalance', 'positions'] })
+      await queryClient.invalidateQueries({
+        queryKey: [
+          '@pool-liquidity',
+          'multipleTokenBalances',
+          'multipleTokenBalances',
+          'positions',
+        ],
+      })
 
       toast({
         title: 'Add Liquidity Success.',
         description: (
           <Finder
-            txHash={data?.transactionHash || data?.txHash}
-            chainId={client?.client?.chainId}
+            txHash={data.transactionHash || data?.txHash}
+            chainId={await signingClient.getChainId()}
           >
             {' '}
           </Finder>
@@ -214,13 +212,13 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -232,7 +230,7 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
+    if (fee === null || msgs === null || msgs.length < 1) {
       return
     }
 
@@ -240,8 +238,8 @@ export const useTransaction = ({
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+    if (txInfo !== null && txHash !== null) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
@@ -256,7 +254,7 @@ export const useTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -7,6 +7,7 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useClients } from 'hooks/useClients'
 import useSimulate from 'hooks/useSimulate'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import useTxStatus from 'hooks/useTxStatus'
@@ -14,7 +15,8 @@ import { num, toChainAmount } from 'libs/num'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
-import { walletState } from 'state/atoms/walletAtoms'
+import { TerraTreasuryService } from 'services/treasuryService'
+import { chainState } from 'state/chainState'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -22,7 +24,6 @@ import {
 
 import useEpoch from './useEpoch'
 import useFactoryConfig from './useFactoryConfig'
-import { TerraTreasuryService } from 'services/treasuryService'
 
 interface Props {
   poolId: string
@@ -32,12 +33,13 @@ interface Props {
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
-  const { address, client, network, chainId } = useRecoilValue(walletState)
+  const { address, chainName, network, chainId } = useRecoilValue(chainState)
+  const { signingClient } = useClients(chainName)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
-    client,
+    signingClient,
   })
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const amount = toChainAmount(token.amount, tokenInfo?.decimals || 6)
@@ -56,11 +58,11 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       return null
     }
 
-    const flow_asset = createAsset(
+    const flowAsset = createAsset(
       amount, tokenInfo.denom, tokenInfo?.native,
     )
-    const start_epoch = dateToEpoch(startDate)
-    const end_epoch = dateToEpoch(endDate)
+    const startEpoch = dateToEpoch(startDate)
+    const endEpoch = dateToEpoch(endDate)
 
     const nativeAmount =
       tokenInfo?.denom === flowFeeDenom
@@ -95,9 +97,9 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         message: {
           open_flow: {
             curve: 'linear',
-            flow_asset,
-            start_epoch,
-            end_epoch,
+            flow_asset: flowAsset,
+            start_epoch: startEpoch,
+            end_epoch: endEpoch,
           },
         },
         senderAddress: address,
@@ -109,19 +111,21 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const simulate = useSimulate({
     msgs,
-    client,
+    signingClient,
     address,
     connected: Boolean(address),
     amount,
   })
 
   const { mutate: submit, ...tx } = useMutation({
-    mutationFn: async() => {
+    mutationFn: async () => {
       let fee = null
       if (chainId === 'columbus-5') {
         fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(amount, tokenInfo?.denom)
       }
-      return await client.post(address, msgs, fee)
+      return await signingClient.signAndBroadcast(
+        address, msgs, fee, null,
+      )
     },
     onError,
     onSuccess,

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 type FactoryConfig = {
   createFlowFee: {
@@ -14,7 +14,7 @@ type FactoryConfig = {
 }
 
 const useFactoryConfig = (incentiveFactory: string) => {
-  const { client } = useRecoilValue(walletState)
+  const { client } = useRecoilValue(chainState)
 
   const { data: config } = useQuery<FactoryConfig>({
     queryKey: ['factoryConfig', incentiveFactory],

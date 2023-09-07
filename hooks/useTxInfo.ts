@@ -1,13 +1,13 @@
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 type TxInfo = {
   txHash: string | null
-  client: CosmWasmClient
+  signingClient: SigningCosmWasmClient
 }
 
-const useTxInfo = ({ txHash, client }) => {
+const useTxInfo = ({ txHash, signingClient }: TxInfo) => {
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
@@ -15,7 +15,7 @@ const useTxInfo = ({ txHash, client }) => {
         return
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash != null,

@@ -18,11 +18,13 @@ import { passThroughTokenSwap } from 'services/swap'
 import {
   TransactionStatus,
   transactionStatusState,
-} from 'state/atoms/transactionAtoms'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+} from 'state/transactionStatusState'
+import { chainState } from 'state/chainState'
 import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { slippageAtom, tokenSwapAtom } from '../swapAtoms'
+import { useClients } from 'hooks/useClients'
+import { useChain } from '@cosmos-kit/react-lite'
 
 type UseTokenSwapArgs = {
   tokenASymbol: string
@@ -38,7 +40,9 @@ export const useTokenSwap = ({
   tokenAmount: providedTokenAmount,
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
-  const { client, address, status } = useRecoilValue(walletState)
+  const { address, chainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
+  const { signingClient } = useClients(chainName)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)
   const setTokenSwap = useSetRecoilState(tokenSwapAtom)
@@ -52,14 +56,14 @@ export const useTokenSwap = ({
   return useMutation(
     'swapTokens',
     async () => {
-      if (status !== WalletStatusType.connected) {
+      if (!isWalletConnected) {
         throw new Error('Please connect your wallet.')
       }
 
       setTransactionState(TransactionStatus.EXECUTING)
 
       const tokenAmount = convertDenomToMicroDenom(providedTokenAmount,
-        tokenA.decimals)
+        tokenA.decimals).toString()
 
       const price = convertDenomToMicroDenom(tokenToTokenPrice, tokenB.decimals)
 
@@ -97,7 +101,7 @@ export const useTokenSwap = ({
         tokenA,
         swapAddress: baseTokenAPool.swap_address,
         outputSwapAddress: baseTokenBPool.swap_address,
-        client,
+        signingClient,
       })
     },
     {

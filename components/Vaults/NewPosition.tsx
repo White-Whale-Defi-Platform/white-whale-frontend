@@ -6,17 +6,19 @@ import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 import useVault, { useVaultDeposit } from './hooks/useVaults'
-import DepositForm from './ManagePoistion/DepositForm'
+import DepositForm from './ManagePosition/DepositForm'
+import { useChain } from '@cosmos-kit/react-lite'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
   const chains: Array<any> = useChains()
-  const { chainId, address, status } = useRecoilValue(walletState)
+  const { chainId, address, chainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
   const vaultId = params.get('vault') || 'JUNOX'
 
   const vault = useMemo(() => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
@@ -92,7 +94,7 @@ const NewPosition = () => {
           {vault?.vault_assets?.symbol && (
             <DepositForm
               vaultAddress={vault?.vault_address}
-              connected={status}
+              isWalletConnected={isWalletConnected}
               isLoading={tokenBalanceLoading}
               balance={tokenBalance}
               defaultToken={vault?.vault_assets?.symbol}

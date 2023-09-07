@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Button, VStack, useToast } from '@chakra-ui/react'
+import { Button, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
 import Finder from 'components/Finder'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 import { TxStep } from '../hooks/useTransaction'
 import useWithdraw from '../hooks/useWithdraw'
 
 type Props = {
-  connected: WalletStatusType
+  isWalletConnected: boolean
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -22,7 +22,7 @@ type Props = {
 }
 
 const WithdrawForm = ({
-  connected,
+  isWalletConnected,
   balance,
   defaultToken,
   vaultAddress,
@@ -34,7 +34,7 @@ const WithdrawForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const onSuccess = useCallback((txHash) => {
     refetch?.()
     toast({
@@ -56,10 +56,9 @@ const WithdrawForm = ({
     lpToken,
     token,
     onSuccess })
-  const isConnected = connected === '@wallet-state/connected'
 
   const buttonLabel = useMemo(() => {
-    if (connected !== '@wallet-state/connected') {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!token?.amount) {
       return 'Enter Amount'
@@ -67,11 +66,11 @@ const WithdrawForm = ({
       return tx?.buttonLabel
     }
     return 'Withdraw'
-  }, [tx?.buttonLabel, connected, token])
+  }, [tx?.buttonLabel, isWalletConnected, token])
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event?.preventDefault()
-    tx?.submit()
+    await tx?.submit()
   }
 
   useEffect(() => {
@@ -107,11 +106,11 @@ const WithdrawForm = ({
         width="full"
         variant="primary"
         isLoading={
-          tx?.txStep == TxStep.Estimating ||
-          tx?.txStep == TxStep.Posting ||
-          tx?.txStep == TxStep.Broadcasting
+          tx?.txStep === TxStep.Estimating ||
+          tx?.txStep === TxStep.Posting ||
+          tx?.txStep === TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isConnected}
+        disabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

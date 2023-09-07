@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
+import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages'
 
 export enum Force {
@@ -21,11 +23,13 @@ const useForceEpochAndTakingSnapshots = ({
   noSnapshotTakenAddresses,
   config,
 }: Params) => {
-  const { address, client } = useRecoilValue(walletState)
-  const incentiveAddresses = useQueryIncentiveContracts(client)
-
+  const { chainName } = useRecoilValue(chainState)
+  const { address } = useChain(chainName)
+  const { signingClient, cosmWasmClient } = useClients(chainName)
+  const incentiveAddresses = useQueryIncentiveContracts(cosmWasmClient)
   const mode = useMemo(() => (noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots),
     [noSnapshotTakenAddresses])
+
   const addresses =
     useMemo(() => (mode === Force.snapshotsOnly
       ? noSnapshotTakenAddresses
@@ -37,7 +41,7 @@ const useForceEpochAndTakingSnapshots = ({
       mode === Force.epochAndSnapshots
         ? 'Epoch Created And Snapshots Taken'
         : 'Taking Snapshots',
-    client,
+    signingClient,
   })
 
   const msgs = useMemo(() => {
@@ -73,7 +77,9 @@ const useForceEpochAndTakingSnapshots = ({
   }, [addresses, address])
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: () => client.post(address, msgs),
+    mutationFn: () => signingClient.signAndBroadcast(
+      address, msgs, 'auto', null,
+    ),
     onError,
     onSuccess,
   })

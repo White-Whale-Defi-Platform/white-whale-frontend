@@ -1,15 +1,19 @@
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { Wallet } from 'util/wallet-adapters'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export const createNewEpoch = async (
-  client: Wallet,
+  signingClient: SigningCosmWasmClient,
   config: Config,
   address: string,
 ) => {
   const handleMsg = {
     new_epoch: {},
   }
-  return client.execute(
-    address, config.fee_distributor, handleMsg,
+
+  return await signingClient.execute(
+    address,
+    config.fee_distributor,
+    handleMsg,
+    'auto',
   )
 }

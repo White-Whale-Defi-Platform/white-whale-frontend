@@ -1,6 +1,17 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { Box, Button, Divider, HStack, Image, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  HStack,
+  Image,
+  Text,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react'
 import { num } from 'libs/num'
 
 import { useClosePosition } from './hooks/useClosePosition'
@@ -42,7 +53,7 @@ const Token = ({ imgUrl, symbol }) => (
   </HStack>
 )
 
-const PositionsOverview = ({ flows, poolId }: Props) => {
+export const PositionsOverview = ({ flows, poolId }: Props) => {
   const [activeButton, setActiveButton] = useState('active')
   const [columnFilters, setColumnFilters] = useState([
     {
@@ -83,46 +94,53 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
       </Box>
     )
   }
-
+  // TODO: Responsive Design
   return (
-    <Box width="full">
-      <HStack
-        margin="20px"
-        backgroundColor="rgba(0, 0, 0, 0.25)"
-        width="auto"
-        px="24px"
-        py="12px"
-        borderRadius="75px"
-        gap="20px"
-      >
-        {STATES.map((item) => (
-          <Button
-            key={item}
-            minW="100px"
-            variant={activeButton === item ? 'primary' : 'unstyled'}
-            color="white"
-            size="sm"
-            onClick={() => {
-              setActiveButton(item)
-              setColumnFilters(item === 'all'
-                ? []
-                : [
-                  {
-                    id: 'state',
-                    value: item,
-                  },
-                ])
-            }}
-            textTransform="capitalize"
-          >
-            {item}
-          </Button>
-        ))}
-      </HStack>
-      <Divider opacity="0.2" />
-      <PositionsTable columnFilters={columnFilters} positions={positions} />
+    <Box
+      border="2px"
+      borderColor="whiteAlpha.200"
+      borderRadius="3xl"
+      pt="8"
+      maxH="fit-content"
+    >
+      <Tabs variant="brand">
+        <TabList
+          display={['flex']}
+          flexWrap={['wrap']}
+          justifyContent="center"
+          background={'#1C1C1C'}
+        >
+          {STATES.map((item) => (
+            <Tab key={`tab-${item}`}
+              onClick={() => {
+                setActiveButton(item)
+                setColumnFilters(item === 'all'
+                  ? []
+                  : [
+                    {
+                      id: 'state',
+                      value: item,
+                    },
+                  ])
+              }}
+              textTransform="capitalize"
+            >
+              {item}
+            </Tab>
+          ))}
+        </TabList>
+        <TabPanels p={4}>
+          {STATES.map((item) => (
+            <TabPanel key={item} padding={4}>
+              <PositionsTable
+                columnFilters={columnFilters}
+                positions={positions}
+              />
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
     </Box>
   )
 }
 
-export default PositionsOverview
