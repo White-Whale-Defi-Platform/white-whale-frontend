@@ -35,26 +35,27 @@ const WithdrawForm = ({
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(chainState)
-  const onSuccess = useCallback(
-    (txHash) => {
-      refetch?.()
-      toast({
-        title: 'Withdraw from Vault Success.',
-        description: (
-          <Finder txHash={txHash} chainId={chainId}>
-            {' '}
-          </Finder>
-        ),
-        status: 'success',
-        duration: 9000,
-        position: 'top-right',
-        isClosable: true,
-      })
-    },
-    [refetch, chainId, toast]
-  )
+  const onSuccess = useCallback((txHash) => {
+    refetch?.()
+    toast({
+      title: 'Withdraw from Vault Success.',
+      description: (
+        <Finder txHash={txHash} chainId={chainId}>
+          {' '}
+        </Finder>
+      ),
+      status: 'success',
+      duration: 9000,
+      position: 'top-right',
+      isClosable: true,
+    })
+  },
+  [refetch, chainId, toast])
 
-  const { tx } = useWithdraw({ vaultAddress, lpToken, token, onSuccess })
+  const { tx } = useWithdraw({ vaultAddress,
+    lpToken,
+    token,
+    onSuccess })
 
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
@@ -105,11 +106,11 @@ const WithdrawForm = ({
         width="full"
         variant="primary"
         isLoading={
-          tx?.txStep == TxStep.Estimating ||
-          tx?.txStep == TxStep.Posting ||
-          tx?.txStep == TxStep.Broadcasting
+          tx?.txStep === TxStep.Estimating ||
+          tx?.txStep === TxStep.Posting ||
+          tx?.txStep === TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isWalletConnected}
+        disabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

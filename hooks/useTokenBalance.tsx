@@ -1,20 +1,22 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
+
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { useChain } from '@cosmos-kit/react-lite'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
+import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { CW20 } from 'services/cw20'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion'
+
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useClients } from 'hooks/useClients'
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
-async function fetchTokenBalance({
+const fetchTokenBalance = async({
   cosmWasmClient,
   signingClient,
   token = {},
@@ -31,16 +33,16 @@ async function fetchTokenBalance({
     return 0
   }
 
-  if (native && !!cosmWasmClient) {
+  if (native && cosmWasmClient) {
     const coin = await cosmWasmClient.getBalance(address, denom)
     const amount = coin ? Number(coin.amount) : 0
     return convertMicroDenomToDenom(amount, decimals)
   }
   if (token_address) {
     try {
-      const balance = await CW20(cosmWasmClient, signingClient)
-        .use(token_address)
-        .balance(address)
+      const balance = await CW20(cosmWasmClient, signingClient).
+        use(token_address).
+        balance(address)
       return convertMicroDenomToDenom(Number(balance), decimals)
     } catch (err) {
       return 0
@@ -58,7 +60,7 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
       denom: ibcToken.juno_denom,
     }
   }
-  return undefined
+  return null
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
@@ -73,14 +75,12 @@ export const useTokenBalance = (tokenSymbol: string) => {
     refetch,
   } = useQuery(
     ['tokenBalance', tokenSymbol, address, network],
-    async () => {
-      return await fetchTokenBalance({
-        cosmWasmClient,
-        signingClient,
-        address,
-        token: tokenInfo || ibcAssetInfo,
-      })
-    },
+    async () => await fetchTokenBalance({
+      cosmWasmClient,
+      signingClient,
+      address,
+      token: tokenInfo || ibcAssetInfo,
+    }),
     {
       enabled:
         Boolean(tokenSymbol) &&
@@ -109,29 +109,21 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
 
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
-    async () =>
-      await Promise.all(
-        tokenSymbols.map((tokenSymbol) => {
-          return fetchTokenBalance({
-            cosmWasmClient,
-            signingClient,
-            address,
-            token:
+
+    async () => await Promise.all(tokenSymbols.map((tokenSymbol) => fetchTokenBalance({
+      cosmWasmClient,
+      signingClient,
+      address,
+      token:
               getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
-              mapIbcTokenToNative(
-                getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)
-              ) ||
+              mapIbcTokenToNative(getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)) ||
               {},
-          })
-        })
-      ),
+    }))),
     {
-      enabled: Boolean(
-        isWalletConnected &&
+      enabled: Boolean(isWalletConnected &&
           tokenSymbols?.length &&
           tokenList?.tokens &&
-          !!cosmWasmClient
-      ),
+          cosmWasmClient),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,

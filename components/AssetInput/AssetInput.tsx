@@ -1,19 +1,18 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react';
 
-import { Button, forwardRef, HStack, VStack } from '@chakra-ui/react'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
-
+import { forwardRef, VStack } from '@chakra-ui/react'
+import { TokenBalance } from 'components/Pages/BondingActions/Bond';
+import {
+  AMP_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL,
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
 import usePrices from 'hooks/usePrices'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { num } from 'libs/num'
 
 import BalanceWithMaxNHalf from './BalanceWithMax'
 import WhaleInput from './WhaleInput'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-  WHALE_TOKEN_SYMBOL,
-} from 'constants/index'
 
 interface AssetInputProps {
   image?: boolean
@@ -34,8 +33,8 @@ interface AssetInputProps {
   hideDollarValue?: boolean
   showBalanceSlider?: boolean
   isBonding?: boolean
-  mobile?: boolean
   unbondingBalances?: TokenBalance[]
+  mobile?: boolean
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, ref) => {

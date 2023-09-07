@@ -92,7 +92,6 @@ const Create = ({ poolId }: Props) => {
                 type="date"
                 paddingEnd={'2px'}
                 min={new Date().toISOString().slice(0, 16)}
-                // Max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
               />
             </InputGroup>

@@ -1,15 +1,14 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
-
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
-} from '../../util/messages'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+} from 'util/messages'
 
 type PassThroughTokenSwapArgs = {
-  tokenAmount: number
+  tokenAmount: string
   price: number
   slippage: number
   senderAddress: string
@@ -54,14 +53,12 @@ export const passThroughTokenSwap = async ({
       message: swapMessage,
     })
 
-    return validateTransactionSuccess(
-      await signingClient.signAndBroadcast(
-        senderAddress,
-        [increaseAllowanceMessage, executeMessage],
-        'auto',
-        null
-      )
-    )
+    return validateTransactionSuccess(await signingClient.signAndBroadcast(
+      senderAddress,
+      [increaseAllowanceMessage, executeMessage],
+      'auto',
+      null,
+    ))
   }
 
   return signingClient.execute(
@@ -70,6 +67,6 @@ export const passThroughTokenSwap = async ({
     swapMessage,
     'auto',
     null,
-    [coin(tokenAmount, tokenA.denom)]
+    [coin(tokenAmount, tokenA.denom)],
   )
 }

@@ -1,12 +1,12 @@
-import React from 'react'
 import { useQueryClient } from 'react-query'
+
 import { Switch } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { MAINNET_TESTNET_MAP, NETWORK_MAP } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
-import { useChain } from '@cosmos-kit/react-lite'
 
-function NetworkSwitch() {
+export const NetworkSwitch = () => {
   const queryClient = useQueryClient()
   const [currentWalletState, setWalletState] = useRecoilState(chainState)
   const { disconnect } = useChain(currentWalletState.chainName)

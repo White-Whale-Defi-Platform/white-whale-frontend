@@ -13,7 +13,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import PositionsOverview from 'components/Pages/Incentivize/PositionsOverview'
+import { PositionsOverview } from 'components/Pages/Incentivize/PositionsOverview';
+import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -22,17 +23,14 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import Create from './Create'
-import { useClients } from 'hooks/useClients'
 
 const Incentivize: FC = () => {
   const router: NextRouter = useRouter()
   const { chainName } = useRecoilValue(chainState)
   const { data: poolList } = usePoolsListQuery()
 
-  const poolId = useMemo(
-    () => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
-    [poolList]
-  )
+  const poolId = useMemo(() => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
+    [poolList])
 
   const { cosmWasmClient } = useClients(chainName)
 
@@ -47,14 +45,11 @@ const Incentivize: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolId, poolList, chainName])
-
-  const [pools] = useQueriesDataSelector(
-    useQueryPoolsLiquidity({
-      refetchInBackground: false,
-      pools: poolList?.pools,
-      cosmWasmClient,
-    })
-  )
+  const [pools] = useQueriesDataSelector(useQueryPoolsLiquidity({
+    refetchInBackground: false,
+    pools: poolList?.pools,
+    cosmWasmClient,
+  }))
 
   const myFlows = useMemo(() => {
     if (!pools || !poolId) {

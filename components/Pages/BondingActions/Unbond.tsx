@@ -1,27 +1,24 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import {useMediaQuery, VStack } from '@chakra-ui/react'
-import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { useRecoilState,useRecoilValue } from 'recoil'
+import { useMediaQuery, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
+import { BondingTokenState, TokenBalance } from 'components/Pages/BondingActions/Bond';
+import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded';
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData';
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'
 
-
 import AssetInput from '../../AssetInput'
-import { BondingTokenState, TokenBalance } from './Bond'
-import { bondingAtom } from './bondAtoms'
-import { useChain } from '@cosmos-kit/react-lite'
 
 const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { isWalletConnected, chain } = useChain(chainName)
+  const { chainName, network, chainId } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<BondingTokenState>(bondingAtom)
-  const config = useConfig(chain.network_type, chain.chain_id)
-  
-
+    useRecoilState<BondingTokenState>(bondingState)
+  const config = useConfig(network, chainId)
   const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
@@ -46,6 +43,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
 
   useEffect(() => {
     if (config) {
+      // eslint-disable-next-line prefer-destructuring
       const firstToken = config.bonding_tokens[0]
       setCurrentBondState({
         tokenSymbol: firstToken.tokenSymbol,
@@ -68,7 +66,6 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
 
   return (
     <VStack px={7} width="full">
-      {/* @ts-ignore */}
       <Controller
         name="currentBondState"
         control={control}

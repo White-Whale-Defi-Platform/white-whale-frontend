@@ -1,6 +1,6 @@
-import { Coin } from '@cosmjs/launchpad'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { Coin } from '@cosmjs/launchpad'
 
 export type Expiration =
   | { readonly at_height: number }
@@ -106,10 +106,8 @@ export interface CW20Contract {
   use: (contractAddress: string) => CW20Instance
 }
 
-export const CW20 = (
-  cosmWasmClient: CosmWasmClient,
-  signingClient: SigningCosmWasmClient
-): CW20Contract => {
+export const CW20 = (cosmWasmClient: CosmWasmClient,
+  signingClient: SigningCosmWasmClient): CW20Contract => {
   const use = (contractAddress: string): CW20Instance => {
     const balance = async (address: string): Promise<string> => {
       const result = await cosmWasmClient?.queryContractSmart(contractAddress, {
@@ -118,56 +116,43 @@ export const CW20 = (
       return result?.balance
     }
 
-    const allowance = async (
-      owner: string,
-      spender: string
-    ): Promise<AllowanceResponse> => {
-      return cosmWasmClient.queryContractSmart(contractAddress, {
-        allowance: { owner, spender },
-      })
-    }
+    const allowance = async (owner: string,
+      spender: string): Promise<AllowanceResponse> => await cosmWasmClient.queryContractSmart(contractAddress, {
+      allowance: { owner,
+        spender },
+    })
 
     const allAllowances = async (
       owner: string,
       startAfter?: string,
-      limit?: number
-    ): Promise<AllAllowancesResponse> => {
-      return cosmWasmClient.queryContractSmart(contractAddress, {
-        all_allowances: { owner, start_after: startAfter, limit },
-      })
-    }
+      limit?: number,
+    ): Promise<AllAllowancesResponse> => await cosmWasmClient.queryContractSmart(contractAddress, {
+      all_allowances: { owner,
+        start_after: startAfter,
+        limit },
+    })
 
-    const allAccounts = async (
-      startAfter?: string,
-      limit?: number
-    ): Promise<readonly string[]> => {
+    const allAccounts = async (startAfter?: string,
+      limit?: number): Promise<readonly string[]> => {
       const accounts: AllAccountsResponse =
         await cosmWasmClient.queryContractSmart(contractAddress, {
-          all_accounts: { start_after: startAfter, limit },
+          all_accounts: { start_after: startAfter,
+            limit },
         })
       return accounts.accounts
     }
+    const tokenInfo = async (): Promise<CW20TokenInfo> => await cosmWasmClient.queryContractSmart(contractAddress, {
+      token_info: {},
+    })
 
-    const tokenInfo = async (): Promise<CW20TokenInfo> => {
-      return cosmWasmClient.queryContractSmart(contractAddress, {
-        token_info: {},
-      })
-    }
+    const investment = async (): Promise<Investment> => await cosmWasmClient.queryContractSmart(contractAddress, {
+      investment: {},
+    })
 
-    const investment = async (): Promise<Investment> => {
-      return cosmWasmClient.queryContractSmart(contractAddress, {
-        investment: {},
-      })
-    }
-
-    const claims = async (address: string): Promise<Claims> => {
-      return await cosmWasmClient.queryContractSmart(contractAddress, {
-        claims: { address },
-      })
-    }
-    const minter = async (): Promise<any> => {
-      return cosmWasmClient.queryContractSmart(contractAddress, { minter: {} })
-    }
+    const claims = async (address: string): Promise<Claims> => await cosmWasmClient.queryContractSmart(contractAddress, {
+      claims: { address },
+    })
+    const minter = async (): Promise<any> => await cosmWasmClient.queryContractSmart(contractAddress, { minter: {} })
 
     const mint = async (
       sender: string,
@@ -178,9 +163,10 @@ export const CW20 = (
         sender,
         contractAddress,
         {
-          mint: { recipient, amount },
+          mint: { recipient,
+            amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -195,9 +181,10 @@ export const CW20 = (
         sender,
         contractAddress,
         {
-          transfer: { recipient, amount },
+          transfer: { recipient,
+            amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -210,7 +197,7 @@ export const CW20 = (
         {
           burn: { amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -224,9 +211,10 @@ export const CW20 = (
         sender,
         contractAddress,
         {
-          increase_allowance: { spender, amount },
+          increase_allowance: { spender,
+            amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -240,9 +228,10 @@ export const CW20 = (
         sender,
         contractAddress,
         {
-          decrease_allowance: { spender, amount },
+          decrease_allowance: { spender,
+            amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -257,9 +246,11 @@ export const CW20 = (
         sender,
         contractAddress,
         {
-          transfer_from: { owner, recipient, amount },
+          transfer_from: { owner,
+            recipient,
+            amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -271,7 +262,7 @@ export const CW20 = (
         { bond: {} },
         'auto',
         null,
-        [coin]
+        [coin],
       )
       return result.transactionHash
     }
@@ -283,7 +274,7 @@ export const CW20 = (
         {
           unbond: { amount },
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }
@@ -295,7 +286,7 @@ export const CW20 = (
         {
           claim: {},
         },
-        'auto'
+        'auto',
       )
       return result.transactionHash
     }

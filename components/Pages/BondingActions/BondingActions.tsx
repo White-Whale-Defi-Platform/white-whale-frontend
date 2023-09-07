@@ -1,14 +1,16 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
+
+import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
+import Loader from 'components/Loader'
 import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
-import { useChains } from 'hooks/useChainInfo'
-import usePrices from 'hooks/usePrices'
-import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+
 import { ActionType } from '../Dashboard/BondingOverview'
 import {
   Config,
@@ -18,15 +20,9 @@ import {
 import { Bond, BondingTokenState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 import useTransaction, { TxStep } from './hooks/useTransaction'
+import { bondingState } from './state/bondingState'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
-import { useChain } from '@cosmos-kit/react-lite'
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import Loader from 'components/Loader'
-export enum WhaleTokenType {
-  ampWHALE,
-  bWHALE,
-}
 
 const BondingActions = ({ globalAction }) => {
   const { chainId, network, chainName } = useRecoilValue(chainState)
@@ -42,7 +38,7 @@ const BondingActions = ({ globalAction }) => {
   const { txStep, submit } = useTransaction()
 
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<BondingTokenState>(bondingAtom)
+    useRecoilState<BondingTokenState>(bondingState)
 
   const [liquidBalances, __] = useMultipleTokenBalance(symbols)
 
@@ -52,7 +48,9 @@ const BondingActions = ({ globalAction }) => {
     bondingConfig,
     unbondingRequests,
     isLoading,
-  } = useDashboardData(address, network, chainId, chainName)
+  } = useDashboardData(
+    address, network, chainId, chainName,
+  )
 
   const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)
   const totalWithdrawable = withdrawableInfos?.reduce((acc, e) => acc + e?.amount,
@@ -78,7 +76,8 @@ const BondingActions = ({ globalAction }) => {
   const BondingActionButton = ({ action }) => {
     const actionString = ActionType[action].toString()
     const onClick = async () => {
-      setCurrentBondState({ ...currentBondState, amount: 0 })
+      setCurrentBondState({ ...currentBondState,
+        amount: 0 })
       await router.push(`/${chainName}/dashboard/${actionString}`)
     }
 
@@ -102,9 +101,8 @@ const BondingActions = ({ globalAction }) => {
       </Button>
     )
   }
-
-  function getFirstDenomWithPositiveAmount(withdrawableInfos: WithdrawableInfo[],
-    config: Config) {
+  const getFirstDenomWithPositiveAmount = (withdrawableInfos: WithdrawableInfo[],
+    config: Config) => {
     const foundToken = config?.bonding_tokens?.
       map((tokenConfig) => withdrawableInfos.find((info) => info.denom === tokenConfig.denom)).
       find((info) => info && info.amount > 0)
@@ -117,7 +115,8 @@ const BondingActions = ({ globalAction }) => {
       width={{ base: '100%',
         md: '650px' }}
       alignItems="flex-start"
-      top={{base: '80px', md:'200'}}
+      top={{ base: '80px',
+        md: '200' }}
       gap={4}
       paddingRight={'5'}
       position="absolute"
@@ -131,7 +130,8 @@ const BondingActions = ({ globalAction }) => {
           icon={<ArrowBackIcon />}
           onClick={async () => {
             await router.push(`/${chainName}/dashboard`)
-            setCurrentBondState({ ...currentBondState, amount: 0 })
+            setCurrentBondState({ ...currentBondState,
+              amount: 0 })
           }}
         />
         <HStack>
@@ -221,6 +221,8 @@ const BondingActions = ({ globalAction }) => {
                       unbondingPeriodInNano={unbondingPeriodInNano}
                     />
                   )
+                default:
+                  return <></>
               }
             })()}
           </Box>
@@ -231,9 +233,9 @@ const BondingActions = ({ globalAction }) => {
             width="80%"
             variant="primary"
             disabled={
-              txStep == TxStep.Estimating ||
-              txStep == TxStep.Posting ||
-              txStep == TxStep.Broadcasting ||
+              txStep === TxStep.Estimating ||
+              txStep === TxStep.Posting ||
+              txStep === TxStep.Broadcasting ||
               (currentBondState.amount <= 0 &&
                 globalAction !== ActionType.withdraw &&
                 isWalletConnected) ||
@@ -241,9 +243,9 @@ const BondingActions = ({ globalAction }) => {
             }
             maxWidth={570}
             isLoading={
-              txStep == TxStep.Estimating ||
-              txStep == TxStep.Posting ||
-              txStep == TxStep.Broadcasting
+              txStep === TxStep.Estimating ||
+              txStep === TxStep.Posting ||
+              txStep === TxStep.Broadcasting
             }
             onClick={async () => {
               if (isWalletConnected) {

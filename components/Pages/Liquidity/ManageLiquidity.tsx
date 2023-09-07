@@ -1,14 +1,10 @@
-import { ArrowBackIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { FC, useEffect, useMemo, useState } from 'react'
 
+import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   Tab,
   TabList,
   TabPanel,
@@ -18,9 +14,12 @@ import {
   VStack,
   useMediaQuery,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
+import { PositionsOverview } from 'components/Pages/Incentivize/PositionsOverview';
 import { useChains } from 'hooks/useChainInfo'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
@@ -31,17 +30,14 @@ import {
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { tokenItemState } from 'state/tokenItemState'
 import { TxStep } from 'types/common'
 
-import PositionsOverview from '../Incentivize/PositionsOverview'
 import Claim from './Claim'
 import DepositForm from './DepositForm'
 import useProvideLP from './hooks/useProvideLP'
-import { tokenItemState } from 'state/tokenItemState'
 import Overview from './Overview'
 import WithdrawForm from './WithdrawForm'
-import { useClients } from 'hooks/useClients'
-import { useChain } from '@cosmos-kit/react-lite'
 
 const ManageLiquidity: FC = () => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')
@@ -54,17 +50,16 @@ const ManageLiquidity: FC = () => {
   const { data: poolList } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenItemState)
   const [bondingDays, setBondingDays] = useState(0)
-  const { simulated, tx } = useProvideLP({ reverse, bondingDays })
+  const { simulated, tx } = useProvideLP({ reverse,
+    bondingDays })
   const { cosmWasmClient } = useClients(chainName)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
-    useQueriesDataSelector(
-      useQueryPoolsLiquidity({
-        refetchInBackground: false,
-        pools: poolList?.pools,
-        cosmWasmClient,
-      })
-    )
+    useQueriesDataSelector(useQueryPoolsLiquidity({
+      refetchInBackground: false,
+      pools: poolList?.pools,
+      cosmWasmClient,
+    }))
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
   const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
@@ -82,7 +77,7 @@ const ManageLiquidity: FC = () => {
   const poolUserShare = usePoolUserShare(
     cosmWasmClient,
     pool?.staking_address,
-    address
+    address,
   )
 
   const dailyEmissionData = useMemo(() => {

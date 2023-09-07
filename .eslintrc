@@ -158,7 +158,6 @@
       "as-needed"
     ],
     "block-scoped-var": "error",
-    "camelcase": "error", // Todo: add options
     "capitalized-comments": [
       "error",
       "always",
@@ -221,8 +220,8 @@
       }*/ // TODO: fix
     ],
     "guard-for-in": "error",
-    // "id-denylist": _ 
-    // "id-length": _ 
+    // "id-denylist": _
+    // "id-length": _
     // "id-match": _
     "init-declarations": "off",
     /*"logical-assignment-operators": [
@@ -260,7 +259,6 @@
     "no-continue": "off",
     "no-delete-var": "error",
     "no-div-regex": "error",
-    "no-else-return": "error",
     "no-empty": "error",
     "no-empty-function": "error",
     // "no-empty-static-block": "error", TODO: fix
@@ -293,7 +291,6 @@
     "no-mixed-operators": "error",
     "no-multi-assign": "error",
     "no-multi-str": "error",
-    "no-negated-condition": "error",
     "no-nested-ternary": "error",
     "no-new": "error",
     "no-new-func": "error",
@@ -327,13 +324,6 @@
     "no-return-await": "off",
     "no-script-url": "error",
     "no-sequences": "error",
-    "@typescript-eslint/no-shadow": [
-      "error",
-      {
-        "builtinGlobals": true,
-        "hoist": "all"
-      }
-    ],
     "no-shadow-restricted-names": "error",
     "no-ternary": "off",
     "no-throw-literal": "error",
@@ -416,7 +406,7 @@
     "symbol-description": "error",
     "vars-on-top": "off",
     "yoda": "error",
-    // EsLint: Layout & Formatting 
+    // EsLint: Layout & Formatting
     "array-bracket-newline": "off",
     "array-bracket-spacing": "error",
     "array-element-newline": "off",
@@ -540,7 +530,6 @@
       }
     ],
     "@typescript-eslint/no-explicit-any": "off",
-    "import/prefer-default-export": "error",
     "react/destructuring-assignment": [
       "warn",
       "always",

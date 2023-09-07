@@ -1,5 +1,5 @@
-import { protectAgainstNaN } from 'junoblocks'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { protectAgainstNaN } from 'junoblocks'
 
 type QueryLiquidityBalanceArgs = {
   address: string
@@ -17,17 +17,13 @@ export const queryLiquidityBalance = async ({
   let balance = 0
   try {
     if (isNative) {
-      balance = Number(
-        (await cosmWasmClient.getBalance(address, tokenAddress)).amount
-      )
+      balance = Number((await cosmWasmClient.getBalance(address, tokenAddress)).amount)
     } else {
-      balance = Number(
-        (
-          await cosmWasmClient.queryContractSmart(tokenAddress, {
-            balance: { address },
-          })
-        ).balance
-      )
+      balance = Number((
+        await cosmWasmClient.queryContractSmart(tokenAddress, {
+          balance: { address },
+        })
+      ).balance)
     }
 
     return protectAgainstNaN(balance)

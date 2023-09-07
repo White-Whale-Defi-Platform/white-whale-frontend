@@ -2,11 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 
 import { executeVault } from './executeVault'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 export enum TxStep {
   /**
@@ -88,14 +88,14 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
 
       return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -109,7 +109,7 @@ export const useTransaction = ({
         const response = await signingClient.simulate(
           senderAddress,
           debouncedMsgs,
-          ''
+          '',
         )
         if (buttonLabel) {
           setButtonLabel(null)
@@ -145,9 +145,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
         Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
@@ -162,63 +162,59 @@ export const useTransaction = ({
     },
   )
 
-  const { mutate } = useMutation(
-    (data: any) =>
-      executeVault({
-        amount,
-        isNative,
-        denom,
-        signingClient,
-        contractAddress,
-        senderAddress,
-        msgs,
-        encodedMsgs,
-      }),
-    {
-      onMutate: () => {
-        setTxStep(TxStep.Posting)
-      },
-      onError: async (e) => {
-        let message: any = ''
-        console.error(e?.toString())
-        setTxStep(TxStep.Failed)
+  const { mutate } = useMutation(() => executeVault({
+    amount,
+    isNative,
+    denom,
+    signingClient,
+    contractAddress,
+    senderAddress,
+    msgs,
+    encodedMsgs,
+  }),
+  {
+    onMutate: () => {
+      setTxStep(TxStep.Posting)
+    },
+    onError: async (e) => {
+      let message: any = ''
+      console.error(e?.toString())
+      setTxStep(TxStep.Failed)
 
-        if (
-          /insufficient funds/i.test(e?.toString()) ||
-          /Overflow: Cannot Sub with/i.test(e?.toString())
-        ) {
-          setError('Insufficient Funds')
-          message = 'Insufficient Funds'
-        } else if (/Max spread assertion/i.test(e?.toString())) {
-          setError('Try increasing slippage')
-          message = 'Try increasing slippage'
-        } else if (/Request rejected/i.test(e?.toString())) {
-          setError('User Denied')
-          message = 'User Denied'
-        } else if (/account sequence mismatch/i.test(e?.toString())) {
-          setError('You have pending transaction')
-          message = 'You have pending transaction'
-        } else if (/out of gas/i.test(e?.toString())) {
-          setError('Out of gas, try increasing gas limit on wallet.')
-          message = 'Out of gas, try increasing gas limit on wallet.'
-        } else if (
-          /was submitted but was not yet found on the chain/i.test(
-            e?.toString()
-          )
-        ) {
-          setError(e?.toString())
-          message = (
-            <Finder
-              txHash={txInfo?.hash}
-              chainId={await signingClient.getChainId()}
-            >
-              {' '}
-            </Finder>
-          )
-        } else {
-          setError('Failed to execute transaction.')
-          message = 'Failed to execute transaction.'
-        }
+      if (
+        (/insufficient funds/i).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/i).test(e?.toString())
+      ) {
+        setError('Insufficient Funds')
+        message = 'Insufficient Funds'
+      } else if ((/Max spread assertion/i).test(e?.toString())) {
+        setError('Try increasing slippage')
+        message = 'Try increasing slippage'
+      } else if ((/Request rejected/i).test(e?.toString())) {
+        setError('User Denied')
+        message = 'User Denied'
+      } else if ((/account sequence mismatch/i).test(e?.toString())) {
+        setError('You have pending transaction')
+        message = 'You have pending transaction'
+      } else if ((/out of gas/i).test(e?.toString())) {
+        setError('Out of gas, try increasing gas limit on wallet.')
+        message = 'Out of gas, try increasing gas limit on wallet.'
+      } else if (
+        (/was submitted but was not yet found on the chain/i).test(e?.toString())
+      ) {
+        setError(e?.toString())
+        message = (
+          <Finder
+            txHash={txInfo?.hash}
+            chainId={await signingClient.getChainId()}
+          >
+            {' '}
+          </Finder>
+        )
+      } else {
+        setError('Failed to execute transaction.')
+        message = 'Failed to execute transaction.'
+      }
 
       toast({
         title: 'Add Liquidity Failed.',
@@ -252,18 +248,15 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
-      return
+    if (fee === null || msgs === null || msgs.length < 1) {
+      return null
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
+    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
+    if (txInfo !== null && txHash !== null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
@@ -279,7 +272,7 @@ export const useTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

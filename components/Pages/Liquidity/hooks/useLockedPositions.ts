@@ -1,6 +1,9 @@
 import { useQuery } from 'react-query'
 
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useChain } from '@cosmos-kit/react-lite'
 import dayjs from 'dayjs'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount } from 'libs/num'
@@ -10,9 +13,6 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useClients } from 'hooks/useClients'
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 type Params = {
   cosmWasmClient: CosmWasmClient
@@ -108,8 +108,8 @@ export const fetchPositions = async ({
           state: position.isOpen
             ? PositionState.active
             : diff <= 0
-              ? 'unbound'
-              : 'unbonding',
+              ? PositionState.unbonded
+              : PositionState.unbonding,
           action: null,
         }
       })
@@ -138,16 +138,16 @@ const useLockedPositions = (poolId: string) => {
       prices,
     ],
     queryFn: (): Promise<Position[]> => fetchPositions({
-        cosmWasmClient,
-        prices,
-        incentiveAddress: staking_address,
-        address,
-        pool_assets,
-        totalAssets,
-        totalLpSupply,
-      }),
-    enabled:
-      Boolean(address) && Boolean(cosmWasmClient) && Boolean(staking_address),
+      cosmWasmClient,
+      prices,
+      incentiveAddress: staking_address,
+      address,
+      pool_assets,
+      totalAssets,
+      totalLpSupply,
+    }),
+    enabled: Boolean(address) && Boolean(cosmWasmClient) && Boolean(staking_address),
+
   })
 }
 

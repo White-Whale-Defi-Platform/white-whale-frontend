@@ -1,16 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMediaQuery, VStack } from '@chakra-ui/react'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
-
+import { useChain } from '@cosmos-kit/react-lite'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData';
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'
 
 import AssetInput from '../../AssetInput'
-import { bondingState } from 'state/bondingState'
-import { useChain } from '@cosmos-kit/react-lite'
-
 
 export interface BondingTokenState {
   tokenSymbol: string
@@ -24,12 +22,11 @@ export interface TokenBalance {
 }
 
 export const Bond = ({ balances, tokenSymbols }) => {
-  const [currentBondState, setCurrentBondState] =
-  useRecoilState<BondingTokenState>(bondingAtom)
-  const { chainName } = useRecoilValue(chainState)
   const [isMobile] = useMediaQuery('(max-width: 720px)')
-
-  const { isWalletConnected, chain } = useChain(chainName)
+  const [currentBondState, setCurrentBondState] =
+    useRecoilState<BondingTokenState>(bondingState)
+  const { chainName, network, chainId } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
 
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 
@@ -53,7 +50,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
         amount: Number(amount) })
     }
   }
-  const config = useConfig( chain.network_type,chain.chain_id)
+  const config = useConfig(network,chainId)
 
   useEffect(() => {
     if (config) {
@@ -76,7 +73,6 @@ export const Bond = ({ balances, tokenSymbols }) => {
     [tokenBalances, currentBondState.tokenSymbol])
   return (
     <VStack px={7} width="full" >
-      {/* @ts-ignore*/}
       <Controller
         name="currentBondState"
         control={control}

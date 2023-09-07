@@ -2,33 +2,34 @@ import { FC, useEffect } from 'react'
 import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
-import { ChainProvider } from '@cosmos-kit/react-lite'
-import { chains, assets } from 'chain-registry'
+
+import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
+import { wallets as leapWallets } from '@cosmos-kit/leap'
+import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
-import { wallets as leapWallets } from '@cosmos-kit/leap'
-import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
+import { chains, assets } from 'chain-registry'
 
 import 'theme/global.css'
 
 import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import {
-  getChainOptions,
   StaticWalletProvider,
   WalletControllerChainOptions,
 } from '@terra-money/wallet-provider'
 import AppLoading from 'components/AppLoading'
 import AppLayout from 'components/Layout/AppLayout'
+import WalletModal from 'components/Wallet/Modal/WalletModal'
+import { endpointOptions } from 'constants/endpointOptions'
+import { signerOptions } from 'constants/signerOptions'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
-import WalletModal from 'components/Wallet/Modal/WalletModal'
-import { endpointOptions } from 'constants/endpointOptions'
-import { signerOptions } from 'constants/signerOptions'
+import { WalletViewProps } from '@cosmos-kit/core';
 
 const ConnectedView = ({ onClose, onReturn, wallet }: WalletViewProps) => {
   const {
@@ -61,16 +62,15 @@ const MyApp: FC<AppProps> = ({
             <QueryClientProvider client={queryClient}>
               <ChakraProvider theme={theme}>
                 <ChainProvider
-                  chains={chains} // supported chains
-                  assetLists={assets} // supported asset lists
-                  // @ts-ignore
+                  chains={chains} // Supported chains
+                  assetLists={assets} // Supported asset lists
                   wallets={[
                     ...keplrWallets,
                     ...cosmoStationWallets,
                     ...shellWallets,
                     ...stationWallets,
                     ...leapWallets,
-                  ]} // supported wallets
+                  ]} // Supported wallets
                   walletModal={WalletModal}
                   signerOptions={signerOptions}
                   endpointOptions={endpointOptions}
@@ -94,7 +94,6 @@ const MyApp: FC<AppProps> = ({
                     <AppLoading />
                   ) : (
                     <AppLayout>
-                      {/* @ts-ignore */}
                       <Component {...pageProps} />
                     </AppLayout>
                   )}
@@ -122,7 +121,6 @@ const MyApp: FC<AppProps> = ({
                     <AppLoading />
                   ) : (
                     <AppLayout>
-                      {/* @ts-ignore */}
                       <Component {...pageProps} />
                     </AppLayout>
                   )}

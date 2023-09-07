@@ -12,9 +12,9 @@ import { getUnbonding } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { getWeight } from 'components/Pages/Dashboard/hooks/getWeight'
 import { getWithdrawable } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
+import { useClients } from 'hooks/useClients'
 import { debounce } from 'lodash'
 import { NetworkType } from 'state/chainState'
-import { useClients } from 'hooks/useClients'
 
 export interface TokenDetails {
   tokenSymbol: string
@@ -53,11 +53,12 @@ export const useConfig = (network: NetworkType, chainId: string) => {
   return config
 }
 
-export const useDashboardData = (address, network, chainId, chainName) => {
-  const debouncedRefetch = useMemo(
-    () => debounce((refetchFunc) => refetchFunc(), 500),
-    []
-  )
+export const useDashboardData = (
+  address: string, network: NetworkType, chainId: string, chainName: string,
+) => {
+  const debouncedRefetch = useMemo(() => debounce((refetchFunc) => refetchFunc(), 500),
+    [])
+
   const config: Config = useConfig(network, chainId)
 
   const { cosmWasmClient: queryClient } = useClients(chainName)
@@ -65,64 +66,78 @@ export const useDashboardData = (address, network, chainId, chainName) => {
   const queries = useQueries([
     {
       queryKey: ['bonded', address, network, chainId],
-      queryFn: () => getBonded(queryClient, address, config),
+
+      queryFn: () => getBonded(
+        queryClient, address, config,
+      ),
       enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['unbonding', address, network, chainId],
-      queryFn: () => getUnbonding(queryClient, address, config),
+      queryFn: () => getUnbonding(
+        queryClient, address, config,
+      ),
       enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
+
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['withdrawable', address, network, chainId],
-      queryFn: () => getWithdrawable(queryClient, address, config),
-      enabled:  Boolean(queryClient) && Boolean(address) && Boolean(config),
+      queryFn: () => getWithdrawable(
+        queryClient, address, config,
+      ),
+      enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
     },
     {
       queryKey: ['totalBonded', network, chainId],
       queryFn: () => getTotalBonded(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['weightInfo', address, network, chainId],
-      queryFn: () => getWeight(queryClient, address, config),
+      queryFn: () => getWeight(
+        queryClient, address, config,
+      ),
       enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
     },
     {
       queryKey: ['feeDistributionConfig', network, chainId],
       queryFn: () => getFeeDistributorConfig(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['currentEpoch', network, chainId],
       queryFn: () => getCurrentEpoch(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['claimableEpochs', network, chainId],
       queryFn: () => getClaimableEpochs(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
     {
       queryKey: ['claimableRewards', address, network, chainId],
-      queryFn: () => getClaimable(queryClient, address, config),
+      queryFn: () => getClaimable(
+        queryClient, address, config,
+      ),
       enabled: Boolean(queryClient) && Boolean(address) && Boolean(config),
     },
     {
       queryKey: ['bondingConfig', network, chainId],
       queryFn: () => getBondingConfig(queryClient, config),
-      enabled: !!queryClient && !!config,
+      enabled: Boolean(queryClient) && Boolean(config),
     },
   ])
 
-  const isLoading = useMemo(() => queries.some((query) => query.isLoading || query.data === null || query.data === undefined),
-    [queries])
+  const isLoading = useMemo(() => queries.some((query) => (
+    query.isLoading || query.data === null || query.data === undefined
+  )),
+  [queries])
 
   const refetchAll = () => {
     queries.forEach((query) => {

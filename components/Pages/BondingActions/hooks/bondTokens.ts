@@ -1,6 +1,7 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { TerraTreasuryService } from 'services/treasuryService'
 
 export const bondTokens = async (
   signingClient: SigningCosmWasmClient,
@@ -22,12 +23,12 @@ export const bondTokens = async (
       },
     },
   }
+
+  let fee = null
+  if (chainId === 'columbus-5') {
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom)
+  }
   return signingClient.execute(
-    address,
-    config.whale_lair,
-    handleMsg,
-    'auto',
-    null,
-    [coin(amount, denom)]
+    address, config.whale_lair, handleMsg, fee, null, [coin(amount, denom)],
   )
 }

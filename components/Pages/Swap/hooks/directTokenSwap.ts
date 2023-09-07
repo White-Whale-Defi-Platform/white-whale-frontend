@@ -1,14 +1,12 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
 import { TokenInfo } from 'queries/usePoolsListQuery'
+import { TerraTreasuryService } from 'services/treasuryService'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from 'util/messages'
-
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-
-import { TerraTreasuryService } from 'services/treasuryService'
 
 type DirectTokenSwapArgs = {
   tokenAmount: string
@@ -43,21 +41,20 @@ export const directTokenSwap = async ({
       message: msgs,
     })
 
-    return validateTransactionSuccess(
-      await signingClient.signAndBroadcast(
-        senderAddress,
-        [increaseAllowanceMessage, executeMessage],
-        'auto',
-        null
-      )
-    )
+    return validateTransactionSuccess(await signingClient.signAndBroadcast(
+      senderAddress,
+      [increaseAllowanceMessage, executeMessage],
+      'auto',
+      null,
+    ))
   }
   let fee = null
   if (chainId === 'columbus-5') {
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(tokenAmount, tokenA.denom)
   }
-
-  return signingClient.execute(senderAddress, swapAddress, msgs, 'auto', null, [
-    coin(tokenAmount, tokenA.denom), fee
-  ])
+  return await signingClient.execute(
+    senderAddress, swapAddress, msgs, fee, null, [
+      coin(tokenAmount, tokenA.denom),
+    ],
+  )
 }

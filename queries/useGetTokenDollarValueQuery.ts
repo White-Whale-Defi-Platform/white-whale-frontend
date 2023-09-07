@@ -4,6 +4,8 @@
  *
  */
 import { useCallback } from 'react'
+
+import { useClients } from 'hooks/useClients'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 import { useRecoilValue } from 'recoil'
@@ -11,46 +13,6 @@ import { chainState } from 'state/chainState'
 
 import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
 import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
-import { useClients } from 'hooks/useClients'
-
-interface PriceData {
-  priceInvertedUsd: string
-}
-
-interface Content {
-  content: PriceData[]
-}
-
-interface PriceByTokenList {
-  priceByTokenList: Content
-}
-
-export const useWhalePrice = () => {
-  const GRAPHQL_URL = 'https://tfm-multi-stage.tfm.dev/graphql'
-
-  const query = gql`
-    query ($chain: String!, $tokenList: String!) {
-      priceByTokenList(chain: $chain, tokenList: $tokenList) {
-        content {
-          priceInvertedUsd
-        }
-      }
-    }
-  `
-
-  const { data } = useQuery('whale-price',
-    async (): Promise<PriceByTokenList> => request(
-      GRAPHQL_URL, query, {
-        chain: 'terra2',
-        tokenList:
-          'ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB,ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
-      },
-    ))
-
-  return useMemo(() => num(data?.priceByTokenList?.content?.[0]?.priceInvertedUsd).toNumber() ||
-      0,
-  [data])
-}
 
 export const useGetTokenDollarValueQuery = () => {
   const baseToken = useBaseTokenInfo()
@@ -66,33 +28,31 @@ export const useGetTokenDollarValueQuery = () => {
     if (!tokenAmountInDenom) {
       return 0
     }
-
-      const priceForOneToken = await tokenToTokenPriceQueryWithPools({
-        matchingPools: getMatchingPoolForSwap({ tokenA, tokenB }),
-        tokenA,
-        tokenB,
-        cosmWasmClient,
-        amount: 1,
-        id: tokenA?.id,
-      })
-
-      if (tokenA?.id === tokenB?.id && tokenA?.id) {
-        return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
-      }
-      return priceForOneToken
-    },
-    [
-      tokenADollarPrice,
+    const priceForOneToken = await tokenToTokenPriceQueryWithPools({
+      matchingPools: getMatchingPoolForSwap({ tokenA,
+        tokenB }),
+      tokenA,
+      tokenB,
       cosmWasmClient,
-      getMatchingPoolForSwap,
-      fetchingDollarPrice,
-    ]
-  )
+      amount: 1,
+      id: tokenA?.id,
+    })
+
+    if (tokenA?.id === tokenB?.id && tokenA?.id) {
+      return (tokenAmountInDenom / priceForOneToken) * tokenADollarPrice
+    }
+    return priceForOneToken
+  },
+  [
+    tokenADollarPrice,
+    cosmWasmClient,
+    getMatchingPoolForSwap,
+    fetchingDollarPrice,
+  ])
 
   return [
     getTokenDollarValue,
-    Boolean(
-      baseToken &&
+    Boolean(baseToken &&
         cosmWasmClient &&
         !fetchingDollarPrice &&
         !isLoadingPoolForSwapMatcher),

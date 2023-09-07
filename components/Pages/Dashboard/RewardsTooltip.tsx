@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
@@ -33,7 +32,9 @@ export const RewardsTooltip = ({
       <Text fontSize={14}>{isWalletConnected ? amount : 'n/a'}</Text>
     </HStack>
   )
+
   const [isLabelOpen, setIsLabelOpen] = useState(false)
+
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 

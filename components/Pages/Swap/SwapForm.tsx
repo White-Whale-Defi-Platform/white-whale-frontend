@@ -11,7 +11,6 @@ import {
   Text,
   Tooltip,
   useMediaQuery,
-  useToast,
   VStack,
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput'
@@ -114,30 +113,28 @@ const SwapForm: FC<Props> = ({
   const [isMobile] = useMediaQuery('(max-width: 485px)')
   const [isLabelOpen, setIsLabelOpen] = useState(false)
 
-  const explainer = (input: string) => {
-    return (
-      <Tooltip
-        label={input}
-        padding="1rem"
-        bg="blackAlpha.900"
-        fontSize="xs"
-        maxW="330px"
-        isOpen={isLabelOpen}
+  const explainer = (input: string) => (
+    <Tooltip
+      label={input}
+      padding="1rem"
+      bg="blackAlpha.900"
+      fontSize="xs"
+      maxW="330px"
+      isOpen={isLabelOpen}
+    >
+      <Box
+        cursor="pointer"
+        color="brand.50"
+        display="flex"
+        alignItems="center"
+        onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}
       >
-        <Box
-          cursor="pointer"
-          color="brand.50"
-          display="flex"
-          alignItems="center"
-          onMouseEnter={() => setIsLabelOpen(true)}
-          onMouseLeave={() => setIsLabelOpen(false)}
-          onClick={() => setIsLabelOpen(!isLabelOpen)}
-        >
-          <InfoOutlineIcon width=".7rem" height=".7rem" />
-        </Box>
-      </Tooltip>
-    )
-  }
+        <InfoOutlineIcon width=".7rem" height=".7rem" />
+      </Box>
+    </Tooltip>
+  )
   const onReverse = () => {
     const A = {
       ...tokenB,
@@ -146,7 +143,7 @@ const SwapForm: FC<Props> = ({
         parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
       decimals: poolList.pools.
         map(({ pool_assets }) => pool_assets).
-        map(([a, b]) => (a?.symbol == (tokenA.tokenSymbol as string)
+        map(([a, b]) => (a?.symbol === (tokenA.tokenSymbol as string)
           ? a?.decimals
           : b?.decimals))[0],
     }
@@ -157,7 +154,7 @@ const SwapForm: FC<Props> = ({
         parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
       decimals: poolList.pools.
         map(({ pool_assets }) => pool_assets).
-        map(([a, b]) => (a?.symbol == (tokenB.tokenSymbol as string)
+        map(([a, b]) => (a?.symbol === (tokenB.tokenSymbol as string)
           ? a?.decimals
           : b?.decimals))[0],
     }
@@ -225,16 +222,8 @@ const SwapForm: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated])
 
-  const isInputDisabled = tx?.txStep == TxStep.Posting
-  // @ts-ignore
-  if (window.debugLogsEnabled) {
-    console.log(
-      'Disabled conditions: ',
-      tx?.txStep != TxStep.Ready,
-      simulated == null,
-      !isConnected,
-    )
-  }
+  const isInputDisabled = tx?.txStep === TxStep.Posting
+
   return (
     <VStack
       paddingX={{ base: 6,
@@ -308,7 +297,6 @@ const SwapForm: FC<Props> = ({
               balance={tokenABalance}
               minMax={false}
               mobile={isMobile}
-              // onInputFocus={() => setIsReverse(true)}
               disabled={isInputDisabled}
               onChange={(value, isTokenChange) => {
                 setReverse(false)
@@ -394,7 +382,6 @@ const SwapForm: FC<Props> = ({
               disabled={isInputDisabled}
               showBalanceSlider={false}
               mobile={isMobile}
-              // onInputFocus={() => setIsReverse(true)}
               onChange={(value, isTokenChange) => {
                 if (tokenB?.tokenSymbol && !isTokenChange) {
                   setReverse(true)
@@ -414,13 +401,13 @@ const SwapForm: FC<Props> = ({
         width="full"
         variant="primary"
         isLoading={
-          tx?.txStep == TxStep.Estimating ||
-          tx?.txStep == TxStep.Posting ||
-          tx?.txStep == TxStep.Broadcasting ||
+          tx?.txStep === TxStep.Estimating ||
+          tx?.txStep === TxStep.Posting ||
+          tx?.txStep === TxStep.Broadcasting ||
           state?.isLoading
         }
         disabled={
-          tx?.txStep != TxStep.Ready || simulated == null || !isWalletConnected
+          tx?.txStep !== TxStep.Ready || simulated === null || !isWalletConnected
         }
       >
         {buttonLabel}
@@ -433,9 +420,7 @@ const SwapForm: FC<Props> = ({
                 <Text color="brand.500" fontSize={12}>
                   Rate
                 </Text>
-                {explainer(
-                  'Swap price is calculated based on the pool price and spread'
-                )}
+                {explainer('Swap price is calculated based on the pool price and spread')}
               </HStack>
               <Text color="brand.500" fontSize={12}>
                 {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
@@ -454,9 +439,7 @@ const SwapForm: FC<Props> = ({
                   <Text color="brand.500" fontSize={12}>
                     Min Receive
                   </Text>
-                  {explainer(
-                    'Expected minimum quantity to be received based on the current price, maximum spread, and trading fee'
-                  )}
+                  {explainer('Expected minimum quantity to be received based on the current price, maximum spread, and trading fee')}
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
                   {num(minReceive).toFixed(tokenBInfo?.decimals)}

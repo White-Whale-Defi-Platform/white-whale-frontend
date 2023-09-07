@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 import { Button, HStack, Image, Text } from '@chakra-ui/react'
-import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
-import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import LeapWalletIcon from 'components/icons/LeapWalletIcon'
 import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
+import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
+import LeapWalletIcon from 'components/icons/LeapWalletIcon'
+import { WalletType } from 'components/Wallet/Modal/WalletModal'
 
 interface Props {
   onCloseModal: () => void
@@ -12,7 +12,7 @@ interface Props {
   connect?: () => void
 }
 
-function WalletConnectButton({ onCloseModal, connect, walletType }: Props) {
+export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props) => {
   const setWallet = useCallback(() => {
     connect()
     onCloseModal()
@@ -37,7 +37,6 @@ function WalletConnectButton({ onCloseModal, connect, walletType }: Props) {
       case WalletType.leapMobile:
         return 'Leap Wallet (mobile)'
       default:
-        // return a default component or null if walletName does not match any type
         return null
     }
   }

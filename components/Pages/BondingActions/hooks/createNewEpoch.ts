@@ -9,10 +9,11 @@ export const createNewEpoch = async (
   const handleMsg = {
     new_epoch: {},
   }
-  return signingClient.execute(
+
+  return await signingClient.execute(
     address,
     config.fee_distributor,
     handleMsg,
-    'auto'
+    'auto',
   )
 }

@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { useChain } from '@cosmos-kit/react-lite'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num } from 'libs/num'
@@ -8,8 +10,6 @@ import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useClients } from 'hooks/useClients'
 
 export type RewardInfo = {
   amount: number
@@ -31,7 +31,7 @@ export type RewardsResult = {
   totalValue: string
 }
 
-function aggregateRewards(rewards: RewardData[]): RewardInfo[] {
+const aggregateRewards = (rewards: RewardData[]): RewardInfo[] => {
   // Use reduce to create the aggregates
   const aggregates = rewards.reduce((acc: { [id: string]: number }, reward) => {
     // Use contract_addr if it exists, otherwise use denom
@@ -43,7 +43,7 @@ function aggregateRewards(rewards: RewardData[]): RewardInfo[] {
       return acc
     }
 
-    const amount = reward.amount
+    const { amount } = reward
     acc[denom] = (acc[denom] || 0) + amount
     return acc
   }, {})
@@ -54,7 +54,7 @@ function aggregateRewards(rewards: RewardData[]): RewardInfo[] {
     const isContract = id.startsWith('contract:')
 
     return {
-      amount: amount,
+      amount,
       dollarValue: 0,
       info: isContract
         ? { token: { contract_addr: id } }
@@ -65,6 +65,7 @@ function aggregateRewards(rewards: RewardData[]): RewardInfo[] {
 const useRewards = (poolId: string): RewardsResult => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
   const { chainName } = useRecoilValue(chainState)
@@ -73,10 +74,9 @@ const useRewards = (poolId: string): RewardsResult => {
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
-    queryFn: async (): Promise<RewardsResult> =>
-      await cosmWasmClient?.queryContractSmart(staking_address, {
-        rewards: { address },
-      }),
+    queryFn: async (): Promise<RewardsResult> => await cosmWasmClient?.queryContractSmart(staking_address, {
+      rewards: { address },
+    }),
     select: (data) => data?.rewards || [],
     enabled: Boolean(staking_address) && Boolean(address),
   })

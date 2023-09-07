@@ -11,8 +11,7 @@ export type Simulated = {
   error?: string
 }
 
-const simulate = async ({ cosmWasmClient, msg, routerAddress }): Promise<any> =>
-  await cosmWasmClient?.queryContractSmart(routerAddress, msg)
+const simulate = async ({ cosmWasmClient, msg, routerAddress }): Promise<any> => await cosmWasmClient?.queryContractSmart(routerAddress, msg)
 
 const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
   const debounseMsg = useDebounceValue(msg, 300)
@@ -20,11 +19,13 @@ const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
   const { data, isLoading, error } = useQuery<any>(
     ['simulation', debounseMsg],
     () => {
-      if (msg == null) {
-        return
+      if (msg === null) {
+        return null
       }
 
-      return simulate({ cosmWasmClient, msg: debounseMsg, routerAddress })
+      return simulate({ cosmWasmClient,
+        msg: debounseMsg,
+        routerAddress })
     },
     {
       enabled: Boolean(cosmWasmClient) && Boolean(msg) && Boolean(debounseMsg),

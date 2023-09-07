@@ -1,14 +1,11 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Box,
   Button,
-  Divider,
   HStack,
-  Stack,
   Image,
   Text,
-  VStack,
   Tab,
   TabList,
   TabPanel,
@@ -56,7 +53,7 @@ const Token = ({ imgUrl, symbol }) => (
   </HStack>
 )
 
-const PositionsOverview = ({ flows, poolId }: Props) => {
+export const PositionsOverview = ({ flows, poolId }: Props) => {
   const [activeButton, setActiveButton] = useState('active')
   const [columnFilters, setColumnFilters] = useState([
     {
@@ -113,44 +110,37 @@ const PositionsOverview = ({ flows, poolId }: Props) => {
           justifyContent="center"
           background={'#1C1C1C'}
         >
-          {STATES.map((item) => {
-            return (
-              <Tab
-                onClick={() => {
-                  setActiveButton(item)
-                  setColumnFilters(
-                    item === 'all'
-                      ? []
-                      : [
-                          {
-                            id: 'state',
-                            value: item,
-                          },
-                        ]
-                  )
-                }}
-                textTransform="capitalize"
-              >
-                {item}
-              </Tab>
-            )
-          })}
+          {STATES.map((item) => (
+            <Tab key={`tab-${item}`}
+              onClick={() => {
+                setActiveButton(item)
+                setColumnFilters(item === 'all'
+                  ? []
+                  : [
+                    {
+                      id: 'state',
+                      value: item,
+                    },
+                  ])
+              }}
+              textTransform="capitalize"
+            >
+              {item}
+            </Tab>
+          ))}
         </TabList>
         <TabPanels p={4}>
-          {STATES.map((item) => {
-            return (
-              <TabPanel padding={4}>
-                <PositionsTable
-                  columnFilters={columnFilters}
-                  positions={positions}
-                />
-              </TabPanel>
-            )
-          })}
+          {STATES.map((item) => (
+            <TabPanel key={item} padding={4}>
+              <PositionsTable
+                columnFilters={columnFilters}
+                positions={positions}
+              />
+            </TabPanel>
+          ))}
         </TabPanels>
       </Tabs>
     </Box>
   )
 }
 
-export default PositionsOverview

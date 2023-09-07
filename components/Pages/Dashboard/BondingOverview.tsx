@@ -42,11 +42,13 @@ const BondingOverview = ({
   const borderRadius = '30px'
   const router = useRouter()
   const TokenBox = ({ tokenType }) => {
-    const { color, label } = data.find((e) => e.tokenType == tokenType)
+    const { color, label } = data.find((e) => e.tokenType === tokenType)
     const box = () => {
       if (!mobile) {
         return <Box bg={color} w="4" h="4" borderRadius="50%" mr="2"></Box>
-      } else return
+      } else {
+        return <></>
+      }
     }
     return (
       <HStack mr="10" paddingBottom={6}>
@@ -63,7 +65,7 @@ const BondingOverview = ({
 
   const piechart = () => {
     if (mobile) {
-      return
+      return <></>
     } else {
       return (
         <PieChart style={{ pointerEvents: 'none' }} width={250} height={275}>
@@ -77,11 +79,11 @@ const BondingOverview = ({
             stroke="none"
           >
             {isWalletConnected ? (
-              data?.map((_entry: any, index: number) => (
+              data?.map((_: any, index: number) => (
                 <Cell key={`cell-${index}`} fill={data[index].color} />
               ))
             ) : (
-              <Cell key={'cell-${index}'} fill="grey" />
+              <Cell fill="grey" />
             )}
           </Pie>
         </PieChart>
@@ -89,7 +91,7 @@ const BondingOverview = ({
     }
   }
 
-  let aggregatedAssets = data?.reduce((acc, e) => acc + (e?.value ?? 0), 0)
+  const aggregatedAssets = data?.reduce((acc, e) => acc + (e?.value ?? 0), 0)
 
   return (
     <VStack
@@ -119,11 +121,11 @@ const BondingOverview = ({
           justifyContent="flex-start"
           paddingLeft={4}
           pt={5}
-          spacing={['2','5']}
+          spacing={['2', '5']}
         >
           {piechart()}
           <VStack alignItems="start" alignSelf="flex-start">
-            <Text paddingBottom={[2,4]} color="whiteAlpha.600">
+            <Text paddingBottom={[2, 4]} color="whiteAlpha.600">
               Tokens
             </Text>
             {data?.map((e) => (
@@ -134,7 +136,7 @@ const BondingOverview = ({
             ))}
           </VStack>
           <VStack alignItems="start" spacing={8} alignSelf="flex-start">
-            <Text marginBottom={['-3.5', '-2']} paddingEnd={['5','10']} color="whiteAlpha.600">
+            <Text marginBottom={['-3.5', '-2']} paddingEnd={['5', '10']} color="whiteAlpha.600">
               {`Value($${(aggregatedAssets * Number(whalePrice)).toFixed(2)})`}
             </Text>
             {/* Value equals the amount of the specific token type (liquid, bonded, unbonding, withdrawable)*/}

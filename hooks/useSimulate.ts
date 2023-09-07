@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query'
 
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { useRecoilState } from 'recoil'
+import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { txRecoilState } from 'state/txRecoilState'
 
 type Simulate = {
   msgs: EncodeObject[]
@@ -38,7 +38,7 @@ const useSimulate = ({
         !signingClient ||
         !msgs
       ) {
-        return
+        return null
       }
 
       setTxState({
@@ -48,7 +48,9 @@ const useSimulate = ({
         buttonLabel: null,
       })
 
-      return signingClient?.simulate(address, msgs!, undefined)
+      return signingClient?.simulate(
+        address, msgs!, undefined,
+      )
     },
     onSuccess: (data) => {
       onSuccess?.(data)

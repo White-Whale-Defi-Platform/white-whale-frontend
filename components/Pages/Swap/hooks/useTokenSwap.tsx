@@ -63,7 +63,7 @@ export const useTokenSwap = ({
       setTransactionState(TransactionStatus.EXECUTING)
 
       const tokenAmount = convertDenomToMicroDenom(providedTokenAmount,
-        tokenA.decimals)
+        tokenA.decimals).toString()
 
       const price = convertDenomToMicroDenom(tokenToTokenPrice, tokenB.decimals)
 

@@ -1,9 +1,8 @@
-import React from 'react'
-
 import { HStack, Image, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil'
 import { chainState } from 'state/chainState'
-import { useRouter } from 'next/router'
+
 const Logo = () => {
   const [currentWalletState, setCurrentWalletState] = useRecoilState(chainState)
   const router = useRouter()

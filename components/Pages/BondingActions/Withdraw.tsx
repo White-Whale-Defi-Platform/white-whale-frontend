@@ -1,21 +1,23 @@
+
+import { useMemo } from 'react';
+
 import {
   Box,
   HStack,
   Stack,
   Text,
-  useMediaQuery,
   VStack,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import usePrices from 'hooks/usePrices'
-import { useTokenList } from 'hooks/useTokenList'
-import { useRecoilValue } from 'recoil'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { useRecoilState } from 'recoil'
+import usePrices from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
+import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import {
   calculateDurationString,
@@ -24,7 +26,6 @@ import {
 } from 'util/conversion'
 
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
-import { WhaleTokenType } from './BondingActions'
 
 type Props = {
   unbondingRequests: UnbondingData[]
@@ -35,12 +36,38 @@ const Withdraw = ({
   unbondingRequests,
   withdrawableInfos,
   unbondingPeriodInNano,
-  whalePrice,
-}) => {
-  const [{ status, chainId, network }, _] = useRecoilState(walletState)
+}: Props) => {
+  const { chainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(chainName)
 
-  const isWalletConnected = status === WalletStatusType.connected
-  const config: Config = useConfig(network, chainId)
+  const prices = usePrices()
+
+  const whalePrice = useMemo(() => {
+    // @ts-ignore
+    if (prices && prices?.WHALE) {
+      // @ts-ignore
+      return prices?.WHALE
+    }
+    return 0 // Default value
+  }, [prices])
+
+  const [tokenList, _] = useTokenList()
+  const unbondingTokens = unbondingRequests?.map((row) => {
+    const tokenSymbol = tokenList.tokens.find((token) => token.denom === row.denom)?.symbol
+    return {
+      amount: row.amount,
+      tokenSymbol,
+      dollarValue: (prices?.[tokenSymbol] ?? whalePrice) * row.amount,
+      timestamp: row.timestamp,
+    }
+  })
+  const withdrawableTokens = withdrawableInfos?.map((row) => ({
+    ...row,
+    dollarValue:
+      (prices?.[row.tokenSymbol] ?? whalePrice) *
+      convertMicroDenomToDenom(row.amount, 6),
+  }))
+
   const ProgressBar = ({ percent }) => (
     <Box
       h="3px"
@@ -61,8 +88,7 @@ const Withdraw = ({
         borderColor="whiteAlpha.400"
         borderRadius="10px"
         p={4}
-        width={['200px','200px','240px']}
-        
+        width={['200px', '200px', '240px']}
       >
         <WhaleTooltip
           label={label}
@@ -106,18 +132,10 @@ const Withdraw = ({
 
   return (
     <VStack spacing={5} mb={35}>
-      <HStack spacing={7}>
-        <TokenBox
-          label="Unbonding"
-          ampWhale={unbondingAmpWhale}
-          bWhale={unbondingBWhale}
-        />
-        <TokenBox
-          label="Withdrawable"
-          ampWhale={withdrawableAmpWhale}
-          bWhale={withdrawableBWhale}
-        />
-      </HStack>
+      <Stack direction={['column', 'row', 'row', 'row']} spacing={7}>
+        <TokenBox label="Unbonding" tokens={unbondingTokens} />
+        <TokenBox label="Withdrawable" tokens={withdrawableTokens} />
+      </Stack>
       {isWalletConnected &&
         unbondingRequests !== null &&
         unbondingRequests?.length > 0 && (

@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useQueryClient } from 'react-query'
 
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
@@ -12,8 +14,6 @@ import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
 import { getPathName } from 'util/route'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useQueryClient } from 'react-query'
 
 const Wallet: any = () => {
   const [isInitialized, setInitialized] = useState(false)
@@ -22,9 +22,7 @@ const Wallet: any = () => {
   const router = useRouter()
   const chainName = router.query.chainId as string
   const [chainInfo] = useChainInfo(currentChainState.chainId)
-  const { isWalletConnected, disconnect, openView } = useChain(
-    currentChainState.chainName
-  )
+  const { isWalletConnected, disconnect, openView } = useChain(currentChainState.chainName)
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
   const resetWallet = () => {
@@ -62,7 +60,7 @@ const Wallet: any = () => {
       })
     }
 
-    if (!ACTIVE_NETWORKS[currentChainState.network][chainName]) {
+    if (!ACTIVE_NETWORKS[currentChainState.network][chainIdParam] && chainIdParam) {
       setCurrentChainState({
         ...currentChainState,
         chainId: defaultChainId,
@@ -74,7 +72,7 @@ const Wallet: any = () => {
 
   const denom = useMemo(() => {
     if (!chainInfo) {
-      return
+      return null
     }
     const [coinDenom] = (chainInfo as any)?.currencies || []
     return coinDenom
@@ -87,19 +85,17 @@ const Wallet: any = () => {
     currentChainState.address,
   ])
 
-  const onChainChange = async (chain) => {
+  const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any } }) => {
     if (
       !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
       router.pathname.includes('dashboard')
     ) {
       await router.push('/swap')
     }
-    setCurrentChainState({
-      ...currentChainState,
-      chainId: chain.chainId,
-      chainName: chain.bech32Config.bech32PrefixAccAddr,
-    })
-    await queryClient.clear()
+
+    setCurrentChainState({ ...currentChainState,
+      chainId: chain.chainId })
+    queryClient.clear()
   }
 
   useEffect(() => {
@@ -113,10 +109,7 @@ const Wallet: any = () => {
       router.push('/404')
     }
 
-    // Update route
-    const sourceChain = chains.find(
-      (row) => row.chainId.toLowerCase() === currentChainState.chainId
-    )
+    const sourceChain = chains.find((row) => row.chainId.toLowerCase() === currentChainState.chainId)
     if (sourceChain && !router.pathname.includes('/404')) {
       const path = getPathName(router, sourceChain.label)
       router.push(path)
@@ -126,7 +119,7 @@ const Wallet: any = () => {
 
   if (!isWalletConnected) {
     return (
-      <><HStack align='right' size={"flex"} paddingLeft={"1"} spacing={"2"} paddingTop={['2','2','0']}>
+      <><HStack align="right" size={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>
         <SelectChainModal
           connected={isWalletConnected}
           denom={denom?.coinDenom}
@@ -144,7 +137,7 @@ const Wallet: any = () => {
         >
           <WalletIcon/>
           <Text>Connect</Text>
-          <Text display={['none','none','contents']}>Wallet</Text>
+          <Text display={['none', 'none', 'contents']}>Wallet</Text>
         </Button></HStack>
       </>
     )
@@ -159,7 +152,8 @@ const Wallet: any = () => {
           onChainChange={onChainChange}
           currentChainState={currentChainState}
         />
-        <Box display={{ base: 'block', md: 'block' }}>
+        <Box display={{ base: 'block',
+          md: 'block' }}>
           <Divider
             orientation="vertical"
             borderColor="rgba(255, 255, 255, 0.1);"

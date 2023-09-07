@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import {
   Box,
@@ -9,10 +10,12 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
+import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -29,8 +32,6 @@ import { ActionCTAs } from './ActionCTAs'
 import AllPoolsTable from './AllPoolsTable'
 import MobilePools from './MobilePools'
 import MyPoolsTable from './MyPoolsTable'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useClients } from 'hooks/useClients'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -43,22 +44,14 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, network, chainName } = useRecoilValue(chainState)
+
+  const { chainId, chainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(chainName)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
 
-  const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(
-    !ACTIVE_INCENTIVE_NETWORKS.includes(chainId)
-  )
+  const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(!ACTIVE_INCENTIVE_NETWORKS.includes(chainId))
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const { cosmWasmClient } = useClients(chainName)
-  const config: Config = useConfig(network, chainId)
-
-  const { data: currentEpochData } = useCurrentEpoch(cosmWasmClient, config)
-  const currentEpoch = useMemo(
-    () => Number(currentEpochData?.currentEpoch?.epoch.id),
-    [currentEpochData]
-  )
 
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -67,23 +60,16 @@ const Pools = () => {
     PoolEntityTypeWithLiquidity[],
     boolean,
     boolean
-  ] = useQueriesDataSelector(
-    useQueryPoolsLiquidity({
-      refetchInBackground: false,
-      pools: poolList?.pools,
-      cosmWasmClient,
-    })
-  )
-  const myPoolsLength = useMemo(
-    () =>
-      pools?.filter(
-        ({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0
-      )?.length,
-    [pools]
-  )
+  ] = useQueriesDataSelector(useQueryPoolsLiquidity({
+    refetchInBackground: false,
+    pools: poolList?.pools,
+    cosmWasmClient,
+  }))
+  const myPoolsLength = useMemo(() => pools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)?.length,
+    [pools])
 
   const chains: any = useChains()
-  const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
+  const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
   [chains, chainId])
 
@@ -91,18 +77,22 @@ const Pools = () => {
     flowPoolData: incentivePoolInfos,
     poolsWithAprAnd24HrVolume: pairInfos,
     isLoading: isIncentivePoolInfoLoading,
-  } = useIncentivePoolInfo(cosmWasmClient, pools, currentChainPrefix)
+  } = useIncentivePoolInfo(
+    cosmWasmClient, pools, currentChainPrefix,
+  )
 
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
-    console.log('Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0)
+    console.log(
+      'Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0,
+    )
     console.log('Pools: ', pools)
     console.log('Pair Infos: ', pairInfos)
   }
 
-  const calculateMyPosition = (pool) => {
+  const calculateMyPosition = (pool: PoolData) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
   }
@@ -241,11 +231,9 @@ const Pools = () => {
 
   const [isLabelOpen, setIsLabelOpen] = useState(false)
 
-  const allPoolsForShown = useMemo(
-    () => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
-    [allPools, myPoolsId]
-  )
-  const parseLiquidity = (liqString) => {
+  const allPoolsForShown = useMemo(() => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
+    [allPools, myPoolsId])
+  const parseLiquidity = (liqString: string) => {
     const value = parseFloat(liqString?.replace(/[^\d.-]/g, ''))
     /*
      * We do this mutation because by now we already have modified the string to include a letter abbreviation

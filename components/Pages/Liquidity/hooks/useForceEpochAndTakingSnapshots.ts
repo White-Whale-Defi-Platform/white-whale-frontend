@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useQueryIncentiveContracts } from 'components/Pages/Incentivize/hooks/useQueryIncentiveContracts'
+import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useClients } from 'hooks/useClients'
 
 export enum Force {
   epochAndSnapshots,
@@ -27,11 +27,9 @@ const useForceEpochAndTakingSnapshots = ({
   const { address } = useChain(chainName)
   const { signingClient, cosmWasmClient } = useClients(chainName)
   const incentiveAddresses = useQueryIncentiveContracts(cosmWasmClient)
-  const mode = useMemo(
-    () =>
-      noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots,
-    [noSnapshotTakenAddresses]
-  )
+  const mode = useMemo(() => (noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots),
+    [noSnapshotTakenAddresses])
+
   const addresses =
     useMemo(() => (mode === Force.snapshotsOnly
       ? noSnapshotTakenAddresses
@@ -79,8 +77,9 @@ const useForceEpochAndTakingSnapshots = ({
   }, [addresses, address])
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: () =>
-      signingClient.signAndBroadcast(address, msgs, 'auto', null),
+    mutationFn: () => signingClient.signAndBroadcast(
+      address, msgs, 'auto', null,
+    ),
     onError,
     onSuccess,
   })

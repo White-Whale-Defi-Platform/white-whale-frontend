@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { useClients } from 'hooks/useClients'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import {
   PoolEntityType,
@@ -18,7 +19,6 @@ import asyncForEach from 'util/asyncForEach'
 import useCoinGecko from './useCoinGecko'
 import { useBaseTokenInfo } from './useTokenInfo'
 import { TokenList, useTokenList } from './useTokenList'
-import { useClients } from 'hooks/useClients'
 
 export type Prices = {
   [key: string]: {
@@ -46,7 +46,7 @@ const getMatchingPool = ({
   baseToken,
 }: GetMatchingPoolArgs): PoolMatchForSwap => {
   if (!poolsList || !token || !baseToken) {
-    return
+    return null
   }
 
   return findPoolForSwap({
@@ -104,19 +104,17 @@ const usePrices = () => {
   const coingeckoIds = useMemo(() => tokensList?.tokens.map((token) => token.id),
     [tokensList?.tokens])
   const coingecko = useCoinGecko(coingeckoIds)
-  //const client = useCosmwasmClient(chainId)
   const { cosmWasmClient } = useClients(chainName)
   const { data: prices } = useQuery<Promise<Prices>>({
     queryKey: ['prices', baseToken?.symbol, chainId],
-    queryFn: async () =>
-      getPrices({
-        baseToken,
-        tokens: tokensList?.tokens,
-        cosmWasmClient,
-        poolsList: poolsList?.pools,
-        coingecko,
-      }),
 
+    queryFn: async () => await getPrices({
+      baseToken,
+      tokens: tokensList?.tokens,
+      cosmWasmClient,
+      poolsList: poolsList?.pools,
+      coingecko,
+    }),
     enabled:
       Boolean(baseToken) &&
       Boolean(tokensList) &&

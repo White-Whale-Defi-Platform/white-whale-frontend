@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useTxInfo from 'hooks/useTxInfo'
 import { useRecoilState } from 'recoil'
 import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 
 type Props = {
   signingClient: SigningCosmWasmClient
@@ -17,11 +17,12 @@ type Props = {
 const useTxStatus = ({ signingClient, transactionType }: Props) => {
   const [txState, setTxState] = useRecoilState(txRecoilState)
   const toast = useToast()
-  const txInfo = useTxInfo({ txHash: txState.txHash, signingClient })
+  const txInfo = useTxInfo({ txHash: txState.txHash,
+    signingClient })
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    if (txInfo != null && txState.txHash != null) {
+    if (txInfo !== null && txState.txHash !== null) {
       if (txInfo?.code) {
         setTxState({
           ...txState,

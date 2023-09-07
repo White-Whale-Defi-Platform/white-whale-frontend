@@ -6,6 +6,7 @@ import { useCheckIncentiveSnapshots } from 'components/Pages/Liquidity/hooks/use
 import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
@@ -13,7 +14,6 @@ import { TxStep } from 'types/common'
 import ClaimTable from './ClaimTable'
 import { useClaim } from './hooks/useClaim'
 import useRewards from './hooks/useRewards'
-import { useClients } from 'hooks/useClients'
 
 const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   <HStack
@@ -51,14 +51,10 @@ const Claim = ({ poolId }: Props) => {
 
   const config = useConfig(network, chainId)
   // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
-  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(
-    cosmWasmClient,
-    config
-  )
-  const allSnapshotsTaken = useMemo(
-    () => noSnapshotTakenAddresses.length === 0,
-    [noSnapshotTakenAddresses.length]
-  )
+  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(cosmWasmClient,
+    config)
+  const allSnapshotsTaken = useMemo(() => noSnapshotTakenAddresses.length === 0,
+    [noSnapshotTakenAddresses.length])
   const forceSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses,
     config,
@@ -66,7 +62,7 @@ const Claim = ({ poolId }: Props) => {
   const { rewards = [], totalValue } = useRewards(poolId)
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.assetAmount),
+    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.amount),
       0)
     return rewardsSum > 0
   }, [rewards])

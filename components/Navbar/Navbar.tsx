@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   Drawer,
@@ -13,9 +12,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/icons/BurgerIcon'
+import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
 
 import Card from '../Card'
 import Wallet from '../Wallet/Wallet'
@@ -62,9 +61,12 @@ const Navbar = () => {
   return (
     <Box
       width={'full'}
-      paddingLeft={{base: '3', md: '5'}}
-      paddingRight={{base: '0', md: '5'}}
-      paddingTop={{base: '2', md: '10'}}
+      paddingLeft={{ base: '3',
+        md: '5' }}
+      paddingRight={{ base: '0',
+        md: '5' }}
+      paddingTop={{ base: '2',
+        md: '10' }}
     >
       <Flex
         justifyContent="space-between"
@@ -98,12 +100,13 @@ const Navbar = () => {
         justify="space-between"
         py={['0',"2"]}
         px={['0',"1"]}
-        display={{ base: 'flex', md: 'none' }}
+        display={{ base: 'flex', 
+        md: 'none' }}
       >
         <Logo />
         <Wallet />
         <IconButton
-          paddingTop={['3','3','0']}
+          paddingTop={['3', '3', '0']}
           align="right"
           aria-label="Open drawer"
           variant="ghost"

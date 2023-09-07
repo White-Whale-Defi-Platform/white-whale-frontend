@@ -21,7 +21,7 @@ export const createIncreaseAllowanceMessage = ({
     contract: tokenAddress,
     msg: toUtf8(JSON.stringify({
       increase_allowance: {
-        amount: `${tokenAmount}`,
+        amount: `${Number(tokenAmount)}`,
         spender: `${swapAddress}`,
       },
     })),

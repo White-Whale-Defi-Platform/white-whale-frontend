@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
+import { useClients } from 'hooks/useClients';
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
-import { useClients } from 'hooks/useClients'
 
 export const useWithdrawPosition = ({ poolId }) => {
   const { address, chainName } = useRecoilValue(chainState)
@@ -29,10 +29,9 @@ export const useWithdrawPosition = ({ poolId }) => {
   const msgs = [executeAddLiquidityMessage]
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: async () =>
-      validateTransactionSuccess(
-        await signingClient.signAndBroadcast(address, msgs, 'auto', null)
-      ),
+    mutationFn: async () => validateTransactionSuccess(await signingClient.signAndBroadcast(
+      address, msgs, 'auto', null,
+    )),
     onError,
     onSuccess,
   })

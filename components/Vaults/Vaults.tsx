@@ -1,13 +1,13 @@
-import React, { FC, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import AllVaultsTable from './AllVaultsTable'
 import useVault from './hooks/useVaults'
-import { useChain } from '@cosmos-kit/react-lite'
 import MobileVaults from './MobileVaults'
 
 const Vaults: FC = () => {

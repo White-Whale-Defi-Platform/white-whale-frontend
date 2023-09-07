@@ -6,7 +6,7 @@ import { InternalQueryContext } from './types'
 import { PoolEntityType, TokenInfoWithReward } from './usePoolsListQuery'
 
 const blocksPerSecond = 6
-const blocksPerYear = (525600 * 60) / blocksPerSecond
+const blocksPerYear = (525_600 * 60) / blocksPerSecond
 
 export type QueryRewardsContractsArgs = {
   swapAddress: PoolEntityType['swap_address']
@@ -23,15 +23,11 @@ export type SerializedRewardsContract = {
   }
 }
 
-export async function queryRewardsContracts({
+export const queryRewardsContracts = async ({
   rewardsTokens,
   context: { cosmWasmClient, getTokenDollarValue },
-}: QueryRewardsContractsArgs): Promise<Array<SerializedRewardsContract>> {
-  const rewardsContractsInfo = await Promise.all(
-    rewardsTokens.map(({ rewards_address }) =>
-      getRewardsInfo(rewards_address, cosmWasmClient)
-    )
-  )
+}: QueryRewardsContractsArgs): Promise<Array<SerializedRewardsContract>> => {
+  const rewardsContractsInfo = await Promise.all(rewardsTokens.map(({ rewards_address }) => getRewardsInfo(rewards_address, cosmWasmClient)))
 
   const currentHeight = await cosmWasmClient.getHeight()
 

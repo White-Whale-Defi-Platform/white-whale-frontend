@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query'
-import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
 
 import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
 
 export type TokenList = {
   base_token: TokenInfo

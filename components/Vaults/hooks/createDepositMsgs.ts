@@ -1,9 +1,6 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
-import { createExecuteMessage } from 'util/messages'
-import { createIncreaseAllowanceMessage } from 'util/messages'
-
-export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
+import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages'
 
 export const createDepostMsg = ({ amount }) => ({
   deposit: { amount },

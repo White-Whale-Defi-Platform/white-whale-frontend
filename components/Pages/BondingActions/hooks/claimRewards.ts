@@ -1,5 +1,5 @@
-import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 export const claimRewards = (
   signingClient: SigningCosmWasmClient,
@@ -13,6 +13,6 @@ export const claimRewards = (
     address,
     config.fee_distributor,
     handleMsg,
-    'auto'
+    'auto',
   )
 }
