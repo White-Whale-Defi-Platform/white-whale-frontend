@@ -6,7 +6,7 @@ export const endpointOptions: EndpointOptions = {
       rpc: ['https://migaloo-rpc.polkachu.com'],
       rest: ['https://migaloo-api.polkachu.com'],
     },
-    terra: {
+    terra2: {
       rpc: ['https://ww-terra-rpc.polkachu.com'],
       rest: ['https://ww-terra-rest.polkachu.com'],
     },

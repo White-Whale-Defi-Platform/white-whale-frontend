@@ -7,9 +7,9 @@ import { truncate } from 'util/truncate'
 import { useChain } from '@cosmos-kit/react-lite'
 
 function TruncatedAddress({ connected }) {
-  const { chainName } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
 
-  const { address } = useChain(chainName)
+  const { address } = useChain(walletChainName)
 
   const truncatedWalletAddress = (addr: string) => {
     const chainName = addr?.substring(0, addr.indexOf('1'))

@@ -21,6 +21,7 @@ import { unbondTokens } from './unbondTokens'
 import { withdrawTokens } from './withdrawTokens'
 
 
+
 export enum TxStep {
   /**
    * Idle
@@ -53,9 +54,9 @@ export enum TxStep {
 }
 export const useTransaction = () => {
   const toast = useToast()
-  const { chainId, chainName, network } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -284,7 +285,7 @@ export const useTransaction = () => {
   [fee, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    if (txInfo != null && txHash != null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
       } else {

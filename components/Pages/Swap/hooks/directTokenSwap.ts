@@ -49,11 +49,11 @@ export const directTokenSwap = async ({
     ))
   }
   let fee = null
-  if (chainId === 'columbus-5') {
+  if (await signingClient.getChainId() === 'columbus-5') {
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(tokenAmount, tokenA.denom)
   }
   return await signingClient.execute(
-    senderAddress, swapAddress, msgs, fee, null, [
+    senderAddress, swapAddress, msgs, fee, '', [
       coin(tokenAmount, tokenA.denom),
     ],
   )

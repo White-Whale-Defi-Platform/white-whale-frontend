@@ -10,8 +10,8 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 
 function ConnectedWalletIcon() {
-  const { chainName } = useRecoilValue(chainState)
-  const { wallet } = useChain(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { wallet } = useChain(walletChainName)
 
   switch (wallet.name) {
     case WalletType.keplrExtension || WalletType.keplrMobile:

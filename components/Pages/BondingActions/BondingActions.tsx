@@ -20,13 +20,13 @@ import {
 import { Bond, BondingTokenState } from './Bond'
 import { bondingAtom } from './bondAtoms'
 import useTransaction, { TxStep } from './hooks/useTransaction'
-import { bondingState } from './state/bondingState'
 import Unbond from './Unbond'
 import Withdraw from './Withdraw'
 
+
 const BondingActions = ({ globalAction }) => {
-  const { chainId, network, chainName } = useRecoilValue(chainState)
-  const { address, isWalletConnected, openView } = useChain(chainName)
+  const { chainId, network, chainName, walletChainName } = useRecoilValue(chainState)
+  const { address, isWalletConnected, openView } = useChain(walletChainName)
 
   const router = useRouter()
 
@@ -38,7 +38,7 @@ const BondingActions = ({ globalAction }) => {
   const { txStep, submit } = useTransaction()
 
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<BondingTokenState>(bondingState)
+    useRecoilState<BondingTokenState>(bondingAtom)
 
   const [liquidBalances, __] = useMultipleTokenBalance(symbols)
 
@@ -49,7 +49,7 @@ const BondingActions = ({ globalAction }) => {
     unbondingRequests,
     isLoading,
   } = useDashboardData(
-    address, network, chainId, chainName,
+    address, network, chainId, walletChainName,
   )
 
   const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)

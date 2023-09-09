@@ -14,6 +14,7 @@ import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
 
+
 type Params = {
   cosmWasmClient: CosmWasmClient
   prices: any
@@ -121,9 +122,9 @@ const useLockedPositions = (poolId: string) => {
     useQueryPoolLiquidity({ poolId })
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
   const totalAssets = liquidity?.reserves?.total || [0, 0]
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { cosmWasmClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
   const tokens = useTokenList()
   const prices = usePrices()
 

@@ -8,7 +8,7 @@ import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from '../../state/chainState'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -31,7 +31,7 @@ const AssetList: FC<AssetListProps> = ({
 }) => {
   const [tokenList] = useTokenList()
 
-  const { network, chainId } = useRecoilValue(walletState)
+  const { network, chainId } = useRecoilValue(chainState)
 
   const config = useConfig(network, chainId)
 

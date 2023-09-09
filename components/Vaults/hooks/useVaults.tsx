@@ -114,9 +114,9 @@ export const useVaultDeposit = (
   vaultAddress: string,
   tokenInfo: TokenInfo,
 ) => {
-  const { chainName, chainId } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { cosmWasmClient } = useClients(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -147,9 +147,9 @@ export const useVaultDeposit = (
     refetch }
 }
 export const useVaultMultiDeposit = (lpTokens: any[]) => {
-  const { chainId, chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { cosmWasmClient } = useClients(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
   const [getTokenDollarValue] = useGetTokenDollarValueQuery()
 
   const {
@@ -179,8 +179,8 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     refetch }
 }
 export const useVaultTotal = (lpTokenIds: any[]) => {
-  const { chainId, chainName } = useRecoilValue(chainState)
-  const { cosmWasmClient } = useClients(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(walletChainName)
   const [getTokenDollarValue, isQueryLoading] = useGetTokenDollarValueQuery()
   const { data: balance, isLoading } = useQuery(
     ['vaultsInfo', lpTokenIds, chainId, isQueryLoading],

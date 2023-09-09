@@ -25,8 +25,8 @@ export const Bond = ({ balances, tokenSymbols }) => {
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)
-  const { chainName, network, chainId } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
 
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 

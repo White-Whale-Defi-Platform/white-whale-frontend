@@ -97,14 +97,14 @@ const getPrices = async ({
 }
 
 const usePrices = () => {
-  const { chainId, chainName } = useRecoilValue(chainState)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
   const { data: poolsList } = usePoolsListQuery()
   const baseToken = useBaseTokenInfo()
   const [tokensList]: readonly [TokenList, boolean] = useTokenList()
   const coingeckoIds = useMemo(() => tokensList?.tokens.map((token) => token.id),
     [tokensList?.tokens])
   const coingecko = useCoinGecko(coingeckoIds)
-  const { cosmWasmClient } = useClients(chainName)
+  const { cosmWasmClient } = useClients(walletChainName)
   const { data: prices } = useQuery<Promise<Prices>>({
     queryKey: ['prices', baseToken?.symbol, chainId],
 

@@ -359,8 +359,8 @@ export const useQueryPoolsLiquidity = ({
 export const useQueryPoolLiquidity = ({ poolId }) => {
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
     usePoolsListQuery()
-  const { chainName } = useRecoilValue(chainState)
-  const { cosmWasmClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]

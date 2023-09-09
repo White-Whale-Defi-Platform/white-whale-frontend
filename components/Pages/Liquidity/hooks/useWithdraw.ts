@@ -14,6 +14,7 @@ import { useWithdrawTransaction } from './useWithdrawTransaction'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 
+
 type Props = {
   amount: string
   contract: string
@@ -29,9 +30,9 @@ const useWithdraw = ({
   claimIncentive,
   stakingAddress,
 }: Props) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (parseFloat(amount) === 0 || contract === null || !signingClient) {

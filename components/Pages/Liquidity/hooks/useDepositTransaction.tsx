@@ -5,8 +5,11 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
+import { useRecoilValue } from 'recoil'
 import { executeAddLiquidity } from 'services/liquidity'
 import { TxStep } from 'types/common'
+
+import { chainState } from '../../../../state/chainState'
 
 type Params = {
   enabled: boolean
@@ -29,6 +32,7 @@ type Params = {
 export const useTransaction = ({
   enabled,
   swapAddress,
+  swapAssets,
   signingClient,
   senderAddress,
   msgs,
@@ -41,6 +45,8 @@ export const useTransaction = ({
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const toast = useToast()
+  const [tokenA, tokenB] = swapAssets
+  const { chainId } = useRecoilValue(chainState)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
@@ -64,6 +70,7 @@ export const useTransaction = ({
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
+        console.log('errrr')
         if (
           (/insufficient funds/i).test(error.toString()) ||
           (/Overflow: Cannot Sub with/i).test(error.toString())
@@ -97,7 +104,7 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs !== null &&
+        debouncedMsgs != null &&
         txStep === TxStep.Idle &&
         error === null &&
         Boolean(signingClient) &&
@@ -120,9 +127,15 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(() => executeAddLiquidity({
+    tokenA,
+    tokenB,
+    tokenAAmount,
+    tokenBAmount,
     signingClient,
+    swapAddress,
     senderAddress,
     msgs: encodedMsgs,
+    chainId,
   }),
   {
     onMutate: () => {
@@ -238,11 +251,13 @@ export const useTransaction = ({
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    // Dont change to !== breaking
+    if (txInfo != null && txHash != null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
+        console.log('success')
         setTxStep(TxStep.Success)
         onSuccess?.(txHash, txInfo)
       }
@@ -270,7 +285,7 @@ export const useTransaction = ({
     error,
     reset,
   }),
-  [txStep, txInfo, txHash, error, reset, fee])
+  [fee, buttonLabel, submit, txStep, txInfo, txHash, error])
 }
 
 export default useTransaction

@@ -9,8 +9,8 @@ import { useChain } from '@cosmos-kit/react-lite'
 
 function ConnectedWallet({ connected }) {
   const toast = useToast()
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
 
   const copyToClipboard = async () => {
     try {

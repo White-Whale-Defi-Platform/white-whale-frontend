@@ -26,6 +26,7 @@ import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { ActionType } from './BondingOverview'
 import { useChain } from '@cosmos-kit/react-lite'
 
+
 const pulseAnimation = keyframes`
   0% {
     transform: scale(0.99) translateX(0%);
@@ -116,9 +117,9 @@ const RewardsComponent = ({
   daysSinceLastClaim,
   weightInfo,
 }) => {
-  const { network, chainId, chainName } = useRecoilValue(chainState)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
 
-  const { openView } = useChain(chainName)
+  const { openView } = useChain(walletChainName)
 
   const claimableRewards = useMemo(() => totalGlobalClaimable * Number(weightInfo?.share || 0),
     [totalGlobalClaimable, weightInfo])

@@ -26,13 +26,13 @@ import Create from './Create'
 
 const Incentivize: FC = () => {
   const router: NextRouter = useRouter()
-  const { chainName } = useRecoilValue(chainState)
+  const { chainName, walletChainName } = useRecoilValue(chainState)
   const { data: poolList } = usePoolsListQuery()
 
   const poolId = useMemo(() => (router.query.poolId as string) ?? poolList?.pools[0].pool_id,
     [poolList])
 
-  const { cosmWasmClient } = useClients(chainName)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   useEffect(() => {
     if (chainName) {

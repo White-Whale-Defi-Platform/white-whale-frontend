@@ -29,9 +29,9 @@ const useWithdraw = ({
   token,
   onSuccess,
 }: DepostProps) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 

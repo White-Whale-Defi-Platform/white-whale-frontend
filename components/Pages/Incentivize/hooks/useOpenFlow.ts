@@ -33,8 +33,8 @@ interface Props {
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
-  const { address, chainName, network, chainId } = useRecoilValue(chainState)
-  const { signingClient } = useClients(chainName)
+  const { address, network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { signingClient } = useClients(walletChainName)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({

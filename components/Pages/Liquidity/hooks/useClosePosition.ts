@@ -9,14 +9,15 @@ import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 
+
 type OpenPosition = {
   poolId: string
 }
 
 export const useClosePosition = ({ poolId }: OpenPosition) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Close Position',

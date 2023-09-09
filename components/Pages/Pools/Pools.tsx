@@ -45,13 +45,13 @@ const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
 
-  const { chainId, chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
 
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(!ACTIVE_INCENTIVE_NETWORKS.includes(chainId))
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
-  const { cosmWasmClient } = useClients(chainName)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const router = useRouter()
   const chainIdParam = router.query.chainId as string

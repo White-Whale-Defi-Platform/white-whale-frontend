@@ -86,7 +86,7 @@ const SwapForm: FC<Props> = ({
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
-
+  console.log(amountA)
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
       return 'Connect Wallet'

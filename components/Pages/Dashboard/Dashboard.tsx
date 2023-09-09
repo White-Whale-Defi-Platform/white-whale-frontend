@@ -7,6 +7,7 @@ import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import {
+  WALLETNAMES_BY_CHAINID,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
 import usePrices from 'hooks/usePrices'
@@ -20,11 +21,9 @@ import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 
 const Dashboard: FC = () => {
-  const { chainId, chainName, network } = useRecoilValue(chainState)
+  const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, address } = useChain(walletChainName)
 
-  const { isWalletConnected, address } = useChain(chainName)
-
-  const currentChainName = chainName.toLowerCase()
 
   const data: BondingData[] = [
     {
@@ -150,7 +149,7 @@ const Dashboard: FC = () => {
     globalAvailableRewards,
     isLoading,
   } = useDashboardData(
-    address, network, chainId, chainName,
+    address, network, chainId, walletChainName,
   )
 
   useEffect(() => {
@@ -190,7 +189,7 @@ const Dashboard: FC = () => {
             isLoading={isLoading && isWalletConnected}
             data={updatedData}
             whalePrice={whalePrice}
-            currentChainName={currentChainName}
+            currentChainName={chainName}
             mobile={isMobile}
           />
         </VStack>

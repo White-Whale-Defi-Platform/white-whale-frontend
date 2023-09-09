@@ -209,7 +209,7 @@ export const useTransaction = ({
       return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash !== null,
+      enabled: txHash != null,
       retry: true,
     },
   )
@@ -222,7 +222,7 @@ export const useTransaction = ({
   }, [msgs, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    if (txInfo != null && txHash != null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)

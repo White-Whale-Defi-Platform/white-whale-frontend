@@ -43,8 +43,8 @@ const ManageLiquidity: FC = () => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router: NextRouter = useRouter()
   const chains: Array<any> = useChains()
-  const { address, chainId, chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { address, chainId,walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
@@ -52,7 +52,7 @@ const ManageLiquidity: FC = () => {
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({ reverse,
     bondingDays })
-  const { cosmWasmClient } = useClients(chainName)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(useQueryPoolsLiquidity({
@@ -151,6 +151,7 @@ const ManageLiquidity: FC = () => {
   }, [poolId])
 
   const clearForm = () => {
+    console.log('clearform')
     setTokenLPState([
       {
         ...tokenA,
@@ -165,7 +166,10 @@ const ManageLiquidity: FC = () => {
   }
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
+    console.log(tx.txStep)
+    console.log(tx?.txStep === TxStep.Success)
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
+      console.log('yes')
       tx.reset()
     }
 

@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages'
 
+
 export enum Force {
   epochAndSnapshots,
   snapshotsOnly,
@@ -23,9 +24,9 @@ const useForceEpochAndTakingSnapshots = ({
   noSnapshotTakenAddresses,
   config,
 }: Params) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient, cosmWasmClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient, cosmWasmClient } = useClients(walletChainName)
   const incentiveAddresses = useQueryIncentiveContracts(cosmWasmClient)
   const mode = useMemo(() => (noSnapshotTakenAddresses ? Force.snapshotsOnly : Force.epochAndSnapshots),
     [noSnapshotTakenAddresses])

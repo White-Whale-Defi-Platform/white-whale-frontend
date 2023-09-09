@@ -11,6 +11,7 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
+
 export type RewardInfo = {
   amount: number
   dollarValue: number
@@ -68,9 +69,9 @@ const useRewards = (poolId: string): RewardsResult => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
 
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { cosmWasmClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],

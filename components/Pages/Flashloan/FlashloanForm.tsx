@@ -21,6 +21,7 @@ import schema from './schema.json'
 import UploadFile from './UploadFile'
 import { useChain } from '@cosmos-kit/react-lite'
 
+
 const defaultJson = {
   flash_loan: {
     assets: [],
@@ -46,8 +47,8 @@ function FlashloanForm({}: Props) {
   const containerRef = useRef(null)
   const [error, setError] = useState(null)
   const [json, setJson] = useState(defaultJson)
-  const { chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
 
   const tx = useFlashloan({ json })
 

@@ -14,11 +14,12 @@ import useTransaction from './useTransaction'
 import { useClients } from 'hooks/useClients'
 import { useChain } from '@cosmos-kit/react-lite'
 
+
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient, cosmWasmClient } = useClients(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient, cosmWasmClient } = useClients(walletChainName)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
   const slippage = useRecoilValue(slippageAtom)

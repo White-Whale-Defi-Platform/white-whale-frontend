@@ -46,8 +46,8 @@ type Props = {
 const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
-  const { network, chainId, chainName } = useRecoilValue(chainState)
-  const { cosmWasmClient } = useClients(chainName)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const config = useConfig(network, chainId)
   // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed

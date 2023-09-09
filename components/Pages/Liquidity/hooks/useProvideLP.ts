@@ -19,11 +19,12 @@ import useIsNewPosition from './useIsNewPosition'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 
+
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenItemState)
-  const { chainId, chainName, network } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const config: Config = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)

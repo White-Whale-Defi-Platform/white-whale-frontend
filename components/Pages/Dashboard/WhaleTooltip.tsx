@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useEffect, useRef, useState } from 'react'
 
 import { TokenBalance } from 'components/Pages/BondingActions/Bond'
 import {

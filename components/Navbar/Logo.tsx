@@ -12,7 +12,8 @@ const Logo = () => {
           onClick={async() => {
             setCurrentWalletState({
               ...currentWalletState,
-              chainId: 'migaloo-1'
+              chainId: 'migaloo-1',
+              walletChainName: 'migaloo'
             })
             await router.push('/migaloo/swap')
           }

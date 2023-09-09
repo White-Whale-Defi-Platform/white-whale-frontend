@@ -9,8 +9,8 @@ import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages'
 
 export const useWithdrawPosition = ({ poolId }) => {
-  const { address, chainName } = useRecoilValue(chainState)
-  const { signingClient } = useClients(chainName)
+  const { address, walletChainName } = useRecoilValue(chainState)
+  const { signingClient } = useClients(walletChainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Open position',

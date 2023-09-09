@@ -9,7 +9,7 @@ import { NetworkType, chainState } from 'state/chainState'
 export const NetworkSwitch = () => {
   const queryClient = useQueryClient()
   const [currentWalletState, setWalletState] = useRecoilState(chainState)
-  const { disconnect } = useChain(currentWalletState.chainName)
+  const { disconnect } = useChain(currentWalletState.walletChainName)
 
   const changeNetwork = async () => {
     queryClient.clear()

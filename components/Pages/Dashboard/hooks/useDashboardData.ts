@@ -54,14 +54,14 @@ export const useConfig = (network: NetworkType, chainId: string) => {
 }
 
 export const useDashboardData = (
-  address: string, network: NetworkType, chainId: string, chainName: string,
+  address: string, network: NetworkType, chainId: string, walletChainName: string,
 ) => {
   const debouncedRefetch = useMemo(() => debounce((refetchFunc) => refetchFunc(), 500),
     [])
 
   const config: Config = useConfig(network, chainId)
 
-  const { cosmWasmClient: queryClient } = useClients(chainName)
+  const { cosmWasmClient: queryClient } = useClients(walletChainName)
 
   const queries = useQueries([
     {

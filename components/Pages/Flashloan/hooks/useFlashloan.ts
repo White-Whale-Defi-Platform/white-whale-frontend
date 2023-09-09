@@ -9,10 +9,11 @@ import useTransaction from './useTransaction'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 
+
 const useFlashloan = ({ json }) => {
-  const { chainName, chainId } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const encodedMsgs = useMemo(() => {
     if (Object.keys(json).length === 0 || !chainId) {
       return null

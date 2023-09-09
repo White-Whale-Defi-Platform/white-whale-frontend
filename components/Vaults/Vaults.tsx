@@ -13,8 +13,8 @@ import MobileVaults from './MobileVaults'
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =
     useState<boolean>(false)
-  const { chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   const { vaults, isLoading } = useVault()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string

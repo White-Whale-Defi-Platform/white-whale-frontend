@@ -247,7 +247,8 @@ export const useTransaction = ({
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    // Dont change to !== breaking
+    if (txInfo != null && txHash != null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)

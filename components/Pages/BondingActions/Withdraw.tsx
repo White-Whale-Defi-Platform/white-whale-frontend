@@ -27,6 +27,7 @@ import {
 
 import { WhaleTooltip } from '../Dashboard/WhaleTooltip'
 
+
 type Props = {
   unbondingRequests: UnbondingData[]
   withdrawableInfos: WithdrawableInfo[]
@@ -37,8 +38,8 @@ const Withdraw = ({
   withdrawableInfos,
   unbondingPeriodInNano,
 }: Props) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
 
   const prices = usePrices()
 
@@ -137,7 +138,7 @@ const Withdraw = ({
         <TokenBox label="Withdrawable" tokens={withdrawableTokens} />
       </Stack>
       {isWalletConnected &&
-        unbondingRequests !== null &&
+        unbondingRequests != null &&
         unbondingRequests?.length > 0 && (
         <Box
           overflowY="scroll"

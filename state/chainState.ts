@@ -7,6 +7,7 @@ type GeneratedWalletState<TStateExtension extends {}> = TStateExtension & {
   chainName: string
   network: NetworkType
   activeWallet: string
+  walletChainName:string
 }
 export enum NetworkType {
   testnet = 'testnet',
@@ -25,11 +26,12 @@ function createWalletState<TState = {}>({
   return atom<GeneratedWalletState<TState>>({
     key,
     default: {
-      chainId: null,
+      chainId: 'migaloo-1',
       chainName: 'migaloo',
       address: '',
       network: NetworkType.mainnet,
       activeWallet: '',
+      walletChainName:'migaloo',
       ...defaultState,
     },
     dangerouslyAllowMutability: true,

@@ -2,12 +2,12 @@ import { useQueries } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
 
-export const useClients = (chainName: string) => {
+export const useClients = (walletChainName: string) => {
   const {
     getCosmWasmClient,
     getSigningCosmWasmClient,
     isWalletConnected,
-  } = useChain(chainName)
+  } = useChain(walletChainName)
 
   const queries = useQueries([
     {

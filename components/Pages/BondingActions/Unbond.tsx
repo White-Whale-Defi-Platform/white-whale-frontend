@@ -12,9 +12,10 @@ import { chainState } from 'state/chainState'
 
 import AssetInput from '../../AssetInput'
 
+
 const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
-  const { chainName, network, chainId } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { walletChainName, network, chainId } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)

@@ -26,7 +26,7 @@ const fetchTokenBalance = async({
   signingClient: SigningCosmWasmClient
   token: any
   address: string
-}) {
+}) => {
   const { denom, native, token_address, decimals } = token || {}
 
   if (!denom && !token_address) {
@@ -64,9 +64,9 @@ const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
 }
 
 export const useTokenBalance = (tokenSymbol: string) => {
-  const { network, chainName } = useRecoilValue(chainState)
-  const { cosmWasmClient, signingClient } = useClients(chainName)
-  const { address } = useChain(chainName)
+  const { network, walletChainName } = useRecoilValue(chainState)
+  const { cosmWasmClient, signingClient } = useClients(walletChainName)
+  const { address } = useChain(walletChainName)
   const tokenInfo = useTokenInfo(tokenSymbol)
   const ibcAssetInfo = useIBCAssetInfo(tokenSymbol)
   const {
@@ -98,9 +98,9 @@ export const useTokenBalance = (tokenSymbol: string) => {
 }
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
-  const { network, chainName, chainId } = useRecoilValue(chainState)
-  const { cosmWasmClient, signingClient } = useClients(chainName)
-  const { address, isWalletConnected } = useChain(chainName)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { cosmWasmClient, signingClient } = useClients(walletChainName)
+  const { address, isWalletConnected } = useChain(walletChainName)
   const [tokenList] = useTokenList()
   const [ibcAssetsList] = useIBCAssetList()
 

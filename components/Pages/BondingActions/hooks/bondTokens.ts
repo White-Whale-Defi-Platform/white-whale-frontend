@@ -25,10 +25,10 @@ export const bondTokens = async (
   }
 
   let fee = null
-  if (chainId === 'columbus-5') {
+  if (await signingClient.getChainId() === 'columbus-5') {
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom)
   }
   return signingClient.execute(
-    address, config.whale_lair, handleMsg, fee, null, [coin(amount, denom)],
+    address, config.whale_lair, handleMsg, fee ,'',[coin(amount, denom)]
   )
 }

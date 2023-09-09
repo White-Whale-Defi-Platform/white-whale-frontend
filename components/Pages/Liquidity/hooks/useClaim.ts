@@ -9,14 +9,15 @@ import { createExecuteMessage } from 'util/messages'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
 
+
 interface Props {
   poolId: string
 }
 
 export const useClaim = ({ poolId }: Props) => {
-  const { chainName } = useRecoilValue(chainState)
-  const { address } = useChain(chainName)
-  const { signingClient } = useClients(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Claim',
