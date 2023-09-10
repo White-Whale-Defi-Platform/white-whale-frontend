@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { List } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChains2 } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
 
 function ChainList({ onChange, onClose, currentChainState }) {
-  const chains = useChains()
+  const chains = useChains2()
 
   return (
     <List spacing={1} color="white" width="full">

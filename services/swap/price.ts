@@ -34,13 +34,11 @@ export const getToken2ForToken1Price = async ({
   swapAddress,
   cosmWasmClient,
 }: GetToken2ForToken1PriceInput) => {
-  console.log(cosmWasmClient)
   try {
     const { assets } = await cosmWasmClient.queryContractSmart(swapAddress, {
       pool: {},
     })
     const [asset1, asset2] = assets
-    console.log(assets)
     return num(asset1.amount).div(asset2.amount).
       toNumber()
   } catch (e) {

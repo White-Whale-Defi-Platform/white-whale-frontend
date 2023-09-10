@@ -1,5 +1,5 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChains2 } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { chainState } from 'state/chainState'
 import { useRecoilValue } from 'recoil'

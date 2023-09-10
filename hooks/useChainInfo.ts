@@ -5,7 +5,7 @@ import testnetChainInfo from 'public/testnet/chain_info.json'
 import { useRecoilValue } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
 
-export const useChains = () => {
+export const useChains2 = () => {
   const { network } = useRecoilValue(chainState)
 
   return useMemo(() => (network === NetworkType.testnet
@@ -15,7 +15,7 @@ export const useChains = () => {
 }
 
 export const useChainInfo = (id = null) => {
-  const chainInfo: Array<any> = useChains()
+  const chainInfo: Array<any> = useChains2()
 
   const chain = useMemo(() => {
     if (!chainInfo) {

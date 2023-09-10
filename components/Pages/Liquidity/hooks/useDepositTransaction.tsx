@@ -70,7 +70,6 @@ export const useTransaction = ({
         setTxStep(TxStep.Ready)
         return response
       } catch (error) {
-        console.log('errrr')
         if (
           (/insufficient funds/i).test(error.toString()) ||
           (/Overflow: Cannot Sub with/i).test(error.toString())
@@ -257,7 +256,6 @@ export const useTransaction = ({
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
-        console.log('success')
         setTxStep(TxStep.Success)
         onSuccess?.(txHash, txInfo)
       }

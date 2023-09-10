@@ -119,7 +119,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const { mutate: submit, ...tx } = useMutation({
     mutationFn: async () => {
-      let fee = null
+      let fee = 'auto'
       if (chainId === 'columbus-5') {
         fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(amount, tokenInfo?.denom)
       }

@@ -1,7 +1,8 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChain } from '@cosmos-kit/react-lite'
+import { useChains2 } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
@@ -15,15 +16,13 @@ import useSwap from './hooks/useSwap'
 import { tokenSwapAtom } from './swapAtoms'
 import SwapForm from './SwapForm'
 import SwapSettings from './SwapSettings'
-import { useChain } from '@cosmos-kit/react-lite'
-
 
 type SwapProps = {
   /* Will be used if provided on first render instead of internal state */
   initialTokenPair?: readonly [string, string]
 }
 
-const Swap: FC<SwapProps> = ({}) => {
+const Swap: FC<SwapProps> = (params) => {
   const router = useRouter()
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenSwapAtom)
@@ -32,15 +31,17 @@ const Swap: FC<SwapProps> = ({}) => {
 
   const { chainId, address, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
-  const chains: Array<any> = useChains()
+  const chains: Array<any> = useChains2()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
   const changeUrl = (tokenSymbol1:string, tokenSymbol2:string) => {
-    const url = `/${currentChainId}/swap?from=${tokenSymbol1}&to=${tokenSymbol2}`
-    router.push(url)
+    if (tokenSymbol1 && tokenSymbol2) {
+      const url = `/${currentChainId}/swap?from=${tokenSymbol1}&to=${tokenSymbol2}`
+      router.push(url)
+    }
   }
 
   const tokenList = useMemo(() => {
@@ -61,18 +62,21 @@ const Swap: FC<SwapProps> = ({}) => {
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
-
-  const tokenSymbols = useMemo(() => tokenList.map((token) => token.symbol),
-    [tokenList])
+  const lowerTokenSymbols = []
+  const tokenSymbols = []
+  useMemo(() => tokenList.forEach((token) => {
+    tokenSymbols.push(token.symbol); lowerTokenSymbols.push(token.symbol.toLowerCase())
+  }),
+  [tokenList])
 
   useEffect(() => {
-
-    if (!currentChainId || tokenList.length === 0) {
+    if ((!chainId && !currentChainId) || tokenList.length === 0) {
       return
     }
-    const { from, to } = router.query
+    // Const { from, to } = router.query
+    const from = params?.initialTokenPair ? params?.initialTokenPair[0] : router.query[0]
+    const to = params?.initialTokenPair ? params?.initialTokenPair[1] : router.query[1]
     const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
-
     let newState: TokenItemState[] = [
       {
         tokenSymbol: String(from),
@@ -85,10 +89,23 @@ const Swap: FC<SwapProps> = ({}) => {
         decimals: 6,
       },
     ]
-
     if (!from || !to) {
-      if (tokenA.tokenSymbol && tokenB.tokenSymbol) {
+      if (tokenA.tokenSymbol && tokenB.tokenSymbol && lowerTokenSymbols.includes(tokenA.tokenSymbol.toLowerCase()) && lowerTokenSymbols.includes(tokenB.tokenSymbol.toLowerCase())) {
         changeUrl(tokenA.tokenSymbol, tokenB.tokenSymbol)
+        newState = [
+          {
+            tokenSymbol: String(tokenA.tokenSymbol),
+            amount: 0,
+            decimals: 6,
+          },
+          {
+            tokenSymbol: String(tokenB.tokenSymbol),
+            amount: 0,
+            decimals: 6,
+          },
+        ]
+        setResetForm(true)
+        setTokenSwapState(newState)
       } else {
         newState = [
           {
@@ -106,7 +123,19 @@ const Swap: FC<SwapProps> = ({}) => {
         setTokenSwapState(newState)
         setResetForm(true)
       }
-    } else if (tokenSymbols.includes(String(from)) && tokenSymbols.includes(String(to))) {
+    } else if (lowerTokenSymbols.includes(String(from).toLowerCase()) && lowerTokenSymbols.includes(String(to).toLowerCase())) {
+      newState = [
+        {
+          tokenSymbol: String(tokenSymbols[lowerTokenSymbols.indexOf(String(from).toLowerCase())]),
+          amount: 0,
+          decimals: 6,
+        },
+        {
+          tokenSymbol: String(tokenSymbols[lowerTokenSymbols.indexOf(String(to).toLowerCase())]),
+          amount: 0,
+          decimals: 6,
+        },
+      ]
       setTokenSwapState(newState)
     } else {
       newState = [

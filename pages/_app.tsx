@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
+
 import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
@@ -50,6 +51,13 @@ const MyApp: FC<AppProps> = ({
   useEffect(() => {
     setMounted(true)
   }, [])
+  const wallets = [
+    ...keplrWallets,
+    ...cosmoStationWallets,
+    ...shellWallets,
+    ...stationWallets,
+    ...leapWallets,
+  ]
 
   return (
     <>
@@ -64,13 +72,7 @@ const MyApp: FC<AppProps> = ({
                 <ChainProvider
                   chains={chains} // Supported chains
                   assetLists={assets} // Supported asset lists
-                  wallets={[
-                    ...keplrWallets,
-                    ...cosmoStationWallets,
-                    ...shellWallets,
-                    ...stationWallets,
-                    ...leapWallets,
-                  ]} // Supported wallets
+                  wallets={wallets} // Supported wallets
                   walletModal={WalletModal}
                   signerOptions={signerOptions}
                   endpointOptions={endpointOptions}

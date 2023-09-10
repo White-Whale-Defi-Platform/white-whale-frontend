@@ -48,7 +48,7 @@ export const directTokenSwap = async ({
       null,
     ))
   }
-  let fee = null
+  let fee = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(tokenAmount, tokenA.denom)
   }

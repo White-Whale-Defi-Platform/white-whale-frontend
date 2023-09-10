@@ -25,7 +25,7 @@ export const executeAddLiquidity = async ({tokenA, tokenB, tokenAAmount, tokenBA
   senderAddress,
   msgs, chainId,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  let fee = null
+  let fee = 'auto'
   if (chainId === 'columbus-5') {
     fee = await TerraTreasuryService.getInstance().getTerraClassicFeeForDeposit(
       tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom,

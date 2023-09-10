@@ -18,7 +18,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Incentivize/hooks/usePoolUserShare'
 import { PositionsOverview } from 'components/Pages/Incentivize/PositionsOverview';
-import { useChains } from 'hooks/useChainInfo'
+import { useChains2 } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -42,7 +42,7 @@ import WithdrawForm from './WithdrawForm'
 const ManageLiquidity: FC = () => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router: NextRouter = useRouter()
-  const chains: Array<any> = useChains()
+  const chains: Array<any> = useChains2()
   const { address, chainId,walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)

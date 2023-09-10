@@ -86,7 +86,6 @@ const SwapForm: FC<Props> = ({
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
-  console.log(amountA)
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
       return 'Connect Wallet'
@@ -245,46 +244,6 @@ const SwapForm: FC<Props> = ({
       position="relative"
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={2}>
-        <HStack justifyContent="space-between" width="full">
-          <HStack visibility={{ base: 'visible',
-            md: 'hidden' }}>
-            <Button
-              variant="outline"
-              size="xs"
-              maxW="fit-content"
-              onClick={() => {
-                setReverse(false)
-                onInputChange({ ...tokenA,
-                  amount: tokenABalance / 2 }, 0)
-                setValue(
-                  'tokenA',
-                  { ...tokenA,
-                    amount: tokenABalance / 2 },
-                  { shouldValidate: true },
-                )
-              }}
-            >
-              half
-            </Button>
-            <Button
-              variant="outline"
-              size="xs"
-              onClick={() => {
-                setReverse(false)
-                onInputChange({ ...tokenA,
-                  amount: tokenABalance }, 0)
-                setValue(
-                  'tokenA',
-                  { ...tokenA,
-                    amount: tokenABalance },
-                  { shouldValidate: true },
-                )
-              }}
-            >
-              max
-            </Button>
-          </HStack>
-        </HStack>
         <Controller
           name="tokenA"
           control={control}
@@ -327,46 +286,7 @@ const SwapForm: FC<Props> = ({
         paddingBottom={8}
         style={{ margin: 'unset' }}
       >
-        <HStack justifyContent="space-between" width="full">
-          <HStack>
-            <Hide above="md">
-              <Button
-                variant="outline"
-                size="xs"
-                onClick={() => {
-                  setReverse(true)
-                  onInputChange({ ...tokenB,
-                    amount: tokenBBalance / 2 }, 1)
-                  setValue(
-                    'tokenB',
-                    { ...tokenB,
-                      amount: tokenBBalance / 2 },
-                    { shouldValidate: true },
-                  )
-                }}
-              >
-                half
-              </Button>
-              <Button
-                variant="outline"
-                size="xs"
-                onClick={() => {
-                  setReverse(true)
-                  onInputChange({ ...tokenB,
-                    amount: tokenBBalance / 2 }, 1)
-                  setValue(
-                    'tokenB',
-                    { ...tokenB,
-                      amount: tokenBBalance },
-                    { shouldValidate: true },
-                  )
-                }}
-              >
-                max
-              </Button>
-            </Hide>
-          </HStack>
-        </HStack>
+        
         <Controller
           name="tokenB"
           control={control}

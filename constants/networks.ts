@@ -20,6 +20,28 @@ export const ACTIVE_NETWORKS = {
   },
 }
 
+export const ACTIVE_NETWORKS_WALLET_NAMES = {
+  mainnet: [
+    'chihuahua',
+    'comdex',
+    'injective',
+    'juno',
+    'migaloo',
+    'terra2',
+    'sei',
+    'terra']
+  ,
+  testnet: [
+    'comdex',
+    'injectivetestnet',
+    'junotestnet',
+    'migalootestnet',
+    'terra2testnet',
+    'seitestnet',
+    'terra',
+  ],
+}
+
 export const WALLETNAMES_BY_CHAINID = {
   'chihuahua-1': 'chihuahua',
   'comdex-1': 'comdex',

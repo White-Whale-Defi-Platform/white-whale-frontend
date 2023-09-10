@@ -1,6 +1,8 @@
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
+
 
 
 /**
@@ -26,7 +28,7 @@ intercept(interceptStdout)
 
 const config = {
   async redirects() {
-    return [
+    const redirects = [
       {
         source: '/',
         destination: '/migaloo/swap',
@@ -53,6 +55,7 @@ const config = {
         permanent: false,
       },
     ]
+    return redirects
   },
   // Adding policies:
   async headers() {

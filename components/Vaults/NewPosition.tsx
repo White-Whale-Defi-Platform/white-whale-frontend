@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChains2 } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
@@ -16,7 +16,7 @@ const NewPosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
-  const chains: Array<any> = useChains()
+  const chains: Array<any> = useChains2()
   const { chainId, address, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const vaultId = params.get('vault') || 'JUNOX'

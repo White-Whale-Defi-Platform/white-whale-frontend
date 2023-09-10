@@ -239,7 +239,7 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee === null || msgs === null || msgs.length < 1) {
+    if (fee === null || msgs === null || !msgs || msgs.length < 1) {
       return null
     }
 

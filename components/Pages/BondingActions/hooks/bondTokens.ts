@@ -24,7 +24,7 @@ export const bondTokens = async (
     },
   }
 
-  let fee = null
+  let fee = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom)
   }

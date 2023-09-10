@@ -1,4 +1,5 @@
 import React from 'react'
+import { isMobile } from 'react-device-detect';
 
 import {
   Modal,
@@ -9,9 +10,8 @@ import {
   ModalOverlay,
   VStack,
 } from '@chakra-ui/react'
-
-import WalletConnectButton from 'components/Wallet/Modal/WalletConnectButton'
 import { WalletModalProps } from '@cosmos-kit/core'
+import WalletConnectButton from 'components/Wallet/Modal/WalletConnectButton'
 
 export enum WalletType {
   keplrExtension = 'keplr-extension',
@@ -28,6 +28,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   function onCloseModal() {
     setOpen(false)
   }
+
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>
       <ModalOverlay />
@@ -36,14 +37,28 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
         <ModalCloseButton />
         <ModalBody>
           <VStack alignItems="flex-start" width="full" gap={2}>
-            {walletRepo?.wallets.map(({ walletName, connect }) => (
-              <WalletConnectButton
-                key={walletName}
-                onCloseModal={onCloseModal}
-                connect={connect}
-                walletType={walletName as WalletType}
-              />
-            ))}
+            {walletRepo?.wallets.map((elem) => {
+              const { connect, walletName } = elem;
+              if (isMobile && !elem.isModeExtension) {
+                return (
+                  <WalletConnectButton
+                    key={walletName}
+                    onCloseModal={onCloseModal}
+                    connect={connect}
+                    walletType={walletName as WalletType}
+                  />
+                )
+              } else if (!isMobile && elem.isModeExtension){
+                return (
+                  <WalletConnectButton
+                    key={walletName}
+                    onCloseModal={onCloseModal}
+                    connect={connect}
+                    walletType={walletName as WalletType}
+                  />
+                )
+              }
+            })}
           </VStack>
         </ModalBody>
       </ModalContent>

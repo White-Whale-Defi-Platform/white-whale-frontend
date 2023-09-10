@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
-import { useChain, useChainWallet, useManager } from '@cosmos-kit/react-lite'
+import { useChain, useChains } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, WALLETNAMES_BY_CHAINID } from 'constants/index'
-import { useChainInfo, useChains } from 'hooks/useChainInfo'
+import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, ACTIVE_NETWORKS_WALLET_NAMES, WALLETNAMES_BY_CHAINID } from 'constants/index'
+import { useChainInfo, useChains2 } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
@@ -17,16 +17,13 @@ import { getPathName } from 'util/route'
 
 const Wallet: any = () => {
   const [isInitialized, setInitialized] = useState(false)
-  
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
-  console.log(currentChainState)
-  const chains: Array<any> = useChains()
+  const chains: Array<any> = useChains2()
   const router = useRouter()
-  const tmp = useManager()
+  const allChains = useChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
   let chainName = router.query.chainId as string
   const [chainInfo] = useChainInfo(currentChainState.chainId)
-  console.log(tmp)
-  const { isWalletConnected, disconnect, openView } = useChain(WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]])
+  const { isWalletConnected, disconnect, openView } = allChains[WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]]
   chainName = chainName ? chainName : currentChainState.chainName
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
@@ -63,12 +60,11 @@ const Wallet: any = () => {
       setCurrentChainState({
         ...currentChainState,
         chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
-        walletChainName: WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]],
+        walletChainName: WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]
       })
     }
 
     if (!ACTIVE_NETWORKS[currentChainState.network][chainIdParam] && chainIdParam) {
-      console.log('2')
       setCurrentChainState({
         ...currentChainState,
         chainId: defaultChainId,
@@ -104,8 +100,12 @@ const Wallet: any = () => {
     setCurrentChainState({ ...currentChainState,
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
-      walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId] })
+      walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId],},
+      )
     queryClient.clear()
+    if (isWalletConnected) {
+      await allChains[WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]].connect()
+    }
     // eslint-disable-next-line react-hooks/rules-of-hooks
   }
 
@@ -119,7 +119,7 @@ const Wallet: any = () => {
     if (router.pathname.includes('/404')) {
       router.push('/404')
     }
-    
+
     const sourceChain = chains.find((row) => row.chainId.toLowerCase() === currentChainState.chainId)
     if (sourceChain && !router.pathname.includes('/404')) {
       const path = getPathName(router, sourceChain.label)
@@ -127,7 +127,6 @@ const Wallet: any = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChainState.chainId, isInitialized])
-  console.log(currentChainState)
   if (!isWalletConnected) {
     return (
       <><HStack align="right" size={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>

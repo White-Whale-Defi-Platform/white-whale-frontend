@@ -14,7 +14,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Incentivize/hooks/useIncentivePoolInfo'
 import { Incentives } from 'components/Pages/Pools/Incentives'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
-import { useChains } from 'hooks/useChainInfo'
+import { useChains2 } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
@@ -68,7 +68,7 @@ const Pools = () => {
   const myPoolsLength = useMemo(() => pools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)?.length,
     [pools])
 
-  const chains: any = useChains()
+  const chains: any = useChains2()
   const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
   [chains, chainId])

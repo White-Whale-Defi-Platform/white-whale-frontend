@@ -27,6 +27,8 @@ export const Bond = ({ balances, tokenSymbols }) => {
     useRecoilState<BondingTokenState>(bondingState)
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
+  
+
 
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 

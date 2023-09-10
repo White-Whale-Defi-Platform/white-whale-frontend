@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChains2 } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
@@ -27,7 +27,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
-  const chains: Array<any> = useChains()
+  const chains: Array<any> = useChains2()
   const params = new URLSearchParams(location.search)
   const { chainId, address, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)

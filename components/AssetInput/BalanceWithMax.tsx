@@ -50,7 +50,7 @@ const MaxButton = ({
   size,
   minwidth,
 }: MaxButtonProps) => {
-  if (hideMax) return null
+  if (hideMax) {console.log(hideMax);return null}
   return (
     <Button
       disabled={disabled}
@@ -101,7 +101,7 @@ const TokenToPrice = ({
   hide,
   mobile,
 }: TokenToPriceProps) => {
-  if (hide) return <Box flex={1} />
+  if (hide) {return <Box flex={1} />}
   let amt = isNaN(Number(numberOfTokens)) ? numberOfTokens : 0
   if (mobile) {
     amt = 'Value:'
