@@ -169,7 +169,7 @@ const Dashboard: FC = () => {
   ])
 
   return (
-    <VStack width={'full'} alignSelf="center" paddingLeft={['0', '5', '10']}>
+    <VStack width={'full'} alignSelf="center" paddingLeft={['5', '5', '10']}>
       <Flex
         direction={{ base: 'column',
           xl: 'row' }}
