@@ -10,8 +10,10 @@ import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
+import { STATE } from 'components/Pages/Trade/Liquidity/Positions'
 
 export type Position = {
+  poolId: string
   amount: number
   weight: string
   duration: string
@@ -33,6 +35,7 @@ export const lpPositionToAssets = ({
   protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
 ]
 export const fetchPositions = async (
+  poolId,
   client,
   prices,
   incentiveAddress,
@@ -82,6 +85,7 @@ export const fetchPositions = async (
             dollarValue,
           }
         })
+        const isWithdraw = poolId === 'ampLUNA-LUNA' || poolId === 'bLUNA-LUNA'
         return {
           ...position,
           duration: position.formatedTime,
@@ -90,10 +94,10 @@ export const fetchPositions = async (
           value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
             0),
           state: position.isOpen
-            ? 'active'
+            ? STATE.ACTIVE
             : diff <= 0
-              ? 'unbound'
-              : 'unbonding',
+              ? STATE.UNBONDED
+              : isWithdraw ? STATE.WITHDRAW : STATE.UNBONDING,
           action: null,
         }
       })
@@ -120,6 +124,7 @@ const useLockedPositions = (poolId: string) => {
       prices,
     ],
     queryFn: (): Promise<Position[]> => fetchPositions(
+      poolId,
       client,
       prices,
       staking_address,

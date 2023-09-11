@@ -11,7 +11,7 @@ export const useWithdrawPosition = ({ poolId }) => {
   const { address, client } = useRecoilValue(walletState)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
-    transactionType: 'Open position',
+    transactionType: 'Unlock Position',
     client,
   })
 
