@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-import { usePriceForOneToken } from 'components/Pages/Swap/index'
+import { usePriceForOneToken } from 'components/Pages/Trade/Swap/index'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
 import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
 

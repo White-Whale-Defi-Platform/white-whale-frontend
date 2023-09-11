@@ -1,4 +1,4 @@
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 
 import { ActionType, TokenType } from '../BondingOverview'
 

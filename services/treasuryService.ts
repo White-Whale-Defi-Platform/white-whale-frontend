@@ -75,13 +75,14 @@ export class TerraTreasuryService extends FCDBaseClient {
   async getTerraClassicIncentiveFee(amount: number | string, denom: string): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5')
     const tax = await this.getTerraTax(amount)
+    const whaleTax = await this.getTerraTax('1000000000')
     const amounts = [{
       denom,
       amount: tax.toString()
     },
       {
         denom: columbusConfig.whale_base_token.denom,
-        amount: '1000000000'
+        amount: whaleTax.toString()
       },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,

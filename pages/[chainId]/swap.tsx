@@ -1,4 +1,4 @@
-import Swap from 'components/Pages/Swap'
+import Swap from 'components/Pages/Trade/Swap'
 
 function getInitialTokenPairFromSearchParams() {
   const params = new URLSearchParams(location.search)

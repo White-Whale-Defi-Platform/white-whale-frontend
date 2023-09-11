@@ -143,12 +143,12 @@ export const useTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => directTokenSwap({
+  const { mutate } = useMutation(() => directTokenSwap({
     tokenA,
     swapAddress,
     senderAddress,
     msgs,
-    tokenAmount: Number(amount),
+    tokenAmount: amount,
     client,
   }),
   {
@@ -238,10 +238,7 @@ export const useTransaction = ({
       return
     }
 
-    mutate({
-      msgs,
-      fee,
-    })
+    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {

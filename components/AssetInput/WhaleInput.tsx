@@ -11,7 +11,7 @@ import {
   forwardRef,
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 
 import AssetSelectModal from './AssetSelectModal'
