@@ -32,6 +32,7 @@ import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
 import { WalletViewProps } from '@cosmos-kit/core';
+import { chainState } from '../state/chainState'
 
 const ConnectedView = ({ onClose, onReturn, wallet }: WalletViewProps) => {
   const {
@@ -60,7 +61,6 @@ const MyApp: FC<AppProps> = ({
     ...leapWallets,
     ...leapSnap,
   ]
-
   return (
     <>
       {typeof window !== 'undefined' ? (
