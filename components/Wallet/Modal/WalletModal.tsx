@@ -27,7 +27,7 @@ export enum WalletType {
 
 function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   function onCloseModal() {
-    if (isOpen){console.log(isOpen)
+    if (isOpen){
     setOpen(false)
     }
   }

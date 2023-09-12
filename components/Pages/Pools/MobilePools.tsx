@@ -17,7 +17,6 @@ type Props = {
 const MobilePools = ({ pools, ctaLabel }: Props) => {
   const router = useRouter()
   const { chainName } = useRecoilValue(chainState)
-  console.log(pools)
   return (
     <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
       {pools &&
