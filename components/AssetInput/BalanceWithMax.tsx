@@ -50,7 +50,7 @@ const MaxButton = ({
   size,
   minwidth,
 }: MaxButtonProps) => {
-  if (hideMax) {console.log(hideMax);return null}
+  if (hideMax) {return null}
   return (
     <Button
       disabled={disabled}

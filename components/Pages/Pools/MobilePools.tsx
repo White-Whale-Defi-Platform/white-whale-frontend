@@ -1,10 +1,13 @@
-import { Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
+
+import Apr from './components/Apr'
+import Liquidity from './components/liquidity'
 import PoolName from './components/PoolName'
 import { Pool } from './types'
-import { chainState } from 'state/chainState'
-import { useRecoilValue } from 'recoil'
-
+import { IncentiveTooltip } from '../../InfoTooltip'
 
 type Props = {
   pools: Pool[]
@@ -13,7 +16,8 @@ type Props = {
 
 const MobilePools = ({ pools, ctaLabel }: Props) => {
   const router = useRouter()
-  const {chainName } = useRecoilValue(chainState)
+  const { chainName } = useRecoilValue(chainState)
+  console.log(pools)
   return (
     <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
       {pools &&
@@ -28,8 +32,8 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             justifyContent="center"
           >
             <HStack width="full" justifyContent="space-between">
-              <Text color="brand.50">{`Pool`}</Text>
-              <Text color="brand.50">{`APR`}</Text>
+              <Text color="brand.50">{'Pool'}</Text>
+              <Text color="brand.50">{'APR'}</Text>
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
@@ -38,18 +42,24 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Text color="brand.50">{` ${pool?.apr}`}</Text>
+              <Apr apr={pool.apr.toString()}
+                flows={pool.flows}/>
             </HStack>
 
             <HStack height="24px" />
 
             <HStack width="full" justifyContent="space-between">
-              <Text color="brand.50">{`Total Liquidity`}</Text>
-              <Text color="brand.50">{`24h volume`}</Text>
+              <Text color="brand.50">{'Total Liquidity'}</Text>
+              {pool?.flows.length > 0 ? (<HStack><Box><IncentiveTooltip iconSize={'3'} /></Box><Text color="brand.50">{'Incentives'}</Text></HStack>) : null}
+              <Text color="brand.50">{'24h Volume'}</Text>
             </HStack>
 
             <HStack width="full" justifyContent="space-between">
-              <Text>{` ${pool?.totalLiq}`}</Text>
+              <Liquidity
+                liquidity={pool.totalLiq.toString()}
+                infos={pool}
+              />
+              {pool?.flows.length > 0 ? (pool.incentives) : null}
               <Text>{` ${pool?.volume24hr}`}</Text>
             </HStack>
 
@@ -59,10 +69,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() =>
-                router.push(
-                  `/${chainName}/pools/manage_liquidity?poolId=${pool?.poolId}`
-                )
+              onClick={() => router.push(`/${chainName}/pools/manage_liquidity?poolId=${pool?.poolId}`)
               }
             >
               {ctaLabel || 'Manage'}
@@ -71,14 +78,12 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
               variant="outline"
               size="sm"
               width="full"
-              onClick={() =>
-                router.push(
-                  `/${chainName}/pools/incentivize?poolId=${pool?.poolId}`
-                )
+              onClick={() => router.push(`/${chainName}/pools/incentivize?poolId=${pool?.poolId}`)
               }
             >
               {'Incentivize'}
             </Button>
+            <Box position="absolute" top="-10px" right="-10px" width="0" height="0" border-top="20px solid #f00" border-left="20px solid transparent"></Box>
           </VStack>
         ))}
     </VStack>

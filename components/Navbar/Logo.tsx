@@ -25,7 +25,7 @@ const Logo = () => {
             boxSize={[8, 12]}
           />
         </a>
-      <HStack display={['none', 'flex', 'none','flex']} >
+      <HStack display={['none', 'none', 'none', 'flex']} >
         <Text pl={2} fontSize="26" fontWeight="400">
           White
         </Text>

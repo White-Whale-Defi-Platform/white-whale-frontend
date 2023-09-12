@@ -76,7 +76,7 @@ const Navbar = () => {
           md: 'flex' }}
         alignItems="center"
       >
-        <Box flex="1">
+        <Box flex='1'>
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>

@@ -1,7 +1,10 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { Box, Icon, Tooltip } from '@chakra-ui/react'
+import { useState } from 'react'
 
-const InfoTooltip = ({ iconSize, description }) => (
+const InfoTooltip = ({ iconSize, description }) => {
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+  return (
   <Tooltip
     label={
       <Box
@@ -22,10 +25,13 @@ const InfoTooltip = ({ iconSize, description }) => (
     placement="bottom"
     closeOnClick={false}
     arrowSize={0}
+      isOpen={isLabelOpen}
   >
-    <Icon as={InfoOutlineIcon} blockSize={iconSize} color={'white'} />
+    <Icon as={InfoOutlineIcon} blockSize={iconSize} color={'white'} onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}/>
   </Tooltip>
-)
+)}
 export const IncentiveTooltip = ({ iconSize }) => (
   <InfoTooltip
     iconSize={iconSize}

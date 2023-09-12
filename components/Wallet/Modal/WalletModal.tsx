@@ -22,12 +22,17 @@ export enum WalletType {
   leapMobile = 'leap-cosmos-mobile',
   cosmoStationExtension = 'cosmostation-extension',
   cosmoStationMobile = 'cosmostation-mobile',
+  leapSnap = 'leap-metamask-cosmos-snap'
 }
 
 function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   function onCloseModal() {
+    if (isOpen){console.log(isOpen)
     setOpen(false)
+    }
   }
+
+  
 
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>

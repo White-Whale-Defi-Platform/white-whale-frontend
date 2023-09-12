@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { useChain } from '@cosmos-kit/react-lite'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import LeapSnapIcon from '../../../icons/LeapSnapIcon'
 
 function ConnectedWalletIcon() {
   const { walletChainName } = useRecoilValue(chainState)
@@ -22,6 +23,8 @@ function ConnectedWalletIcon() {
       return <CosmostationWalletIcon />
     case WalletType.terraExtension:
       return <TerraExtensionIcon />
+    case WalletType.leapSnap:
+      return <LeapSnapIcon />
     default:
       return <></>
   }

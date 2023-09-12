@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 
 import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 
@@ -8,11 +9,14 @@ type Props = {
 }
 
 const Liquidity = ({ liquidity, infos }: Props) => {
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
   const assets = infos.poolAssets
   const ttDisabled = liquidity === 'n/a'
   return (
+
     <Tooltip
       isDisabled={ttDisabled}
+      isOpen={!ttDisabled && isLabelOpen}
       sx={{ boxShadow: 'none' }}
       label={
         <VStack
@@ -64,7 +68,9 @@ const Liquidity = ({ liquidity, infos }: Props) => {
         <Text mb="-0.3rem" color="white">
           {
             <HStack borderBottom={!ttDisabled ? '1px dotted rgba(255, 255, 255, 0.5)' : 'InactiveBorder'} paddingTop={'2'}>
-              <Text align="right">{liquidity}</Text>
+              <Text align="right" onMouseEnter={() => setIsLabelOpen(true)}
+                onMouseLeave={() => setIsLabelOpen(false)}
+                onClick={() => setIsLabelOpen(!isLabelOpen)}>{liquidity}</Text>
             </HStack>
           }
         </Text>

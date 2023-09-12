@@ -5,6 +5,7 @@ import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import LeapWalletIcon from 'components/icons/LeapWalletIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import LeapSnapIcon from '../../icons/LeapSnapIcon'
 
 interface Props {
   onCloseModal: () => void
@@ -23,19 +24,21 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       case WalletType.keplrExtension:
         return 'Keplr Wallet'
       case WalletType.keplrMobile:
-        return 'Keplr Wallet (mobile)'
+        return 'Keplr Wallet'
       case WalletType.terraExtension:
         return 'Terra Station'
       case WalletType.cosmoStationExtension:
         return 'Cosmostation'
       case WalletType.cosmoStationMobile:
-        return 'Cosmostation (mobile)'
+        return 'Cosmostation'
       case WalletType.shellExtension:
         return 'Shell Wallet'
       case WalletType.leapExtension:
         return 'Leap Wallet'
       case WalletType.leapMobile:
-        return 'Leap Wallet (mobile)'
+        return 'Leap Wallet'
+      case WalletType.leapSnap:
+        return 'Leap Metamask Snap'
       default:
         return null
     }
@@ -69,6 +72,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return <LeapWalletIcon />
       case WalletType.leapMobile:
         return walletConnectIcon
+      case WalletType.leapSnap:
+        return <LeapSnapIcon />
       default:
         return null
     }

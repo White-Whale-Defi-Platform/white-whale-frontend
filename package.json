@@ -27,6 +27,7 @@
     "@cosmos-kit/cosmostation": "^2.1.3",
     "@cosmos-kit/keplr": "^2.1.2",
     "@cosmos-kit/leap": "^2.1.3",
+    "@cosmos-kit/leap-metamask-cosmos-snap": "^0.2.0",
     "@cosmos-kit/react-lite": "^2.1.3",
     "@cosmos-kit/shell": "^2.1.2",
     "@cosmos-kit/station": "^2.1.2",

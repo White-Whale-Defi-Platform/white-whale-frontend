@@ -5,6 +5,7 @@ import { QueryClientProvider } from 'react-query'
 
 
 import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
+import {wallets as leapSnap} from '@cosmos-kit/leap-metamask-cosmos-snap'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
 import { ChainProvider } from '@cosmos-kit/react-lite'
@@ -57,6 +58,7 @@ const MyApp: FC<AppProps> = ({
     ...shellWallets,
     ...stationWallets,
     ...leapWallets,
+    ...leapSnap,
   ]
 
   return (
