@@ -68,7 +68,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '1000000'
+      gas: '10000000'
     }
   }
 
@@ -91,7 +91,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '1000000'
+      gas: '10000000'
     }
   }
 
@@ -118,7 +118,7 @@ export class TerraTreasuryService extends FCDBaseClient {
 
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '1000000'
+      gas: '10000000'
     }
   }
 
