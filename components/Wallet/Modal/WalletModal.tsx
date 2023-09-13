@@ -32,8 +32,6 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
     }
   }
 
-  
-
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>
       <ModalOverlay />
@@ -62,6 +60,20 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                     walletType={walletName as WalletType}
                   />
                 )
+              } else if (window.leap && isMobile && walletName.toLowerCase().includes('chainleapextension')){
+                <WalletConnectButton
+                key={walletName}
+                onCloseModal={onCloseModal}
+                connect={connect}
+                walletType={walletName as WalletType}
+              />
+              }else if (window.cosmostation! && isMobile && walletName.toLowerCase().includes('chaincosmostationextension')){
+                <WalletConnectButton
+                key={walletName}
+                onCloseModal={onCloseModal}
+                connect={connect}
+                walletType={walletName as WalletType}
+              />
               }
             })}
           </VStack>
