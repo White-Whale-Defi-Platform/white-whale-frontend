@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
+import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'

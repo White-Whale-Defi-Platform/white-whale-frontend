@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import useEpoch from 'components/Pages/Incentivize/hooks/useEpoch'
-import { fetchTotalLockedLp } from 'components/Pages/Pools/hooks/fetchTotalLockedLp'
+import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
+import { fetchTotalLockedLp } from 'components/Pages/Trade/Pools/hooks/fetchTotalLockedLp'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,

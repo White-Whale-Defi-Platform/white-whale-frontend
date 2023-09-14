@@ -16,7 +16,7 @@ import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
 
-const fetchTokenBalance = async({
+const fetchTokenBalance = async ({
   cosmWasmClient,
   signingClient,
   token = {},

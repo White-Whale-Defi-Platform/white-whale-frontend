@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   Box,
@@ -10,22 +10,21 @@ import {
   VStack,
   keyframes,
 } from '@chakra-ui/react'
-import { BondingActionTooltip } from 'components/Pages/BondingActions/BondingAcionTooltip'
+import { useChain } from '@cosmos-kit/react-lite'
+import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingAcionTooltip'
+import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
-import useForceEpochAndTakingSnapshots from 'components/Pages/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import Loader from '../../Loader'
-import useTransaction, { TxStep } from '../BondingActions/hooks/useTransaction'
 import { ActionType } from './BondingOverview'
-import { useChain } from '@cosmos-kit/react-lite'
-
 
 const pulseAnimation = keyframes`
   0% {
@@ -133,11 +132,8 @@ const RewardsComponent = ({
   const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
     1)
 
-  const apr = useMemo(
-    () =>
-      ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio,
-    [annualRewards, globalTotalBonded, multiplierRatio]
-  )
+  const apr = useMemo(() => ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio,
+    [annualRewards, globalTotalBonded, multiplierRatio])
 
   const { txStep, submit } = useTransaction()
 
@@ -205,14 +201,14 @@ const RewardsComponent = ({
           borderRadius={borderRadius}
           alignItems="center"
           minH={320}
-          width='flex'
+          width="flex"
           gap={4}
           overflow="hidden"
           position="relative"
           display="flex"
           justifyContent="flex-start"
         >
-          <HStack spacing={['100','170']} align="stretch" mt={7}>
+          <HStack spacing={['100', '170']} align="stretch" mt={7}>
             <HStack flex="1">
               <a>
                 <Image
@@ -228,7 +224,7 @@ const RewardsComponent = ({
             </Text>
           </HStack>
           <VStack>
-            <HStack justifyContent="space-between" minWidth={["280","380"]}>
+            <HStack justifyContent="space-between" minWidth={['280', '380']}>
               <Text color="whiteAlpha.600">Next rewards in</Text>
               <Text>{durationString}</Text>
             </HStack>
@@ -242,7 +238,7 @@ const RewardsComponent = ({
             borderColor="whiteAlpha.400"
             borderRadius="10px"
             p={4}
-            minW={['290','390']}
+            minW={['290', '390']}
           >
             <HStack justifyContent="space-between">
               <HStack>
@@ -277,7 +273,7 @@ const RewardsComponent = ({
               </Text>
             </HStack>
           </Box>
-          <HStack w={[290,390]}>
+          <HStack w={[290, 390]}>
             <Button
               alignSelf="center"
               bg="#6ACA70"
@@ -285,16 +281,16 @@ const RewardsComponent = ({
               variant="primary"
               width={'100%'}
               disabled={
-                txStep == TxStep.Estimating ||
-                txStep == TxStep.Posting ||
-                txStep == TxStep.Broadcasting ||
+                txStep === TxStep.Estimating ||
+                txStep === TxStep.Posting ||
+                txStep === TxStep.Broadcasting ||
                 (isWalletConnected && claimableRewards === 0)
               }
               maxWidth={570}
               isLoading={
-                txStep == TxStep.Estimating ||
-                txStep == TxStep.Posting ||
-                txStep == TxStep.Broadcasting
+                txStep === TxStep.Estimating ||
+                txStep === TxStep.Posting ||
+                txStep === TxStep.Broadcasting
               }
               onClick={async () => {
                 if (isWalletConnected) {

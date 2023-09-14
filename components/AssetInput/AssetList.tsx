@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react'
 
 import { Box, Button, HStack, Image, Text } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'

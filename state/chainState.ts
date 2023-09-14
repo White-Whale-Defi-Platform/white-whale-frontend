@@ -1,7 +1,7 @@
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
 
-type GeneratedWalletState<TStateExtension extends {}> = TStateExtension & {
+type GeneratedWalletState<TStateExtension extends NonNullable<unknown>> = TStateExtension & {
   address: string
   chainId: string
   chainName: string
@@ -14,12 +14,12 @@ export enum NetworkType {
   mainnet = 'mainnet',
 }
 
-type CreateWalletStateArgs<TState = {}> = {
+type CreateWalletStateArgs<TState = NonNullable<unknown>> = {
   key: string
   default: TState
 }
 
-function createWalletState<TState = {}>({
+function createWalletState<TState = NonNullable<unknown>>({
   key,
   default: defaultState,
 }: CreateWalletStateArgs<TState>) {
@@ -31,7 +31,7 @@ function createWalletState<TState = {}>({
       address: '',
       network: NetworkType.mainnet,
       activeWallet: '',
-      walletChainName:'migaloo',
+      walletChainName: 'migaloo',
       ...defaultState,
     },
     dangerouslyAllowMutability: true,

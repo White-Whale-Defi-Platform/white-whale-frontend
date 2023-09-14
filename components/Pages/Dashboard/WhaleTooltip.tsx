@@ -1,14 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { TokenBalance } from 'components/Pages/BondingActions/Bond'
-import {
-  Box,
-  Divider,
-  HStack,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 
 import { TokenType } from './BondingOverview'
 import { BondingData } from './types/BondingData'

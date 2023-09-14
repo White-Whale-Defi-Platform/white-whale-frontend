@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { forwardRef, VStack } from '@chakra-ui/react'
-import { TokenBalance } from 'components/Pages/BondingActions/Bond';
+import { VStack, forwardRef } from '@chakra-ui/react'
+import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
