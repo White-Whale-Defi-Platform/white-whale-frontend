@@ -2,10 +2,9 @@ import axios from 'axios'
 import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/index'
 import columbusConfig from 'public/mainnet/columbus-5/config.json'
-import rebelConfig from 'public/testnet/rebel-2/config.json'
 
 class FCDBaseClient {
-  private readonly baseURL: string = 'https://fcd.terra.dev'
+  private readonly baseURL: string = 'https://terra-classic-lcd.publicnode.com/terra'
 
   // Private constructor so it cannot be instantiated directly.
   constructor() {
@@ -61,6 +60,8 @@ export class TerraTreasuryService extends FCDBaseClient {
       denom,
       amount: tax.toString()
     },
+      // Passing another native token as tax to avoid error
+      { denom: columbusConfig.whale_base_token.denom, amount: '1' },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
         amount: (Number(terraClassic.gasPriceStep.average) * 10 ** 6).toString()
@@ -68,7 +69,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '10000000'
+      gas: '1000000'
     }
   }
 
@@ -91,7 +92,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '10000000'
+      gas: '1000000'
     }
   }
 
@@ -118,13 +119,13 @@ export class TerraTreasuryService extends FCDBaseClient {
 
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '10000000'
+      gas: '1000000'
     }
   }
 
   private async getTaxRate(): Promise<any> {
-    const response = await this.get('treasury/tax_rate')
-    return response?.result
+    const response = await this.get('treasury/v1beta1/tax_rate')
+    return response?.tax_rate
   }
 
   /*

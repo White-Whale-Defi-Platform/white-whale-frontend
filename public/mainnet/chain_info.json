@@ -101,8 +101,8 @@
   {
     "chainId": "columbus-5",
     "chainName": "Terra Classic Mainnet",
-    "rpc": "https://rpc-terra-ia.cosmosia.notional.ventures/",
-    "rest": "https://api-terra-ia.cosmosia.notional.ventures/",
+    "rpc": "https://terra-classic-rpc.publicnode.com",
+    "rest": "https://terra-classic-lcd.publicnode.com",
     "icon": "/logos/lunac.png",
     "network_type": "mainnet",
     "label": "Terra-Classic",
