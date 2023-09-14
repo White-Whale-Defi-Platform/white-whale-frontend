@@ -60,6 +60,8 @@ export class TerraTreasuryService extends FCDBaseClient {
       denom,
       amount: tax.toString()
     },
+      // Passing another native token as tax to avoid error
+      { denom: columbusConfig.whale_base_token.denom, amount: '1' },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
         amount: (Number(terraClassic.gasPriceStep.average) * 10 ** 6).toString()
