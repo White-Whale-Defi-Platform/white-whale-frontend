@@ -1,8 +1,8 @@
 {
   "whale_lair": "terra1fatrd72lsf5hv59aeg9w00lg8yqz2fqthxxh9u9k63sngzm5nrdszt0w9u",
-  "incentive_factory": "terra1jfs5jfqf6xjuvw6hfk4uzkyfd6ynfll5nqytx9n67yvmg2cumm5qe66s7a",
+  "incentive_factory": "terra1zuyalae3t5qg4gkumff0mj5he6auv73n467jknj4p6pr00wqmnjqdxv6cx",
   "fee_distributor": "terra1d2p6vqyynhn2eraf74qtedaugfuknt32wnsm8e4uskfqv2jersdqkstzer",
-  "frontend_helper": "terra1n26k9zssr2thr49ah522sf2fjhs8jjhly4qwfv6y8ns2ss22wsqqhsp8ye",
+  "frontend_helper": "terra1pew7zvqmg8lq4v8hd4gtr6832exrzcsu8wz6eh9388kx5lpt75sq8j5vsk",
   "whale_base_token": {
     "name": "WHALE",
     "denom": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB",

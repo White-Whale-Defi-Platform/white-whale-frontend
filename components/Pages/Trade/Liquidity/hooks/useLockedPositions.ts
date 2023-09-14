@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
+import { STATE } from 'components/Pages/Trade/Liquidity/Positions'
 
 type Params = {
   cosmWasmClient: CosmWasmClient
@@ -24,6 +25,7 @@ type Params = {
   totalLpSupply: number
 }
 export type Position = {
+  poolId: string
   amount: number
   weight: string
   duration: string
