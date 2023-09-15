@@ -1,6 +1,8 @@
 import React from 'react'
 import { isMobile } from 'react-device-detect';
-
+import { chainState } from '../../../state/chainState';
+import { useChains2 } from '../../../hooks/useChainInfo';
+import { useRecoilValue } from 'recoil'
 import {
   Modal,
   ModalBody,
@@ -26,6 +28,10 @@ export enum WalletType {
 }
 
 function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
+  const { chainId } = useRecoilValue(chainState)
+  let chains = useChains2()
+  const snap = chains.find((elem)=> elem.chainId == chainId && elem.coinType == 118)
+
   function onCloseModal() {
     if (isOpen){
     setOpen(false)
@@ -52,6 +58,9 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                   />
                 )
               } else if (!isMobile && elem.isModeExtension){
+                if (walletName.includes('metamask') && !snap) {
+                  return
+                }else{
                 return (
                   <WalletConnectButton
                     key={walletName}
@@ -59,15 +68,15 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                     connect={connect}
                     walletType={walletName as WalletType}
                   />
-                )
-              } else if (window.leap && isMobile && walletName.toLowerCase().includes('chainleapextension')){
+                )}
+              } else if (window.leap && isMobile && walletName.toLowerCase().includes('chainleap')){
                 <WalletConnectButton
                 key={walletName}
                 onCloseModal={onCloseModal}
                 connect={connect}
                 walletType={walletName as WalletType}
               />
-              }else if (window.cosmostation! && isMobile && walletName.toLowerCase().includes('chaincosmostationextension')){
+              }else if (window.cosmostation! && isMobile && walletName.toLowerCase().includes('chaincosmostation')){
                 <WalletConnectButton
                 key={walletName}
                 onCloseModal={onCloseModal}
