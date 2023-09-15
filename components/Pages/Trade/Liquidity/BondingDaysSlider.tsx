@@ -36,7 +36,7 @@ export const BondingDaysSlider = ({
   setBondingDays,
   show,
 }: Props) => {
-  if (!show) return null
+  if (!show) { return null }
   return (
     <VStack width="full" alignItems="flex-start" gap="2" pb="6">
       <TooltipWithChildren label="Unlock Duration">

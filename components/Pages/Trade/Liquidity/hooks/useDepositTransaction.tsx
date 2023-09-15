@@ -132,7 +132,7 @@ export const useTransaction = ({
     signingClient,
     swapAddress,
     senderAddress,
-    msgs: encodedMsgs,
+    msgs: debouncedMsgs,
     chainId,
   }),
   {
@@ -243,7 +243,7 @@ export const useTransaction = ({
 
   useEffect(() => {
     // Dont change to !== breaking
-    if (txInfo !== null && txHash !== null) {
+    if (txInfo != null && txHash != null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)

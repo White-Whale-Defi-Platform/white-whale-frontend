@@ -7,6 +7,7 @@ import useDepost from 'components/Pages/Flashloan/Vaults/hooks/useDeposit'
 import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from '../../../../../state/chainState'
 
 type Props = {
   connected: WalletStatusType
@@ -33,8 +34,8 @@ const DepositForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
-  const isConnected = connected === '@wallet-state/connected'
+  const { chainId } = useRecoilValue(chainState)
+  const isConnected = connected !== ''
 
   const onSuccess = useCallback((txHash) => {
     refetch?.()

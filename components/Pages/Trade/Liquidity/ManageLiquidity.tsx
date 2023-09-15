@@ -150,7 +150,6 @@ const ManageLiquidity: FC = () => {
   }, [poolId])
 
   const clearForm = () => {
-    console.log('clearform')
     setTokenLPState([
       {
         ...tokenA,
@@ -165,10 +164,7 @@ const ManageLiquidity: FC = () => {
   }
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
-    console.log(tx.txStep)
-    console.log(tx?.txStep === TxStep.Success)
     if (tx?.txStep === TxStep.Failed || tx?.txStep === TxStep.Success) {
-      console.log('yes')
       tx.reset()
     }
 

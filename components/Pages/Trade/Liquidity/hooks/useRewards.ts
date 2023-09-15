@@ -75,7 +75,7 @@ const useRewards = (poolId: string): RewardsResult => {
 
   const { data: rewards = [] } = useQuery({
     queryKey: ['rewards', staking_address, address],
-    queryFn: async (): Promise<RewardsResult> => await cosmWasmClient?.queryContractSmart(staking_address, {
+    queryFn: async (): Promise<RewardsResult> => await cosmWasmClient.queryContractSmart(staking_address, {
       rewards: { address },
     }),
     select: (data) => data?.rewards || [],

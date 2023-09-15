@@ -54,7 +54,6 @@ const DepositForm = ({
       token2: tokenB,
     },
   })
-
   const incentivesEnabled = useMemo(() => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
     [chainId])
   const [currentAprHelperState, _] = useRecoilState(aprHelperState)

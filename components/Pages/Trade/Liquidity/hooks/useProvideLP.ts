@@ -18,7 +18,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 
-const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
+const useProvideLP = ({ reverse = false, bondingDays }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenItemState)
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
@@ -42,7 +42,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     poolId })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
-  let minUnbondingDuration = 0
+  let minUnbondingDuration = 86400
   if (factoryConfig) {
     minUnbondingDuration = factoryConfig?.minUnbondingDuration
   }
@@ -174,6 +174,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     bondingDays,
     isNewPosition,
   ])
+
 
   const tx = useTransaction({
     enabled:

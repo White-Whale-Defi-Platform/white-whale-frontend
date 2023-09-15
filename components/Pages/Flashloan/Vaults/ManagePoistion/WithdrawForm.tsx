@@ -8,6 +8,7 @@ import useWithdraw from 'components/Pages/Flashloan/Vaults/hooks/useWithdraw'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from '../../../../../state/chainState'
 
 type Props = {
   connected: WalletStatusType
@@ -33,7 +34,7 @@ const WithdrawForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const onSuccess = useCallback((txHash) => {
     refetch?.()
     toast({
