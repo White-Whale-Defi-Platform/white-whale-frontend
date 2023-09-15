@@ -1,7 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
-import { TooltipWithChildren } from 'components/TooltipWithChildren'
-
 import InfoTooltip from 'components/InfoTooltip'
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
 
 type Props = {
   multiplicator: string
@@ -14,7 +13,7 @@ const incentiveDisclaimer = (incentivized) => {
   if (incentivized) {
     return (
       <InfoTooltip
-        IconSize={'3'}
+        iconSize={'3'}
         description={
           'This Pool is currently incentivized. The creator can clawback all unclaimed rewards at anytime. Claim them regularly.'
         }

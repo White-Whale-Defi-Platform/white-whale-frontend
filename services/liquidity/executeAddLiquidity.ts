@@ -27,8 +27,11 @@ export const executeAddLiquidity = async ({tokenA, tokenB, tokenAAmount, tokenBA
 }: ExecuteAddLiquidityArgs): Promise<any> => {
   let fee = 'auto'
   if (chainId === 'columbus-5') {
+    const gas = Math.ceil(await client.simulate(
+      senderAddress, msgs, '',
+    ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFeeForDeposit(
-      tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom,
+      tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom, gas,
     )
   }
   return await signingClient.signAndBroadcast(

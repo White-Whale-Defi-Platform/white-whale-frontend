@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 
 import { Box, Text, VStack } from '@chakra-ui/react'
-import useLockedPositions from 'components/Pages/Trade/Liquidity/hooks/useLockedPositions'
-
 import { Action } from 'components/Pages/Trade/Liquidity/Action'
+import useLockedPositions from 'components/Pages/Trade/Liquidity/hooks/useLockedPositions'
 import useRewards from 'components/Pages/Trade/Liquidity/hooks/useRewards'
 import { Positions } from 'components/Pages/Trade/Liquidity/Positions'
 import { Rewards } from 'components/Pages/Trade/Liquidity/Rewards'

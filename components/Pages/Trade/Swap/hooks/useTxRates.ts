@@ -1,8 +1,7 @@
+import { usePriceForOneToken } from 'components/Pages/Trade/Swap/hooks/usePriceForOneToken'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
 import { usePersistance } from 'junoblocks'
 import { protectAgainstNaN } from 'util/conversion/index'
-
-import { usePriceForOneToken } from 'components/Pages/Trade/Swap/hooks/usePriceForOneToken'
 
 function calculateTokenToTokenConversionRate({
   tokenAAmount,

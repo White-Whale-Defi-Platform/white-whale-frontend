@@ -22,7 +22,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-
 import { IncentiveTooltip } from 'components/InfoTooltip'
 import Loader from 'components/Loader'
 import Apr from 'components/Pages/Trade/Pools/components/Apr'

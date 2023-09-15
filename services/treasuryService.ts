@@ -1,8 +1,7 @@
 import axios from 'axios'
 import chains from 'public/mainnet/chain_info.json'
-import { aggregateAndSortTaxAmounts } from 'util/conversion/index'
 import columbusConfig from 'public/mainnet/columbus-5/config.json'
-import rebelConfig from 'public/testnet/rebel-2/config.json'
+import { aggregateAndSortTaxAmounts } from 'util/conversion/index'
 
 class FCDBaseClient {
   private readonly baseURL: string = 'https://terra-classic-lcd.publicnode.com/terra'
@@ -54,49 +53,60 @@ export class TerraTreasuryService extends FCDBaseClient {
     return Math.ceil(Math.min(Number(amount) * Number(taxRate), Number(taxCap)))
   }
 
-  async getTerraClassicFee(amount: number | string, denom: string): Promise<any> {
+  async getTerraClassicFee(
+    amount: number | string, denom: string, gas:number,
+  ): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5')
     const tax = await this.getTerraTax(amount)
-    const amounts = [{
-      denom,
-      amount: tax.toString()
-    },
-      {
-        denom: terraClassic.stakeCurrency.coinMinimalDenom,
-        amount: (Number(terraClassic.gasPriceStep.average) * 10 ** 6).toString()
-      }
-    ]
+    let amounts = []
+    if (tax == 0) {
+      amounts = []
+    } else {
+      amounts.push({
+        denom,
+        amount: tax.toString(),
+      })
+    }
+    amounts.push({ denom: columbusConfig.whale_base_token.denom,
+      amount: '1' },
+    {
+      denom: terraClassic.stakeCurrency.coinMinimalDenom,
+      amount: (Math.ceil(Number(terraClassic.gasPriceStep.average) * gas)).toString(),
+    })
+    // Passing another native token as tax to avoid error
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '10000000'
+      gas: String(gas),
     }
   }
 
-  async getTerraClassicIncentiveFee(amount: number | string, denom: string): Promise<any> {
+  async getTerraClassicIncentiveFee(
+    amount: number | string, denom: string, gas:number,
+  ): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5')
     const tax = await this.getTerraTax(amount)
     const whaleTax = await this.getTerraTax('1000000000')
     const amounts = [{
       denom,
-      amount: tax.toString()
+      amount: tax.toString(),
     },
-      {
-        denom: columbusConfig.whale_base_token.denom,
-        amount: whaleTax.toString()
-      },
-      {
-        denom: terraClassic.stakeCurrency.coinMinimalDenom,
-        amount: (Number(terraClassic.gasPriceStep.average) * 10 ** 6).toString()
-      }
+    {
+      denom: columbusConfig.whale_base_token.denom,
+      amount: whaleTax.toString(),
+    },
+    {
+      denom: terraClassic.stakeCurrency.coinMinimalDenom,
+      amount: (Number(terraClassic.gasPriceStep.average) * gas).toString(),
+    },
     ]
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '10000000'
+      gas: String(gas),
     }
   }
 
   async getTerraClassicFeeForDeposit(
-    amountA: number | string, denomA: string, amountB: number | string, denomB: string
+    amountA: number | string, denomA: string, amountB: number | string, denomB: string, gas:number,
   ): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5')
     const taxA = await this.getTerraTax(amountA)
@@ -104,21 +114,21 @@ export class TerraTreasuryService extends FCDBaseClient {
     const amounts = [
       {
         denom: denomA,
-        amount: taxA.toString()
+        amount: taxA.toString(),
       },
       {
         denom: denomB,
-        amount: taxB.toString()
+        amount: taxB.toString(),
       },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
-        amount: (Number(terraClassic.gasPriceStep.average) * 10 ** 6).toString()
-      }
+        amount: (Number(terraClassic.gasPriceStep.average) * gas).toString(),
+      },
     ]
 
     return {
       amount: aggregateAndSortTaxAmounts(amounts),
-      gas: '10000000'
+      gas: String(gas),
     }
   }
 

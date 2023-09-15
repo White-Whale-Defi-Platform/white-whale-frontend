@@ -12,10 +12,10 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react'
-import { num } from 'libs/num'
 
 import { useClosePosition } from 'components/Pages/Trade/Incentivize/hooks/useClosePosition'
 import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
+import { num } from 'libs/num'
 
 type Props = {
   flows: any[]

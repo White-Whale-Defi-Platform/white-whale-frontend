@@ -47,13 +47,20 @@ export const directTokenSwap = async ({
       null,
     ))
   }
-  let fee = 'auto'
+  let fee = null
+  const execMsg = createExecuteMessage({ senderAddress,
+    contractAddress: swapAddress,
+    message: msgs,
+    funds: [coin(tokenAmount, tokenA.denom)] })
   if (await signingClient.getChainId() === 'columbus-5') {
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(tokenAmount, tokenA.denom)
+    const gas = Math.ceil(await signingClient.simulate(
+      senderAddress, [execMsg], '',
+    ) * 1.3)
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+      tokenAmount, tokenA.denom, gas,
+    )
   }
-  return await signingClient.execute(
-    senderAddress, swapAddress, msgs, fee, '', [
-      coin(tokenAmount, tokenA.denom),
-    ],
+  return await signingClient.signAndBroadcast(
+    senderAddress, [execMsg], fee, '', 
   )
 }

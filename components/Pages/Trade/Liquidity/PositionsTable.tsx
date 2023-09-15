@@ -22,9 +22,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { TooltipWithChildren } from 'components/TooltipWithChildren'
-
 import { AvailableRewards } from 'components/Pages/Trade/Liquidity/AvailableRewards'
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
 
 type TableProps = {
   duration: string

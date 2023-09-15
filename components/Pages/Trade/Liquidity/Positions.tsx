@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { Box, Button, Divider, HStack } from '@chakra-ui/react'
-
 import { PositionsTable } from 'components/Pages/Trade/Liquidity/PositionsTable'
 
 const STATES = ['all', 'active', 'unbonding']

@@ -15,7 +15,6 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-
 import { IncentivesLogos } from 'components/Pages/Trade/Pools/IncentivesLogos'
 
 export const Incentives = ({ flows }) => {

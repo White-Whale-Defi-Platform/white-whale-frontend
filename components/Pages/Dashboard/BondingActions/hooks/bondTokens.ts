@@ -2,6 +2,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 import { coin } from '@cosmjs/stargate'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { TerraTreasuryService } from 'services/treasuryService'
+import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const bondTokens = async (
   signingClient: SigningCosmWasmClient,
@@ -22,13 +23,21 @@ export const bondTokens = async (
       },
     },
   }
-
-  let fee:any = 'auto'
+  const execMsg = createExecuteMessage({ senderAddress: address,
+    contractAddress: config.whale_lair,
+    message: handleMsg,
+    funds: [coin(amount, denom)] })
+  let fee = null
   if (await signingClient.getChainId() === 'columbus-5') {
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom)
+    const gas = Math.ceil(await signingClient.simulate(
+      address, [execMsg], '',
+    ) * 1.3)
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+      amount, denom, gas,
+    )
   }
-
-  return signingClient.execute(
-    address, config.whale_lair, handleMsg, fee, '', [coin(amount, denom)],
+  return await signingClient.signAndBroadcast(
+    address, [execMsg], fee, ''
   )
 }
+

@@ -5,7 +5,9 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
-import useDebounceValue from 'hooks/useDebounceValue'
+import { useRecoilValue } from 'recoil'
+import { walletState } from 'state/atoms/walletAtoms'
+
 export enum TxStep {
   /**
    * Idle
@@ -71,6 +73,7 @@ export const useTransaction = ({
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
   const queryClient = useQueryClient()
+  const {chainId} = useRecoilValue(walletState)
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -88,6 +91,7 @@ export const useTransaction = ({
           debouncedMsgs,
           '',
         )
+        setGas(response)
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -143,14 +147,14 @@ export const useTransaction = ({
       },
     },
   )
-
   const { mutate } = useMutation(() => directTokenSwap({
     tokenA,
     swapAddress,
     senderAddress,
     msgs,
     tokenAmount: amount,
-    signingClient,
+    client,
+    chainId
   }),
   {
     onMutate: () => {

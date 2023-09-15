@@ -1,12 +1,11 @@
 import { useMemo } from 'react'
 
+import { createDepostExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
+import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-
-import { createDepostExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
-import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 
 type DepostProps = {
   token: {

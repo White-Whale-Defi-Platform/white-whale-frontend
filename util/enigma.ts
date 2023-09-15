@@ -76,9 +76,11 @@ export const getPairAprAndDailyVolume = async (pools: any[],
   const poolIds = pools?.map((pool: any) => pool.pool_id)
   const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chainPrefix)
 
-   // @ts-ignore
-   if (window.debugLogsEnabled) {
-    console.log('Raw Pair Infos for ',chainPrefix, ': ', pairInfos)
+  // @ts-ignore
+  if (window.debugLogsEnabled) {
+    console.log(
+      'Raw Pair Infos for ', chainPrefix, ': ', pairInfos,
+    )
   }
 
   if (pairInfos.length > 0) {

@@ -18,7 +18,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import Loader from 'components/Loader'
-
 import VaultName from 'components/Pages/Flashloan/Vaults/VaultName'
 
 export type Vault = {
