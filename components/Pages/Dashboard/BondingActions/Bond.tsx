@@ -2,12 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
+import AssetInput from 'components/AssetInput/index'
+import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
 import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
-
-import AssetInput from 'components/AssetInput/index'
-import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
 
 export interface BondingTokenState {
   tokenSymbol: string

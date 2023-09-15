@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 
 import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
-import { TooltipWithChildren } from 'components/TooltipWithChildren'
-
 import { AvailableRewards } from 'components/Pages/Trade/Liquidity/AvailableRewards'
+import { TooltipWithChildren } from 'components/TooltipWithChildren'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => dailyEmissions.reduce((total, item) => total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission),

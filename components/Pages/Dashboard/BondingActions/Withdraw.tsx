@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import { WhaleTooltip } from 'components/Pages/Dashboard/WhaleTooltip'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
@@ -12,8 +13,6 @@ import {
   convertMicroDenomToDenom,
   nanoToMilli,
 } from 'util/conversion/index'
-
-import { WhaleTooltip } from 'components/Pages/Dashboard/WhaleTooltip'
 
 type Props = {
   unbondingRequests: UnbondingData[]

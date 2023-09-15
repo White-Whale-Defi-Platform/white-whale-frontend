@@ -3,9 +3,8 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
-import useDebounceValue from 'hooks/useDebounceValue'
-
 import { executeVault } from 'components/Pages/Flashloan/Vaults/hooks/executeVault'
+import useDebounceValue from 'hooks/useDebounceValue'
 
 export enum TxStep {
   /**

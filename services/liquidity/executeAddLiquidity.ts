@@ -31,8 +31,11 @@ export const executeAddLiquidity = async ({
 }: ExecuteAddLiquidityArgs): Promise<any> => {
   let fee = null
   if (chainId === 'columbus-5') {
+    const gas = Math.ceil(await client.simulate(
+      senderAddress, msgs, '',
+    ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFeeForDeposit(
-      tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom,
+      tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom, gas,
     )
   }
   return client.post(

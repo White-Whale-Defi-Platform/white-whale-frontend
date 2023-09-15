@@ -70,7 +70,7 @@ export const useIncentivePoolInfo = (
 
   useEffect(() => {
     const fetchPoolData = async () => {
-      currentChainPrefix = chainId === 'columbus-5' ? 'terra-classic': currentChainPrefix
+      currentChainPrefix = chainId === 'columbus-5' ? 'terra-classic' : currentChainPrefix
       const poolData =
         currentChainPrefix === 'terra' && chainId !== 'columbus-5'
           ? await getPairAprAndDailyVolumeTerra(pools)

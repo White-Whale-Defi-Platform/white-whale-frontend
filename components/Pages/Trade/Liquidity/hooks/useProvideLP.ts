@@ -4,18 +4,17 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
+import createLpMsg, { createLPExecuteMsgs } from 'components/Pages/Trade/Liquidity/hooks/createLPMsg'
+import useTransaction from 'components/Pages/Trade/Liquidity/hooks/useDepositTransaction'
+import useIsNewPosition from 'components/Pages/Trade/Liquidity/hooks/useIsNewPosition'
+import { tokenLpAtom } from 'components/Pages/Trade/Liquidity/lpAtoms'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
-import { tokenLpAtom } from 'components/Pages/Trade/Liquidity/lpAtoms'
-import createLpMsg, { createLPExecuteMsgs } from 'components/Pages/Trade/Liquidity/hooks/createLPMsg'
-import useTransaction from 'components/Pages/Trade/Liquidity/hooks/useDepositTransaction'
-import useIsNewPosition from 'components/Pages/Trade/Liquidity/hooks/useIsNewPosition'
 
 const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)

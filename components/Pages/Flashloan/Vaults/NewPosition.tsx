@@ -2,14 +2,13 @@ import { useEffect, useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
+import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/DepositForm'
 import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
-import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/DepositForm'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()

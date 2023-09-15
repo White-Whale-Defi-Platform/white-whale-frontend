@@ -1,5 +1,4 @@
 import { Box, Button } from '@chakra-ui/react'
-
 import { useClosePosition } from 'components/Pages/Trade/Liquidity/hooks/useClosePosition'
 import { useWithdrawPosition } from 'components/Pages/Trade/Liquidity/hooks/useWithdrawPosition'
 import { STATE } from 'components/Pages/Trade/Liquidity/Positions'

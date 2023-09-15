@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import { BondingDaysSlider } from 'components/Pages/Trade/Liquidity/BondingDaysSlider'
+import Multiplicator from 'components/Pages/Trade/Liquidity/Multiplicator'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
@@ -13,8 +14,6 @@ import { useRecoilState } from 'recoil'
 import { aprHelperState } from 'state/atoms/aprHelperState'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
 import { TokenItemState } from 'types/index'
-
-import Multiplicator from 'components/Pages/Trade/Liquidity/Multiplicator'
 
 type Props = {
   connected: WalletStatusType

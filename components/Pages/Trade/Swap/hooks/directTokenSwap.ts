@@ -1,13 +1,12 @@
 import { coin } from '@cosmjs/stargate'
 import { TokenInfo } from 'queries/usePoolsListQuery'
+import { TerraTreasuryService } from 'services/treasuryService'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from 'util/messages/index'
-
 import { Wallet } from 'util/wallet-adapters/index'
-import { TerraTreasuryService } from 'services/treasuryService'
 
 type DirectTokenSwapArgs = {
   tokenAmount: string
@@ -17,6 +16,7 @@ type DirectTokenSwapArgs = {
   client: Wallet
   msgs: Record<string, any>
   chainId?: string
+  gas:number
 }
 
 export const directTokenSwap = async ({
@@ -27,6 +27,7 @@ export const directTokenSwap = async ({
   client,
   msgs,
   chainId,
+  gas,
 }: DirectTokenSwapArgs) => {
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
@@ -48,12 +49,19 @@ export const directTokenSwap = async ({
     ]))
   }
   let fee = null
+  const execMsg = createExecuteMessage({ senderAddress,
+    contractAddress: swapAddress,
+    message: msgs,
+    funds: [coin(tokenAmount, tokenA.denom)] })
   if (chainId === 'columbus-5') {
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(tokenAmount, tokenA.denom)
+    const gas = Math.ceil(await client.simulate(
+      senderAddress, [execMsg], '',
+    ) * 1.3)
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+      tokenAmount, tokenA.denom, gas,
+    )
   }
-  return client.execute(
-    senderAddress, swapAddress, msgs, [
-      coin(tokenAmount, tokenA.denom),
-    ],fee
+  return await client.post(
+    senderAddress, [execMsg], '', fee,
   )
 }

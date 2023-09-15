@@ -7,6 +7,8 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
+import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
 import useSimulate from 'hooks/useSimulate'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import useTxStatus from 'hooks/useTxStatus'
@@ -14,15 +16,12 @@ import { num, toChainAmount } from 'libs/num'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { walletState } from 'state/atoms/walletAtoms'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
 } from 'util/messages/index'
-
-import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
-import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
-import { TerraTreasuryService } from 'services/treasuryService'
 
 interface Props {
   poolId: string
@@ -116,12 +115,19 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   })
 
   const { mutate: submit, ...tx } = useMutation({
-    mutationFn: async() => {
+    mutationFn: async () => {
       let fee = null
       if (chainId === 'columbus-5') {
-        fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(amount, tokenInfo?.denom)
+        const gas = Math.ceil(await client.simulate(
+          address, msgs, '',
+        ) * 1.3)
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+          amount, tokenInfo?.denom, gas,
+        )
       }
-      return await client.post(address, msgs,null, fee)
+      return await client.post(
+        address, msgs, null, fee,
+      )
     },
     onError,
     onSuccess,

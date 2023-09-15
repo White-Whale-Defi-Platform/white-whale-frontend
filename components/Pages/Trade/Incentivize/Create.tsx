@@ -9,14 +9,13 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
+import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlow'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useRecoilValue } from 'recoil'
 import { txAtom } from 'state/atoms/tx'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
-
-import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlow'
 
 const defaultToken = {
   tokenSymbol: 'WHALE',

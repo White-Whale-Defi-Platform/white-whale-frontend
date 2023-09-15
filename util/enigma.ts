@@ -78,7 +78,9 @@ export const getPairAprAndDailyVolume = async (pools: any[],
 
   // @ts-ignore
   if (window.debugLogsEnabled) {
-    console.log('Raw Pair Infos for ',chainPrefix, ': ', pairInfos)
+    console.log(
+      'Raw Pair Infos for ', chainPrefix, ': ', pairInfos,
+    )
   }
 
   if (pairInfos.length > 0) {

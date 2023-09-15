@@ -3,12 +3,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button, VStack, useToast } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import Finder from 'components/Finder'
+import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
+import useWithdraw from 'components/Pages/Flashloan/Vaults/hooks/useWithdraw'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
-
-import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
-import useWithdraw from 'components/Pages/Flashloan/Vaults/hooks/useWithdraw'
 
 type Props = {
   connected: WalletStatusType

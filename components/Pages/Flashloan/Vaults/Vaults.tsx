@@ -1,12 +1,11 @@
 import React, { FC, useMemo, useState } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import AllVaultsTable from 'components/Pages/Flashloan/Vaults/AllVaultsTable'
+import useVault from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
-
-import AllVaultsTable from 'components/Pages/Flashloan/Vaults/AllVaultsTable'
-import useVault from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 
 const Vaults: FC = () => {
   const [allVaultsInitialized, setAllVaultsInitialized] =

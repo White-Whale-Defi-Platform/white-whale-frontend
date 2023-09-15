@@ -2,14 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
+import AssetInput from 'components/AssetInput/index'
+import { BondingTokenState, TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
 import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
-
-import AssetInput from 'components/AssetInput/index'
-import { BondingTokenState, TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
-import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
 
 const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   const { status, chainId, network } = useRecoilValue(walletState)

@@ -3,9 +3,8 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
-import useDebounceValue from 'hooks/useDebounceValue'
-
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
+import useDebounceValue from 'hooks/useDebounceValue'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 
@@ -74,7 +73,8 @@ export const useTransaction = ({
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
   const queryClient = useQueryClient()
-  const {chainId} = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(walletState)
+  const [gas, setGas] = useState<number>(0)
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -90,6 +90,7 @@ export const useTransaction = ({
         const response = await client.simulate(
           senderAddress, debouncedMsgs, '',
         )
+        setGas(response)
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -145,7 +146,6 @@ export const useTransaction = ({
       },
     },
   )
-
   const { mutate } = useMutation(() => directTokenSwap({
     tokenA,
     swapAddress,
@@ -153,7 +153,8 @@ export const useTransaction = ({
     msgs,
     tokenAmount: amount,
     client,
-    chainId
+    chainId,
+    gas,
   }),
   {
     onMutate: () => {
@@ -193,7 +194,7 @@ export const useTransaction = ({
 
       onError?.()
     },
-    onSuccess: async(data: any) => {
+    onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data.transactionHash || data?.txHash)
       onBroadcasting?.(data.transactionHash)

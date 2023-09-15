@@ -15,6 +15,13 @@ import {
 } from '@chakra-ui/react'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Trade/Incentivize/hooks/usePoolUserShare'
+import PositionsOverview from 'components/Pages/Trade/Incentivize/PositionsOverview'
+import Claim from 'components/Pages/Trade/Liquidity/Claim'
+import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
+import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
+import { tokenLpAtom } from 'components/Pages/Trade/Liquidity/lpAtoms'
+import Overview from 'components/Pages/Trade/Liquidity/Overview'
+import WithdrawForm from 'components/Pages/Trade/Liquidity/WithdrawForm'
 import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
 import usePrices from 'hooks/usePrices'
@@ -28,14 +35,6 @@ import {
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { TxStep } from 'types/common'
-
-import PositionsOverview from 'components/Pages/Trade/Incentivize/PositionsOverview'
-import Claim from 'components/Pages/Trade/Liquidity/Claim'
-import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
-import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
-import { tokenLpAtom } from 'components/Pages/Trade/Liquidity/lpAtoms'
-import Overview from 'components/Pages/Trade/Liquidity/Overview'
-import WithdrawForm from 'components/Pages/Trade/Liquidity/WithdrawForm'
 
 const ManageLiquidity: FC = () => {
   const router: NextRouter = useRouter()

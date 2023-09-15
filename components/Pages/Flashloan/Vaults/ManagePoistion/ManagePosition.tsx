@@ -13,15 +13,14 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
+import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/DepositForm'
+import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/WithdrawForm'
 import { useChains } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
-import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/DepositForm'
-import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/WithdrawForm'
 
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
