@@ -1,5 +1,4 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
-
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 

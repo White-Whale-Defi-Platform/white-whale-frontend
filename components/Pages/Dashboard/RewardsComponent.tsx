@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingAcionTooltip'
+import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import {
   Config,
   useConfig,
@@ -24,7 +25,6 @@ import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import Loader from '../../Loader'
 import WalletModal from '../../Wallet/Modal/Modal'
-import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import { ActionType } from './BondingOverview'
 
 const pulseAnimation = keyframes`

@@ -1,6 +1,11 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
+import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
+import useSwap from 'components/Pages/Trade/Swap/hooks/useSwap'
+import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import SwapForm from 'components/Pages/Trade/Swap/SwapForm'
+import SwapSettings from 'components/Pages/Trade/Swap/SwapSettings'
 import { useChains } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
@@ -9,12 +14,6 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { TokenItemState } from 'types/index'
-
-import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
-import useSwap from 'components/Pages/Trade/Swap/hooks/useSwap'
-import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
-import SwapForm from 'components/Pages/Trade/Swap/SwapForm'
-import SwapSettings from 'components/Pages/Trade/Swap/SwapSettings'
 
 type SwapProps = {
   /* Will be used if provided on first render instead of internal state */

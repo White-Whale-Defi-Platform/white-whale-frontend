@@ -3,8 +3,12 @@ import { useMutation, useQuery } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import Finder from 'components/Finder'
+import { bondTokens } from 'components/Pages/Dashboard/BondingActions/hooks/bondTokens'
 import { claimRewards } from 'components/Pages/Dashboard/BondingActions/hooks/claimRewards'
 import { createNewEpoch } from 'components/Pages/Dashboard/BondingActions/hooks/createNewEpoch'
+import { unbondTokens } from 'components/Pages/Dashboard/BondingActions/hooks/unbondTokens'
+import { withdrawTokens } from 'components/Pages/Dashboard/BondingActions/hooks/withdrawTokens'
+import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
 import {
   Config,
   useConfig,
@@ -12,11 +16,6 @@ import {
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { convertDenomToMicroDenom } from 'util/conversion/index'
-
-import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
-import { bondTokens } from 'components/Pages/Dashboard/BondingActions/hooks/bondTokens'
-import { unbondTokens } from 'components/Pages/Dashboard/BondingActions/hooks/unbondTokens'
-import { withdrawTokens } from 'components/Pages/Dashboard/BondingActions/hooks/withdrawTokens'
 
 export enum TxStep {
   /**

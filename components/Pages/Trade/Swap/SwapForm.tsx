@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import DoubleArrowsIcon from 'components/icons/DoubleArrowsIcon'
+import { Simulated } from 'components/Pages/Trade/Swap/hooks/useSimulate'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
@@ -21,8 +22,6 @@ import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
 import { TokenItemState } from 'types/index'
-
-import { Simulated } from 'components/Pages/Trade/Swap/hooks/useSimulate'
 
 type Props = {
   connected: WalletStatusType

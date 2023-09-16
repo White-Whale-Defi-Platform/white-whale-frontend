@@ -1,5 +1,8 @@
 import { useMemo } from 'react'
 
+import useRoute from 'components/Pages/Trade/Swap/hooks/useRoute'
+import useSimulate from 'components/Pages/Trade/Swap/hooks/useSimulate'
+import useTransaction from 'components/Pages/Trade/Swap/hooks/useTransaction'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
@@ -7,10 +10,6 @@ import { fromChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import useRoute from 'components/Pages/Trade/Swap/hooks/useRoute'
-import useSimulate from 'components/Pages/Trade/Swap/hooks/useSimulate'
-import useTransaction from 'components/Pages/Trade/Swap/hooks/useTransaction'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)

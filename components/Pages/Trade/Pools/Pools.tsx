@@ -11,7 +11,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
+import { ActionCTAs } from 'components/Pages/Trade/Pools/ActionCTAs'
+import AllPoolsTable from 'components/Pages/Trade/Pools/AllPoolsTable'
 import { Incentives } from 'components/Pages/Trade/Pools/Incentives'
+import MobilePools from 'components/Pages/Trade/Pools/MobilePools'
+import MyPoolsTable from 'components/Pages/Trade/Pools/MyPoolsTable'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
 import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
@@ -29,11 +33,6 @@ import {
 } from 'state/atoms/aprHelperState'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { EnigmaPoolData } from 'util/enigma'
-
-import { ActionCTAs } from 'components/Pages/Trade/Pools/ActionCTAs'
-import AllPoolsTable from 'components/Pages/Trade/Pools/AllPoolsTable'
-import MobilePools from 'components/Pages/Trade/Pools/MobilePools'
-import MyPoolsTable from 'components/Pages/Trade/Pools/MyPoolsTable'
 
 type PoolData = PoolEntityTypeWithLiquidity &
   EnigmaPoolData & {
@@ -85,7 +84,9 @@ const Pools = () => {
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
-    console.log('Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0)
+    console.log(
+      'Loading-Info: ', isLoading, isInitLoading, pairInfos.length === 0,
+    )
     console.log('Pools: ', pools)
     console.log('Pair Infos: ', pairInfos)
   }

@@ -10,27 +10,27 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import Loader from 'components/Loader'
+import { Bond, BondingTokenState } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
 import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingAcionTooltip'
+import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
+import Unbond from 'components/Pages/Dashboard/BondingActions/Unbond'
+import Withdraw from 'components/Pages/Dashboard/BondingActions/Withdraw'
+import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import {
+  Config,
+  useConfig,
+  useDashboardData,
+} from 'components/Pages/Dashboard/hooks/useDashboardData'
+import WalletModal from 'components/Wallet/Modal/Modal'
 import { useChains } from 'hooks/useChainInfo'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 
-import Loader from 'components/Loader'
-import WalletModal from 'components/Wallet/Modal/Modal'
-import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
-import {
-  Config,
-  useConfig,
-  useDashboardData,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { Bond, BondingTokenState } from 'components/Pages/Dashboard/BondingActions/Bond'
-import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
-import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
-import Unbond from 'components/Pages/Dashboard/BondingActions/Unbond'
-import Withdraw from 'components/Pages/Dashboard/BondingActions/Withdraw'
 
 const BondingActions = ({ globalAction }) => {
   const [{ chainId, client, address, status, network }, _] =

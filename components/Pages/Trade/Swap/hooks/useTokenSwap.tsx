@@ -1,6 +1,7 @@
 import { toast } from 'react-hot-toast'
 import { useMutation } from 'react-query'
 
+import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { useRefetchQueries } from 'hooks/useRefetchQueries'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 // TODO: These should be deprecated in place of some other chakra component so we can remove the dep on junoblocks
@@ -21,8 +22,6 @@ import {
 } from 'state/atoms/transactionAtoms'
 import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
 import { convertDenomToMicroDenom } from 'util/conversion/index'
-
-import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 
 type UseTokenSwapArgs = {
   tokenASymbol: string

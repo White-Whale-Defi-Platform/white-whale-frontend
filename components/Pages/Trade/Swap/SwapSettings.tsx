@@ -17,9 +17,8 @@ import {
   VStack,
   useBoolean,
 } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
-
 import { slippageAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import { useRecoilState } from 'recoil'
 
 const SwapSettings = () => {
   const [slippage, setSlippage] = useRecoilState(slippageAtom)

@@ -3,15 +3,14 @@ import { useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
+import useClaimableLP from 'components/Pages/Trade/Liquidity/hooks/useClaimableLP'
+import useWithdraw, { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { WalletStatusType } from 'state/atoms/walletAtoms'
-
-import useClaimableLP from 'components/Pages/Trade/Liquidity/hooks/useClaimableLP'
-import useWithdraw, { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
 
 type Props = {
   poolId: string

@@ -13,6 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import Create from 'components/Pages/Trade/Incentivize/Create'
 import PositionsOverview from 'components/Pages/Trade/Incentivize/PositionsOverview'
 import { useChains } from 'hooks/useChainInfo'
 import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
@@ -22,8 +23,6 @@ import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useQueryPoolsLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
-
-import Create from 'components/Pages/Trade/Incentivize/Create'
 
 const Incentivize: FC = () => {
   const router: NextRouter = useRouter()

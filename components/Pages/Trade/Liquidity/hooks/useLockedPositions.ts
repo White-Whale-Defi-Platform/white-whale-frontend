@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query'
 
+import { STATE } from 'components/Pages/Trade/Liquidity/Positions'
 import dayjs from 'dayjs'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
@@ -10,7 +11,6 @@ import { useRecoilValue } from 'recoil'
 import { walletState } from 'state/atoms/walletAtoms'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
-import { STATE } from 'components/Pages/Trade/Liquidity/Positions'
 
 export type Position = {
   poolId: string

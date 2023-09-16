@@ -1,5 +1,4 @@
 import { HStack, Image, Text, VStack } from '@chakra-ui/react'
-
 import { Reward } from 'components/Pages/Trade/Liquidity/hooks/useRewards'
 
 type Props = {
