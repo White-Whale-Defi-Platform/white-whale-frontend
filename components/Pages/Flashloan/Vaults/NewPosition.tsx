@@ -5,7 +5,7 @@ import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
@@ -15,7 +15,7 @@ const NewPosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
-  const chains: Array<any> = useChains2()
+  const chains: Array<any> = useChainInfos()
   const { chainId, address, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const vaultId = params.get('vault') || 'JUNOX'

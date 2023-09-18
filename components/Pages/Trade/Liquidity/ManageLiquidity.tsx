@@ -22,7 +22,7 @@ import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
 import Overview from 'components/Pages/Trade/Liquidity/Overview'
 import WithdrawForm from 'components/Pages/Trade/Liquidity/WithdrawForm'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -41,7 +41,7 @@ import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsO
 const ManageLiquidity: FC = () => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router: NextRouter = useRouter()
-  const chains: Array<any> = useChains2()
+  const chains: Array<any> = useChainInfos()
   const { address, chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)

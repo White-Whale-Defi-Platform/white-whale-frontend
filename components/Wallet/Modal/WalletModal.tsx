@@ -1,7 +1,7 @@
 import React from 'react'
 import { isMobile } from 'react-device-detect';
-import { chainState } from '../../../state/chainState';
-import { useChains2 } from '../../../hooks/useChainInfo';
+import { chainState } from 'state/chainState';
+import { useChainInfos } from 'hooks/useChainInfo';
 import { useRecoilValue } from 'recoil'
 import {
   Modal,
@@ -29,8 +29,8 @@ export enum WalletType {
 
 function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   const { chainId } = useRecoilValue(chainState)
-  let chains = useChains2()
-  const snap = chains.find((elem)=> elem.chainId == chainId && elem.coinType == 118)
+  const chainInfos: any = useChainInfos()
+  const snap = chainInfos.find((elem)=> elem.chainId == chainId && elem.coinType == 118)
 
   function onCloseModal() {
     if (isOpen){
@@ -48,6 +48,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
           <VStack alignItems="flex-start" width="full" gap={2}>
             {walletRepo?.wallets.map((elem) => {
               const { connect, walletName } = elem;
+              // TODO diffentiate between connect buttons
               if (isMobile && !elem.isModeExtension) {
                 return (
                   <WalletConnectButton
@@ -70,14 +71,14 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                   />
                 )}
               } else if (window.leap && isMobile && walletName.toLowerCase().includes('chainleap')){
-                <WalletConnectButton
+               return <WalletConnectButton
                 key={walletName}
                 onCloseModal={onCloseModal}
                 connect={connect}
                 walletType={walletName as WalletType}
               />
               }else if (window.cosmostation! && isMobile && walletName.toLowerCase().includes('chaincosmostation')){
-                <WalletConnectButton
+                return <WalletConnectButton
                 key={walletName}
                 onCloseModal={onCloseModal}
                 connect={connect}

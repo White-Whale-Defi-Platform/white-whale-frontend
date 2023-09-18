@@ -16,16 +16,16 @@ import {
 import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/DepositForm'
 import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/WithdrawForm'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { chainState } from '../../../../../state/chainState'
+import { chainState } from 'state/chainState'
 
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
-  const chains: Array<any> = useChains2()
+  const chains: Array<any> = useChainInfos()
   const params = new URLSearchParams(location.search)
   const { chainId, address, walletChainName } = useRecoilValue(chainState)
   const vaultId = params.get('vault') || 'JUNO'

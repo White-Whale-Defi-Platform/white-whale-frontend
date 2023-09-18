@@ -3,7 +3,7 @@ import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
+import { TerraTreasuryService } from 'services/treasuryService'
 
 export const unbondTokens = async (
   signingClient: SigningCosmWasmClient,
@@ -29,7 +29,7 @@ export const unbondTokens = async (
     contractAddress: config.whale_lair,
     message: handleMsg,
     funds: [] })
-  let fee = null
+  let fee = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
@@ -37,6 +37,7 @@ export const unbondTokens = async (
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom, gas)
   }
   return await signingClient.signAndBroadcast(
+    // @ts-ignore
     address, [execMsg], fee, '',
   )
 }

@@ -27,7 +27,7 @@ export const bondTokens = async (
     contractAddress: config.whale_lair,
     message: handleMsg,
     funds: [coin(amount, denom)] })
-  let fee = null
+  let fee = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
@@ -36,7 +36,9 @@ export const bondTokens = async (
       amount, denom, gas,
     )
   }
+
   return await signingClient.signAndBroadcast(
+    // @ts-ignore
     address, [execMsg], fee, ''
   )
 }

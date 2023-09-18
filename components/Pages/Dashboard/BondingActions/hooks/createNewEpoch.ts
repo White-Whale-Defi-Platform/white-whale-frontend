@@ -18,7 +18,7 @@ export const createNewEpoch = async (
     contractAddress: config.fee_distributor,
     message: handleMsg,
     funds: [] })
-  let fee = null
+  let fee = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
@@ -28,6 +28,7 @@ export const createNewEpoch = async (
     )
   }
   return await signingClient.signAndBroadcast(
-    address, [execMsg], fee, '', 
+    // @ts-ignore
+    address, [execMsg], fee, '',
   )
 }

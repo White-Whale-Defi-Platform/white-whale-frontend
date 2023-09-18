@@ -3,12 +3,12 @@ import { BsCircleFill } from 'react-icons/bs'
 import { useQuery } from 'react-query'
 
 import { HStack, Icon, Text } from '@chakra-ui/react'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 const Status = () => {
-  const chains: Array<any> = useChains2()
+  const chains: Array<any> = useChainInfos()
   const { chainId } = useRecoilValue(chainState)
 
   const url = useMemo(() => chains?.find((c) => c?.chainId === chainId)?.rpc,

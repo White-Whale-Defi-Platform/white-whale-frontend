@@ -47,7 +47,7 @@ export const directTokenSwap = async ({
       null,
     ))
   }
-  let fee = null
+  let fee = 'auto'
   const execMsg = createExecuteMessage({ senderAddress,
     contractAddress: swapAddress,
     message: msgs,
@@ -61,6 +61,7 @@ export const directTokenSwap = async ({
     )
   }
   return await signingClient.signAndBroadcast(
-    senderAddress, [execMsg], fee, '', 
+    // @ts-ignore
+    senderAddress, [execMsg], fee, '',
   )
 }

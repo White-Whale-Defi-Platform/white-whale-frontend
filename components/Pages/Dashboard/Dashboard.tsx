@@ -7,7 +7,6 @@ import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
 import {
-  WALLETNAMES_BY_CHAINID,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
 import usePrices from 'hooks/usePrices'

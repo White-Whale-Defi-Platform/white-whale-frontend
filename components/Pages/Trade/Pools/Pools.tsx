@@ -18,7 +18,7 @@ import { Incentives } from 'components/Pages/Trade/Pools/Incentives'
 import MobilePools from 'components/Pages/Trade/Pools/MobilePools'
 import MyPoolsTable from 'components/Pages/Trade/Pools/MyPoolsTable'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
@@ -67,7 +67,7 @@ const Pools = () => {
   const myPoolsLength = useMemo(() => pools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)?.length,
     [pools])
 
-  const chains: any = useChains2()
+  const chains: any = useChainInfos()
   const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
   [chains, chainId])
@@ -275,18 +275,29 @@ const Pools = () => {
           </Text>
           <Stack direction="row">
             <Tooltip
-              label="By default, Pools with less than $1.0k total liquidity will be hidden but optionally can be shown"
-              isOpen={isLabelOpen}
+              label={
+                <Box
+                  maxWidth="250px"
+                  minWidth="fit-content"
+                  borderRadius="10px"
+                  bg="black"
+                  color="white"
+                  fontSize={14}
+                  p={4}
+                  whiteSpace="pre-wrap"
+                >
+                  By default, pools with less than $1.0k total liquidity will be
+                  hidden but optionally can be shown.
+                </Box>
+              }
+              bg="transparent"
+              hasArrow={false}
+              placement="bottom"
+              closeOnClick={false}
+              arrowSize={0}
             >
-              <Text
-                as="h6"
-                fontSize="14"
-                fontWeight="700"
-                onMouseEnter={() => setIsLabelOpen(true)}
-                onMouseLeave={() => setIsLabelOpen(false)}
-                onClick={() => setIsLabelOpen(!isLabelOpen)}
-              >
-                <InfoOutlineIcon marginRight={2} />
+              <Text as="h6" fontSize="14" fontWeight="700">
+                <InfoOutlineIcon marginRight={2} mb={1} />
                 Show All Pools
               </Text>
             </Tooltip>

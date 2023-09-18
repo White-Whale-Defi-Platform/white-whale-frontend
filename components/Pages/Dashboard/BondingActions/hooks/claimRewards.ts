@@ -2,7 +2,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
+import { TerraTreasuryService } from 'services/treasuryService'
 
 export const claimRewards = async (
   signingClient: SigningCosmWasmClient,
@@ -17,7 +17,7 @@ export const claimRewards = async (
     contractAddress: config.fee_distributor,
     message: handleMsg,
     funds: [] })
-  let fee = null
+  let fee = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
@@ -27,6 +27,7 @@ export const claimRewards = async (
     )
   }
   return await signingClient.signAndBroadcast(
-    address, [execMsg], fee, '', 
+    // @ts-ignore
+    address, [execMsg], fee, '',
   )
 }

@@ -123,7 +123,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+        fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(
           amount, tokenInfo?.denom, gas,
         )
       }

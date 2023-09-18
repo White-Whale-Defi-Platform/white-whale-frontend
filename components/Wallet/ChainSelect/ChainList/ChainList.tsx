@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { List } from '@chakra-ui/react'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
 
 function ChainList({ onChange, onClose, currentChainState }) {
-  let chains = useChains2()
+  let chains = useChainInfos()
   if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') == 'leap-metamask-cosmos-snap') {
     const snapChains = []
     chains.forEach((row) => {

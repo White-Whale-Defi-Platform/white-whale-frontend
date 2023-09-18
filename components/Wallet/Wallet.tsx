@@ -9,16 +9,16 @@ import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, ACTIVE_NETWORKS_WALLET_NAMES, WALLETNAMES_BY_CHAINID } from 'constants/index'
-import { useChainInfo, useChains2 } from 'hooks/useChainInfo'
+import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
 import { getPathName } from 'util/route'
 
-const Wallet: any = () => {
+const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
-  const chains: Array<any> = useChains2()
+  const chains: Array<any> = useChainInfos()
   const router = useRouter()
   const allChains = useChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
   let chainName = router.query.chainId as string
@@ -90,7 +90,7 @@ const Wallet: any = () => {
     currentChainState.address,
   ])
 
-  const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any } }) => {
+  const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any }; label:string }) => {
     if (
       !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
       router.pathname.includes('dashboard')
@@ -139,7 +139,7 @@ const Wallet: any = () => {
         <Button
           variant="outline"
           display="flex"
-          gap="3"
+          gap="1"
           color="white"
           borderColor="whiteAlpha.400"
           borderRadius="full"

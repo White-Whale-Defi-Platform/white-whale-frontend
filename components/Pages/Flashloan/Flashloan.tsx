@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -11,9 +11,9 @@ import FlashloanForm from './FlashloanForm'
 const Flashloan: FC = () => {
   const { chainId } = useRecoilValue(chainState)
   const router = useRouter()
-  const chains = useChains2()
+  const chainInfos : any = useChainInfos()
   const chainIdParam = router.query.chainId as string
-  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChain = chainInfos.find((row) => row.chainId === chainId)
 
   if (!currentChain || currentChain.label.toLowerCase() !== chainIdParam) {
     return null

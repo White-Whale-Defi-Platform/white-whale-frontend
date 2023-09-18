@@ -31,18 +31,6 @@ import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
-import { WalletViewProps } from '@cosmos-kit/core';
-import { chainState } from '../state/chainState'
-
-const ConnectedView = ({ onClose, onReturn, wallet }: WalletViewProps) => {
-  const {
-    walletInfo: { prettyName },
-    username,
-    address,
-  } = wallet
-
-  return <div>{`${prettyName}/${username}/${address}`}</div>
-}
 
 const MyApp: FC<AppProps> = ({
   Component,
@@ -145,7 +133,7 @@ const MyApp: FC<AppProps> = ({
 }
 
 /*
- * TODO: Removed this for now to improve page load, Failed to fetch chains.json TypeError: fetch failed is currently returned in alot of cases
+ * TODO: Removed this for now to improve page load, Failed to fetch chains.json TypeError: fetch failed is currently returned in a lot of cases
  * Instead the page loads and we get the chainOptions after
  * In future we should use ServerStaticProps rather than InitialProps, InitialProps is deprecated
  * MyApp.getInitialProps = async () => {

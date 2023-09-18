@@ -7,7 +7,7 @@ import useSwap from 'components/Pages/Trade/Swap/hooks/useSwap'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SwapForm from 'components/Pages/Trade/Swap/SwapForm'
 import SwapSettings from 'components/Pages/Trade/Swap/SwapSettings'
-import { useChains2 } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
@@ -30,7 +30,7 @@ const Swap: FC<SwapProps> = (params) => {
 
   const { chainId, address, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
-  const chains: Array<any> = useChains2()
+  const chains: Array<any> = useChainInfos()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
   const currentChain = chains.find((row) => row.chainId === chainId)
@@ -69,12 +69,11 @@ const Swap: FC<SwapProps> = (params) => {
   [tokenList])
 
   useEffect(() => {
-    if ((!chainId && !currentChainId) || tokenList.length === 0) {
+    if (!currentChainId || tokenList.length === 0) {
       return
     }
-    // Const { from, to } = router.query
-    const from = params?.initialTokenPair ? params?.initialTokenPair[0] : router.query[0]
-    const to = params?.initialTokenPair ? params?.initialTokenPair[1] : router.query[1]
+    const { from, to } = router.query
+
     const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
     let newState: TokenItemState[] = [
       {
@@ -89,22 +88,8 @@ const Swap: FC<SwapProps> = (params) => {
       },
     ]
     if (!from || !to) {
-      if (tokenA.tokenSymbol && tokenB.tokenSymbol && lowerTokenSymbols.includes(tokenA.tokenSymbol.toLowerCase()) && lowerTokenSymbols.includes(tokenB.tokenSymbol.toLowerCase())) {
+      if (tokenA.tokenSymbol && tokenB.tokenSymbol) {
         changeUrl(tokenA.tokenSymbol, tokenB.tokenSymbol)
-        newState = [
-          {
-            tokenSymbol: String(tokenA.tokenSymbol),
-            amount: 0,
-            decimals: 6,
-          },
-          {
-            tokenSymbol: String(tokenB.tokenSymbol),
-            amount: 0,
-            decimals: 6,
-          },
-        ]
-        setResetForm(true)
-        setTokenSwapState(newState)
       } else {
         newState = [
           {
@@ -122,19 +107,7 @@ const Swap: FC<SwapProps> = (params) => {
         setTokenSwapState(newState)
         setResetForm(true)
       }
-    } else if (lowerTokenSymbols.includes(String(from).toLowerCase()) && lowerTokenSymbols.includes(String(to).toLowerCase())) {
-      newState = [
-        {
-          tokenSymbol: String(tokenSymbols[lowerTokenSymbols.indexOf(String(from).toLowerCase())]),
-          amount: 0,
-          decimals: 6,
-        },
-        {
-          tokenSymbol: String(tokenSymbols[lowerTokenSymbols.indexOf(String(to).toLowerCase())]),
-          amount: 0,
-          decimals: 6,
-        },
-      ]
+    } else if (tokenSymbols.includes(String(from)) && tokenSymbols.includes(String(to))) {
       setTokenSwapState(newState)
     } else {
       newState = [

@@ -1,6 +1,7 @@
 import { EndpointOptions } from '@cosmos-kit/core'
 
 export const endpointOptions: EndpointOptions = {
+  isLazy: true,
   endpoints: {
     migaloo: {
       rpc: ['https://migaloo-rpc.polkachu.com'],
