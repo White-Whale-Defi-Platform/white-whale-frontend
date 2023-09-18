@@ -96,7 +96,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     },
     {
       denom: terraClassic.stakeCurrency.coinMinimalDenom,
-      amount: (Number(terraClassic.gasPriceStep.average) * gas).toString(),
+      amount: (Math.ceil(Number(terraClassic.gasPriceStep.average) * gas)).toString(),
     },
     ]
     return {
@@ -122,7 +122,7 @@ export class TerraTreasuryService extends FCDBaseClient {
       },
       {
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
-        amount: (Number(terraClassic.gasPriceStep.average) * gas).toString(),
+        amount: (Math.ceil(Number(terraClassic.gasPriceStep.average) * gas)).toString(),
       },
     ]
 
