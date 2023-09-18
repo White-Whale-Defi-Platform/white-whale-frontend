@@ -28,7 +28,8 @@ const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
   columnHelper.accessor('pool', {
-    header: () => <Text color="brand.50">Pool</Text>,
+    header: () => (<Text color="brand.50" display="inline">
+    Pool</Text>),
     cell: (info) => (
       <PoolName
         poolId={info.getValue()}
@@ -39,7 +40,7 @@ const columns = [
   }),
   columnHelper.accessor('price', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {'RATIO'}
       </Text>
     ),
@@ -62,7 +63,7 @@ const columns = [
   }),
   columnHelper.accessor('volume24hr', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {'24hr Volume'}
       </Text>
     ),
@@ -70,7 +71,7 @@ const columns = [
   }),
   columnHelper.accessor('totalLiq', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {'Total Liquidity'}
       </Text>
     ),
@@ -83,7 +84,7 @@ const columns = [
   }),
   columnHelper.accessor('myPosition', {
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {'My Position'}
       </Text>
     ),
@@ -132,7 +133,7 @@ const PoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', 'auto']}
+        width={['full']}
         background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
@@ -147,7 +148,7 @@ const PoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', 'auto']}
+        width={['full']}
         background={'#1C1C1C'}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius="30px"
@@ -164,9 +165,10 @@ const PoolsTable = ({
     <Flex
       px="30px"
       background={'#212121'}
+      width={['full', 'auto']}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
-      display={['none', 'flex']}
+      display={['none', 'none', 'none', 'flex']}
       flexDirection="column"
     >
       <TableContainer width="full" overflowX="hidden">

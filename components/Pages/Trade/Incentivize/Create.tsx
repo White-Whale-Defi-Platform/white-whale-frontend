@@ -46,8 +46,8 @@ const Create = ({ poolId }: Props) => {
   })
   const formData = watch()
 
-  const { chainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(chainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   const { txStep } = useRecoilValue(txRecoilState)
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const { simulate, submit } = useOpenFlow({ poolId,

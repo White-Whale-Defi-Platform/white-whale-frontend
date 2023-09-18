@@ -54,11 +54,9 @@ const Incentivize: FC = () => {
     if (!pools || !poolId) {
       return []
     }
-
     const flows = pools.find((p) => p.pool_id === poolId)
     return flows?.liquidity?.myFlows || []
   }, [pools, poolId])
-
   return (
     <VStack
       minWidth={{ base: '100%',

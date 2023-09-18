@@ -28,6 +28,7 @@ import {
 } from './queryRewardsContracts'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+import { useChain } from '@cosmos-kit/react-lite'
 
 export type AssetType = [number?, number?]
 
@@ -124,7 +125,8 @@ export const useQueryPoolsLiquidity = ({
   const [getTokenDollarValue, enabledGetTokenDollarValue] =
     useGetTokenDollarValueQuery()
   const prices = usePrices()
-  const { address } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
 
   const [tokenList] = useTokenList()
   const { epochToDate, currentEpoch } = useEpoch()
@@ -187,13 +189,12 @@ export const useQueryPoolsLiquidity = ({
           const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch
             const endEpoch = flow.end_epoch
-
             const getState = () => {
               switch (true) {
-                case currentEpoch < startEpoch:
-                  return 'upcoming'
                 case currentEpoch >= startEpoch && currentEpoch < endEpoch:
                   return 'active'
+                case currentEpoch < startEpoch:
+                  return 'upcoming'
                 case currentEpoch >= endEpoch:
                   return 'over'
                 default:
@@ -211,7 +212,6 @@ export const useQueryPoolsLiquidity = ({
               flow.flow_asset.info?.native_token?.denom ||
               null
             const token = tokenList?.tokens?.find((t) => t?.denom === denom)
-
             return {
               token,
               isCreator: flow.flow_creator === address,

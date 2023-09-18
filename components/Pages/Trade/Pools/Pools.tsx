@@ -251,12 +251,16 @@ const Pools = () => {
       ? pools
       : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
   }, [allPoolsForShown, showAllPools])
-
   return (
-    <VStack width={{ base: '100%' }} alignItems="center" margin="auto">
+    <VStack
+      width={{ base: '100%',
+        md: 'auto' }}
+      alignItems="center"
+      margin="auto"
+    >
       {myPools?.length > 0 && (
         <Box width={{ base: '100%' }}>
-          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5} paddingY={10}>
           My Pools
           </Text>
           <MyPoolsTable

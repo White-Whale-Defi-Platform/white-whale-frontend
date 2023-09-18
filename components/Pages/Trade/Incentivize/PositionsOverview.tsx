@@ -61,7 +61,6 @@ export const PositionsOverview = ({ flows, poolId }: Props) => {
       value: 'active',
     },
   ])
-
   const positions = useMemo(() => flows.map((flow) => ({
     token: (
       <Token imgUrl={flow?.token?.logoURI} symbol={flow?.token?.symbol} />
@@ -86,7 +85,7 @@ export const PositionsOverview = ({ flows, poolId }: Props) => {
     ),
   })),
   [flows])
-
+  
   if (positions.length === 0) {
     return (
       <Box width="full" textAlign="center">

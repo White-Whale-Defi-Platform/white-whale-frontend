@@ -27,5 +27,9 @@ export const endpointOptions: EndpointOptions = {
       rpc: ['https://ww-injective-rpc.polkachu.com'],
       rest: ['https://ww-injective-rest.polkachu.com'],
     },
+    terra: {
+      rpc: ['https://terra-classic-rpc.publicnode.com'],
+      rest: ['https://terra-classic-lcd.publicnode.com'],
+    },
   },
 }

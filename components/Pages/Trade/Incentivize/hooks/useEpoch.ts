@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import {
   Config,
   useConfig,
@@ -9,6 +10,8 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+
+import { useClients } from '../../../../../hooks/useClients'
 dayjs.extend(utc)
 interface Epoch {
   available: {
@@ -78,23 +81,24 @@ interface EpochConfigData {
 }
 
 const useEpoch = () => {
-  const { client, network, chainId } = useRecoilValue(chainState)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const contracts: Config = useConfig(network, chainId)
 
+  const { cosmWasmClient } = useClients(walletChainName)
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
-    queryFn: async () => await client?.queryContractSmart(contracts?.fee_distributor, {
+    queryFn: async () => await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
       config: {},
     }),
-    enabled: Boolean(contracts) && Boolean(client),
+    enabled: Boolean(contracts) && Boolean(cosmWasmClient),
   })
 
   const { data } = useQuery<EpochData>({
     queryKey: ['incentive', 'epoch', contracts?.fee_distributor],
-    queryFn: async () => await client?.queryContractSmart(contracts?.fee_distributor, {
+    queryFn: async () => await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
       current_epoch: {},
     }),
-    enabled: Boolean(contracts) && Boolean(client),
+    enabled: Boolean(contracts) && Boolean(cosmWasmClient),
   })
 
   const checkLocalAndUTC = () => {

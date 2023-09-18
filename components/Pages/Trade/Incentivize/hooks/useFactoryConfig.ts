@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { useClients } from '../../../../../hooks/useClients'
 
 type FactoryConfig = {
   createFlowFee: {
@@ -14,11 +15,12 @@ type FactoryConfig = {
 }
 
 const useFactoryConfig = (incentiveFactory: string) => {
-  const { client } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
+  const {cosmWasmClient} = useClients(walletChainName)
 
   const { data: config } = useQuery<FactoryConfig>({
     queryKey: ['factoryConfig', incentiveFactory],
-    queryFn: () => client?.
+    queryFn: () => cosmWasmClient?.
       queryContractSmart(incentiveFactory, {
         config: {},
       }).
@@ -30,7 +32,7 @@ const useFactoryConfig = (incentiveFactory: string) => {
         minUnbondingDuration: data?.min_unbonding_duration,
         maxUnbondingDuration: data?.max_unbonding_duration,
       })),
-    enabled: Boolean(incentiveFactory) && Boolean(client),
+    enabled: Boolean(incentiveFactory) && Boolean(cosmWasmClient),
   })
 
   return useMemo(() => config, [config])
