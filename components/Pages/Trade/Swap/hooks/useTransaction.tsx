@@ -28,7 +28,7 @@ export enum TxStep {
    */
   Broadcasting = 4,
   /**
-   * Succesful
+   * Successful
    */
   Success = 5,
   /**

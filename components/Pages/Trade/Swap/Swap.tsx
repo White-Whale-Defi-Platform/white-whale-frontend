@@ -61,19 +61,15 @@ const Swap: FC<SwapProps> = (params) => {
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolList, chainId])
-  const lowerTokenSymbols = []
-  const tokenSymbols = []
-  useMemo(() => tokenList.forEach((token) => {
-    tokenSymbols.push(token.symbol); lowerTokenSymbols.push(token.symbol.toLowerCase())
-  }),
-  [tokenList])
+
+  const tokenSymbols = useMemo(() => tokenList.map((token) => token.symbol),
+    [tokenList])
 
   useEffect(() => {
     if (!currentChainId || tokenList.length === 0) {
       return
     }
-    const { from, to } = router.query
-
+    const [ from , to] = params?.initialTokenPair || []
     const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
     let newState: TokenItemState[] = [
       {
