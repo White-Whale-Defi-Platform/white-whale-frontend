@@ -13,7 +13,7 @@ export const endpointOptions: EndpointOptions = {
     },
     juno: {
       rpc: ['https://ww-juno-rpc.polkachu.com'],
-      rest: ['https://juno-rpc.polkachu.com'],
+      rest: ['https://ww-juno-rest.polkachu.com'],
     },
     chihuahua: {
       rpc: ['https://ww-chihuahua-rpc.polkachu.com'],
@@ -30,6 +30,10 @@ export const endpointOptions: EndpointOptions = {
     terra: {
       rpc: ['https://terra-classic-rpc.publicnode.com'],
       rest: ['https://terra-classic-lcd.publicnode.com'],
+    },
+    sei: {
+      rpc: ['https://sei-rpc.polkachu.com'],
+      rest: ['https://sei-api.polkachu.com'],
     },
   },
 }
