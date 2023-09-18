@@ -29,11 +29,11 @@ export const unbondTokens = async (
     message: handleMsg,
     funds: [] })
   let fee = null
-  if (chainId === 'columbus-5') {
+  if (await client.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await client.simulate(
       address, [execMsg], '',
     ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom)
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom, gas)
   }
   return await client.post(
     address, [execMsg], '', fee,

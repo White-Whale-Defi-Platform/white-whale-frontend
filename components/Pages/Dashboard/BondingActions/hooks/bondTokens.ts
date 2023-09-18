@@ -29,7 +29,7 @@ export const bondTokens = async (
     message: handleMsg,
     funds: [coin(amount, denom)] })
   let fee = null
-  if (chainId === 'columbus-5') {
+  if (await client.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await client.simulate(
       address, [execMsg], '',
     ) * 1.3)
