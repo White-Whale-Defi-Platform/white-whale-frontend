@@ -52,8 +52,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
         <ModalCloseButton />
         <ModalBody>
           <VStack alignItems="flex-start" width="full" gap={2}>
-            {
-              filteredWallets.map((wallet) => {
+            {filteredWallets?.map((wallet) => {
 
               // @ts-ignore
               if (window.debugLogsEnabled) {
