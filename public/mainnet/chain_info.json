@@ -52,7 +52,7 @@
     "chainId": "pacific-1",
     "chainName": "SEI Mainnet",
     "rpc": "https://sei-rpc.polkachu.com",
-    "rest": "https://sei-rest.polkachu.com",
+    "rest": "https://sei-api.polkachu.com",
     "icon": "/logos/sei.svg",
     "network_type": "mainnet",
     "label": "Sei",
@@ -101,8 +101,6 @@
   {
     "chainId": "columbus-5",
     "chainName": "Terra Classic Mainnet",
-    "rpc": "https://terra-classic-rpc.publicnode.com",
-    "rest": "https://terra-classic-lcd.publicnode.com",
     "icon": "/logos/lunac.png",
     "network_type": "mainnet",
     "label": "Terra-Classic",
