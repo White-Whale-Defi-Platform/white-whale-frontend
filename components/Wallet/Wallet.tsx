@@ -18,8 +18,21 @@ import { getPathName } from 'util/route'
 const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
-  const chains: Array<any> = useChainInfos()
-  const allChains = useChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
+  const chains: Array<any> = useChainInfos() 
+  let walletChains: Array<string> = []
+  if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap') {
+    const snapChains = []
+    chains.forEach((row) => {
+      if (row.coinType == 118) {
+        snapChains.push(WALLETNAMES_BY_CHAINID[row.chainId])
+      }
+    })
+    walletChains = snapChains
+  } else {
+    walletChains = ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network]
+  }
+  
+  const allChains = useChains(walletChains)
   const router = useRouter()
   let chainName = router.query.chainId as string
   const [chainInfo] = useChainInfo(currentChainState.chainId)
