@@ -42,6 +42,8 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   if (window.debugLogsEnabled) {
     console.log('Wallets: ')
   }
+  const seenWalletNames = new Set();
+  const filteredWallets = walletRepo?.wallets.filter(wallet => !seenWalletNames.has(wallet.walletName) && seenWalletNames.add(wallet.walletName));
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>
       <ModalOverlay />
@@ -50,11 +52,12 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
         <ModalCloseButton />
         <ModalBody>
           <VStack alignItems="flex-start" width="full" gap={2}>
-            {walletRepo?.wallets.map((wallet) => {
+            {
+              filteredWallets.map((wallet) => {
 
               // @ts-ignore
               if (window.debugLogsEnabled) {
-                console.log(wallet)
+                console.log(wallet.walletName)
               }
 
               const { connect, walletName } = wallet;
