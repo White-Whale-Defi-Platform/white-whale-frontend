@@ -11,7 +11,7 @@ const LineItem = ({ token, isLast }) => (
     <Text>{token?.symbol ?? 'Unknown'}</Text>
     <Text>
       {' '}
-      {token?.assetAmount?.toFixed(6) || token.dailyEmission.toFixed(6)}
+      {token?.amount?.toFixed(6) || token.dailyEmission?.toFixed(6)}
     </Text>
   </HStack>
 )

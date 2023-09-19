@@ -7,11 +7,10 @@ import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import useWithdraw from 'components/Pages/Flashloan/Vaults/hooks/useWithdraw'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
-import { chainState } from '../../../../../state/chainState'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
 
 type Props = {
-  connected: WalletStatusType
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -22,7 +21,6 @@ type Props = {
 }
 
 const WithdrawForm = ({
-  connected,
   balance,
   defaultToken,
   vaultAddress,
@@ -34,7 +32,10 @@ const WithdrawForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(chainState)
+
+  const { chainId, walletChainName, } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
+
   const onSuccess = useCallback((txHash) => {
     refetch?.()
     toast({
@@ -56,10 +57,9 @@ const WithdrawForm = ({
     lpToken,
     token,
     onSuccess })
-  const isConnected = connected === '@wallet-state/connected'
 
   const buttonLabel = useMemo(() => {
-    if (connected !== '@wallet-state/connected') {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!token?.amount) {
       return 'Enter Amount'
@@ -67,7 +67,7 @@ const WithdrawForm = ({
       return tx?.buttonLabel
     }
     return 'Withdraw'
-  }, [tx?.buttonLabel, connected, token])
+  }, [tx?.buttonLabel, isWalletConnected, token])
 
   const onSubmit = (event) => {
     event?.preventDefault()
@@ -111,7 +111,7 @@ const WithdrawForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isConnected}
+        disabled={tx.txStep != TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

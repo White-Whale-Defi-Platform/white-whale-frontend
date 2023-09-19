@@ -103,7 +103,7 @@ export const PositionsTable = ({ columnFilters, positions }) => {
 
   // Loop through positions and get total value
   const assetsWithValue = useMemo(() => {
-    const initialValue = { assetAmount: 0,
+    const initialValue = { amount: 0,
       dollarValue: 0 }
     const filter = columnFilters?.[0]?.value
     const filteredPositions = positions.filter((p) => (filter ? p.state === filter : true))
@@ -118,12 +118,12 @@ export const PositionsTable = ({ columnFilters, positions }) => {
           {
             ...c1,
             dollarValue: a1.dollarValue + c1.dollarValue || 0,
-            assetAmount: a1.assetAmount + c1.assetAmount || 0,
+            amount: a1.amount + c1.amount || 0,
           },
           {
             ...c2,
             dollarValue: a2.dollarValue + c2.dollarValue || 0,
-            assetAmount: a2.assetAmount + c2.assetAmount || 0,
+            amount: a2.amount + c2.amount || 0,
           },
         ]
       }, [])

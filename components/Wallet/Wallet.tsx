@@ -18,9 +18,9 @@ import { getPathName } from 'util/route'
 const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
-  const chains: Array<any> = useChainInfos() 
+  const chains: Array<any> = useChainInfos()
   let walletChains: Array<string> = []
-  
+
   if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap') {
     const snapChains = []
     chains.forEach((row) => {
@@ -100,7 +100,6 @@ const Wallet = () => {
     currentChainState.chainId,
     currentChainState.network,
     currentChainState.activeWallet,
-    currentChainState.address,
   ])
 
   const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any }; label:string }) => {

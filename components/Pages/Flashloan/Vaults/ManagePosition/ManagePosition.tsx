@@ -28,8 +28,8 @@ const ManagePosition = () => {
   const { vaults, refetch: vaultsRefetch } = useVault()
   const chains: Array<any> = useChainInfos()
   const params = new URLSearchParams(location.search)
-  const { chainId, address, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, address } = useChain(walletChainName)
   const vaultId = params.get('vault') || 'JUNO'
 
   const vault = useMemo(() => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),

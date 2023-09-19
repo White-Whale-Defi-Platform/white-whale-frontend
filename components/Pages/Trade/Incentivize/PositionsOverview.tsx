@@ -54,7 +54,7 @@ const Token = ({ imgUrl, symbol }) => (
 )
 
 export const PositionsOverview = ({ flows, poolId }: Props) => {
-  const [activeButton, setActiveButton] = useState('active')
+  const [_, setActiveButton] = useState('active')
   const [columnFilters, setColumnFilters] = useState([
     {
       id: 'state',
@@ -85,7 +85,7 @@ export const PositionsOverview = ({ flows, poolId }: Props) => {
     ),
   })),
   [flows])
-  
+
   if (positions.length === 0) {
     return (
       <Box width="full" textAlign="center">

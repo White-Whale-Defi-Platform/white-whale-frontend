@@ -2,8 +2,6 @@ import { FC, useEffect } from 'react'
 import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
-
-
 import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
@@ -47,7 +45,7 @@ const MyApp: FC<AppProps> = ({
     ...stationWallets,
     ...leapWallets,
   ]
-  
+
   return (
     <>
       {typeof window !== 'undefined' ? (

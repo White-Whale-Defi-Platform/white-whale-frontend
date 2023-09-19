@@ -8,7 +8,7 @@ import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
-import { chainState } from '../../state/chainState'
+import { chainState } from 'state/chainState'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void

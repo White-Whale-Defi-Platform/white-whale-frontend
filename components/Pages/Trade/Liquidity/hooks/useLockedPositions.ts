@@ -29,7 +29,7 @@ export type Position = {
   weight: string
   duration: string
   unbonding_duration: number
-  assets: TokenInfo & { dollarValue: number; assetAmount: number }[]
+  assets: TokenInfo & { dollarValue: number; amount: number }[]
   value: number
   state: string
   action: null
@@ -95,7 +95,7 @@ export const fetchPositions = async ({
           const dollarValue = Number(assetAmount) * prices?.[asset.symbol] || 0
           return {
             ...asset,
-            assetAmount: parseFloat(assetAmount),
+            amount: parseFloat(assetAmount),
             dollarValue,
           }
         })
