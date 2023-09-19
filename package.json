@@ -46,11 +46,11 @@
     "jsoneditor": "^9.9.2",
     "junoblocks": "^0.2.93",
     "lodash": "^4.17.21",
-    "next": "12.2.4",
+    "next": "13.4.0",
     "numeral": "^2.0.6",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-device-detect": "^2.2.2",
-    "react-dom": "18.2.0",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.32.1",
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.7.1",
@@ -62,13 +62,13 @@
     "@keplr-wallet/types": "^0.9.9",
     "@types/react": "17.0.14",
     "autoprefixer": "^10.3.1",
-    "eslint": "7.30.0",
-    "eslint-config-next": "11.0.1",
+    "eslint": "^8.49.0",
+    "eslint-config-next": "^13.4.19",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "postcss": "^8.3.5",
     "prettier": "^2.8.8",
-    "typescript": "4.3.5"
+    "typescript": "^5.2.2"
   },
   "lint-staged": {
     "**/*.{ts,md,tsx}": "prettier --write"
