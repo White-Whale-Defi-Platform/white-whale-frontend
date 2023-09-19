@@ -180,7 +180,7 @@ export const useTransaction = () => {
       ) {
         setError(e?.toString())
         message = (
-          <Finder txHash={txInfo?.txhash} chainId={chainId}>
+          <Finder txHash={txInfo?.hash} chainId={chainId}>
             {' '}
           </Finder>
         )
@@ -248,7 +248,7 @@ export const useTransaction = () => {
       if (txHash === null) {
         return null
       }
-      return signingClient.getTx(txHash)
+      return signingClient?.getTx(txHash)
     },
     {
       enabled: txHash !== null,
