@@ -8,6 +8,8 @@ import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/common'
 
+import { TerraTreasuryService } from '../../../../../services/treasuryService'
+
 type Params = {
   lpTokenAddress: string
   swapAddress: string
@@ -100,23 +102,37 @@ export const useWithdrawTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => (isNative
-    ? signingClient.execute(
-      senderAddress,
-      swapAddress,
-      { withdraw_liquidity: {} },
-      'auto',
-      null,
-      [coin(amount, lpTokenAddress)],
-    )
-    : signingClient.signAndBroadcast(
-      senderAddress,
-      encodedMsgs,
-      'auto',
-      null,
-    )),
+  const { mutate } = useMutation(async (data: any) => {
+    if (isNative) {
+      return signingClient.execute(
+        senderAddress,
+        swapAddress,
+        { withdraw_liquidity: {} },
+        'auto',
+        null,
+        [coin(amount, lpTokenAddress)],
+      )
+    } else {
+      let fee:any = 'auto'
+      if (await signingClient.getChainId() === 'columbus-5') {
+        const gas = Math.ceil(await signingClient.simulate(
+          senderAddress, encodedMsgs, '',
+        ) * 1.3)
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+          0, '', gas,
+        )
+      }
+      return signingClient.signAndBroadcast(
+        senderAddress,
+        encodedMsgs,
+        fee,
+        null,
+      )
+    }
+  },
   {
     onMutate: () => {
+      console.log(msgs)
       setTxStep(TxStep.Posting)
     },
     onError: (e: unknown) => {

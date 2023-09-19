@@ -23,6 +23,7 @@ import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
 } from 'util/messages/index'
+import { useChain } from '@cosmos-kit/react-lite'
 
 interface Props {
   poolId: string
@@ -32,8 +33,9 @@ interface Props {
 }
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
-  const { address, network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { signingClient } = useClients(walletChainName)
+  const { address } = useChain(walletChainName)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
@@ -118,7 +120,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const { mutate: submit, ...tx } = useMutation({
     mutationFn: async () => {
-      let fee:any = "auto"
+      let fee:any = 'auto'
       if (chainId === 'columbus-5') {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',

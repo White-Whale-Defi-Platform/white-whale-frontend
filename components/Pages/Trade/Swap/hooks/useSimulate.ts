@@ -15,14 +15,12 @@ const simulate = async ({ cosmWasmClient, msg, routerAddress }): Promise<any> =>
 
 const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
   const debounseMsg = useDebounceValue(msg, 300)
-
   const { data, isLoading, error } = useQuery<any>(
     ['simulation', debounseMsg],
-    () => {
+    async () => {
       if (msg === null) {
         return null
       }
-
       return simulate({ cosmWasmClient,
         msg: debounseMsg,
         routerAddress })

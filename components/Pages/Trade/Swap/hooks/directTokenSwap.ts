@@ -26,6 +26,7 @@ export const directTokenSwap = async ({
   signingClient,
   msgs,
 }: DirectTokenSwapArgs) => {
+  let fee = 'auto'
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,
@@ -39,7 +40,6 @@ export const directTokenSwap = async ({
       contractAddress: tokenA.token_address,
       message: msgs,
     })
-
     return validateTransactionSuccess(await signingClient.signAndBroadcast(
       senderAddress,
       [increaseAllowanceMessage, executeMessage],
@@ -47,7 +47,6 @@ export const directTokenSwap = async ({
       null,
     ))
   }
-  let fee = 'auto'
   const execMsg = createExecuteMessage({ senderAddress,
     contractAddress: swapAddress,
     message: msgs,

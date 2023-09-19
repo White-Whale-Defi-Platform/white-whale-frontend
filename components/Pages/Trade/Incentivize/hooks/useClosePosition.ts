@@ -9,6 +9,8 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
 
+import { TerraTreasuryService } from '../../../../../services/treasuryService'
+
 type OpenPosition = {
   poolId: string
 }
@@ -62,9 +64,17 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
       console.log({ msg,
         flowId,
         poolId })
-
+      let fee:any = 'auto'
+      if (await signingClient.getChainId() === 'columbus-5') {
+        const gas = Math.ceil(await signingClient.simulate(
+          address, msg, '',
+        ) * 1.3)
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+          0, '', gas,
+        )
+      }
       return validateTransactionSuccess(await signingClient.signAndBroadcast(
-        address, msg, 'auto', null,
+        address, msg, fee, null,
       ))
     },
     onError,

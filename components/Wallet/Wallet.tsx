@@ -146,7 +146,7 @@ const Wallet = () => {
   }, [currentChainState.chainId, isInitialized])
   if (!isWalletConnected) {
     return (
-      <><HStack align="right" size={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>
+      <><HStack align="right" boxSize={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>
         <SelectChainModal
           connected={isWalletConnected}
           denom={denom?.coinDenom}
