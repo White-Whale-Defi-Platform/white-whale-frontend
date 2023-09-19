@@ -19,17 +19,17 @@ const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
   const chains: Array<any> = useChainInfos()
-  const router = useRouter()
   const allChains = useChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
+  const router = useRouter()
   let chainName = router.query.chainId as string
   const [chainInfo] = useChainInfo(currentChainState.chainId)
   const { isWalletConnected, disconnect, openView } = allChains[WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]]
   chainName = chainName ? chainName : currentChainState.chainName
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
-  const resetWallet = () => {
+  const resetWallet = async () => {
     queryClient.clear()
-    disconnect()
+    await disconnect()
   }
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const Wallet = () => {
     setCurrentChainState({ ...currentChainState,
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
-      walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId],},
+      walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId]},
       )
     queryClient.clear()
     if (isWalletConnected) {

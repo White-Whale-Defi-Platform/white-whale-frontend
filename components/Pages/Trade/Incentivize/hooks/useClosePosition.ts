@@ -40,14 +40,31 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async ({ flowId }: { flowId: number }) => {
-      const msgs = createClosPositionMessage(flowId)
+      const msg = createClosPositionMessage(flowId)
+      try {
+        await signingClient.simulate(
+          address, msg, '',
+        )
+      } catch (e) {
+        const err = e.toString()
+        if (err.includes('unclaimed rewards')) {
+          msg.push(createExecuteMessage({
+            message: {
+              claim: {},
+            },
+            senderAddress: address,
+            contractAddress: pool?.staking_address,
+            funds: [],
+          }))
+        }
+      }
 
-      console.log({ msgs,
+      console.log({ msg,
         flowId,
         poolId })
 
       return validateTransactionSuccess(await signingClient.signAndBroadcast(
-        address, msgs, 'auto', null,
+        address, msg, 'auto', null,
       ))
     },
     onError,

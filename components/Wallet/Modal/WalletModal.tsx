@@ -60,7 +60,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                   />
                 )
               } else if (!isMobile && elem.isModeExtension) {
-                if (walletName.includes('metamask') && !snap) {
+                if (snap === false && walletName.toLowerCase().includes('metamask')) {
                   return null
                 } else {
                   return (
