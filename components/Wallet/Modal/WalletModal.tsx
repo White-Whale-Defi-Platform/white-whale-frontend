@@ -32,7 +32,6 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   const { chainId } = useRecoilValue(chainState)
   const chainInfos: any = useChainInfos()
   const snap = Boolean(chainInfos.find((elem) => elem.chainId == chainId && elem.coinType == 118))
-
   function onCloseModal() {
     if (isOpen) {
       setOpen(false)
@@ -42,8 +41,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
   if (window.debugLogsEnabled) {
     console.log('Wallets: ')
   }
-  const seenWalletNames = new Set();
-  const filteredWallets = walletRepo?.wallets.filter(wallet => !seenWalletNames.has(wallet.walletName) && seenWalletNames.add(wallet.walletName));
+  
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>
       <ModalOverlay />
@@ -52,7 +50,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
         <ModalCloseButton />
         <ModalBody>
           <VStack alignItems="flex-start" width="full" gap={2}>
-            {filteredWallets?.map((wallet) => {
+            {walletRepo?.wallets.map((wallet) => {
 
               // @ts-ignore
               if (window.debugLogsEnabled) {
@@ -71,8 +69,8 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                   />
                 )
               } else if (!isMobile && wallet.isModeExtension) {
-                if (snap === false && walletName.toLowerCase().includes('metamask')) {
-                  return null
+                if (!snap && walletName.toLowerCase().includes('metamask')) {
+                  return
                 } else {
                   return (
                     <WalletConnectButton
@@ -90,8 +88,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                   connect={connect}
                   walletType={walletName as WalletType}
                 />
-                // @ts-ignore
-              } else if (window.cosmostation! && isMobile && walletName.toLowerCase().includes('chaincosmostation')) {
+              } else if (window.cosmostation && isMobile && walletName.toLowerCase().includes('chaincosmostation')) {
                 return <WalletConnectButton
                   key={walletName}
                   onCloseModal={onCloseModal}

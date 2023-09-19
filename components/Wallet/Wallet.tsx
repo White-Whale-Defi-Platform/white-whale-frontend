@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
-import { useChain, useChains } from '@cosmos-kit/react-lite'
+import { useChains } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
@@ -20,10 +20,11 @@ const Wallet = () => {
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
   const chains: Array<any> = useChainInfos() 
   let walletChains: Array<string> = []
+  
   if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap') {
     const snapChains = []
     chains.forEach((row) => {
-      if (row.coinType == 118) {
+      if (row.coinType === 118) {
         snapChains.push(WALLETNAMES_BY_CHAINID[row.chainId])
       }
     })
@@ -31,7 +32,6 @@ const Wallet = () => {
   } else {
     walletChains = ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network]
   }
-  
   const allChains = useChains(walletChains)
   const router = useRouter()
   let chainName = router.query.chainId as string
@@ -114,10 +114,15 @@ const Wallet = () => {
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
       walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId]},
-      )
+    )
     queryClient.clear()
     if (isWalletConnected) {
-      await allChains[WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]].connect()
+      const newChain = allChains[WALLETNAMES_BY_CHAINID[chain.chainId]]
+      if (!(window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap')) {
+        await newChain.connect()
+      } else {
+        await resetWallet()
+      }
     }
     // eslint-disable-next-line react-hooks/rules-of-hooks
   }
