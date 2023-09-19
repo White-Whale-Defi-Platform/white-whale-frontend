@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 
-export const txAtom = atom({
-  key: 'txAtom',
+export const txRecoilState = atom({
+  key: 'txRecoilState',
   default: {
     txStep: 0,
     txHash: undefined,

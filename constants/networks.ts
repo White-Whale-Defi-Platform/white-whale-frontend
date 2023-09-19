@@ -15,9 +15,49 @@ export const ACTIVE_NETWORKS = {
     juno: 'uni-6',
     narwhal: 'narwhal-1',
     terra: 'pisco-1',
-    sei: 'sei-devnet-1',
+    sei: 'atlantic-1',
     'terra-classic': 'rebel-2',
   },
+}
+
+export const ACTIVE_NETWORKS_WALLET_NAMES = {
+  mainnet: [
+    'chihuahua',
+    'comdex',
+    'injective',
+    'juno',
+    'migaloo',
+    'terra2',
+    'sei',
+    'terra']
+  ,
+  testnet: [
+    'comdex',
+    'injectivetestnet',
+    'junotestnet',
+    'migalootestnet',
+    'terra2testnet',
+    'seitestnet',
+    'terra',
+  ],
+}
+
+export const WALLETNAMES_BY_CHAINID = {
+  'chihuahua-1': 'chihuahua',
+  'comdex-1': 'comdex',
+  'injective-1': 'injective',
+  'juno-1': 'juno',
+  'migaloo-1': 'migaloo',
+  'phoenix-1': 'terra2',
+  'pacific-1': 'sei',
+  'columbus-5': 'terra',
+  'comdex-test2': 'comdex',
+  'injective-888': 'injectivetestnet',
+  'uni-6': 'junotestnet',
+  'narwhal-1': 'migalootestnet',
+  'pisco-1': 'terra2testnet',
+  'atlantic-1': 'seitestnet',
+  'rebel-2': 'terra',
 }
 
 export const ACTIVE_BONDING_NETWORKS = [

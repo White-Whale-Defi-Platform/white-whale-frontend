@@ -22,12 +22,6 @@ export default extendTheme({
         initialColorMode: 'dark',
         useSystemColorMode: false,
       },
-      /*
-       * "#chakra-toast-manager-bottom-right": {
-       *   right: "32px!important",
-       *   bottom: "32px!important",
-       * },
-       */
     },
   },
   fonts: {

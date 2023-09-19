@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useMemo } from 'react'
+import { FC, Fragment, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { InfoOutlineIcon } from '@chakra-ui/icons'
@@ -6,10 +6,10 @@ import {
   Box,
   Button,
   HStack,
-  Hide,
   IconButton,
   Text,
   Tooltip,
+  useMediaQuery,
   VStack,
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
@@ -20,11 +20,10 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
 import { TokenItemState } from 'types/index'
 
 type Props = {
-  connected: WalletStatusType
+  isWalletConnected: boolean
   tokenA: TokenItemState
   tokenB: TokenItemState
   onInputChange: (asset: TokenItemState, index: number) => void
@@ -41,7 +40,7 @@ type Props = {
 }
 
 const SwapForm: FC<Props> = ({
-  connected,
+  isWalletConnected,
   tokenA,
   tokenB,
   onInputChange,
@@ -82,13 +81,11 @@ const SwapForm: FC<Props> = ({
 
   const tokenAInfo = useTokenInfo(tokenA?.tokenSymbol)
   const tokenBInfo = useTokenInfo(tokenB?.tokenSymbol)
-  const isConnected = connected === '@wallet-state/connected'
 
   const amountA = getValues('tokenA')
   const amountB = getValues('tokenB')
-
   const buttonLabel = useMemo(() => {
-    if (connected !== '@wallet-state/connected') {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!tokenA?.tokenSymbol || !tokenB?.tokenSymbol) {
       return 'Select Token'
@@ -102,8 +99,39 @@ const SwapForm: FC<Props> = ({
     return 'Swap'
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx?.buttonLabel, tokenB.tokenSymbol, connected, amountA, state?.error])
+  }, [
+    tx?.buttonLabel,
+    tokenB.tokenSymbol,
+    isWalletConnected,
+    amountA,
+    state?.error,
+  ])
 
+  const [isMobile] = useMediaQuery('(max-width: 485px)')
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+
+  const explainer = (input: string) => (
+    <Tooltip
+      label={input}
+      padding="1rem"
+      bg="blackAlpha.900"
+      fontSize="xs"
+      maxW="330px"
+      isOpen={isLabelOpen}
+    >
+      <Box
+        cursor="pointer"
+        color="brand.50"
+        display="flex"
+        alignItems="center"
+        onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}
+      >
+        <InfoOutlineIcon width=".7rem" height=".7rem" />
+      </Box>
+    </Tooltip>
+  )
   const onReverse = () => {
     const A = {
       ...tokenB,
@@ -112,7 +140,7 @@ const SwapForm: FC<Props> = ({
         parseFloat(fromChainAmount(simulated?.amount, tokenAInfo?.decimals)),
       decimals: poolList.pools.
         map(({ pool_assets }) => pool_assets).
-        map(([a, b]) => (a?.symbol == (tokenA.tokenSymbol as string)
+        map(([a, b]) => (a?.symbol === (tokenA.tokenSymbol as string)
           ? a?.decimals
           : b?.decimals))[0],
     }
@@ -123,7 +151,7 @@ const SwapForm: FC<Props> = ({
         parseFloat(fromChainAmount(simulated?.amount, tokenBInfo?.decimals)),
       decimals: poolList.pools.
         map(({ pool_assets }) => pool_assets).
-        map(([a, b]) => (a?.symbol == (tokenB.tokenSymbol as string)
+        map(([a, b]) => (a?.symbol === (tokenB.tokenSymbol as string)
           ? a?.decimals
           : b?.decimals))[0],
     }
@@ -191,16 +219,8 @@ const SwapForm: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated])
 
-  const isInputDisabled = tx?.txStep == TxStep.Posting
-  // @ts-ignore
-  if (window.debugLogsEnabled) {
-    console.log(
-      'Disabled conditions: ',
-      tx?.txStep != TxStep.Ready,
-      simulated == null,
-      !isConnected,
-    )
-  }
+  const isInputDisabled = tx?.txStep === TxStep.Posting
+
   return (
     <VStack
       paddingX={{ base: 6,
@@ -222,46 +242,6 @@ const SwapForm: FC<Props> = ({
       position="relative"
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={2}>
-        <HStack justifyContent="space-between" width="full">
-          <HStack visibility={{ base: 'visible',
-            md: 'hidden' }}>
-            <Button
-              variant="outline"
-              size="xs"
-              maxW="fit-content"
-              onClick={() => {
-                setReverse(false)
-                onInputChange({ ...tokenA,
-                  amount: tokenABalance / 2 }, 0)
-                setValue(
-                  'tokenA',
-                  { ...tokenA,
-                    amount: tokenABalance / 2 },
-                  { shouldValidate: true },
-                )
-              }}
-            >
-              half
-            </Button>
-            <Button
-              variant="outline"
-              size="xs"
-              onClick={() => {
-                setReverse(false)
-                onInputChange({ ...tokenA,
-                  amount: tokenABalance }, 0)
-                setValue(
-                  'tokenA',
-                  { ...tokenA,
-                    amount: tokenABalance },
-                  { shouldValidate: true },
-                )
-              }}
-            >
-              max
-            </Button>
-          </HStack>
-        </HStack>
         <Controller
           name="tokenA"
           control={control}
@@ -273,6 +253,7 @@ const SwapForm: FC<Props> = ({
               token={tokenA}
               balance={tokenABalance}
               minMax={false}
+              mobile={isMobile}
               disabled={isInputDisabled}
               onChange={(value, isTokenChange) => {
                 setReverse(false)
@@ -303,46 +284,7 @@ const SwapForm: FC<Props> = ({
         paddingBottom={8}
         style={{ margin: 'unset' }}
       >
-        <HStack justifyContent="space-between" width="full">
-          <HStack>
-            <Hide above="md">
-              <Button
-                variant="outline"
-                size="xs"
-                onClick={() => {
-                  setReverse(true)
-                  onInputChange({ ...tokenB,
-                    amount: tokenBBalance / 2 }, 1)
-                  setValue(
-                    'tokenB',
-                    { ...tokenB,
-                      amount: tokenBBalance / 2 },
-                    { shouldValidate: true },
-                  )
-                }}
-              >
-                half
-              </Button>
-              <Button
-                variant="outline"
-                size="xs"
-                onClick={() => {
-                  setReverse(true)
-                  onInputChange({ ...tokenB,
-                    amount: tokenBBalance / 2 }, 1)
-                  setValue(
-                    'tokenB',
-                    { ...tokenB,
-                      amount: tokenBBalance },
-                    { shouldValidate: true },
-                  )
-                }}
-              >
-                max
-              </Button>
-            </Hide>
-          </HStack>
-        </HStack>
+
         <Controller
           name="tokenB"
           control={control}
@@ -357,6 +299,7 @@ const SwapForm: FC<Props> = ({
               balance={tokenBBalance}
               disabled={isInputDisabled}
               showBalanceSlider={false}
+              mobile={isMobile}
               onChange={(value, isTokenChange) => {
                 if (tokenB?.tokenSymbol && !isTokenChange) {
                   setReverse(true)
@@ -376,13 +319,13 @@ const SwapForm: FC<Props> = ({
         width="full"
         variant="primary"
         isLoading={
-          tx?.txStep == TxStep.Estimating ||
-          tx?.txStep == TxStep.Posting ||
-          tx?.txStep == TxStep.Broadcasting ||
+          tx?.txStep === TxStep.Estimating ||
+          tx?.txStep === TxStep.Posting ||
+          tx?.txStep === TxStep.Broadcasting ||
           state?.isLoading
         }
         disabled={
-          tx?.txStep != TxStep.Ready || simulated == null || !isConnected
+          tx?.txStep !== TxStep.Ready || simulated === null || !isWalletConnected
         }
       >
         {buttonLabel}
@@ -395,22 +338,7 @@ const SwapForm: FC<Props> = ({
                 <Text color="brand.500" fontSize={12}>
                   Rate
                 </Text>
-                <Tooltip
-                  label="Swap price is calculated based on the pool price and spread"
-                  padding="1rem"
-                  bg="blackAlpha.900"
-                  fontSize="xs"
-                  maxW="330px"
-                >
-                  <Box
-                    cursor="pointer"
-                    color="brand.50"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <InfoOutlineIcon width=".7rem" height=".7rem" />
-                  </Box>
-                </Tooltip>
+                {explainer('Swap price is calculated based on the pool price and spread')}
               </HStack>
               <Text color="brand.500" fontSize={12}>
                 {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
@@ -429,22 +357,7 @@ const SwapForm: FC<Props> = ({
                   <Text color="brand.500" fontSize={12}>
                     Min Receive
                   </Text>
-                  <Tooltip
-                    label="Expected minimum quantity to be received based on the current price, maximum spread, and trading fee"
-                    padding="1rem"
-                    bg="blackAlpha.900"
-                    fontSize="xs"
-                    maxW="330px"
-                  >
-                    <Box
-                      cursor="pointer"
-                      color="brand.50"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <InfoOutlineIcon width=".7rem" height=".7rem" />
-                    </Box>
-                  </Tooltip>
+                  {explainer('Expected minimum quantity to be received based on the current price, maximum spread, and trading fee')}
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
                   {num(minReceive).toFixed(tokenBInfo?.decimals)}
@@ -464,23 +377,7 @@ const SwapForm: FC<Props> = ({
               <Text color="brand.500" fontSize={12}>
                 Route
               </Text>
-              <Tooltip
-                label="Optimized route for your optimal gain"
-                padding="1rem"
-                bg="blackAlpha.900"
-                fontSize="xs"
-                maxW="330px"
-              >
-                <Box
-                  cursor="pointer"
-                  color="brand.50"
-                  marginTop="-1px"
-                  display="flex"
-                  alignItems="center"
-                >
-                  <InfoOutlineIcon width=".7rem" />
-                </Box>
-              </Tooltip>
+              {explainer('Optimized route for your optimal gain')}
             </HStack>
             <HStack maxW="70%" flexWrap="wrap">
               {path?.map((item, index) => (

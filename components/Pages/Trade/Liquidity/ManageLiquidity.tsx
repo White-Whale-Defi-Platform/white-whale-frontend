@@ -12,18 +12,18 @@ import {
   Tabs,
   Text,
   VStack,
+  useMediaQuery,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Trade/Incentivize/hooks/usePoolUserShare'
-import PositionsOverview from 'components/Pages/Trade/Incentivize/PositionsOverview'
 import Claim from 'components/Pages/Trade/Liquidity/Claim'
 import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
-import { tokenLpAtom } from 'components/Pages/Trade/Liquidity/lpAtoms'
 import Overview from 'components/Pages/Trade/Liquidity/Overview'
 import WithdrawForm from 'components/Pages/Trade/Liquidity/WithdrawForm'
-import { useChains } from 'hooks/useChainInfo'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { useChainInfos } from 'hooks/useChainInfo'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
@@ -33,27 +33,31 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { tokenItemState } from 'state/tokenItemState'
 import { TxStep } from 'types/common'
+import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsOverview';
 
 const ManageLiquidity: FC = () => {
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router: NextRouter = useRouter()
-  const chains: Array<any> = useChains()
-  const { address, chainId, status, client } = useRecoilValue(walletState)
+  const chains: Array<any> = useChainInfos()
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, address } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolList } = usePoolsListQuery()
-  const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenLpAtom)
+  const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenItemState)
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({ reverse,
     bondingDays })
-  const cosmwasmClient = useCosmwasmClient(chainId)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(useQueryPoolsLiquidity({
       refetchInBackground: false,
       pools: poolList?.pools,
-      client: cosmwasmClient,
+      cosmWasmClient,
     }))
   const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
@@ -61,7 +65,7 @@ const ManageLiquidity: FC = () => {
     bech32PrefixAccAddr,
   [chains, chainId])
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
-    client,
+    cosmWasmClient,
     pools,
     currentChainPrefix,
   )
@@ -70,7 +74,9 @@ const ManageLiquidity: FC = () => {
     [poolId, poolList])
   // TODO pool user share might be falsy
   const poolUserShare = usePoolUserShare(
-    client, pool?.staking_address, address,
+    cosmWasmClient,
+    pool?.staking_address,
+    address,
   )
 
   const dailyEmissionData = useMemo(() => {
@@ -209,7 +215,6 @@ const ManageLiquidity: FC = () => {
       <Box
         background={'#1C1C1C'}
         padding={[6, 12]}
-        paddingTop={[10]}
         borderRadius="30px"
         width={['full']}
       >
@@ -220,8 +225,13 @@ const ManageLiquidity: FC = () => {
           pt="8"
           maxH="fit-content"
         >
-          <Tabs variant="brand">
-            <TabList justifyContent="center" background={'#1C1C1C'}>
+          <Tabs variant={'brand'}>
+            <TabList
+              display={['flex']}
+              flexWrap={['wrap']}
+              justifyContent="center"
+              background={'#1C1C1C'}
+            >
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
@@ -239,7 +249,7 @@ const ManageLiquidity: FC = () => {
                     bondingDays={bondingDays}
                     setReverse={setReverse}
                     reverse={reverse}
-                    connected={status}
+                    isWalletConnected={isWalletConnected}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -248,14 +258,16 @@ const ManageLiquidity: FC = () => {
                     clearForm={clearForm}
                     chainId={chainId}
                     poolId={poolId}
+                    mobile={isMobile}
                   />
                 )}
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  connected={status}
+                  isWalletConnected={isWalletConnected}
                   clearForm={clearForm}
                   poolId={poolId}
+                  mobile={isMobile}
                 />
               </TabPanel>
               <TabPanel padding={4}>

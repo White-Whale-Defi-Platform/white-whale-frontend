@@ -1,15 +1,15 @@
 import { useQuery } from 'react-query'
 
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { useRecoilState } from 'recoil'
-import { txAtom } from 'state/atoms/tx'
+import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
-import { Wallet } from 'util/wallet-adapters'
 
 type Simulate = {
   msgs: EncodeObject[]
-  client: Wallet | undefined
+  signingClient: SigningCosmWasmClient
   address: string | undefined
   connected: boolean
   amount: string
@@ -19,20 +19,26 @@ type Simulate = {
 
 const useSimulate = ({
   msgs,
-  client,
+  signingClient,
   address,
   connected,
   amount,
   onError,
   onSuccess,
 }: Simulate) => {
-  const [txState, setTxState] = useRecoilState(txAtom)
+  const [txState, setTxState] = useRecoilState(txRecoilState)
 
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],
     queryFn: () => {
-      if (!connected || Number(amount) <= 0 || !address || !client || !msgs) {
-        return
+      if (
+        !connected ||
+        Number(amount) <= 0 ||
+        !address ||
+        !signingClient ||
+        !msgs
+      ) {
+        return null
       }
 
       setTxState({
@@ -42,7 +48,7 @@ const useSimulate = ({
         buttonLabel: null,
       })
 
-      return client?.simulate(
+      return signingClient?.simulate(
         address, msgs!, undefined,
       )
     },

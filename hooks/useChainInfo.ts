@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import mainnetChainInfo from 'public/mainnet/chain_info.json'
 import testnetChainInfo from 'public/testnet/chain_info.json'
 import { useRecoilValue } from 'recoil'
-import { NetworkType, walletState } from 'state/atoms/walletAtoms'
+import { NetworkType, chainState } from 'state/chainState'
 
-export const useChains = () => {
-  const { network } = useRecoilValue(walletState)
+export const useChainInfos = () => {
+  const { network } = useRecoilValue(chainState)
 
   return useMemo(() => (network === NetworkType.testnet
     ? testnetChainInfo || []
@@ -15,7 +15,7 @@ export const useChains = () => {
 }
 
 export const useChainInfo = (id = null) => {
-  const chainInfo: Array<any> = useChains()
+  const chainInfo: Array<any> = useChainInfos()
 
   const chain = useMemo(() => {
     if (!chainInfo) {

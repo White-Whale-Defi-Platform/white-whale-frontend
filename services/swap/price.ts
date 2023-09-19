@@ -1,18 +1,20 @@
 import { num } from 'libs/num'
 import { Wallet } from 'util/wallet-adapters'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface GetToken1ForToken2PriceInput {
   swapAddress: string
-  client: Wallet
+  cosmWasmClient: CosmWasmClient
 }
 
 export const getToken1ForToken2Price = async ({
   swapAddress,
-  client,
+  cosmWasmClient,
 }: GetToken1ForToken2PriceInput) => {
   // TODO make sure client is initialized to avoid type error in console
+  
   try {
-    const { assets } = await client.queryContractSmart(swapAddress, {
+    const { assets } = await cosmWasmClient.queryContractSmart(swapAddress, {
       pool: {},
     })
     const [asset1, asset2] = assets
@@ -25,15 +27,15 @@ export const getToken1ForToken2Price = async ({
 
 export interface GetToken2ForToken1PriceInput {
   swapAddress: string
-  client: Wallet
+  cosmWasmClient: CosmWasmClient
 }
 
 export const getToken2ForToken1Price = async ({
   swapAddress,
-  client,
+  cosmWasmClient,
 }: GetToken2ForToken1PriceInput) => {
   try {
-    const { assets } = await client.queryContractSmart(swapAddress, {
+    const { assets } = await cosmWasmClient.queryContractSmart(swapAddress, {
       pool: {},
     })
     const [asset1, asset2] = assets
@@ -48,14 +50,14 @@ export interface GetTokenForTokenPriceInput {
   tokenAmount: number
   swapAddress: string
   outputSwapAddress: string
-  client: Wallet
+  cosmWasmClient: CosmWasmClient
 }
 
 export const getTokenForTokenPrice = async (input: GetTokenForTokenPriceInput) => {
   try {
     return await getToken1ForToken2Price({
       swapAddress: input.outputSwapAddress,
-      client: input.client,
+      cosmWasmClient: input.cosmWasmClient,
     })
   } catch (e) {
     console.error('error(getTokenForTokenPrice)', e)

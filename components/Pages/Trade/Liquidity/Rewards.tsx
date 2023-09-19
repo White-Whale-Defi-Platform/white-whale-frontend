@@ -2,13 +2,18 @@ import { useMemo } from 'react'
 
 import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
 import { AvailableRewards } from 'components/Pages/Trade/Liquidity/AvailableRewards'
-import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { RewardToolTip } from 'components/RewardToolTip'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => dailyEmissions.reduce((total, item) => total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission),
     0),
   [dailyEmissions])
 
+  const {walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   return (
     <VStack
       alignItems="flex-start"
@@ -22,12 +27,13 @@ export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
         <Text fontSize="14px" color="whiteAlpha.700">
           Available Rewards
         </Text>
-        <TooltipWithChildren
+        <RewardToolTip
           label={`$${totalValue}`}
           showTooltip={rewards.length > 0}
+          isWalletConnected={isWalletConnected}
         >
           <AvailableRewards data={rewards} />
-        </TooltipWithChildren>
+        </RewardToolTip>
       </HStack>
 
       <Divider />
@@ -36,12 +42,13 @@ export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
         <Text fontSize="14px" color="whiteAlpha.700">
           Estimated Daily Rewards
         </Text>
-        <TooltipWithChildren
+        <RewardToolTip
           label={`$${totalUsdValue.toFixed(2)}`}
           showTooltip={dailyEmissions.length > 0}
+          isWalletConnected={isWalletConnected}
         >
           <AvailableRewards data={dailyEmissions} />
-        </TooltipWithChildren>
+        </RewardToolTip>
       </HStack>
     </VStack>
   )

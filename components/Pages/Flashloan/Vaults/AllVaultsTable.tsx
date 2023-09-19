@@ -30,6 +30,8 @@ export type Vault = {
   myDeposit: string
 }
 
+//TODO: Mobile Responsive
+
 const columnHelper = createColumnHelper<Vault>()
 
 const columns = [
@@ -135,11 +137,12 @@ const AllVaultsTable = ({
   return (
     <Flex
       padding={10}
-      width={['full', '1160px']}
+      width={['full', 'auto']}
       background={'#1C1C1C'}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius="30px"
-      display={['none', 'flex']}
+      display={['none', 'none', 'none', 'flex']}
+      flexDirection="column"
     >
       <TableContainer width="full">
         <Table variant="unstyled">

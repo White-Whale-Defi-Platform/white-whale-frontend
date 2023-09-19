@@ -1,19 +1,19 @@
 import { FC } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 import FlashloanForm from './FlashloanForm'
 
 const Flashloan: FC = () => {
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId } = useRecoilValue(chainState)
   const router = useRouter()
-  const chains = useChains()
+  const chainInfos : any = useChainInfos()
   const chainIdParam = router.query.chainId as string
-  const currentChain = chains.find((row) => row.chainId === chainId)
+  const currentChain = chainInfos.find((row) => row.chainId === chainId)
 
   if (!currentChain || currentChain.label.toLowerCase() !== chainIdParam) {
     return null
@@ -24,7 +24,7 @@ const Flashloan: FC = () => {
       md: '722px' }} alignItems="center">
       <Box>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             Flashloan
           </Text>
         </HStack>

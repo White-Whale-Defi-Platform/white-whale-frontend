@@ -3,25 +3,24 @@ import { BsCircleFill } from 'react-icons/bs'
 import { useQuery } from 'react-query'
 
 import { HStack, Icon, Text } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 const Status = () => {
-  const chains: Array<any> = useChains()
-  const { chainId } = useRecoilValue(walletState)
+  const chains: Array<any> = useChainInfos()
+  const { chainId } = useRecoilValue(chainState)
 
   const url = useMemo(() => chains?.find((c) => c?.chainId === chainId)?.rpc,
     [chainId, chains])
-
   const { data: status } = useQuery(
     ['status', chainId],
     async () => {
       const res = await fetch(`${url}/status?`)
       const resJons = await res?.json()
       return {
-        block: resJons?.result?.sync_info?.latest_block_height || status?.block,
-        active: Boolean(resJons?.result?.sync_info?.latest_block_height),
+        block: resJons?.result?.sync_info?.latest_block_height || status?.block || resJons.sync_info.latest_block_height,
+        active: Boolean(resJons?.result?.sync_info?.latest_block_height) || !resJons.sync_info.catching_up,
       }
     },
     {

@@ -1,13 +1,21 @@
 import React from 'react'
 
 import { List } from '@chakra-ui/react'
-import { useChains } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
 
-function ChainList({ onChange, onClose, currentWalletState }) {
-  const chains = useChains()
-
+function ChainList({ onChange, onClose, currentChainState }) {
+  let chains = useChainInfos()
+  if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') == 'leap-metamask-cosmos-snap') {
+    const snapChains = []
+    chains.forEach((row) => {
+      if (row.coinType == 118) {
+        snapChains.push(row)
+      }
+    })
+    chains = snapChains
+  }
   return (
     <List spacing={1} color="white" width="full">
       {chains.map((chain, index) => (
@@ -18,8 +26,8 @@ function ChainList({ onChange, onClose, currentWalletState }) {
           onChange={onChange}
           onClose={onClose}
           chainList={chains}
-          active={currentWalletState?.chainId === chain?.chainId}
-          walletState={currentWalletState}
+          active={currentChainState?.chainId === chain?.chainId}
+          currentChainState={currentChainState}
         />
       ))}
     </List>

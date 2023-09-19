@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 
-import { createDepostExecuteMsgs, createDepostMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
+import { createDepostExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
 import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 type DepostProps = {
   token: {
@@ -17,7 +17,7 @@ type DepostProps = {
 }
 
 const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
-  const { address, client } = useRecoilValue(walletState)
+  const { address, client } = useRecoilValue(chainState)
   const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -27,7 +27,7 @@ const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
     }
 
     return {
-      msgs: createDepostMsg({ amount }),
+      msgs: createDepositMsg({ amount }),
       encodedMsgs: createDepostExecuteMsgs({
         amount,
         senderAddress: address,

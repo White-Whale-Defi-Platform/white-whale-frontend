@@ -10,15 +10,15 @@ import SubmitButton from 'components/SubmitButton'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
-import { WalletStatusType } from 'state/atoms/walletAtoms'
 
 type Props = {
   poolId: string
-  connected: WalletStatusType
+  isWalletConnected: boolean
+  mobile?: boolean
   clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
+const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -94,21 +94,18 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
     stakingAddress: staking_address,
   })
 
-  const isConnected = connected === WalletStatusType.connected
-  const isInputDisabled = tx?.txStep == TxStep.Posting
+  const isInputDisabled = tx?.txStep === TxStep.Posting
 
   const buttonLabel = useMemo(() => {
-    if (connected !== WalletStatusType.connected) {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!tokenA?.amount) {
       return 'Enter Amount'
-    }
-    // Else if (!isFinite(Number(lp)) || Number(lp) > lpBalance) return 'Insufficient funds'
-    else if (tx?.buttonLabel) {
+    } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
     }
     return 'Withdraw'
-  }, [tx?.buttonLabel, connected, tokenA, tokenB, lp, lpBalance])
+  }, [tx?.buttonLabel, isWalletConnected, tokenA, tokenB, lp, lpBalance])
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
@@ -128,7 +125,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
       tx.reset()
     }
 
-    if (asset == 1) {
+    if (asset === 1) {
       setValue('token1', value)
     } else {
       setValue('token2', value)
@@ -164,6 +161,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
         isDisabled={isInputDisabled}
         balance={num(tokenABalance).toNumber()}
         fetchBalance={false}
+        mobile={mobile}
         onChange={(value) => {
           if (reverse) {
             setReverse(false)
@@ -171,7 +169,6 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
           onInputChange(value, 1)
         }}
       />
-
       <Input
         control={control}
         name="token2"
@@ -179,6 +176,7 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
         isDisabled={isInputDisabled}
         balance={num(tokenBBalance).toNumber()}
         fetchBalance={false}
+        mobile={mobile}
         onChange={(value) => {
           if (!reverse) {
             setReverse(true)
@@ -189,9 +187,9 @@ const WithdrawForm = ({ poolId, connected, clearForm }: Props) => {
 
       <SubmitButton
         label={buttonLabel as string}
-        isConnected={isConnected}
+        isConnected={isWalletConnected}
         txStep={tx?.txStep}
-        isDisabled={tx.txStep != TxStep.Ready || !isConnected}
+        isDisabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
       />
 
       <ShowError

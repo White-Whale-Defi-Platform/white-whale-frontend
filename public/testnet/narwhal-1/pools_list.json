@@ -1,6 +1,6 @@
 {
   "name": "Pools list on testnet",
-  "logoURI": "/img/logo.svg",
+  "logoURI": "/logos/logo.svg",
   "keywords": ["special tokens"],
   "tags": {
     "ProjectName": {
@@ -27,7 +27,7 @@
       "pool_id": "WHALE-LUNA",
       "lpOrder": ["WHALE", "LUNA"],
       "displayName": "WHALE-LUNA",
-      "displayLogo1": "/img/logo.svg",
+      "displayLogo1": "/logos/logo.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -37,7 +37,7 @@
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
-          "logoURI": "/img/logo.svg",
+          "logoURI": "/Ïlogos/logo.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uwhale"
@@ -64,7 +64,7 @@
       "pool_id": "WILLyz-WILLye",
       "lpOrder": ["WILLye", "WILLyz"],
       "displayName": "WILLyz-WILLye",
-      "displayLogo1": "/img/logo.svg",
+      "displayLogo1": "/logos/logo.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -100,7 +100,7 @@
       "pool_id": "WILLye-WILLyb",
       "lpOrder": ["WILLye", "WILLyb"],
       "displayName": "WILLye-WILLyb",
-      "displayLogo1": "/img/logo.svg",
+      "displayLogo1": "/logos/logo.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -136,7 +136,7 @@
       "pool_id": "WILLyz-WILLyg",
       "lpOrder": ["WILLyz", "WILLyg"],
       "displayName": "WILLyz-WILLyg",
-      "displayLogo1": "/img/logo.svg",
+      "displayLogo1": "/logos/logo.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -175,7 +175,7 @@
       "pool_id": "WHALE-WILLye",
       "lpOrder": ["WHALE", "WILLye"],
       "displayName": "WHALE-WILLye",
-      "displayLogo1": "/img/logo.svg",
+      "displayLogo1": "/logos/logo.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -185,7 +185,7 @@
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
-          "logoURI": "/img/logo.svg",
+          "logoURI": "/logos/logo.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uwhale"
@@ -211,7 +211,7 @@
       "pool_id": "WHALE-WILLyb",
       "lpOrder": ["WHALE", "WILLyb"],
       "displayName": "WHALE-WILLyb",
-      "displayLogo1": "/img/logo.svg",
+      "displayLogo1": "/logos/logo.svg",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -221,7 +221,7 @@
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
-          "logoURI": "/img/logo.svg",
+          "logoURI": "/logos/logo.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uwhale"

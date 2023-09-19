@@ -1,7 +1,5 @@
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
-import { Wallet } from 'util/wallet-adapters'
-
 import { Config } from './useDashboardData'
 
 interface NativeTokenInfo {
@@ -27,7 +25,7 @@ export interface BondedData {
 }
 
 const fetchBonded = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ): Promise<BondedInfo> => {
@@ -39,7 +37,7 @@ const fetchBonded = async (
 }
 
 export const getBonded = async (
-  client: Wallet | null,
+  client: CosmWasmClient | null,
   address: string | null,
   config: Config,
 ) => {

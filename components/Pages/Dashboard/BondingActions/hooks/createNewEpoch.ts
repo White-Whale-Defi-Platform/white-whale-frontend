@@ -1,11 +1,12 @@
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
-import { Wallet } from 'util/wallet-adapters/index'
+
 
 import { TerraTreasuryService } from '../../../../../services/treasuryService'
 
 export const createNewEpoch = async (
-  client: Wallet,
+  signingClient: SigningCosmWasmClient,
   config: Config,
   address: string,
 ) => {
@@ -17,16 +18,17 @@ export const createNewEpoch = async (
     contractAddress: config.fee_distributor,
     message: handleMsg,
     funds: [] })
-  let fee = null
-  if (await client.getChainId() === 'columbus-5') {
-    const gas = Math.ceil(await client.simulate(
+  let fee = 'auto'
+  if (await signingClient.getChainId() === 'columbus-5') {
+    const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
       0, '', gas,
     )
   }
-  return await client.post(
-    address, [execMsg], '', fee,
+  return await signingClient.signAndBroadcast(
+    // @ts-ignore
+    address, [execMsg], fee, '',
   )
 }

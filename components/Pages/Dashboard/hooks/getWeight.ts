@@ -1,5 +1,4 @@
-import { JsonObject } from '@cosmjs/cosmwasm-stargate'
-import { Wallet } from 'util/wallet-adapters'
+import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
 
@@ -12,7 +11,7 @@ export interface WeightInfo {
 }
 
 export const getWeight = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ) => {
@@ -31,7 +30,7 @@ export const getWeight = async (
 }
 
 const fetchWeight = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ): Promise<WeightInfo> => {

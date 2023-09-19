@@ -3,6 +3,7 @@ import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
 
 import { Config } from './useDashboardData'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface UnbondingInfo {
   total_amount: string

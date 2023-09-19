@@ -1,5 +1,5 @@
-import ManagePoistion from 'components/Pages/Flashloan/Vaults/ManagePoistion'
+import ManagePosition from 'components/Pages/Flashloan/Vaults/ManagePosition'
 
-const ManagePositionPage = () => <ManagePoistion />
+const ManagePositionPage = () => <ManagePosition />
 
 export default ManagePositionPage

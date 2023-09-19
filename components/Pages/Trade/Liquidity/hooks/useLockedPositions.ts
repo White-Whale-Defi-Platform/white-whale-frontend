@@ -1,31 +1,46 @@
 import { useQuery } from 'react-query'
 
-import { STATE } from 'components/Pages/Trade/Liquidity/Positions'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useChain } from '@cosmos-kit/react-lite'
 import dayjs from 'dayjs'
+import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount } from 'libs/num'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
 
+type Params = {
+  cosmWasmClient: CosmWasmClient
+  prices: any
+  incentiveAddress: string
+  address: string
+  pool_assets: TokenInfo[]
+  totalAssets: number[]
+  totalLpSupply: number
+}
 export type Position = {
   poolId: string
   amount: number
   weight: string
   duration: string
   unbonding_duration: number
-  assets: TokenInfo & { dollarValue: number; assetAmount: number }[]
+  assets: TokenInfo & { dollarValue: number; amount: number }[]
   value: number
   state: string
   action: null
   isOpen: boolean
   formattedTime: string
 }
-
+export enum PositionState {
+  unbonding = 'unbonding',
+  active = 'active',
+  unbonded = 'unbonded',
+}
 export const lpPositionToAssets = ({
   totalAssets,
   totalLpSupply,
@@ -34,17 +49,16 @@ export const lpPositionToAssets = ({
   protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
   protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
 ]
-export const fetchPositions = async (
-  poolId,
-  client,
+export const fetchPositions = async ({
+  cosmWasmClient,
   prices,
   incentiveAddress,
   address,
   pool_assets,
   totalAssets,
   totalLpSupply,
-) => {
-  const data = await client?.queryContractSmart(incentiveAddress, {
+}: Params) => {
+  const data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
     positions: { address },
   })
   return data.positions.
@@ -81,11 +95,10 @@ export const fetchPositions = async (
           const dollarValue = Number(assetAmount) * prices?.[asset.symbol] || 0
           return {
             ...asset,
-            assetAmount: parseFloat(assetAmount),
+            amount: parseFloat(assetAmount),
             dollarValue,
           }
         })
-        const isWithdraw = poolId === 'ampLUNA-LUNA' || poolId === 'bLUNA-LUNA'
         return {
           ...position,
           duration: position.formatedTime,
@@ -94,10 +107,10 @@ export const fetchPositions = async (
           value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
             0),
           state: position.isOpen
-            ? STATE.ACTIVE
+            ? PositionState.active
             : diff <= 0
-              ? STATE.UNBONDED
-              : isWithdraw ? STATE.WITHDRAW : STATE.UNBONDING,
+              ? PositionState.unbonded
+              : PositionState.unbonding,
           action: null,
         }
       })
@@ -108,8 +121,10 @@ const useLockedPositions = (poolId: string) => {
   const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
     useQueryPoolLiquidity({ poolId })
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
-  const totalReserve = liquidity?.reserves?.total || [0, 0]
-  const { address, client } = useRecoilValue(walletState)
+  const totalAssets = liquidity?.reserves?.total || [0, 0]
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
   const tokens = useTokenList()
   const prices = usePrices()
 
@@ -123,17 +138,17 @@ const useLockedPositions = (poolId: string) => {
       pool_assets,
       prices,
     ],
-    queryFn: (): Promise<Position[]> => fetchPositions(
-      poolId,
-      client,
+    queryFn: (): Promise<Position[]> => fetchPositions({
+      cosmWasmClient,
       prices,
-      staking_address,
+      incentiveAddress: staking_address,
       address,
       pool_assets,
-      totalReserve,
+      totalAssets,
       totalLpSupply,
-    ),
-    enabled: Boolean(address) && Boolean(client) && Boolean(staking_address),
+    }),
+    enabled: Boolean(address) && Boolean(cosmWasmClient) && Boolean(staking_address),
+
   })
 }
 

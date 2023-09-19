@@ -1,56 +1,35 @@
 import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
-import { Wallet } from 'util/wallet-adapters'
 
-export enum WalletStatusType {
-  /* Nothing happens to the wallet */
-  idle = '@wallet-state/idle',
-  /* Restored wallets state from the cache */
-  restored = '@wallet-state/restored',
-  /* The wallet is fully connected */
-  connected = '@wallet-state/connected',
-  /* The wallet is fully connected */
-  disconnected = '@wallet-state/disconnected',
-  /* Connecting to the wallet */
-  connecting = '@wallet-state/connecting',
-  /* Error when tried to connect */
-  error = '@wallet-state/error',
-}
-
-type GeneratedWalletState<
-  TClient extends any,
-  TStateExtension extends {}
-> = TStateExtension & {
-  client: TClient | null
-  status: WalletStatusType
-  address: string
+type GeneratedWalletState<TStateExtension extends NonNullable<unknown>> = TStateExtension & {
   chainId: string
+  chainName: string
   network: NetworkType
   activeWallet: string
+  walletChainName:string
 }
 export enum NetworkType {
   testnet = 'testnet',
   mainnet = 'mainnet',
 }
 
-type CreateWalletStateArgs<TState = {}> = {
+type CreateWalletStateArgs<TState = NonNullable<unknown>> = {
   key: string
   default: TState
 }
 
-function createWalletState<TClient = any, TState = {}>({
+function createWalletState<TState = NonNullable<unknown>>({
   key,
   default: defaultState,
 }: CreateWalletStateArgs<TState>) {
-  return atom<GeneratedWalletState<TClient, TState>>({
+  return atom<GeneratedWalletState<TState>>({
     key,
     default: {
-      status: WalletStatusType.idle,
-      client: null,
-      chainId: null,
-      address: '',
+      chainId: 'migaloo-1',
+      chainName: 'migaloo',
       network: NetworkType.mainnet,
       activeWallet: '',
+      walletChainName: 'migaloo',
       ...defaultState,
     },
     dangerouslyAllowMutability: true,
@@ -64,8 +43,6 @@ function createWalletState<TClient = any, TState = {}>({
             if (parsedSavedState?.address) {
               setSelf({
                 ...parsedSavedState,
-                client: null,
-                status: WalletStatusType.restored,
               })
             }
           } catch (e) {}
@@ -83,7 +60,7 @@ function createWalletState<TClient = any, TState = {}>({
   })
 }
 
-export const walletState = createWalletState<Wallet, { key?: Key }>({
+export const chainState = createWalletState<{ key?: Key }>({
   key: 'internal-wallet',
   default: {
     key: null,

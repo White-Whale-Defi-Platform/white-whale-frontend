@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export default function TerraExtensionIcon(props) {
+export default function TerraExtensionIcon() {
   return (
     <svg
       width="20"

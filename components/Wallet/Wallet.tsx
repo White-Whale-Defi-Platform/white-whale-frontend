@@ -1,39 +1,49 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useQueryClient } from 'react-query'
 
-import { Box, Button, Divider } from '@chakra-ui/react'
-import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider'
+import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
+import { useChains } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
-import Select from 'components/Wallet/ChainSelect/Select'
+import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS } from 'constants/index'
-import { useChainInfo, useChains } from 'hooks/useChainInfo'
-import useConnectCosmostation from 'hooks/useConnectCosmostation'
-import useConnectKeplr from 'hooks/useConnectKeplr'
-import useConnectLeap from 'hooks/useConnectLeap'
-import { useTerraStation } from 'hooks/useTerraStation'
+import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, ACTIVE_NETWORKS_WALLET_NAMES, WALLETNAMES_BY_CHAINID } from 'constants/index'
+import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { NetworkType, walletState } from 'state/atoms/walletAtoms'
+import { NetworkType, chainState } from 'state/chainState'
 import { getPathName } from 'util/route'
 
-const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
+const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
-  const [currentWalletState, setCurrentWalletState] =
-    useRecoilState(walletState)
+  const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
+  const chains: Array<any> = useChainInfos()
+  let walletChains: Array<string> = []
 
-  const chains: Array<any> = useChains()
+  if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap') {
+    const snapChains = []
+    chains.forEach((row) => {
+      if (row.coinType === 118) {
+        snapChains.push(WALLETNAMES_BY_CHAINID[row.chainId])
+      }
+    })
+    walletChains = snapChains
+  } else {
+    walletChains = ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network]
+  }
+  const allChains = useChains(walletChains)
   const router = useRouter()
-  const connectedWallet = useConnectedWallet()
-  const [chainInfo] = useChainInfo(currentWalletState.chainId)
-
-  const { connectKeplr } = useConnectKeplr()
-  const { connectLeap } = useConnectLeap()
-  const { connectCosmostation } = useConnectCosmostation()
-  const { connectTerraAndCloseModal, filterForStation } = useTerraStation(() => {})
-  const { availableConnections } = useWallet()
+  let chainName = router.query.chainId as string
+  const [chainInfo] = useChainInfo(currentChainState.chainId)
+  const { isWalletConnected, disconnect, openView } = allChains[WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]]
+  chainName = chainName ? chainName : currentChainState.chainName
+  const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
+  const resetWallet = async () => {
+    queryClient.clear()
+    await disconnect()
+  }
 
   useEffect(() => {
     if (!router.query.chainId) {
@@ -48,24 +58,31 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     }
 
     const defaultChainId =
-      currentWalletState.network === NetworkType.mainnet
+      currentChainState.network === NetworkType.mainnet
         ? 'migaloo-1'
         : 'narwhal-1'
 
+    const defaultChainName =
+      currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'narwhal'
+    const defaultWalletChainName = currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'migalootestnet'
+
     if (
-      ACTIVE_NETWORKS[currentWalletState.network][chainIdParam] !==
-      currentWalletState.chainId
+      ACTIVE_NETWORKS[currentChainState.network][chainName] !==
+      currentChainState.chainId
     ) {
-      setCurrentWalletState({
-        ...currentWalletState,
-        chainId: ACTIVE_NETWORKS[currentWalletState.network][chainIdParam],
+      setCurrentChainState({
+        ...currentChainState,
+        chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
+        walletChainName: WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]
       })
     }
 
-    if (!ACTIVE_NETWORKS[currentWalletState.network][chainIdParam] && chainIdParam) {
-      setCurrentWalletState({
-        ...currentWalletState,
+    if (!ACTIVE_NETWORKS[currentChainState.network][chainIdParam] && chainIdParam) {
+      setCurrentChainState({
+        ...currentChainState,
         chainId: defaultChainId,
+        chainName: defaultChainName,
+        walletChainName: defaultWalletChainName,
       })
     }
     setInitialized(true)
@@ -73,84 +90,82 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
 
   const denom = useMemo(() => {
     if (!chainInfo) {
-      return
+      return null
     }
     const [coinDenom] = (chainInfo as any)?.currencies || []
     return coinDenom
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     chainInfo,
-    currentWalletState.chainId,
-    currentWalletState.network,
-    currentWalletState.activeWallet,
-    currentWalletState.address,
+    currentChainState.chainId,
+    currentChainState.network,
+    currentChainState.activeWallet,
   ])
 
-  const onChainChange = async (chain) => {
+  const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any }; label:string }) => {
     if (
       !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
       router.pathname.includes('dashboard')
     ) {
       await router.push('/swap')
     }
-    setCurrentWalletState({ ...currentWalletState,
-      chainId: chain.chainId })
+    setCurrentChainState({ ...currentChainState,
+      chainId: chain.chainId,
+      chainName: chain.label.toLowerCase(),
+      walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId]},
+    )
+    queryClient.clear()
+    if (isWalletConnected) {
+      const newChain = allChains[WALLETNAMES_BY_CHAINID[chain.chainId]]
+      if (!(window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap')) {
+        await newChain.connect()
+      } else {
+        await resetWallet()
+      }
+    }
+    // eslint-disable-next-line react-hooks/rules-of-hooks
   }
 
   useEffect(() => {
     if (!isInitialized) {
       return
     }
-    if (!currentWalletState.chainId) {
+    if (!currentChainState.chainId) {
       return
     }
     if (router.pathname.includes('/404')) {
       router.push('/404')
     }
-    if (currentWalletState.activeWallet === 'leap') {
-      connectLeap()
-    } else if (currentWalletState.activeWallet === 'keplr') {
-      connectKeplr()
-    } else if (currentWalletState.activeWallet === 'cosmostation') {
-      connectCosmostation()
-    } else if (currentWalletState.activeWallet === 'station') {
-      const [{ type = null, identifier = null } = {}] =
-        availableConnections.filter(filterForStation)
-      if (type && identifier) {
-        connectTerraAndCloseModal(type, identifier)
-      }
-    }
 
-    // Update route
-    const sourceChain = chains.find((row) => row.chainId.toLowerCase() === currentWalletState.chainId)
+    const sourceChain = chains.find((row) => row.chainId.toLowerCase() === currentChainState.chainId)
     if (sourceChain && !router.pathname.includes('/404')) {
       const path = getPathName(router, sourceChain.label)
       router.push(path)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentWalletState.chainId, isInitialized, availableConnections])
-
-  if (!connected && !connectedWallet) {
+  }, [currentChainState.chainId, isInitialized])
+  if (!isWalletConnected) {
     return (
-      <>
-        <Select
-          connected={connected}
+      <><HStack align="right" boxSize={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>
+        <SelectChainModal
+          connected={isWalletConnected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
-          currentWalletState={currentWalletState}
+          currentChainState={currentChainState}
         />
         <Button
           variant="outline"
           display="flex"
-          gap="3"
+          gap="1"
           color="white"
           borderColor="whiteAlpha.400"
           borderRadius="full"
-          onClick={onOpenModal}
+          onClick={openView}
         >
-          <WalletIcon />
-          Connect wallet
-        </Button>
+          <WalletIcon/>
+          <Text>Connect</Text>
+          <Text display={['none', 'none', 'contents']}>Wallet</Text>
+        </Button></HStack>
       </>
     )
   }
@@ -159,12 +174,12 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
     <>
       <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
         <ChainSelectWithBalance
-          connected={connected}
+          connected={isWalletConnected}
           denom={denom}
           onChainChange={onChainChange}
-          currentWalletState={currentWalletState}
+          currentChainState={currentChainState}
         />
-        <Box display={{ base: 'none',
+        <Box display={{ base: 'block',
           md: 'block' }}>
           <Divider
             orientation="vertical"
@@ -172,8 +187,8 @@ const Wallet: any = ({ connected, onDisconnect, onOpenModal }) => {
           />
         </Box>
         <ConnectedWalletWithDisconnect
-          connected={connected}
-          onDisconnect={onDisconnect}
+          connected={isWalletConnected}
+          onDisconnect={resetWallet}
         />
       </Card>
     </>

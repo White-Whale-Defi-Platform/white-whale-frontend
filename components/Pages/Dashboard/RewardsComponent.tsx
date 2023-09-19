@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   Box,
@@ -9,8 +9,8 @@ import {
   Tooltip,
   VStack,
   keyframes,
-  useDisclosure,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingAcionTooltip'
 import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import {
@@ -19,12 +19,11 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
-import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import Loader from '../../Loader'
-import WalletModal from '../../Wallet/Modal/Modal'
 import { ActionType } from './BondingOverview'
 
 const pulseAnimation = keyframes`
@@ -78,7 +77,8 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
   return (
     <Box
       h="7px"
-      minW={390}
+      width={[280, 380]}
+      maxWidth={390}
       bg={
         percent === 100 && currentEpochStartTimeInNano > 0
           ? 'transparent'
@@ -116,12 +116,9 @@ const RewardsComponent = ({
   daysSinceLastClaim,
   weightInfo,
 }) => {
-  const [{ chainId, network }, _] = useRecoilState(walletState)
-  const {
-    isOpen: isOpenModal,
-    onOpen: onOpenModal,
-    onClose: onCloseModal,
-  } = useDisclosure()
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+
+  const { openView } = useChain(walletChainName)
 
   const claimableRewards = useMemo(() => totalGlobalClaimable * Number(weightInfo?.share || 0),
     [totalGlobalClaimable, weightInfo])
@@ -135,8 +132,8 @@ const RewardsComponent = ({
   const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
     1)
 
-  const apr =
-    ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio
+  const apr = useMemo(() => ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio,
+    [annualRewards, globalTotalBonded, multiplierRatio])
 
   const { txStep, submit } = useTransaction()
 
@@ -182,8 +179,6 @@ const RewardsComponent = ({
           width="full"
           background={boxBg}
           borderRadius={borderRadius}
-          minH={320}
-          w={450}
           gap={3}
           overflow="hidden"
           position="relative"
@@ -191,8 +186,6 @@ const RewardsComponent = ({
           justifyContent="center"
         >
           <HStack
-            minW={100}
-            minH={100}
             width="full"
             alignContent="center"
             justifyContent="center"
@@ -203,28 +196,23 @@ const RewardsComponent = ({
         </VStack>
       ) : (
         <VStack
-          width="full"
+          px={4}
           background={boxBg}
           borderRadius={borderRadius}
           alignItems="center"
           minH={320}
-          w={450}
+          width="flex"
           gap={4}
           overflow="hidden"
           position="relative"
           display="flex"
           justifyContent="flex-start"
         >
-          <HStack
-            justifyContent="space-between"
-            align="stretch"
-            mt={7}
-            minW={390}
-          >
+          <HStack spacing={['100', '170']} align="stretch" mt={7}>
             <HStack flex="1">
               <a>
                 <Image
-                  src="/img/logo.svg"
+                  src="/logos/logo.svg"
                   alt="WhiteWhale Logo"
                   boxSize={[5, 7]}
                 />
@@ -236,7 +224,7 @@ const RewardsComponent = ({
             </Text>
           </HStack>
           <VStack>
-            <HStack justifyContent="space-between" minW={390}>
+            <HStack justifyContent="space-between" minWidth={['280', '380']}>
               <Text color="whiteAlpha.600">Next rewards in</Text>
               <Text>{durationString}</Text>
             </HStack>
@@ -250,7 +238,7 @@ const RewardsComponent = ({
             borderColor="whiteAlpha.400"
             borderRadius="10px"
             p={4}
-            minW={390}
+            minW={['290', '390']}
           >
             <HStack justifyContent="space-between">
               <HStack>
@@ -272,9 +260,7 @@ const RewardsComponent = ({
               <Text color="whiteAlpha.600" fontSize={11}>
                 Estimated APR
               </Text>
-              <Text fontSize={11}>
-                {isWalletConnected ? `${apr.toFixed(2)}%` : 'n/a'}
-              </Text>
+              <Text fontSize={11}>{`${apr.toFixed(2)}%`}</Text>
             </HStack>
             <HStack>
               <Text color="whiteAlpha.600" fontSize={11}>
@@ -287,7 +273,7 @@ const RewardsComponent = ({
               </Text>
             </HStack>
           </Box>
-          <HStack w={390}>
+          <HStack w={[290, 390]}>
             <Button
               alignSelf="center"
               bg="#6ACA70"
@@ -295,16 +281,16 @@ const RewardsComponent = ({
               variant="primary"
               width={'100%'}
               disabled={
-                txStep == TxStep.Estimating ||
-                txStep == TxStep.Posting ||
-                txStep == TxStep.Broadcasting ||
+                txStep === TxStep.Estimating ||
+                txStep === TxStep.Posting ||
+                txStep === TxStep.Broadcasting ||
                 (isWalletConnected && claimableRewards === 0)
               }
               maxWidth={570}
               isLoading={
-                txStep == TxStep.Estimating ||
-                txStep == TxStep.Posting ||
-                txStep == TxStep.Broadcasting
+                txStep === TxStep.Estimating ||
+                txStep === TxStep.Posting ||
+                txStep === TxStep.Broadcasting
               }
               onClick={async () => {
                 if (isWalletConnected) {
@@ -312,7 +298,7 @@ const RewardsComponent = ({
                     ActionType.claim, null, null,
                   )
                 } else {
-                  onOpenModal()
+                  openView()
                 }
               }}
               style={{ textTransform: 'capitalize' }}
@@ -343,11 +329,6 @@ const RewardsComponent = ({
               </Tooltip>
             )}
           </HStack>
-          <WalletModal
-            isOpenModal={isOpenModal}
-            onCloseModal={onCloseModal}
-            chainId={chainId}
-          />
         </VStack>
       )}
     </>

@@ -15,6 +15,7 @@ type Props = {
   fetchBalance?: boolean
   ignoreSlack?: boolean
   showList?: boolean
+  mobile?: boolean
 }
 
 const Input = ({
@@ -27,6 +28,7 @@ const Input = ({
   fetchBalance = true,
   ignoreSlack = false,
   showList = false,
+  mobile,
 }: Props) => {
   const { balance: tokenBalance } = useTokenBalance(token?.tokenSymbol)
 
@@ -44,6 +46,7 @@ const Input = ({
             balance={fetchBalance ? tokenBalance : balance}
             ignoreSlack={ignoreSlack}
             showList={showList}
+            mobile={mobile}
             onChange={(value) => {
               onChange(value)
               field.onChange(value)

@@ -1,13 +1,14 @@
 import { Box, Button } from '@chakra-ui/react'
+import { PositionState } from 'components/Pages/Trade/Liquidity/hooks/useLockedPositions'
+
 import { useClosePosition } from 'components/Pages/Trade/Liquidity/hooks/useClosePosition'
 import { useWithdrawPosition } from 'components/Pages/Trade/Liquidity/hooks/useWithdrawPosition'
-import { STATE } from 'components/Pages/Trade/Liquidity/Positions'
 
 export const Action = ({ item, poolId }) => {
   const close = useClosePosition({ poolId })
   const withdraw = useWithdrawPosition({ poolId })
 
-  if (item?.state === STATE.ACTIVE) {
+  if (item?.state === PositionState.active) {
     return (
       <Button
         width="full"
@@ -20,13 +21,13 @@ export const Action = ({ item, poolId }) => {
         Close
       </Button>
     )
-  } else if (item?.state === STATE.UNBONDING) {
+  } else if (item?.state === PositionState.unbonding) {
     return (
       <Button width="full" variant="outline" size="sm" isDisabled={true}>
         Unbonding
       </Button>
     )
-  } else if (item?.state === STATE.UNBONDED) {
+  } else if (item?.state === PositionState.unbonded) {
     return (
       <Button
         width="full"
@@ -35,21 +36,10 @@ export const Action = ({ item, poolId }) => {
         isLoading={withdraw?.isLoading}
         onClick={() => withdraw?.submit()}
       >
-        Unbound
+        Unbonded
       </Button>
     )
-  } else if (item?.state === STATE.WITHDRAW) {
-    return (
-      <Button
-        width="full"
-        variant="primary"
-        size="sm"
-        isLoading={withdraw?.isLoading}
-        onClick={() => withdraw?.submit()}
-      >
-       Unlock LP
-      </Button>
-    )
+  } else {
+    return <Box w="full" />
   }
-  <Box w="full" />
 }

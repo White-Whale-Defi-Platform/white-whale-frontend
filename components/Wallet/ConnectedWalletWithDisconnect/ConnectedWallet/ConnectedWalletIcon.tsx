@@ -4,20 +4,27 @@ import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import LeapWalletIcon from 'components/icons/LeapWalletIcon'
 import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
-import { useRecoilState } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
+import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import LeapSnapIcon from '../../../icons/LeapSnapIcon'
 
 function ConnectedWalletIcon() {
-  const [currentWalletState, _] = useRecoilState(walletState)
-  switch (currentWalletState?.activeWallet) {
-    case 'keplr':
+  const { walletChainName } = useRecoilValue(chainState)
+  const { wallet } = useChain(walletChainName)
+
+  switch (wallet.name) {
+    case WalletType.keplrExtension || WalletType.keplrMobile:
       return <KeplrWalletIcon />
-    case 'leap':
+    case WalletType.leapExtension || WalletType.leapMobile:
       return <LeapWalletIcon />
-    case 'cosmostation':
+    case WalletType.cosmoStationExtension || WalletType.cosmoStationMobile:
       return <CosmostationWalletIcon />
-    case 'station':
+    case WalletType.terraExtension:
       return <TerraExtensionIcon />
+    case WalletType.leapSnap:
+      return <LeapSnapIcon />
     default:
       return <></>
   }

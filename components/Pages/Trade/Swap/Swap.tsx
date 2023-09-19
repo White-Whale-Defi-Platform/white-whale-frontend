@@ -1,18 +1,19 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import useSwap from 'components/Pages/Trade/Swap/hooks/useSwap'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SwapForm from 'components/Pages/Trade/Swap/SwapForm'
 import SwapSettings from 'components/Pages/Trade/Swap/SwapSettings'
-import { useChains } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import { TokenItemState } from 'types/index'
 
 type SwapProps = {
@@ -20,23 +21,26 @@ type SwapProps = {
   initialTokenPair?: readonly [string, string]
 }
 
-const Swap: FC<SwapProps> = ({}) => {
+const Swap: FC<SwapProps> = (params) => {
   const router = useRouter()
   const [[tokenA, tokenB], setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const [reverse, setReverse] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
 
-  const { chainId, address, network, status } = useRecoilValue(walletState)
-  const chains: Array<any> = useChains()
+  const { chainId, address, network, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
+  const chains: Array<any> = useChainInfos()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
   const changeUrl = (tokenSymbol1:string, tokenSymbol2:string) => {
-    const url = `/${currentChainId}/swap?from=${tokenSymbol1}&to=${tokenSymbol2}`
-    router.push(url)
+    if (tokenSymbol1 && tokenSymbol2) {
+      const url = `/${currentChainId}/swap?from=${tokenSymbol1}&to=${tokenSymbol2}`
+      router.push(url)
+    }
   }
 
   const tokenList = useMemo(() => {
@@ -65,9 +69,8 @@ const Swap: FC<SwapProps> = ({}) => {
     if (!currentChainId || tokenList.length === 0) {
       return
     }
-    const { from, to } = router.query
+    const [ from , to] = params?.initialTokenPair || []
     const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
-
     let newState: TokenItemState[] = [
       {
         tokenSymbol: String(from),
@@ -80,7 +83,6 @@ const Swap: FC<SwapProps> = ({}) => {
         decimals: 6,
       },
     ]
-
     if (!from || !to) {
       if (tokenA.tokenSymbol && tokenB.tokenSymbol) {
         changeUrl(tokenA.tokenSymbol, tokenB.tokenSymbol)
@@ -180,7 +182,7 @@ const Swap: FC<SwapProps> = ({}) => {
         <SwapSettings />
       </HStack>
       <SwapForm
-        connected={status}
+        isWalletConnected={isWalletConnected}
         tokenA={tokenA}
         tokenB={tokenB}
         onReverseDirection={onReverseDirection}

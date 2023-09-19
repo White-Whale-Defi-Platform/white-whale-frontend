@@ -42,7 +42,6 @@ type Params = {
   enabled: boolean
   swapAddress: string
   swapAssets: any[]
-  price: number
   client: any
   senderAddress: string
   msgs: any | null
@@ -55,6 +54,7 @@ type Params = {
   onError?: (txHash?: string, txInfo?: any) => void
 }
 
+// TODO make this useTx base version and remove the duplicate code
 export const useTransaction = ({
   enabled,
   swapAddress,
@@ -64,7 +64,6 @@ export const useTransaction = ({
   msgs,
   encodedMsgs,
   amount,
-  price,
   onBroadcasting,
   onSuccess,
   onError,
@@ -127,9 +126,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -185,17 +184,16 @@ export const useTransaction = ({
       })
 
       setTxStep(TxStep.Failed)
-
       onError?.()
     },
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data.transactionHash)
       onBroadcasting?.(data.transactionHash)
       const queryPath = `multipleTokenBalances/${swapAssets.
         map(({ symbol }) => symbol)?.
         join('+')}`
-      queryClient.invalidateQueries([queryPath])
+      await queryClient.invalidateQueries([queryPath])
       toast({
         title: 'Swap Success.',
         description: (
@@ -215,14 +213,14 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
 
       return client.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -234,15 +232,15 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
-      return
+    if (fee === null || msgs === null || msgs.length < 1) {
+      return null
     }
 
     mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
+    if (txInfo !== null && txHash !== null) {
       if (txInfo?.txResponse?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
@@ -258,7 +256,7 @@ export const useTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,5 +275,3 @@ export const useTransaction = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   [txStep, txInfo, txHash, error, reset, fee])
 }
-
-export default useTransaction

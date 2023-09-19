@@ -1,15 +1,13 @@
 import React from 'react'
 
 import { Button, HStack, PopoverTrigger, Text } from '@chakra-ui/react'
-import { useConnectedWallet } from '@terra-money/wallet-provider'
 
 import ChevronDownIcon from '../../icons/ChevronDownIcon'
 
 function ChainSelectTrigger({ connected, denom }) {
-  const connectedWallet = useConnectedWallet()
   return (
     <PopoverTrigger>
-      {connected || connectedWallet ? (
+      {connected ? (
         <HStack as={Button} variant="unstyled">
           <Text fontSize={['14px', '16px']}>{denom}</Text>
           <ChevronDownIcon />

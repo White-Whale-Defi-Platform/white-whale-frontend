@@ -1,7 +1,9 @@
 import { toast } from 'react-hot-toast'
 import { useMutation } from 'react-query'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import { useClients } from 'hooks/useClients'
 import { useRefetchQueries } from 'hooks/useRefetchQueries'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 // TODO: These should be deprecated in place of some other chakra component so we can remove the dep on junoblocks
@@ -16,11 +18,11 @@ import {
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { passThroughTokenSwap } from 'services/swap/index'
+import { chainState } from 'state/chainState'
 import {
   TransactionStatus,
   transactionStatusState,
-} from 'state/atoms/transactionAtoms'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+} from 'state/transactionStatusState'
 import { convertDenomToMicroDenom } from 'util/conversion/index'
 
 type UseTokenSwapArgs = {
@@ -37,7 +39,9 @@ export const useTokenSwap = ({
   tokenAmount: providedTokenAmount,
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
-  const { client, address, status } = useRecoilValue(walletState)
+  const { address, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)
   const setTokenSwap = useSetRecoilState(tokenSwapAtom)
@@ -50,15 +54,15 @@ export const useTokenSwap = ({
 
   return useMutation(
     'swapTokens',
-    async () => {
-      if (status !== WalletStatusType.connected) {
+    () => {
+      if (!isWalletConnected) {
         throw new Error('Please connect your wallet.')
       }
 
       setTransactionState(TransactionStatus.EXECUTING)
 
       const tokenAmount = convertDenomToMicroDenom(providedTokenAmount,
-        tokenA.decimals)
+        tokenA.decimals).toString()
 
       const price = convertDenomToMicroDenom(tokenToTokenPrice, tokenB.decimals)
 
@@ -96,7 +100,7 @@ export const useTokenSwap = ({
         tokenA,
         swapAddress: baseTokenAPool.swap_address,
         outputSwapAddress: baseTokenBPool.swap_address,
-        client,
+        signingClient,
       })
     },
     {

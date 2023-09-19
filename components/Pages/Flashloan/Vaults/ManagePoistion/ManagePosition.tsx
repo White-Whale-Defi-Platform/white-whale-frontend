@@ -16,18 +16,20 @@ import {
 import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/DepositForm'
 import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePoistion/WithdrawForm'
-import { useChains } from 'hooks/useChainInfo'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
 
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
   const { vaults, refetch: vaultsRefetch } = useVault()
-  const chains: Array<any> = useChains()
+  const chains: Array<any> = useChainInfos()
   const params = new URLSearchParams(location.search)
-  const { chainId, address, status } = useRecoilValue(walletState)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
   const vaultId = params.get('vault') || 'JUNO'
 
   const vault = useMemo(() => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
@@ -35,12 +37,12 @@ const ManagePosition = () => {
 
   useEffect(() => {
     if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain) {
+      const currentChain = chains.find((row) => row.chainId === chainId)
+      if (currentChain) {
         if (!vault) {
-          router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
+          router.push(`/${currentChain.label.toLocaleLowerCase()}/vaults`)
         } else {
-          router.push(`/${currenChain.label.toLowerCase()}/vaults/manage_position?vault=${vaultId}`)
+          router.push(`/${currentChain.label.toLowerCase()}/vaults/manage_position?vault=${vaultId}`)
         }
       }
     }
@@ -119,7 +121,6 @@ const ManagePosition = () => {
                 {vault?.vault_assets?.symbol && (
                   <DepositForm
                     vaultAddress={vault?.vault_address}
-                    connected={status}
                     isLoading={tokenBalanceLoading}
                     balance={tokenBalance}
                     defaultToken={vault?.vault_assets?.symbol}
@@ -132,7 +133,6 @@ const ManagePosition = () => {
                   <WithdrawForm
                     vaultAddress={vault?.vault_address}
                     lpToken={vault?.lp_token}
-                    connected={status}
                     isLoading={lpTokenBalanceLoading}
                     balance={lpTokenBalance?.lpBalance}
                     assetBlance={lpTokenBalance?.underlyingAsset}

@@ -4,15 +4,17 @@ import { Button, HStack, useToast } from '@chakra-ui/react'
 import ConnectedWalletIcon from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWalletIcon'
 import TruncatedAddress from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/TruncatedAddress'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
 
 function ConnectedWallet({ connected }) {
   const toast = useToast()
-  const { address } = useRecoilValue(walletState)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
 
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     try {
-      navigator.clipboard.writeText(address)
+      await navigator.clipboard.writeText(address)
       toast({
         title: 'Address copied to clipboard',
         status: 'success',

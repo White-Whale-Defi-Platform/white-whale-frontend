@@ -1,16 +1,18 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
+import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import { WHALE_TOKEN_SYMBOL } from 'constants/index'
-import { useChains } from 'hooks/useChainInfo'
+import {
+  WHALE_TOKEN_SYMBOL,
+} from 'constants/index'
 import usePrices from 'hooks/usePrices'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
-import { useRecoilState } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
 
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
 import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
@@ -18,12 +20,9 @@ import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 
 const Dashboard: FC = () => {
-  const [{ chainId, status, client, address, network }] =
-    useRecoilState(walletState)
-  const isWalletConnected: boolean = status === WalletStatusType.connected
-  const chains: Array<any> = useChains()
-  const currentChain = chains.find((row: { chainId: string }) => row.chainId === chainId)
-  const currentChainName = currentChain?.label.toLowerCase()
+  const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, address } = useChain(walletChainName)
+
 
   const data: BondingData[] = [
     {
@@ -61,17 +60,18 @@ const Dashboard: FC = () => {
   ]
 
   const [updatedData, setData] = useState(null)
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
 
   const setValues = (
     tokenType: TokenType,
     value: number,
     tokenBalances: TokenBalance[],
   ) => {
-    const specificBondingData = data?.find((e) => e.tokenType == tokenType)
+    const specificBondingData = data?.find((e) => e.tokenType === tokenType)
     specificBondingData.value = value ?? 0
     specificBondingData.tokenBalances = tokenBalances ?? []
   }
-  const setBondedTokens = function (bondedAssets: BondedData[]) {
+  const setBondedTokens = (bondedAssets: BondedData[]) => {
     const tokenBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
       tokenSymbol: asset.tokenSymbol }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
@@ -79,8 +79,8 @@ const Dashboard: FC = () => {
       TokenType.bonded, total, tokenBalances,
     )
   }
-  const setLiquidTokens = function (liquidBalances: number[],
-    symbols: string[]) {
+  const setLiquidTokens = (liquidBalances: number[],
+    symbols: string[]) => {
     const tokenBalances = symbols?.map((symbol, idx) => ({
       amount: liquidBalances?.[idx] ?? 0,
       tokenSymbol: symbol,
@@ -91,7 +91,7 @@ const Dashboard: FC = () => {
     )
   }
 
-  const setUnbondingTokens = function (unbondingRequests: UnbondingData[]) {
+  const setUnbondingTokens = (unbondingRequests: UnbondingData[]) => {
     const tokenBalances = unbondingRequests?.map((req) => ({ amount: req.amount,
       tokenSymbol: req.tokenSymbol }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
@@ -101,7 +101,8 @@ const Dashboard: FC = () => {
     )
   }
 
-  const setWithdrawableTokens = function (withdrawableInfos: WithdrawableInfo[]) {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const setWithdrawableTokens = (withdrawableInfos: WithdrawableInfo[]) => {
     const tokenBalances = withdrawableInfos?.map((info) => ({ amount: info.amount,
       tokenSymbol: info.tokenSymbol }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
@@ -147,7 +148,7 @@ const Dashboard: FC = () => {
     globalAvailableRewards,
     isLoading,
   } = useDashboardData(
-    client, address, network, chainId,
+    address, network, chainId, walletChainName,
   )
 
   useEffect(() => {
@@ -167,17 +168,18 @@ const Dashboard: FC = () => {
   ])
 
   return (
-    <VStack alignSelf="center">
+    <VStack width={'full'} alignSelf="center" paddingLeft={['5', '5', '10']}>
       <Flex
         direction={{ base: 'column',
           xl: 'row' }}
-        gap={10}
+        gap={5}
         justifyContent="space-between"
         alignItems="flex-end"
       >
-        <VStack>
-          <HStack width="full" paddingY={5}>
-            <Text as="h2" fontSize="24" fontWeight="900">
+        <VStack width="flex">
+          <HStack width="full" paddingY={{ base: 3,
+            md: 5 }}>
+            <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding
             </Text>
           </HStack>
@@ -186,7 +188,8 @@ const Dashboard: FC = () => {
             isLoading={isLoading && isWalletConnected}
             data={updatedData}
             whalePrice={whalePrice}
-            currentChainName={currentChainName}
+            currentChainName={chainName}
+            mobile={isMobile}
           />
         </VStack>
         <VStack alignSelf={{ base: 'center',

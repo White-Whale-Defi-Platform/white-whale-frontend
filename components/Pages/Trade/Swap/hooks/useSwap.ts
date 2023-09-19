@@ -1,19 +1,22 @@
 import { useMemo } from 'react'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import useRoute from 'components/Pages/Trade/Swap/hooks/useRoute'
 import useSimulate from 'components/Pages/Trade/Swap/hooks/useSimulate'
 import useTransaction from 'components/Pages/Trade/Swap/hooks/useTransaction'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import { num, toChainAmount } from 'libs/num'
-import { fromChainAmount } from 'libs/num'
+import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
-  const { address, client } = useRecoilValue(walletState)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient, cosmWasmClient } = useClients(walletChainName)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
   const slippage = useRecoilValue(slippageAtom)
@@ -40,7 +43,7 @@ const useSwap = ({ reverse }) => {
   })
 
   const { simulated, error, isLoading } = useSimulate({
-    client,
+    cosmWasmClient,
     msg: simulateMsg,
     routerAddress,
   })
@@ -62,7 +65,7 @@ const useSwap = ({ reverse }) => {
     swapAddress: routerAddress,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
-    client,
+    signingClient,
     msgs: executeMsg,
     encodedMsgs: encodedExecuteMsg,
     amount: reverse ? simulated?.amount : amount,

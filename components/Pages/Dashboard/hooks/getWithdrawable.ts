@@ -1,7 +1,7 @@
 import { convertMicroDenomToDenom } from 'util/conversion'
-import { Wallet } from 'util/wallet-adapters'
 
 import { Config } from './useDashboardData'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface WithdrawableInfo {
   amount: number
@@ -10,7 +10,7 @@ export interface WithdrawableInfo {
 }
 
 export const getWithdrawable = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ) => {
@@ -38,7 +38,7 @@ export const getWithdrawable = async (
 }
 
 const fetchWithdrawable = async (
-  client: Wallet,
+  client: CosmWasmClient,
   address: string,
   config: Config,
 ): Promise<WithdrawableInfo[]> => {

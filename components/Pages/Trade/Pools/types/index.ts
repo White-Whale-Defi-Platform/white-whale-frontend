@@ -3,6 +3,7 @@ import React from 'react'
 import { FlowData } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 
 export type Pool = {
+  poolId: string
   contract: string
   pool: string
   token1Img: string

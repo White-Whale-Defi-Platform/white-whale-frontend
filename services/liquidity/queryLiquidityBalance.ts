@@ -1,15 +1,15 @@
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { protectAgainstNaN } from 'junoblocks'
-import { Wallet } from 'util/wallet-adapters'
 
 type QueryLiquidityBalanceArgs = {
   address: string
   tokenAddress: string
-  client: Wallet
+  cosmWasmClient: CosmWasmClient
   isNative: boolean
 }
 
 export const queryLiquidityBalance = async ({
-  client,
+  cosmWasmClient,
   tokenAddress,
   address,
   isNative = false,
@@ -17,10 +17,10 @@ export const queryLiquidityBalance = async ({
   let balance = 0
   try {
     if (isNative) {
-      balance = Number((await client.getBalance(address, tokenAddress)).amount)
+      balance = Number((await cosmWasmClient.getBalance(address, tokenAddress)).amount)
     } else {
       balance = Number((
-        await client.queryContractSmart(tokenAddress, {
+        await cosmWasmClient.queryContractSmart(tokenAddress, {
           balance: { address },
         })
       ).balance)

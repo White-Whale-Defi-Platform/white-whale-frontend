@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import {
   Config,
   useConfig,
@@ -8,17 +9,20 @@ import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactor
 import createLpMsg, { createLPExecuteMsgs } from 'components/Pages/Trade/Liquidity/hooks/createLPMsg'
 import useTransaction from 'components/Pages/Trade/Liquidity/hooks/useDepositTransaction'
 import useIsNewPosition from 'components/Pages/Trade/Liquidity/hooks/useIsNewPosition'
-import { tokenLpAtom } from 'components/Pages/Trade/Liquidity/lpAtoms'
+import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
 import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { tokenItemState } from 'state/tokenItemState'
 
-const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
-  const [lpTokenA, lpTokenB] = useRecoilValue(tokenLpAtom)
-  const { address, client, network, chainId } = useRecoilValue(walletState)
+const useProvideLP = ({ reverse = false, bondingDays }) => {
+  const [lpTokenA, lpTokenB] = useRecoilValue(tokenItemState)
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const config: Config = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
@@ -38,7 +42,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     poolId })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
-  let minUnbondingDuration = 0
+  let minUnbondingDuration = 86400
   if (factoryConfig) {
     minUnbondingDuration = factoryConfig?.minUnbondingDuration
   }
@@ -68,7 +72,6 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
       : [lpTokenB, lpTokenA]
   }, [lpTokenA, lpTokenB, lpOrder])
 
-  // @ts-ignore
   const [tokenAReserve, tokenBReserve] = liquidity?.reserves?.total || []
 
   const tokenAAmount = toChainAmount(lpA?.amount,
@@ -108,11 +111,11 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (
-      simulated == null ||
+      simulated === null ||
       !tokenAAmount ||
       !tokenBAmount ||
-      swapAddress == null ||
-      minUnbondingDuration == null
+      swapAddress === null ||
+      minUnbondingDuration === null
     ) {
       return {}
     }
@@ -172,8 +175,8 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     isNewPosition,
   ])
 
+
   const tx = useTransaction({
-    poolId,
     enabled:
       Boolean(encodedMsgs) &&
       Number(tokenAAmount) > 0 &&
@@ -181,7 +184,7 @@ const useProvideLP = ({ reverse = false, bondingDays = 0 }) => {
     swapAddress: bondingDays === 0 ? swapAddress : config?.frontend_helper,
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
-    client,
+    signingClient,
     msgs,
     encodedMsgs,
     tokenAAmount: reverse

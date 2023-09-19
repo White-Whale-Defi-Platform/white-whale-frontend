@@ -2,12 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
-
 export enum TxStep {
   /**
    * Idle
@@ -30,7 +28,7 @@ export enum TxStep {
    */
   Broadcasting = 4,
   /**
-   * Succesful
+   * Successful
    */
   Success = 5,
   /**
@@ -44,7 +42,7 @@ type Params = {
   swapAddress: string
   swapAssets: any[]
   price: number
-  client: any
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -60,7 +58,7 @@ export const useTransaction = ({
   enabled,
   swapAddress,
   swapAssets,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -73,8 +71,6 @@ export const useTransaction = ({
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
   const queryClient = useQueryClient()
-  const { chainId } = useRecoilValue(walletState)
-  const [gas, setGas] = useState<number>(0)
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
@@ -87,10 +83,11 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(
-          senderAddress, debouncedMsgs, '',
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
         )
-        setGas(response)
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -131,9 +128,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -152,9 +149,7 @@ export const useTransaction = ({
     senderAddress,
     msgs,
     tokenAmount: amount,
-    client,
-    chainId,
-    gas,
+    signingClient
   }),
   {
     onMutate: () => {
@@ -180,7 +175,6 @@ export const useTransaction = ({
         setError('Failed to execute transaction.')
         message = 'Failed to execute transaction.'
       }
-
       toast({
         title: 'Swap Failed.',
         description: message,
@@ -191,20 +185,22 @@ export const useTransaction = ({
       })
 
       setTxStep(TxStep.Failed)
-
       onError?.()
     },
     onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data.transactionHash || data?.txHash)
       onBroadcasting?.(data.transactionHash)
-      await queryClient.invalidateQueries(['multipleTokenBalances', 'tokenBalance'])
+      await queryClient.invalidateQueries([
+        'multipleTokenBalances',
+        'tokenBalance',
+      ])
       toast({
         title: 'Swap Success.',
         description: (
           <Finder
             txHash={data.transactionHash || data?.txHash}
-            chainId={client?.client?.chainId || client?.chainID}
+            chainId={await signingClient?.getChainId()}
           >
             {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
@@ -221,13 +217,13 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -239,16 +235,17 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
-      return
+    if (fee === null || msgs === null || !msgs || msgs.length < 1) {
+      return null
     }
 
     mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {
+    // Dont change to !== breaking
     if (txInfo != null && txHash != null) {
-      if (txInfo?.txResponse?.code) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
@@ -263,7 +260,7 @@ export const useTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

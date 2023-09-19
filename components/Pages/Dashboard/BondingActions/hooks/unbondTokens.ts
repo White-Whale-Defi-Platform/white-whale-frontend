@@ -1,11 +1,12 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { createExecuteMessage } from 'util/messages/createExecuteMessage'
-import { Wallet } from 'util/wallet-adapters/index'
 
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
+import { createExecuteMessage } from 'util/messages/createExecuteMessage'
+
+import { TerraTreasuryService } from 'services/treasuryService'
 
 export const unbondTokens = async (
-  client: Wallet,
+  signingClient: SigningCosmWasmClient,
   address: string,
   amount: number,
   denom: string,
@@ -17,7 +18,7 @@ export const unbondTokens = async (
         amount: amount.toString(),
         info: {
           native_token: {
-            denom,
+            denom: denom,
           },
         },
       },
@@ -28,14 +29,15 @@ export const unbondTokens = async (
     contractAddress: config.whale_lair,
     message: handleMsg,
     funds: [] })
-  let fee = null
-  if (await client.getChainId() === 'columbus-5') {
-    const gas = Math.ceil(await client.simulate(
+  let fee = 'auto'
+  if (await signingClient.getChainId() === 'columbus-5') {
+    const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom, gas)
   }
-  return await client.post(
-    address, [execMsg], '', fee,
+  return await signingClient.signAndBroadcast(
+    // @ts-ignore
+    address, [execMsg], fee, '',
   )
 }

@@ -2,17 +2,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/common'
-import { Wallet } from 'util/wallet-adapters/index'
+
+import { TerraTreasuryService } from '../../../../../services/treasuryService'
 
 type Params = {
   lpTokenAddress: string
   swapAddress: string
   enabled: boolean
-  client: Wallet
+  signingClient: SigningCosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -27,7 +29,7 @@ export const useWithdrawTransaction = ({
   lpTokenAddress,
   enabled,
   swapAddress,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -52,8 +54,10 @@ export const useWithdrawTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(
-          senderAddress, debouncedMsgs, '',
+        const response = await signingClient.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
         )
         if (buttonLabel) {
           setButtonLabel(null)
@@ -80,16 +84,16 @@ export const useWithdrawTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
-        Boolean(client) &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
+        Boolean(signingClient) &&
         Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
-      onSuccess: (data) => {
+      onSuccess: () => {
         setTxStep(TxStep.Ready)
       },
       onError: () => {
@@ -98,16 +102,37 @@ export const useWithdrawTransaction = ({
     },
   )
 
-  const { mutate } = useMutation((data: any) => (isNative
-    ? client.execute(
-      senderAddress,
-      swapAddress,
-      { withdraw_liquidity: {} },
-      [coin(amount, lpTokenAddress)],
-    )
-    : client.post(senderAddress, encodedMsgs)),
+  const { mutate } = useMutation(async (data: any) => {
+    if (isNative) {
+      return signingClient.execute(
+        senderAddress,
+        swapAddress,
+        { withdraw_liquidity: {} },
+        'auto',
+        null,
+        [coin(amount, lpTokenAddress)],
+      )
+    } else {
+      let fee:any = 'auto'
+      if (await signingClient.getChainId() === 'columbus-5') {
+        const gas = Math.ceil(await signingClient.simulate(
+          senderAddress, encodedMsgs, '',
+        ) * 1.3)
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+          0, '', gas,
+        )
+      }
+      return signingClient.signAndBroadcast(
+        senderAddress,
+        encodedMsgs,
+        fee,
+        null,
+      )
+    }
+  },
   {
     onMutate: () => {
+      console.log(msgs)
       setTxStep(TxStep.Posting)
     },
     onError: (e: unknown) => {
@@ -146,12 +171,15 @@ export const useWithdrawTransaction = ({
     onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data.transactionHash || data?.txHash)
-      const chainId = await client.getChainId()
-      queryClient.invalidateQueries({ queryKey: ['@pool-liquidity'] })
-      queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-      queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-      queryClient.invalidateQueries({ queryKey: ['positions'] })
-
+      const chainId = await signingClient.getChainId()
+      await queryClient.invalidateQueries({
+        queryKey: [
+          '@pool-liquidity',
+          'multipleTokenBalances',
+          'tokenBalance',
+          'positions',
+        ],
+      })
       onBroadcasting?.(data.transactionHash || data?.txHash)
       toast({
         title: 'Withdraw Liquidity Success.',
@@ -174,14 +202,14 @@ export const useWithdrawTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
-        return
+      if (txHash === null) {
+        return null
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: txHash !== null,
       retry: true,
     },
   )
@@ -193,7 +221,7 @@ export const useWithdrawTransaction = ({
   }
 
   const submit = useCallback(async () => {
-    if (fee == null || msgs == null || msgs.length < 1) {
+    if (fee === null || msgs === null || msgs.length < 1) {
       return
     }
 
@@ -204,7 +232,7 @@ export const useWithdrawTransaction = ({
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
+    if (txInfo !== null && txHash !== null) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
@@ -220,7 +248,7 @@ export const useWithdrawTransaction = ({
       setError(null)
     }
 
-    if (txStep != TxStep.Idle) {
+    if (txStep !== TxStep.Idle) {
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,3 @@
-import React from 'react'
-import { useQueryClient } from 'react-query'
-
 import {
   Box,
   Drawer,
@@ -14,15 +11,12 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useWallet } from '@terra-money/wallet-provider'
 import BurgerIcon from 'components/icons/BurgerIcon'
 import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
-import { useChains } from 'hooks/useChainInfo'
-import { useRecoilState } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
 
 import Card from '../Card'
-import WalletModal from '../Wallet/Modal/Modal'
 import Wallet from '../Wallet/Wallet'
 import DrawerLink from './DrawerLink'
 import Logo from './Logo'
@@ -31,66 +25,49 @@ import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
 
-export const links = [
-  {
-    label: 'Swap',
-    link: '/swap',
-  },
-  {
-    label: 'Pools',
-    link: '/pools',
-  },
-  {
-    label: 'Flashloan',
-    link: '/flashloan',
-  },
-  {
-    label: 'Vaults',
-    link: '/vaults',
-  },
-  {
-    label: 'Dashboard',
-    link: '/dashboard',
-  },
-  {
-    label: 'Bridge',
-    link: 'https://tfm.com/bridge',
-  },
-]
 const Navbar = () => {
-  const { disconnect } = useWallet()
-  const [{ key, chainId, network }, setWalletState] =
-    useRecoilState(walletState)
-  const queryClient = useQueryClient()
-  const chains: Array<any> = useChains()
-  const {
-    isOpen: isOpenModal,
-    onOpen: onOpenModal,
-    onClose: onCloseModal,
-  } = useDisclosure()
+  const { chainId, chainName } = useRecoilValue(chainState)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const currentChainName = chainName
 
-  const resetWalletConnection = () => {
-    setWalletState({
-      status: WalletStatusType.idle,
-      address: '',
-      key: null,
-      client: null,
-      network,
-      chainId,
-      activeWallet: null,
-    })
-    queryClient.clear()
-    disconnect()
-  }
-
-  const currentChain = chains.find((row) => row.chainId === chainId)
-  const currentChainName = currentChain?.label.toLowerCase()
+  const links = [
+    {
+      label: 'Dashboard',
+      link: `/${currentChainName}/dashboard`,
+    },
+    {
+      label: 'Swap',
+      link: `/${currentChainName}/swap`,
+    },
+    {
+      label: 'Pools',
+      link: `/${currentChainName}/pools`,
+    },
+    {
+      label: 'Vaults',
+      link: `/${currentChainName}/vaults`,
+    },
+    {
+      label: 'Flashloan',
+      link: `/${currentChainName}/flashloan`,
+    },
+    {
+      label: 'Bridge',
+      link: 'https://tfm.com/bridge',
+    },
+  ]
 
   return (
-    <Box py={{ base: '4',
-      md: '10' }} px={{ base: '4',
-      md: '10' }}>
+    <Box
+      width={'full'}
+      paddingLeft={{ base: '3',
+        md: '5' }}
+      paddingRight={{ base: '0',
+        md: '5' }}
+      paddingTop={{ base: '2',
+        md: '10' }}
+    >
       <Flex
         justifyContent="space-between"
         mx="auto"
@@ -99,7 +76,7 @@ const Navbar = () => {
           md: 'flex' }}
         alignItems="center"
       >
-        <Box flex="1">
+        <Box flex='1'>
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
@@ -110,49 +87,31 @@ const Navbar = () => {
             <NavbarPopper
               key={menu.label}
               menu={menu}
-              currentChainName={currentChainName}
+              currentChainName={chainName}
               chainId={chainId}
             />
           ))}
         </Card>
         <HStack flex="1" spacing="6" justify="flex-end">
-          <Wallet
-            connected={Boolean(key?.name)}
-            walletName={key?.name}
-            onDisconnect={resetWalletConnection}
-            disconnect={disconnect}
-            isOpenModal={isOpenModal}
-            onOpenModal={onOpenModal}
-            onCloseModal={onCloseModal}
-            onPrimaryButton={false}
-          />
-          <WalletModal
-            isOpenModal={isOpenModal}
-            onCloseModal={onCloseModal}
-            chainId={chainId}
-          />
+          <Wallet />
         </HStack>
       </Flex>
       <Flex
         justify="space-between"
-        align="center"
-        py="4"
-        display={{ base: 'flex',
-          md: 'none' }}
+        py={['0',"2"]}
+        px={['0',"1"]}
+        display={{ base: 'flex', 
+        md: 'none' }}
       >
         <Logo />
-        <Wallet
-          connected={Boolean(key?.name)}
-          walletName={key?.name}
-          onDisconnect={resetWalletConnection}
-          disconnect={disconnect}
-          onOpenModal={onOpenModal}
-        />
+        <Wallet />
         <IconButton
+          paddingTop={['3', '3', '0']}
+          align="right"
           aria-label="Open drawer"
           variant="ghost"
           color="white"
-          icon={<BurgerIcon width="1rem" height="1rem" />}
+          icon={<BurgerIcon width="3rem" height="1rem" />}
           onClick={onOpen}
           display={{ base: 'block',
             md: 'none' }}
@@ -169,7 +128,6 @@ const Navbar = () => {
           Open
         </IconButton>
       </Flex>
-
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
@@ -190,5 +148,4 @@ const Navbar = () => {
     </Box>
   )
 }
-
 export default Navbar

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useClients } from 'hooks/useClients'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import {
   PoolEntityType,
@@ -13,12 +13,10 @@ import {
   findPoolForSwap,
 } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 import asyncForEach from 'util/asyncForEach'
-import { Wallet } from 'util/wallet-adapters'
 
 import useCoinGecko from './useCoinGecko'
-import { useCosmwasmClient } from './useCosmwasmClient'
 import { useBaseTokenInfo } from './useTokenInfo'
 import { TokenList, useTokenList } from './useTokenList'
 
@@ -37,7 +35,7 @@ type GetMatchingPoolArgs = {
 type GetPrices = {
   baseToken: TokenInfo
   tokens: TokenInfo[]
-  client: any
+  cosmWasmClient: any
   poolsList: PoolEntityType[]
   coingecko: Prices
 }
@@ -48,7 +46,7 @@ const getMatchingPool = ({
   baseToken,
 }: GetMatchingPoolArgs): PoolMatchForSwap => {
   if (!poolsList || !token || !baseToken) {
-    return
+    return null
   }
 
   return findPoolForSwap({
@@ -62,7 +60,7 @@ const getMatchingPool = ({
 const getPrices = async ({
   baseToken,
   tokens,
-  client,
+  cosmWasmClient,
   poolsList,
   coingecko,
 }: GetPrices): Promise<Prices> => {
@@ -84,9 +82,10 @@ const getPrices = async ({
       if (Object.keys(matchingPools)?.length > 0) {
         const value = await tokenToTokenPriceQueryWithPools({
           matchingPools,
+
           tokenA: streamlinePoolAB ? token : baseToken,
           tokenB: streamlinePoolBA ? token : baseToken,
-          client: client as Wallet | CosmWasmClient,
+          cosmWasmClient,
           amount: 1,
         })
         const price = value * baseTokenPrice
@@ -98,28 +97,28 @@ const getPrices = async ({
 }
 
 const usePrices = () => {
-  const { chainId } = useRecoilValue(walletState)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
   const { data: poolsList } = usePoolsListQuery()
   const baseToken = useBaseTokenInfo()
   const [tokensList]: readonly [TokenList, boolean] = useTokenList()
   const coingeckoIds = useMemo(() => tokensList?.tokens.map((token) => token.id),
     [tokensList?.tokens])
   const coingecko = useCoinGecko(coingeckoIds)
-  const client = useCosmwasmClient(chainId)
-
+  const { cosmWasmClient } = useClients(walletChainName)
   const { data: prices } = useQuery<Promise<Prices>>({
     queryKey: ['prices', baseToken?.symbol, chainId],
-    queryFn: async () => getPrices({
+
+    queryFn: async () => await getPrices({
       baseToken,
       tokens: tokensList?.tokens,
-      client,
+      cosmWasmClient,
       poolsList: poolsList?.pools,
       coingecko,
     }),
     enabled:
       Boolean(baseToken) &&
       Boolean(tokensList) &&
-      Boolean(client) &&
+      Boolean(cosmWasmClient) &&
       Boolean(coingecko),
     refetchInterval: 30000,
   })

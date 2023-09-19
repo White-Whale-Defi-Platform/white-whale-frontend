@@ -10,6 +10,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { ActionCTAs } from 'components/Pages/Trade/Pools/ActionCTAs'
 import AllPoolsTable from 'components/Pages/Trade/Pools/AllPoolsTable'
@@ -17,8 +18,8 @@ import { Incentives } from 'components/Pages/Trade/Pools/Incentives'
 import MobilePools from 'components/Pages/Trade/Pools/MobilePools'
 import MyPoolsTable from 'components/Pages/Trade/Pools/MyPoolsTable'
 import { ACTIVE_INCENTIVE_NETWORKS, STABLE_COIN_LIST } from 'constants/index'
-import { useChains } from 'hooks/useChainInfo'
-import { useCosmwasmClient } from 'hooks/useCosmwasmClient'
+import { useChainInfos } from 'hooks/useChainInfo'
+import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
@@ -27,11 +28,8 @@ import {
   useQueryPoolsLiquidity,
 } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import {
-  aprHelperState,
-  updateAPRHelperState,
-} from 'state/atoms/aprHelperState'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
+import { chainState } from 'state/chainState'
 import { EnigmaPoolData } from 'util/enigma'
 
 type PoolData = PoolEntityTypeWithLiquidity &
@@ -45,12 +43,14 @@ type PoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
-  const { chainId, status } = useRecoilValue(walletState)
+
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
   const [_, setAprHelperState] = useRecoilState(aprHelperState)
-  const isWalletConnected: boolean = status === WalletStatusType.connected
+
   const [incentivePoolsLoaded, setIncentivePoolsLoaded] = useState(!ACTIVE_INCENTIVE_NETWORKS.includes(chainId))
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
-  const cosmwasmClient = useCosmwasmClient(chainId)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
@@ -62,13 +62,13 @@ const Pools = () => {
   ] = useQueriesDataSelector(useQueryPoolsLiquidity({
     refetchInBackground: false,
     pools: poolList?.pools,
-    client: cosmwasmClient,
+    cosmWasmClient,
   }))
   const myPoolsLength = useMemo(() => pools?.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)?.length,
     [pools])
 
-  const chains: any = useChains()
-  const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
+  const chains: any = useChainInfos()
+  const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
   [chains, chainId])
 
@@ -77,7 +77,7 @@ const Pools = () => {
     poolsWithAprAnd24HrVolume: pairInfos,
     isLoading: isIncentivePoolInfoLoading,
   } = useIncentivePoolInfo(
-    cosmwasmClient, pools, currentChainPrefix,
+    cosmWasmClient, pools, currentChainPrefix,
   )
 
   // @ts-ignore
@@ -91,7 +91,7 @@ const Pools = () => {
     console.log('Pair Infos: ', pairInfos)
   }
 
-  const calculateMyPosition = (pool) => {
+  const calculateMyPosition = (pool: PoolData) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
   }
@@ -228,9 +228,11 @@ const Pools = () => {
   // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+
   const allPoolsForShown = useMemo(() => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId])
-  const parseLiquidity = (liqString) => {
+  const parseLiquidity = (liqString: string) => {
     const value = parseFloat(liqString?.replace(/[^\d.-]/g, ''))
     /*
      * We do this mutation because by now we already have modified the string to include a letter abbreviation
@@ -249,7 +251,6 @@ const Pools = () => {
       ? pools
       : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
   }, [allPoolsForShown, showAllPools])
-
   return (
     <VStack
       width={{ base: '100%',
@@ -259,8 +260,8 @@ const Pools = () => {
     >
       {myPools?.length > 0 && (
         <Box width={{ base: '100%' }}>
-          <Text as="h2" fontSize="24" fontWeight="700" pb={5}>
-            My Pools
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5} paddingY={10}>
+          My Pools
           </Text>
           <MyPoolsTable
             show={true}
@@ -271,9 +272,9 @@ const Pools = () => {
         </Box>
       )}
 
-      <Box>
+      <Box width={{ base: '100%' }}>
         <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700">
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             All Pools
           </Text>
           <Stack direction="row">
@@ -317,7 +318,7 @@ const Pools = () => {
           pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
         />
-        <MobilePools pools={allPoolsForShown} ctaLabel="Add Liquidity" />
+        <MobilePools pools={showAllPoolsList} ctaLabel="Manage" />
       </Box>
     </VStack>
   )

@@ -1,6 +1,7 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { Box, Icon, Tooltip } from '@chakra-ui/react'
 import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
+import { useState } from 'react'
 
 const bondingActionText = (action: ActionType) => {
   switch (action) {
@@ -18,33 +19,40 @@ const bondingActionText = (action: ActionType) => {
   }
 }
 
-export const BondingActionTooltip = ({ action }) => (
-  <Tooltip
-    label={
-      <Box
-        maxWidth="250px"
-        minWidth="fit-content"
-        borderRadius="10px"
-        bg="black"
+export const BondingActionTooltip = ({ action }) => {
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+  return (
+    <Tooltip
+      label={
+        <Box
+          maxWidth="250px"
+          minWidth="fit-content"
+          borderRadius="10px"
+          bg="black"
+          color="white"
+          fontSize={14}
+          p={4}
+          whiteSpace="pre-wrap"
+        >
+          {bondingActionText(action)}
+        </Box>
+      }
+      bg="transparent"
+      hasArrow={false}
+      placement="bottom"
+      closeOnClick={false}
+      isOpen={isLabelOpen}
+      arrowSize={0}
+    >
+      <Icon
+        w={action === ActionType.claim ? 3 : 5}
+        as={InfoOutlineIcon}
         color="white"
-        fontSize={14}
-        p={4}
-        whiteSpace="pre-wrap"
-      >
-        {bondingActionText(action)}
-      </Box>
-    }
-    bg="transparent"
-    hasArrow={false}
-    placement="bottom"
-    closeOnClick={false}
-    arrowSize={0}
-  >
-    <Icon
-      w={action === ActionType.claim ? 3 : 5}
-      as={InfoOutlineIcon}
-      color="white"
-      cursor="pointer"
-    />
-  </Tooltip>
-)
+        cursor="pointer"
+        onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}
+      />
+    </Tooltip>
+  )
+}

@@ -1,16 +1,18 @@
 import { useMemo } from 'react'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import {
   createWithdrawExecuteMsgs,
   createWithdrawMsg,
 } from 'components/Pages/Flashloan/Vaults/hooks/createWithdrawMsgs'
 import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
+import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
-type DepostProps = {
+type DepositProps = {
   token: {
     amount: number
     tokenSymbol: string
@@ -25,8 +27,10 @@ const useWithdraw = ({
   lpToken,
   token,
   onSuccess,
-}: DepostProps) => {
-  const { address, client } = useRecoilValue(walletState)
+}: DepositProps) => {
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -54,7 +58,7 @@ const useWithdraw = ({
     denom: tokenInfo?.denom,
     contractAddress: lpToken,
     enabled: Boolean(encodedMsgs),
-    client,
+    signingClient,
     senderAddress: address,
     msgs,
     encodedMsgs,

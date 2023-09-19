@@ -3,20 +3,14 @@ import { useState } from 'react'
 import { Box, Button, Divider, HStack } from '@chakra-ui/react'
 import { PositionsTable } from 'components/Pages/Trade/Liquidity/PositionsTable'
 
-export enum STATE {
-  ALL = 'all',
-  ACTIVE = 'active',
-  WITHDRAW = 'withdraw',
-  UNBONDED = 'unbonded',
-  UNBONDING = 'unbonding'
-}
+const STATES = ['all', 'active', 'unbonding']
 
 type Props = {
   positions: any[]
 }
 
 export const Positions = ({ positions }: Props) => {
-  const [activeButton, setActiveButton] = useState(STATE.ALL)
+  const [activeButton, setActiveButton] = useState('all')
   const [columnFilters, setColumnFilters] = useState([])
 
   return (
@@ -30,7 +24,7 @@ export const Positions = ({ positions }: Props) => {
         borderRadius="75px"
         gap="20px"
       >
-        {[STATE.ALL, STATE.ACTIVE, STATE.UNBONDING, STATE.WITHDRAW].map((item) => (
+        {STATES.map((item) => (
           <Button
             key={item}
             minW="120px"
@@ -39,7 +33,7 @@ export const Positions = ({ positions }: Props) => {
             size="sm"
             onClick={() => {
               setActiveButton(item)
-              setColumnFilters(item === STATE.ALL
+              setColumnFilters(item === 'all'
                 ? []
                 : [
                   {
@@ -54,7 +48,9 @@ export const Positions = ({ positions }: Props) => {
           </Button>
         ))}
       </HStack>
+
       <Divider opacity="0.2" />
+
       <PositionsTable columnFilters={columnFilters} positions={positions} />
     </Box>
   )

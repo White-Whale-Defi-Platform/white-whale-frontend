@@ -11,11 +11,11 @@ function ChainItem({
   onClose,
   chainList,
   active,
-  walletState,
+  currentChainState,
 }) {
   const queryClient = useQueryClient()
   if (
-    walletState?.activeWallet == 'station' &&
+    currentChainState?.activeWallet == 'station' &&
     (chain?.chainId == 'injective-1' || chain?.chainId == 'comdex-1')
   ) {
     return null

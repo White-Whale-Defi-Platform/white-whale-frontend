@@ -8,7 +8,7 @@ import useFilter from 'hooks/useFilter'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
-import { walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -31,7 +31,7 @@ const AssetList: FC<AssetListProps> = ({
 }) => {
   const [tokenList] = useTokenList()
 
-  const { network, chainId } = useRecoilValue(walletState)
+  const { network, chainId } = useRecoilValue(chainState)
 
   const config = useConfig(network, chainId)
 
@@ -75,7 +75,7 @@ const AssetList: FC<AssetListProps> = ({
       paddingX={6}
       height="full"
       flex={1}
-      maxHeight={200}
+      maxHeight={600}
       minHeight={200}
       overflowY="scroll"
       sx={{
@@ -112,7 +112,6 @@ const AssetList: FC<AssetListProps> = ({
             <Image
               src={item?.logoURI}
               alt="logo-small"
-              // BoxSize="2rem"
               width="auto"
               maxW="1.5rem"
               maxH="1.5rem"

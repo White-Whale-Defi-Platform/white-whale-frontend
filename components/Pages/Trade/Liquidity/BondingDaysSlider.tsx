@@ -1,6 +1,12 @@
 import {
   Box,
   HStack,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -16,15 +22,21 @@ type Props = {
   show: boolean
 }
 
+const setBondingdays = (input: string, setBondingDays: any) => {
+  if (Number(input) <= 365 && Number(input) >= 1) {
+    setBondingDays(input)
+  }
+  if (Number(input) > 365) {
+    setBondingDays(365)
+  }
+}
+
 export const BondingDaysSlider = ({
   bondingDays,
   setBondingDays,
   show,
 }: Props) => {
-  if (!show) {
-    return null
-  }
-
+  if (!show) { return null }
   return (
     <VStack width="full" alignItems="flex-start" gap="2" pb="6">
       <TooltipWithChildren label="Unlock Duration">
@@ -34,9 +46,9 @@ export const BondingDaysSlider = ({
             'which only starts after this position has been closed.'}
         </Text>
       </TooltipWithChildren>
-
       <Box width="full">
         <Slider
+          focusThumbOnChange={false}
           defaultValue={0}
           value={bondingDays}
           step={1}
@@ -52,13 +64,30 @@ export const BondingDaysSlider = ({
           <SliderThumb boxSize={6} bg="brand.500" />
         </Slider>
       </Box>
-
-      <HStack gap="4">
-        <Box px="10" py="2" bg="rgba(0, 0, 0, 0.5)" borderRadius="100px">
-          <Text color="white" fontSize="14">
-            {' '}
-            ~{bondingDays} days
-          </Text>
+      <HStack>
+        <Box
+          px={2}
+          py="2"
+          bg="rgba(0, 0, 0, 0.5)"
+          borderRadius="100px"
+          maxWidth={''}
+        >
+          <NumberInput
+            defaultValue={0}
+            min={0}
+            max={365}
+            size={'xs'}
+            value={bondingDays}
+            inputMode={'numeric'}
+            onChange={(elem: string) => {
+              setBondingdays(elem, setBondingDays)
+            }}
+          >
+            <NumberInputField border={'hidden'} maxWidth={'70'} />
+            <NumberInputStepper minWidth={'8'} py={'3px'}>
+              <Text fontSize={'12'}>Days</Text>
+            </NumberInputStepper>
+          </NumberInput>
         </Box>
       </HStack>
     </VStack>

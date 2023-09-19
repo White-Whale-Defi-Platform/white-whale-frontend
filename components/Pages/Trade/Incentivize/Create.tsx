@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import {
@@ -7,18 +7,21 @@ import {
   HStack,
   InputGroup,
   Stack,
+  useMediaQuery,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import Input from 'components/AssetInput/Input'
 import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlow'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
+import { WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useRecoilValue } from 'recoil'
-import { txAtom } from 'state/atoms/tx'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 
 const defaultToken = {
-  tokenSymbol: 'WHALE',
+  tokenSymbol: WHALE_TOKEN_SYMBOL,
   amount: '',
 }
 
@@ -43,9 +46,10 @@ const Create = ({ poolId }: Props) => {
   })
   const formData = watch()
 
-  const { status } = useRecoilValue(walletState)
-  const isConnected = status === WalletStatusType.connected
-  const { txStep } = useRecoilValue(txAtom)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
+  const { txStep } = useRecoilValue(txRecoilState)
+  const [isMobile] = useMediaQuery('(max-width: 640px)')
   const { simulate, submit } = useOpenFlow({ poolId,
     ...formData })
 
@@ -56,6 +60,7 @@ const Create = ({ poolId }: Props) => {
         control={control}
         token={token}
         showList={true}
+        mobile={isMobile}
         // IsDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
           setToken({
@@ -85,9 +90,9 @@ const Create = ({ poolId }: Props) => {
                 placeholder="Enter amount"
                 h="50px"
                 type="date"
+                paddingEnd={'2px'}
                 min={new Date().toISOString().
                   slice(0, 16)}
-                // Max="2017-06-30T16:30"
                 focusBorderColor="brand.500"
               />
             </InputGroup>
@@ -114,6 +119,7 @@ const Create = ({ poolId }: Props) => {
                 placeholder="Enter amount"
                 h="50px"
                 type="date"
+                paddingEnd={'2px'}
                 min={new Date().toISOString().
                   slice(0, 16)}
                 focusBorderColor="brand.500"
@@ -132,7 +138,7 @@ const Create = ({ poolId }: Props) => {
           txStep === TxStep.Posting ||
           txStep === TxStep.Broadcasting
         }
-        isDisabled={!isValid || txStep !== TxStep.Ready || !isConnected}
+        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
       />
     </Stack>
   )

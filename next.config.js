@@ -1,6 +1,8 @@
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
+
 
 
 /**
@@ -26,13 +28,34 @@ intercept(interceptStdout)
 
 const config = {
   async redirects() {
-    return [
+    const redirects = [
       {
         source: '/',
         destination: '/migaloo/swap',
         permanent: false,
       },
+      {
+        source: '/dashboard',
+        destination: '/terra/dashboard',
+        permanent: false,
+      },
+      {
+        source: '/pools',
+        destination: '/terra/pools',
+        permanent: false,
+      },
+      {
+        source: '/vaults',
+        destination: '/terra/vaults',
+        permanent: false,
+      },
+      {
+        source: '/flashloan',
+        destination: '/terra/flashloan',
+        permanent: false,
+      },
     ]
+    return redirects
   },
   // Adding policies:
   async headers() {

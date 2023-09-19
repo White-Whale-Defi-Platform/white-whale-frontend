@@ -1,1 +1,1 @@
-export const SECONDS_PER_DAY = 86400
+export const SECONDS_PER_DAY = 86_400

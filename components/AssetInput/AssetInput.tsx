@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react';
 
 import { VStack, forwardRef } from '@chakra-ui/react'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
@@ -34,6 +34,7 @@ interface AssetInputProps {
   showBalanceSlider?: boolean
   isBonding?: boolean
   unbondingBalances?: TokenBalance[]
+  mobile?: boolean
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, ref) => {
@@ -46,6 +47,7 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
     ignoreSlack,
     hideMax,
     hideDollarValue,
+    mobile,
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
@@ -105,6 +107,7 @@ const AssetInput = forwardRef((props: AssetInputProps, ref) => {
         hideMax={hideMax}
         onMaxClick={onMaxClick}
         onHalfClick={onHalfClick}
+        mobile={mobile}
       />
     </VStack>
   )

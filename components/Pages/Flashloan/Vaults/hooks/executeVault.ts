@@ -1,6 +1,6 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
 import { validateTransactionSuccess } from 'util/messages/index'
-import { Wallet } from 'util/wallet-adapters/index'
 
 type ExecuteAddLiquidityArgs = {
   isNative: boolean
@@ -8,7 +8,7 @@ type ExecuteAddLiquidityArgs = {
   amount: string
   senderAddress: string
   contractAddress: string
-  client: Wallet
+  signingClient: SigningCosmWasmClient
   msgs: any
   encodedMsgs: any
 }
@@ -19,17 +19,27 @@ export const executeVault = async ({
   msgs,
   encodedMsgs,
   amount,
-  client,
+  signingClient,
   contractAddress,
   senderAddress,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
   if (!isNative) {
-    return validateTransactionSuccess(await client.post(senderAddress, encodedMsgs))
+    return validateTransactionSuccess(await signingClient.signAndBroadcast(
+      senderAddress,
+      encodedMsgs,
+      'auto',
+      null,
+    ))
   }
 
   const funds = [coin(amount, denom)]
 
-  return client.execute(
-    senderAddress, contractAddress, msgs, funds,
+  return signingClient.execute(
+    senderAddress,
+    contractAddress,
+    msgs,
+    'auto',
+    null,
+    funds,
   )
 }

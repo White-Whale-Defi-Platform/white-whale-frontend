@@ -2,23 +2,28 @@ import { useEffect } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useTxInfo from 'hooks/useTxInfo'
 import { useRecoilState } from 'recoil'
-import { txAtom } from 'state/atoms/tx'
+import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 
-const useTxStatus = ({ client, transactionType }) => {
-  const [txState, setTxState] = useRecoilState(txAtom)
+type Props = {
+  signingClient: SigningCosmWasmClient
+  transactionType: string
+}
+const useTxStatus = ({ signingClient, transactionType }: Props) => {
+  const [txState, setTxState] = useRecoilState(txRecoilState)
   const toast = useToast()
   const txInfo = useTxInfo({ txHash: txState.txHash,
-    client })
+    signingClient })
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    if (txInfo != null && txState.txHash != null) {
-      if (txInfo?.txResponse?.code) {
+    if (txInfo !== null && txState.txHash !== null) {
+      if (txInfo?.code) {
         setTxState({
           ...txState,
           txStep: TxStep.Failed,
@@ -32,8 +37,8 @@ const useTxStatus = ({ client, transactionType }) => {
     }
   }, [txInfo, txState.txHash])
 
-  const description = (hash: string) => (
-    <Finder txHash={hash} chainId={client.client.chainId}>
+  const description = async (hash: string) => (
+    <Finder txHash={hash} chainId={await signingClient.getChainId()}>
       {' '}
     </Finder>
   )
@@ -88,12 +93,17 @@ const useTxStatus = ({ client, transactionType }) => {
       isClosable: true,
     })
 
-    queryClient.invalidateQueries({ queryKey: '@pool-liquidity' })
-    queryClient.invalidateQueries({ queryKey: ['multipleTokenBalances'] })
-    queryClient.invalidateQueries({ queryKey: ['tokenBalance'] })
-    queryClient.invalidateQueries({ queryKey: ['positions'] })
-    queryClient.invalidateQueries({ queryKey: ['rewards'] })
-    queryClient.refetchQueries()
+    await queryClient.invalidateQueries({
+      queryKey: [
+        '@pool-liquidity',
+        'multipleTokenBalances',
+        'tokenBalance',
+        'positions',
+        'rewards',
+      ],
+    })
+
+    await queryClient.refetchQueries()
   }
 
   return {

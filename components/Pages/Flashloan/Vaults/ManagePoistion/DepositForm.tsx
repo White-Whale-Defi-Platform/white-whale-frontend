@@ -6,10 +6,10 @@ import Finder from 'components/Finder'
 import useDepost from 'components/Pages/Flashloan/Vaults/hooks/useDeposit'
 import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useRecoilValue } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { chainState } from 'state/chainState'
+import { useChain } from '@cosmos-kit/react-lite'
 
 type Props = {
-  connected: WalletStatusType
   isLoading: boolean
   balance: number | undefined
   defaultToken: string
@@ -20,7 +20,6 @@ type Props = {
 }
 
 const DepositForm = ({
-  connected,
   balance,
   defaultToken,
   edgeTokenList = [],
@@ -33,8 +32,8 @@ const DepositForm = ({
     tokenSymbol: defaultToken,
   })
   const toast = useToast()
-  const { chainId } = useRecoilValue(walletState)
-  const isConnected = connected === '@wallet-state/connected'
+  const { chainId, walletChainName, } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
 
   const onSuccess = useCallback((txHash) => {
     refetch?.()
@@ -60,7 +59,7 @@ const DepositForm = ({
 
   const buttonLabel = useMemo(() => {
     // TODO: Note for later, Select Token is commented
-    if (connected !== '@wallet-state/connected') {
+    if (!isWalletConnected) {
       return 'Connect Wallet'
     } else if (!token?.amount) {
       return 'Enter Amount'
@@ -68,7 +67,7 @@ const DepositForm = ({
       return tx?.buttonLabel
     }
     return 'Deposit'
-  }, [tx?.buttonLabel, connected, token])
+  }, [tx?.buttonLabel, isWalletConnected, token])
 
   const onSubmit = (event) => {
     event?.preventDefault()
@@ -114,7 +113,7 @@ const DepositForm = ({
           tx?.txStep == TxStep.Posting ||
           tx?.txStep == TxStep.Broadcasting
         }
-        disabled={tx.txStep != TxStep.Ready || !isConnected}
+        disabled={tx.txStep != TxStep.Ready || !isWalletConnected}
       >
         {buttonLabel}
       </Button>

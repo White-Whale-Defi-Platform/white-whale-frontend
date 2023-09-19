@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { VStack } from '@chakra-ui/react'
+import { useMediaQuery, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import AssetInput from 'components/AssetInput/index'
-import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData';
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { WalletStatusType, walletState } from 'state/atoms/walletAtoms'
+import { bondingState } from 'state/bondingState'
+import { chainState } from 'state/chainState'
 
 export interface BondingTokenState {
   tokenSymbol: string
@@ -20,11 +21,11 @@ export interface TokenBalance {
 }
 
 export const Bond = ({ balances, tokenSymbols }) => {
+  const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
-    useRecoilState<BondingTokenState>(bondingAtom)
-  const { status, network, chainId } = useRecoilValue(walletState)
-
-  const isWalletConnected = status === WalletStatusType.connected
+    useRecoilState<BondingTokenState>(bondingState)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
 
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 
@@ -70,13 +71,14 @@ export const Bond = ({ balances, tokenSymbols }) => {
   const currentTokenBalance = useMemo(() => tokenBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol)?.amount,
     [tokenBalances, currentBondState.tokenSymbol])
   return (
-    <VStack px={7} width="full">
+    <VStack px={7} width="full" >
       <Controller
         name="currentBondState"
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
           <AssetInput
+            mobile={isMobile}
             isBonding={true}
             hideToken={currentBondState.tokenSymbol}
             {...field}

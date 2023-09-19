@@ -5,7 +5,12 @@ import { Popover, useDisclosure } from '@chakra-ui/react'
 import ChainSelectPopoverContent from './ChainSelectPopoverContent'
 import ChainSelectTrigger from './ChainSelectTrigger'
 
-const Select = ({ denom, onChange, connected, currentWalletState }) => {
+const SelectChainModal = ({
+  denom,
+  onChange,
+  connected,
+  currentChainState,
+}) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
 
@@ -21,10 +26,10 @@ const Select = ({ denom, onChange, connected, currentWalletState }) => {
       <ChainSelectPopoverContent
         onChange={onChange}
         onClose={onClose}
-        currentWalletState={currentWalletState}
+        currentChainState={currentChainState}
       />
     </Popover>
   )
 }
 
-export default Select
+export default SelectChainModal
