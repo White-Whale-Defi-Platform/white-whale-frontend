@@ -38,7 +38,10 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
       setOpen(false)
     }
   }
-
+  // @ts-ignore
+  if (window.debugLogsEnabled) {
+    console.log('Wallets: ')
+  }
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>
       <ModalOverlay />
@@ -47,10 +50,16 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
         <ModalCloseButton />
         <ModalBody>
           <VStack alignItems="flex-start" width="full" gap={2}>
-            {walletRepo?.wallets.map((elem) => {
-              const { connect, walletName } = elem;
+            {walletRepo?.wallets.map((wallet) => {
+
+              // @ts-ignore
+              if (window.debugLogsEnabled) {
+                console.log(wallet)
+              }
+
+              const { connect, walletName } = wallet;
               // TODO diffentiate between connect buttons
-              if (isMobile && !elem.isModeExtension) {
+              if (isMobile && !wallet.isModeExtension) {
                 return (
                   <WalletConnectButton
                     key={walletName}
@@ -59,7 +68,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                     walletType={walletName as WalletType}
                   />
                 )
-              } else if (!isMobile && elem.isModeExtension) {
+              } else if (!isMobile && wallet.isModeExtension) {
                 if (snap === false && walletName.toLowerCase().includes('metamask')) {
                   return null
                 } else {
@@ -79,6 +88,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
                   connect={connect}
                   walletType={walletName as WalletType}
                 />
+                // @ts-ignore
               } else if (window.cosmostation! && isMobile && walletName.toLowerCase().includes('chaincosmostation')) {
                 return <WalletConnectButton
                   key={walletName}
