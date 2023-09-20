@@ -5,6 +5,10 @@ import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import LeapWalletIcon from 'components/icons/LeapWalletIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import { useRecoilValue } from 'recoil'
+
+import { ACTIVE_NETWORKS } from '../../../constants'
+import { chainState } from '../../../state/chainState'
 import LeapSnapIcon from '../../icons/LeapSnapIcon'
 
 interface Props {
@@ -14,7 +18,26 @@ interface Props {
 }
 
 export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props) => {
-  const setWallet = useCallback(() => {
+  const { network } = useRecoilValue(chainState)
+  const getKeplrChains = async (chains: Array<string>) => {
+    const registry = await (await fetch('https://keplr-chain-registry.vercel.app/api/chains')).json()
+    const toAdd = []
+    Object.values(registry.chains).map((elem:any) => {
+      if (chains.includes(elem.chainId)) {
+        toAdd.push(elem)
+      }
+    })
+    return toAdd
+  }
+  const setWallet = useCallback(async () => {
+    if (walletType === 'keplr-extension' && window.keplr) {
+      const keplrChains = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
+      for (let i = 0; i < keplrChains.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        await window.keplr.experimentalSuggestChain(keplrChains[i])
+      }
+    }
+
     connect()
     onCloseModal()
   }, [onCloseModal, connect])
