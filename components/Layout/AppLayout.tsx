@@ -14,8 +14,7 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(chainState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
   return (
-    <>{(isMobile || isMobileView) && <MobileNotSupportedModal />}
-      {!(isMobile || isMobileView) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
+    <>{(<Flex direction="column" backgroundColor="transparent" height="100vh">
         <RadialGradient />
         <Navbar />
         <Flex
