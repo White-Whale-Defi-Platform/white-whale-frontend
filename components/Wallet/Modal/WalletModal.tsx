@@ -40,8 +40,8 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
 
   function shouldRenderButton(wallet : ChainWalletBase) {
     const walletName = wallet.walletName
-    const inApp = isMobile && walletName.toLowerCase().includes('leap') && window.leap && window?.leap?.mode === 'mobile-web'
-    if (inApp) return true;
+    const inApp = isMobile && window.leap && window?.leap?.mode === 'mobile-web'
+    if (inApp && walletName === 'leap-extension') return true;
     if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) return false;
     if (!inApp && isMobile && !wallet.isModeExtension) return true;
     if (!inApp && !isMobile && wallet.isModeExtension) return true;
