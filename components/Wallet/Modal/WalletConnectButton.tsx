@@ -3,13 +3,12 @@ import { useCallback } from 'react'
 import { Button, HStack, Image, Text } from '@chakra-ui/react'
 import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
+import LeapSnapIcon from 'components/icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/icons/LeapWalletIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import { ACTIVE_NETWORKS } from 'constants/networks'
 import { useRecoilValue } from 'recoil'
-
-import { ACTIVE_NETWORKS } from '../../../constants'
-import { chainState } from '../../../state/chainState'
-import LeapSnapIcon from '../../icons/LeapSnapIcon'
+import { chainState } from 'state/chainState'
 
 interface Props {
   onCloseModal: () => void
@@ -30,7 +29,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
     return toAdd
   }
   const setWallet = useCallback(async () => {
-    if (walletType === 'keplr-extension' && window.keplr) {
+    if (walletType === WalletType.keplrExtension && window.keplr) {
       const keplrChains = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
       for (let i = 0; i < keplrChains.length; i++) {
         // eslint-disable-next-line no-await-in-loop
