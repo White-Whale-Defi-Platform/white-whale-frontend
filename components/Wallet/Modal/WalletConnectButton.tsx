@@ -31,8 +31,10 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
   const setWallet = useCallback(async () => {
     if (walletType === WalletType.keplrExtension && window.keplr) {
       const keplrChains = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
-      await Promise.all(
-        keplrChains.map((chain) => window.keplr.experimentalSuggestChain(chain)));
+      for (const chain of keplrChains) {
+        // eslint-disable-next-line no-await-in-loop
+        await window.keplr.experimentalSuggestChain(chain)
+      }
     }
 
     connect()
