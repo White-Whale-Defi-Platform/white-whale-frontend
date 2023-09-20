@@ -14,7 +14,7 @@ import RadialGradient from './RadialGradient'
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(chainState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
-  const leapInApp = window.leap && window?.leap?.mode === 'mobile-web'
+  const leapInApp = window.leap && window.leap.mode === 'mobile-web'
   return (
     <>{((isMobile || isMobileView) && !leapInApp) && <MobileNotSupportedModal />}
       {(!(isMobile || isMobileView) || leapInApp) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
