@@ -70,7 +70,7 @@ const Swap: FC<SwapProps> = (params) => {
       return
     }
     const [ from , to] = params?.initialTokenPair || []
-    const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
+    const [defaultFrom, defaultTo] = defaultTokens[network][walletChainName]
 
     let newState: TokenItemState[] = [
       {
