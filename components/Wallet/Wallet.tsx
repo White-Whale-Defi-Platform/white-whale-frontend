@@ -8,16 +8,20 @@ import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, ACTIVE_NETWORKS_WALLET_NAMES, WALLETNAMES_BY_CHAINID } from 'constants/index'
+import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, ACTIVE_NETWORKS_WALLET_NAMES, WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/index'
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
 import { getPathName } from 'util/route'
+import { TokenItemState } from 'types/index'
+import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 
 const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
+  const [_, setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const chains: Array<any> = useChainInfos()
   let walletChains: Array<string> = []
 
@@ -25,7 +29,7 @@ const Wallet = () => {
     const snapChains = []
     chains.forEach((row) => {
       if (row.coinType === 118) {
-        snapChains.push(WALLETNAMES_BY_CHAINID[row.chainId])
+        snapChains.push(WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId])
       }
     })
     walletChains = snapChains
@@ -36,7 +40,7 @@ const Wallet = () => {
   const router = useRouter()
   let chainName = router.query.chainId as string
   const [chainInfo] = useChainInfo(currentChainState.chainId)
-  const { isWalletConnected, disconnect, openView } = allChains[WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]]
+  const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]]
   chainName = chainName ? chainName : currentChainState.chainName
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
@@ -73,7 +77,7 @@ const Wallet = () => {
       setCurrentChainState({
         ...currentChainState,
         chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
-        walletChainName: WALLETNAMES_BY_CHAINID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]
+        walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]
       })
     }
 
@@ -112,11 +116,26 @@ const Wallet = () => {
     setCurrentChainState({ ...currentChainState,
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
-      walletChainName: WALLETNAMES_BY_CHAINID[chain.chainId]},
+      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]},
     )
     queryClient.clear()
+    const [defaultFrom, defaultTo] = defaultTokens[currentChainState.network][WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
+    const newState: TokenItemState[] = [
+      {
+        tokenSymbol: String(defaultFrom.tokenSymbol),
+        amount: 0,
+        decimals: 6,
+      },
+      {
+        tokenSymbol: String(defaultTo.tokenSymbol),
+        amount: 0,
+        decimals: 6,
+      },
+    ]
+    setTokenSwapState(newState)
+
     if (isWalletConnected) {
-      const newChain = allChains[WALLETNAMES_BY_CHAINID[chain.chainId]]
+      const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
       if (!(window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap')) {
         await newChain.connect()
       } else {

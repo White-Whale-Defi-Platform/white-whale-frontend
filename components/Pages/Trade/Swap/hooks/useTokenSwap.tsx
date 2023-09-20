@@ -39,8 +39,8 @@ export const useTokenSwap = ({
   tokenAmount: providedTokenAmount,
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
-  const { address, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, address } = useChain(walletChainName)
   const { signingClient } = useClients(walletChainName)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)

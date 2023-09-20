@@ -28,8 +28,8 @@ const Swap: FC<SwapProps> = (params) => {
   const [reverse, setReverse] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
 
-  const { chainId, address, network, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, address } = useChain(walletChainName)
   const chains: Array<any> = useChainInfos()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
   const { data: poolList } = usePoolsListQuery()
@@ -70,15 +70,16 @@ const Swap: FC<SwapProps> = (params) => {
       return
     }
     const [ from , to] = params?.initialTokenPair || []
-    const [defaultFrom, defaultTo] = defaultTokens[network][currentChainId]
+    const [defaultFrom, defaultTo] = defaultTokens[network][walletChainName]
+
     let newState: TokenItemState[] = [
       {
-        tokenSymbol: String(from),
+        tokenSymbol: String(from || defaultFrom.tokenSymbol),
         amount: 0,
         decimals: 6,
       },
       {
-        tokenSymbol: String(to),
+        tokenSymbol: String(to || defaultTo.tokenSymbol),
         amount: 0,
         decimals: 6,
       },
@@ -106,18 +107,6 @@ const Swap: FC<SwapProps> = (params) => {
     } else if (tokenSymbols.includes(String(from)) && tokenSymbols.includes(String(to))) {
       setTokenSwapState(newState)
     } else {
-      newState = [
-        {
-          tokenSymbol: String(defaultFrom.tokenSymbol),
-          amount: 0,
-          decimals: 6,
-        },
-        {
-          tokenSymbol: String(defaultTo.tokenSymbol),
-          amount: 0,
-          decimals: 6,
-        },
-      ]
       setResetForm(true)
       setTokenSwapState(newState)
     }

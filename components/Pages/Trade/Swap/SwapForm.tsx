@@ -101,7 +101,7 @@ const SwapForm: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     tx?.buttonLabel,
-    tokenB.tokenSymbol,
+    tokenB?.tokenSymbol,
     isWalletConnected,
     amountA,
     state?.error,
@@ -170,11 +170,11 @@ const SwapForm: FC<Props> = ({
       return null
     }
 
-    const e = num(tokenA.amount).times(10 ** tokenBInfo.decimals)
+    const e = num(tokenA?.amount).times(10 ** tokenBInfo?.decimals)
     return num(simulated?.amount).div(e).
       toFixed(6)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [simulated, tokenA.amount])
+  }, [simulated, tokenA?.amount])
 
   useEffect(() => {
     if (simulated) {
@@ -331,7 +331,7 @@ const SwapForm: FC<Props> = ({
         {buttonLabel}
       </Button>
       <VStack alignItems="flex-start" width="full" px={3}>
-        {amountB.amount && (
+        {amountB?.amount && (
           <>
             <HStack justifyContent="space-between" width="full">
               <HStack style={{ marginTop: 'unset' }} height="24px">

@@ -10,7 +10,7 @@
         "amount": 0
       }
     ],
-    "terra": [
+    "terra2": [
       {
         "tokenSymbol": "axlUSDC",
         "amount": 0
@@ -70,7 +70,7 @@
         "amount": 0
       }
     ],
-    "terra-classic": [
+    "terra": [
       {
         "tokenSymbol": "LUNC",
         "amount": 0

@@ -42,7 +42,7 @@ export const ACTIVE_NETWORKS_WALLET_NAMES = {
   ],
 }
 
-export const WALLETNAMES_BY_CHAINID = {
+export const WALLET_CHAIN_NAMES_BY_CHAIN_ID = {
   'chihuahua-1': 'chihuahua',
   'comdex-1': 'comdex',
   'injective-1': 'injective',
