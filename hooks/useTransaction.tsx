@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useToast } from '@chakra-ui/react'
 
 import Finder from '../components/Finder'
-import { directTokenSwap } from '../services/swap'
 import useDebounceValue from './useDebounceValue'
+import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 
 export enum TxStep {
   /**
@@ -42,7 +42,7 @@ type Params = {
   enabled: boolean
   swapAddress: string
   swapAssets: any[]
-  client: any
+  signingClient: any
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -59,7 +59,7 @@ export const useTransaction = ({
   enabled,
   swapAddress,
   swapAssets,
-  client,
+  signingClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -84,7 +84,7 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       try {
-        const response = await client.simulate(
+        const response = await signingClient.simulate(
           senderAddress, debouncedMsgs, '',
         )
         if (buttonLabel) {
@@ -148,7 +148,7 @@ export const useTransaction = ({
     senderAddress,
     msgs,
     tokenAmount: amount,
-    client,
+    signingClient,
   }),
   {
     onMutate: () => {
@@ -197,7 +197,7 @@ export const useTransaction = ({
       toast({
         title: 'Swap Success.',
         description: (
-          <Finder txHash={data.transactionHash} chainId={client.chainId}>
+          <Finder txHash={data.transactionHash} chainId={signingClient.chainId}>
             {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
           </Finder>
@@ -217,7 +217,7 @@ export const useTransaction = ({
         return null
       }
 
-      return client.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: txHash !== null,

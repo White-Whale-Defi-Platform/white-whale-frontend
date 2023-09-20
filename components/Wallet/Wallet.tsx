@@ -14,10 +14,14 @@ import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
 import { getPathName } from 'util/route'
+import { TokenItemState } from 'types/index'
+import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 
 const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
+  const [_, setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const chains: Array<any> = useChainInfos()
   let walletChains: Array<string> = []
 
@@ -117,6 +121,20 @@ const Wallet = () => {
     queryClient.clear()
     if (isWalletConnected) {
       const newChain = allChains[WALLETNAMES_BY_CHAINID[chain.chainId]]
+      const [defaultFrom, defaultTo] = defaultTokens[currentChainState.network][chain.bech32Config.bech32PrefixAccAddr]
+      const newState: TokenItemState[] = [
+        {
+          tokenSymbol: String(defaultFrom.tokenSymbol),
+          amount: 0,
+          decimals: 6,
+        },
+        {
+          tokenSymbol: String(defaultTo.tokenSymbol),
+          amount: 0,
+          decimals: 6,
+        },
+      ]
+      setTokenSwapState(newState)
       if (!(window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap')) {
         await newChain.connect()
       } else {
