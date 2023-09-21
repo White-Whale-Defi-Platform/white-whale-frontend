@@ -39,13 +39,11 @@ function WalletModal({ isOpen, setOpen, walletRepo }) {
 
   function shouldRenderButton(wallet: { walletName: string, isModeExtension: boolean }) {
     const walletName = wallet.walletName
-    if (walletName.toLowerCase().includes('metamask') && !snap) return false;
-    if (isMobile && !wallet.isModeExtension) return true;
-    if (!isMobile && wallet.isModeExtension) return true;
-    if (window.leap && isMobile && wallet.walletName.toLowerCase().includes('chainleap')) return true;
-    // @ts-ignore
-    return window.cosmostation && isMobile && walletName.toLowerCase().includes('chaincosmostation');
-
+    const inApp = isMobile && window.leap && window.leap.mode === 'mobile-web'
+    if (inApp && walletName === 'leap-extension') return true;
+    if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) return false;
+    if (!inApp && isMobile && !wallet.isModeExtension) return true;
+    if (!inApp && !isMobile && wallet.isModeExtension) return true;
   }
 
   return (
