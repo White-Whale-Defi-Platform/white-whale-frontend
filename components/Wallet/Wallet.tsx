@@ -8,7 +8,13 @@ import WalletIcon from 'components/icons/WalletIcon'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
-import { ACTIVE_BONDING_NETWORKS, ACTIVE_NETWORKS, ACTIVE_NETWORKS_WALLET_NAMES, WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/index'
+import {
+  ACTIVE_BONDING_NETWORKS,
+  ACTIVE_NETWORKS,
+  ACTIVE_NETWORKS_WALLET_NAMES,
+  COSMOS_KIT_WALLET_KEY,
+  WALLET_CHAIN_NAMES_BY_CHAIN_ID
+} from 'constants/index'
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
@@ -17,6 +23,7 @@ import { getPathName } from 'util/route'
 import { TokenItemState } from 'types/index'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
+import { WalletType } from 'components/Wallet/Modal/WalletModal'
 
 const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
@@ -25,7 +32,7 @@ const Wallet = () => {
   const chains: Array<any> = useChainInfos()
   let walletChains: Array<string> = []
 
-  if (window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap') {
+  if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap) {
     const snapChains = []
     chains.forEach((row) => {
       if (row.coinType === 118) {
@@ -136,7 +143,7 @@ const Wallet = () => {
 
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
-      if (!(window.localStorage.getItem('cosmos-kit@2:core//current-wallet') === 'leap-metamask-cosmos-snap')) {
+      if (!(window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap)) {
         await newChain.connect()
       } else {
         await resetWallet()

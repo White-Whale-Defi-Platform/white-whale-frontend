@@ -9,7 +9,6 @@ import {
   ModalOverlay,
   VStack,
 } from '@chakra-ui/react';
-import { ChainWalletBase, WalletModalProps } from '@cosmos-kit/core'
 import WalletConnectButton from 'components/Wallet/Modal/WalletConnectButton';
 import { useChainInfos } from 'hooks/useChainInfo';
 import { useRecoilValue } from 'recoil';
@@ -27,7 +26,7 @@ export enum WalletType {
   cosmoStationMobile = 'cosmostation-mobile'
 }
 
-function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
+function WalletModal({ isOpen, setOpen, walletRepo }) {
   const { chainId } = useRecoilValue(chainState);
   const chainInfos: any = useChainInfos();
   const snap = Boolean(chainInfos.find((elem) => elem.chainId == chainId && elem.coinType == 118));
@@ -38,7 +37,7 @@ function WalletModal({ isOpen, setOpen, walletRepo }: WalletModalProps) {
     }
   }
 
-  function shouldRenderButton(wallet : ChainWalletBase) {
+  function shouldRenderButton(wallet: { walletName: string, isModeExtension: boolean }) {
     const walletName = wallet.walletName
     if (walletName.toLowerCase().includes('metamask') && !snap) return false;
     if (isMobile && !wallet.isModeExtension) return true;
