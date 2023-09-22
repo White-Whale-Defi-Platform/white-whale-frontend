@@ -107,7 +107,7 @@ const Navbar = () => {
         <Wallet />
         <IconButton
           paddingTop={['3', '3', '0']}
-          align="right"
+          alignSelf="right"
           aria-label="Open drawer"
           variant="ghost"
           color="white"
