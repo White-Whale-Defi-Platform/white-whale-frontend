@@ -1,18 +1,18 @@
 import { useMemo } from 'react'
 
 import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { AvailableRewards } from 'components/Pages/Trade/Liquidity/AvailableRewards'
 import { RewardToolTip } from 'components/RewardToolTip'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { useChain } from '@cosmos-kit/react-lite'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => dailyEmissions.reduce((total, item) => total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission),
     0),
   [dailyEmissions])
 
-  const {walletChainName } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   return (
     <VStack

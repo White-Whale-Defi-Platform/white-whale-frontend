@@ -11,7 +11,7 @@ import {
   keyframes,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
-import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingAcionTooltip'
+import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingActionTooltip'
 import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import {
   Config,

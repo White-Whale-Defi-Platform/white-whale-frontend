@@ -69,7 +69,7 @@ const Swap: FC<SwapProps> = (params) => {
     if (!currentChainId || tokenList.length === 0) {
       return
     }
-    const [ from , to] = params?.initialTokenPair || []
+    const [from, to] = params?.initialTokenPair || []
     const [defaultFrom, defaultTo] = defaultTokens[network][walletChainName]
 
     let newState: TokenItemState[] = [

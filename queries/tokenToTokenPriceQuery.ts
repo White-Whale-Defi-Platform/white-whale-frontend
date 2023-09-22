@@ -1,3 +1,4 @@
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { tokenDollarValueQuery } from 'queries/tokenDollarValueQuery'
 import {
   getToken1ForToken2Price,
@@ -8,7 +9,6 @@ import { convertDenomToMicroDenom } from 'util/conversion'
 
 import { TokenInfo } from './usePoolsListQuery'
 import { PoolMatchForSwap } from './useQueryMatchingPoolForSwap'
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 type TokenToTokenPriceQueryArgs = {
   matchingPools: PoolMatchForSwap
@@ -32,7 +32,7 @@ export async function tokenToTokenPriceQueryWithPools({
   }
 
   if (!cosmWasmClient) {
-    return
+    return null
   }
 
   const convertedTokenAmount = convertDenomToMicroDenom(amount, tokenA.decimals)

@@ -133,7 +133,6 @@ export const useTransaction = ({
     swapAddress,
     senderAddress,
     msgs: debouncedMsgs,
-    chainId,
   }),
   {
     onMutate: () => {

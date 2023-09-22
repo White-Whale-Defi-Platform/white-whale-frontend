@@ -12,7 +12,6 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react'
-
 import { useClosePosition } from 'components/Pages/Trade/Incentivize/hooks/useClosePosition'
 import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
 import { num } from 'libs/num'

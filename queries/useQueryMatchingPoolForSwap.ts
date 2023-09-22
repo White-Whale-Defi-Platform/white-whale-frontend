@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
+
 import {
   PoolEntityType,
   TokenInfo,

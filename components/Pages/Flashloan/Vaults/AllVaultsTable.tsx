@@ -30,7 +30,7 @@ export type Vault = {
   myDeposit: string
 }
 
-//TODO: Mobile Responsive
+// TODO: Mobile Responsive
 
 const columnHelper = createColumnHelper<Vault>()
 

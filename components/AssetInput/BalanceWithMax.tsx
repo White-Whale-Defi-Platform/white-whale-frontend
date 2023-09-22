@@ -50,7 +50,9 @@ const MaxButton = ({
   size,
   minwidth,
 }: MaxButtonProps) => {
-  if (hideMax) {return null}
+  if (hideMax) {
+    return null
+  }
   return (
     <Button
       disabled={disabled}
@@ -101,7 +103,9 @@ const TokenToPrice = ({
   hide,
   mobile,
 }: TokenToPriceProps) => {
-  if (hide) {return <Box flex={1} />}
+  if (hide) {
+    return <Box flex={1} />
+  }
   let amt = isNaN(Number(numberOfTokens)) ? numberOfTokens : 0
   if (mobile) {
     amt = 'Value:'
@@ -140,55 +144,51 @@ const BalanceWithMaxNHalf = ({
   hideMax,
   hideDollarValue,
   mobile,
-}: BalanceWithMaxProps) => {
-    return ( 
-      <>
-      <HStack width="full" px={5}>
-          <TokenToPrice
-            numberOfTokens={numberOfTokens}
-            dollarValue={dollarValue}
-            hide={hideDollarValue}
-            mobile={mobile}
-          />
-          <Balance balance={balance} mobile={mobile} />
-          {!mobile ? (
-          <>
+}: BalanceWithMaxProps) => (
+  <>
+    <HStack width="full" px={5}>
+      <TokenToPrice
+        numberOfTokens={numberOfTokens}
+        dollarValue={dollarValue}
+        hide={hideDollarValue}
+        mobile={mobile}
+      />
+      <Balance balance={balance} mobile={mobile} />
+      {!mobile ? (
+        <>
           <HalfButton
-          disabled={maxDisabled}
-          onClick={onHalfClick}
-          hideHalf={hideMax}
-          maxwidth={'50'}
-          size={'xs'}
-        />
-        <MaxButton
-          disabled={maxDisabled}
-          onClick={onMaxClick}
-          hideMax={hideMax}
-          maxwidth={'50'}
-          size={'xs'}
-        />
+            disabled={maxDisabled}
+            onClick={onHalfClick}
+            hideHalf={hideMax}
+            maxwidth={'50'}
+            size={'xs'}
+          />
+          <MaxButton
+            disabled={maxDisabled}
+            onClick={onMaxClick}
+            hideMax={hideMax}
+            maxwidth={'50'}
+            size={'xs'}
+          />
         </>) : (null)}
-        </HStack>
-      {mobile ? (
+    </HStack>
+    {mobile ? (
       <>
-      <HStack justifyContent="center" spacing={2} width={'full'} paddingTop={1} paddingBottom={4}>
-        <HalfButton
-          disabled={hideMax}
-          onClick={onHalfClick}
-          hideHalf={hideMax}
-          size={'md'}
-        />
-        <MaxButton
-          disabled={hideMax}
-          onClick={onMaxClick}
-          hideMax={hideMax}
-          size={'md'}
-        />
-      </HStack>
-    </>): (null)}
-    </>)
-}
-
-
+        <HStack justifyContent="center" spacing={2} width={'full'} paddingTop={1} paddingBottom={4}>
+          <HalfButton
+            disabled={hideMax}
+            onClick={onHalfClick}
+            hideHalf={hideMax}
+            size={'md'}
+          />
+          <MaxButton
+            disabled={hideMax}
+            onClick={onMaxClick}
+            hideMax={hideMax}
+            size={'md'}
+          />
+        </HStack>
+      </>) : (null)}
+  </>)
 
 export default BalanceWithMaxNHalf

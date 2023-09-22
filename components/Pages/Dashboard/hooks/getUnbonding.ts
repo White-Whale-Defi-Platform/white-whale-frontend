@@ -3,17 +3,29 @@ import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
 import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
 
 import { Config } from './useDashboardData'
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
-export interface UnbondingInfo {
-  total_amount: string
-  unbonding_requests: UnbondingRequest[]
+interface NativeToken {
+  denom: string
+}
+
+interface AssetInfo {
+  native_token: NativeToken
+}
+
+interface Asset {
+  info: AssetInfo
+  amount: string
 }
 
 export interface UnbondingRequest {
   asset: Asset
   timestamp: string
   weight: string
+}
+
+export interface UnbondingInfo {
+  total_amount: string
+  unbonding_requests: UnbondingRequest[]
 }
 
 export interface UnbondingData {
@@ -23,18 +35,14 @@ export interface UnbondingData {
   tokenSymbol: string
 }
 
-interface Asset {
-  info: AssetInfo
-  amount: string
-}
-
-interface AssetInfo {
-  native_token: NativeToken
-}
-
-interface NativeToken {
-  denom: string
-}
+const fetchUnbonding = async (
+  client: CosmWasmClient,
+  address: string,
+  config: Config,
+): Promise<UnbondingInfo[]> => await Promise.all(Object.entries(config.bonding_tokens).map(async ([key, token]) => client.queryContractSmart(config.whale_lair, {
+  unbonding: { address,
+    denom: token.denom },
+})))
 
 export const getUnbonding = async (
   client: CosmWasmClient,
@@ -78,11 +86,3 @@ export const getUnbonding = async (
   return { unbondingRequests }
 }
 
-const fetchUnbonding = async (
-  client: CosmWasmClient,
-  address: string,
-  config: Config,
-): Promise<UnbondingInfo[]> => Promise.all(Object.entries(config.bonding_tokens).map(async ([key, token]) => client.queryContractSmart(config.whale_lair, {
-  unbonding: { address,
-    denom: token.denom },
-})))

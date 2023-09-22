@@ -11,7 +11,6 @@ import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-
 export type RewardInfo = {
   amount: number
   dollarValue: number

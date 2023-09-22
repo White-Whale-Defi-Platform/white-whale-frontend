@@ -1,5 +1,6 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
+
 import {
   Modal,
   ModalBody,
@@ -38,12 +39,20 @@ function WalletModal({ isOpen, setOpen, walletRepo }) {
   }
 
   function shouldRenderButton(wallet: { walletName: string, isModeExtension: boolean }) {
-    const walletName = wallet.walletName
+    const { walletName } = wallet
     const inApp = isMobile && window.leap && window.leap.mode === 'mobile-web'
-    if (inApp && walletName === 'leap-extension') return true;
-    if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) return false;
-    if (!inApp && isMobile && !wallet.isModeExtension) return true;
-    if (!inApp && !isMobile && wallet.isModeExtension) return true;
+    if (inApp && walletName === 'leap-extension') {
+      return true;
+    }
+    if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) {
+      return false;
+    }
+    if (!inApp && isMobile && !wallet.isModeExtension) {
+      return true;
+    }
+    if (!inApp && !isMobile && wallet.isModeExtension) {
+      return true;
+    }
   }
 
   return (
@@ -57,7 +66,9 @@ function WalletModal({ isOpen, setOpen, walletRepo }) {
             {walletRepo?.wallets.map((wallet) => {
               const { connect, walletName } = wallet;
 
-              if (!shouldRenderButton(wallet)) return null
+              if (!shouldRenderButton(wallet)) {
+                return null
+              }
 
               return (
                 <WalletConnectButton

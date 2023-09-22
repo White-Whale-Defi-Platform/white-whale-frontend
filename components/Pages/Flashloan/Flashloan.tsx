@@ -13,7 +13,7 @@ const Flashloan: FC = () => {
   const router = useRouter()
   const chainInfos : any = useChainInfos()
   const chainIdParam = router.query.chainId as string
-  const currentChain = chainInfos.find((row) => row.chainId === chainId)
+  const currentChain = chainInfos.find((row: { chainId: string }) => row.chainId === chainId)
 
   if (!currentChain || currentChain.label.toLowerCase() !== chainIdParam) {
     return null

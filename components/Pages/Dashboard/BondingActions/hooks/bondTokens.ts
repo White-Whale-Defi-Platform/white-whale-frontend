@@ -39,7 +39,7 @@ export const bondTokens = async (
 
   return await signingClient.signAndBroadcast(
     // @ts-ignore
-    address, [execMsg], fee, ''
+    address, [execMsg], fee, '',
   )
 }
 

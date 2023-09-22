@@ -1,14 +1,15 @@
-import { Text, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 
+import { Text, Tooltip } from '@chakra-ui/react'
+
 export const RewardToolTip = ({
-                                      children = null,
-                                      label = 'label',
-                                      isHeading = false,
-                                      fontSize = 'sm',
-                                      showTooltip = true,
-                                      isWalletConnected = false,
-                                    }) => {
+  children = null,
+  label = 'label',
+  isHeading = false,
+  fontSize = 'sm',
+  showTooltip = true,
+  isWalletConnected = false,
+}) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
 
   return (

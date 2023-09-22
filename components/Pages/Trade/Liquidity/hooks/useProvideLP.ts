@@ -175,7 +175,6 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     isNewPosition,
   ])
 
-
   const tx = useTransaction({
     enabled:
       Boolean(encodedMsgs) &&

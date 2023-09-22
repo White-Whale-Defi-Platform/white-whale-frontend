@@ -149,7 +149,7 @@ export const useTransaction = ({
     senderAddress,
     msgs,
     tokenAmount: amount,
-    signingClient
+    signingClient,
   }),
   {
     onMutate: () => {

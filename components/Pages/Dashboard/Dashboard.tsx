@@ -23,7 +23,6 @@ const Dashboard: FC = () => {
   const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address } = useChain(walletChainName)
 
-
   const data: BondingData[] = [
     {
       tokenType: TokenType.liquid,

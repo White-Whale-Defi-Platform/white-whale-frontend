@@ -1,7 +1,6 @@
-import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
-
 
 import { TerraTreasuryService } from '../../../../../services/treasuryService'
 

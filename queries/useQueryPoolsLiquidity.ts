@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useChain } from '@cosmos-kit/react-lite'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import { fetchTotalLockedLp } from 'components/Pages/Trade/Pools/hooks/fetchTotalLockedLp'
 import {
@@ -28,7 +29,6 @@ import {
 } from './queryRewardsContracts'
 import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
 import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
-import { useChain } from '@cosmos-kit/react-lite'
 
 export type AssetType = [number?, number?]
 

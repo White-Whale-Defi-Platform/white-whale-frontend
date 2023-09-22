@@ -10,6 +10,7 @@ import {
   VStack,
   Stack,
 } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -19,8 +20,6 @@ import { TxStep } from './hooks/useTransaction'
 import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
-import { useChain } from '@cosmos-kit/react-lite'
-
 
 const defaultJson = {
   flash_loan: {
@@ -28,9 +27,6 @@ const defaultJson = {
     msgs: [],
   },
 }
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
 
 const options = {
   schema,
@@ -42,7 +38,7 @@ const options = {
   allowSchemaSuggestions: true,
 }
 
-function FlashloanForm({}: Props) {
+const FlashloanForm = () => {
   const editorRef = useRef(null)
   const containerRef = useRef(null)
   const [error, setError] = useState(null)
@@ -52,7 +48,7 @@ function FlashloanForm({}: Props) {
 
   const tx = useFlashloan({ json })
 
-  const onChange = async (data) => {
+  const onChange = async () => {
     try {
       const isValid = await editorRef?.current?.validate()
       if (isValid?.length === 0) {
@@ -174,11 +170,11 @@ function FlashloanForm({}: Props) {
               variant="primary"
               width={60}
               isLoading={
-                // tx?.txStep == TxStep.Estimating ||
+                // Tx?.txStep == TxStep.Estimating ||
                 tx?.txStep == TxStep.Posting ||
                 tx?.txStep == TxStep.Broadcasting
               }
-              disabled={!!error || !isWalletConnected}
+              disabled={Boolean(error) || !isWalletConnected}
             >
               {buttonLabel}
             </Button>

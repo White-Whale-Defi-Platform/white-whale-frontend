@@ -1,5 +1,5 @@
-import { num } from 'libs/num'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { num } from 'libs/num'
 
 export interface GetToken1ForToken2PriceInput {
   swapAddress: string
@@ -21,6 +21,7 @@ export const getToken1ForToken2Price = async ({
       toNumber()
   } catch (e) {
     console.error('err(getToken1ForToken2Price):', e)
+    return null
   }
 }
 
@@ -42,6 +43,7 @@ export const getToken2ForToken1Price = async ({
       toNumber()
   } catch (e) {
     console.error('err(getToken2ForToken1Price):', e)
+    return null
   }
 }
 
@@ -60,6 +62,7 @@ export const getTokenForTokenPrice = async (input: GetTokenForTokenPriceInput) =
     })
   } catch (e) {
     console.error('error(getTokenForTokenPrice)', e)
+    return null
   }
 }
 

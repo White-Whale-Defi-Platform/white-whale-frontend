@@ -1,22 +1,20 @@
-import { FC, useEffect } from 'react'
-import { useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
+
+import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
-import { chains, assets } from 'chain-registry'
-
-import 'theme/global.css'
-
-import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import {
   StaticWalletProvider,
   WalletControllerChainOptions,
 } from '@terra-money/wallet-provider'
+import { chains, assets } from 'chain-registry'
+import 'theme/global.css'
 import AppLoading from 'components/AppLoading'
 import AppLayout from 'components/Layout/AppLayout'
 import WalletModal from 'components/Wallet/Modal/WalletModal'
