@@ -60,15 +60,15 @@ const ClaimTable = ({ tokens = [] }: Props) => {
       py="4"
     >
       {tokens?.map((item, index) => (
-          <TokenRow
-            key={
-              (item?.info?.native_token?.denom ??
+        <TokenRow
+          key={
+            (item?.info?.native_token?.denom ??
                 item.info.token.contract_addr) + index
-            }
-            item={item}
-            isLast={index === tokens.length - 1}
-          />
-        ))}
+          }
+          item={item}
+          isLast={index === tokens.length - 1}
+        />
+      ))}
     </VStack>
   )
 }

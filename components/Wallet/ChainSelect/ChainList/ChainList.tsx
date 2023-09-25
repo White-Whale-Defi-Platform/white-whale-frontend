@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { List } from '@chakra-ui/react'
+import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import { COSMOS_KIT_WALLET_KEY } from 'constants/index'
 import { useChainInfos } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
-import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { COSMOS_KIT_WALLET_KEY } from 'constants/index'
 
 function ChainList({ onChange, onClose, currentChainState }) {
   let chains = useChainInfos()

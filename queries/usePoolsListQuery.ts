@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
-import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 
+import { PoolLiquidityState } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 

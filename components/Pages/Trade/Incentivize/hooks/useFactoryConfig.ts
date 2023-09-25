@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+
 import { useClients } from '../../../../../hooks/useClients'
 
 type FactoryConfig = {
@@ -16,7 +17,7 @@ type FactoryConfig = {
 
 const useFactoryConfig = (incentiveFactory: string) => {
   const { walletChainName } = useRecoilValue(chainState)
-  const {cosmWasmClient} = useClients(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const { data: config } = useQuery<FactoryConfig>({
     queryKey: ['factoryConfig', incentiveFactory],

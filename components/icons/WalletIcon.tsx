@@ -1,4 +1,5 @@
 import * as React from 'react'
+
 import { Icon } from '@chakra-ui/react'
 
 export default function WalletIcon() {

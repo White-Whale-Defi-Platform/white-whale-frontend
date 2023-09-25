@@ -17,6 +17,7 @@ import {
 import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Trade/Incentivize/hooks/usePoolUserShare'
+import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsOverview';
 import Claim from 'components/Pages/Trade/Liquidity/Claim'
 import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
@@ -36,7 +37,6 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 import { TxStep } from 'types/common'
-import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsOverview';
 
 const ManageLiquidity: FC = () => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')

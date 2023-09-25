@@ -1,5 +1,6 @@
-import Swap from 'components/Pages/Trade/Swap'
 import { useEffect, useState } from 'react'
+
+import Swap from 'components/Pages/Trade/Swap'
 
 function getInitialTokenPairFromSearchParams() {
   const params = new URLSearchParams(location.search)
@@ -15,8 +16,7 @@ const SwapPage = () => {
     setInitialTokenPair(getInitialTokenPairFromSearchParams());
   }, [window.location.search]);
 
-    return <Swap initialTokenPair={initialTokenPair} />
-
+  return <Swap initialTokenPair={initialTokenPair} />
 }
 
 export default SwapPage

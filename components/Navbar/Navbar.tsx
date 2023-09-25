@@ -76,7 +76,7 @@ const Navbar = () => {
           md: 'flex' }}
         alignItems="center"
       >
-        <Box flex='1'>
+        <Box flex="1">
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
@@ -98,16 +98,16 @@ const Navbar = () => {
       </Flex>
       <Flex
         justify="space-between"
-        py={['0',"2"]}
-        px={['0',"1"]}
-        display={{ base: 'flex', 
-        md: 'none' }}
+        py={['0', '2']}
+        px={['0', '1']}
+        display={{ base: 'flex',
+          md: 'none' }}
       >
         <Logo />
         <Wallet />
         <IconButton
           paddingTop={['3', '3', '0']}
-          align="right"
+          alignSelf="right"
           aria-label="Open drawer"
           variant="ghost"
           color="white"

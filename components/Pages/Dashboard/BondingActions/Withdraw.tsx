@@ -15,6 +15,7 @@ import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { WhaleTooltip } from 'components/Pages/Dashboard/WhaleTooltip'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
@@ -24,9 +25,6 @@ import {
   convertMicroDenomToDenom,
   nanoToMilli,
 } from 'util/conversion/index'
-
-import { WhaleTooltip } from 'components/Pages/Dashboard/WhaleTooltip'
-
 
 type Props = {
   unbondingRequests: UnbondingData[]

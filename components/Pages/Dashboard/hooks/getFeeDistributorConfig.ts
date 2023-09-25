@@ -1,4 +1,5 @@
 import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+
 import { Config } from './useDashboardData'
 
 export interface FeeDistributionConfig {
@@ -17,6 +18,15 @@ export interface FeeDistributionConfig {
   }
 }
 
+const fetchConfig = async (client: CosmWasmClient,
+  config: Config): Promise<FeeDistributionConfig> => {
+  const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
+    {
+      config: {},
+    })
+
+  return result as FeeDistributionConfig
+}
 export const getFeeDistributorConfig = async (client: CosmWasmClient,
   config: Config) => {
   if (!client) {
@@ -27,12 +37,3 @@ export const getFeeDistributorConfig = async (client: CosmWasmClient,
   return { feeDistributionConfig }
 }
 
-const fetchConfig = async (client: CosmWasmClient,
-  config: Config): Promise<FeeDistributionConfig> => {
-  const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
-    {
-      config: {},
-    })
-
-  return result as FeeDistributionConfig
-}

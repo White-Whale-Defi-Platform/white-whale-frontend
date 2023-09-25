@@ -1,7 +1,8 @@
+import { useState } from 'react'
+
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { Box, Icon, Tooltip } from '@chakra-ui/react'
 import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
-import { useState } from 'react'
 
 const bondingActionText = (action: ActionType) => {
   switch (action) {

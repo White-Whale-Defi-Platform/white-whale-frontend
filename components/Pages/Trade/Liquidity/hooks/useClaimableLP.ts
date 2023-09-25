@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import useLockedPositions, {PositionState} from 'components/Pages/Trade/Liquidity/hooks/useLockedPositions'
+import useLockedPositions, { PositionState } from 'components/Pages/Trade/Liquidity/hooks/useLockedPositions'
 
 const useClaimableLP = ({ poolId }) => {
   const { data: positions = [] } = useLockedPositions(poolId)

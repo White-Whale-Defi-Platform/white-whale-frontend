@@ -5,25 +5,25 @@ import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
 import { useChains } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
 import WalletIcon from 'components/icons/WalletIcon'
+import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
+import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
+import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import {
   ACTIVE_BONDING_NETWORKS,
   ACTIVE_NETWORKS,
   ACTIVE_NETWORKS_WALLET_NAMES,
   COSMOS_KIT_WALLET_KEY,
-  WALLET_CHAIN_NAMES_BY_CHAIN_ID
+  WALLET_CHAIN_NAMES_BY_CHAIN_ID,
 } from 'constants/index'
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
-import { getPathName } from 'util/route'
 import { TokenItemState } from 'types/index'
-import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
-import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
-import { WalletType } from 'components/Wallet/Modal/WalletModal'
+import { getPathName } from 'util/route'
 
 const Wallet = () => {
   const [isInitialized, setInitialized] = useState(false)
@@ -84,7 +84,7 @@ const Wallet = () => {
       setCurrentChainState({
         ...currentChainState,
         chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
-        walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]
+        walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]],
       })
     }
 
@@ -123,8 +123,7 @@ const Wallet = () => {
     setCurrentChainState({ ...currentChainState,
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
-      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]},
-    )
+      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId] })
     queryClient.clear()
     const [defaultFrom, defaultTo] = defaultTokens[currentChainState.network][WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
     const newState: TokenItemState[] = [

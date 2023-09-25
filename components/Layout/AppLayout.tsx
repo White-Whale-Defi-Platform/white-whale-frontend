@@ -1,22 +1,34 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useMemo } from 'react'
 import { isMobile } from 'react-device-detect'
 
-import { useMediaQuery } from '@chakra-ui/react'
-import { Flex } from '@chakra-ui/react'
+import { useMediaQuery, Flex } from '@chakra-ui/react'
 import Navbar from 'components/Navbar'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import Status from '../Status'
 import MobileNotSupportedModal from '../Wallet/Modal/MobileNotSupportedModal'
-import RadialGradient from './RadialGradient'
+import RadialGradient, { backgrounds } from './RadialGradient'
 
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(chainState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
   const leapInApp = window.leap && window.leap.mode === 'mobile-web'
+  const background = useMemo(() => backgrounds[chainId], [chainId])
   return (
-    <>{((isMobile || isMobileView) && !leapInApp) && <MobileNotSupportedModal />}
+    <>
+      {isMobile && <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+          background: background.replace('linear', 'radial').replace('90deg', 'circle'),
+        }}
+      ></div>}
+      {((isMobile || isMobileView) && !leapInApp) && <MobileNotSupportedModal />}
       {(!(isMobile || isMobileView) || leapInApp) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
         <RadialGradient />
         <Navbar />

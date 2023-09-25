@@ -18,7 +18,6 @@ export const useGetTokenDollarValueQuery = () => {
   const baseToken = useBaseTokenInfo()
   const { walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient } = useClients(walletChainName)
-  
 
   const [tokenADollarPrice, fetchingDollarPrice] = useTokenDollarValue(baseToken?.symbol)
 

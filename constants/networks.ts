@@ -29,8 +29,7 @@ export const ACTIVE_NETWORKS_WALLET_NAMES = {
     'migaloo',
     'terra2',
     'sei',
-    'terra']
-  ,
+    'terra'],
   testnet: [
     'comdex',
     'injectivetestnet',

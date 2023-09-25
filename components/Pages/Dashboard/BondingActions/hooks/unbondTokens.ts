@@ -1,9 +1,7 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-
-import { createExecuteMessage } from 'util/messages/createExecuteMessage'
-
 import { TerraTreasuryService } from 'services/treasuryService'
+import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const unbondTokens = async (
   signingClient: SigningCosmWasmClient,
@@ -18,7 +16,7 @@ export const unbondTokens = async (
         amount: amount.toString(),
         info: {
           native_token: {
-            denom: denom,
+            denom,
           },
         },
       },
@@ -34,7 +32,9 @@ export const unbondTokens = async (
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
     ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(amount, denom, gas)
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+      amount, denom, gas,
+    )
   }
   return await signingClient.signAndBroadcast(
     // @ts-ignore

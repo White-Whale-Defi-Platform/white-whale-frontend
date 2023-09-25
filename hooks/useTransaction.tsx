@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 
 import Finder from '../components/Finder'
 import useDebounceValue from './useDebounceValue'
-import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 
 export enum TxStep {
   /**

@@ -5,9 +5,7 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { useRecoilValue } from 'recoil'
 import { executeAddLiquidity } from 'services/liquidity/index'
-import { chainState } from 'state/chainState';
 import { TxStep } from 'types/common'
 
 type Params = {
@@ -45,7 +43,6 @@ export const useTransaction = ({
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const toast = useToast()
   const [tokenA, tokenB] = swapAssets
-  const { chainId } = useRecoilValue(chainState)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [error, setError] = useState<unknown | null>(null)
@@ -102,7 +99,7 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
+        debouncedMsgs !== null &&
         txStep === TxStep.Idle &&
         error === null &&
         Boolean(signingClient) &&
@@ -123,7 +120,19 @@ export const useTransaction = ({
       },
     },
   )
-
+  const { data: txInfo } = useQuery(
+    ['txInfo', txHash],
+    () => {
+      if (txHash === null) {
+        return null
+      }
+      return signingClient.getTx(txHash)
+    },
+    {
+      enabled: txHash !== null,
+      retry: true,
+    },
+  )
   const { mutate } = useMutation(() => executeAddLiquidity({
     tokenA,
     tokenB,
@@ -133,7 +142,6 @@ export const useTransaction = ({
     swapAddress,
     senderAddress,
     msgs: debouncedMsgs,
-    chainId,
   }),
   {
     onMutate: () => {
@@ -213,29 +221,15 @@ export const useTransaction = ({
     },
   })
 
-  const { data: txInfo } = useQuery(
-    ['txInfo', txHash],
-    () => {
-      if (txHash === null) {
-        return null
-      }
-      return signingClient.getTx(txHash)
-    },
-    {
-      enabled: txHash !== null,
-      retry: true,
-    },
-  )
-
   const reset = () => {
     setError(null)
     setTxHash(undefined)
     setTxStep(TxStep.Idle)
   }
 
-  const submit = useCallback(async () => {
+  const submit = useCallback(() => {
     if (fee === null || msgs === null || msgs.length < 1) {
-      return
+      return null
     }
 
     mutate()

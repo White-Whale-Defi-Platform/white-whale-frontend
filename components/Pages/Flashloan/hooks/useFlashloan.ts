@@ -1,14 +1,13 @@
 import { useMemo } from 'react'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import flashLoanContract from 'constants/vaultRouterAddresses.json'
+import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import { createFlashLoanMsg } from './createFlashLoanMsg'
 import useTransaction from './useTransaction'
-import { useChain } from '@cosmos-kit/react-lite'
-import { useClients } from 'hooks/useClients'
-
 
 const useFlashloan = ({ json }) => {
   const { chainId, walletChainName } = useRecoilValue(chainState)

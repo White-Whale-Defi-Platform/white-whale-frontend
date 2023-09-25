@@ -3,6 +3,7 @@ import { useMutation } from 'react-query'
 
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
+import { useChain } from '@cosmos-kit/react-lite'
 import {
   Config,
   useConfig,
@@ -23,7 +24,6 @@ import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
 } from 'util/messages/index'
-import { useChain } from '@cosmos-kit/react-lite'
 
 interface Props {
   poolId: string

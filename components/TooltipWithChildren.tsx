@@ -1,5 +1,6 @@
-import { Text, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
+
+import { Text, Tooltip } from '@chakra-ui/react'
 
 export const TooltipWithChildren = ({
   children = null,
