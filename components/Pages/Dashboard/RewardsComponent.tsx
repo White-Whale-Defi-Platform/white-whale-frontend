@@ -104,7 +104,6 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
 
 const RewardsComponent = ({
   isWalletConnected,
-  isLoading,
   whalePrice,
   currentEpoch,
   localTotalBonded,
@@ -173,166 +172,141 @@ const RewardsComponent = ({
     [genesisStartTimeInNano])
 
   return (
-    <>
-      {isLoading ? (
-        <VStack
-          width="full"
-          background={boxBg}
-          borderRadius={borderRadius}
-          gap={3}
-          overflow="hidden"
-          position="relative"
-          display="flex"
-          justifyContent="center"
-        >
-          <HStack
-            width="full"
-            alignContent="center"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Loader />
-          </HStack>
-        </VStack>
-      ) : (
-        <VStack
-          px={4}
-          background={boxBg}
-          borderRadius={borderRadius}
-          alignItems="center"
-          minH={320}
-          width="flex"
-          gap={4}
-          overflow="hidden"
-          position="relative"
-          display="flex"
-          justifyContent="flex-start"
-        >
-          <HStack spacing={['100', '170']} align="stretch" mt={7}>
-            <HStack flex="1">
-              <a>
-                <Image
-                  src="/logos/logo.svg"
-                  alt="WhiteWhale Logo"
-                  boxSize={[5, 7]}
-                />
-              </a>
-              <Text fontSize={20}>WHALE</Text>
-            </HStack>
-            <Text color="#7CFB7D" fontSize={18}>
-              ${whalePrice?.toFixed(6)}
-            </Text>
-          </HStack>
-          <VStack>
-            <HStack justifyContent="space-between" minWidth={['280', '380']}>
-              <Text color="whiteAlpha.600">Next rewards in</Text>
-              <Text>{durationString}</Text>
-            </HStack>
-            <ProgressBar
-              progress={progress}
-              currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)}
+    <VStack
+      px={4}
+      background={boxBg}
+      borderRadius={borderRadius}
+      alignItems="center"
+      minH={320}
+      width="flex"
+      gap={4}
+      overflow="hidden"
+      position="relative"
+      display="flex"
+      justifyContent="flex-start"
+    >
+      <HStack spacing={['100', '170']} align="stretch" mt={7}>
+        <HStack flex="1">
+          <a>
+            <Image
+              src="/logos/logo.svg"
+              alt="WhiteWhale Logo"
+              boxSize={[5, 7]}
             />
-          </VStack>
-          <Box
-            border="0.5px solid"
-            borderColor="whiteAlpha.400"
-            borderRadius="10px"
-            p={4}
-            minW={['290', '390']}
-          >
-            <HStack justifyContent="space-between">
-              <HStack>
-                <Text color="whiteAlpha.600">Estimated Rewards</Text>
-                <BondingActionTooltip action={ActionType.claim} />
-              </HStack>
-              <RewardsTooltip
-                dollarValue={
-                  isWalletConnected
-                    ? `$${(claimableRewards * whalePrice).toFixed(2)}`
-                    : 'n/a'
-                }
-                isWalletConnected={isWalletConnected}
-                amount={claimableRewards.toFixed(6)}
-                daysSinceLastClaim={daysSinceLastClaim}
-              />
-            </HStack>
-            <HStack>
-              <Text color="whiteAlpha.600" fontSize={11}>
+          </a>
+          <Text fontSize={20}>WHALE</Text>
+        </HStack>
+        <Text color="#7CFB7D" fontSize={18}>
+              ${whalePrice?.toFixed(6)}
+        </Text>
+      </HStack>
+      <VStack>
+        <HStack justifyContent="space-between" minWidth={['280', '380']}>
+          <Text color="whiteAlpha.600">Next rewards in</Text>
+          <Text>{durationString}</Text>
+        </HStack>
+        <ProgressBar
+          progress={progress}
+          currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)}
+        />
+      </VStack>
+      <Box
+        border="0.5px solid"
+        borderColor="whiteAlpha.400"
+        borderRadius="10px"
+        p={4}
+        minW={['290', '390']}
+      >
+        <HStack justifyContent="space-between">
+          <HStack>
+            <Text color="whiteAlpha.600">Estimated Rewards</Text>
+            <BondingActionTooltip action={ActionType.claim} />
+          </HStack>
+          <RewardsTooltip
+            dollarValue={
+              isWalletConnected
+                ? `$${(claimableRewards * whalePrice).toFixed(2)}`
+                : 'n/a'
+            }
+            isWalletConnected={isWalletConnected}
+            amount={claimableRewards.toFixed(6)}
+            daysSinceLastClaim={daysSinceLastClaim}
+          />
+        </HStack>
+        <HStack>
+          <Text color="whiteAlpha.600" fontSize={11}>
                 Estimated APR
-              </Text>
-              <Text fontSize={11}>{`${apr.toFixed(2)}%`}</Text>
-            </HStack>
-            <HStack>
-              <Text color="whiteAlpha.600" fontSize={11}>
+          </Text>
+          <Text fontSize={11}>{`${apr.toFixed(2)}%`}</Text>
+        </HStack>
+        <HStack>
+          <Text color="whiteAlpha.600" fontSize={11}>
                 Multiplier
-              </Text>
-              <Text fontSize={11}>
-                {isWalletConnected
-                  ? `${((multiplierRatio - 1) * 100).toFixed(2)}%`
-                  : 'n/a'}
-              </Text>
-            </HStack>
-          </Box>
-          <HStack w={[290, 390]}>
-            <Button
-              alignSelf="center"
-              bg="#6ACA70"
-              borderRadius="full"
-              variant="primary"
-              width={'100%'}
-              disabled={
-                txStep === TxStep.Estimating ||
+          </Text>
+          <Text fontSize={11}>
+            {isWalletConnected
+              ? `${((multiplierRatio - 1) * 100).toFixed(2)}%`
+              : 'n/a'}
+          </Text>
+        </HStack>
+      </Box>
+      <HStack w={[290, 390]}>
+        <Button
+          alignSelf="center"
+          bg="#6ACA70"
+          borderRadius="full"
+          variant="primary"
+          width={'100%'}
+          disabled={
+            txStep === TxStep.Estimating ||
                 txStep === TxStep.Posting ||
                 txStep === TxStep.Broadcasting ||
                 (isWalletConnected && claimableRewards === 0)
-              }
-              maxWidth={570}
-              isLoading={
-                txStep === TxStep.Estimating ||
+          }
+          maxWidth={570}
+          isLoading={
+            txStep === TxStep.Estimating ||
                 txStep === TxStep.Posting ||
                 txStep === TxStep.Broadcasting
-              }
-              onClick={async () => {
-                if (isWalletConnected) {
-                  await submit(
-                    ActionType.claim, null, null,
-                  )
-                } else {
-                  openView()
-                }
+          }
+          onClick={ () => {
+            if (isWalletConnected) {
+              submit(
+                ActionType.claim, null, null,
+              )
+            } else {
+              openView()
+            }
+          }}
+          style={{ textTransform: 'capitalize' }}
+        >
+          {buttonLabel}
+        </Button>
+        {progress === 100 && isWalletConnected && bondingHasStarted && (
+          <Tooltip
+            label="Community driven enforcement of the next epoch."
+            borderRadius={10}
+            bg="black"
+          >
+            <Button
+              alignSelf="center"
+              bg="transparent"
+              borderRadius="full"
+              border="1px solid white"
+              width="50%"
+              variant="primary"
+              _hover={{
+                border: '1px solid #6ACA70',
+                color: '#6ACA70',
               }}
-              style={{ textTransform: 'capitalize' }}
+              onClick={() => forceEpochAndTakeSnapshots.submit()}
             >
-              {buttonLabel}
+              {'Force Epoch'}
             </Button>
-            {progress === 100 && isWalletConnected && bondingHasStarted && (
-              <Tooltip
-                label="Community driven enforcement of the next epoch."
-                borderRadius={10}
-                bg="black"
-              >
-                <Button
-                  alignSelf="center"
-                  bg="transparent"
-                  borderRadius="full"
-                  border="1px solid white"
-                  width="50%"
-                  variant="primary"
-                  _hover={{
-                    border: '1px solid #6ACA70',
-                    color: '#6ACA70',
-                  }}
-                  onClick={() => forceEpochAndTakeSnapshots.submit()}
-                >
-                  {'Force Epoch'}
-                </Button>
-              </Tooltip>
-            )}
-          </HStack>
-        </VStack>
-      )}
-    </>
-  )
+          </Tooltip>
+        )}
+      </HStack>
+    </VStack>)
 }
 
 export default RewardsComponent

@@ -2,14 +2,16 @@ import React from 'react'
 
 import { Button, HStack, useToast } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
-import ConnectedWalletIcon from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWalletIcon'
+import {
+  ConnectedWalletIcon,
+} from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWalletIcon'
 import TruncatedAddress from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/TruncatedAddress'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-function ConnectedWallet({ connected }) {
+export const ConnectedWallet = ({ connected }) => {
   const toast = useToast()
-  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
 
   const copyToClipboard = async () => {
@@ -39,5 +41,3 @@ function ConnectedWallet({ connected }) {
     </HStack>
   )
 }
-
-export default ConnectedWallet

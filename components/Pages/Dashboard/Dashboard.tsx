@@ -2,6 +2,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 
 import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
+import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
@@ -166,51 +167,61 @@ const Dashboard: FC = () => {
     symbols,
   ])
 
-  return (
-    <VStack width={'full'} alignSelf="center" paddingLeft={['5', '5', '10']}>
-      <Flex
-        direction={{ base: 'column',
-          xl: 'row' }}
-        gap={5}
-        justifyContent="space-between"
-        alignItems="flex-end"
-      >
-        <VStack width="flex">
-          <HStack width="full" paddingY={{ base: 3,
-            md: 5 }}>
-            <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
+  return <>{isLoading && isWalletConnected ?
+    <HStack
+      width="full"
+      alignContent="center"
+      justifyContent="center"
+      alignItems="center">
+      <Loader />
+    </HStack> : (
+      <VStack width={'full'} alignSelf="center" paddingLeft={['5', '5', '10']}>
+        <Flex
+          direction={{
+            base: 'column',
+            xl: 'row',
+          }}
+          gap={5}
+          justifyContent="space-between"
+          alignItems="flex-end"
+        >
+          <VStack width="flex">
+            <HStack width="full" paddingY={{
+              base: 3,
+              md: 5,
+            }}>
+              <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding
-            </Text>
-          </HStack>
-          <BondingOverview
-            isWalletConnected={isWalletConnected}
-            isLoading={isLoading && isWalletConnected}
-            data={updatedData}
-            whalePrice={whalePrice}
-            currentChainName={chainName}
-            mobile={isMobile}
-          />
-        </VStack>
-        <VStack alignSelf={{ base: 'center',
-          xl: 'end' }}>
-          <RewardsComponent
-            isWalletConnected={isWalletConnected}
-            whalePrice={whalePrice}
-            currentEpoch={currentEpoch}
-            isLoading={isLoading && isWalletConnected}
-            localTotalBonded={localTotalBonded}
-            globalTotalBonded={globalTotalBonded}
-            feeDistributionConfig={feeDistributionConfig}
-            annualRewards={annualRewards}
-            globalAvailableRewards={globalAvailableRewards}
-            totalGlobalClaimable={totalGlobalClaimable}
-            daysSinceLastClaim={daysSinceLastClaim}
-            weightInfo={weightInfo}
-          />
-        </VStack>
-      </Flex>
-    </VStack>
-  )
+              </Text>
+            </HStack>
+            <BondingOverview
+              isWalletConnected={isWalletConnected}
+              data={updatedData}
+              whalePrice={whalePrice}
+              currentChainName={chainName}
+              mobile={isMobile}
+            />
+          </VStack>
+          <VStack alignSelf={{
+            base: 'center',
+            xl: 'end',
+          }}>
+            <RewardsComponent
+              isWalletConnected={isWalletConnected}
+              whalePrice={whalePrice}
+              currentEpoch={currentEpoch}
+              localTotalBonded={localTotalBonded}
+              globalTotalBonded={globalTotalBonded}
+              feeDistributionConfig={feeDistributionConfig}
+              annualRewards={annualRewards}
+              globalAvailableRewards={globalAvailableRewards}
+              totalGlobalClaimable={totalGlobalClaimable}
+              daysSinceLastClaim={daysSinceLastClaim}
+              weightInfo={weightInfo}
+            />
+          </VStack>
+        </Flex>
+      </VStack>) }</>
 }
 
 export default Dashboard

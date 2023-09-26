@@ -11,11 +11,11 @@ export const useClients = (walletChainName: string) => {
 
   const queries = useQueries([
     {
-      queryKey: 'cosmWasmClient',
+      queryKey: ['cosmWasmClient', walletChainName],
       queryFn: async () => await getCosmWasmClient(),
     },
     {
-      queryKey: 'signingClient',
+      queryKey: ['signingClient', walletChainName],
       queryFn: async () => await getSigningCosmWasmClient(),
       enabled: isWalletConnected,
     },

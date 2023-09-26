@@ -17,7 +17,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import AssetSelectModal from './AssetSelectModal'
 
 interface AssetInputProps {
-  image?: boolean
+  showLogo?: boolean
   token: any
   value: any
   onChange: (value: any, isTokenChange?: boolean) => void
@@ -70,7 +70,7 @@ const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
 }
 
 const AssetInput: FC<AssetInputProps> = forwardRef(({
-  image = true,
+  showLogo = true,
   token,
   onChange,
   value,
@@ -139,7 +139,7 @@ ref) => {
           >
             <AssetSelectTrigger
               tokenInfo={tokenInfo}
-              showIcon={image}
+              showIcon={showLogo}
               symbol={token?.tokenSymbol}
             />
             {showList && (
