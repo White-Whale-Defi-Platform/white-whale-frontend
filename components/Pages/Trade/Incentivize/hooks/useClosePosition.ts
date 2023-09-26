@@ -25,7 +25,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     signingClient,
   })
 
-  const createClosPositionMessage = (flow_id: number) => {
+  const createClosePositionMessage = (flow_id: number) => {
     const msg = createExecuteMessage({
       message: {
         close_flow: {
@@ -42,7 +42,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async ({ flowId }: { flowId: number }) => {
-      const msg = createClosPositionMessage(flowId)
+      const msg = createClosePositionMessage(flowId)
       try {
         await signingClient.simulate(
           address, msg, '',

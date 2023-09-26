@@ -4,7 +4,6 @@ import { BondingData } from 'components/Pages/Dashboard/types/BondingData'
 import { useRouter } from 'next/router'
 import { Cell, Pie, PieChart } from 'recharts'
 
-import Loader from '../../Loader'
 import { WhaleTooltip } from './WhaleTooltip'
 
 export enum TokenType {
@@ -24,7 +23,6 @@ export enum ActionType {
 }
 type Props = {
   isWalletConnected: boolean
-  isLoading: boolean
   data: BondingData[]
   whalePrice: number
   currentChainName: string
@@ -33,7 +31,6 @@ type Props = {
 
 const BondingOverview = ({
   isWalletConnected,
-  isLoading,
   data,
   whalePrice,
   currentChainName,
@@ -106,94 +103,83 @@ const BondingOverview = ({
       display="flex"
       justifyContent="center"
     >
-      {isLoading ? (
-        <HStack
-          width="full"
-          alignContent="center"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Loader />
-        </HStack>
-      ) : (
-        <HStack
-          alignItems="center"
-          justifyContent="flex-start"
-          paddingLeft={4}
-          pt={5}
-          spacing={['2', '5']}
-        >
-          {piechart()}
-          <VStack alignItems="start" alignSelf="flex-start">
-            <Text paddingBottom={[2, 4]} color="whiteAlpha.600">
+      <HStack
+        alignItems="center"
+        justifyContent="flex-start"
+        paddingLeft={4}
+        pt={5}
+        spacing={['2', '5']}
+      >
+        {piechart()}
+        <VStack alignItems="start" alignSelf="flex-start">
+          <Text paddingBottom={[2, 4]} color="whiteAlpha.600">
               Tokens
-            </Text>
-            {data?.map((e) => (
-              <TokenBox
-                key={`tokenBox-${e.actionType}`}
-                tokenType={e.tokenType}
-              />
-            ))}
-          </VStack>
-          <VStack alignItems="start" spacing={8} alignSelf="flex-start">
-            <Text marginBottom={['-3.5', '-2']} paddingEnd={['5', '10']} color="whiteAlpha.600">
-              {`Value($${(aggregatedAssets * Number(whalePrice)).toFixed(2)})`}
-            </Text>
-            {/* Value equals the amount of the specific token type (liquid, bonded, unbonding, withdrawable)*/}
-            {data?.map((e: {
+          </Text>
+          {data?.map((e) => (
+            <TokenBox
+              key={`tokenBox-${e.actionType}`}
+              tokenType={e.tokenType}
+            />
+          ))}
+        </VStack>
+        <VStack alignItems="start" spacing={8} alignSelf="flex-start">
+          <Text marginBottom={['-3.5', '-2']} paddingEnd={['5', '10']} color="whiteAlpha.600">
+            {`Value($${(aggregatedAssets * Number(whalePrice)).toFixed(2)})`}
+          </Text>
+          {/* Value equals the amount of the specific token type (liquid, bonded, unbonding, withdrawable)*/}
+          {data?.map((e: {
                 value: number | string
                 actionType: ActionType
                 tokenType: TokenType
                 tokenBalances: TokenBalance[]
               }) => (
-              <WhaleTooltip
-                key={`${e.tokenType}${e.actionType}`}
-                label={
-                  e?.value != null && isWalletConnected
-                    ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
-                    : 'n/a'
-                }
-                tokenType={e.tokenType}
-                data={data}
-                isWalletConnected={isWalletConnected}
-              />
-            ))}
-          </VStack>
-          <VStack
-            alignItems="flex-start"
-            justify="flex-start"
-            alignSelf="flex-start"
-            paddingLeft={3}
-            paddingRight={6}
-            spacing={8}
-          >
-            <Text mb={-2} color="whiteAlpha.600">
+            <WhaleTooltip
+              key={`${e.tokenType}${e.actionType}`}
+              label={
+                e?.value != null && isWalletConnected
+                  ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
+                  : 'n/a'
+              }
+              tokenType={e.tokenType}
+              data={data}
+              isWalletConnected={isWalletConnected}
+            />
+          ))}
+        </VStack>
+        <VStack
+          alignItems="flex-start"
+          justify="flex-start"
+          alignSelf="flex-start"
+          paddingLeft={3}
+          paddingRight={6}
+          spacing={8}
+        >
+          <Text mb={-2} color="whiteAlpha.600">
               Actions
-            </Text>
-            {data?.map((e: { actionType: ActionType }) => (
-              <Button
-                key={`button-${e.actionType}`}
-                alignSelf="flex-start"
-                variant="outline"
-                size="sm"
-                w={110}
-                style={{ textTransform: 'capitalize' }}
-                onClick={async () => {
-                  if (e.actionType === ActionType.buy) {
-                    await router.push(`/${currentChainName}/swap`)
-                  } else {
-                    await router.push(`/${currentChainName}/dashboard/${
-                      ActionType[e.actionType]
-                    }`)
-                  }
-                }}
-              >
-                {ActionType[e.actionType]}
-              </Button>
-            ))}
-          </VStack>
-        </HStack>
-      )}
+          </Text>
+          {data?.map((e: { actionType: ActionType }) => (
+            <Button
+              key={`button-${e.actionType}`}
+              alignSelf="flex-start"
+              variant="outline"
+              size="sm"
+              w={110}
+              style={{ textTransform: 'capitalize' }}
+              onClick={async () => {
+                if (e.actionType === ActionType.buy) {
+                  await router.push(`/${currentChainName}/swap`)
+                } else {
+                  await router.push(`/${currentChainName}/dashboard/${
+                    ActionType[e.actionType]
+                  }`)
+                }
+              }}
+            >
+              {ActionType[e.actionType]}
+            </Button>
+          ))}
+        </VStack>
+      </HStack>
     </VStack>
   )
 }

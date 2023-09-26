@@ -1,5 +1,9 @@
-import { Key } from '@keplr-wallet/types'
 import { atom } from 'recoil'
+
+export enum NetworkType {
+  testnet = 'testnet',
+  mainnet = 'mainnet',
+}
 
 type GeneratedWalletState<TStateExtension extends NonNullable<unknown>> = TStateExtension & {
   chainId: string
@@ -8,35 +12,29 @@ type GeneratedWalletState<TStateExtension extends NonNullable<unknown>> = TState
   activeWallet: string
   walletChainName:string
 }
-export enum NetworkType {
-  testnet = 'testnet',
-  mainnet = 'mainnet',
-}
 
 type CreateWalletStateArgs<TState = NonNullable<unknown>> = {
   key: string
   default: TState
 }
 
-function createWalletState<TState = NonNullable<unknown>>({
+const createWalletState = ({
   key,
   default: defaultState,
-}: CreateWalletStateArgs<TState>) {
-  return atom<GeneratedWalletState<TState>>({
-    key,
-    default: {
-      chainId: 'migaloo-1',
-      chainName: 'migaloo',
-      network: NetworkType.mainnet,
-      activeWallet: '',
-      walletChainName: 'migaloo',
-      ...defaultState,
-    },
-    dangerouslyAllowMutability: true,
-  })
-}
+}: CreateWalletStateArgs<NonNullable<unknown>>) => atom<GeneratedWalletState<NonNullable<unknown>>>({
+  key,
+  default: {
+    chainId: 'migaloo-1',
+    chainName: 'migaloo',
+    network: NetworkType.mainnet,
+    activeWallet: '',
+    walletChainName: 'migaloo',
+    ...defaultState,
+  },
+  dangerouslyAllowMutability: true,
+})
 
-export const chainState = createWalletState<{ key?: Key }>({
+export const chainState = createWalletState({
   key: 'internal-wallet',
   default: {
     key: null,

@@ -78,13 +78,27 @@ export const ACTIVE_INCENTIVE_NETWORKS = [
   'columbus-5',
 ]
 
-export const MAINNET_TESTNET_MAP = {
+export const MAINNET_TESTNET_CHAIN_ID_MAP = {
   'migaloo-1': 'narwhal-1',
   'narwhal-1': 'migaloo-1',
   'phoenix-1': 'pisco-1',
   'pisco-1': 'phoenix-1',
   'pacific-1': 'sei-devnet-1',
   'columbus-5': 'rebel-2',
+}
+
+export const WALLET_CHAIN_NAME_MAINNET_TESTNET_MAP = {
+  migaloo: 'migalootestnet',
+  migalootestnet: 'migaloo',
+  terra2: 'terra2testnet',
+  terra2testnet: 'terra2',
+  sei: 'seitestnet',
+  seitestnet: 'sei',
+  juno: 'junotestnet',
+  junotestnet: 'juno',
+  terra: 'terra',
+  injective: 'injectivetestnet',
+  injectivetestnet: 'injective',
 }
 
 export const NETWORK_MAP = {

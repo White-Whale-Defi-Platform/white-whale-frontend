@@ -16,7 +16,7 @@
     "symbol": "WHALE",
     "name": "Whale",
     "decimals": 6,
-    "logoURI": "/logos/migaloo.png",
+    "logoURI": "/logos/whale.svg",
     "tags": ["native"],
     "native": true,
     "denom": "uwhale"
@@ -27,7 +27,7 @@
       "pool_id": "WHALE-LUNA",
       "lpOrder": ["WHALE", "LUNA"],
       "displayName": "WHALE-LUNA",
-      "displayLogo1": "/logos/logo.svg",
+      "displayLogo1": "/logos/migaloo.png",
       "displayLogo2": "/logos/atom.png",
       "pool_assets": [
         {
@@ -37,7 +37,7 @@
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
-          "logoURI": "/Ïlogos/logo.svg",
+          "logoURI": "/logos/whale.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uwhale"
@@ -166,7 +166,7 @@
       "lp_token": "migaloo1wc0a7fchmsp5waapczq6me2fa0rz3dlcpzlwxv0h08ukg04xuh8sr5qfe2",
       "swap_address": "migaloo158c7cllh2zl82rc4gyz4wse40v255vh33u2x7n28qqnaq98jl4zqx5laup",
       "staking_address": "migaloo15e5cj2430xzayxtgvqutudargxd3jgtr3q8qpv8mgszjy3gm8gfsm0vv6h",
-      "staking_proxy": "migaloo1ldn4f4ycnq9sd9uncfemqqr58a6fpv8924wxs4w9zf6uz8hql2wsf2wwes", 
+      "staking_proxy": "migaloo1ldn4f4ycnq9sd9uncfemqqr58a6fpv8924wxs4w9zf6uz8hql2wsf2wwes",
       "incentiveFactory" : "migaloo1wqsyztz9qw2ert8n2zypq5pp5evyqtrj7pzagrj40rwkypgghm3qeqj2jg",
       "feeDistributor" : "migaloo1l9lnd2qrtkejhj30lkjwfknkvtswgf7hrtzfwkse760wnajt78mq9skwjn",
       "rewards_tokens": []
@@ -185,7 +185,7 @@
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
-          "logoURI": "/logos/logo.svg",
+          "logoURI": "/logos/whale.svg",
           "tags": ["native"],
           "native": true,
           "denom": "uwhale"

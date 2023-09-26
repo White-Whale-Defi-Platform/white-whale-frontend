@@ -11,11 +11,10 @@ import { chainState } from 'state/chainState'
 
 import LeapSnapIcon from '../../../icons/LeapSnapIcon'
 
-function ConnectedWalletIcon() {
+export const ConnectedWalletIcon = () => {
   const { walletChainName } = useRecoilValue(chainState)
   const { wallet } = useChain(walletChainName)
-
-  switch (wallet.name) {
+  switch (wallet?.name) {
     case WalletType.keplrExtension || WalletType.keplrMobile:
       return <KeplrWalletIcon />
     case WalletType.leapExtension || WalletType.leapMobile:
@@ -31,4 +30,3 @@ function ConnectedWalletIcon() {
   }
 }
 
-export default ConnectedWalletIcon

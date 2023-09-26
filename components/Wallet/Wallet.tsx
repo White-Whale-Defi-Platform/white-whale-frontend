@@ -8,8 +8,10 @@ import WalletIcon from 'components/icons/WalletIcon'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
-import ChainSelectWithBalance from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
-import ConnectedWalletWithDisconnect from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
+import { ChainSelectWithBalance } from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
+import {
+  ConnectedWalletWithDisconnect,
+} from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import {
   ACTIVE_BONDING_NETWORKS,
@@ -21,7 +23,7 @@ import {
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
-import { NetworkType, chainState } from 'state/chainState'
+import { chainState, NetworkType } from 'state/chainState'
 import { TokenItemState } from 'types/index'
 import { getPathName } from 'util/route'
 
@@ -30,25 +32,35 @@ const Wallet = () => {
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
   const [_, setTokenSwapState] = useRecoilState<TokenItemState[]>(tokenSwapAtom)
   const chains: Array<any> = useChainInfos()
-  let walletChains: Array<string> = []
+  const [walletChains, setWalletChains] = useState<string[]>([])
+  const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
 
-  if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap) {
-    const snapChains = []
-    chains.forEach((row) => {
-      if (row.coinType === 118) {
-        snapChains.push(WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId])
-      }
-    })
-    walletChains = snapChains
-  } else {
-    walletChains = ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network]
-  }
+  useEffect(() => {
+    if (chainName && currentChainState.network === NetworkType.mainnet) {
+      setCurrentChainState({
+        chainName,
+        chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
+        network: currentChainState.network,
+        activeWallet: currentChainState.activeWallet,
+        walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]],
+      })
+    }
+
+    if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap) {
+      const newWalletChains = chains.
+        filter((row) => row.coinType === 118).
+        map((row) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId]);
+      setWalletChains(newWalletChains);
+    } else if (walletChains.length === 0) {
+      setWalletChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
+    }
+  }, [chains, currentChainState.network, chainName])
+
   const allChains = useChains(walletChains)
   const router = useRouter()
-  let chainName = router.query.chainId as string
+
   const [chainInfo] = useChainInfo(currentChainState.chainId)
-  const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]]]
-  chainName = chainName ? chainName : currentChainState.chainName
+  const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
   const resetWallet = async () => {
@@ -57,10 +69,9 @@ const Wallet = () => {
   }
 
   useEffect(() => {
-    if (!router.query.chainId) {
-      return
+    if (router.query.chainId) {
+      setChainIdParam(router.query.chainId as string)
     }
-    setChainIdParam(router.query.chainId as string)
   }, [router.query.chainId])
 
   useEffect(() => {
@@ -76,17 +87,6 @@ const Wallet = () => {
     const defaultChainName =
       currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'narwhal'
     const defaultWalletChainName = currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'migalootestnet'
-
-    if (
-      ACTIVE_NETWORKS[currentChainState.network][chainName] !==
-      currentChainState.chainId
-    ) {
-      setCurrentChainState({
-        ...currentChainState,
-        chainId: ACTIVE_NETWORKS[currentChainState.network][chainName],
-        walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][currentChainState.chainName]],
-      })
-    }
 
     if (!ACTIVE_NETWORKS[currentChainState.network][chainIdParam] && chainIdParam) {
       setCurrentChainState({

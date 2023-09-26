@@ -15,7 +15,7 @@ import BalanceWithMaxNHalf from './BalanceWithMax'
 import WhaleInput from './WhaleInput'
 
 interface AssetInputProps {
-  image?: boolean
+  showLogo?: boolean
   token: any
   value: any
   onChange: (value: any, isTokenChange?: boolean) => void
