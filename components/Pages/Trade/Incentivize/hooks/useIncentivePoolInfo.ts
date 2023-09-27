@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import {
   Config,
   useConfig,
@@ -12,7 +13,7 @@ import {
   B_WHALE_TOKEN_SYMBOL,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
-import usePrices from 'hooks/usePrices'
+import usePrices, { Prices } from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
@@ -40,6 +41,7 @@ export interface Flow {
       }
     }
   }
+  asset_history: Array<{ [key: number]: number }>
   flow_creator: string
   flow_id: number
   start_epoch: number
@@ -57,16 +59,17 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
-const fetchFlows = async (client, address): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
+
+const fetchFlows = async (client: CosmWasmClient, address: string): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
 const getPoolFlowData = async (
-  client,
-  pools,
-  currentEpochData,
-  poolAssets,
-  prices,
-  poolsWithAprAnd24HrVolume,
+  client: CosmWasmClient,
+  pools: { staking_address: string; pool_id: any; swap_address: string }[],
+  currentEpochData: { currentEpoch: any },
+  poolAssets: any[],
+  prices: Promise<Prices>,
+  poolsWithAprAnd24HrVolume: any[],
 ): Promise<IncentivePoolInfo[]> => await (pools
-  ? Promise.all(pools.map(async (pool) => {
+  ? Promise.all(pools.map(async (pool: { staking_address: string; pool_id: any; swap_address: string }) => {
     if (pool.staking_address === '') {
       return {
         poolId: pool.pool_id,
@@ -83,7 +86,7 @@ const getPoolFlowData = async (
     const currentEpochId: number =
       Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
-    let lockedLpShare
+    let lockedLpShare: number
     try {
       const weight = await client.queryContractSmart(pool.staking_address,
         {
@@ -131,7 +134,10 @@ const getPoolFlowData = async (
             flow.flow_asset.info?.token?.contract_addr ??
             flow.flow_asset.info?.native_token?.denom
 
-          const emission = convertMicroDenomToDenom((Number(flow.flow_asset.amount) - emittedTokens) /
+          // Last entry of flow param asset history represents total flow amount, param only given if flow was expanded, otherwise we use amount of flow asset which is the initial flow amount
+          const amount = flow?.asset_history && flow?.asset_history?.length > 0 ? flow.asset_history[flow.asset_history.length - 1][Object.keys(flow.asset_history[flow.asset_history.length - 1])[0]] : flow.flow_asset.amount
+
+          const emission = convertMicroDenomToDenom((Number(amount) - emittedTokens) /
             (flow.start_epoch +
               (flow.end_epoch - flow.start_epoch) -
               Number(currentEpochData.currentEpoch.epoch.id)),
@@ -169,7 +175,7 @@ const getPoolFlowData = async (
   : [])
 
 export const useIncentivePoolInfo = (
-  client, pools, currentChainPrefix,
+  client: CosmWasmClient, pools: any[], currentChainPrefix: string,
 ) => {
   const { chainId, network } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
