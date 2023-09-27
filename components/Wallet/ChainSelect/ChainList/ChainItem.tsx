@@ -35,8 +35,6 @@ function ChainItem({
           onChange(chain)
           queryClient.clear()
           onClose()
-        } else {
-          null
         }
       }}
     >

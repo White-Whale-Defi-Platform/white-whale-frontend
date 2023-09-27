@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { List } from '@chakra-ui/react'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
@@ -33,7 +33,7 @@ function ChainList({ onChange, onClose, currentChainState, connChainids }) {
     <List spacing={1} color="white" width="full">
       {chains.map((chain, index) => (
         <ChainItem
-          key={chain.chainId + chain?.chainName}
+          key={chain?.chainId + chain?.chainName}
           chain={chain}
           index={index}
           onChange={onChange}
@@ -43,9 +43,9 @@ function ChainList({ onChange, onClose, currentChainState, connChainids }) {
           walletNotConnected={false}
         />
       ))}
-      {removed ? (removed.map((chain, index) => (
+      {removed.length >= 1 ? (removed.map((chain, index) => (
         <ChainItem
-          key={chain.chainId + chain?.chainName}
+          key={chain?.chainId + chain?.chainName}
           chain={chain}
           index={index}
           onChange={onChange}

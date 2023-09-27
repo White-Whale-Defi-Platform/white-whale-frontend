@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { Button, HStack, Image, Text, Toast, useToast } from '@chakra-ui/react'
+import { Button, HStack, Image, Text, useToast } from '@chakra-ui/react'
 import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/icons/LeapSnapIcon'
