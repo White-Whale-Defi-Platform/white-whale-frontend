@@ -9,6 +9,7 @@ export const ChainSelectWithBalance = ({
   denom,
   onChainChange,
   currentChainState,
+  currentConnChainIds,
 }) => (
   <HStack spacing="4">
     <DisplayBalance />
@@ -17,6 +18,9 @@ export const ChainSelectWithBalance = ({
       denom={denom?.coinDenom}
       onChange={onChainChange}
       currentChainState={currentChainState}
+      connectedChainIds={currentConnChainIds}
     />
   </HStack>
 )
+
+export default ChainSelectWithBalance

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { Button, HStack, Image, Text } from '@chakra-ui/react'
+import { Button, HStack, Image, Text, Toast, useToast } from '@chakra-ui/react'
 import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/icons/LeapSnapIcon'
@@ -17,7 +17,8 @@ interface Props {
 }
 
 export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props) => {
-  const { network } = useRecoilValue(chainState)
+  const toast = useToast()
+  const { network, chainId, chainName } = useRecoilValue(chainState)
   const getKeplrChains = async (chains: Array<string>) => {
     const registry = await (await fetch('https://keplr-chain-registry.vercel.app/api/chains')).json()
     const toAdd = []
@@ -29,15 +30,38 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
     return toAdd
   }
   const setWallet = useCallback(async () => {
+    let err = false
     if (walletType === WalletType.keplrExtension && window.keplr) {
+      const connected = (await window.keplr.getChainInfosWithoutEndpoints()).map((elem) => elem.chainId)
       const keplrChains = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
       for (const chain of keplrChains) {
+        if (!connected.includes(chain.chainId)) {
         // eslint-disable-next-line no-await-in-loop
-        await window.keplr.experimentalSuggestChain(chain)
+          await window.keplr.experimentalSuggestChain(chain)
+        }
       }
     }
-
-    connect()
+    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) && (chainId === 'injective-1' || chainId === 'columbus-5')) {
+      const windowConn = walletType === WalletType.terraExtension ? window.station.keplr : window.keplr
+      try {
+        await (windowConn.getKey(chainId))
+      } catch (e) {
+        err = true
+        console.error(`${chainId} not activated`)
+        console.error(e)
+        toast({
+          title: `${chainName} not activated`,
+          description: `Please add ${chainName} to your Wallet.`,
+          status: 'error',
+          duration: 9000,
+          position: 'top-right',
+          isClosable: true,
+        })
+      }
+    }
+    if (!err) {
+      connect()
+    }
     onCloseModal()
   }, [onCloseModal, connect])
 

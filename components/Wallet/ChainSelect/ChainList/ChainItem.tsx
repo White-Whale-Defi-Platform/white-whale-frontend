@@ -11,15 +11,9 @@ function ChainItem({
   onClose,
   chainList,
   active,
-  currentChainState,
+  walletNotConnected,
 }) {
   const queryClient = useQueryClient()
-  if (
-    currentChainState?.activeWallet == 'station' &&
-    (chain?.chainId == 'injective-1' || chain?.chainId == 'comdex-1')
-  ) {
-    return null
-  }
   return (
     <ListItem
       justifyContent="space-between"
@@ -32,14 +26,18 @@ function ChainItem({
       }
       paddingY={1}
       opacity={active ? 1 : 0.3}
-      cursor="pointer"
-      _hover={{
+      cursor={walletNotConnected ? 'default' : "pointer"}
+      _hover={!walletNotConnected ? {
         opacity: 1,
-      }}
+      } : null}
       onClick={() => {
-        onChange(chain)
-        queryClient.clear()
-        onClose()
+        if (!walletNotConnected) {
+          onChange(chain)
+          queryClient.clear()
+          onClose()
+        } else {
+          null
+        }
       }}
     >
       <HStack>
@@ -48,8 +46,8 @@ function ChainItem({
       </HStack>
       <ListIcon
         as={BsCircleFill}
-        color="#3CCD64"
-        boxShadow="0px 0px 14.0801px #298F46"
+        color= {walletNotConnected ? '#cc0000' : '#3CCD64'}
+        boxShadow={walletNotConnected ? "0px 0px 14.0801px #9f0000": "0px 0px 14.0801px #298F46"}
         bg="#1C1C1C"
         borderRadius="full"
       />

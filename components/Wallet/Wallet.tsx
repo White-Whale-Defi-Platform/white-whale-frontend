@@ -34,6 +34,7 @@ const Wallet = () => {
   const chains: Array<any> = useChainInfos()
   const [walletChains, setWalletChains] = useState<string[]>([])
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
+  const [currentConnChainIds, setCurrentConnChainIds] = useState([])
 
   useEffect(() => {
     if (chainName && currentChainState.network === NetworkType.mainnet) {
@@ -47,14 +48,57 @@ const Wallet = () => {
     }
 
     if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap) {
+      const snapChainIds = []
       const newWalletChains = chains.
         filter((row) => row.coinType === 118).
-        map((row) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId]);
+        map((row) => { 
+          snapChainIds.push(row.chainId); 
+          return WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId]});
       setWalletChains(newWalletChains);
+      setCurrentConnChainIds(snapChainIds)
+    } else if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.terraExtension || window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.keplrExtension) {
+      const walletWindowConnection = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.terraExtension ? window.station.keplr : window.keplr
+      const getAddedStationChainsIds = async () => {
+        const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints()
+        const ids = []
+        chainInfos.forEach((chain) => {
+          ids.push(chain.chainId)
+        });
+        return ids
+      }
+      const filterChains = async () => {
+        const ids = []
+        const outChainNames = []
+        const addedChains = await getAddedStationChainsIds()
+        chains.forEach((chain:any) => {
+          if (addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]) {
+            outChainNames.push(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId])
+            ids.push(chain.chainId)
+          }
+        })
+        return [outChainNames, ids]
+      }
+
+      filterChains().then(async ([chainNames, ids]) => {
+        if (chainNames.includes('injective')) {
+          let hasInj = false
+          try {
+            hasInj = await (walletWindowConnection.getKey('injective-1'))
+          } catch {
+            console.error('Injective not activated')
+          }
+          if (!hasInj) {
+            chainNames.splice(chainNames.indexOf('injective'), 1)
+            ids.splice(ids.indexOf('injective-1'), 1)
+            setCurrentConnChainIds(ids)
+          }
+          setWalletChains(chainNames)
+        }
+      })
     } else if (walletChains.length === 0) {
       setWalletChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
     }
-  }, [chains, currentChainState.network, chainName])
+  }, [chains, currentChainState.network, chainName, window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)])
 
   const allChains = useChains(walletChains)
   const router = useRouter()
@@ -62,10 +106,13 @@ const Wallet = () => {
   const [chainInfo] = useChainInfo(currentChainState.chainId)
   const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
   const queryClient = useQueryClient()
+
   const [chainIdParam, setChainIdParam] = useState<string>(null)
-  const resetWallet = async () => {
+  const resetWallet = () => {
+    setCurrentConnChainIds([])
     queryClient.clear()
-    await disconnect()
+    setWalletChains([])
+    disconnect()
   }
 
   useEffect(() => {
@@ -139,13 +186,12 @@ const Wallet = () => {
       },
     ]
     setTokenSwapState(newState)
-
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
       if (!(window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap)) {
         await newChain.connect()
       } else {
-        await resetWallet()
+        resetWallet()
       }
     }
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -177,6 +223,7 @@ const Wallet = () => {
           denom={denom?.coinDenom}
           onChange={onChainChange}
           currentChainState={currentChainState}
+          connectedChainIds={currentConnChainIds}
         />
         <Button
           variant="outline"
@@ -203,6 +250,7 @@ const Wallet = () => {
           denom={denom}
           onChainChange={onChainChange}
           currentChainState={currentChainState}
+          currentConnChainIds={currentConnChainIds}
         />
         <Box display={{ base: 'block',
           md: 'block' }}>
