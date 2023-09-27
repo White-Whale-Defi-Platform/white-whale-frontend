@@ -16,7 +16,7 @@ export const claimRewards = async (
     contractAddress: config.fee_distributor,
     message: handleMsg,
     funds: [] })
-  let fee = 'auto'
+  let fee: any = 'auto'
   if (await signingClient.getChainId() === 'columbus-5') {
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',

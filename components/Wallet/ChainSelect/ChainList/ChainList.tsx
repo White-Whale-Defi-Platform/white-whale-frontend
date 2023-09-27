@@ -23,7 +23,7 @@ function ChainList({ onChange, onClose, currentChainState, connChainids }) {
     chains.forEach((row) => {
       if (connChainids.includes(row.chainId)) {
         connChains.push(row)
-      }else {
+      } else {
         removed.push(row)
       }
     })
