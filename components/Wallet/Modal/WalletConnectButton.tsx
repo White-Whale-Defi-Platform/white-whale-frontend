@@ -50,8 +50,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         console.error(`${chainId} not activated`)
         console.error(e)
         toast({
-          title: `${chainName} not activated`,
-          description: `Please add ${chainName} to your Wallet.`,
+          title: `${chainName[0].toUpperCase() + chainName.slice(1)} not activated`,
+          description: `Please add ${chainName[0].toUpperCase() + chainName.slice(1)} to your wallet.`,
           status: 'error',
           duration: 9000,
           position: 'top-right',
