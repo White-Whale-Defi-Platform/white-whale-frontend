@@ -28,7 +28,7 @@ const SelectChainModal = ({
         onChange={onChange}
         onClose={onClose}
         currentChainState={currentChainState}
-        connChainids={connectedChainIds}
+        connectedChainIds={connectedChainIds}
       />
     </Popover>
   )

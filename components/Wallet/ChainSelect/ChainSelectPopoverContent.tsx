@@ -11,7 +11,7 @@ import {
 import ChainList from './ChainList/ChainList'
 import NetworkForm from './NetworkForm/NetworkForm'
 
-function ChainSelectPopoverContent({ onChange, onClose, currentChainState, connChainids }) {
+function ChainSelectPopoverContent({ onChange, onClose, currentChainState, connectedChainIds }) {
   return (
     <PopoverContent
       borderColor="#1C1C1C"
@@ -36,7 +36,7 @@ function ChainSelectPopoverContent({ onChange, onClose, currentChainState, connC
             onChange={onChange}
             onClose={onClose}
             currentChainState={currentChainState}
-            connChainids={connChainids}
+            connectedChainIds={connectedChainIds}
           />
         </VStack>
       </PopoverBody>
