@@ -36,7 +36,6 @@ export const bondTokens = async (
       amount, denom, gas,
     )
   }
-  console.log(fee)
   return await signingClient.signAndBroadcast(
     // @ts-ignore
     address, [execMsg], fee, '',

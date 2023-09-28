@@ -132,7 +132,6 @@ export const useWithdrawTransaction = ({
   },
   {
     onMutate: () => {
-      console.log(msgs)
       setTxStep(TxStep.Posting)
     },
     onError: (e: unknown) => {
