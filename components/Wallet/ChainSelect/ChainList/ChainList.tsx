@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { List } from '@chakra-ui/react'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
@@ -7,24 +7,24 @@ import { useChainInfos } from 'hooks/useChainInfo'
 
 import ChainItem from './ChainItem'
 
-function ChainList({ onChange, onClose, currentChainState, connChainids }) {
+function ChainList({ onChange, onClose, currentChainState, connChainids: connChainIds }) {
   let chains = useChainInfos()
-  const removed = []
+  const removedChains = []
   if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) == WalletType.leapSnap) {
-    const snapChains = []
-    chains.forEach((row) => {
-      if (row.coinType == 118) {
-        snapChains.push(row)
+    const snapActivatedChains = []
+    chains.forEach((chain) => {
+      if (chain.coinType == 118) {
+        snapActivatedChains.push(chain)
       }
     })
-    chains = snapChains
-  } else if (connChainids && connChainids.length >= 1) {
+    chains = snapActivatedChains
+  } else if (connChainIds && connChainIds.length >= 1) {
     const connChains = []
-    chains.forEach((row) => {
-      if (connChainids.includes(row.chainId)) {
-        connChains.push(row)
+    chains.forEach((chain) => {
+      if (connChainIds.includes(chain.chainId)) {
+        connChains.push(chain)
       } else {
-        removed.push(row)
+        removedChains.push(chain)
       }
     })
     chains = connChains
@@ -43,7 +43,7 @@ function ChainList({ onChange, onClose, currentChainState, connChainids }) {
           walletNotConnected={false}
         />
       ))}
-      {removed.length >= 1 ? (removed.map((chain, index) => (
+      {removedChains.length >= 1 ? (removedChains.map((chain, index) => (
         <ChainItem
           key={chain?.chainId + chain?.chainName}
           chain={chain}

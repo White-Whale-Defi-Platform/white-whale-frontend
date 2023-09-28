@@ -15,6 +15,7 @@ export const RewardsTooltip = ({
   isWalletConnected,
   daysSinceLastClaim,
 }: Props) => {
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
   const lastClaimed = () => {
     if (daysSinceLastClaim >= 21) {
       return '21+ days ago'
@@ -33,8 +34,6 @@ export const RewardsTooltip = ({
     </HStack>
   )
 
-  const [isLabelOpen, setIsLabelOpen] = useState(false)
-
   const textRef = useRef(null)
   const [textWidth, setTextWidth] = useState(0)
 
@@ -48,19 +47,16 @@ export const RewardsTooltip = ({
       label={
         isWalletConnected ? (
           <VStack
-            minW="250px"
+            minW="180px"
             minH="fit-content"
             borderRadius="10px"
             bg="blackAlpha.900"
-            px="4"
-            py="4"
+            px="2"
+            py="2"
             position="relative"
             border="none"
             justifyContent="center"
             alignItems="center"
-            onMouseEnter={() => setIsLabelOpen(true)}
-            onMouseLeave={() => setIsLabelOpen(false)}
-            onClick={() => setIsLabelOpen(!isLabelOpen)}
           >
             <TokenDetail />
             <HStack justify="space-between" direction="row" width="full" px={2}>
@@ -75,7 +71,9 @@ export const RewardsTooltip = ({
       bg="transparent"
       isOpen={isLabelOpen}
     >
-      <VStack alignItems="flex-start" minW={50}>
+      <VStack alignItems="flex-start" minW={50} onMouseEnter={() => setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onClick={() => setIsLabelOpen(!isLabelOpen)}>
         <Text ref={textRef} mb="-0.3rem" color="white">
           {dollarValue}
         </Text>

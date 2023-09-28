@@ -31,13 +31,11 @@ export const ACTIVE_NETWORKS_WALLET_NAMES = {
     'sei',
     'terra'],
   testnet: [
-    'comdex',
     'injectivetestnet',
     'junotestnet',
     'migalootestnet',
     'terra2testnet',
     'seitestnet',
-    'terra',
   ],
 }
 
