@@ -10,7 +10,7 @@ const SelectChainModal = ({
   onChange,
   connected,
   currentChainState,
-  connectedChainIds
+  connectedChainIds,
 }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
@@ -28,7 +28,7 @@ const SelectChainModal = ({
         onChange={onChange}
         onClose={onClose}
         currentChainState={currentChainState}
-        connChainids={connectedChainIds}
+        connectedChainIds={connectedChainIds}
       />
     </Popover>
   )

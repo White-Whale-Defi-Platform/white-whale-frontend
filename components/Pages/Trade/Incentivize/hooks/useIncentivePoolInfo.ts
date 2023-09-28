@@ -9,7 +9,7 @@ import { useCurrentEpoch } from 'components/Pages/Trade/Incentivize/hooks/useCur
 import { fetchTotalPoolSupply } from 'components/Pages/Trade/Pools/hooks/fetchTotalPoolLp'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
+  B_WHALE_TOKEN_SYMBOL, ChainId,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
 import usePrices from 'hooks/usePrices'
@@ -181,9 +181,9 @@ export const useIncentivePoolInfo = (
 
   useEffect(() => {
     const fetchPoolData = async () => {
-      currentChainPrefix = chainId === 'columbus-5' ? 'terra-classic' : currentChainPrefix
+      currentChainPrefix = chainId === ChainId.terrac ? 'terra-classic' : currentChainPrefix
       const poolData =
-        currentChainPrefix === 'terra' && chainId !== 'columbus-5'
+        currentChainPrefix === 'terra' && chainId !== ChainId.terrac
           ? await getPairAprAndDailyVolumeTerra(pools)
           : await getPairAprAndDailyVolume(pools, currentChainPrefix)
       setPoolsWithAprAnd24HrVolume(poolData)

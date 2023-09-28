@@ -2,14 +2,14 @@ import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
+import { ChainId } from 'constants/index'
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
-
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
 
 interface Props {
   poolId: string
@@ -36,8 +36,8 @@ export const useClaim = ({ poolId }: Props) => {
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {
-      let fee:any = 'auto'
-      if (await signingClient.getChainId() === 'columbus-5') {
+      let fee: any = 'auto'
+      if (await signingClient.getChainId() === ChainId.terrac) {
         const gas = Math.ceil(await signingClient.simulate(
           address, [msg], '',
         ) * 1.3)

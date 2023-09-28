@@ -1,5 +1,6 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
+import { ChainId } from 'constants/index'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { TerraTreasuryService } from 'services/treasuryService'
 import {
@@ -26,7 +27,7 @@ export const directTokenSwap = async ({
   signingClient,
   msgs,
 }: DirectTokenSwapArgs) => {
-  let fee = 'auto'
+  let fee : any = 'auto'
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,
@@ -51,7 +52,7 @@ export const directTokenSwap = async ({
     contractAddress: swapAddress,
     message: msgs,
     funds: [coin(tokenAmount, tokenA.denom)] })
-  if (await signingClient.getChainId() === 'columbus-5') {
+  if (await signingClient.getChainId() === ChainId.terrac) {
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, [execMsg], '',
     ) * 1.3)
@@ -60,7 +61,6 @@ export const directTokenSwap = async ({
     )
   }
   return await signingClient.signAndBroadcast(
-    // @ts-ignore
     senderAddress, [execMsg], fee, '',
   )
 }

@@ -1,4 +1,5 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { ChainId } from 'constants/index'
 import { TokenInfo } from 'queries/usePoolsListQuery'
 import { TerraTreasuryService } from 'services/treasuryService'
 
@@ -25,8 +26,8 @@ export const executeAddLiquidity = async ({ tokenA, tokenB, tokenAAmount, tokenB
   senderAddress,
   msgs,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  let fee:any = 'auto'
-  if (await signingClient.getChainId() === 'columbus-5') {
+  let fee: any = 'auto'
+  if (await signingClient.getChainId() === ChainId.terrac) {
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, msgs, '',
     ) * 1.3)

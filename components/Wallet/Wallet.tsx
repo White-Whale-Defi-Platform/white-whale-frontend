@@ -10,15 +10,16 @@ import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
 import { ChainSelectWithBalance } from 'components/Wallet/ChainSelectWithBalance/ChainSelectWithBalance'
 import {
-  ConnectedWalletWithDisconnect,
+  ConnectedWalletWithDisconnect
 } from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWalletWithDisconnect'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import {
   ACTIVE_BONDING_NETWORKS,
   ACTIVE_NETWORKS,
   ACTIVE_NETWORKS_WALLET_NAMES,
+  ChainId,
   COSMOS_KIT_WALLET_KEY,
-  WALLET_CHAIN_NAMES_BY_CHAIN_ID,
+  WALLET_CHAIN_NAMES_BY_CHAIN_ID
 } from 'constants/index'
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useRouter } from 'next/router'
@@ -34,7 +35,7 @@ const Wallet = () => {
   const chains: Array<any> = useChainInfos()
   const [walletChains, setWalletChains] = useState<string[]>([])
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
-  const [currentConnChainIds, setCurrentConnChainIds] = useState([])
+  const [currentConnectedChainIds, setCurrentConnectedChainIds] = useState([])
 
   useEffect(() => {
     if (chainName && currentChainState.network === NetworkType.mainnet) {
@@ -48,57 +49,56 @@ const Wallet = () => {
     }
 
     if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap) {
-      const snapChainIds = []
-      const newWalletChains = chains.
-        filter((row) => row.coinType === 118).
-        map((row) => { 
-          snapChainIds.push(row.chainId); 
-          return WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId]});
+      const snapChainIds = chains.reduce((acc, row) => {
+        if (row.coinType === 118) {
+          acc.push(row.chainId);
+          return acc;
+        }
+        return acc;
+      }, []);
+
+      const newWalletChains = snapChainIds.map((chainId: string) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId]);
+
       setWalletChains(newWalletChains);
-      setCurrentConnChainIds(snapChainIds)
+      setCurrentConnectedChainIds(snapChainIds);
     } else if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.terraExtension || window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.keplrExtension) {
       const walletWindowConnection = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.terraExtension ? window.station.keplr : window.keplr
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints()
-        const ids = []
-        chainInfos.forEach((chain) => {
-          ids.push(chain.chainId)
-        });
-        return ids
-      }
+        return chainInfos.map((chain: { chainId: any }) => chain.chainId)
+      };
       const filterChains = async () => {
-        const ids = []
-        const outChainNames = []
-        const addedChains = await getAddedStationChainsIds()
-        chains.forEach((chain:any) => {
-          if (addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]) {
-            outChainNames.push(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId])
-            ids.push(chain.chainId)
-          }
-        })
-        return [outChainNames, ids]
-      }
+        const addedChains = await getAddedStationChainsIds();
+        const filteredChains = chains.filter((chain) => addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId])
+        const outChainNames = filteredChains.map((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId])
+        const ids = filteredChains.map((chain) => chain.chainId)
+        return [outChainNames, ids];
+      };
 
       filterChains().then(async ([chainNames, ids]) => {
         if (chainNames.includes('injective')) {
-          let hasInj = false
           try {
-            hasInj = await (walletWindowConnection.getKey('injective-1'))
-          } catch {
-            console.error('Injective not activated')
+            const hasInj = await walletWindowConnection.getKey(ChainId.injective);
+
+            if (!hasInj) {
+              const injectiveIndex = chainNames.indexOf('injective');
+
+              if (injectiveIndex !== -1) {
+                chainNames.splice(injectiveIndex, 1);
+                ids.splice(injectiveIndex, 1);
+                setCurrentConnectedChainIds(ids);
+                setWalletChains(chainNames);
+              }
+            }
+          } catch (error) {
+            console.error('Injective not activated', error);
           }
-          if (!hasInj) {
-            chainNames.splice(chainNames.indexOf('injective'), 1)
-            ids.splice(ids.indexOf('injective-1'), 1)
-            setCurrentConnChainIds(ids)
-          }
-          setWalletChains(chainNames)
         }
       })
     } else if (walletChains.length === 0) {
       setWalletChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
     }
-  }, [chains, currentChainState.network, chainName, window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)])
+  }, [chains, currentChainState.network, chainName, window.localStorage])
 
   const allChains = useChains(walletChains)
   const router = useRouter()
@@ -109,7 +109,7 @@ const Wallet = () => {
 
   const [chainIdParam, setChainIdParam] = useState<string>(null)
   const resetWallet = () => {
-    setCurrentConnChainIds([])
+    setCurrentConnectedChainIds([])
     queryClient.clear()
     setWalletChains([])
     disconnect()
@@ -128,8 +128,8 @@ const Wallet = () => {
 
     const defaultChainId =
       currentChainState.network === NetworkType.mainnet
-        ? 'migaloo-1'
-        : 'narwhal-1'
+        ? ChainId.migaloo
+        : ChainId.narwhal
 
     const defaultChainName =
       currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'narwhal'
@@ -223,7 +223,7 @@ const Wallet = () => {
           denom={denom?.coinDenom}
           onChange={onChainChange}
           currentChainState={currentChainState}
-          connectedChainIds={currentConnChainIds}
+          connectedChainIds={currentConnectedChainIds}
         />
         <Button
           variant="outline"
@@ -250,7 +250,7 @@ const Wallet = () => {
           denom={denom}
           onChainChange={onChainChange}
           currentChainState={currentChainState}
-          currentConnChainIds={currentConnChainIds}
+          currentConnChainIds={currentConnectedChainIds}
         />
         <Box display={{ base: 'block',
           md: 'block' }}>

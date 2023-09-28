@@ -4,6 +4,7 @@ import { useMutation } from 'react-query'
 import { useChain } from '@cosmos-kit/react-lite'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useQueryIncentiveContracts } from 'components/Pages/Trade/Incentivize/hooks/useQueryIncentiveContracts'
+import { ChainId } from 'constants/index'
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
@@ -79,8 +80,8 @@ const useForceEpochAndTakingSnapshots = ({
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {
-      let fee:any = 'auto'
-      if (await signingClient.getChainId() === 'columbus-5') {
+      let fee: any = 'auto'
+      if (await signingClient.getChainId() === ChainId.terrac) {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
@@ -88,7 +89,6 @@ const useForceEpochAndTakingSnapshots = ({
           0, '', gas,
         )
       }
-
       return signingClient.signAndBroadcast(
         address, msgs, fee, null,
       )

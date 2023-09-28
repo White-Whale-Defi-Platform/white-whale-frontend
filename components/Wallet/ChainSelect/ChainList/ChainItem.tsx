@@ -4,15 +4,15 @@ import { useQueryClient } from 'react-query'
 
 import { HStack, Image, ListIcon, ListItem, Text } from '@chakra-ui/react'
 
-function ChainItem({
+export const ChainItem = ({
   chain,
   index,
   onChange,
   onClose,
   chainList,
   active,
-  walletNotConnected,
-}) {
+  isWalletConnected,
+}) => {
   const queryClient = useQueryClient()
   return (
     <ListItem
@@ -26,12 +26,12 @@ function ChainItem({
       }
       paddingY={1}
       opacity={active ? 1 : 0.3}
-      cursor={walletNotConnected ? 'default' : "pointer"}
-      _hover={!walletNotConnected ? {
+      cursor={!isWalletConnected ? 'default' : 'pointer'}
+      _hover={isWalletConnected ? {
         opacity: 1,
       } : null}
       onClick={() => {
-        if (!walletNotConnected) {
+        if (isWalletConnected) {
           onChange(chain)
           queryClient.clear()
           onClose()
@@ -44,8 +44,8 @@ function ChainItem({
       </HStack>
       <ListIcon
         as={BsCircleFill}
-        color= {walletNotConnected ? '#cc0000' : '#3CCD64'}
-        boxShadow={walletNotConnected ? "0px 0px 14.0801px #9f0000": "0px 0px 14.0801px #298F46"}
+        color= {!isWalletConnected ? '#cc0000' : '#3CCD64'}
+        boxShadow={!isWalletConnected ? '0px 0px 14.0801px #9f0000' : '0px 0px 14.0801px #298F46'}
         bg="#1C1C1C"
         borderRadius="full"
       />

@@ -6,7 +6,7 @@ import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/icons/LeapWalletIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { ACTIVE_NETWORKS } from 'constants/networks'
+import { ACTIVE_NETWORKS, ChainId } from 'constants/networks'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -30,9 +30,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
     return toAdd
   }
   const setWallet = useCallback(async () => {
-    let err = false
     if (walletType === WalletType.keplrExtension && window.keplr) {
-      const connected = (await window.keplr.getChainInfosWithoutEndpoints()).map((elem) => elem.chainId)
+      const connected = (await window.keplr.getChainInfosWithoutEndpoints()).map((elem: { chainId: string }) => elem.chainId)
       const keplrChains = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
       for (const chain of keplrChains) {
         if (!connected.includes(chain.chainId)) {
@@ -41,12 +40,12 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         }
       }
     }
-    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) && (chainId === 'injective-1' || chainId === 'columbus-5')) {
+    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) && (chainId === ChainId.injective || chainId === ChainId.terrac)) {
       const windowConn = walletType === WalletType.terraExtension ? window.station.keplr : window.keplr
       try {
         await (windowConn.getKey(chainId))
+        connect()
       } catch (e) {
-        err = true
         console.error(`${chainId} not activated`)
         console.error(e)
         toast({
@@ -58,9 +57,6 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
           isClosable: true,
         })
       }
-    }
-    if (!err) {
-      connect()
     }
     onCloseModal()
   }, [onCloseModal, connect])
