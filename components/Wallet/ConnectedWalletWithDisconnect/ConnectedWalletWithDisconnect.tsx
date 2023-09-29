@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { IconButton } from '@chakra-ui/react'
-import LogoutIcon from 'components/icons/LogoutIcon'
+import LogoutIcon from 'components/Icons/LogoutIcon'
 import { ConnectedWallet } from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWallet'
 
 export const ConnectedWalletWithDisconnect = ({ connected, onDisconnect }) => (

@@ -11,8 +11,8 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import BurgerIcon from 'components/icons/BurgerIcon'
-import { ACTIVE_BONDING_NETWORKS } from 'constants/index'
+import BurgerIcon from 'components/Icons/BurgerIcon'
+import { ACTIVE_BONDING_NETWORKS, ChainId } from 'constants/index'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -80,7 +80,7 @@ const Navbar = () => {
           <Logo />
         </Box>
         <Card paddingX={10} gap={6}>
-          {(chainId === 'columbus-5' ? luncMenuLinks : ACTIVE_BONDING_NETWORKS.includes(chainId)
+          {(chainId === ChainId.terrac ? luncMenuLinks : ACTIVE_BONDING_NETWORKS.includes(chainId)
             ? menuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (

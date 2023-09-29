@@ -27,21 +27,21 @@ export enum WalletType {
   cosmoStationMobile = 'cosmostation-mobile'
 }
 
-function WalletModal({ isOpen, setOpen, walletRepo }) {
+export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
   const { chainId } = useRecoilValue(chainState);
   const chainInfos: any = useChainInfos();
-  const snap = Boolean(chainInfos.find((elem) => elem.chainId == chainId && elem.coinType == 118));
+  const snap = Boolean(chainInfos.find((elem: { chainId: string; coinType: number; }) => elem.chainId === chainId && elem.coinType === 118));
 
-  function onCloseModal() {
+  const onCloseModal = () => {
     if (isOpen) {
       setOpen(false);
     }
   }
 
-  function shouldRenderButton(wallet: { walletName: string, isModeExtension: boolean }) {
+  const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
     const inApp = isMobile && window.leap && window.leap.mode === 'mobile-web'
-    if (inApp && walletName === 'leap-extension') {
+    if (inApp && walletName === WalletType.leapExtension) {
       return true;
     }
     if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) {
@@ -65,11 +65,9 @@ function WalletModal({ isOpen, setOpen, walletRepo }) {
           <VStack alignItems="flex-start" width="full" gap={2}>
             {walletRepo?.wallets.map((wallet) => {
               const { connect, walletName } = wallet;
-
               if (!shouldRenderButton(wallet)) {
                 return null
               }
-
               return (
                 <WalletConnectButton
                   key={walletName}

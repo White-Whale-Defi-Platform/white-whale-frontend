@@ -1,61 +1,66 @@
-import React from 'react'
+import React from 'react';
 
-import { List } from '@chakra-ui/react'
-import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { COSMOS_KIT_WALLET_KEY, ACTIVE_NETWORKS } from 'constants/index'
-import { useChainInfos } from 'hooks/useChainInfo'
+import { List } from '@chakra-ui/react';
+import { WalletType } from 'components/Wallet/Modal/WalletModal';
+import { COSMOS_KIT_WALLET_KEY } from 'constants/index';
+import { useChainInfos } from 'hooks/useChainInfo';
 
-import ChainItem from './ChainItem'
+import ChainItem from './ChainItem';
 
-function ChainList({ onChange, onClose, currentChainState, connectedChainIds }) {
-  let chains = useChainInfos();
+const useFilteredChains = (connectedChainIds) => {
+  const chains = useChainInfos();
   const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
-  const connectedChains = []
-  const removedChains = []
-  const filterChain = (chain) => {
+
+  const connectedChains = [];
+  const removedChains = [];
+
+  chains.forEach((chain) => {
     const isChainConnected =
-    walletType === WalletType.leapSnap
-      ? chain.coinType === 118
-      : connectedChainIds.includes(chain.chainId);
+      walletType === WalletType.leapSnap
+        ? chain.coinType === 118
+        : connectedChainIds.includes(chain.chainId);
 
     if (isChainConnected) {
       connectedChains.push(chain);
     } else {
       removedChains.push(chain);
     }
+  });
 
-    return isChainConnected;
-  };
+  return [connectedChains, removedChains];
+};
 
-  chains = chains.filter(filterChain);
+const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) => {
+  const [connectedChains, removedChains] = useFilteredChains(connectedChainIds);
+
   return (
     <List spacing={1} color="white" width="full">
-      {chains.map((chain, index) => (
+      {connectedChains.map((chain, index) => (
         <ChainItem
-          key={chain?.chainId + chain?.chainName}
+          key={chain?.chainId}
           chain={chain}
           index={index}
           onChange={onChange}
           onClose={onClose}
-          chainList={chains}
+          chainList={connectedChains}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={true}
         />
       ))}
-      {removedChains.length >= 1 ? (removedChains.map((chain, index) => (
+      {removedChains.map((chain, index) => (
         <ChainItem
-          key={chain?.chainId + chain?.chainName}
+          key={chain?.chainId}
           chain={chain}
           index={index}
           onChange={onChange}
           onClose={onClose}
-          chainList={chains}
+          chainList={connectedChains}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={false}
         />
-      ))) : null }
+      ))}
     </List>
-  )
-}
+  );
+};
 
-export default ChainList
+export default ChainList;

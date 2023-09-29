@@ -5,10 +5,10 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
 import Finder from 'components/Finder'
+import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { TxStep } from 'types/common'
-
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
 
 type Params = {
   lpTokenAddress: string
@@ -66,8 +66,8 @@ export const useWithdrawTransaction = ({
         return response
       } catch (e) {
         if (
-          (/insufficient funds/i).test(e.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(e.toString())
+          (/insufficient funds/u).test(e.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(e.toString())
         ) {
           console.error(e)
           setTxStep(TxStep.Idle)
@@ -102,7 +102,7 @@ export const useWithdrawTransaction = ({
     },
   )
 
-  const { mutate } = useMutation(async (data: any) => {
+  const { mutate } = useMutation(async () => {
     if (isNative) {
       return signingClient.execute(
         senderAddress,
@@ -113,8 +113,8 @@ export const useWithdrawTransaction = ({
         [coin(amount, lpTokenAddress)],
       )
     } else {
-      let fee:any = 'auto'
-      if (await signingClient.getChainId() === 'columbus-5') {
+      let fee: any = 'auto'
+      if (await signingClient.getChainId() === ChainId.terrac) {
         const gas = Math.ceil(await signingClient.simulate(
           senderAddress, encodedMsgs, '',
         ) * 1.3)
@@ -138,15 +138,15 @@ export const useWithdrawTransaction = ({
       let message = ''
       console.error(e?.toString())
       if (
-        (/insufficient funds/i).test(e?.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(e?.toString())
+        (/insufficient funds/u).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(e?.toString())
       ) {
         setError('Insufficient Funds')
         message = 'Insufficient Funds'
-      } else if ((/Max spread assertion/i).test(e?.toString())) {
+      } else if ((/Max spread assertion/u).test(e?.toString())) {
         setError('Try increasing slippage')
         message = 'Try increasing slippage'
-      } else if ((/Request rejected/i).test(e?.toString())) {
+      } else if ((/Request rejected/u).test(e?.toString())) {
         setError('User Denied')
         message = 'User Denied'
       } else {
@@ -219,15 +219,11 @@ export const useWithdrawTransaction = ({
     setTxStep(TxStep.Idle)
   }
 
-  const submit = useCallback(async () => {
+  const submit = useCallback(() => {
     if (fee === null || msgs === null || msgs.length < 1) {
-      return
+      return null
     }
-
-    mutate({
-      msgs,
-      fee,
-    })
+    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {

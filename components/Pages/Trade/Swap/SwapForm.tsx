@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
-import DoubleArrowsIcon from 'components/icons/DoubleArrowsIcon'
+import DoubleArrowsIcon from 'components/Icons/DoubleArrowsIcon'
 import { Simulated } from 'components/Pages/Trade/Swap/hooks/useSimulate'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'

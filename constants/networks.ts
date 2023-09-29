@@ -103,3 +103,5 @@ export const NETWORK_MAP = {
   mainnet: 'testnet',
   testnet: 'mainnet',
 }
+
+export enum ChainId { terrac = 'columbus-5', terra = 'phoenix-1', migaloo= 'migaloo-1', juno= 'juno-1', sei= 'pacific-1', comdex= 'comdex-1', injective= 'injective-1', chihuahua= 'chihuahua-1', narwhal= 'narwhal-1', pisco= 'pisco-1' }

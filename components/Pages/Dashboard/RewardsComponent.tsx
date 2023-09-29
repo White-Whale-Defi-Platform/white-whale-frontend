@@ -23,7 +23,6 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
-import Loader from '../../Loader'
 import { ActionType } from './BondingOverview'
 
 const pulseAnimation = keyframes`
@@ -95,7 +94,7 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
         borderRadius="10px"
         position="relative"
         animation={
-          isImminent ? `${pulseAnimation} 1.8s ease-in-out infinite` : undefined
+          isImminent ? `${pulseAnimation} 1.8s ease-in-out infinite` : null
         }
       />
     </Box>

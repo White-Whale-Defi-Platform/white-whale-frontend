@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ChainId } from 'constants/index'
 import chains from 'public/mainnet/chain_info.json'
 import columbusConfig from 'public/mainnet/columbus-5/config.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/index'
@@ -56,10 +57,10 @@ export class TerraTreasuryService extends FCDBaseClient {
   async getTerraClassicFee(
     amount: number | string, denom: string, gas:number,
   ): Promise<any> {
-    const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5')
+    const terraClassic = chains.find((chain) => chain.chainId === ChainId.terrac)
     const tax = await this.getTerraTax(amount)
     let amounts = []
-    if (tax == 0) {
+    if (tax === 0) {
       amounts = []
     } else {
       amounts.push({
@@ -67,8 +68,7 @@ export class TerraTreasuryService extends FCDBaseClient {
         amount: tax.toString(),
       })
     }
-    amounts.push(
-    {
+    amounts.push({
       denom: terraClassic.stakeCurrency.coinMinimalDenom,
       amount: (Math.ceil(Number(terraClassic.gasPriceStep.average) * gas)).toString(),
     })
@@ -82,7 +82,7 @@ export class TerraTreasuryService extends FCDBaseClient {
   async getTerraClassicIncentiveFee(
     amount: number | string, denom: string, gas:number,
   ): Promise<any> {
-    const terraClassic = chains.find((chain) => chain.chainId === 'columbus-5')
+    const terraClassic = chains.find((chain) => chain.chainId === ChainId.terrac)
     const tax = await this.getTerraTax(amount)
     const whaleTax = await this.getTerraTax('1000000000')
     const amounts = [{

@@ -4,7 +4,7 @@ import { useQueryClient } from 'react-query'
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
 import { useChains } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
-import WalletIcon from 'components/icons/WalletIcon'
+import WalletIcon from 'components/Icons/WalletIcon'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
@@ -17,6 +17,7 @@ import {
   ACTIVE_BONDING_NETWORKS,
   ACTIVE_NETWORKS,
   ACTIVE_NETWORKS_WALLET_NAMES,
+  ChainId,
   COSMOS_KIT_WALLET_KEY,
   WALLET_CHAIN_NAMES_BY_CHAIN_ID,
 } from 'constants/index'
@@ -62,7 +63,7 @@ const Wallet = () => {
 
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints();
-        return chainInfos.map((chain) => chain.chainId);
+        return chainInfos.map((chain: { chainId: string }) => chain.chainId);
       };
 
       const filterChains = async () => {
@@ -74,14 +75,10 @@ const Wallet = () => {
 
       filterChains().then(async ([chainNames, ids]) => {
         if (chainNames.includes('injective')) {
-          let hasInj = false;
           try {
-            hasInj = await walletWindowConnection.getKey('injective-1');
+            await walletWindowConnection.getKey(ChainId.injective);
           } catch {
             console.error('Injective not activated');
-          }
-
-          if (!hasInj) {
             const injIndex = chainNames.indexOf('injective');
             if (injIndex !== -1) {
               chainNames.splice(injIndex, 1);
@@ -89,9 +86,8 @@ const Wallet = () => {
               setCurrentConnectedChainIds(ids);
             }
           }
-
-          setWalletChains(chainNames);
         }
+        setWalletChains(chainNames);
       });
     } else if (walletChains.length === 0) {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
@@ -129,8 +125,8 @@ const Wallet = () => {
 
     const defaultChainId =
       currentChainState.network === NetworkType.mainnet
-        ? 'migaloo-1'
-        : 'narwhal-1'
+        ? ChainId.migaloo
+        : ChainId.narwhal
 
     const defaultChainName =
       currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'narwhal'

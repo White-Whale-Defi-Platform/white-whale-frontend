@@ -1,15 +1,14 @@
 import React from 'react'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
-import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
-import LeapWalletIcon from 'components/icons/LeapWalletIcon'
-import TerraExtensionIcon from 'components/icons/TerraExtensionIcon'
+import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
+import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
+import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
+import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
+import TerraExtensionIcon from 'components/Icons/TerraExtensionIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-
-import LeapSnapIcon from '../../../icons/LeapSnapIcon'
 
 export const ConnectedWalletIcon = () => {
   const { walletChainName } = useRecoilValue(chainState)

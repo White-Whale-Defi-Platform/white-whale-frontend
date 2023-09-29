@@ -1,8 +1,8 @@
 import { ReactNode } from 'react'
 
 import { Link } from '@chakra-ui/react'
-
-import { truncate } from '../libs/text'
+import { ChainId } from 'constants/index'
+import { truncate } from 'libs/text'
 
 type Props = {
   chainId: string
@@ -10,31 +10,31 @@ type Props = {
   children?: ReactNode
 }
 
-const getUrl = (chainId, txHash) => {
+const getUrl = (chainId: string, txHash: string) => {
   switch (chainId) {
     case 'uni-6':
       return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
-    case 'migaloo-1':
+    case ChainId.migaloo:
       return `https://explorer.silknodes.io/migaloo/tx/${txHash}`
-    case 'narwhal-1':
+    case ChainId.narwhal:
       return `https://testnet.migaloo.explorers.guru/transaction/${txHash}`
-    case 'pisco-1':
+    case ChainId.pisco:
       return `https://finder.terra.money/testnet/tx/${txHash}`
-    case 'juno-1':
+    case ChainId.juno:
       return `https://mintscan.io/juno/txs/${txHash}`
-    case 'phoenix-1':
+    case ChainId.terra:
       return `https://finder.terra.money/mainnet/tx/${txHash}`
-    case 'chihuahua-1':
+    case ChainId.chihuahua:
       return `https://www.mintscan.io/chihuahua/txs/${txHash}`
     case 'injective-888':
       return `https://testnet.explorer.injective.network/transaction/${txHash}`
-    case 'injective-1':
+    case ChainId.injective:
       return `https://explorer.injective.network/transaction/${txHash}`
-    case 'comdex-1':
+    case ChainId.comdex:
       return `https://mintscan.io/comdex/txs/${txHash}`
-    case 'pacific-1':
+    case ChainId.sei:
       return `https://ping.pub/sei/tx/${txHash}`
-    case 'columbus-5':
+    case ChainId.terrac:
       return `https://ping.pub/terra-luna/tx/${txHash}`
     default:
       return null
