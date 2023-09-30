@@ -7,6 +7,7 @@ import { useQueryIncentiveContracts } from 'components/Pages/Trade/Incentivize/h
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
 
@@ -77,9 +78,20 @@ const useForceEpochAndTakingSnapshots = ({
   }, [addresses, address])
 
   const { mutate: submit, ...state } = useMutation({
-    mutationFn: () => signingClient.signAndBroadcast(
-      address, msgs, 'auto', null,
-    ),
+    mutationFn: async () => {
+      let fee: any = 'auto'
+      if (await signingClient.getChainId() === 'columbus-5') {
+        const gas = Math.ceil(await signingClient.simulate(
+          address, msgs, '',
+        ) * 1.3)
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+          0, '', gas,
+        )
+      }
+      return await signingClient.signAndBroadcast(
+        address, msgs, fee, null,
+      )
+    },
     onError,
     onSuccess,
   })
