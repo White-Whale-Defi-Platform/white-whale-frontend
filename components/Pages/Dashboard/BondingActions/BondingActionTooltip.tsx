@@ -17,6 +17,8 @@ const bondingActionText = (action: ActionType) => {
         'Rewards fluctuate due to bonding activity.\nUnstable APR (depending on share, trading/flashloan volume, amp/bWHALE relation to WHALE etc.).\n' +
         'Time dependent multiplier, i.e. the longer you bond the more you get.\nShown APR takes multiplier into account.'
       )
+    default:
+      return ''
   }
 }
 
