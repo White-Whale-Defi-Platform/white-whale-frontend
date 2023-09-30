@@ -23,7 +23,6 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
-import Loader from '../../Loader'
 import { ActionType } from './BondingOverview'
 
 const pulseAnimation = keyframes`
