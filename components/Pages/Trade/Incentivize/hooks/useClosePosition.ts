@@ -6,10 +6,9 @@ import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
-
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
 
 type OpenPosition = {
   poolId: string
@@ -25,8 +24,17 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     signingClient,
   })
 
-  const createClosePositionMessage = (flow_id: number) => {
-    const msg = createExecuteMessage({
+  const createClosePositionMessage = (flow_id: number, walletChainName: string) => {
+    const msg = walletChainName === 'juno' ? createExecuteMessage({
+      message: {
+        close_flow: {
+          flow_identifier: { id: flow_id },
+        },
+      },
+      senderAddress: address,
+      contractAddress: pool?.staking_address,
+      funds: [],
+    }) : createExecuteMessage({
       message: {
         close_flow: {
           flow_id,
@@ -36,13 +44,13 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
       contractAddress: pool?.staking_address,
       funds: [],
     })
-
     return [msg]
   }
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async ({ flowId }: { flowId: number }) => {
-      const msg = createClosePositionMessage(flowId)
+      const msg = createClosePositionMessage(flowId, walletChainName)
+
       try {
         await signingClient.simulate(
           address, msg, '',
@@ -61,9 +69,6 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
         }
       }
 
-      console.log({ msg,
-        flowId,
-        poolId })
       let fee:any = 'auto'
       if (await signingClient.getChainId() === 'columbus-5') {
         const gas = Math.ceil(await signingClient.simulate(

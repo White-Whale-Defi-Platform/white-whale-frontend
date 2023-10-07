@@ -6,10 +6,9 @@ import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
+import { TerraTreasuryService } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
-
-import { TerraTreasuryService } from '../../../../../services/treasuryService'
 
 type OpenPosition = {
   poolId: string
@@ -25,7 +24,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     signingClient,
   })
 
-  const createClosPositionMessage = (unbonding_duration: number) => {
+  const createClosePositionMessage = (unbonding_duration: number) => {
     const msg = createExecuteMessage({
       message: {
         close_position: {
@@ -46,7 +45,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     }: {
       unbonding_duration: number
     }) => {
-      const msgs = createClosPositionMessage(unbonding_duration)
+      const msgs = createClosePositionMessage(unbonding_duration)
       let fee:any = 'auto'
       if (await signingClient.getChainId() === 'columbus-5') {
         const gas = Math.ceil(await signingClient.simulate(
