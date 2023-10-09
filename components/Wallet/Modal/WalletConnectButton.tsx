@@ -42,7 +42,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
   }
   const setWallet = useCallback(async () => {
     let err = false
-    if (walletType === WalletType.keplrExtension && window.keplr && window.keplr.mode !== 'mobile-web') {
+    if (walletType === WalletType.keplrExtension && window.keplr) {
       const connected = (await window.keplr.getChainInfosWithoutEndpoints()).map((elem) => elem.chainId)
       const keplrChains: any[] = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
       for (const chain of keplrChains) {
