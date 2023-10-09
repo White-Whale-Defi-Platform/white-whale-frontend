@@ -50,6 +50,15 @@ const Wallet = () => {
 
     const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
 
+    if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
+      // Window.leap.defaultOptions
+      window.leap.defaultOptions = {
+        sign: {
+          preferNoSetFee: true,
+        },
+      }
+    }
+
     if (walletType === WalletType.leapSnap) {
       const snapChainIds = chains.
         filter((row) => row.coinType === 118).
