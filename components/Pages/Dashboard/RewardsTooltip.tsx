@@ -69,7 +69,6 @@ export const RewardsTooltip = ({
         ) : null
       } // Displaying nothing when wallet disconnected
       bg="transparent"
-      isOpen={isLabelOpen}
     >
       <VStack alignItems="flex-start" minW={50} onMouseEnter={() => setIsLabelOpen(true)}
         onMouseLeave={() => setIsLabelOpen(false)}
