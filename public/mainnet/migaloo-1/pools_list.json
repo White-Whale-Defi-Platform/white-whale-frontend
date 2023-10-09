@@ -1,7 +1,9 @@
 {
   "name": "Pools list on mainnet",
   "logoURI": "/logos/logo.svg",
-  "keywords": ["special tokens"],
+  "keywords": [
+    "special tokens"
+  ],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -17,16 +19,71 @@
     "name": "Whale",
     "decimals": 6,
     "logoURI": "/logos/migaloo.png",
-    "tags": ["native"],
+    "tags": [
+      "native"
+    ],
     "native": true,
     "denom": "uwhale"
   },
   "routerAddress": "migaloo1tma28exp38q92c69r8uujhphxy95xa4awq2cudqqg3nhzkhnrg5s4r60en",
   "pools": [
     {
+      "pool_id": "WHALE-USDC",
+      "lpOrder": [
+        "WHALE",
+        "USDC"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "USDC"
+      ],
+      "displayName": "WHALE-USDC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/axlUSDC.png",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "phoenix-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        },
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/BC5C0BAFD19A5E4133FDA0F3E04AE1FBEE75A4A226554B2CBB021089FF2E1F8A",
+          "symbol": "USDC",
+          "name": "USDC",
+          "decimals": 6,
+          "logoURI": "/logos/axlUSDC.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/BC5C0BAFD19A5E4133FDA0F3E04AE1FBEE75A4A226554B2CBB021089FF2E1F8A"
+        }
+      ],
+      "lp_token": "factory/migaloo1xv4ql6t6r8zawlqn2tyxqsrvjpmjfm6kvdfvytaueqe3qvcwyr7shtx0hj/uLP",
+      "swap_address": "migaloo1xv4ql6t6r8zawlqn2tyxqsrvjpmjfm6kvdfvytaueqe3qvcwyr7shtx0hj",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
       "pool_id": "WHALE-axlUSDC",
-      "lpOrder": ["WHALE", "axlUSDC"],
-      "assetOrder": ["WHALE", "axlUSDC"],
+      "lpOrder": [
+        "WHALE",
+        "axlUSDC"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "axlUSDC"
+      ],
       "displayName": "WHALE-axlUSDC",
       "displayLogo1": "/logos/whale.svg",
       "displayLogo2": "/logos/axlUSDC.png",
@@ -39,7 +96,9 @@
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uwhale"
         },
@@ -50,7 +109,9 @@
           "name": "axlUSDC",
           "decimals": 6,
           "logoURI": "/logos/axlUSDC.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/80E8F826480B995AE28C1EE86106C1BE2034FF1966579D29951CF61885458040"
         }
@@ -62,8 +123,14 @@
     },
     {
       "pool_id": "bWHALE-WHALE",
-      "lpOrder": ["bWHALE", "WHALE"],
-      "assetOrder": ["bWHALE", "WHALE"],
+      "lpOrder": [
+        "bWHALE",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "bWHALE",
+        "WHALE"
+      ],
       "displayName": "bWHALE-WHALE",
       "displayLogo1": "/logos/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
@@ -75,10 +142,13 @@
           "name": "bWhale",
           "decimals": 6,
           "logoURI": "/logos/bWHALE.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale"
-        },{
+        },
+        {
           "id": "white-whale",
           "chain_id": "migaloo-1",
           "token_address": "uwhale",
@@ -86,7 +156,9 @@
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uwhale"
         }
@@ -98,8 +170,14 @@
     },
     {
       "pool_id": "ampWHALE-WHALE",
-      "lpOrder": ["ampWHALE", "WHALE"],
-      "assetOrder": ["ampWHALE", "WHALE"],
+      "lpOrder": [
+        "ampWHALE",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "ampWHALE",
+        "WHALE"
+      ],
       "displayName": "ampWHALE-WHALE",
       "displayLogo1": "/logos/ampWhale.svg",
       "displayLogo2": "/logos/whale.svg",
@@ -111,7 +189,9 @@
           "name": "ampWhale",
           "decimals": 6,
           "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE"
         },
@@ -123,7 +203,9 @@
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uwhale"
         }
@@ -135,8 +217,14 @@
     },
     {
       "pool_id": "RAC-WHALE",
-      "lpOrder": ["RAC", "WHALE"],
-      "assetOrder": ["RAC", "WHALE"],
+      "lpOrder": [
+        "RAC",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "RAC",
+        "WHALE"
+      ],
       "displayName": "RAC-WHALE",
       "displayLogo1": "/logos/rac.png",
       "displayLogo2": "/logos/whale.svg",
@@ -148,7 +236,9 @@
           "name": "RAC",
           "decimals": 6,
           "logoURI": "/logos/rac.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/urac"
         },
@@ -160,7 +250,9 @@
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uwhale"
         }
@@ -172,8 +264,14 @@
     },
     {
       "pool_id": "ASH-WHALE",
-      "lpOrder": ["ASH", "WHALE"],
-      "assetOrder": ["ASH", "WHALE"],
+      "lpOrder": [
+        "ASH",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "ASH",
+        "WHALE"
+      ],
       "displayName": "ASH-WHALE",
       "displayLogo1": "/logos/ash.svg",
       "displayLogo2": "/logos/whale.svg",
@@ -185,7 +283,9 @@
           "name": "ASH",
           "decimals": 6,
           "logoURI": "/logos/ash.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash"
         },
@@ -197,7 +297,9 @@
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "uwhale"
         }
@@ -209,8 +311,14 @@
     },
     {
       "pool_id": "ampWHALE-arbWHALE",
-      "lpOrder": ["ampWHALE", "arbWHALE"],
-      "assetOrder": ["ampWHALE", "arbWHALE"],
+      "lpOrder": [
+        "ampWHALE",
+        "arbWHALE"
+      ],
+      "assetOrder": [
+        "ampWHALE",
+        "arbWHALE"
+      ],
       "displayName": "ampWHALE-arbWHALE",
       "displayLogo1": "/logos/ampWhale.svg",
       "displayLogo2": "/logos/whale.svg",
@@ -222,7 +330,9 @@
           "name": "ampWhale",
           "decimals": 6,
           "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE"
         },
@@ -233,7 +343,9 @@
           "name": "Whale",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/migaloo1ey4sn2mkmhew4pdrzk90l9acluvas25qlhuvsfgssw42ugz8yjlqx92j9l/arbWHALE "
         }

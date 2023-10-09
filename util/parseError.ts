@@ -1,19 +1,19 @@
 export const parseError = (error: Error) => {
   const customErrors = [
-    { regex: /insufficient funds/i,
+    { regex: /insufficient funds/u,
       message: 'Insufficient funds' },
-    { regex: /overflow: cannot sub with/i,
+    { regex: /overflow: cannot sub with/u,
       message: 'Insufficient funds' },
-    { regex: /max spread assertion/i,
+    { regex: /max spread assertion/u,
       message: 'Try increasing slippage' },
-    { regex: /request rejected/i,
+    { regex: /request rejected/u,
       message: 'User denied' },
     {
-      regex: /which exceeds the maximum of 3 flows allowed/i,
+      regex: /which exceeds the maximum of 3 flows allowed/u,
       message: 'Exceeds maximum allowed flows',
     },
     {
-      regex: /Flow start timestamp is too far into the future/i,
+      regex: /Flow start timestamp is too far into the future/u,
       message: 'Start date is too far in future',
     },
   ]
