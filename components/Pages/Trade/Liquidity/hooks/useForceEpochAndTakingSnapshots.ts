@@ -89,8 +89,7 @@ const useForceEpochAndTakingSnapshots = ({
           0, '', gas,
         )
       }
-
-      return signingClient.signAndBroadcast(
+      return await signingClient.signAndBroadcast(
         address, msgs, fee, null,
       )
     },
