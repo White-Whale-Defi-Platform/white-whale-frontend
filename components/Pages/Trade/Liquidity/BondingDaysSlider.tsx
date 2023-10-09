@@ -22,8 +22,13 @@ type Props = {
   show: boolean
 }
 
-const setBondingdays = (input: string, setBondingDays: any) => {
-  if (Number(input) <= 365 && Number(input) >= 1) {
+const setBondingdays = (
+  input: string, setBondingDays: any, bondingDays:number,
+) => {
+  if (Number(input).valueOf() === 0 && Number(bondingDays).valueOf() === 0) {
+    setBondingDays(Number(bondingDays).valueOf())
+  }
+  if (Number(input) <= 365 && Number(input) >= 0) {
     setBondingDays(input)
   }
   if (Number(input) > 365) {
@@ -51,10 +56,10 @@ export const BondingDaysSlider = ({
       <Box width="full">
         <Slider
           focusThumbOnChange={false}
-          defaultValue={0}
+          defaultValue={1}
           value={bondingDays}
           step={1}
-          min={0}
+          min={1}
           max={365}
           borderRadius={100}
           height={1.5}
@@ -75,14 +80,17 @@ export const BondingDaysSlider = ({
           maxWidth={''}
         >
           <NumberInput
-            defaultValue={0}
-            min={0}
+            defaultValue={1}
+            min={1}
             max={365}
+            textColor={'white'}
             size={'xs'}
-            value={bondingDays}
+            value={bondingDays.valueOf()}
             inputMode={'numeric'}
             onChange={(elem: string) => {
-              setBondingdays(elem, setBondingDays)
+              setBondingdays(
+                elem, setBondingDays, bondingDays,
+              )
             }}
           >
             <NumberInputField border={'hidden'} maxWidth={'70'} />

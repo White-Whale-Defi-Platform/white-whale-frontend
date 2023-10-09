@@ -1,5 +1,6 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { ChainId } from 'constants/index'
 import { TerraTreasuryService } from 'services/treasuryService'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
@@ -19,8 +20,8 @@ export const withdrawTokens = async (
     contractAddress: config.whale_lair,
     message: handleMsg,
     funds: [] })
-  let fee = 'auto'
-  if (await signingClient.getChainId() === 'columbus-5') {
+  let fee: any = 'auto'
+  if (await signingClient.getChainId() === ChainId.terrac) {
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
     ) * 1.3)
@@ -29,7 +30,6 @@ export const withdrawTokens = async (
     )
   }
   return await signingClient.signAndBroadcast(
-    // @ts-ignore
     address, [execMsg], fee, '',
   )
 }

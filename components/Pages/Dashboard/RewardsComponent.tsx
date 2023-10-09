@@ -94,7 +94,7 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
         borderRadius="10px"
         position="relative"
         animation={
-          isImminent ? `${pulseAnimation} 1.8s ease-in-out infinite` : undefined
+          isImminent ? `${pulseAnimation} 1.8s ease-in-out infinite` : null
         }
       />
     </Box>

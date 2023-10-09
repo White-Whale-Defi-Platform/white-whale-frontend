@@ -1,12 +1,15 @@
 import { useCallback } from 'react'
 
-import { Button, HStack, Image, Text } from '@chakra-ui/react'
-import CosmostationWalletIcon from 'components/icons/CosmostationWalletIcon'
-import KeplrWalletIcon from 'components/icons/KeplrWalletIcon'
-import LeapSnapIcon from 'components/icons/LeapSnapIcon'
-import LeapWalletIcon from 'components/icons/LeapWalletIcon'
+import { Button, HStack, Text, useToast } from '@chakra-ui/react'
+import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
+import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
+import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
+import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
+import { ShellWalletIcon } from 'components/Icons/ShellWalletIcon'
+import { TerraStationWalletIcon } from 'components/Icons/TerraStationWalletIcon'
+import { WalletConnectIcon } from 'components/Icons/WalletConnectIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { ACTIVE_NETWORKS } from 'constants/networks'
+import { ACTIVE_NETWORKS, ChainId } from 'constants/networks'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -17,27 +20,52 @@ interface Props {
 }
 
 export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props) => {
-  const { network } = useRecoilValue(chainState)
+  const toast = useToast()
+  const { network, chainId, chainName } = useRecoilValue(chainState)
   const getKeplrChains = async (chains: Array<string>) => {
-    const registry = await (await fetch('https://keplr-chain-registry.vercel.app/api/chains')).json()
-    const toAdd = []
-    Object.values(registry.chains).map((elem:any) => {
-      if (chains.includes(elem.chainId)) {
-        toAdd.push(elem)
-      }
-    })
-    return toAdd
+    const response = await fetch('https://keplr-chain-registry.vercel.app/api/chains');
+    const registry = await response.json();
+    return Object.values(registry.chains).filter((elem : {chainId: string}) => chains.includes(elem.chainId));
+  }
+  const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+  const handleChainActivationError = (chainName: string, toast) => {
+    const capitalizedChainName = capitalizeFirstLetter(chainName);
+    console.error(`${capitalizedChainName} not activated`);
+    toast({
+      title: `${capitalizedChainName} not activated`,
+      description: `Please add ${capitalizedChainName} to your wallet.`,
+      status: 'error',
+      duration: 9000,
+      position: 'top-right',
+      isClosable: true,
+    });
   }
   const setWallet = useCallback(async () => {
+    let err = false
     if (walletType === WalletType.keplrExtension && window.keplr) {
-      const keplrChains = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
+      const connected = (await window.keplr.getChainInfosWithoutEndpoints()).map((elem) => elem.chainId)
+      const keplrChains: any[] = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
       for (const chain of keplrChains) {
+        if (!connected.includes(chain.chainId)) {
         // eslint-disable-next-line no-await-in-loop
-        await window.keplr.experimentalSuggestChain(chain)
+          await window.keplr.experimentalSuggestChain(chain)
+        }
       }
     }
-
-    connect()
+    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) && (chainId === ChainId.injective || chainId === ChainId.terrac)) {
+      const windowConnection = walletType === WalletType.terraExtension ? window.station.keplr : window.keplr
+      try {
+        await (windowConnection.getKey(chainId))
+      } catch (e) {
+        err = true
+        console.error(`${chainId} not activated`)
+        console.error(e);
+        handleChainActivationError(chainName, toast);
+      }
+    }
+    if (!err) {
+      connect()
+    }
     onCloseModal()
   }, [onCloseModal, connect])
 
@@ -66,34 +94,24 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
     }
   }
 
-  const walletConnectIcon = (
-    <Image
-      src={'/logos/wallet-connect-icon.png'}
-      width="auto"
-      maxW="1.5rem"
-      maxH="1.5rem"
-      alt="token1-img"
-    />
-  )
-
   const renderIcon = () => {
     switch (walletType) {
       case WalletType.keplrExtension:
         return <KeplrWalletIcon />
       case WalletType.keplrMobile:
-        return walletConnectIcon
+        return <WalletConnectIcon />
       case WalletType.terraExtension:
-        return <img src="/logos/station-icon.png" width={'27px'} />
+        return <TerraStationWalletIcon/>
       case WalletType.cosmoStationExtension:
         return <CosmostationWalletIcon />
       case WalletType.cosmoStationMobile:
-        return walletConnectIcon
+        return <WalletConnectIcon />
       case WalletType.shellExtension:
-        return <img src="/logos/shell-icon.png" width={'27px'} />
+        return <ShellWalletIcon/>
       case WalletType.leapExtension:
         return <LeapWalletIcon />
       case WalletType.leapMobile:
-        return walletConnectIcon
+        return <WalletConnectIcon />
       case WalletType.leapSnap:
         return <LeapSnapIcon />
       default:

@@ -4,7 +4,7 @@ import { useQueryClient } from 'react-query'
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
 import { useChains } from '@cosmos-kit/react-lite'
 import Card from 'components/Card'
-import WalletIcon from 'components/icons/WalletIcon'
+import WalletIcon from 'components/Icons/WalletIcon'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
@@ -17,6 +17,7 @@ import {
   ACTIVE_BONDING_NETWORKS,
   ACTIVE_NETWORKS,
   ACTIVE_NETWORKS_WALLET_NAMES,
+  ChainId,
   COSMOS_KIT_WALLET_KEY,
   WALLET_CHAIN_NAMES_BY_CHAIN_ID,
 } from 'constants/index'
@@ -34,6 +35,7 @@ const Wallet = () => {
   const chains: Array<any> = useChainInfos()
   const [walletChains, setWalletChains] = useState<string[]>([])
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
+  const [currentConnectedChainIds, setCurrentConnectedChainIds] = useState([])
 
   useEffect(() => {
     if (chainName && currentChainState.network === NetworkType.mainnet) {
@@ -46,15 +48,63 @@ const Wallet = () => {
       })
     }
 
-    if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap) {
-      const newWalletChains = chains.
+    const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
+
+    if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
+      // Window.leap.defaultOptions
+      window.leap.defaultOptions = {
+        sign: {
+          preferNoSetFee: true,
+        },
+      }
+    }
+
+    if (walletType === WalletType.leapSnap) {
+      const snapChainIds = chains.
         filter((row) => row.coinType === 118).
         map((row) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId]);
-      setWalletChains(newWalletChains);
+
+      setWalletChains(snapChainIds);
+      setCurrentConnectedChainIds(snapChainIds);
+    } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
+      const walletWindowConnection =
+        walletType === WalletType.terraExtension ? window.station.keplr : window.keplr;
+
+      const getAddedStationChainsIds = async () => {
+        const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints();
+        return chainInfos.map((chain: { chainId: string }) => chain.chainId);
+      };
+
+      const filterChains = async () => {
+        const addedChains = await getAddedStationChainsIds();
+        const filteredChains = chains.filter((chain) => addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]);
+        const chainNames = filteredChains.map((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]);
+        return [chainNames, filteredChains.map((chain) => chain.chainId)];
+      };
+
+      filterChains().then(async ([chainNames, ids]) => {
+        if (chainNames.includes('injective')) {
+          try {
+            await walletWindowConnection.getKey(ChainId.injective);
+          } catch {
+            console.error('Injective not activated');
+            const injIndex = chainNames.indexOf('injective');
+            if (injIndex !== -1) {
+              chainNames.splice(injIndex, 1);
+              ids.splice(injIndex, 1);
+              setCurrentConnectedChainIds(ids);
+            }
+          }
+        }
+        setWalletChains(chainNames);
+      });
     } else if (walletChains.length === 0) {
+      setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
       setWalletChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
+    } else {
+      setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }
-  }, [chains, currentChainState.network, chainName])
+  }, [chains, currentChainState.network, chainName, window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)])
 
   const allChains = useChains(walletChains)
   const router = useRouter()
@@ -62,10 +112,13 @@ const Wallet = () => {
   const [chainInfo] = useChainInfo(currentChainState.chainId)
   const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
   const queryClient = useQueryClient()
+
   const [chainIdParam, setChainIdParam] = useState<string>(null)
-  const resetWallet = async () => {
+  const resetWallet = () => {
+    setCurrentConnectedChainIds([])
     queryClient.clear()
-    await disconnect()
+    setWalletChains([])
+    disconnect()
   }
 
   useEffect(() => {
@@ -81,8 +134,8 @@ const Wallet = () => {
 
     const defaultChainId =
       currentChainState.network === NetworkType.mainnet
-        ? 'migaloo-1'
-        : 'narwhal-1'
+        ? ChainId.migaloo
+        : ChainId.narwhal
 
     const defaultChainName =
       currentChainState.network === NetworkType.mainnet ? 'migaloo' : 'narwhal'
@@ -139,13 +192,12 @@ const Wallet = () => {
       },
     ]
     setTokenSwapState(newState)
-
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
       if (!(window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap)) {
         await newChain.connect()
       } else {
-        await resetWallet()
+        resetWallet()
       }
     }
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -177,6 +229,7 @@ const Wallet = () => {
           denom={denom?.coinDenom}
           onChange={onChainChange}
           currentChainState={currentChainState}
+          connectedChainIds={currentConnectedChainIds}
         />
         <Button
           variant="outline"
@@ -203,6 +256,7 @@ const Wallet = () => {
           denom={denom}
           onChainChange={onChainChange}
           currentChainState={currentChainState}
+          currentConnectedChainIds={currentConnectedChainIds}
         />
         <Box display={{ base: 'block',
           md: 'block' }}>

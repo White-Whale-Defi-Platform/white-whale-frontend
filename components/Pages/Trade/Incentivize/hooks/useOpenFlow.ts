@@ -10,6 +10,7 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
+import { ChainId } from 'constants/index'
 import { useClients } from 'hooks/useClients'
 import useSimulate from 'hooks/useSimulate'
 import { useTokenInfo } from 'hooks/useTokenInfo'
@@ -120,8 +121,8 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const { mutate: submit, ...tx } = useMutation({
     mutationFn: async () => {
-      let fee:any = 'auto'
-      if (chainId === 'columbus-5') {
+      let fee: any = 'auto'
+      if (chainId === ChainId.terrac) {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
