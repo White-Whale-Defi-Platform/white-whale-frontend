@@ -14,6 +14,7 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(chainState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
   const leapInApp = window.leap && window.leap.mode === 'mobile-web'
+  const keplrInApp = window.keplr && window.keplr.mode === 'mobile-web'
   const background = useMemo(() => backgrounds[chainId], [chainId])
   return (
     <>
@@ -28,8 +29,8 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
           background: background.replace('linear', 'radial').replace('90deg', 'circle'),
         }}
       ></div>}
-      {((isMobile || isMobileView) && !leapInApp) && <MobileNotSupportedModal />}
-      {(!(isMobile || isMobileView) || leapInApp) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
+      {((isMobile || isMobileView) && (!leapInApp || keplrInApp )) && <MobileNotSupportedModal />}
+      {(!(isMobile || isMobileView) || leapInApp || keplrInApp) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
         <RadialGradient />
         <Navbar />
         <Flex
