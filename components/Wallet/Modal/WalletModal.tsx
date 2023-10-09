@@ -41,7 +41,10 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
     const inApp = isMobile && ((window.leap && window.leap.mode === 'mobile-web') || (window.keplr && window.keplr.mode === 'mobile-web'))
-    if (inApp && (walletName === WalletType.leapExtension) || (walletName === WalletType.keplrExtension)) {
+    if (inApp && walletName === WalletType.leapExtension) {
+      return true;
+    }
+    if (inApp && walletName === WalletType.keplrExtension) {
       return true;
     }
     if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) {
