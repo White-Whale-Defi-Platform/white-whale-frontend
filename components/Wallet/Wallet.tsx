@@ -74,14 +74,12 @@ const Wallet = () => {
         const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints();
         return chainInfos.map((chain: { chainId: string }) => chain.chainId);
       };
-
       const filterChains = async () => {
         const addedChains = await getAddedStationChainsIds();
         const filteredChains = chains.filter((chain) => addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]);
         const chainNames = filteredChains.map((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]);
         return [chainNames, filteredChains.map((chain) => chain.chainId)];
       };
-
       filterChains().then(async ([chainNames, ids]) => {
         if (chainNames.includes('injective')) {
           try {
@@ -92,11 +90,11 @@ const Wallet = () => {
             if (injIndex !== -1) {
               chainNames.splice(injIndex, 1);
               ids.splice(injIndex, 1);
-              setCurrentConnectedChainIds(ids);
             }
           }
         }
         setWalletChains(chainNames);
+        setCurrentConnectedChainIds(ids);
       });
     } else if (walletChains.length === 0) {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
@@ -105,7 +103,6 @@ const Wallet = () => {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }
   }, [chains, currentChainState.network, chainName, window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)])
-
   const allChains = useChains(walletChains)
   const router = useRouter()
 

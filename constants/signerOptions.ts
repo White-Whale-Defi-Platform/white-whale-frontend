@@ -9,7 +9,7 @@ const prices = (chainName:string, chain:Chain) => {
   if (activeChains.includes(chainName)) {
     const [feeTokens] = chain.fees.fee_tokens;
     const price = feeTokens
-      ? feeTokens.fixed_min_gas_price || feeTokens.low_gas_price || feeTokens.average_gas_price || 0
+      ? feeTokens.average_gas_price || feeTokens.low_gas_price || feeTokens.fixed_min_gas_price || 0
       : 0;
     return {
       gasPrice: GasPrice.fromString(String(price) + chain.fees.fee_tokens[0].denom),
