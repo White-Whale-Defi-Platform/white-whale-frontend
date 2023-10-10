@@ -125,9 +125,9 @@ export const getPairAprAndDailyVolumeTerra = async (pools: any[]): Promise<Enigm
       const displayAssetOrder = pool.displayName?.split('-')
       const totalPoolLiquidity = pool.liquidity.reserves.total
       const asset0Balance =
-        totalPoolLiquidity[0] / 10 ** pool.pool_assets[0].decimals
+        totalPoolLiquidity[0] / (10 ** pool.pool_assets[0].decimals)
       const asset1Balance =
-        totalPoolLiquidity[1] / 10 ** pool.pool_assets[1].decimals
+        totalPoolLiquidity[1] / (10 ** pool.pool_assets[1].decimals)
 
       let poolRatio = asset1Balance === 0 ? 0 : asset0Balance / asset1Balance
       if (displayAssetOrder?.[0] === pool.assetOrder?.[0]) {

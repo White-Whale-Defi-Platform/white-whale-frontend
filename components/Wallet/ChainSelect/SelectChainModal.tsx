@@ -10,7 +10,7 @@ const SelectChainModal = ({
   onChange,
   connected,
   currentChainState,
-  connectedChainIds
+  connectedChainIds,
 }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)

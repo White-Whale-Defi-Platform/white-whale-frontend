@@ -66,7 +66,7 @@ export const useTransaction = ({
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
-  const [txHash, setTxHash] = useState<string | undefined>(undefined)
+  const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
@@ -88,8 +88,8 @@ export const useTransaction = ({
         return response
       } catch (err) {
         if (
-          (/insufficient funds/i).test(err.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(err.toString())
+          (/insufficient funds/u).test(err.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(err.toString())
         ) {
           console.error(err)
           setTxStep(TxStep.Idle)
@@ -97,7 +97,7 @@ export const useTransaction = ({
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
         } else if (
-          (/Negative profits when attempting to flash-loan /i).test(err.toString())
+          (/Negative profits when attempting to flash-loan /u).test(err.toString())
         ) {
           console.error(err)
           setTxStep(TxStep.Idle)
@@ -114,9 +114,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs != null &&
-        txStep == TxStep.Idle &&
-        error == null &&
+        debouncedMsgs !== null &&
+        txStep === TxStep.Idle &&
+        error === null &&
         Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
@@ -145,15 +145,15 @@ export const useTransaction = ({
       let message = ''
       console.error(e?.toString())
       if (
-        (/insufficient funds/i).test(e?.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(e?.toString())
+        (/insufficient funds/u).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(e?.toString())
       ) {
         setError('Insufficient Funds')
         message = 'Insufficient Funds'
-      } else if ((/Max spread assertion/i).test(e?.toString())) {
+      } else if ((/Max spread assertion/u).test(e?.toString())) {
         setError('Try increasing slippage')
         message = 'Try increasing slippage'
-      } else if ((/Request rejected/i).test(e?.toString())) {
+      } else if ((/Request rejected/u).test(e?.toString())) {
         setError('User Denied')
         message = 'User Denied'
       } else {

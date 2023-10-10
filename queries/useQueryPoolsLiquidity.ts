@@ -20,7 +20,6 @@ import { fromChainAmount } from 'libs/num'
 import { queryPoolInfo } from 'queries/queryPoolInfo'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { TokenInfo } from 'types'
 
 import { queryMyLiquidity } from './queryMyLiquidity'
 import {
@@ -40,6 +39,10 @@ export type PoolTokenValue = {
 export type PoolState = {
   total: PoolTokenValue
   provided: PoolTokenValue
+}
+
+type TokenInfo = {
+  token_info: {}
 }
 
 export type Flow = {
