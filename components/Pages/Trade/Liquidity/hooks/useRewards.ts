@@ -42,7 +42,6 @@ const aggregateRewards = (rewards: RewardData[]): RewardInfo[] => {
     if (!denom) {
       return acc
     }
-
     const { amount } = reward
     acc[denom] = (acc[denom] || 0) + amount
     return acc
@@ -80,6 +79,11 @@ const useRewards = (poolId: string): RewardsResult => {
     select: (data) => data?.rewards || [],
     enabled: Boolean(staking_address) && Boolean(address),
   })
+  // @ts-ignore
+  if (window.debugLogsEnabled) {
+    console.log('Rewards: ', rewards)
+  }
+
   const aggregatedRewards = useMemo(() => aggregateRewards(rewards), [rewards])
 
   return useMemo(() => {

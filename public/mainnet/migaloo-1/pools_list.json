@@ -75,53 +75,6 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "WHALE-axlUSDC",
-      "lpOrder": [
-        "WHALE",
-        "axlUSDC"
-      ],
-      "assetOrder": [
-        "WHALE",
-        "axlUSDC"
-      ],
-      "displayName": "WHALE-axlUSDC",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/axlUSDC.png",
-      "pool_assets": [
-        {
-          "id": "white-whale",
-          "chain_id": "phoenix-1",
-          "token_address": "uwhale",
-          "symbol": "WHALE",
-          "name": "Whale",
-          "decimals": 6,
-          "logoURI": "/logos/whale.svg",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "uwhale"
-        },
-        {
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/80E8F826480B995AE28C1EE86106C1BE2034FF1966579D29951CF61885458040",
-          "symbol": "axlUSDC",
-          "name": "axlUSDC",
-          "decimals": 6,
-          "logoURI": "/logos/axlUSDC.png",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/80E8F826480B995AE28C1EE86106C1BE2034FF1966579D29951CF61885458040"
-        }
-      ],
-      "lp_token": "factory/migaloo1nha6qlam4p92cf9j64qv9he40xyf3akl2m9w5dukftmf2ryrxz5qy650zh/uLP",
-      "swap_address": "migaloo1nha6qlam4p92cf9j64qv9he40xyf3akl2m9w5dukftmf2ryrxz5qy650zh",
-      "staking_address": "",
-      "rewards_tokens": []
-    },
-    {
       "pool_id": "bWHALE-WHALE",
       "lpOrder": [
         "bWHALE",

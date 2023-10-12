@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
@@ -27,7 +27,7 @@ import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
-import { NextRouter, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
@@ -38,16 +38,16 @@ import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 import { TxStep } from 'types/common'
 
-const ManageLiquidity: FC = () => {
+const ManageLiquidity = ({ poolIdFromUrl }) => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')
-  const router: NextRouter = useRouter()
+  const router = useRouter()
   const chains: Array<any> = useChainInfos()
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
-  const { data: poolList } = usePoolsListQuery()
-  const [[tokenA, tokenB], setTokenLPState] = useRecoilState(tokenItemState)
+  const { data: poolData } = usePoolsListQuery()
+  const [[tokenA, tokenB], setTokenItemState] = useRecoilState(tokenItemState)
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({ reverse,
     bondingDays })
@@ -56,10 +56,9 @@ const ManageLiquidity: FC = () => {
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
     useQueriesDataSelector(useQueryPoolsLiquidity({
       refetchInBackground: false,
-      pools: poolList?.pools,
+      pools: poolData?.pools,
       cosmWasmClient,
     }))
-  const poolId = (router.query.poolId as string) ?? poolList?.pools[0].pool_id
   const prices = usePrices()
   const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
@@ -70,8 +69,8 @@ const ManageLiquidity: FC = () => {
     currentChainPrefix,
   )
 
-  const pool = useMemo(() => poolList?.pools.find((pool: any) => pool.pool_id === poolId),
-    [poolId, poolList])
+  const pool = useMemo(() => poolData?.pools.find((pool: any) => pool.pool_id === poolIdFromUrl),
+    [poolIdFromUrl, poolData])
   // TODO pool user share might be falsy
   const poolUserShare = usePoolUserShare(
     cosmWasmClient,
@@ -80,7 +79,7 @@ const ManageLiquidity: FC = () => {
   )
 
   const dailyEmissionData = useMemo(() => {
-    const incentivePoolInfo = incentivePoolInfos?.find((info) => info.poolId === poolId)
+    const incentivePoolInfo = incentivePoolInfos?.find((info) => info.poolId === poolIdFromUrl)
     if (!poolUserShare) {
       return null
     }
@@ -95,29 +94,34 @@ const ManageLiquidity: FC = () => {
         }
       }) ?? []
     )
-  }, [prices, incentivePoolInfos, poolId, poolUserShare])
+  }, [prices, incentivePoolInfos, poolIdFromUrl, poolUserShare])
   const chainIdParam = router.query.chainId as string
-  const currentChain = chains.find((row) => row.chainId === chainId)
+  const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
 
-  // TODO default query param in url when no poolId is provided
   useEffect(() => {
-    if (currentChain) {
-      if (poolId) {
-        const pools = poolList?.pools
-        if (pools && !pools.find((pool: any) => pool.pool_id === poolId)) {
-          router.push(`/${currentChain.label.toLowerCase()}/pools`)
+    if (chainName) {
+      if (poolIdFromUrl) {
+        const pools = poolData?.pools
+        if (pools && !pools.find((pool: any) => pool.pool_id === poolIdFromUrl)) {
+          router.push(`/${chainName.toLowerCase()}/pools`)
         } else {
-          router.push(`/${currentChain.label.toLowerCase()}/pools/manage_liquidity?poolId=${poolId}`)
+          router.push(`/${chainName.toLowerCase()}/pools/manage_liquidity?poolId=${poolIdFromUrl}`)
+        }
+      } else {
+        if (poolData?.pools) {
+          const defaultPoolId = poolData.pools[0].pool_id
+          router.push(`/${chainName}/pools/manage_liquidity?poolId=${defaultPoolId}`)
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, poolId, poolList, currentChain])
+  }, [chainId, poolIdFromUrl, poolData, chainName])
 
   useEffect(() => {
-    if (poolId) {
-      const [tokenASymbol, tokenBSymbol] = poolId?.split('-')
-      setTokenLPState([
+    if (poolIdFromUrl) {
+      const [tokenASymbol, tokenBSymbol] = poolIdFromUrl?.split('-')
+
+      setTokenItemState([
         {
           tokenSymbol: tokenASymbol,
           amount: 0,
@@ -132,7 +136,7 @@ const ManageLiquidity: FC = () => {
       setIsToken(true)
     }
     return () => {
-      setTokenLPState([
+      setTokenItemState([
         {
           tokenSymbol: null,
           amount: 0,
@@ -147,10 +151,10 @@ const ManageLiquidity: FC = () => {
       setIsToken(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolId])
+  }, [poolIdFromUrl])
 
   const clearForm = () => {
-    setTokenLPState([
+    setTokenItemState([
       {
         ...tokenA,
         amount: 0,
@@ -173,17 +177,17 @@ const ManageLiquidity: FC = () => {
       tokenSymbol,
       amount: Number(amount),
     }
-    setTokenLPState(newState)
+    setTokenItemState(newState)
   }
 
   const myFlows = useMemo(() => {
-    if (!pools || !poolId) {
+    if (!pools || !poolIdFromUrl) {
       return []
     }
 
-    const flows = pools.find((p) => p.pool_id === poolId)
+    const flows = pools.find((p) => p.pool_id === poolIdFromUrl)
     return flows?.liquidity?.myFlows || []
-  }, [pools, poolId])
+  }, [pools, poolIdFromUrl])
 
   return (
     <VStack
@@ -240,7 +244,7 @@ const ManageLiquidity: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview poolId={poolId} dailyEmissions={dailyEmissionData} />
+                <Overview poolId={poolIdFromUrl} dailyEmissions={dailyEmissionData} />
               </TabPanel>
               <TabPanel padding={4}>
                 {isTokenSet && (
@@ -257,7 +261,7 @@ const ManageLiquidity: FC = () => {
                     tx={tx}
                     clearForm={clearForm}
                     chainId={chainId}
-                    poolId={poolId}
+                    poolId={poolIdFromUrl}
                     mobile={isMobile}
                   />
                 )}
@@ -266,16 +270,16 @@ const ManageLiquidity: FC = () => {
                 <WithdrawForm
                   isWalletConnected={isWalletConnected}
                   clearForm={clearForm}
-                  poolId={poolId}
+                  poolId={poolIdFromUrl}
                   mobile={isMobile}
                 />
               </TabPanel>
               <TabPanel padding={4}>
-                <Claim poolId={poolId} />
+                <Claim poolId={poolIdFromUrl} />
               </TabPanel>
               {dailyEmissionData.length > 0 ? (
                 <TabPanel padding={4}>
-                  <PositionsOverview flows={myFlows} poolId={poolId} />
+                  <PositionsOverview flows={myFlows} poolId={poolIdFromUrl} />
                 </TabPanel>
               ) : null}
             </TabPanels>

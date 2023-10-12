@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { Box, Divider, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 
@@ -46,7 +45,7 @@ const Liquidity = ({ liquidity, infos }: Props) => {
                   <Text fontSize={14}>
                     {(
                       infos.liquidity.reserves.total[index] /
-                        10 ** infos.poolAssets[index].decimals
+                        (10 ** infos.poolAssets[index].decimals)
                     ).toFixed(2)}
                   </Text>
                 </HStack>

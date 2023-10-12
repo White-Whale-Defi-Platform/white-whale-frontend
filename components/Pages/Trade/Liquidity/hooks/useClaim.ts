@@ -44,7 +44,7 @@ export const useClaim = ({ poolId }: Props) => {
         fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
           0, '', gas,
         )
-      } return signingClient.signAndBroadcast(
+      } return await signingClient.signAndBroadcast(
         address, [msg], fee, null,
       )
     },
