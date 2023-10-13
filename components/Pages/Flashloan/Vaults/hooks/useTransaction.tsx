@@ -87,7 +87,7 @@ export const useTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash === null) {
+      if (!txHash) {
         return null
       }
 
