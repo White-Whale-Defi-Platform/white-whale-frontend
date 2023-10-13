@@ -6,36 +6,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 import useDebounceValue from 'hooks/useDebounceValue'
-export enum TxStep {
-  /**
-   * Idle
-   */
-  Idle = 0,
-  /**
-   * Estimating fees
-   */
-  Estimating = 1,
-  /**
-   * Ready to post transaction
-   */
-  Ready = 2,
-  /**
-   * Signing transaction in Terra Station
-   */
-  Posting = 3,
-  /**
-   * Broadcasting
-   */
-  Broadcasting = 4,
-  /**
-   * Successful
-   */
-  Success = 5,
-  /**
-   * Failed
-   */
-  Failed = 6,
-}
+import { TxStep } from 'types/index'
 
 type Params = {
   enabled: boolean
@@ -73,7 +44,7 @@ export const useTransaction = ({
   const queryClient = useQueryClient()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
-  const [txHash, setTxHash] = useState<string | undefined>(undefined)
+  const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
 
@@ -95,15 +66,15 @@ export const useTransaction = ({
         return response
       } catch (error) {
         if (
-          (/insufficient funds/i).test(error.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(error.toString())
+          (/insufficient funds/u).test(error.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(error.toString())
         ) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if ((/Max spread assertion/i).test(error.toString())) {
+        } else if ((/Max spread assertion/u).test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -160,15 +131,15 @@ export const useTransaction = ({
       console.error({ message: e?.message() })
       console.error(e?.toString())
       if (
-        (/insufficient funds/i).test(e?.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(e?.toString())
+        (/insufficient funds/u).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(e?.toString())
       ) {
         setError('Insufficient Funds')
         message = 'Insufficient Funds'
-      } else if ((/Max spread assertion/i).test(e?.toString())) {
+      } else if ((/Max spread assertion/u).test(e?.toString())) {
         setError('Try increasing slippage')
         message = 'Try increasing slippage'
-      } else if ((/Request rejected/i).test(e?.toString())) {
+      } else if ((/Request rejected/u).test(e?.toString())) {
         setError('User Denied')
         message = 'User Denied'
       } else {
@@ -216,35 +187,28 @@ export const useTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => {
-      if (txHash === null) {
-        return null
-      }
-      return signingClient.getTx(txHash)
-    },
+    () => signingClient.getTx(txHash),
     {
-      enabled: txHash !== null,
+      enabled: Boolean(txHash),
       retry: true,
     },
   )
 
   const reset = () => {
     setError(null)
-    setTxHash(undefined)
+    setTxHash(null)
     setTxStep(TxStep.Idle)
   }
 
-  const submit = useCallback(async () => {
-    if (fee === null || msgs === null || !msgs || msgs.length < 1) {
-      return null
+  const submit = useCallback(() => {
+    if (!(fee === null || msgs === null || !msgs || msgs.length < 1)) {
+      mutate()
     }
-
-    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {
     // Dont change to !== breaking
-    if (txInfo != null && txHash != null) {
+    if (txInfo && txHash) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)

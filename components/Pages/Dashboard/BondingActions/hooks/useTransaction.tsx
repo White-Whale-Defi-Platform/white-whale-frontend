@@ -17,38 +17,9 @@ import {
 import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 import { convertDenomToMicroDenom } from 'util/conversion/index'
 
-export enum TxStep {
-  /**
-   * Idle
-   */
-  Idle = 0,
-  /**
-   * Estimating fees
-   */
-  Estimating = 1,
-  /**
-   * Ready to post transaction
-   */
-  Ready = 2,
-  /**
-   * Signing transaction in Terra Station
-   */
-  Posting = 3,
-  /**
-   * Broadcasting
-   */
-  Broadcasting = 4,
-  /**
-   * Successful
-   */
-  Successful = 5,
-  /**
-   * Failed
-   */
-  Failed = 6,
-}
 export const useTransaction = () => {
   const toast = useToast()
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
@@ -245,7 +216,7 @@ export const useTransaction = () => {
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash === null) {
+      if (!txHash) {
         return null
       }
       return signingClient?.getTx(txHash)
@@ -286,7 +257,7 @@ export const useTransaction = () => {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
       } else {
-        setTxStep(TxStep.Successful)
+        setTxStep(TxStep.Success)
       }
     }
   }, [txInfo, txHash, error])

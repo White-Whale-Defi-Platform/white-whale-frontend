@@ -42,7 +42,7 @@ export type PoolState = {
 }
 
 type TokenInfo = {
-  token_info: {}
+  token_info: any
 }
 
 export type Flow = {
@@ -258,7 +258,7 @@ export const useQueryPoolsLiquidity = ({
       myLockedLp,
     })
 
-    function getPoolTokensValues(assets, lpTokenAmount = null) {
+    const getPoolTokensValues = (assets: any, lpTokenAmount = null) => {
       const tokenASymbol =
         tokenA?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
         tokenA?.symbol === B_WHALE_TOKEN_SYMBOL
@@ -272,8 +272,8 @@ export const useQueryPoolsLiquidity = ({
       return {
         tokenAmount: lpTokenAmount ?? assets[1] + assets[0],
         dollarValue:
-          Number(fromChainAmount(assets[0])) * prices?.[tokenASymbol] +
-          Number(fromChainAmount(assets[1])) * prices?.[tokenBSymbol],
+          (Number(fromChainAmount(assets[0])) * (prices?.[tokenASymbol] || 0)) +
+          (Number(fromChainAmount(assets[1])) * (prices?.[tokenBSymbol] || 0)),
       }
     }
 
@@ -347,7 +347,7 @@ export const useQueryPoolsLiquidity = ({
     refetchOnMount: false as const,
     refetchInterval: refetchInBackground
       ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
-      : undefined,
+      : null,
     refetchIntervalInBackground: refetchInBackground,
 
     async queryFn() {
@@ -367,7 +367,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
 
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]
-    return pool ? [pool] : undefined
+    return pool ? [pool] : null
   }, [poolId, poolsListResponse])
 
   const [poolResponse] = useQueryPoolsLiquidity({

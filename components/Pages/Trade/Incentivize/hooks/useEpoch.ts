@@ -1,17 +1,16 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { useChain } from '@cosmos-kit/react-lite'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-import { useClients } from '../../../../../hooks/useClients'
 dayjs.extend(utc)
 interface Epoch {
   available: {
@@ -100,47 +99,22 @@ const useEpoch = () => {
     }),
     enabled: Boolean(contracts) && Boolean(cosmWasmClient),
   })
-
-  const checkLocalAndUTC = () => {
-    // Get the current local date
-    const currentLocalDate = dayjs()
-
-    // Get the current UTC date
-    const currentUTCDate = dayjs().utc()
-
-    // Check if local date is still the same and UTC date is one day forward
-    const isSameLocalDate = currentUTCDate.isSame(dayjs(), 'day')
-    // Const isUTCOneDayForward = currentUTCDate.isAfter(currentLocalDate.add(1, 'day'), 'day');
-
-    // Get yesterday's date
-    const yesterday = currentUTCDate.subtract(1, 'day')
-
-    return isSameLocalDate ? yesterday : currentLocalDate
-  }
-
   const dateToEpoch = (givenDate) => {
     if (!data?.epoch?.id || !config?.epoch_config?.duration || !givenDate) {
       return null
     }
 
-    const epochStartTimeInMillis = Number(data?.epoch?.start_time) / 1_000_000
     const epochDurationInMillis =
       Number(config?.epoch_config?.duration) / 1_000_000
     const currentEpoch = Number(data?.epoch?.id)
 
     const now = dayjs().utc()
 
-    // Convert the epoch start time to a dayjs instance in UTC
-    const startTime = dayjs.utc(epochStartTimeInMillis)
-
     // Convert the given date to a dayjs instance in local time
     const givenDateTime = dayjs(givenDate).utc()
 
     // Const timestampDiffNew = givenDateTime.valueOf() - now.valueOf();
     const timestampDiffNew = givenDateTime.diff(now, 'millisecond')
-
-    // Calculate the timestamp difference between the given date and epoch start time
-    const timestampDiff = givenDateTime.valueOf() - startTime.valueOf()
 
     const diff = Math.floor(timestampDiffNew / epochDurationInMillis)
 
@@ -170,7 +144,7 @@ const useEpoch = () => {
 
     // Calculate the timestamp of the given epoch
     const givenTimestamp =
-      startTime.valueOf() + (givenEpoch - currentEpoch) * epochDuration
+      startTime.valueOf() + ((givenEpoch - currentEpoch) * epochDuration)
 
     // Convert the timestamp to a dayjs instance in local time
     const givenEpochDate = dayjs(givenTimestamp).local()

@@ -43,13 +43,13 @@ const useSimulate = ({
 
       setTxState({
         txStep: TxStep.Estimating,
-        txHash: undefined,
+        txHash: null,
         error: null,
         buttonLabel: null,
       })
 
       return signingClient?.simulate(
-        address, msgs!, undefined,
+        address, msgs, null,
       )
     },
     onSuccess: (data) => {
@@ -63,13 +63,13 @@ const useSimulate = ({
       const message = parseError(error)
       setTxState({
         txStep: TxStep.Idle,
-        txHash: undefined,
+        txHash: null,
         error: message,
         buttonLabel: message,
       })
       onError?.(error)
     },
-    enabled: msgs?.length > 0 && Boolean(connected) && Number(amount) > 0,
+    enabled: Boolean(msgs) && msgs?.length > 0 && Boolean(connected) && Number(amount) > 0,
     retry: false,
   })
 

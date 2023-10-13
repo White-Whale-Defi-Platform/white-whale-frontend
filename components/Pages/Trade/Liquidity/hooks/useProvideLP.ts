@@ -91,10 +91,10 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     const decimals = reverse ? tokenInfoB?.decimals : tokenInfoA?.decimals
     const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0
     const tokenA = num(tokenAReserve).
-      div(10 ** tokenInfoA?.decimals).
+      div(10 ** tokenInfoA.decimals).
       toNumber()
     const tokenB = num(tokenBReserve).
-      div(10 ** tokenInfoB?.decimals).
+      div(10 ** tokenInfoB.decimals).
       toNumber()
     const ratio = reverse ? num(tokenA).div(tokenB) : num(tokenB).div(tokenA)
     return num(normalizedValue).times(ratio.toNumber()).

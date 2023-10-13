@@ -49,7 +49,7 @@ export const useWithdrawTransaction = ({
   const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', amount, debouncedMsgs, error],
+    ['fee', amount, debouncedMsgs, error, signingClient],
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
@@ -201,7 +201,7 @@ export const useWithdrawTransaction = ({
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     async () => {
-      if (txHash === null) {
+      if (!txHash) {
         return null
       }
 

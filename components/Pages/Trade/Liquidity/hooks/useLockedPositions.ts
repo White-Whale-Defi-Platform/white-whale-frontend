@@ -92,7 +92,7 @@ export const fetchPositions = async ({
         })
         const assets = pool_assets.map((asset, i) => {
           const assetAmount = fromChainAmount(lpAssets[i], asset.decimals)
-          const dollarValue = Number(assetAmount) * prices?.[asset.symbol] || 0
+          const dollarValue = Number(assetAmount) * (prices?.[asset.symbol] || 0)
           return {
             ...asset,
             amount: parseFloat(assetAmount),

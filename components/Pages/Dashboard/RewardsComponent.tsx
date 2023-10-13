@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingActionTooltip'
-import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
+import useTransaction from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import {
   Config,
   useConfig,
@@ -21,6 +21,7 @@ import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
 
 import { ActionType } from './BondingOverview'

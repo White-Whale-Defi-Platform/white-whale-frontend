@@ -1,6 +1,5 @@
-import { EndpointOptions } from '@cosmos-kit/core'
 
-export const endpointOptions: EndpointOptions = {
+export const endpointOptions = {
   isLazy: true,
   endpoints: {
     migaloo: {

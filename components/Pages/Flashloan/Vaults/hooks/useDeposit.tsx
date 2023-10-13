@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
 
+import { useChain } from '@cosmos-kit/react-lite'
 import { createDepostExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
 import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
+import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
@@ -16,8 +18,10 @@ type DepostProps = {
   vaultAddress: string
 }
 
-const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
-  const { address, client } = useRecoilValue(chainState)
+const useDeposit = ({ vaultAddress, token, onSuccess }: DepostProps) => {
+  const { walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -42,7 +46,7 @@ const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
     denom: tokenInfo?.denom,
     contractAddress: vaultAddress,
     enabled: Boolean(encodedMsgs),
-    client,
+    signingClient,
     senderAddress: address,
     msgs,
     encodedMsgs,
@@ -53,4 +57,4 @@ const useDepost = ({ vaultAddress, token, onSuccess }: DepostProps) => {
   return { tx }
 }
 
-export default useDepost
+export default useDeposit
