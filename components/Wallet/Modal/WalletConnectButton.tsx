@@ -9,7 +9,7 @@ import { ShellWalletIcon } from 'components/Icons/ShellWalletIcon'
 import { TerraStationWalletIcon } from 'components/Icons/TerraStationWalletIcon'
 import { WalletConnectIcon } from 'components/Icons/WalletConnectIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { ACTIVE_NETWORKS, ChainId } from 'constants/networks'
+import { ACTIVE_NETWORKS } from 'constants/networks'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -52,14 +52,13 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         }
       }
     }
-    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) && (chainId === ChainId.injective || chainId === ChainId.terrac)) {
-      const windowConnection = walletType === WalletType.terraExtension ? window.station.keplr : window.keplr
+    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension)) {
+      const windowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
       try {
         await (windowConnection.getKey(chainId))
       } catch (e) {
         err = true
         console.error(`${chainId} not activated`)
-        console.error(e);
         handleChainActivationError(chainName, toast);
       }
     }
@@ -67,7 +66,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       connect()
     }
     onCloseModal()
-  }, [onCloseModal, connect])
+  }, [onCloseModal, connect, walletType])
 
   const renderContent = () => {
     switch (walletType) {

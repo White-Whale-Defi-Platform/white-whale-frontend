@@ -67,8 +67,7 @@ const Wallet = () => {
       setWalletChains(snapChainIds);
       setCurrentConnectedChainIds(snapChainIds);
     } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
-      const walletWindowConnection =
-        walletType === WalletType.terraExtension ? window.station.keplr : window.keplr;
+      const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr);
 
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints();
@@ -191,7 +190,7 @@ const Wallet = () => {
     setTokenSwapState(newState)
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
-      if (!(window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) === WalletType.leapSnap)) {
+      if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) !== WalletType.leapSnap && window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) !== WalletType.terraExtension) {
         await newChain.connect()
       } else {
         resetWallet()
