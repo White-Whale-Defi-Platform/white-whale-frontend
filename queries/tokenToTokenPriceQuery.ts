@@ -19,14 +19,14 @@ type TokenToTokenPriceQueryArgs = {
   id?: string
 }
 
-export async function tokenToTokenPriceQueryWithPools({
+export const tokenToTokenPriceQueryWithPools = async ({
   matchingPools,
   tokenA,
   tokenB,
   amount,
   cosmWasmClient,
   id,
-}: TokenToTokenPriceQueryArgs): Promise<number | undefined> {
+}: TokenToTokenPriceQueryArgs): Promise<number> => {
   if (tokenA?.symbol === tokenB?.symbol) {
     return 1
   }

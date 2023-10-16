@@ -4,9 +4,9 @@ import { Button, useMediaQuery, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import Finder from 'components/Finder'
 import useDeposit from 'components/Pages/Flashloan/Vaults/hooks/useDeposit'
-import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 
 type Props = {
   isWalletConnected: boolean

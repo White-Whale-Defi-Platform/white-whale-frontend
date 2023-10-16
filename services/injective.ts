@@ -13,13 +13,12 @@ import {
   ChainRestAuthApi,
   ChainRestBankApi,
   ChainRestTendermintApi,
+  MsgExecuteContract,
   TxRaw,
   TxRestClient,
   createTransaction,
   createTxRawFromSigResponse,
 } from '@injectivelabs/sdk-ts'
-import { MsgExecuteContract } from '@injectivelabs/sdk-ts'
-import { AccountDetails } from '@injectivelabs/sdk-ts/dist/types/auth'
 import { ChainId } from '@injectivelabs/ts-types'
 import {
   BigNumberInBase,
@@ -49,7 +48,7 @@ type SimulateResponse = {
   }
 }
 
-const getKey = async (wallet, chainId) => {
+const getKey = async (wallet: string, chainId: ChainId) => {
   switch (wallet) {
     case 'cosmostation':
       // @ts-ignore
@@ -125,11 +124,7 @@ class Injective {
     return this.chainId
   }
 
-  async getTx(txHash: string) {
-    return this.txClient.fetchTx(txHash)
-  }
-
-  async signAndBroadcast(signerAddress: string, messages: EncodeObject[]) {
+  async signAndBroadcast(messages: EncodeObject[]) {
     try {
       this.txRaw = null
       const { txRaw } = await this.prepair(messages)
@@ -236,7 +231,7 @@ class Injective {
   }
 
   async queryContractSmart(address: string, queryMsg: Record<string, unknown>) {
-    return this.wasmApi.
+    return await this.wasmApi.
       fetchSmartContractState(address,
         Buffer.from(JSON.stringify(queryMsg)).toString('base64')).
       then(({ data }) => base64ToJson(data as string))
@@ -244,8 +239,8 @@ class Injective {
 
   async getTxRawFromJson(
     message: Record<string, unknown>,
-    contractAddress,
-    funds,
+    contractAddress: string,
+    funds: any[],
   ) {
     await this.init()
     const restEndpoint = getNetworkEndpoints(this.network).rest

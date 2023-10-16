@@ -23,7 +23,7 @@ export type RewardsInfoResponse = {
   }
 }
 
-export const getRewardsInfo = async (rewardsAddress: string,
+export const getRewardsInfo = (rewardsAddress: string,
   client: CosmWasmClient): Promise<RewardsInfoResponse> => {
   const msg = { info: {} }
   return client.queryContractSmart(rewardsAddress, msg)

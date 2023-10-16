@@ -1,8 +1,6 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
-import { createExecuteMessage } from 'util/messages/index'
-import { createIncreaseAllowanceMessage } from 'util/messages/index'
-
-export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
+import { toBase64 } from 'util/conversion/index'
+import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages/index'
 
 export const createWithdrawMsg = ({ amount, vaultAddress }) => ({
   send: {

@@ -1,5 +1,5 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { protectAgainstNaN } from 'junoblocks'
+import { protectAgainstNaN } from 'util/conversion/index'
 
 type QueryLiquidityBalanceArgs = {
   address: string
@@ -29,5 +29,6 @@ export const queryLiquidityBalance = async ({
     return protectAgainstNaN(balance)
   } catch (e) {
     console.error('Cannot get liquidity balance:', e)
+    return null
   }
 }

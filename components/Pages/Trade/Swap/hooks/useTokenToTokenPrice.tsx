@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query'
 
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
+import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import { TokenInfo } from 'queries/usePoolsListQuery'
@@ -23,7 +24,9 @@ export const useTokenToTokenPriceQuery = ({
   enabled = true,
   refetchInBackground,
 }: UseTokenPairsPricesArgs) => {
-  const { client } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
+
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const tokenA = useTokenInfo(tokenASymbol)
   const tokenB = useTokenInfo(tokenBSymbol)
@@ -36,19 +39,21 @@ export const useTokenToTokenPriceQuery = ({
       `tokenToTokenPrice/${tokenBSymbol}/${tokenASymbol}/${tokenAmount}`,
       tokenAmount,
     ],
-    async queryFn() {
+    queryFn() {
       if (tokenA && tokenB && matchingPools) {
         return tokenToTokenPriceQueryWithPools({
           matchingPools,
           tokenA,
           tokenB,
-          client,
+          cosmWasmClient,
           amount: tokenAmount,
         })
+      } else {
+        return null
       }
     },
     enabled: Boolean(enabled &&
-        client &&
+        cosmWasmClient &&
         matchingPools &&
         tokenA &&
         tokenB &&
@@ -57,7 +62,7 @@ export const useTokenToTokenPriceQuery = ({
     refetchOnMount: 'always' as const,
     refetchInterval: refetchInBackground
       ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
-      : undefined,
+      : null,
     refetchIntervalInBackground: Boolean(refetchInBackground),
   })
 }

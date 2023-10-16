@@ -45,3 +45,17 @@ export type TokenItemState = {
   amount: number
   decimals: number
 }
+
+export type Asset = {
+  asset: string
+  icon: string
+  contract: string
+  amount: string | number
+  balance: number
+}
+
+export type CW20AssetInfo = { token: { contract_addr: string } }
+export type NativeAssetInfo = { native_token: { denom: string } }
+
+export type AssetInfo = CW20AssetInfo | NativeAssetInfo
+

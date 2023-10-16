@@ -3,11 +3,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button, VStack, useToast } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import Finder from 'components/Finder'
-import { TxStep } from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import useWithdraw from 'components/Pages/Flashloan/Vaults/hooks/useWithdraw'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 
 type Props = {
   isWalletConnected: boolean
@@ -67,9 +67,9 @@ const WithdrawForm = ({
     return 'Withdraw'
   }, [tx?.buttonLabel, isWalletConnected, token])
 
-  const onSubmit = async (event) => {
+  const onSubmit = (event) => {
     event?.preventDefault()
-    await tx?.submit()
+    tx?.submit()
   }
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const WithdrawForm = ({
           tx?.txStep === TxStep.Posting ||
           tx?.txStep === TxStep.Broadcasting
         }
-        disabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
+        disabled={tx.txStep !== TxStep.Ready && isWalletConnected}
       >
         {buttonLabel}
       </Button>

@@ -5,12 +5,11 @@ import { useTokenList } from 'hooks/useTokenList'
 import { num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { toAssetInfo } from 'services/asset'
+import { toBase64 } from 'util/conversion/index'
 import { createExecuteMessage } from 'util/messages/index'
 
-export const toBase64 = (obj: object) => Buffer.from(JSON.stringify(obj)).toString('base64')
-
 const buildRoute = (
-  graph, start, end,
+  graph: { [x: string]: any[] }, start: any, end: any,
 ) => {
   if (!start || !end) {
     return []
@@ -41,11 +40,11 @@ const createRouteMessage = (
   }
 
   const operations = route.map(([offerAsset, askAsset]) => {
-    const offer_asset_info = toAssetInfo(offerAsset?.denom, offerAsset?.native)
-    const ask_asset_info = toAssetInfo(askAsset?.denom, askAsset?.native)
+    const offerAssetInfo = toAssetInfo(offerAsset?.denom, offerAsset?.native)
+    const askAssetInfo = toAssetInfo(askAsset?.denom, askAsset?.native)
     return {
-      terra_swap: { offer_asset_info,
-        ask_asset_info },
+      terra_swap: { offer_asset_info: offerAssetInfo,
+        ask_asset_info: askAssetInfo },
     }
   })
 
@@ -126,7 +125,9 @@ const useRoute = ({
     const pools = poolsList?.pools?.map(({ pool_id }) => pool_id)
     const tokens = tokenList?.tokens?.map(({ symbol }) => symbol)
 
-    tokens && tokens.forEach((token) => (graph[token] = []))
+    if (tokens) {
+      tokens.forEach((token) => (graph[token] = []))
+    }
     // NULL_POINTER check for pools
     if (!pools) {
       return {

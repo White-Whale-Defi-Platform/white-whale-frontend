@@ -29,12 +29,12 @@ export const getPairInfos = async (chain: string): Promise<EnigmaPoolResponse[]>
   if (!chain) {
     return []
   }
-  chain = chain === 'inj' ? 'injective' : chain
-  const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${chain}/all/current`
+  const adjustedChain = chain === 'inj' ? 'injective' : chain
+  const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${adjustedChain}/all/current`
 
-  async function fetchWithRetry(
+  const fetchWithRetry = async (
     url, retries = 5, interval = 3000,
-  ) {
+  ) => {
     while (retries) {
       const response = await fetch(url)
 
@@ -43,7 +43,9 @@ export const getPairInfos = async (chain: string): Promise<EnigmaPoolResponse[]>
       }
 
       console.log('Retrying...')
-      await new Promise((resolve) => setTimeout(resolve, interval))
+      await new Promise((resolve) => {
+        setTimeout(resolve, interval)
+      })
       retries--
     }
 

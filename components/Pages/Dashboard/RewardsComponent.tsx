@@ -22,7 +22,7 @@ import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/ho
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
-import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
+import { nanoToMilli, useCalculateRewardDurationString } from 'util/conversion/timeUtil'
 
 import { ActionType } from './BondingOverview'
 
@@ -162,7 +162,7 @@ const RewardsComponent = ({
     return 'Claim'
   }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
-  const durationString = calculateRewardDurationString(epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
+  const durationString = useCalculateRewardDurationString(epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
     genesisStartTimeInNano)
 
   const progress = Math.min((passedTimeSinceCurrentEpochStartedInMilli / epochDurationInMilli) * 100,

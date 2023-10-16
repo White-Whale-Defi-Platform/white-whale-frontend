@@ -1,6 +1,7 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
-import { convertMicroDenomToDenom, nanoToMilli } from 'util/conversion'
+import { convertMicroDenomToDenom } from 'util/conversion'
+import { nanoToMilli } from 'util/conversion/timeUtil'
 
 import { Config } from './useDashboardData'
 
@@ -39,7 +40,7 @@ const fetchUnbonding = async (
   client: CosmWasmClient,
   address: string,
   config: Config,
-): Promise<UnbondingInfo[]> => await Promise.all(Object.entries(config.bonding_tokens).map(async ([key, token]) => client.queryContractSmart(config.whale_lair, {
+): Promise<UnbondingInfo[]> => await Promise.all(Object.entries(config.bonding_tokens).map(async ([_, token]) => await client.queryContractSmart(config.whale_lair, {
   unbonding: { address,
     denom: token.denom },
 })))

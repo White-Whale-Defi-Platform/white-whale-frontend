@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
+import { lastClaimed } from 'util/conversion/numberUtil'
 
 type Props = {
   dollarValue: string
@@ -16,15 +17,7 @@ export const RewardsTooltip = ({
   daysSinceLastClaim,
 }: Props) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
-  const lastClaimed = () => {
-    if (daysSinceLastClaim >= 21) {
-      return '21+ days ago'
-    } else if (daysSinceLastClaim === 0) {
-      return 'Today'
-    }
-    const multiple = daysSinceLastClaim === 1 ? '' : 's'
-    return `${daysSinceLastClaim} day${multiple} ago`
-  }
+
   const TokenDetail = () => (
     <HStack justify="space-between" direction="row" width="full" px={2}>
       <Text color="whiteAlpha.600" fontSize={14}>
@@ -63,7 +56,7 @@ export const RewardsTooltip = ({
               <Text color="whiteAlpha.600" fontSize={14}>
                 {'Last Claimed'}
               </Text>
-              <Text fontSize={14}>{lastClaimed()}</Text>
+              <Text fontSize={14}>{lastClaimed(daysSinceLastClaim)}</Text>
             </HStack>
           </VStack>
         ) : null

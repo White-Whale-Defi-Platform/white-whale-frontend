@@ -1,4 +1,5 @@
-import { AssetInfo } from 'types'
+import { AssetInfo } from 'types/index'
+
 export const isNativeToken = (token?: string): boolean => (token ? token.startsWith('u') || token.includes('factory' || 'ibc') : false)
 export const toAssetInfo = (token: string, isNative: boolean): AssetInfo => {
   if (isNative) {
