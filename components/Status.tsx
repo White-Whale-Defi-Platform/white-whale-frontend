@@ -3,6 +3,7 @@ import { BsCircleFill } from 'react-icons/bs'
 import { useQuery } from 'react-query'
 
 import { HStack, Icon, Text } from '@chakra-ui/react'
+import { kBg } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -48,7 +49,7 @@ const Status = () => {
         as={BsCircleFill}
         color={status?.active ? '#3CCD64' : 'gray'}
         boxShadow="0px 0px 14.0801px #298F46"
-        bg="#1C1C1C"
+        bg={kBg}
         borderRadius="full"
         width="11px"
         height="11px"

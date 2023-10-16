@@ -23,6 +23,7 @@ import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
 import Overview from 'components/Pages/Trade/Liquidity/Overview'
 import WithdrawForm from 'components/Pages/Trade/Liquidity/WithdrawForm'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
@@ -119,7 +120,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
 
   useEffect(() => {
     if (poolIdFromUrl) {
-      const [tokenASymbol, tokenBSymbol] = poolIdFromUrl?.split('-')
+      const [tokenASymbol, tokenBSymbol] = poolIdFromUrl?.split('-') || []
 
       setTokenItemState([
         {
@@ -217,9 +218,9 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
       </HStack>
 
       <Box
-        background={'#1C1C1C'}
+        background={kBg}
         padding={[6, 12]}
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         width={['full']}
       >
         <Box
@@ -234,7 +235,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
               display={['flex']}
               flexWrap={['wrap']}
               justifyContent="center"
-              background={'#1C1C1C'}
+              background={kBg}
             >
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>

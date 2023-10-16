@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 
 import AssetSelectModal from './AssetSelectModal'
@@ -95,8 +96,8 @@ ref) => {
       <HStack
         width="full"
         border="1px solid rgba(255, 255, 255, 0.1)"
-        borderLeftRadius="30px"
-        borderRightRadius={['30px', 'unset']}
+        borderLeftRadius={kBorderRadius}
+        borderRightRadius={[kBorderRadius, 'unset']}
         height={12}
         paddingLeft={6}
         paddingRight={3}
@@ -121,8 +122,8 @@ ref) => {
       <HStack
         width={['full', '185px']}
         border="1px solid rgba(255, 255, 255, 0.1)"
-        borderRightRadius="30px"
-        borderLeftRadius={['30px', 'unset']}
+        borderRightRadius={kBorderRadius}
+        borderLeftRadius={[kBorderRadius, 'unset']}
         height={12}
         paddingX={2}
         justifyContent={'flex-end'}

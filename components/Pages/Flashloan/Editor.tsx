@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import styled from '@emotion/styled'
+import { kBorderRadius } from 'constants/visualComponentConstants'
 
 const JSONEditorInput = styled(Box)`
   /* dark styling of the editor */
@@ -36,7 +37,7 @@ const JSONEditorInput = styled(Box)`
     border-color: #1C1C1C;
   }
   div.jsoneditor-value.jsoneditor-string, div.jsoneditor textarea.jsoneditor-text{
-    color: color: #FAFAFA;
+    color: #FAFAFA;
   }
   .ace-jsoneditor .ace_string {
     color : #3b8aee;
@@ -75,17 +76,15 @@ type Props = {
   containerRef: any
 }
 
-function Editor({ containerRef }: Props) {
-  return (
-    <JSONEditorInput
-      ref={containerRef}
-      width="full"
-      height="full"
-      border="1px solid #FFFFFF"
-      borderRadius="30px"
-      padding="24px"
-    />
-  )
-}
+const Editor = ({ containerRef }: Props) => (
+  <JSONEditorInput
+    ref={containerRef}
+    width="full"
+    height="full"
+    border="1px solid #FFFFFF"
+    borderRadius={kBorderRadius}
+    padding="24px"
+  />
+)
 
 export default Editor

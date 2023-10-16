@@ -67,22 +67,23 @@ const getPrices = async ({
   const prices = {}
   const baseTokenPrice = coingecko?.[baseToken?.id]?.usd || 0
 
-  await asyncForEach(tokens, async (token) => {
+  await asyncForEach(async (token: { symbol: any; id: any; chain_id?: string; token_address?: string; name?: string; decimals?: number; logoURI?: string; tags?: string[]; denom?: string; native?: boolean }) => {
     const symbol = token?.symbol
 
     if (token?.id) {
       prices[symbol] = coingecko?.[token?.id]?.usd || 0
     } else {
-      const matchingPools = getMatchingPool({ token,
+      const matchingPools = getMatchingPool(<GetMatchingPoolArgs>{
+        token,
         poolsList,
-        baseToken })
+        baseToken,
+      })
 
       const { streamlinePoolBA, streamlinePoolAB } = matchingPools
 
       if (Object.keys(matchingPools)?.length > 0) {
-        const value = await tokenToTokenPriceQueryWithPools({
+        const value = await tokenToTokenPriceQueryWithPools(<any>{
           matchingPools,
-
           tokenA: streamlinePoolAB ? token : baseToken,
           tokenB: streamlinePoolBA ? token : baseToken,
           cosmWasmClient,
@@ -92,7 +93,7 @@ const getPrices = async ({
         prices[symbol] = price || 0
       }
     }
-  })
+  }, tokens)
   return prices
 }
 

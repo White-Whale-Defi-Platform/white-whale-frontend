@@ -5,6 +5,7 @@ import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
@@ -16,7 +17,7 @@ const NewPosition = () => {
   const { vaults, refetch: vaultsRefetch } = useVault()
   const params = new URLSearchParams(location.search)
   const chains: Array<any> = useChainInfos()
-  const { chainId, address, walletChainName } = useRecoilValue(chainState)
+  const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const vaultId = params.get('vault') || 'JUNOX'
 
@@ -25,17 +26,17 @@ const NewPosition = () => {
 
   useEffect(() => {
     if (chainId) {
-      const currenChain = chains.find((row) => row.chainId === chainId)
-      if (currenChain) {
+      const currentChain = chains.find((row) => row.chainId === chainId)
+      if (currentChain) {
         if (!vault) {
-          router.push(`/${currenChain.label.toLocaleLowerCase()}/vaults`)
+          router.push(`/${currentChain.label.toLocaleLowerCase()}/vaults`)
         } else {
-          router.push(`/${currenChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`)
+          router.push(`/${currentChain.label.toLowerCase()}/vaults/new_position?vault=${vaultId}`)
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, address, chains, vault])
+  }, [chainId, chains, vault])
 
   const edgeTokenList = useMemo(() => vaults?.vaults.map(({ vault_assets }) => vault_assets?.symbol),
     [vaults])
@@ -83,10 +84,10 @@ const NewPosition = () => {
         </Text>
       </HStack>
       <Box
-        background={'#1C1C1C'}
+        background={kBg}
         padding={[6, 12]}
         paddingTop={[10]}
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         width={['full']}
       >
         <Box pt="8" maxW="600px" maxH="fit-content">

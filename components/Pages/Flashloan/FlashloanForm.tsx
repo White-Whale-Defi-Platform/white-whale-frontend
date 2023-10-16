@@ -21,6 +21,8 @@ import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
 
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
+
 const defaultJson = {
   flash_loan: {
     assets: [],
@@ -135,12 +137,12 @@ const FlashloanForm = () => {
       padding={10}
       width={'flex'}
       height={'600'}
-      background="#1C1C1C"
+      background={kBg}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-      borderRadius="30px"
+      borderRadius={kBorderRadius}
       display={'flex'}
     >
-      <VStack width={['300px', 'full']} height={'full'}>
+      <VStack width={[kBorderRadius, 'full']} height={'full'}>
         <HStack
           width="full"
           justifyContent="space-between"

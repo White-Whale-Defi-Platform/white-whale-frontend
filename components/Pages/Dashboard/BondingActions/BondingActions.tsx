@@ -7,7 +7,7 @@ import Loader from 'components/Loader'
 import { Bond, BondingTokenState } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { bondingAtom } from 'components/Pages/Dashboard/BondingActions/bondAtoms'
 import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingActionTooltip'
-import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
+import useTransaction from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import Unbond from 'components/Pages/Dashboard/BondingActions/Unbond'
 import Withdraw from 'components/Pages/Dashboard/BondingActions/Withdraw'
 import { ActionType } from 'components/Pages/Dashboard/BondingOverview'
@@ -17,10 +17,12 @@ import {
   useConfig,
   useDashboardData,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 
 const BondingActions = ({ globalAction }) => {
   const { chainId, network, chainName, walletChainName } = useRecoilValue(chainState)
@@ -83,12 +85,12 @@ const BondingActions = ({ globalAction }) => {
       <Button
         sx={{
           '&:hover': {
-            backgroundColor: '#1C1C1C',
+            backgroundColor: kBg,
             color: '#6ACA70',
           },
         }}
         color={globalAction === action ? 'white' : 'grey'}
-        bg={'#1C1C1C'}
+        bg={kBg}
         fontSize={20}
         px={3}
         transform="translate(0%, -55%)"
@@ -149,8 +151,8 @@ const BondingActions = ({ globalAction }) => {
       {isLoading && isWalletConnected ? (
         <VStack
           width="full"
-          background={'#1C1C1C'}
-          borderRadius={'30px'}
+          background={kBg}
+          borderRadius={kBorderRadius}
           justifyContent="center"
           top={70}
           minH={280}
@@ -176,8 +178,8 @@ const BondingActions = ({ globalAction }) => {
       ) : (
         <VStack
           width="full"
-          background={'#1C1C1C'}
-          borderRadius={'30px'}
+          background={kBg}
+          borderRadius={kBorderRadius}
           alignItems="flex-start"
           verticalAlign="flex-start"
           top={70}
@@ -192,7 +194,7 @@ const BondingActions = ({ globalAction }) => {
         >
           <Box
             border="0.5px solid grey"
-            borderRadius="30px"
+            borderRadius={kBorderRadius}
             minH={160}
             width={'90%'}
             alignSelf="center"

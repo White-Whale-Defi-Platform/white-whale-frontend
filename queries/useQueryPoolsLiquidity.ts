@@ -12,6 +12,7 @@ import {
   POOL_REWARDS_ENABLED,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
+import { IncentiveState } from 'constants/state'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
@@ -51,7 +52,7 @@ export type Flow = {
   startTime: number
   flowId: number
   amount: string
-  state: 'active' | 'over'
+  state: IncentiveState.active | IncentiveState.over
 }
 
 export type PoolLiquidityState = {
@@ -195,11 +196,11 @@ export const useQueryPoolsLiquidity = ({
             const getState = () => {
               switch (true) {
                 case currentEpoch >= startEpoch && currentEpoch < endEpoch:
-                  return 'active'
+                  return IncentiveState.active
                 case currentEpoch < startEpoch:
-                  return 'upcoming'
+                  return IncentiveState.upcoming
                 case currentEpoch >= endEpoch:
-                  return 'over'
+                  return IncentiveState.over
                 default:
                   return ''
               }

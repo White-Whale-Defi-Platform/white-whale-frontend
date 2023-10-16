@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import Create from 'components/Pages/Trade/Incentivize/Create'
 import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsOverview'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
@@ -84,10 +85,10 @@ const Incentivize: FC = () => {
       </HStack>
 
       <Box
-        background={'#1C1C1C'}
+        background={kBg}
         padding={[6, 12]}
         paddingTop={[10]}
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         width={['full']}
       >
         <Box
@@ -98,7 +99,7 @@ const Incentivize: FC = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background={'#1C1C1C'}>
+            <TabList justifyContent="center" background={kBg}>
               <Tab>Overview</Tab>
               <Tab>Create</Tab>
             </TabList>

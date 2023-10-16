@@ -19,6 +19,7 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import { kBorderRadius, kBg } from 'constants/visualComponentConstants'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
@@ -143,11 +144,6 @@ const RewardsComponent = ({
     config,
   })
 
-  // TODO global constant?
-  const boxBg = '#1C1C1C'
-  // TODO global constant ?
-  const borderRadius = '30px'
-
   const currentEpochStartDateTimeInMilli = new Date(nanoToMilli(Number(currentEpoch?.epoch?.start_time))).getTime()
 
   const passedTimeSinceCurrentEpochStartedInMilli =
@@ -174,8 +170,8 @@ const RewardsComponent = ({
   return (
     <VStack
       px={4}
-      background={boxBg}
-      borderRadius={borderRadius}
+      background={kBg}
+      borderRadius={kBorderRadius}
       alignItems="center"
       minH={320}
       width="flex"

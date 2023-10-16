@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { BsCircleFill } from 'react-icons/bs'
 import { useQueryClient } from 'react-query'
 
 import { Box, HStack, Image, ListIcon, ListItem, Text, Tooltip } from '@chakra-ui/react'
+import { kBg } from 'constants/visualComponentConstants'
 
-function ChainItem({
+const ChainItem = ({
   chain,
   index,
   onChange,
@@ -12,8 +13,7 @@ function ChainItem({
   chainList,
   active,
   walletConnected,
-}) {
-  const [isLabelOpen, setIsLabelOpen] = useState(false)
+}) => {
   const queryClient = useQueryClient()
   return (
     <Tooltip
@@ -36,12 +36,8 @@ function ChainItem({
       placement="bottom"
       closeOnClick={false}
       arrowSize={0}
-      isOpen={isLabelOpen}
     >
       <ListItem
-        onMouseEnter={() => setIsLabelOpen(true)}
-        onMouseLeave={() => setIsLabelOpen(false)}
-        onClick={() => setIsLabelOpen(!isLabelOpen)}
         justifyContent="space-between"
         display="flex"
         alignItems="center"
@@ -72,7 +68,7 @@ function ChainItem({
           as={BsCircleFill}
           color= {walletConnected ? '#3CCD64' : '#cc0000'}
           boxShadow={walletConnected ? '0px 0px 14.0801px #298F46' : '0px 0px 14.0801px #9f0000'}
-          bg="#1C1C1C"
+          bg={kBg}
           borderRadius="full"
         />
       </ListItem>

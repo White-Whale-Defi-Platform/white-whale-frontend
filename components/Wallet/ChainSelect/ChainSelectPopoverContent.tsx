@@ -7,20 +7,21 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 
 import ChainList from './ChainList/ChainList'
 import NetworkForm from './NetworkForm/NetworkForm'
 
 const ChainSelectPopoverContent = ({ onChange, onClose, currentChainState, connectedChainIds }) => (
   <PopoverContent
-    borderColor="#1C1C1C"
-    borderRadius="30px"
-    backgroundColor="#1C1C1C"
+    borderColor={kBg}
+    borderRadius={kBorderRadius}
+    backgroundColor={kBg}
     width="253px"
     marginTop={3}
   >
     <PopoverArrow
-      bg="#1C1C1C"
+      bg={kBg}
       boxShadow="unset"
       style={{ boxShadow: 'unset' }}
       sx={{ '--popper-arrow-shadow-color': '#1C1C1C' }}

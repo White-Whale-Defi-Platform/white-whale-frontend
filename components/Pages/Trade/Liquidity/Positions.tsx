@@ -2,15 +2,16 @@ import { useState } from 'react'
 
 import { Box, Button, Divider, HStack } from '@chakra-ui/react'
 import { PositionsTable } from 'components/Pages/Trade/Liquidity/PositionsTable'
+import { PositionState } from 'constants/state'
 
-const STATES = ['all', 'active', 'unbonding']
+const STATES = [PositionState.all, PositionState.active, PositionState.unbonding]
 
 type Props = {
   positions: any[]
 }
 
 export const Positions = ({ positions }: Props) => {
-  const [activeButton, setActiveButton] = useState('all')
+  const [activeButton, setActiveButton] = useState(PositionState.all)
   const [columnFilters, setColumnFilters] = useState([])
 
   return (

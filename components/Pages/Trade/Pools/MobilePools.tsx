@@ -2,6 +2,7 @@ import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { IncentiveTooltip } from 'components/InfoTooltip';
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -25,9 +26,9 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
             key={pool?.pool}
             padding={10}
             width={['full']}
-            background="#1C1C1C"
+            background={kBg}
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-            borderRadius="30px"
+            borderRadius={kBorderRadius}
             justifyContent="center"
           >
             <HStack width="full" justifyContent="space-between">

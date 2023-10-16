@@ -17,6 +17,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
 import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePosition/WithdrawForm'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { NextRouter, useRouter } from 'next/router'
@@ -97,10 +98,10 @@ const ManagePosition = () => {
       </HStack>
 
       <Box
-        background={'#1C1C1C'}
+        background={kBg}
         padding={[6, 12]}
         paddingTop={[10]}
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         width={['full']}
       >
         <Box
@@ -112,7 +113,7 @@ const ManagePosition = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background={'#1C1C1C'}>
+            <TabList justifyContent="center" background={kBg}>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
             </TabList>

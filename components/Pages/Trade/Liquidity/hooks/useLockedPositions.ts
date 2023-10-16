@@ -2,6 +2,7 @@ import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChain } from '@cosmos-kit/react-lite'
+import { PositionState } from 'constants/state'
 import dayjs from 'dayjs'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
@@ -35,11 +36,6 @@ export type Position = {
   action: null
   isOpen: boolean
   formattedTime: string
-}
-export enum PositionState {
-  unbonding = 'unbonding',
-  active = 'active',
-  unbonded = 'unbonded',
 }
 export const lpPositionToAssets = ({
   totalAssets,

@@ -15,12 +15,12 @@ import {
 import AssetInput from 'components/AssetInput/index'
 import DoubleArrowsIcon from 'components/Icons/DoubleArrowsIcon'
 import { Simulated } from 'components/Pages/Trade/Swap/hooks/useSimulate'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { TokenItemState } from 'types/index'
+import { TokenItemState, TxStep } from 'types/index'
 
 type Props = {
   isWalletConnected: boolean
@@ -228,9 +228,9 @@ const SwapForm: FC<Props> = ({
       paddingY={{ base: 14,
         md: 10 }}
       width="full"
-      background={'#1C1C1C'}
+      background={kBg}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-      borderRadius="30px"
+      borderRadius={kBorderRadius}
       alignItems="flex-start"
       minH={400}
       maxWidth={{ base: 'full',

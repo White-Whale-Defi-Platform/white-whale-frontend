@@ -1,4 +1,5 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -22,9 +23,9 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
             key={vault?.vaultId}
             padding={10}
             width={['full']}
-            background="#1C1C1C"
+            background={kBg}
             boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-            borderRadius="30px"
+            borderRadius={kBorderRadius}
             justifyContent="center"
           >
             <HStack width="full" justifyContent="space-between">

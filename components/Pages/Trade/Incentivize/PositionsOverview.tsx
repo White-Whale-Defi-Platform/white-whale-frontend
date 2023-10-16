@@ -14,6 +14,8 @@ import {
 } from '@chakra-ui/react'
 import { useClosePosition } from 'components/Pages/Trade/Incentivize/hooks/useClosePosition'
 import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
+import { IncentiveState } from 'constants/state'
+import { kBg } from 'constants/visualComponentConstants'
 import { num } from 'libs/num'
 
 type Props = {
@@ -21,7 +23,7 @@ type Props = {
   poolId: string
 }
 
-const STATES = ['all', 'active', 'upcoming', 'over']
+const STATES = [IncentiveState.all, IncentiveState.active, IncentiveState.upcoming, IncentiveState.over]
 
 const CloseAction = ({ poolId, flowId, isCreator }) => {
   const close = useClosePosition({ poolId })
@@ -53,11 +55,11 @@ const Token = ({ imgUrl, symbol }) => (
 )
 
 export const PositionsOverview = ({ flows, poolId }: Props) => {
-  const [_, setActiveButton] = useState('active')
+  const [_, setActiveButton] = useState(IncentiveState.active)
   const [columnFilters, setColumnFilters] = useState([
     {
       id: 'state',
-      value: 'active',
+      value: IncentiveState.active,
     },
   ])
   const positions = useMemo(() => flows.map((flow) => ({
@@ -106,13 +108,13 @@ export const PositionsOverview = ({ flows, poolId }: Props) => {
           display={['flex']}
           flexWrap={['wrap']}
           justifyContent="center"
-          background={'#1C1C1C'}
+          background={kBg}
         >
           {STATES.map((item) => (
             <Tab key={`tab-${item}`}
               onClick={() => {
                 setActiveButton(item)
-                setColumnFilters(item === 'all'
+                setColumnFilters(item === IncentiveState.all
                   ? []
                   : [
                     {
