@@ -30,7 +30,7 @@ type TableProps = {
   startDate: string
   endDate: string
   value: string
-  action: JSX.Element
+  action: any
   state: string
 }
 const columnHelper = createColumnHelper<TableProps>()
@@ -108,7 +108,7 @@ const PositionsTable = ({ positions, columnFilters }: Props) => {
     <TableContainer color="white" width="full">
       <Table size="md" variant="unstyled" margin="auto" width="full">
         <Thead borderBottom="1px solid rgba(255, 255, 255, 0.1)" color="gray">
-          {table?.getHeaderGroups().map((headerGroup, index) => (
+          {table?.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <Th
@@ -126,7 +126,7 @@ const PositionsTable = ({ positions, columnFilters }: Props) => {
                         <TriangleUpIcon
                           fontSize="8px"
                           color={
-                            header.column.getIsSorted() == 'asc'
+                            header.column.getIsSorted() === 'asc'
                               ? 'white'
                               : 'gray'
                           }

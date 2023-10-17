@@ -3,6 +3,7 @@ export enum PositionState {
   unbonding = 'unbonding',
   active = 'active',
   unbonded = 'unbonded',
+  withdraw = 'withdraw',
 }
 export enum IncentiveState {
   all = 'all',

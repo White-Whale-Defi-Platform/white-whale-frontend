@@ -54,7 +54,7 @@ const Token = ({ imgUrl, symbol }) => (
   </HStack>
 )
 
-export const PositionsOverview = ({ flows, poolId }: Props) => {
+export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
   const [_, setActiveButton] = useState(IncentiveState.active)
   const [columnFilters, setColumnFilters] = useState([
     {
