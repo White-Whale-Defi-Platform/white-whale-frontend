@@ -21,7 +21,7 @@ export type Position = {
   weight: string
   duration: string
   unbonding_duration: number
-  assets: TokenInfo & { dollarValue: number; assetAmount: number }[]
+  assets: TokenInfo & { dollarValue: number; amount: number }[]
   value: number
   state: string
   action: null
