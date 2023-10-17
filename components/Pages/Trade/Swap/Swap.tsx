@@ -8,13 +8,12 @@ import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SwapForm from 'components/Pages/Trade/Swap/SwapForm'
 import SwapSettings from 'components/Pages/Trade/Swap/SwapSettings'
 import { useChainInfos } from 'hooks/useChainInfo'
-import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { TokenItemState } from 'types/index'
+import { TxStep, TokenItemState } from 'types/index'
 
 type SwapProps = {
   /* Will be used if provided on first render instead of internal state */
