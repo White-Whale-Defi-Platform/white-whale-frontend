@@ -1,10 +1,9 @@
 import { Chain } from '@chain-registry/types'
 import { GasPrice } from '@cosmjs/stargate'
-import { SignerOptions } from '@cosmos-kit/core'
 
 import { ACTIVE_NETWORKS_WALLET_NAMES } from './networks'
 
-const prices = (chainName:string, chain:Chain) => {
+const getGasPrices = (chainName:string, chain:Chain) => {
   const activeChains = [...ACTIVE_NETWORKS_WALLET_NAMES.mainnet, ...ACTIVE_NETWORKS_WALLET_NAMES.testnet]
   if (activeChains.includes(chainName)) {
     const [feeTokens] = chain.fees.fee_tokens;
@@ -15,8 +14,9 @@ const prices = (chainName:string, chain:Chain) => {
       gasPrice: GasPrice.fromString(String(price) + chain.fees.fee_tokens[0].denom),
     }
   }
+  return {}
 }
-export const signerOptions: SignerOptions = {
-  signingCosmwasm: (chain: Chain) => prices(chain.chain_name, chain),
-  signingStargate: (chain: Chain) => prices(chain.chain_name, chain),
+export const signerOptions = {
+  signingCosmwasm: (chain: Chain) => getGasPrices(chain.chain_name, chain),
+  signingStargate: (chain: Chain) => getGasPrices(chain.chain_name, chain),
 }

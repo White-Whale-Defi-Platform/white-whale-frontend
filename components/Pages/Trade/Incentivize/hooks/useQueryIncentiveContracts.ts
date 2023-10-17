@@ -13,7 +13,7 @@ const fetchIncentiveContracts = async (client : CosmWasmClient,
   const data = await client.queryContractSmart(config.incentive_factory, {
     incentives: {},
   })
-  return data.map((incentive) => incentive.incentive_address)
+  return data?.map((incentive: { incentive_address: string }) => incentive.incentive_address)
 }
 
 export const useQueryIncentiveContracts = (cosmWasmClient: CosmWasmClient): Array<string> => {
@@ -26,7 +26,7 @@ export const useQueryIncentiveContracts = (cosmWasmClient: CosmWasmClient): Arra
       enabled:
         Boolean(cosmWasmClient) &&
         Boolean(config) &&
-        Boolean(config.incentive_factory),
+        Boolean(config?.incentive_factory),
     },
   )
   return data

@@ -1,7 +1,7 @@
 import { Box, Button } from '@chakra-ui/react'
 import { useClosePosition } from 'components/Pages/Trade/Liquidity/hooks/useClosePosition'
-import { PositionState } from 'components/Pages/Trade/Liquidity/hooks/useLockedPositions'
 import { useWithdrawPosition } from 'components/Pages/Trade/Liquidity/hooks/useWithdrawPosition'
+import { PositionState } from 'constants/state'
 
 export const Action = ({ item, poolId }) => {
   const close = useClosePosition({ poolId })

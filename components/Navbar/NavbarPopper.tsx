@@ -15,6 +15,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BRIDGE_NETWORK_DEFAULTS } from 'constants/index'
+import { kBg } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'
@@ -28,7 +29,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
 
   const isActiveLink = useMemo(() => {
     const [linkInAsPath] =
-      menu?.children === undefined
+      !menu?.children
         ? [asPath.includes(menu.link)]
         : (menu.children ?? []).filter((item: { link: string }) => asPath.includes(item.link))
     return Boolean(linkInAsPath)
@@ -48,7 +49,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       onOpen={
         menu.isExternal
           ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
-          : menu?.children === undefined
+          : !menu?.children
             ? () => window.location.assign(`/${currentChainName}${menu.link}`)
             : onOpen
       }
@@ -70,16 +71,16 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       </PopoverTrigger>
 
       <PopoverContent
-        borderColor="#1C1C1C"
+        borderColor={kBg}
         borderRadius="25px"
-        backgroundColor="#1C1C1C"
+        backgroundColor={kBg}
         width="auto"
       >
         <PopoverArrow
-          bg="#1C1C1C"
+          bg={kBg}
           boxShadow="unset"
           style={{ boxShadow: 'unset' }}
-          sx={{ '--popper-arrow-shadow-color': '#1C1C1C' }}
+          sx={{ '--popper-arrow-shadow-color': kBg }}
         />
         <PopoverBody px="unset">
           <VStack overflow="hidden">

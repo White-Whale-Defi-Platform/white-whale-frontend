@@ -1,6 +1,6 @@
 import { transparentize } from '@chakra-ui/theme-tools'
 
-function variantBrand(props: Record<string, any>) {
+const variantBrand = (props: Record<string, any>) => {
   const { colorScheme: c } = props
   return {
     bg: transparentize(`${c}.500`, 0.2),

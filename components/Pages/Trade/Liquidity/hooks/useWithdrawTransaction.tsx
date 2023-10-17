@@ -43,13 +43,13 @@ export const useWithdrawTransaction = ({
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
-  const [txHash, setTxHash] = useState<string | undefined>(undefined)
+  const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', amount, debouncedMsgs, error],
+    ['fee', amount, debouncedMsgs, error, signingClient],
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
@@ -200,30 +200,29 @@ export const useWithdrawTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => {
+    async () => {
       if (!txHash) {
         return null
       }
 
-      return signingClient.getTx(txHash)
+      return await signingClient.getTx(txHash)
     },
     {
-      enabled: txHash !== null,
+      enabled: txHash !== null && Boolean(signingClient),
       retry: true,
     },
   )
 
   const reset = () => {
     setError(null)
-    setTxHash(undefined)
+    setTxHash(null)
     setTxStep(TxStep.Idle)
   }
 
   const submit = useCallback(() => {
-    if (fee === null || msgs === null || msgs.length < 1) {
-      return null
+    if (!(fee === null || msgs === null || msgs.length < 1)) {
+      mutate()
     }
-    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {

@@ -12,16 +12,18 @@ import {
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingActionTooltip'
-import useTransaction, { TxStep } from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
+import useTransaction from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
+import { kBorderRadius, kBg } from 'constants/visualComponentConstants'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { calculateRewardDurationString, nanoToMilli } from 'util/conversion'
+import { TxStep } from 'types/index'
+import { nanoToMilli, useCalculateRewardDurationString } from 'util/conversion/timeUtil'
 
 import { ActionType } from './BondingOverview'
 
@@ -142,11 +144,6 @@ const RewardsComponent = ({
     config,
   })
 
-  // TODO global constant?
-  const boxBg = '#1C1C1C'
-  // TODO global constant ?
-  const borderRadius = '30px'
-
   const currentEpochStartDateTimeInMilli = new Date(nanoToMilli(Number(currentEpoch?.epoch?.start_time))).getTime()
 
   const passedTimeSinceCurrentEpochStartedInMilli =
@@ -161,7 +158,7 @@ const RewardsComponent = ({
     return 'Claim'
   }, [isWalletConnected, globalAvailableRewards, claimableRewards])
 
-  const durationString = calculateRewardDurationString(epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
+  const durationString = useCalculateRewardDurationString(epochDurationInMilli - passedTimeSinceCurrentEpochStartedInMilli,
     genesisStartTimeInNano)
 
   const progress = Math.min((passedTimeSinceCurrentEpochStartedInMilli / epochDurationInMilli) * 100,
@@ -173,8 +170,8 @@ const RewardsComponent = ({
   return (
     <VStack
       px={4}
-      background={boxBg}
-      borderRadius={borderRadius}
+      background={kBg}
+      borderRadius={kBorderRadius}
       alignItems="center"
       minH={320}
       width="flex"

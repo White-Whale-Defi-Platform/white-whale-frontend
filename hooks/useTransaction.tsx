@@ -3,40 +3,10 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
+import { TxStep } from 'types/index'
 
 import Finder from '../components/Finder'
 import useDebounceValue from './useDebounceValue'
-
-export enum TxStep {
-  /**
-   * Idle
-   */
-  Idle = 0,
-  /**
-   * Estimating fees
-   */
-  Estimating = 1,
-  /**
-   * Ready to post transaction
-   */
-  Ready = 2,
-  /**
-   * Signing transaction in Terra Station
-   */
-  Posting = 3,
-  /**
-   * Broadcasting
-   */
-  Broadcasting = 4,
-  /**
-   * Succesful
-   */
-  Success = 5,
-  /**
-   * Failed
-   */
-  Failed = 6,
-}
 
 type Params = {
   enabled: boolean
@@ -74,7 +44,7 @@ export const useTransaction = ({
   const queryClient = useQueryClient()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
-  const [txHash, setTxHash] = useState<string | undefined>(undefined)
+  const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
 
@@ -94,15 +64,15 @@ export const useTransaction = ({
         return response
       } catch (err) {
         if (
-          (/insufficient funds/i).test(err.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(err.toString())
+          (/insufficient funds/u).test(err.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(err.toString())
         ) {
           console.error(err)
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if ((/Max spread assertion/i).test(err.toString())) {
+        } else if ((/Max spread assertion/u).test(err.toString())) {
           console.error(err)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
@@ -158,15 +128,15 @@ export const useTransaction = ({
       let message = ''
       console.error(e?.toString())
       if (
-        (/insufficient funds/i).test(e?.toString()) ||
-          (/Overflow: Cannot Sub with/i).test(e?.toString())
+        (/insufficient funds/u).test(e?.toString()) ||
+          (/Overflow: Cannot Sub with/u).test(e?.toString())
       ) {
         setError('Insufficient Funds')
         message = 'Insufficient Funds'
-      } else if ((/Max spread assertion/i).test(e?.toString())) {
+      } else if ((/Max spread assertion/u).test(e?.toString())) {
         setError('Try increasing slippage')
         message = 'Try increasing slippage'
-      } else if ((/Request rejected/i).test(e?.toString())) {
+      } else if ((/Request rejected/u).test(e?.toString())) {
         setError('User Denied')
         message = 'User Denied'
       } else {
@@ -227,16 +197,14 @@ export const useTransaction = ({
 
   const reset = () => {
     setError(null)
-    setTxHash(undefined)
+    setTxHash(null)
     setTxStep(TxStep.Idle)
   }
 
-  const submit = useCallback(async () => {
-    if (fee === null || msgs === null || msgs.length < 1) {
-      return null
+  const submit = useCallback(() => {
+    if (!(fee === null || msgs === null || msgs.length < 1)) {
+      mutate()
     }
-
-    mutate()
   }, [msgs, fee, mutate])
 
   useEffect(() => {

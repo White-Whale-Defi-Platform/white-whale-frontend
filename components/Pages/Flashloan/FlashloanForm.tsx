@@ -13,13 +13,15 @@ import {
 import { useChain } from '@cosmos-kit/react-lite'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 
 import Editor from './Editor'
 import useFlashloan from './hooks/useFlashloan'
-import { TxStep } from './hooks/useTransaction'
 import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
+
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 
 const defaultJson = {
   flash_loan: {
@@ -135,12 +137,12 @@ const FlashloanForm = () => {
       padding={10}
       width={'flex'}
       height={'600'}
-      background="#1C1C1C"
+      background={kBg}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-      borderRadius="30px"
+      borderRadius={kBorderRadius}
       display={'flex'}
     >
-      <VStack width={['300px', 'full']} height={'full'}>
+      <VStack width={[kBorderRadius, 'full']} height={'full'}>
         <HStack
           width="full"
           justifyContent="space-between"
@@ -171,8 +173,8 @@ const FlashloanForm = () => {
               width={60}
               isLoading={
                 // Tx?.txStep == TxStep.Estimating ||
-                tx?.txStep == TxStep.Posting ||
-                tx?.txStep == TxStep.Broadcasting
+                tx?.txStep === TxStep.Posting ||
+                tx?.txStep === TxStep.Broadcasting
               }
               disabled={Boolean(error) || !isWalletConnected}
             >

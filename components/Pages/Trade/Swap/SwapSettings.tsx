@@ -18,6 +18,7 @@ import {
   useBoolean,
 } from '@chakra-ui/react'
 import { slippageAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useRecoilState } from 'recoil'
 
 const SwapSettings = () => {
@@ -65,7 +66,7 @@ const SwapSettings = () => {
         />
       </PopoverTrigger>
       <PopoverContent
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         borderColor="black"
         backgroundColor="black"
       >
@@ -100,7 +101,7 @@ const SwapSettings = () => {
                 <Input
                   type="number"
                   variant="unstyled"
-                  borderRadius="30px"
+                  borderRadius={kBorderRadius}
                   placeholder="Custom"
                   color="brand.500"
                   // BorderColor="rgba(255, 255, 255, 0.1)"
@@ -113,8 +114,9 @@ const SwapSettings = () => {
                   color={slippage === 0 ? '#718096' : 'brand.500'}
                   paddingBottom="10px"
                   pointerEvents="none"
-                  children="%"
-                />
+                >
+                  %
+                </InputRightElement>
               </InputGroup>
             </HStack>
             <HStack width="full" justifyContent="end">

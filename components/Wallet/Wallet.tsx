@@ -69,7 +69,6 @@ const Wallet = () => {
     } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
       const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr);
 
-
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints();
         return chainInfos.map((chain: { chainId: string }) => chain.chainId);

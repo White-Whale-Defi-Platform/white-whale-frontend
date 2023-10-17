@@ -12,6 +12,7 @@ import {
   POOL_REWARDS_ENABLED,
   WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
+import { IncentiveState } from 'constants/state'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
@@ -42,7 +43,7 @@ export type PoolState = {
 }
 
 type TokenInfo = {
-  token_info: {}
+  token_info: any
 }
 
 export type Flow = {
@@ -51,7 +52,7 @@ export type Flow = {
   startTime: number
   flowId: number
   amount: string
-  state: 'active' | 'over'
+  state: IncentiveState.active | IncentiveState.over
 }
 
 export type PoolLiquidityState = {
@@ -195,11 +196,11 @@ export const useQueryPoolsLiquidity = ({
             const getState = () => {
               switch (true) {
                 case currentEpoch >= startEpoch && currentEpoch < endEpoch:
-                  return 'active'
+                  return IncentiveState.active
                 case currentEpoch < startEpoch:
-                  return 'upcoming'
+                  return IncentiveState.upcoming
                 case currentEpoch >= endEpoch:
-                  return 'over'
+                  return IncentiveState.over
                 default:
                   return ''
               }
@@ -258,7 +259,7 @@ export const useQueryPoolsLiquidity = ({
       myLockedLp,
     })
 
-    function getPoolTokensValues(assets, lpTokenAmount = null) {
+    const getPoolTokensValues = (assets: any, lpTokenAmount = null) => {
       const tokenASymbol =
         tokenA?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
         tokenA?.symbol === B_WHALE_TOKEN_SYMBOL
@@ -272,8 +273,8 @@ export const useQueryPoolsLiquidity = ({
       return {
         tokenAmount: lpTokenAmount ?? assets[1] + assets[0],
         dollarValue:
-          Number(fromChainAmount(assets[0])) * prices?.[tokenASymbol] +
-          Number(fromChainAmount(assets[1])) * prices?.[tokenBSymbol],
+          (Number(fromChainAmount(assets[0])) * (prices?.[tokenASymbol] || 0)) +
+          (Number(fromChainAmount(assets[1])) * (prices?.[tokenBSymbol] || 0)),
       }
     }
 
@@ -347,7 +348,7 @@ export const useQueryPoolsLiquidity = ({
     refetchOnMount: false as const,
     refetchInterval: refetchInBackground
       ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
-      : undefined,
+      : null,
     refetchIntervalInBackground: refetchInBackground,
 
     async queryFn() {
@@ -367,7 +368,7 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
 
   const poolToFetch = useMemo(() => {
     const pool = poolsListResponse?.poolsById[poolId]
-    return pool ? [pool] : undefined
+    return pool ? [pool] : null
   }, [poolId, poolsListResponse])
 
   const [poolResponse] = useQueryPoolsLiquidity({

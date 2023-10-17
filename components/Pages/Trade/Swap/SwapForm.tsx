@@ -15,12 +15,12 @@ import {
 import AssetInput from 'components/AssetInput/index'
 import DoubleArrowsIcon from 'components/Icons/DoubleArrowsIcon'
 import { Simulated } from 'components/Pages/Trade/Swap/hooks/useSimulate'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
-import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num } from 'libs/num'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import { TokenItemState } from 'types/index'
+import { TokenItemState, TxStep } from 'types/index'
 
 type Props = {
   isWalletConnected: boolean
@@ -110,7 +110,7 @@ const SwapForm: FC<Props> = ({
   const [isMobile] = useMediaQuery('(max-width: 485px)')
   const [isLabelOpen, setIsLabelOpen] = useState(false)
 
-  const explainer = (input: string) => (
+  const ExplanationTooltip = (input: string) => (
     <Tooltip
       label={input}
       padding="1rem"
@@ -170,7 +170,7 @@ const SwapForm: FC<Props> = ({
       return null
     }
 
-    const e = num(tokenA?.amount).times(10 ** tokenBInfo?.decimals)
+    const e = num(tokenA?.amount).times(10 ** tokenBInfo.decimals)
     return num(simulated?.amount).div(e).
       toFixed(6)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,9 +228,9 @@ const SwapForm: FC<Props> = ({
       paddingY={{ base: 14,
         md: 10 }}
       width="full"
-      background={'#1C1C1C'}
+      background={kBg}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-      borderRadius="30px"
+      borderRadius={kBorderRadius}
       alignItems="flex-start"
       minH={400}
       maxWidth={{ base: 'full',
@@ -255,7 +255,7 @@ const SwapForm: FC<Props> = ({
               minMax={false}
               mobile={isMobile}
               disabled={isInputDisabled}
-              onChange={(value, isTokenChange) => {
+              onChange={(value, _) => {
                 setReverse(false)
                 onInputChange(value, 0)
                 field.onChange(value)
@@ -338,7 +338,7 @@ const SwapForm: FC<Props> = ({
                 <Text color="brand.500" fontSize={12}>
                   Rate
                 </Text>
-                {explainer('Swap price is calculated based on the pool price and spread')}
+                {ExplanationTooltip('Swap price is calculated based on the pool price and spread.')}
               </HStack>
               <Text color="brand.500" fontSize={12}>
                 {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
@@ -357,7 +357,7 @@ const SwapForm: FC<Props> = ({
                   <Text color="brand.500" fontSize={12}>
                     Min Receive
                   </Text>
-                  {explainer('Expected minimum quantity to be received based on the current price, maximum spread, and trading fee')}
+                  {ExplanationTooltip('Expected minimum quantity to be received based on the current price, maximum spread, and trading fee')}
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
                   {num(minReceive).toFixed(tokenBInfo?.decimals)}
@@ -377,7 +377,7 @@ const SwapForm: FC<Props> = ({
               <Text color="brand.500" fontSize={12}>
                 Route
               </Text>
-              {explainer('Optimized route for your optimal gain')}
+              {ExplanationTooltip('Optimized route for your optimal gain')}
             </HStack>
             <HStack maxW="70%" flexWrap="wrap">
               {path?.map((item, index) => (

@@ -26,12 +26,12 @@ type FindPoolForSwapArgs = {
  * Assuming theres always a pool with `baseToken` including either a `tokenA` or `tokenB` pair
  *
  */
-export function findPoolForSwap({
+export const findPoolForSwap = ({
   baseToken,
   tokenA,
   tokenB,
   poolsList,
-}: FindPoolForSwapArgs) {
+}: FindPoolForSwapArgs) => {
   const isPoolMatchingTokens = ({
     pool: {
       pool_assets: [poolTokenA, poolTokenB],
@@ -109,7 +109,7 @@ export const useGetQueryMatchingPoolForSwap = () => {
 
   const getMatchingPool = useCallback(({ tokenA, tokenB }: GetMatchingPoolArgs) => {
     if (!poolsListResponse?.pools || !tokenA || !tokenB) {
-      return undefined
+      return null
     }
 
     return findPoolForSwap({

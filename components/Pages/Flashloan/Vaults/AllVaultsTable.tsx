@@ -19,6 +19,7 @@ import {
 } from '@tanstack/react-table'
 import Loader from 'components/Loader'
 import VaultName from 'components/Pages/Flashloan/Vaults/VaultName'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 
 export type Vault = {
   vaultId: string
@@ -106,9 +107,9 @@ const AllVaultsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background={'#1C1C1C'}
+        background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         justifyContent="center"
       >
         <Loader />
@@ -121,9 +122,9 @@ const AllVaultsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background={'#1C1C1C'}
+        background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         justifyContent="center"
       >
         <Text py={10} color="white">
@@ -138,9 +139,9 @@ const AllVaultsTable = ({
     <Flex
       padding={10}
       width={['full', 'auto']}
-      background={'#1C1C1C'}
+      background={kBg}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-      borderRadius="30px"
+      borderRadius={kBorderRadius}
       display={['none', 'none', 'none', 'flex']}
       flexDirection="column"
     >

@@ -28,6 +28,7 @@ import Apr from 'components/Pages/Trade/Pools/components/Apr'
 import Liquidity from 'components/Pages/Trade/Pools/components/liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -136,9 +137,9 @@ const AllPoolsTable = ({
       <Flex
         padding={10}
         width={['full', '1160px']}
-        background={'#1C1C1C'}
+        background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         justifyContent="center"
       >
         <Loader />
@@ -151,9 +152,9 @@ const AllPoolsTable = ({
       <Flex
         padding={10}
         width={['560px', '560px', '1160px']}
-        background={'#1C1C1C'}
+        background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-        borderRadius="30px"
+        borderRadius={kBorderRadius}
         justifyContent="center"
       >
         <Text py={10} color="white">
@@ -167,9 +168,9 @@ const AllPoolsTable = ({
     <Flex
       padding={10}
       width={['full', 'auto']}
-      background={'#1C1C1C'}
+      background={kBg}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-      borderRadius="30px"
+      borderRadius={kBorderRadius}
       display={['none', 'none', 'none', 'flex']}
       flexDirection="column"
     >

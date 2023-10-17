@@ -30,6 +30,7 @@ import {
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
 import { chainState } from 'state/chainState'
+import { parseLiquidity } from 'util/conversion/numberUtil'
 import { EnigmaPoolData } from 'util/enigma'
 
 type PoolData = PoolEntityTypeWithLiquidity &
@@ -224,33 +225,21 @@ const Pools = () => {
       const pools = allPools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       setMyPools(pools)
     }
-  }, [allPools])
+  }, [allPools, isWalletConnected])
+
   // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])
 
-  const [isLabelOpen, setIsLabelOpen] = useState(false)
-
   const allPoolsForShown = useMemo(() => allPools?.filter((item) => !myPoolsId?.includes(item.pool)),
     [allPools, myPoolsId])
-  const parseLiquidity = (liqString: string) => {
-    const value = parseFloat(liqString?.replace(/[^\d.-]/g, ''))
-    /*
-     * We do this mutation because by now we already have modified the string to include a letter abbreviation
-     * if the liquidity goes over 1000
-     * If it's in the thousands, multiply the value by 1000, if millions 1000000
-     */
-    return liqString?.toUpperCase().includes('K')
-      ? value * 1_000
-      : liqString?.toUpperCase().includes('M')
-        ? value * 1_000_000
-        : value
-  }
+
   const showAllPoolsList = useMemo(() => {
     const pools = allPoolsForShown
     return showAllPools
       ? pools
       : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
   }, [allPoolsForShown, showAllPools])
+
   return (
     <VStack
       width={{ base: '100%',

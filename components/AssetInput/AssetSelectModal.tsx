@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
-import { Asset } from 'types/blockchain'
+import { Asset } from 'types/index'
 
 import AssetList from './AssetList'
 import SearchInput from './SearchInput'

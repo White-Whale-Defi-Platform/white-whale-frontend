@@ -9,7 +9,7 @@ import { ShellWalletIcon } from 'components/Icons/ShellWalletIcon'
 import { TerraStationWalletIcon } from 'components/Icons/TerraStationWalletIcon'
 import { WalletConnectIcon } from 'components/Icons/WalletConnectIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { ACTIVE_NETWORKS, ChainId } from 'constants/networks'
+import { ACTIVE_NETWORKS } from 'constants/networks'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -53,7 +53,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       }
     }
     if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension)) {
-      const windowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr);
+      const windowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
       try {
         await (windowConnection.getKey(chainId))
       } catch (e) {

@@ -1,6 +1,7 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { BondingData } from 'components/Pages/Dashboard/types/BondingData'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 import { Cell, Pie, PieChart } from 'recharts'
 
@@ -36,7 +37,6 @@ const BondingOverview = ({
   currentChainName,
   mobile,
 }: Props) => {
-  const borderRadius = '30px'
   const router = useRouter()
   const TokenBox = ({ tokenType }) => {
     const { color, label } = data.find((e) => e.tokenType === tokenType)
@@ -93,8 +93,8 @@ const BondingOverview = ({
   return (
     <VStack
       width="full"
-      background={'#1C1C1C'}
-      borderRadius={borderRadius}
+      background={kBg}
+      borderRadius={kBorderRadius}
       alignItems="flex-start"
       verticalAlign="center"
       as="form"
@@ -136,7 +136,7 @@ const BondingOverview = ({
             <WhaleTooltip
               key={`${e.tokenType}${e.actionType}`}
               label={
-                e?.value != null && isWalletConnected
+                e?.value !== null && isWalletConnected
                   ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
                   : 'n/a'
               }

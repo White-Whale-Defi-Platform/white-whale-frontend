@@ -8,11 +8,10 @@ import Multiplicator from 'components/Pages/Trade/Liquidity/Multiplicator'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
-import { TxStep } from 'hooks/useTransaction'
 import { num } from 'libs/num'
 import { useRecoilState } from 'recoil'
 import { aprHelperState } from 'state/aprHelperState'
-import { TokenItemState } from 'types/index'
+import { TokenItemState, TxStep } from 'types/index'
 
 type Props = {
   isWalletConnected: boolean
@@ -61,15 +60,15 @@ const DepositForm = ({
   const poolAPRs = useMemo(() => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
     [currentAprHelperState, poolId])
 
-  const multiplicator = useMemo(() => (bondingDays == 0
+  const multiplicator = useMemo(() => (bondingDays === 0
     ? bondingDays
     : Math.round(100 *
               (0.997132 +
-                0.0027633 * bondingDays +
-                0.000105042 * bondingDays ** 2)) / 100),
+                (0.0027633 * bondingDays) +
+               (0.000105042 * (bondingDays ** 2)))) / 100),
   [bondingDays])
   // Const [bondingDays, setBondingDays] = useState(0)
-  const isInputDisabled = tx?.txStep == TxStep.Posting
+  const isInputDisabled = tx?.txStep === TxStep.Posting
   const amountA = getValues('token1')
 
   useEffect(() => {
@@ -97,12 +96,12 @@ const DepositForm = ({
       if (reverse) {
         if (!tokenB.amount) {
           setValue('token1', { ...tokenA,
-            amount: undefined })
+            amount: null })
         }
       } else {
         if (!tokenA.amount) {
           setValue('token2', { ...tokenB,
-            amount: undefined })
+            amount: null })
         }
       }
     }
@@ -140,7 +139,7 @@ const DepositForm = ({
     return 'Deposit'
   }, [tx?.buttonLabel, tokenB.tokenSymbol, isWalletConnected, amountA])
 
-  const apr = useMemo(() => `${(poolAPRs?.fees * 100 + poolAPRs?.incentives * multiplicator).toFixed(2)}`,
+  const apr = useMemo(() => `${(((poolAPRs?.fees || 0) * 100) + ((poolAPRs?.incentives || 0) * multiplicator)).toFixed(2)}`,
     [poolAPRs, multiplicator])
 
   return (
@@ -193,7 +192,7 @@ const DepositForm = ({
         isConnected={isWalletConnected}
         txStep={tx?.txStep}
         isDisabled={
-          tx.txStep != TxStep.Ready || simulated == null || !isWalletConnected
+          tx.txStep !== TxStep.Ready || simulated === null || !isWalletConnected
         }
       />
 

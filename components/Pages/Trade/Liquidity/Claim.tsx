@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { HStack, VStack } from '@chakra-ui/react'
+import { useChain } from '@cosmos-kit/react-lite'
 import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import ClaimTable from 'components/Pages/Trade/Liquidity/ClaimTable'
 import { useCheckIncentiveSnapshots } from 'components/Pages/Trade/Liquidity/hooks/useCheckIncentiveSnapshots'
@@ -46,6 +47,7 @@ const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected, openView } = useChain(walletChainName)
   const { cosmWasmClient } = useClients(walletChainName)
 
   const config = useConfig(network, chainId)
@@ -65,7 +67,16 @@ const Claim = ({ poolId }: Props) => {
       0)
     return rewardsSum > 0
   }, [rewards])
-
+  const buttonLabel = useMemo(() => {
+    if (!isWalletConnected) {
+      return 'Connect Wallet'
+    } else if (Number(totalValue) === 0) {
+      return 'No Rewards'
+    } else if (!allSnapshotsTaken) {
+      return 'Take Snapshots'
+    }
+    return 'Claim'
+  }, [isWalletConnected, totalValue, allSnapshotsTaken])
   return (
     <VStack gap={10} py={5}>
       <AvailableRewards totalValue={totalValue} />
@@ -73,15 +84,22 @@ const Claim = ({ poolId }: Props) => {
       <ClaimTable tokens={rewards} />
 
       <SubmitButton
-        label={allSnapshotsTaken ? 'Claim' : 'Take Snapshots'}
+        label={buttonLabel}
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={!isClaimable && allSnapshotsTaken}
+        isDisabled={isWalletConnected && !isClaimable && allSnapshotsTaken}
         isLoading={claim.isLoading}
-        onClick={
-          allSnapshotsTaken
-            ? () => claim.submit()
-            : () => forceSnapshots.submit()
+        onClick={() => {
+          if (!isWalletConnected) {
+            openView()
+          } else {
+            if (allSnapshotsTaken) {
+              claim.submit()
+            } else {
+              forceSnapshots.submit()
+            }
+          }
+        }
         }
       />
     </VStack>

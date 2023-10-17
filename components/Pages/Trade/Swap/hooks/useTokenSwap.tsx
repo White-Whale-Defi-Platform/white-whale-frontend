@@ -1,6 +1,7 @@
 import { toast } from 'react-hot-toast'
 import { useMutation } from 'react-query'
 
+import { Button } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { useClients } from 'hooks/useClients'
@@ -8,7 +9,6 @@ import { useRefetchQueries } from 'hooks/useRefetchQueries'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 // TODO: These should be deprecated in place of some other chakra component so we can remove the dep on junoblocks
 import {
-  Button,
   ErrorIcon,
   IconWrapper,
   Toast,
@@ -67,30 +67,9 @@ export const useTokenSwap = ({
       const price = convertDenomToMicroDenom(tokenToTokenPrice, tokenB.decimals)
 
       const {
-        streamlinePoolAB,
-        streamlinePoolBA,
         baseTokenAPool,
         baseTokenBPool,
       } = matchingPools
-
-      if (streamlinePoolAB || streamlinePoolBA) {
-        const swapDirection = streamlinePoolAB?.swap_address
-          ? 'tokenAtoTokenB'
-          : 'tokenBtoTokenA'
-        const swapAddress =
-          streamlinePoolAB?.swap_address ?? streamlinePoolBA?.swap_address
-        /*
-         * TODO: Direct token swap
-         * return await directTokenSwap({
-         *   tokenA,
-         *   senderAddress: address,
-         *   swapAddress,
-         *   tokenAmount,
-         *   client,
-         *   msgs
-         * })
-         */
-      }
 
       return passThroughTokenSwap({
         tokenAmount,
@@ -140,7 +119,7 @@ export const useTokenSwap = ({
                 variant="ghost"
                 href={process.env.NEXT_PUBLIC_FEEDBACK_LINK}
                 target="__blank"
-                iconRight={<UpRightArrow />}
+                rightIcon={<UpRightArrow />}
               >
                 Provide feedback
               </Button>

@@ -3,11 +3,11 @@ import { toast } from 'react-hot-toast'
 
 import { ErrorIcon, Toast } from 'junoblocks'
 
-function createAlertPricingServiceIsDown() {
+const createAlertPricingServiceIsDown = () => {
   let hasRenderedAlert
   let timeout
 
-  function renderAlert() {
+  const renderAlert = () => {
     toast.custom((t) => (
       <Toast
         icon={<ErrorIcon color="error" />}

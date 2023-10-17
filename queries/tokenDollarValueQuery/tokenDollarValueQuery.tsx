@@ -3,7 +3,7 @@ import { TokenInfo } from 'queries/usePoolsListQuery'
 import { fetchDollarPriceByTokenIds } from './fetchDollarPriceByTokenIds'
 import { pricingServiceIsDownAlert } from './pricingServiceIsDownAlert'
 
-export async function tokenDollarValueQuery(tokenIds: Array<TokenInfo['id']>) {
+export const tokenDollarValueQuery = async (tokenIds: Array<TokenInfo['id']>) => {
   if (!tokenIds?.length) {
     throw new Error('Provide token ids in order to query their price')
   }

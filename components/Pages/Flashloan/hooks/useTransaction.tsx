@@ -5,39 +5,9 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
+import { TxStep } from 'types/index'
 
 import { executeFlashloan } from './executeFlashloan'
-
-export enum TxStep {
-  /**
-   * Idle
-   */
-  Idle = 0,
-  /**
-   * Estimating fees
-   */
-  Estimating = 1,
-  /**
-   * Ready to post transaction
-   */
-  Ready = 2,
-  /**
-   * Signing transaction in Terra Station
-   */
-  Posting = 3,
-  /**
-   * Broadcasting
-   */
-  Broadcasting = 4,
-  /**
-   * Succesful
-   */
-  Success = 5,
-  /**
-   * Failed
-   */
-  Failed = 6,
-}
 
 type Params = {
   enabled: boolean
@@ -201,15 +171,9 @@ export const useTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => {
-      if (!txHash) {
-        return null
-      }
-
-      return signingClient.getTx(txHash)
-    },
+    () => signingClient.getTx(txHash),
     {
-      enabled: txHash !== null,
+      enabled: Boolean(txHash),
       retry: true,
     },
   )
@@ -222,7 +186,7 @@ export const useTransaction = ({
   }, [msgs, mutate])
 
   useEffect(() => {
-    if (txInfo != null && txHash != null) {
+    if (txInfo && txHash) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ChainId } from 'constants/index'
 import chains from 'public/mainnet/chain_info.json'
 import columbusConfig from 'public/mainnet/columbus-5/config.json'
-import { aggregateAndSortTaxAmounts } from 'util/conversion/index'
+import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
 
 class FCDBaseClient {
   private readonly baseURL: string = 'https://terra-classic-lcd.publicnode.com/terra'

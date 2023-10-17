@@ -1,4 +1,3 @@
-
 import { useMemo } from 'react';
 
 import {
@@ -11,20 +10,15 @@ import {
 import { useChain } from '@cosmos-kit/react-lite'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import {
-  Config,
-  useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { WhaleTooltip } from 'components/Pages/Dashboard/WhaleTooltip'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import {
-  calculateDurationString,
   convertMicroDenomToDenom,
-  nanoToMilli,
 } from 'util/conversion/index'
+import { calculateDurationString, nanoToMilli } from 'util/conversion/timeUtil'
 
 type Props = {
   unbondingRequests: UnbondingData[]
@@ -121,7 +115,7 @@ const Withdraw = ({
         <ProgressBar
           percent={
             (1 -
-              timeUntilUnbondingInMilli / nanoToMilli(unbondingPeriodInNano)) *
+             (timeUntilUnbondingInMilli / nanoToMilli(unbondingPeriodInNano))) *
             100
           }
         />
@@ -136,7 +130,7 @@ const Withdraw = ({
         <TokenBox label="Withdrawable" tokens={withdrawableTokens} />
       </Stack>
       {isWalletConnected &&
-        unbondingRequests != null &&
+        unbondingRequests !== null &&
         unbondingRequests?.length > 0 && (
         <Box
           overflowY="scroll"

@@ -15,12 +15,12 @@ export const aprHelperState = atom<APRHelperState>({
 })
 
 // Custom hook to access and update the APR state
-export function updateAPRHelperState(
+export const updateAPRHelperState = (
   poolId: string,
   feeAsString: string,
   incentives: number,
   setAPRs: SetterOrUpdater<APRHelperState>,
-) {
+) => {
   // Helper function to update the APR for a specific pool
   const fees = Number(feeAsString?.replace('%', '')) / 100
   setAPRs((prevAPR) => {

@@ -7,9 +7,9 @@ import useClaimableLP from 'components/Pages/Trade/Liquidity/hooks/useClaimableL
 import useWithdraw, { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
-import { TxStep } from 'hooks/useTransaction'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
+import { TxStep } from 'types/index'
 
 type Props = {
   poolId: string
@@ -189,7 +189,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
         label={buttonLabel as string}
         isConnected={isWalletConnected}
         txStep={tx?.txStep}
-        isDisabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
+        isDisabled={tx.txStep !== TxStep.Ready && isWalletConnected}
       />
 
       <ShowError

@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const useClaim = ({ poolId }: Props) => {
-  const { walletChainName } = useRecoilValue(chainState)
+  const { walletChainName, chainId } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient } = useClients(walletChainName)
   const [pool] = usePoolFromListQueryById({ poolId })
@@ -37,14 +37,14 @@ export const useClaim = ({ poolId }: Props) => {
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {
       let fee: any = 'auto'
-      if (await signingClient.getChainId() === ChainId.terrac) {
+      if (chainId === ChainId.terrac) {
         const gas = Math.ceil(await signingClient.simulate(
           address, [msg], '',
         ) * 1.3)
         fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
           0, '', gas,
         )
-      } return signingClient.signAndBroadcast(
+      } return await signingClient.signAndBroadcast(
         address, [msg], fee, null,
       )
     },
