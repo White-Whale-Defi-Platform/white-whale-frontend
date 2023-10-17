@@ -17,7 +17,7 @@ export const useWithdrawPosition = ({ poolId }) => {
   const { address } = useChain(walletChainName)
   const [pool] = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
-    transactionType: 'Open position',
+    transactionType: 'Unlock Position',
     signingClient,
   })
 

@@ -17,7 +17,7 @@ import {
 import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Trade/Incentivize/hooks/usePoolUserShare'
-import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsOverview';
+import { IncentivePositionsOverview } from 'components/Pages/Trade/Incentivize/IncentivePositionsOverview';
 import Claim from 'components/Pages/Trade/Liquidity/Claim'
 import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
@@ -280,7 +280,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
               </TabPanel>
               {dailyEmissionData.length > 0 ? (
                 <TabPanel padding={4}>
-                  <PositionsOverview flows={myFlows} poolId={poolIdFromUrl} />
+                  <IncentivePositionsOverview flows={myFlows} poolId={poolIdFromUrl} />
                 </TabPanel>
               ) : null}
             </TabPanels>

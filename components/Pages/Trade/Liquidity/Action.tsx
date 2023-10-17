@@ -26,19 +26,18 @@ export const Action = ({ item, poolId }) => {
         Unbonding
       </Button>
     )
-  } else if (item?.state === PositionState.unbonded) {
+  } else if (item?.state === PositionState.withdraw || item?.state === PositionState.unbonded) {
     return (
       <Button
         width="full"
-        variant="outline"
+        variant="primary"
         size="sm"
         isLoading={withdraw?.isLoading}
         onClick={() => withdraw?.submit()}
       >
-        Unbonded
+        Unlock LP
       </Button>
     )
-  } else {
-    return <Box w="full" />
   }
+  return <Box w="full" />
 }

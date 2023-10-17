@@ -4,8 +4,6 @@ import { Box, Button, Divider, HStack } from '@chakra-ui/react'
 import { PositionsTable } from 'components/Pages/Trade/Liquidity/PositionsTable'
 import { PositionState } from 'constants/state'
 
-const STATES = [PositionState.all, PositionState.active, PositionState.unbonding]
-
 type Props = {
   positions: any[]
 }
@@ -25,7 +23,7 @@ export const Positions = ({ positions }: Props) => {
         borderRadius="75px"
         gap="20px"
       >
-        {STATES.map((item) => (
+        {[PositionState.all, PositionState.active, PositionState.unbonding, PositionState.withdraw].map((item) => (
           <Button
             key={item}
             minW="120px"
@@ -34,7 +32,7 @@ export const Positions = ({ positions }: Props) => {
             size="sm"
             onClick={() => {
               setActiveButton(item)
-              setColumnFilters(item === 'all'
+              setColumnFilters(item === PositionState.all
                 ? []
                 : [
                   {

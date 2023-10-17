@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Create from 'components/Pages/Trade/Incentivize/Create'
-import { PositionsOverview } from 'components/Pages/Trade/Incentivize/PositionsOverview'
+import { IncentivePositionsOverview } from 'components/Pages/Trade/Incentivize/IncentivePositionsOverview'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
@@ -105,7 +105,7 @@ const Incentivize: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <PositionsOverview flows={myFlows} poolId={poolId} />
+                <IncentivePositionsOverview flows={myFlows} poolId={poolId} />
               </TabPanel>
               <TabPanel padding={4}>
                 <Create poolId={poolId} />
