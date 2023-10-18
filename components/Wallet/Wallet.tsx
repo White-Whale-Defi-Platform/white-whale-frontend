@@ -36,6 +36,14 @@ const Wallet = () => {
   const [walletChains, setWalletChains] = useState<string[]>([])
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
   const [currentConnectedChainIds, setCurrentConnectedChainIds] = useState([])
+  const allChains = useChains(walletChains)
+  const router = useRouter()
+
+  const [chainInfo] = useChainInfo(currentChainState.chainId)
+  const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
+  const queryClient = useQueryClient()
+
+  const [chainIdParam, setChainIdParam] = useState<string>(null)
 
   useEffect(() => {
     if (chainName && currentChainState.network === NetworkType.mainnet) {
@@ -48,7 +56,7 @@ const Wallet = () => {
       })
     }
 
-    const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
+    const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
 
     if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
       // Window.leap.defaultOptions
@@ -67,33 +75,37 @@ const Wallet = () => {
       setWalletChains(snapChainIds);
       setCurrentConnectedChainIds(snapChainIds);
     } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
-      const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr);
+      const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
 
       const getAddedStationChainsIds = async () => {
-        const chainInfos = await walletWindowConnection.getChainInfosWithoutEndpoints();
-        return chainInfos.map((chain: { chainId: string }) => chain.chainId);
+        const chainInfos = await walletWindowConnection?.getChainInfosWithoutEndpoints()
+        if (!chainInfos) {
+          await disconnect()
+          return null
+        }
+        return chainInfos.map((chain: { chainId: string }) => chain.chainId)
       };
       const filterChains = async () => {
-        const addedChains = await getAddedStationChainsIds();
-        const filteredChains = chains.filter((chain) => addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]);
-        const chainNames = filteredChains.map((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]);
-        return [chainNames, filteredChains.map((chain) => chain.chainId)];
+        const addedChains = await getAddedStationChainsIds()
+        const filteredChains = chains.filter((chain) => addedChains.includes(chain.chainId) && WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId])
+        const chainNames = filteredChains.map((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId])
+        return [chainNames, filteredChains.map((chain) => chain.chainId)]
       };
       filterChains().then(async ([chainNames, ids]) => {
         if (chainNames.includes('injective')) {
           try {
-            await walletWindowConnection.getKey(ChainId.injective);
+            await walletWindowConnection.getKey(ChainId.injective)
           } catch {
             console.error('Injective not activated');
-            const injIndex = chainNames.indexOf('injective');
+            const injIndex = chainNames.indexOf('injective')
             if (injIndex !== -1) {
-              chainNames.splice(injIndex, 1);
-              ids.splice(injIndex, 1);
+              chainNames.splice(injIndex, 1)
+              ids.splice(injIndex, 1)
             }
           }
         }
-        setWalletChains(chainNames);
-        setCurrentConnectedChainIds(ids);
+        setWalletChains(chainNames)
+        setCurrentConnectedChainIds(ids)
       });
     } else if (walletChains.length === 0) {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
@@ -102,14 +114,7 @@ const Wallet = () => {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }
   }, [chains, currentChainState.network, chainName, window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)])
-  const allChains = useChains(walletChains)
-  const router = useRouter()
 
-  const [chainInfo] = useChainInfo(currentChainState.chainId)
-  const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
-  const queryClient = useQueryClient()
-
-  const [chainIdParam, setChainIdParam] = useState<string>(null)
   const resetWallet = () => {
     setCurrentConnectedChainIds([])
     queryClient.clear()
