@@ -99,6 +99,13 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   const chainIdParam = router.query.chainId as string
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
 
+  // @ts-ignore
+  if (window.debugLogsEnabled) {
+    console.log(
+      'ManageLiquidity; Chain Name: ', chainName, ' ', poolIdFromUrl,
+    )
+  }
+
   useEffect(() => {
     if (chainName) {
       if (poolIdFromUrl) {
