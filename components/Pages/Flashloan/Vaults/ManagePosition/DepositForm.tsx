@@ -94,10 +94,11 @@ const DepositForm = ({
     >
       <VStack width="full" alignItems="flex-start" paddingBottom={8}>
         <AssetInput
+          ignoreSlack={false}
           value={token}
           token={token}
           disabled={false}
-          minMax={true}
+          hideHalfMax={false}
           balance={balance}
           showList={showList}
           edgeTokenList={edgeTokenList}

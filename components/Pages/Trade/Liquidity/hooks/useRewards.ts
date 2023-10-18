@@ -43,10 +43,9 @@ const aggregateRewards = (rewards: RewardData[]): RewardInfo[] => {
       return acc
     }
     const { amount } = reward
-    acc[denom] = (acc[denom] || 0) + amount
+    acc[denom] = (acc[denom] || 0) + Number(amount)
     return acc
   }, {})
-
   // Use Object.entries and map to transform aggregates into an array of rewards
   return Object.entries(aggregates).map(([id, amount]) => {
     // Determine whether id is a contract_addr or a denom

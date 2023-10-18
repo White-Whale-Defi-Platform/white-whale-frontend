@@ -49,7 +49,7 @@ export const useTransaction = () => {
           (/insufficient funds/u).test(error.toString()) ||
           (/Overflow: Cannot Sub with/u).test(error.toString())
         ) {
-          console.error(error)
+          console.error(error.toString())
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
@@ -59,7 +59,7 @@ export const useTransaction = () => {
           setButtonLabel('You have pending transaction')
           throw new Error('You have pending transaction')
         } else {
-          console.error({ error })
+          console.error(error.toString())
           setTxStep(TxStep.Idle)
           setError(error?.message)
           throw Error(error?.message)
@@ -72,7 +72,7 @@ export const useTransaction = () => {
       }
     },
     {
-      enabled: txStep === TxStep.Idle && error === null && Boolean(signingClient),
+      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -85,10 +85,10 @@ export const useTransaction = () => {
     },
   )
 
-  const { mutate } = useMutation((data: any) => {
+  const { mutate } = useMutation(async (data: any) => {
     const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
-    if (data.bondingAction === ActionType.bond) {
-      return bondTokens(
+    if (data.bondingAction === ActionType.bond) { 
+      return await bondTokens(
         signingClient,
         address,
         adjustedAmount,
@@ -96,7 +96,7 @@ export const useTransaction = () => {
         config,
       )
     } else if (data.bondingAction === ActionType.unbond) {
-      return unbondTokens(
+      return await unbondTokens(
         signingClient,
         address,
         adjustedAmount,
@@ -104,15 +104,15 @@ export const useTransaction = () => {
         config,
       )
     } else if (data.bondingAction === ActionType.withdraw) {
-      return withdrawTokens(
+      return await withdrawTokens(
         signingClient, address, data.denom, config,
       )
     } else if (data.bondingAction === ActionType.claim) {
-      return claimRewards(
+      return await claimRewards(
         signingClient, address, config,
       )
     } else {
-      return createNewEpoch(
+      return await createNewEpoch(
         signingClient, config, address,
       )
     }
@@ -222,7 +222,7 @@ export const useTransaction = () => {
       return signingClient?.getTx(txHash)
     },
     {
-      enabled: txHash !== null,
+      enabled: Boolean(txHash),
       retry: true,
     },
   )
@@ -238,9 +238,6 @@ export const useTransaction = () => {
     amount: number | null,
     denom: string | null,
   ) => {
-    if (fee === null) {
-      return
-    }
     setBondingAction(bondingAction)
 
     mutate({
@@ -253,7 +250,7 @@ export const useTransaction = () => {
   [fee, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    if (txInfo && txHash) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
       } else {

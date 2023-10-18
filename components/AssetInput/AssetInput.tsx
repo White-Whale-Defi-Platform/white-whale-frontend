@@ -24,12 +24,11 @@ interface AssetInputProps {
   balance?: number
   whalePrice?: number
   disabled?: boolean
-  minMax?: boolean
+  hideHalfMax?: boolean
   isSingleInput?: boolean
   hideToken?: string
   edgeTokenList?: string[]
   ignoreSlack?: boolean
-  hideMax?: boolean
   hideDollarValue?: boolean
   showBalanceSlider?: boolean
   isBonding?: boolean
@@ -45,7 +44,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     token,
     onChange,
     ignoreSlack,
-    hideMax,
+    hideHalfMax,
     hideDollarValue,
     mobile,
   } = props
@@ -104,7 +103,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
         numberOfTokens={numberOfTokens}
         dollarValue={dollarValue}
         maxDisabled={maxDisabled}
-        hideMax={hideMax}
+        hideHalfMax={hideHalfMax}
         onMaxClick={onMaxClick}
         onHalfClick={onHalfClick}
         mobile={mobile}

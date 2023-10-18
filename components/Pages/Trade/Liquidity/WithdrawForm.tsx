@@ -29,7 +29,6 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
   ] = useQueryPoolLiquidity({ poolId })
 
   const claimableLP = useClaimableLP({ poolId })
-
   const [reverse, setReverse] = useState(false)
   const [assetA, assetB] = poolId?.split('-') || []
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
@@ -61,7 +60,6 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
 
   const tokenA = watch('token1')
   const tokenB = watch('token2')
-
   const { lp, simulated } = useSimulateWithdraw({
     lp: liquidity?.available?.provided?.tokenAmount,
     tokenA: liquidity?.reserves?.myNotLocked?.[0],
@@ -162,6 +160,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
         balance={num(tokenABalance).toNumber()}
         fetchBalance={false}
         mobile={mobile}
+        ignoreSlack={true}
         onChange={(value) => {
           if (reverse) {
             setReverse(false)
@@ -171,6 +170,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
       />
       <Input
         control={control}
+        ignoreSlack={true}
         name="token2"
         token={tokenB}
         isDisabled={isInputDisabled}
@@ -189,7 +189,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
         label={buttonLabel as string}
         isConnected={isWalletConnected}
         txStep={tx?.txStep}
-        isDisabled={tx.txStep !== TxStep.Ready && isWalletConnected}
+        isDisabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
       />
 
       <ShowError

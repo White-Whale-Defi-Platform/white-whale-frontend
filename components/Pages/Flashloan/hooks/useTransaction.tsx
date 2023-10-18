@@ -45,8 +45,11 @@ export const useTransaction = ({
     ['fee', msgs, error],
     async () => {
       setTxStep(TxStep.Estimating)
+      if (!signingClient) {
+        return
+      }
       try {
-        const response = await signingClient.simulate(
+        const response = await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -84,9 +87,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs !== null &&
+      Boolean(debouncedMsgs) &&
         txStep === TxStep.Idle &&
-        error === null &&
+        !error &&
         Boolean(signingClient) &&
         enabled,
       refetchOnWindowFocus: false,
@@ -179,7 +182,7 @@ export const useTransaction = ({
   )
 
   const submit = useCallback(() => {
-    if (msgs === null || msgs.length < 1) {
+    if (!msgs || msgs.length < 1) {
       return
     }
     mutate()

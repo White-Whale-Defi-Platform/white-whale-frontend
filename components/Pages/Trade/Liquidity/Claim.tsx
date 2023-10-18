@@ -47,7 +47,7 @@ const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, openView } = useChain(walletChainName)
+  const { isWalletConnected } = useChain(walletChainName)
   const { cosmWasmClient } = useClients(walletChainName)
 
   const config = useConfig(network, chainId)
@@ -82,25 +82,21 @@ const Claim = ({ poolId }: Props) => {
       <AvailableRewards totalValue={totalValue} />
 
       <ClaimTable tokens={rewards} />
-
       <SubmitButton
         label={buttonLabel}
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={isWalletConnected && !isClaimable && allSnapshotsTaken}
+        isDisabled={!isWalletConnected && !isClaimable && allSnapshotsTaken}
         isLoading={claim.isLoading}
         onClick={() => {
-          if (!isWalletConnected) {
-            openView()
+          if (isWalletConnected && allSnapshotsTaken && rewards.length !== 0) {
+            claim.submit()
           } else {
-            if (allSnapshotsTaken) {
-              claim.submit()
-            } else {
-              forceSnapshots.submit()
-            }
+            forceSnapshots.submit()
           }
         }
         }
+
       />
     </VStack>
   )

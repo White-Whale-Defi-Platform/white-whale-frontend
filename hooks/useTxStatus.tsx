@@ -22,7 +22,7 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    if (txInfo !== null && txState.txHash !== null) {
+    if (txInfo && txState.txHash) {
       if (txInfo?.code) {
         setTxState({
           ...txState,

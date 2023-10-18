@@ -192,7 +192,7 @@ const DepositForm = ({
         isConnected={isWalletConnected}
         txStep={tx?.txStep}
         isDisabled={
-          tx.txStep !== TxStep.Ready || simulated === null || !isWalletConnected
+          tx.txStep !== TxStep.Ready || !simulated || !isWalletConnected
         }
       />
 

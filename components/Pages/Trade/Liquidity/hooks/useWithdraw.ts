@@ -33,7 +33,7 @@ const useWithdraw = ({
   const { signingClient } = useClients(walletChainName)
 
   const { msgs, encodedMsgs } = useMemo(() => {
-    if (parseFloat(amount) === 0 || contract === null || !signingClient) {
+    if (parseFloat(amount) === 0 || !contract || !signingClient) {
       return {}
     }
 

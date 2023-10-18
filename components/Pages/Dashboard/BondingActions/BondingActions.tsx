@@ -232,12 +232,14 @@ const BondingActions = ({ globalAction }) => {
             borderRadius="full"
             width="80%"
             variant="primary"
-            disabled={
+            isDisabled={
               txStep === TxStep.Estimating ||
               txStep === TxStep.Posting ||
               txStep === TxStep.Broadcasting ||
-              (currentBondState.amount <= 0 &&
-                globalAction !== ActionType.withdraw &&
+              (globalAction === ActionType.bond && currentBondState.amount <= 0 &&
+                isWalletConnected) ||
+              (currentBondState.amount === 0 &&
+                globalAction === ActionType.unbond &&
                 isWalletConnected) ||
               (totalWithdrawable === 0 && ActionType.withdraw === globalAction)
             }

@@ -111,11 +111,11 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (
-      simulated === null ||
+      !simulated ||
       !tokenAAmount ||
       !tokenBAmount ||
-      swapAddress === null ||
-      minUnbondingDuration === null
+      !swapAddress ||
+      !minUnbondingDuration
     ) {
       return {}
     }
@@ -200,7 +200,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     onError: () => {},
   })
   const noMatchingPool =
-    swapAddress === null && !isLoading
+    !swapAddress && !isLoading
       ? {
         buttonLabel: 'No Matching Pool',
       }

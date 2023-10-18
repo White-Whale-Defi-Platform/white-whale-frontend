@@ -11,10 +11,9 @@ const useTxInfo = ({ txHash, signingClient }: TxInfo) => {
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
     () => {
-      if (txHash == null) {
+      if (!txHash) {
         return
       }
-
       return signingClient.getTx(txHash)
     },
     {

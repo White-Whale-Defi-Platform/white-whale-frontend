@@ -130,7 +130,7 @@ const Withdraw = ({
         <TokenBox label="Withdrawable" tokens={withdrawableTokens} />
       </Stack>
       {isWalletConnected &&
-        unbondingRequests !== null &&
+        unbondingRequests &&
         unbondingRequests?.length > 0 && (
         <Box
           overflowY="scroll"

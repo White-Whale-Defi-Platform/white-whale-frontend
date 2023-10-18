@@ -42,7 +42,7 @@ const AssetList: FC<AssetListProps> = ({
     : tokenList?.tokens
 
   const [tokenBalance = []] =
-    unbondingBalances !== null
+    unbondingBalances
       ? [
         tokens?.map(({ symbol }) => unbondingBalances.find((b) => b.tokenSymbol === symbol)?.amount),
       ]

@@ -79,7 +79,6 @@ const WithdrawForm = ({
       tx?.reset()
     }
   }, [tx, token, setToken])
-
   return (
     <VStack
       paddingY={6}
@@ -109,7 +108,9 @@ const WithdrawForm = ({
           tx?.txStep === TxStep.Posting ||
           tx?.txStep === TxStep.Broadcasting
         }
-        disabled={tx.txStep !== TxStep.Ready && isWalletConnected}
+        disabled={tx.txStep === TxStep.Estimating ||
+          tx.txStep === TxStep.Posting ||
+          tx.txStep === TxStep.Broadcasting }
       >
         {buttonLabel}
       </Button>
