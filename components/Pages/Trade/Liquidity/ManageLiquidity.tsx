@@ -40,6 +40,7 @@ import { tokenItemState } from 'state/tokenItemState'
 import { TxStep } from 'types/common'
 
 const ManageLiquidity = ({ poolIdFromUrl }) => {
+  const [poolIdState, setPoolIdState] = useState(null)
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router = useRouter()
   const chains: Array<any> = useChainInfos()
@@ -107,13 +108,17 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   }
 
   useEffect(() => {
+    setPoolIdState(poolIdFromUrl || poolIdState)
+  }, [poolIdFromUrl])
+
+  useEffect(() => {
     if (chainName) {
-      if (poolIdFromUrl) {
+      if (poolIdState) {
         const pools = poolData?.pools
-        if (pools && !pools.find((pool: any) => pool.pool_id === poolIdFromUrl)) {
+        if (pools && !pools.find((pool: any) => pool.pool_id === poolIdState)) {
           router.push(`/${chainName.toLowerCase()}/pools`)
         } else {
-          router.push(`/${chainName.toLowerCase()}/pools/manage_liquidity?poolId=${poolIdFromUrl}`)
+          router.push(`/${chainName.toLowerCase()}/pools/manage_liquidity?poolId=${poolIdState}`)
         }
       } else {
         if (poolData?.pools) {
@@ -123,7 +128,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, poolIdFromUrl, poolData, chainName])
+  }, [chainId, poolIdState, poolData, chainName])
 
   useEffect(() => {
     if (poolIdFromUrl) {
