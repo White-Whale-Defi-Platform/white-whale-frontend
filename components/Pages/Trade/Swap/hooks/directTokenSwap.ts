@@ -57,7 +57,7 @@ export const directTokenSwap = async ({
       senderAddress, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-      tokenAmount, tokenA.denom, gas,
+      execMsg.value.funds, gas,
     )
   }
   return await signingClient.signAndBroadcast(

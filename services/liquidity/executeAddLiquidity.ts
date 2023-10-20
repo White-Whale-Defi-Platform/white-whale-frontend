@@ -31,8 +31,8 @@ export const executeAddLiquidity = async ({ tokenA, tokenB, tokenAAmount, tokenB
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, msgs, '',
     ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFeeForDeposit(
-      tokenAAmount, tokenA.denom, tokenBAmount, tokenB.denom, gas,
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+      msgs[0].value.funds, gas,
     )
   }
   return await signingClient.signAndBroadcast(

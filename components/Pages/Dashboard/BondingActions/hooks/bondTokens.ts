@@ -34,7 +34,7 @@ export const bondTokens = async (
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-      amount, denom, gas,
+      execMsg.value.funds, gas,
     )
   }
   return await signingClient.signAndBroadcast(

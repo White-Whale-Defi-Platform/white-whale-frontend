@@ -70,7 +70,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
           address, msg, '',
         ) * 1.3)
         fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          0, '', gas,
+          null, gas,
         )
       }
       return validateTransactionSuccess(await signingClient.signAndBroadcast(

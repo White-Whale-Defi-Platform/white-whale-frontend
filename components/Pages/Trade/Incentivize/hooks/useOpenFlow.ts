@@ -25,6 +25,7 @@ import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
 } from 'util/messages/index'
+import dayjs from 'dayjs'
 
 interface Props {
   poolId: string
@@ -63,9 +64,12 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     const flowAsset = createAsset(
       amount, tokenInfo.denom, tokenInfo?.native,
     )
-    const startEpoch = dateToEpoch(startDate)
+    let startEpoch = dateToEpoch(startDate)
     const endEpoch = dateToEpoch(endDate)
-
+    const now = dayjs().utc()
+    if (now.hour() < 15) {
+      startEpoch += 1;
+    }
     const nativeAmount =
       tokenInfo?.denom === flowFeeDenom
         ? num(amount).plus(factoryConfig?.createFlowFee?.amount).
@@ -126,8 +130,8 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicIncentiveFee(
-          amount, tokenInfo?.denom, gas,
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
+          msgs[0].value.funds, gas,
         )
       }
       return await signingClient.signAndBroadcast(
