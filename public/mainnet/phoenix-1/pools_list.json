@@ -485,7 +485,7 @@
           "decimals": 6,
           "logoURI": "/logos/lion.png",
           "tags": [],
-          "native": false,
+          "native": true,
           "denom": "factory/terra1vklefn7n6cchn0u962w3gaszr4vf52wjvd4y95t2sydwpmpdtszsqvk9wy/ampROAR"
         },
         {
