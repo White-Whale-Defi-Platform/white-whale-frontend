@@ -46,7 +46,7 @@
     "jsoneditor": "^9.9.2",
     "junoblocks": "^0.2.93",
     "lodash": "^4.17.21",
-    "next": "13.4.0",
+    "next": "13.5.0",
     "numeral": "^2.0.6",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.2",
