@@ -6,7 +6,7 @@ export const createDepositMsg = ({ amount }) => ({
   deposit: { amount },
 })
 
-export const createDepostExecuteMsgs = ({
+export const createDepositExecuteMsgs = ({
   amount,
   vaultAddress,
   senderAddress,

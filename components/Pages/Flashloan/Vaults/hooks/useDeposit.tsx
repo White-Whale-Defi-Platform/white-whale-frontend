@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import { createDepostExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
+import { createDepositExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
 import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
@@ -32,7 +32,7 @@ const useDeposit = ({ vaultAddress, token, onSuccess }: DepostProps) => {
 
     return {
       msgs: createDepositMsg({ amount }),
-      encodedMsgs: createDepostExecuteMsgs({
+      encodedMsgs: createDepositExecuteMsgs({
         amount,
         senderAddress: address,
         vaultAddress,

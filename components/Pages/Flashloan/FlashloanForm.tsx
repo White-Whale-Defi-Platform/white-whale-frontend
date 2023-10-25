@@ -11,6 +11,7 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
+import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
@@ -20,8 +21,6 @@ import useFlashloan from './hooks/useFlashloan'
 import 'jsoneditor/dist/jsoneditor.css'
 import schema from './schema.json'
 import UploadFile from './UploadFile'
-
-import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 
 const defaultJson = {
   flash_loan: {
@@ -95,7 +94,7 @@ const FlashloanForm = () => {
     return 'Flashloan'
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx?.buttonLabel, status, error])
+  }, [tx?.buttonLabel, error])
 
   const handleChange = (event: any) => {
     const fileReader = new FileReader()
