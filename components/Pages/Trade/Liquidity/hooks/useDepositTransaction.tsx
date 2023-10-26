@@ -54,8 +54,11 @@ export const useTransaction = ({
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
+      if (!signingClient) {
+        return
+      }
       try {
-        const response = await signingClient.simulate(
+        const response = await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -85,7 +88,6 @@ export const useTransaction = ({
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
         } else {
-          console.error({ error })
           setTxStep(TxStep.Idle)
           setError(error?.message)
           throw Error(error?.message)
@@ -99,9 +101,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs !== null &&
+      Boolean(debouncedMsgs) &&
         txStep === TxStep.Idle &&
-        error === null &&
+        !error &&
         Boolean(signingClient) &&
         Boolean(senderAddress) &&
         enabled &&
@@ -129,7 +131,7 @@ export const useTransaction = ({
       return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash !== null,
+      enabled: Boolean(txHash),
       retry: true,
     },
   )
@@ -228,7 +230,7 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(() => {
-    if (!(fee === null || msgs === null || msgs.length < 1)) {
+    if (!(!fee || !msgs || msgs.length < 1)) {
       mutate()
     }
   }, [msgs, fee, mutate])

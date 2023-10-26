@@ -1,8 +1,7 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createAsset } from 'services/asset'
-import { createExecuteMessage } from 'util/messages/index'
-import { createIncreaseAllowanceMessage } from 'util/messages/index'
+import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages/index'
 
 const createLpMsg = ({
   tokenA,

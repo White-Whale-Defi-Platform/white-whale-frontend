@@ -53,8 +53,11 @@ export const useWithdrawTransaction = ({
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
+      if (!signingClient) {
+        return
+      }
       try {
-        const response = await signingClient.simulate(
+        const response = await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -84,9 +87,9 @@ export const useWithdrawTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs !== null &&
+      Boolean(debouncedMsgs) &&
         txStep === TxStep.Idle &&
-        error === null &&
+        !error &&
         Boolean(signingClient) &&
         Number(amount) > 0 &&
         enabled,
@@ -208,7 +211,7 @@ export const useWithdrawTransaction = ({
       return await signingClient.getTx(txHash)
     },
     {
-      enabled: txHash !== null && Boolean(signingClient),
+      enabled: Boolean(txHash) && Boolean(signingClient),
       retry: true,
     },
   )
@@ -220,13 +223,13 @@ export const useWithdrawTransaction = ({
   }
 
   const submit = useCallback(() => {
-    if (!(fee === null || msgs === null || msgs.length < 1)) {
+    if (!(!fee || !msgs || msgs.length < 1)) {
       mutate()
     }
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    if (txInfo && txHash) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)

@@ -55,7 +55,7 @@ const MaxButton = ({
   }
   return (
     <Button
-      disabled={disabled}
+      isDisabled={disabled}
       variant="outline"
       size={size}
       onClick={onClick}
@@ -79,7 +79,7 @@ const HalfButton = ({
   }
   return (
     <Button
-      disabled={disabled}
+      isDisabled={disabled}
       variant="outline"
       size={size}
       onClick={onClick}
@@ -129,7 +129,7 @@ type BalanceWithMaxProps = {
   dollarValue: number | string
   onMaxClick: () => void
   onHalfClick: () => void
-  hideMax?: boolean
+  hideHalfMax?: boolean
   hideDollarValue?: boolean
   mobile?: boolean
 }
@@ -141,7 +141,7 @@ const BalanceWithMaxNHalf = ({
   dollarValue,
   onMaxClick,
   onHalfClick,
-  hideMax,
+  hideHalfMax,
   hideDollarValue,
   mobile,
 }: BalanceWithMaxProps) => (
@@ -159,14 +159,14 @@ const BalanceWithMaxNHalf = ({
           <HalfButton
             disabled={maxDisabled}
             onClick={onHalfClick}
-            hideHalf={hideMax}
+            hideHalf={hideHalfMax}
             maxwidth={'50'}
             size={'xs'}
           />
           <MaxButton
             disabled={maxDisabled}
             onClick={onMaxClick}
-            hideMax={hideMax}
+            hideMax={hideHalfMax}
             maxwidth={'50'}
             size={'xs'}
           />
@@ -176,15 +176,15 @@ const BalanceWithMaxNHalf = ({
       <>
         <HStack justifyContent="center" spacing={2} width={'full'} paddingTop={1} paddingBottom={4}>
           <HalfButton
-            disabled={hideMax}
+            disabled={hideHalfMax}
             onClick={onHalfClick}
-            hideHalf={hideMax}
+            hideHalf={hideHalfMax}
             size={'md'}
           />
           <MaxButton
-            disabled={hideMax}
+            disabled={hideHalfMax}
             onClick={onMaxClick}
-            hideMax={hideMax}
+            hideMax={hideHalfMax}
             size={'md'}
           />
         </HStack>

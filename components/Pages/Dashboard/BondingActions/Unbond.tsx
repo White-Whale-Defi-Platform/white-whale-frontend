@@ -78,7 +78,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
             {...field}
             token={currentBondState}
             balance={currentTokenBalance}
-            minMax={false}
+            hideHalfMax={false}
             disabled={false}
             onChange={(value, isTokenChange) => {
               onInputChange(value, 0)

@@ -36,22 +36,22 @@ const config = {
       },
       {
         source: '/dashboard',
-        destination: '/terra/dashboard',
+        destination: '/migaloo/dashboard',
         permanent: false,
       },
       {
         source: '/pools',
-        destination: '/terra/pools',
+        destination: '/migaloo/pools',
         permanent: false,
       },
       {
         source: '/vaults',
-        destination: '/terra/vaults',
+        destination: '/migaloo/vaults',
         permanent: false,
       },
       {
         source: '/flashloan',
-        destination: '/terra/flashloan',
+        destination: '/migaloo/flashloan',
         permanent: false,
       },
     ]
@@ -92,9 +92,7 @@ const config = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  experimental: {
-    outputStandalone: true,
-  },
+  output: "standalone",
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.

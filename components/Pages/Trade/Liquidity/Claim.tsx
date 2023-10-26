@@ -82,25 +82,23 @@ const Claim = ({ poolId }: Props) => {
       <AvailableRewards totalValue={totalValue} />
 
       <ClaimTable tokens={rewards} />
-
       <SubmitButton
         label={buttonLabel}
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={isWalletConnected && !isClaimable && allSnapshotsTaken}
+        isDisabled={(!isClaimable && allSnapshotsTaken) && isWalletConnected}
         isLoading={claim.isLoading}
         onClick={() => {
-          if (!isWalletConnected) {
+          if (isWalletConnected && allSnapshotsTaken && rewards.length !== 0) {
+            claim.submit()
+          } else if (!isWalletConnected) {
             openView()
           } else {
-            if (allSnapshotsTaken) {
-              claim.submit()
-            } else {
-              forceSnapshots.submit()
-            }
+            forceSnapshots.submit()
           }
         }
         }
+
       />
     </VStack>
   )

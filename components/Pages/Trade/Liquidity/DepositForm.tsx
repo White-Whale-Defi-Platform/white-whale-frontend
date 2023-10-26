@@ -28,6 +28,7 @@ type Props = {
   chainId: string
   mobile?: boolean
   poolId: string
+  openView: any
 }
 
 const DepositForm = ({
@@ -45,6 +46,7 @@ const DepositForm = ({
   chainId,
   mobile,
   poolId,
+  openView,
 }: Props) => {
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
@@ -148,7 +150,7 @@ const DepositForm = ({
       paddingX={2}
       width="full"
       as="form"
-      onSubmit={handleSubmit(tx?.submit)}
+      onSubmit={isWalletConnected ? handleSubmit(tx?.submit) : handleSubmit(openView)}
     >
       <Input
         name="token1"
@@ -192,7 +194,7 @@ const DepositForm = ({
         isConnected={isWalletConnected}
         txStep={tx?.txStep}
         isDisabled={
-          tx.txStep !== TxStep.Ready || simulated === null || !isWalletConnected
+          (tx.txStep !== TxStep.Ready || !simulated) && isWalletConnected
         }
       />
 

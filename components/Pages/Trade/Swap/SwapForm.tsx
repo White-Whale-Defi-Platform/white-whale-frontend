@@ -248,11 +248,12 @@ const SwapForm: FC<Props> = ({
           rules={{ required: true }}
           render={({ field }) => (
             <AssetInput
+              ignoreSlack={false}
               hideToken={tokenA?.tokenSymbol}
               {...field}
               token={tokenA}
               balance={tokenABalance}
-              minMax={false}
+              hideHalfMax={false}
               mobile={isMobile}
               disabled={isInputDisabled}
               onChange={(value, _) => {
@@ -291,11 +292,11 @@ const SwapForm: FC<Props> = ({
           rules={{ required: true }}
           render={({ field }) => (
             <AssetInput
+              ignoreSlack={false}
               hideToken={tokenA?.tokenSymbol}
               {...field}
               token={tokenB}
-              hideMax={true}
-              minMax={false}
+              hideHalfMax={false}
               balance={tokenBBalance}
               disabled={isInputDisabled}
               showBalanceSlider={false}
@@ -325,7 +326,7 @@ const SwapForm: FC<Props> = ({
           state?.isLoading
         }
         disabled={
-          tx?.txStep !== TxStep.Ready || simulated === null || !isWalletConnected
+          tx?.txStep !== TxStep.Ready || !simulated || !isWalletConnected
         }
       >
         {buttonLabel}

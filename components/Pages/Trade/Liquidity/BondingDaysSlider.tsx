@@ -56,10 +56,10 @@ export const BondingDaysSlider = ({
       <Box width="full">
         <Slider
           focusThumbOnChange={false}
-          defaultValue={1}
+          defaultValue={0}
           value={bondingDays}
           step={1}
-          min={1}
+          min={0}
           max={365}
           borderRadius={100}
           height={1.5}
@@ -80,8 +80,8 @@ export const BondingDaysSlider = ({
           maxWidth={''}
         >
           <NumberInput
-            defaultValue={1}
-            min={1}
+            defaultValue={0}
+            min={0}
             max={365}
             textColor={'white'}
             size={'xs'}

@@ -166,7 +166,6 @@ const RewardsComponent = ({
 
   const bondingHasStarted: boolean = useMemo(() => genesisStartTimeInNano / 1_000_000 < Date.now(),
     [genesisStartTimeInNano])
-
   return (
     <VStack
       px={4}
@@ -253,7 +252,7 @@ const RewardsComponent = ({
           borderRadius="full"
           variant="primary"
           width={'100%'}
-          disabled={
+          isDisabled={
             txStep === TxStep.Estimating ||
                 txStep === TxStep.Posting ||
                 txStep === TxStep.Broadcasting ||

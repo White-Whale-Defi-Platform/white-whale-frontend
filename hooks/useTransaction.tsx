@@ -53,8 +53,11 @@ export const useTransaction = ({
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
+      if (!signingClient || !debouncedMsgs) {
+        return
+      }
       try {
-        const response = await signingClient.simulate(
+        const response = await signingClient?.simulate(
           senderAddress, debouncedMsgs, '',
         )
         if (buttonLabel) {
@@ -96,9 +99,9 @@ export const useTransaction = ({
     },
     {
       enabled:
-        debouncedMsgs !== null &&
+      Boolean(debouncedMsgs) &&
         txStep === TxStep.Idle &&
-        error === null &&
+        !error &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -190,7 +193,7 @@ export const useTransaction = ({
       return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash !== null,
+      enabled: Boolean(txHash),
       retry: true,
     },
   )
@@ -202,13 +205,13 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(() => {
-    if (!(fee === null || msgs === null || msgs.length < 1)) {
+    if (!(!fee || !msgs || msgs.length < 1)) {
       mutate()
     }
   }, [msgs, fee, mutate])
 
   useEffect(() => {
-    if (txInfo !== null && txHash !== null) {
+    if (txInfo && txHash) {
       if (txInfo?.txResponse?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
