@@ -204,7 +204,7 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(() => {
-    if (!(!fee || !msgs || !msgs || msgs.length < 1)) {
+    if (!(!fee || !msgs || msgs.length < 1)) {
       mutate()
     }
   }, [msgs, fee, mutate])

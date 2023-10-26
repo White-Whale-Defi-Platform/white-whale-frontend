@@ -45,7 +45,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   const router = useRouter()
   const chains: Array<any> = useChainInfos()
   const { chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address } = useChain(walletChainName)
+  const { isWalletConnected, address, openView } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolData } = usePoolsListQuery()
@@ -276,6 +276,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
                     chainId={chainId}
                     poolId={poolIdFromUrl}
                     mobile={isMobile}
+                    openView={openView}
                   />
                 )}
               </TabPanel>
@@ -285,10 +286,11 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
                   clearForm={clearForm}
                   poolId={poolIdFromUrl}
                   mobile={isMobile}
+                  openView={openView}
                 />
               </TabPanel>
               <TabPanel padding={4}>
-                <Claim poolId={poolIdFromUrl} />
+                <Claim poolId={poolIdFromUrl}/>
               </TabPanel>
               {dailyEmissionData.length > 0 ? (
                 <TabPanel padding={4}>

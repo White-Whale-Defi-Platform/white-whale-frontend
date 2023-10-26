@@ -15,10 +15,11 @@ type Props = {
   poolId: string
   isWalletConnected: boolean
   mobile?: boolean
+  openView: any
   clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) => {
+const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -150,7 +151,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
       paddingX={2}
       width="full"
       as="form"
-      onSubmit={handleSubmit(tx?.submit)}
+      onSubmit={isWalletConnected ? handleSubmit(tx?.submit) : handleSubmit(openView)}
     >
       <Input
         control={control}
@@ -189,7 +190,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile }: Props) =
         label={buttonLabel as string}
         isConnected={isWalletConnected}
         txStep={tx?.txStep}
-        isDisabled={tx.txStep !== TxStep.Ready || !isWalletConnected}
+        isDisabled={(tx.txStep !== TxStep.Ready) && isWalletConnected}
       />
 
       <ShowError

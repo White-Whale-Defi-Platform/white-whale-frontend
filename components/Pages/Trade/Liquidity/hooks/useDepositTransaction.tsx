@@ -88,7 +88,6 @@ export const useTransaction = ({
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
         } else {
-          //console.error( error )
           setTxStep(TxStep.Idle)
           setError(error?.message)
           throw Error(error?.message)
