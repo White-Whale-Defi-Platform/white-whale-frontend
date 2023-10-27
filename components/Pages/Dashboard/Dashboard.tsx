@@ -146,6 +146,7 @@ const Dashboard: FC = () => {
     totalGlobalClaimable,
     daysSinceLastClaim,
     globalAvailableRewards,
+    globalIndexInfo,
     isLoading,
   } = useDashboardData(
     address, network, chainId, walletChainName,
@@ -218,6 +219,7 @@ const Dashboard: FC = () => {
               totalGlobalClaimable={totalGlobalClaimable}
               daysSinceLastClaim={daysSinceLastClaim}
               weightInfo={weightInfo}
+              globalInfo={globalIndexInfo}
             />
           </VStack>
         </Flex>

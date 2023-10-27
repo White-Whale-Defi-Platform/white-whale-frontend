@@ -16,6 +16,8 @@ import { useClients } from 'hooks/useClients'
 import { debounce } from 'lodash'
 import { NetworkType } from 'state/chainState'
 
+import { getGlobalIndex } from './getGlobalIndex'
+
 export interface TokenDetails {
   tokenSymbol: string
   denom: string
@@ -132,6 +134,11 @@ export const useDashboardData = (
       queryFn: () => getBondingConfig(queryClient, config),
       enabled: Boolean(queryClient) && Boolean(config),
     },
+    {
+      queryKey: ['globalIndex', network, chainId],
+      queryFn: () => getGlobalIndex(queryClient, config),
+      enabled: Boolean(queryClient) && Boolean(config),
+    },
   ])
 
   const isLoading = useMemo(() => queries.some((query) => (
@@ -156,6 +163,7 @@ export const useDashboardData = (
     const claimableEpochsData = queries[7].data
     const claimableRewardsData = queries[8].data
     const bondingConfigData = queries[9].data
+    const globalIndexData = queries[10].data
     return {
       ...bondedData,
       ...unbondingData,
@@ -167,6 +175,7 @@ export const useDashboardData = (
       ...claimableEpochsData,
       ...claimableRewardsData,
       ...bondingConfigData,
+      ...globalIndexData,
     }
   }, [queries])
 

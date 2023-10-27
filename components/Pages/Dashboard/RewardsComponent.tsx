@@ -115,6 +115,7 @@ const RewardsComponent = ({
   totalGlobalClaimable,
   daysSinceLastClaim,
   weightInfo,
+  globalInfo
 }) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
 
@@ -131,12 +132,22 @@ const RewardsComponent = ({
 
   const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
     1)
+  const annualRewardsPerShare = annualRewards / globalInfo?.weight
+  const rewardsPerYear = weightInfo?.weight * annualRewardsPerShare
+  const defaultAPR = (annualRewardsPerShare * 1_000_000) * 100
+  const myAPR = ((rewardsPerYear / localTotalBonded) * 1_000_000) * 100
 
-  const apr = useMemo(() => ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio,
-    [annualRewards, globalTotalBonded, multiplierRatio])
+  const apr = useMemo(() => (myAPR ? myAPR : defaultAPR),
+    [annualRewards, globalTotalBonded])
 
   const { txStep, submit } = useTransaction()
 
+  if (window.debugLogsEnabled) {
+    console.log('new APR: ', apr)
+    console.log('default APR: ', defaultAPR)
+    console.log('old APR with multiplier: ', ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio)
+    console.log('old APR w/o multiplier: ', ((annualRewards || 0) / (globalTotalBonded || 1)) * 100)
+  }
   const config: Config = useConfig(network, chainId)
 
   const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
