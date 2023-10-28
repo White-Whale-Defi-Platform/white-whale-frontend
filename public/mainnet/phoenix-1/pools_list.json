@@ -474,7 +474,7 @@
       "lpOrder": ["ampROAR", "ROAR"],
       "assetOrder": ["ampROAR", "ROAR"],
       "displayName": "ampROAR-ROAR",
-      "displayLogo1": "/logos/lion.png",
+      "displayLogo1": "/logos/ampROAR.png.png",
       "displayLogo2": "/logos/lion.png",
       "pool_assets": [
         {
@@ -483,7 +483,7 @@
           "symbol": "ampROAR",
           "name": "ampRoar",
           "decimals": 6,
-          "logoURI": "/logos/lion.png",
+          "logoURI": "/logos/ampROAR.png",
           "tags": [],
           "native": true,
           "denom": "factory/terra1vklefn7n6cchn0u962w3gaszr4vf52wjvd4y95t2sydwpmpdtszsqvk9wy/ampROAR"
