@@ -115,7 +115,7 @@ const RewardsComponent = ({
   totalGlobalClaimable,
   daysSinceLastClaim,
   weightInfo,
-  globalInfo
+  globalInfo,
 }) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
 
@@ -132,12 +132,11 @@ const RewardsComponent = ({
 
   const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
     1)
-  const annualRewardsPerShare = annualRewards / globalInfo?.weight
-  const rewardsPerYear = weightInfo?.weight * annualRewardsPerShare
-  const defaultAPR = (annualRewardsPerShare * 1_000_000) * 100
-  const myAPR = ((rewardsPerYear / localTotalBonded) * 1_000_000) * 100
-
-  const apr = useMemo(() => (myAPR ? myAPR : defaultAPR),
+  const localEmission = annualRewards * (localWeight / globalInfo?.weight)
+  const localAPR = (localEmission / localTotalBonded) * 1_000_000 * 100
+  // Const defaultAPR = ((annualRewards * (1_000_000 / globalInfo?.weight)) / 1_000_000) * 1_000_000 * 100
+  const defaultAPR = (annualRewards * (1_000_000 / globalInfo?.weight)) * 100
+  const apr = useMemo(() => (localAPR ? localAPR : defaultAPR),
     [annualRewards, globalTotalBonded])
 
   const { txStep, submit } = useTransaction()
