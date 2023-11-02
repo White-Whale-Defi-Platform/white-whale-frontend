@@ -15,13 +15,13 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
-      - name: Use Node.js 18.16.1
+      - name: Use Node.js 20.9.0
         uses: actions/setup-node@v3
         with:
-          node-version: 18.16.1
+          node-version: 20.9.0
       - name: Install dependencies
-        run: yarn install
-      - run: yarn build
-      - run: yarn prettier
-      - run: yarn unimported
+        run: npm install
+      - run: npm run build
+      - run: npm run prettier
+      - run: npm run unimported
       # - run: yarn test

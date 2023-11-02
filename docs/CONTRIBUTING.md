@@ -18,19 +18,18 @@ The following are the tools you'll need:
 
 - [Git](https://git-scm.com/)
 - [NodeJS](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/)
 - wasm32 target
 
 ```bash
-$ yarn
+$ npm install
 
-$ yarn dev
+$ npm run dev
 
 # for running a close to prod version
-$ yarn start
+$ npm start
 
 # for building a production package
-$ yarn build
+$ npm run build
 ```
 
 - An IDE. We recommend either [Intellij Idea](https://www.jetbrains.com/idea/download/) or [VS Code](https://code.visualstudio.com/download),
@@ -68,7 +67,7 @@ The following are the steps to fork the repository to your GitHub account and cl
    you are trying to achieve: - Please use [conventional commits](https://conventionalcommits.org) syntax. - Please make sure to use clear commit messages. - Please favor small commits instead of large ones.
 6. Make sure to visually test your features or additions locally before deploying.
 7. Make sure your code compiles, so that it can be deployed on Netlify
-   - `yarn build`
+   - `npm run build`
 8. Test your code. We strive for high quality code, so any changes you introduce ideally will be tested. We know testing frontends
    can be difficult at first! If you are not sure how to create tests, please refer to existing ones or just ask us on our
    [discord](https://discordapp.com/channels/908044702794801233/987301947440767006). Please note that **Untested code will be rejected**. After we have an adequate test suite in place such that contributors can easily write tests we will ask for tests on all new features. - `cargo test`
