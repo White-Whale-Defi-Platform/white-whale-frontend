@@ -23,8 +23,8 @@
     "@cosmjs/launchpad": "0.27.1",
     "@cosmjs/proto-signing": "0.31.3",
     "@cosmos-kit/cosmostation": "^2.4.6",
-    "@cosmos-kit/keplr": "^2.4.6",
-    "@cosmos-kit/leap": "^2.4.5",
+    "@cosmos-kit/keplr": "^2.4.7",
+    "@cosmos-kit/leap": "^2.4.6",
     "@cosmos-kit/react-lite": "^2.5.5",
     "@cosmos-kit/shell": "^2.4.5",
     "@cosmos-kit/station": "^2.4.4",
@@ -57,8 +57,8 @@
     "recoil": "^0.7.7"
   },
   "devDependencies": {
-    "@keplr-wallet/types": "^0.12.39",
-    "@types/react": "18.2.33",
+    "@keplr-wallet/types": "^0.12.40",
+    "@types/react": "18.2.34",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.52.0",
     "eslint-config-next": "^14.0.1",
