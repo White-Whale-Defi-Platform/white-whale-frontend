@@ -9,7 +9,7 @@ import TruncatedAddress from 'components/Wallet/ConnectedWalletWithDisconnect/Co
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-export const ConnectedWallet = ({ connected }) => {
+export const ConnectedWallet = () => {
   const toast = useToast()
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
@@ -37,7 +37,7 @@ export const ConnectedWallet = ({ connected }) => {
       width="full"
     >
       <ConnectedWalletIcon />
-      <TruncatedAddress connected={connected} />
+      <TruncatedAddress/>
     </HStack>
   )
 }
