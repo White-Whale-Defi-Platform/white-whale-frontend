@@ -170,7 +170,7 @@ const BalanceWithMaxNHalf = ({
             maxwidth={'50'}
             size={'xs'}
           />
-        </>) : (null)}
+        </>) : null}
     </HStack>
     {mobile ? (
       <>
@@ -188,7 +188,7 @@ const BalanceWithMaxNHalf = ({
             size={'md'}
           />
         </HStack>
-      </>) : (null)}
+      </>) : null}
   </>)
 
 export default BalanceWithMaxNHalf

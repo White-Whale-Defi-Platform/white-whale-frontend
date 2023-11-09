@@ -70,10 +70,10 @@ const Wallet = () => {
     if (walletType === WalletType.leapSnap) {
       const snapChainIds = chains.
         filter((row) => row.coinType === 118).
-        map((row) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId]);
+        map((row) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[row.chainId])
 
-      setWalletChains(snapChainIds);
-      setCurrentConnectedChainIds(snapChainIds);
+      setWalletChains(snapChainIds)
+      setCurrentConnectedChainIds(snapChainIds)
     } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
       const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
 
@@ -115,11 +115,11 @@ const Wallet = () => {
     }
   }, [chains, currentChainState.network, chainName, window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)])
 
-  const resetWallet = () => {
+  const resetWallet = async () => {
     setCurrentConnectedChainIds([])
     queryClient.clear()
     setWalletChains([])
-    disconnect()
+    await disconnect()
   }
 
   useEffect(() => {
@@ -267,7 +267,6 @@ const Wallet = () => {
           />
         </Box>
         <ConnectedWalletWithDisconnect
-          connected={isWalletConnected}
           onDisconnect={resetWallet}
         />
       </Card>

@@ -4,9 +4,9 @@ import { IconButton } from '@chakra-ui/react'
 import LogoutIcon from 'components/Icons/LogoutIcon'
 import { ConnectedWallet } from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWallet'
 
-export const ConnectedWalletWithDisconnect = ({ connected, onDisconnect }) => (
+export const ConnectedWalletWithDisconnect = ({ onDisconnect }) => (
   <>
-    <ConnectedWallet connected={connected} />
+    <ConnectedWallet />
     <IconButton
       aria-label="Logout"
       icon={<LogoutIcon />}
