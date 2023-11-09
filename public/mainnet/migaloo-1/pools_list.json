@@ -316,8 +316,9 @@
 
       ],
       "assetOrder": [
-        "ampMNTA",
-        "WHALE"
+        
+        "WHALE",
+        "ampMNTA"
       ],
       "displayName": "ampMNTA-WHALE",
       "displayLogo2": "/logos/whale.svg",
