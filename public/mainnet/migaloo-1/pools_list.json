@@ -309,19 +309,33 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "WHALE-ampMNTA",
+      "pool_id": "ampMNTA-WHALE",
       "lpOrder": [
         "WHALE",
         "ampMNTA"
       ],
       "assetOrder": [
-        "WHALE",
-        "ampMNTA"
+        
+        "ampMNTA",
+        "WHALE"
       ],
-      "displayName": "WHALE-ampMNTA",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/ampmnta.png",
+      "displayName": "ampMNTA-WHALE",
+      "displayLogo2": "/logos/whale.svg",
+      "displayLogo1": "/logos/ampmnta.png",
       "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87",
+          "symbol": "ampMNTA",
+          "name": "ampMNTA",
+          "decimals": 6,
+          "logoURI": "/logos/ampmnta.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87"
+        },
         {
           "id": "white-whale",
           "chain_id": "migaloo-1",
@@ -335,19 +349,6 @@
           ],
           "native": true,
           "denom": "uwhale"
-        },
-        {
-          "chain_id": "migaloo-1",
-          "token_address": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87",
-          "symbol": "ampMNTA",
-          "name": "ampMNTA",
-          "decimals": 6,
-          "logoURI": "/logos/ampmnta.png",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87"
         }
       ],
       "swap_address": "migaloo1hcfxtr40txsay0y59e88q099qu78cy9kqe6w5yr9swr0v08ydecsss8h4z",
