@@ -23,6 +23,7 @@ const createLpMsg = ({
     return {
       provide_liquidity: {
         assets: [asset1, asset2],
+        slippage_tolerance: '0.005',
       },
     }
   }
@@ -32,6 +33,7 @@ const createLpMsg = ({
       assets: [asset1, asset2],
       pair_address: pairAddress,
       unbonding_duration: bondingDays * minUnbondingDuration,
+      slippage_tolerance: '0.005',
     },
   }
 }

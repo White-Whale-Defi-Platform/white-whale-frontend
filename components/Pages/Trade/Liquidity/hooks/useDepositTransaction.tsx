@@ -49,6 +49,7 @@ export const useTransaction = ({
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
 
+
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', tokenAAmount, tokenBAmount, debouncedMsgs, error],
     async () => {
@@ -87,6 +88,11 @@ export const useTransaction = ({
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
+        } else if ((/Slippage tolerance exceeded/u).test(error.toString())) {
+          console.error(error)
+          setTxStep(TxStep.Idle)
+          setError('Slippage too high')
+          throw new Error('Retry again later')
         } else {
           setTxStep(TxStep.Idle)
           setError(error?.message)

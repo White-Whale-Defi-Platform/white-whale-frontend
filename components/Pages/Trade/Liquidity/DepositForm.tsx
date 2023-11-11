@@ -168,7 +168,7 @@ const DepositForm = ({
         name="token2"
         control={control}
         token={tokenB}
-        isDisabled={true}
+        isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         mobile={mobile}
         onChange={(value) => {
           setReverse(true)
