@@ -474,7 +474,7 @@
       "lpOrder": ["ampROAR", "ROAR"],
       "assetOrder": ["ampROAR", "ROAR"],
       "displayName": "ampROAR-ROAR",
-      "displayLogo1": "/logos/ampROAR.png.png",
+      "displayLogo1": "/logos/ampROAR.png",
       "displayLogo2": "/logos/lion.png",
       "pool_assets": [
         {

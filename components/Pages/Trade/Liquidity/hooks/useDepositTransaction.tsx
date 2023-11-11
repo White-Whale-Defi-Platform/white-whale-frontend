@@ -8,8 +8,6 @@ import useDebounceValue from 'hooks/useDebounceValue'
 import { executeAddLiquidity } from 'services/liquidity/index'
 import { TxStep } from 'types/common'
 
-import { getPoolInfo } from '../../../../../services/swap'
-
 type Params = {
   enabled: boolean
   swapAddress: string
@@ -51,29 +49,10 @@ export const useTransaction = ({
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
 
-  const confirmRatio = async (debouncedMsgFunds:Array<any>) => {
-    const address = msgs.provide_liquidity ? swapAddress : msgs.deposit.pair_address;
-    const poolInfo = await getPoolInfo(address, signingClient);
-    const poolAssets = poolInfo.assets;
-
-    const [poolAsset1, poolAsset2] = poolAssets;
-    const poolRatio = poolAsset1.amount / poolAsset2.amount;
-
-    const transactionRatio =
-      Number(debouncedMsgFunds.find((elem: any) => elem.denom === poolAsset1.info.native_token.denom).amount) /
-      Number(debouncedMsgFunds.find((elem: any) => elem.denom === poolAsset2.info.native_token.denom).amount);
-
-    const slippage = (poolRatio / 100) * 2;
-
-    if (!(transactionRatio >= poolRatio - slippage && transactionRatio <= poolRatio + slippage)) {
-      throw new Error('LP Spread Error');
-    }
-  }
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', tokenAAmount, tokenBAmount, debouncedMsgs, error],
     async () => {
-      await confirmRatio(debouncedMsgs[0].value.funds)
       setError(null)
       setTxStep(TxStep.Estimating)
       if (!signingClient) {
@@ -109,6 +88,11 @@ export const useTransaction = ({
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
+        } else if ((/Slippage tolerance exceeded/u).test(error.toString())) {
+          console.error(error)
+          setTxStep(TxStep.Idle)
+          setError('Slippage too high')
+          throw new Error('Retry again later')
         } else {
           setTxStep(TxStep.Idle)
           setError(error?.message)
