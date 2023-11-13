@@ -311,8 +311,8 @@
     {
       "pool_id": "ampMNTA-WHALE",
       "lpOrder": [
-        "WHALE",
-        "ampMNTA"
+        "ampMNTA",
+        "WHALE"
       ],
       "assetOrder": [
         
