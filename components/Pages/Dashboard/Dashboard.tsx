@@ -144,7 +144,7 @@ const Dashboard: FC = () => {
     annualRewards,
     currentEpoch,
     totalGlobalClaimable,
-    daysSinceLastClaim,
+    lastClaimedTime,
     globalAvailableRewards,
     globalIndexInfo,
     isLoading,
@@ -217,7 +217,7 @@ const Dashboard: FC = () => {
               annualRewards={annualRewards}
               globalAvailableRewards={globalAvailableRewards}
               totalGlobalClaimable={totalGlobalClaimable}
-              daysSinceLastClaim={daysSinceLastClaim}
+              daysSinceLastClaim={lastClaimedTime}
               weightInfo={weightInfo}
               globalInfo={globalIndexInfo}
             />
