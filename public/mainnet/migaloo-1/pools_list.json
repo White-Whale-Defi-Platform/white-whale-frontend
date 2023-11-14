@@ -309,19 +309,33 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "WHALE-ampMNTA",
+      "pool_id": "ampMNTA-WHALE",
       "lpOrder": [
-        "WHALE",
-        "ampMNTA"
+        "ampMNTA",
+        "WHALE"
       ],
       "assetOrder": [
-        "WHALE",
-        "ampMNTA"
+        
+        "ampMNTA",
+        "WHALE"
       ],
-      "displayName": "WHALE-ampMNTA",
-      "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/ampmnta.png",
+      "displayName": "ampMNTA-WHALE",
+      "displayLogo2": "/logos/whale.svg",
+      "displayLogo1": "/logos/ampmnta.png",
       "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87",
+          "symbol": "ampMNTA",
+          "name": "ampMNTA",
+          "decimals": 6,
+          "logoURI": "/logos/ampmnta.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87"
+        },
         {
           "id": "white-whale",
           "chain_id": "migaloo-1",
@@ -335,24 +349,11 @@
           ],
           "native": true,
           "denom": "uwhale"
-        },
-        {
-          "chain_id": "migaloo-1",
-          "token_address": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87",
-          "symbol": "ampMNTA",
-          "name": "ampMNTA",
-          "decimals": 6,
-          "logoURI": "/logos/ampmnta.png",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/0102CC6E28D29F57444C645C86AE2F4E8789C3A85445A3B185E51F0A23862E87"
         }
       ],
-      "swap_address": "migaloo1hcfxtr40txsay0y59e88q099qu78cy9kqe6w5yr9swr0v08ydecsss8h4z",
-      "lp_token": "factory/migaloo1hcfxtr40txsay0y59e88q099qu78cy9kqe6w5yr9swr0v08ydecsss8h4z/uLP",
-      "staking_address": "migaloo18zgkqvgjrh6d0f2jukhtrq2hvky4e7qwfagw95knm6huzfeja4xqvggnqw",
+      "swap_address": "migaloo1wxnc6vd83pxudrfjf0ql8v73x3xute65fefxm7x5qxsehy5g0pzskclu2r",
+      "lp_token": "factory/migaloo1wxnc6vd83pxudrfjf0ql8v73x3xute65fefxm7x5qxsehy5g0pzskclu2r/uLP",
+      "staking_address": "migaloo1nplqhfd64jru7cj5ng2f3kh9g70gr3l3yut7wsu85z4q599hag5s0enjy8",
       "rewards_tokens": []
     }
   ],
