@@ -15,9 +15,6 @@ import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import {
-  convertMicroDenomToDenom,
-} from 'util/conversion/index'
 import { calculateDurationString, nanoToMilli } from 'util/conversion/timeUtil'
 
 type Props = {
@@ -57,8 +54,7 @@ const Withdraw = ({
   const withdrawableTokens = withdrawableInfos?.map((row) => ({
     ...row,
     dollarValue:
-      (prices?.[row.tokenSymbol] ?? whalePrice) *
-      convertMicroDenomToDenom(row.amount, 6),
+      (prices?.[row.tokenSymbol] ?? whalePrice) * row.amount,
   }))
 
   const ProgressBar = ({ percent }) => (

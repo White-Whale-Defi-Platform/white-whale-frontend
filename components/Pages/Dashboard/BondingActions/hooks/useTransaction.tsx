@@ -87,7 +87,7 @@ export const useTransaction = () => {
 
   const { mutate } = useMutation(async (data: any) => {
     const adjustedAmount = convertDenomToMicroDenom(data.amount, 6)
-    if (data.bondingAction === ActionType.bond) { 
+    if (data.bondingAction === ActionType.bond) {
       return await bondTokens(
         signingClient,
         address,

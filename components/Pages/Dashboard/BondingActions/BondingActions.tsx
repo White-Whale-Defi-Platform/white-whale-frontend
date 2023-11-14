@@ -53,7 +53,7 @@ const BondingActions = ({ globalAction }) => {
   )
 
   const unbondingPeriodInNano = Number(bondingConfig?.unbonding_period)
-  const totalWithdrawable = withdrawableInfos?.reduce((acc, e) => acc + e?.amount,
+  const totalWithdrawable = withdrawableInfos?.reduce((acc, e) => acc + (e?.amount || 0),
     0)
 
   const buttonLabel = useMemo(() => {
@@ -249,14 +249,14 @@ const BondingActions = ({ globalAction }) => {
               txStep === TxStep.Posting ||
               txStep === TxStep.Broadcasting
             }
-            onClick={async () => {
+            onClick={ () => {
               if (isWalletConnected) {
                 let { denom } = config.bonding_tokens.find((token) => token.tokenSymbol === currentBondState.tokenSymbol)
                 if (globalAction === ActionType.withdraw) {
                   denom = getFirstDenomWithPositiveAmount(withdrawableInfos,
                     config)
                 }
-                await submit(
+                submit(
                   globalAction, currentBondState.amount, denom,
                 )
               } else {
