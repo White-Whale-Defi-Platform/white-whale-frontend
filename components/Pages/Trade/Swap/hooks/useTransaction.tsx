@@ -82,6 +82,11 @@ export const useTransaction = ({
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
           throw new Error('Try increasing slippage')
+        } else if ((/Spread limit exceeded/u).test(error.toString())) {
+          console.error(error)
+          setTxStep(TxStep.Idle)
+          setError('Try increasing slippage or with a smaller amount')
+          throw new Error('Try increasing slippage')
         } else {
           console.error(error)
           setTxStep(TxStep.Idle)
