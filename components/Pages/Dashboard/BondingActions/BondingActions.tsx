@@ -106,7 +106,6 @@ const BondingActions = ({ globalAction }) => {
     const foundToken = config?.bonding_tokens?.
       map((tokenConfig) => withdrawableInfos.find((info) => info.denom === tokenConfig.denom)).
       find((info) => info && info.amount > 0)
-
     return foundToken?.denom
   }
 
@@ -251,10 +250,12 @@ const BondingActions = ({ globalAction }) => {
             }
             onClick={async () => {
               if (isWalletConnected) {
-                let { denom } = config.bonding_tokens.find((token) => token.tokenSymbol === currentBondState.tokenSymbol)
+                let denom: any
                 if (globalAction === ActionType.withdraw) {
                   denom = getFirstDenomWithPositiveAmount(withdrawableInfos,
                     config)
+                } else {
+                  denom = config.bonding_tokens.find((token) => token.tokenSymbol === currentBondState.tokenSymbol)
                 }
                 await submit(
                   globalAction, currentBondState.amount, denom,

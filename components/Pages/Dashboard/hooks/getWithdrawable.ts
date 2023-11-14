@@ -47,14 +47,12 @@ export const getWithdrawable = async (
     flatMap((item) => item).
     map((item) => {
       const tokenSymbol = config.bonding_tokens.find((token) => token.denom === item.denom)?.tokenSymbol
-
       return {
-        amount: convertMicroDenomToDenom(item.amount, 6),
+        amount: item.amount,
         denom: item.denom,
         tokenSymbol,
       }
     })
-
   return { withdrawableInfos }
 }
 

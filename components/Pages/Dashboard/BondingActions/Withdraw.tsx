@@ -54,13 +54,13 @@ const Withdraw = ({
       timestamp: row.timestamp,
     }
   })
-  const withdrawableTokens = withdrawableInfos?.map((row) => ({
+
+  const withdrawableTokens = withdrawableInfos?.map((row) => ( {
     ...row,
     dollarValue:
       (prices?.[row.tokenSymbol] ?? whalePrice) *
       convertMicroDenomToDenom(row.amount, 6),
   }))
-
   const ProgressBar = ({ percent }) => (
     <Box
       h="3px"
@@ -74,7 +74,7 @@ const Withdraw = ({
   )
 
   const TokenBox = ({ label, tokens }) => {
-    const dollarValue = tokens?.reduce((acc, cur) => acc + cur.dollarValue, 0)
+    const dollarValue = tokens?.reduce((acc:number, cur:any) => acc + cur.dollarValue, 0)
     return (
       <Box
         border="0.5px solid"

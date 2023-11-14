@@ -7,7 +7,6 @@ export const convertMicroDenomToDenom = (value: number | string,
   if (decimals === 0) {
     return Number(value)
   }
-
   return protectAgainstNaN(Number(value) / (10 ** decimals))
 }
 

@@ -26,10 +26,8 @@ export const getTotalBonded = async (client: CosmWasmClient,
   }
   try {
     const totalBondedInfo = await fetchTotalBonded(client, config)
-
     const globalTotalBonded = convertMicroDenomToDenom(totalBondedInfo?.total_bonded || 0,
       6)
-
     return { globalTotalBonded }
   } catch (e) {
     return 0
