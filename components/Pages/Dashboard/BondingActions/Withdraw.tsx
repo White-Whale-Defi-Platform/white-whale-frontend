@@ -44,7 +44,7 @@ const Withdraw = ({
     return 0 // Default value
   }, [prices])
 
-  const [tokenList, _] = useTokenList()
+  const [tokenList] = useTokenList()
   const unbondingTokens = unbondingRequests?.map((row) => {
     const tokenSymbol = tokenList.tokens.find((token) => token.denom === row.denom)?.symbol
     return {

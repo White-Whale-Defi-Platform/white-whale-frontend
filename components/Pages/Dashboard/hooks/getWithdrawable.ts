@@ -49,7 +49,7 @@ export const getWithdrawable = async (
       const tokenSymbol = config.bonding_tokens.find((token) => token.denom === item.denom)?.tokenSymbol
 
       return {
-        amount: convertMicroDenomToDenom(item.amount, 6),
+        amount: item.amount,
         denom: item.denom,
         tokenSymbol,
       }
