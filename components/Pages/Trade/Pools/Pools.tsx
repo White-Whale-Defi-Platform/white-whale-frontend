@@ -30,7 +30,6 @@ import {
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
 import { chainState } from 'state/chainState'
-import { parseLiquidity } from 'util/conversion/numberUtil'
 import { EnigmaPoolData } from 'util/enigma'
 
 type PoolData = PoolEntityTypeWithLiquidity &
@@ -117,7 +116,7 @@ const Pools = () => {
         ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
       }))
 
-      const _allPools = await Promise.all(_pools.map(async (pool) => {
+      const _allPools = await Promise.all(_pools.map((pool) => {
         const isUSDPool =
             STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
             STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
@@ -237,7 +236,7 @@ const Pools = () => {
     const pools = allPoolsForShown
     return showAllPools
       ? pools
-      : pools.filter((item) => parseLiquidity(item.totalLiq) > 1000)
+      : pools.filter((item) => item.totalLiq > 1000)
   }, [allPoolsForShown, showAllPools])
 
   return (

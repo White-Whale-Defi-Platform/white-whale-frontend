@@ -29,6 +29,7 @@ import Liquidity from 'components/Pages/Trade/Pools/components/liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
+import { formatPrice } from 'libs/num'
 
 const columnHelper = createColumnHelper<Pool>()
 
@@ -47,15 +48,17 @@ const columns = [
       />
     ),
   }),
-  columnHelper.accessor('price', {
+  columnHelper.accessor((row) => row.price, {
+    id: 'price',
     header: () => (
       <Text align="right" color="brand.50" display="inline">
         {'RATIO'}
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => <Text align="right">{`${Number(info.getValue()).toFixed(3)}`}</Text>,
   }),
-  columnHelper.accessor('apr', {
+  columnHelper.accessor((row) => row.apr, {
+    id: 'apr',
     header: () => (
       <Text align="right" color="brand.50" display="inline">
         {'APR'}
@@ -65,31 +68,25 @@ const columns = [
       <Text>{info.getValue()}</Text>
     ) : (
       <Apr
-        apr={info.getValue()?.toString()}
+        apr={`${Number(info.getValue()).toFixed(2)}`}
         flows={info.row.original.flows}
       />
     )),
   }),
-  columnHelper.accessor('volume24hr', {
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'24hr Volume'}
-      </Text>
-    ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+  columnHelper.accessor((row) => row.volume24hr, {
+    id: 'volume24hr',
+    header: () => <Text align="right" color="brand.50" display="inline">
+      24hr Volume
+    </Text>,
+    cell: (info) => <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
   }),
-  columnHelper.accessor('totalLiq', {
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'Total Liquidity'}
-      </Text>
-    ),
-    cell: (info) => (
-      <Liquidity
-        liquidity={info.getValue()?.toString()}
-        infos={info.row.original}
-      />
-    ),
+  columnHelper.accessor((row) => row.totalLiq, {
+    id: 'totalLiq',
+    header: () => <Text align="right" color="brand.50" display="inline">Total Liquidity</Text>,
+    cell: (info) => <Liquidity
+      liquidity={`$${formatPrice(info.getValue())}`}
+      infos={info.row.original}
+    />,
   }),
   columnHelper.accessor('incentives', {
     header: () => (

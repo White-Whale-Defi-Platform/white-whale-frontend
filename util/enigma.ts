@@ -90,12 +90,11 @@ export const getPairAprAndDailyVolume = async (pools: any[],
       const pairInfo = pairInfos.find((row: any) => row.pool_id === poolId)
       return {
         pool_id: poolId,
-        usdVolume24h: `$${formatPrice(pairInfo?.volume_24h)}`,
-        usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
-        totalLiquidity: Number(pairInfo?.TVL),
-        TVL: `$${formatPrice(pairInfo?.TVL)}`,
-        apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
-        ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
+        usdVolume24h: pairInfo?.volume_24h,
+        usdVolume7d: pairInfo?.volume_7d,
+        TVL: pairInfo?.TVL,
+        apr7d: pairInfo?.APR,
+        ratio: Number(pairInfo?.Price),
       } as EnigmaPoolData
     })
   }
