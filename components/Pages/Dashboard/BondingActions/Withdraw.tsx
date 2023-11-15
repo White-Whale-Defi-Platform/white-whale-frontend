@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react'
 
 import {
   Box,
@@ -8,12 +8,15 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
+import { BondingTokenState } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
+import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { WhaleTooltip } from 'components/Pages/Dashboard/WhaleTooltip'
 import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'
 import { calculateDurationString, nanoToMilli } from 'util/conversion/timeUtil'
 
@@ -27,7 +30,7 @@ const Withdraw = ({
   withdrawableInfos,
   unbondingPeriodInNano,
 }: Props) => {
-  const { walletChainName } = useRecoilValue(chainState)
+  const { walletChainName, network, chainId } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
 
   const prices = usePrices()
@@ -51,6 +54,24 @@ const Withdraw = ({
       timestamp: row.timestamp,
     }
   })
+  const [_, setCurrentBondState] =
+    useRecoilState<BondingTokenState>(bondingState)
+
+  const config = useConfig(network, chainId)
+
+  useEffect(() => {
+    if (config) {
+      // eslint-disable-next-line prefer-destructuring
+      const firstToken = config.bonding_tokens[0]
+      setCurrentBondState({
+        tokenSymbol: firstToken.tokenSymbol,
+        amount: 0,
+        decimals: 6,
+        denom: firstToken.denom,
+      })
+    }
+  }, [isWalletConnected, config])
+
   const withdrawableTokens = withdrawableInfos?.map((row) => ({
     ...row,
     dollarValue:
