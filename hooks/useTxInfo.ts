@@ -12,12 +12,12 @@ const useTxInfo = ({ txHash, signingClient }: TxInfo) => {
     ['txInfo', txHash],
     () => {
       if (!txHash) {
-        return
+        return null
       }
       return signingClient.getTx(txHash)
     },
     {
-      enabled: txHash != null,
+      enabled: Boolean(txHash),
       retry: true,
     },
   )

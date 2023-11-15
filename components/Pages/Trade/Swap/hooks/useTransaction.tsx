@@ -54,7 +54,7 @@ export const useTransaction = ({
       setError(null)
       setTxStep(TxStep.Estimating)
       if (!signingClient) {
-        return
+        return null
       }
       try {
         const response = await signingClient?.simulate(
@@ -78,9 +78,12 @@ export const useTransaction = ({
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
         } else if ((/Max spread assertion/u).test(error.toString())) {
-          console.error(error)
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
+          throw new Error('Try increasing slippage')
+        } else if ((/Spread limit exceeded/u).test(error.toString())) {
+          setTxStep(TxStep.Idle)
+          setError('Try increasing slippage or with a smaller amount')
           throw new Error('Try increasing slippage')
         } else {
           console.error(error)

@@ -71,7 +71,7 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
   const reset = () => {
     setTxState({
       txStep: TxStep.Idle,
-      txHash: undefined,
+      txHash: null,
       error: null,
       buttonLabel: null,
     })
