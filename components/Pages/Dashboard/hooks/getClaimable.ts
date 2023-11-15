@@ -48,15 +48,14 @@ export const getClaimable = async (
   const data = await fetchClaimableData(
     client, address, config,
   )
-  const daysSinceLastClaim = data?.epochs.length
-
+  const lastClaimedTime = (Number(data?.epochs[data?.epochs.length - 1]?.start_time) / 1e6) || 0
   const claimableAmounts = data?.epochs.
     flatMap((e) => e.available.map((a) => a.amount)).
     reduce((acc, amount) => acc + parseFloat(amount), 0)
 
   const totalGlobalClaimable = convertMicroDenomToDenom(claimableAmounts, 6)
   return { totalGlobalClaimable,
-    daysSinceLastClaim }
+    lastClaimedTime }
 }
 const fetchClaimableData = async (
   client: CosmWasmClient,

@@ -22,12 +22,16 @@ export const aggregateAndSortTaxAmounts = (amounts: { denom: string, amount: str
   return acc;
 }, [] as { denom: string, amount: string }[]).sort((a, b) => a.denom.localeCompare(b.denom));
 
-export const lastClaimed = (daysSinceLastClaim: number) => {
-  if (daysSinceLastClaim >= 21) {
+export const lastClaimed = (latestEpochStartDate: number) => {
+  let days = Math.ceil((Date.now() - latestEpochStartDate) / 86400000)
+  if (latestEpochStartDate === 0) {
+    days = 0
+  }
+  if (days >= 21) {
     return '21+ days ago'
-  } else if (daysSinceLastClaim === 0) {
+  } else if (days === 0) {
     return 'Today'
   }
-  const multiple = daysSinceLastClaim === 1 ? '' : 's'
-  return `${daysSinceLastClaim} day${multiple} ago`
+  const multiple = days === 1 ? '' : 's'
+  return `${days} day${multiple} ago`
 }
