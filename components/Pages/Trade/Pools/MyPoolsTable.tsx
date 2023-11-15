@@ -1,4 +1,8 @@
+import React from 'react'
+
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
+  chakra,
   Flex,
   HStack,
   Table,
@@ -15,6 +19,8 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from '@tanstack/react-table'
 import { IncentiveTooltip } from 'components/InfoTooltip'
@@ -24,13 +30,17 @@ import Liquidity from 'components/Pages/Trade/Pools/components/liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
+import { formatPrice } from 'libs/num'
 
 const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
   columnHelper.accessor('pool', {
-    header: () => (<Text color="brand.50" display="inline">
-    Pool</Text>),
+    header: () => (
+      <Text color="brand.50" display="inline">
+        Pool
+      </Text>
+    ),
     cell: (info) => (
       <PoolName
         poolId={info.getValue()}
@@ -39,17 +49,19 @@ const columns = [
       />
     ),
   }),
-  columnHelper.accessor('price', {
+  columnHelper.accessor((row) => row.price, {
+    id: 'price',
     header: () => (
       <Text align="right" color="brand.50" display="inline">
         {'RATIO'}
       </Text>
     ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+    cell: (info) => <Text align="right">{`${Number(info.getValue()).toFixed(3)}`}</Text>,
   }),
-  columnHelper.accessor('apr', {
+  columnHelper.accessor((row) => row.apr, {
+    id: 'apr',
     header: () => (
-      <Text align="right" color="brand.50">
+      <Text align="right" color="brand.50" display="inline">
         {'APR'}
       </Text>
     ),
@@ -57,43 +69,38 @@ const columns = [
       <Text>{info.getValue()}</Text>
     ) : (
       <Apr
-        apr={info.getValue()?.toString()}
+        apr={`${Number(info.getValue()).toFixed(2)}`}
         flows={info.row.original.flows}
       />
     )),
   }),
-  columnHelper.accessor('volume24hr', {
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'24hr Volume'}
-      </Text>
-    ),
-    cell: (info) => <Text align="right">{info.getValue()}</Text>,
+  columnHelper.accessor((row) => row.volume24hr, {
+    id: 'volume24hr',
+    header: () => <Text align="right" color="brand.50" display="inline">
+      24hr Volume
+    </Text>,
+    cell: (info) => <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
   }),
-  columnHelper.accessor('totalLiq', {
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'Total Liquidity'}
-      </Text>
-    ),
-    cell: (info) => (
-      <Liquidity
-        liquidity={info.getValue()?.toString()}
-        infos={info.row.original}
-      />
-    ),
+  columnHelper.accessor((row) => row.totalLiq, {
+    id: 'totalLiq',
+    header: () => <Text align="right" color="brand.50" display="inline">Total Liquidity</Text>,
+    cell: (info) => <Liquidity
+      liquidity={`$${formatPrice(info.getValue())}`}
+      infos={info.row.original}
+    />,
   }),
   columnHelper.accessor('myPosition', {
+    id: 'myPosition',
     header: () => (
       <Text align="right" color="brand.50" display="inline">
-        {'My Position'}
+        My Position
       </Text>
     ),
-    cell: (info) => <Text align="right">${info.getValue()}</Text>,
+    cell: (info) => <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
   }),
   columnHelper.accessor('incentives', {
     header: () => (
-      <HStack>
+      <HStack paddingTop={4}>
         <IncentiveTooltip iconSize={'3'} />
         <Text align="left" color="brand.50">
           {'Incentives'}
@@ -104,7 +111,7 @@ const columns = [
   }),
   columnHelper.accessor('action', {
     header: () => (
-      <Text align="left" color="brand.50">
+      <Text align="left" color="brand.50" display="inline">
         Action
       </Text>
     ),
@@ -121,6 +128,7 @@ const PoolsTable = ({
   pools: Pool[]
   isLoading: boolean
 }) => {
+  const [sorting, setSorting] = React.useState<SortingState>([])
   if (!show) {
     return null
   }
@@ -128,6 +136,11 @@ const PoolsTable = ({
     data: pools,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   })
 
   if (isLoading || !pools) {
@@ -198,11 +211,25 @@ const PoolsTable = ({
                     bg={
                       header.id === 'myPosition' && 'rgba(255, 255, 255, 0.05)'
                     }
+                    onClick={
+                      header.id === 'action' || header.id === 'incentives' || header.id === 'pool'
+                        ? null
+                        : header.column.getToggleSortingHandler()
+                    }
                   >
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header,
                         header.getContext())}
+                    <chakra.span pl="2">
+                      {header.column.getIsSorted() ? (
+                        header.column.getIsSorted() === 'desc' ? (
+                          <TriangleDownIcon aria-label="sorted descending" />
+                        ) : (
+                          <TriangleUpIcon aria-label="sorted ascending" />
+                        )
+                      ) : null}
+                    </chakra.span>
                   </Th>
                 ))}
               </Tr>

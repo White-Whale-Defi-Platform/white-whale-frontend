@@ -181,7 +181,7 @@ const AllPoolsTable = ({
                     key={header.id}
                     color="brand.50"
                     onClick={
-                      header.id === 'action' || header.id === 'incentives'
+                      header.id === 'action' || header.id === 'incentives' || header.id === 'pool'
                         ? null
                         : header.column.getToggleSortingHandler()
                     }
