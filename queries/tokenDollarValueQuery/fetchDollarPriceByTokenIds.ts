@@ -33,6 +33,9 @@ export const fetchDollarPriceByTokenIds = debounce(async (tokenIds: Array<string
       {
         method: 'GET',
         cache: 'force-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
     if (response.status === 200) {
       return await response.json()
