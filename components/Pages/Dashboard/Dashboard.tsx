@@ -125,11 +125,11 @@ const Dashboard: FC = () => {
 
   const config: Config = useConfig(network, chainId)
 
-  const symbols = useMemo(() => [
-    ...(config?.bonding_tokens?.map((token) => token.tokenSymbol) ?? []),
-    WHALE_TOKEN_SYMBOL,
-  ],
-  [config])
+  const symbols = useMemo(() => {
+    const tokenSymbols = config?.bonding_tokens?.map((token) => token.tokenSymbol) ?? [];
+    const uniqueSymbols = [...new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL])];
+    return uniqueSymbols;
+  }, [config]);
 
   const [liquidBalances, _] = useMultipleTokenBalance(symbols)
 
