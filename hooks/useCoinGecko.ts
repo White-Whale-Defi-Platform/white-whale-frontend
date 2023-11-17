@@ -5,14 +5,19 @@ const getCoinGecko = async (ids = []) => {
 
   const coinGeckoUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds}&vs_currencies=usd`
 
-  const response = await fetch(coinGeckoUrl,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-  return await response.json()
+  let response:any = {}
+  try {
+    response = await (await fetch(coinGeckoUrl,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })).json()
+  } catch (e) {
+    console.error(e)
+  }
+  return response
 }
 
 const useCoinGecko = (ids: string[]) => {
