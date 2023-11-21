@@ -27,9 +27,10 @@ const debounce = (getPromise: any,
 export const fetchDollarPriceByTokenIds = debounce(async (tokenIds: Array<string>): Promise<ApiResponse> => {
   const apiIds = tokenIds.flat()
   const newApiIds = [...new Set(apiIds)].join(',')
+  const coinGeckoUrl = `/api/cors?url=https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds}&vs_currencies=usd`
 
   try {
-    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds}&vs_currencies=usd`,
+    const response = await fetch(coinGeckoUrl,
       {
         method: 'GET',
         cache: 'force-cache',
