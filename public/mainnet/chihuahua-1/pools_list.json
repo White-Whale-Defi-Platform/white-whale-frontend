@@ -377,7 +377,7 @@
           "denom": "ibc/6BB4ADB45B1903AE497710FBC24E73C2C578A79D25EF923BD2E784A7FD0FC59F"
         },
         {
-          "id": "chihuahua-chain",
+          "id": "chihuahua-token",
           "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
           "symbol": "HUAHUA",
@@ -402,7 +402,7 @@
       "displayLogo1": "/logos/treatz.png",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
-       
+
         {
           "chain_id": "chihuahua-1",
           "token_address": "chihuahua1se7z0mx6rs84zvd89c7v9lf7kum90y2hsevhht2c3pdww35n2m6sm5gg9x",
@@ -415,7 +415,7 @@
           "denom": "chihuahua1se7z0mx6rs84zvd89c7v9lf7kum90y2hsevhht2c3pdww35n2m6sm5gg9x"
         },
         {
-          "id": "chihuahua-chain",
+          "id": "chihuahua-token",
           "chain_id": "chihuahua-1",
           "token_address": "uhuahua",
           "symbol": "HUAHUA",
