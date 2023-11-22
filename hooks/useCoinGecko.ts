@@ -9,7 +9,7 @@ const getCoinGecko = async (ids = []) => {
 }
 
 const useCoinGecko = (ids: string[]) => {
-  const areAllStrings = ids.every((element) => typeof element === 'string');
+  const areAllStrings = ids?.every((element) => typeof element === 'string') || false
   const { data } = useQuery({
     queryKey: ['coinGecko', ids],
     queryFn: () => getCoinGecko(ids),
