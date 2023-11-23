@@ -1,11 +1,8 @@
 import { useQuery } from 'react-query'
 
 const getCoinGecko = async (ids = []) => {
-  const newApiIds = [...new Set(ids)].join(',')
-
-  const coinGeckoUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds}&vs_currencies=usd`
-
-  const response = await fetch(coinGeckoUrl)
+  const newApiIds = [...new Set(ids)].filter((elem) => typeof elem === 'string').join()
+  const response = await fetch(`/api/coingecko?ids=${newApiIds}`);
   return await response.json()
 }
 

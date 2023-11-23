@@ -87,7 +87,7 @@
       "displayLogo2": "/logos/ustc.png",
       "pool_assets": [
         {
-          "id": "terra-classic",
+          "id": "terra-luna",
           "chain_id": "columbus-5",
           "token_address": "uluna",
           "symbol": "LUNC",

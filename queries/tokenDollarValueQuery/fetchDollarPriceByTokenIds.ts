@@ -29,7 +29,7 @@ export const fetchDollarPriceByTokenIds = debounce(async (tokenIds: Array<string
   const newApiIds = [...new Set(apiIds)].join(',')
 
   try {
-    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds}&vs_currencies=usd`,
+    const response = await fetch(`/api/coingecko?ids=${newApiIds}`,
       {
         method: 'GET',
         cache: 'force-cache',
