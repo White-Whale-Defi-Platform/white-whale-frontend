@@ -15,7 +15,7 @@ const getUrl = (chainId: string, txHash: string) => {
     case 'uni-6':
       return `https://testnet.mintscan.io/juno-testnet/txs/${txHash}`
     case ChainId.migaloo:
-      return `https://explorer.silknodes.io/migaloo/tx/${txHash}`
+      return `https://explorer.kjnodes.com/migaloo/tx/${txHash}`
     case ChainId.narwhal:
       return `https://testnet.migaloo.explorers.guru/transaction/${txHash}`
     case ChainId.pisco:
