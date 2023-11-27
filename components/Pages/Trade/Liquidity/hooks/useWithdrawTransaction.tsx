@@ -122,7 +122,7 @@ export const useWithdrawTransaction = ({
           senderAddress, encodedMsgs, '',
         ) * 1.3)
         fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          0, '', gas,
+          null, gas,
         )
       }
       return signingClient.signAndBroadcast(

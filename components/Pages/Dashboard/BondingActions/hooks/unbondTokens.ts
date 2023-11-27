@@ -34,7 +34,7 @@ export const unbondTokens = async (
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-      amount, denom, gas,
+      null, gas,
     )
   }
   return await signingClient.signAndBroadcast(

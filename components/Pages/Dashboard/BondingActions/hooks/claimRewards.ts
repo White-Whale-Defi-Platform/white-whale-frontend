@@ -23,7 +23,7 @@ export const claimRewards = async (
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-      0, '', gas,
+      null, gas,
     )
   }
   return await signingClient.signAndBroadcast(
