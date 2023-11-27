@@ -7,8 +7,15 @@ export const useClients = (walletChainName: string) => {
     getCosmWasmClient,
     getSigningCosmWasmClient,
     isWalletConnected,
+    setDefaultSignOptions,
   } = useChain(walletChainName)
-
+  if (isWalletConnected) {
+    setDefaultSignOptions({
+      preferNoSetFee: true,
+      preferNoSetMemo: true,
+      disableBalanceCheck: true,
+    })
+  }
   const queries = useQueries([
     {
       queryKey: ['cosmWasmClient', walletChainName],
