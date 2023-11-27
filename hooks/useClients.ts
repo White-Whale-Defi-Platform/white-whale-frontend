@@ -10,11 +10,15 @@ export const useClients = (walletChainName: string) => {
     setDefaultSignOptions,
   } = useChain(walletChainName)
   if (isWalletConnected) {
-    setDefaultSignOptions({
-      preferNoSetFee: true,
-      preferNoSetMemo: true,
-      disableBalanceCheck: true,
-    })
+    try {
+      setDefaultSignOptions({
+        preferNoSetFee: true,
+        preferNoSetMemo: true,
+        disableBalanceCheck: true,
+      })
+    } catch {
+      console.error('unable to set Deafault option')
+    }
   }
   const queries = useQueries([
     {
