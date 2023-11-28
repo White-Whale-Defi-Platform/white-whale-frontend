@@ -7,8 +7,20 @@ export const useClients = (walletChainName: string) => {
     getCosmWasmClient,
     getSigningCosmWasmClient,
     isWalletConnected,
+    setDefaultSignOptions,
+    wallet,
   } = useChain(walletChainName)
-
+  if (isWalletConnected && !wallet.name.includes('station')) {
+    try {
+      setDefaultSignOptions({
+        preferNoSetFee: true,
+        preferNoSetMemo: true,
+        disableBalanceCheck: true,
+      })
+    } catch {
+      console.error(`unable to set Default option for: ${wallet.name}`)
+    }
+  }
   const queries = useQueries([
     {
       queryKey: ['cosmWasmClient', walletChainName],
