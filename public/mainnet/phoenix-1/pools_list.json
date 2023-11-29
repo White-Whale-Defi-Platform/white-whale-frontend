@@ -366,6 +366,7 @@
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
+          "id": "wrapped-bitcoin",
           "chain_id": "phoenix-1",
           "token_address": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD",
           "symbol": "wBTC",
@@ -373,7 +374,7 @@
           "decimals": 8,
           "logoURI": "/logos/wBTC.png",
           "tags": ["native"],
-          "native": false,
+          "native": true,
           "denom": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD"
         },
         {
