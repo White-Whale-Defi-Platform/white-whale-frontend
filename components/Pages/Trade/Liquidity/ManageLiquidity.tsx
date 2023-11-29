@@ -138,12 +138,12 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
         {
           tokenSymbol: tokenASymbol,
           amount: 0,
-          decimals: 6,
+          decimals: pool?.pool_assets.find((asset) => asset.symbol === tokenASymbol)?.decimals,
         },
         {
           tokenSymbol: tokenBSymbol,
           amount: 0,
-          decimals: 6,
+          decimals: pool?.pool_assets.find((asset) => asset.symbol === tokenBSymbol)?.decimals,
         },
       ])
       setIsToken(true)

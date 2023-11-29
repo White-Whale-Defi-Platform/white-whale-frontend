@@ -57,7 +57,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
       amount:
         isTokenAndBaseTokenSame && !ignoreSlack
           ? num(balance === 0 ? 0 : balance - 0.1).toFixed(6)
-          : num(balance).toFixed(6),
+          : num(balance).toFixed(token?.decimals || 6),
     })
   }
   const onHalfClick = () => {

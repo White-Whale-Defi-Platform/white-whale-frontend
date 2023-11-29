@@ -9,7 +9,7 @@ import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
 import { num } from 'libs/num'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { aprHelperState } from 'state/aprHelperState'
 import { TokenItemState, TxStep } from 'types/index'
 
@@ -57,7 +57,7 @@ const DepositForm = ({
   })
   const incentivesEnabled = useMemo(() => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
     [chainId])
-  const [currentAprHelperState, _] = useRecoilState(aprHelperState)
+  const currentAprHelperState = useRecoilValue(aprHelperState)
 
   const poolAPRs = useMemo(() => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),
     [currentAprHelperState, poolId])
@@ -163,7 +163,6 @@ const DepositForm = ({
           onInputChange(value, 0)
         }}
       />
-
       <Input
         name="token2"
         control={control}
@@ -175,20 +174,17 @@ const DepositForm = ({
           onInputChange(value, 1)
         }}
       />
-
       <BondingDaysSlider
         bondingDays={bondingDays}
         setBondingDays={setBondingDays}
         show={incentivesEnabled}
       />
-
       <Multiplicator
         multiplicator={String(multiplicator)}
         apr={apr}
         show={incentivesEnabled}
         incentivized={poolAPRs?.incentives !== 0}
       />
-
       <SubmitButton
         label={buttonLabel}
         isConnected={isWalletConnected}
