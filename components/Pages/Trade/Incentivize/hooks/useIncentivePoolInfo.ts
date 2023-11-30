@@ -75,7 +75,7 @@ const getPoolFlowData = async (
       } // Skip this iteration and continue with the next one.
     }
     // TODO replace with own total liq calc
-    const totalLiquidity = poolsWithAprAnd24HrVolume.find((p) => p.pool_id === pool.pool_id)?.totalLiquidity
+    const totalLiquidity = poolsWithAprAnd24HrVolume.find((p) => p.pool_id === pool.pool_id)?.TVL
 
     const totalPoolLp = await fetchTotalPoolSupply(pool.swap_address,
       client)
