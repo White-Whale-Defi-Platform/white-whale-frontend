@@ -87,7 +87,7 @@ const Swap: FC<SwapProps> = (params) => {
         setTokenSwapState(newState)
         setResetForm(true)
       }
-    } else if (tokenSymbols.includes(from) && tokenSymbols.includes(to)) {
+    } else if (tokenSymbols?.includes(from) && tokenSymbols?.includes(to)) {
       setTokenSwapState(newState)
     } else {
       setResetForm(true)
