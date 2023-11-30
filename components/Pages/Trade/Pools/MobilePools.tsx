@@ -42,8 +42,8 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Apr apr={pool.apr.toString()}
-                flows={pool.flows}/>
+              <Apr apr={pool?.apr.toString()}
+                flows={pool?.flows}/>
             </HStack>
 
             <HStack height="24px" />
