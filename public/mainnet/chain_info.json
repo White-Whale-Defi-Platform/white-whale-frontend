@@ -199,7 +199,7 @@
     "chainId": "phoenix-1",
     "chainName": "Terra Mainnet",
     "label": "Terra",
-    "icon": "/logos/luna.svg",
+    "icon": "/logos/terra.png",
     "rpc": "https://ww-terra-rpc.polkachu.com",
     "rest": "https://ww-terra-rest.polkachu.com",
     "stakeCurrency": {

@@ -1,7 +1,7 @@
 let cache = {}
 let initialized = false
 const fetchInterval = 60 * 1000 // 60 seconds
-const coinGeckoIds = ['white-whale', 'chihuahua-token', 'lion-dao', 'terra-luna', 'comdex', 'cosmos', 'injective-protocol', 'juno-network', 'sei-network', 'terra-luna-2']
+const coinGeckoIds = ['white-whale', 'chihuahua-token', 'lion-dao', 'terra-luna', 'comdex', 'cosmos', 'injective-protocol', 'juno-network', 'sei-network', 'terra-luna-2', 'wrapped-bitcoin']
 
 const fetchDataFromCoinGecko = async () => {
   const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinGeckoIds.join(',')}&vs_currencies=usd`;

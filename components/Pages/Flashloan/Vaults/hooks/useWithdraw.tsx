@@ -16,6 +16,7 @@ type DepositProps = {
   token: {
     amount: number
     tokenSymbol: string
+    decimals: number
   }
   onSuccess: (txHash: string) => void
   vaultAddress: string
@@ -31,7 +32,7 @@ const useWithdraw = ({
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient } = useClients(walletChainName)
-  const amount = toChainAmount(token?.amount)
+  const amount = toChainAmount(token?.amount, token?.decimals)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
   const { msgs, encodedMsgs } = useMemo(() => {

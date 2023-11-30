@@ -8,9 +8,9 @@ type BalanceProps = {
 }
 
 const Balance = ({ balance, mobile }: BalanceProps) => {
-  let shortbalance = balance
+  let shortBalance = balance
   if (mobile) {
-    shortbalance = String(Number(balance).toFixed(2))
+    shortBalance = Number(balance).toFixed(2)
   }
   return (
     <HStack>
@@ -19,7 +19,7 @@ const Balance = ({ balance, mobile }: BalanceProps) => {
       </Text>
       <Text fontWeight={700} fontSize="14px">
         {' '}
-        {shortbalance}
+        {shortBalance}
       </Text>
     </HStack>
   )
@@ -113,7 +113,7 @@ const TokenToPrice = ({
   return (
     <HStack spacing={0} gap={0} flex={1}>
       <Text color="brand.50" fontWeight={400} fontSize="14px">
-        ${amt}≈
+        {amt}≈
       </Text>
       <Text fontWeight={700} fontSize="14px">
         ${isNaN(Number(dollarValue)) ? 0 : dollarValue}

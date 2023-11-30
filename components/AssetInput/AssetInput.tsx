@@ -56,27 +56,30 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
       ...token,
       amount:
         isTokenAndBaseTokenSame && !ignoreSlack
-          ? num(balance === 0 ? 0 : balance - 0.1).toFixed(6)
-          : num(balance).toFixed(6),
+          ? num(balance === 0 ? 0 : balance - 0.1).toFixed(token?.decimals || 6)
+          : num(balance).toFixed(token?.decimals || 6),
     })
   }
   const onHalfClick = () => {
     onChange({
       ...token,
-      amount: num(balance === 0 ? 0 : balance / 2).toFixed(6),
+      amount: num(balance === 0 ? 0 : balance / 2).toFixed(token?.decimals || 6),
     })
   }
   const maxDisabled = useMemo(() => disabled || (!isSingleInput && !tokenInfo?.symbol),
     [balance, disabled, isSingleInput, tokenInfo])
 
   const formatNumber = (num: number, decimalPlaces: number) => {
-    const parts = num.toString().split('.')
-    parts[0] = parts[0].replace(/\B(?=(?<temp1>\d{3})+(?!\d))/gu, ',')
-    parts[1] = parts[1]?.substring(0, decimalPlaces).replace(/0+$/u, '')
-    return parts[1] ? parts.join('.') : parts[0]
+    if (!num) {
+      return 0
+    }
+    const parts = num?.toString()?.split('.')
+    parts[0] = parts?.[0]?.replace(/\B(?=(?<temp1>\d{3})+(?!\d))/gu, ',')
+    parts[1] = parts?.[1]?.substring(0, decimalPlaces)?.replace(/0+$/u, '')
+    return parts?.[1] ? parts.join('.') : parts?.[0]
   }
 
-  const numberOfTokens = useMemo(() => `${formatNumber(token?.amount, 6)} ${token?.tokenSymbol}`,
+  const numberOfTokens = useMemo(() => `${formatNumber(token?.amount, token?.decimals)} ${token?.tokenSymbol}`,
     [token])
   const prices = usePrices()
   const tokenSymbol = useMemo(() => (token?.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
@@ -85,12 +88,11 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     : token?.tokenSymbol),
   [token])
   const dollarValue = useMemo(() => num(prices?.[tokenSymbol]).times(token?.amount).
-    dp(6).
-    toFixed(2),
-  [tokenSymbol, prices, token?.amount])
-
-  const balanceWithDecimals = useMemo(() => num(balance).
     dp(token?.decimals || 6).
+    toFixed(2),
+  [tokenSymbol, prices, token])
+
+  const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).
     toString(),
   [balance, token?.decimals])
 

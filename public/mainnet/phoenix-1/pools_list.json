@@ -358,6 +358,44 @@
       "rewards_tokens": []
     },
     {
+      "pool_id": "wBTC-LUNA",
+      "lpOrder": ["wBTC", "LUNA"],
+      "assetOrder": ["wBTC", "LUNA"],
+      "displayName": "wBTC-LUNA",
+      "displayLogo1": "/logos/wBTC.png",
+      "displayLogo2": "/logos/luna.svg",
+      "pool_assets": [
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD",
+          "symbol": "wBTC",
+          "name": "wBTC",
+          "decimals": 8,
+          "logoURI": "/logos/wBTC.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "factory/terra1xhhr7x8yhv9p336t3squh5f8t2827ttrevnwrwwvqrp88nkt665qy0w07c/uLP",
+      "swap_address": "terra1xhhr7x8yhv9p336t3squh5f8t2827ttrevnwrwwvqrp88nkt665qy0w07c",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
       "pool_id": "WHALE-ROAR",
       "lpOrder": ["WHALE", "ROAR"],
       "assetOrder": ["WHALE", "ROAR"],

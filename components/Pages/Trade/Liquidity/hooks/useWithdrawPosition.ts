@@ -39,9 +39,7 @@ export const useWithdrawPosition = ({ poolId }) => {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          null, gas,
-        )
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
       }
       return validateTransactionSuccess(await signingClient.signAndBroadcast(
         address, msgs, fee, null,
