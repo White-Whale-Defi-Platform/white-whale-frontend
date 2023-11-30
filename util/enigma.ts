@@ -1,6 +1,5 @@
 import { POOL_INFO_BASE_URL } from 'constants/index'
 import fetch from 'isomorphic-unfetch'
-import { formatPrice } from 'libs/num'
 import terraPoolConfig from 'public/mainnet/phoenix-1/pools_list.json'
 
 export interface EnigmaPoolResponse {
@@ -90,12 +89,11 @@ export const getPairAprAndDailyVolume = async (pools: any[],
       const pairInfo = pairInfos.find((row: any) => row.pool_id === poolId)
       return {
         pool_id: poolId,
-        usdVolume24h: `$${formatPrice(pairInfo?.volume_24h)}`,
-        usdVolume7d: `$${formatPrice(pairInfo?.volume_7d)}`,
-        totalLiquidity: Number(pairInfo?.TVL),
-        TVL: `$${formatPrice(pairInfo?.TVL)}`,
-        apr7d: `${Number(pairInfo?.APR).toFixed(2)}%`,
-        ratio: `${Number(pairInfo?.Price).toFixed(3)}`,
+        usdVolume24h: pairInfo?.volume_24h,
+        usdVolume7d: pairInfo?.volume_7d,
+        TVL: pairInfo?.TVL,
+        apr7d: pairInfo?.APR,
+        ratio: Number(pairInfo?.Price),
       } as EnigmaPoolData
     })
   }
@@ -138,11 +136,11 @@ export const getPairAprAndDailyVolumeTerra = async (pools: any[]): Promise<Enigm
       const ratio = poolId?.includes('axlUSDC') ? chRatio : poolRatio
       return {
         pool_id: poolId,
-        usdVolume24h: `$${formatPrice(pairInfo?.volume24h)}`,
-        usdVolume7d: `$${formatPrice(pairInfo?.volume7d)}`,
-        totalLiquidity: Number(pairInfo?.liquidity),
-        TVL: `$${formatPrice(pairInfo?.liquidity)}`,
-        apr7d: `${Number(pairInfo?.apr7d).toFixed(2)}%`,
+        usdVolume24h: pairInfo?.volume24h,
+        usdVolume7d: pairInfo?.volume7d,
+        totalLiquidity: pairInfo?.liquidity,
+        TVL: pairInfo?.liquidity,
+        apr7d: pairInfo?.apr7d,
         ratio: `${ratio.toFixed(3)}`,
       } as EnigmaPoolData
     })

@@ -74,7 +74,7 @@ const Apr = ({ apr, flows }: Props) => {
                 >
                   <Td color="white">Fees</Td>
                   <Td color="white" isNumeric>
-                    {apr}
+                    {apr}%
                   </Td>
                 </Tr>
                 {flows?.map((flowInfo, index) => (
