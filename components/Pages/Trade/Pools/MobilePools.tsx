@@ -42,7 +42,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Apr apr={pool?.apr.toString()}
+              <Apr apr={pool?.apr?.toString()}
                 flows={pool?.flows}/>
             </HStack>
 
@@ -56,7 +56,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
 
             <HStack width="full" justifyContent="space-between">
               <Liquidity
-                liquidity={pool.totalLiq.toString()}
+                liquidity={pool.totalLiq?.toString()}
                 infos={pool}
               />
               {pool?.flows.length > 0 ? (pool.incentives) : null}
