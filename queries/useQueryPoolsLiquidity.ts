@@ -150,12 +150,10 @@ export const useQueryPoolsLiquidity = ({
       swap_address: pool.swap_address,
     })
 
-    const tokenA = pool.pool_assets.find((asset) => asset.denom ===
-        (poolInfo?.assets[0]?.info?.native_token?.denom ??
-          poolInfo?.assets[0]?.info?.token?.contract_addr))
-    const tokenB = pool.pool_assets.find((asset) => asset.denom ===
-        (poolInfo?.assets[1]?.info?.native_token?.denom ??
-          poolInfo?.assets[1]?.info?.token?.contract_addr))
+    const getTokenDenom = (assetInfo) => assetInfo?.info?.native_token?.denom ?? assetInfo?.info?.token?.contract_addr
+
+    const tokenA = pool.pool_assets.find((asset) => asset.denom === getTokenDenom(poolInfo?.assets[0]));
+    const tokenB = pool.pool_assets.find((asset) => asset.denom === getTokenDenom(poolInfo?.assets[1]));
 
     const getFlows = async ({ cosmWasmClient }) => {
       if (
@@ -271,10 +269,10 @@ export const useQueryPoolsLiquidity = ({
           ? WHALE_TOKEN_SYMBOL
           : tokenB?.symbol
       return {
-        tokenAmount: lpTokenAmount ?? assets[1] + assets[0],
+        tokenAmount: lpTokenAmount ?? (assets[1] + assets[0]),
         dollarValue:
-          (Number(fromChainAmount(assets[0])) * (prices?.[tokenASymbol] || 0)) +
-          (Number(fromChainAmount(assets[1])) * (prices?.[tokenBSymbol] || 0)),
+          (Number(fromChainAmount(assets[0], tokenA?.decimals)) * (prices?.[tokenASymbol] || 0)) +
+          (Number(fromChainAmount(assets[1], tokenB?.decimals)) * (prices?.[tokenBSymbol] || 0)),
       }
     }
 

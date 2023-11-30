@@ -1,25 +1,14 @@
 import { atom } from 'recoil'
 import { TokenItemState } from 'types/index'
 
-export const tokenItemState = atom<[TokenItemState, TokenItemState]>({
+export const tokenItemState = atom<[TokenItemState?, TokenItemState?]>({
   key: 'tokenLPState',
-  default: [
-    {
-      tokenSymbol: null,
-      amount: 0,
-      decimals: 6,
-    },
-    {
-      tokenSymbol: null,
-      amount: 0,
-      decimals: 6,
-    },
-  ],
+  default: [],
   effects_UNSTABLE: [
     function validateIfTokensAreSame({ onSet, setSelf }) {
       onSet((newValue, oldValue) => {
         const [tokenA, tokenB] = newValue
-        if (tokenA.tokenSymbol === tokenB.tokenSymbol) {
+        if (tokenA && tokenB && tokenA.tokenSymbol === tokenB.tokenSymbol) {
           requestAnimationFrame(() => {
             const A = { ...oldValue[1],
               amount: oldValue[0].amount }

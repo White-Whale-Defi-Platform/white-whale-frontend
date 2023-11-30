@@ -8,12 +8,13 @@ import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import SwapForm from 'components/Pages/Trade/Swap/SwapForm'
 import SwapSettings from 'components/Pages/Trade/Swap/SwapSettings'
 import { useChainInfos } from 'hooks/useChainInfo'
+import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount } from 'libs/num'
 import { useRouter } from 'next/router'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep, TokenItemState } from 'types/index'
+import { getDecimals } from 'util/conversion/index'
 
 type SwapProps = {
   /* Will be used if provided on first render instead of internal state */
@@ -31,7 +32,6 @@ const Swap: FC<SwapProps> = (params) => {
   const { isWalletConnected, address } = useChain(walletChainName)
   const chains: Array<any> = useChainInfos()
   const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
-  const { data: poolList } = usePoolsListQuery()
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
@@ -42,45 +42,29 @@ const Swap: FC<SwapProps> = (params) => {
     }
   }
 
-  const tokenList = useMemo(() => {
-    let listObj = {}
-    const { pools = [] } = poolList || {}
-    pools.
-      map(({ pool_assets }) => pool_assets).
-      map(([a, b]) => {
-        listObj = { ...listObj,
-          [a.symbol]: a,
-          [b.symbol]: b }
-      })
+  const [tokenList] = useTokenList()
 
-    return Object.keys(listObj).map((row) => ({
-      symbol: listObj[row].symbol,
-      decimals: listObj[row].decimals,
-      amount: 0,
-    }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolList, chainId])
-
-  const tokenSymbols = useMemo(() => tokenList.map((token) => token.symbol),
+  const tokenSymbols = useMemo(() => tokenList?.tokens.map((token) => token.symbol),
     [tokenList])
 
   useEffect(() => {
-    if (!currentChainId || tokenList.length === 0) {
+    if (!currentChainId || tokenList?.tokens.length === 0) {
       return
     }
     const [from, to] = params?.initialTokenPair || []
     const [defaultFrom, defaultTo] = defaultTokens[network][walletChainName]
-
+    const tokenASymbol = from || defaultFrom.tokenSymbol
+    const tokenBSymbol = to || defaultTo.tokenSymbol
     let newState: TokenItemState[] = [
       {
-        tokenSymbol: String(from || defaultFrom.tokenSymbol),
+        tokenSymbol: tokenASymbol,
         amount: 0,
-        decimals: 6,
+        decimals: getDecimals(tokenASymbol, tokenList),
       },
       {
-        tokenSymbol: String(to || defaultTo.tokenSymbol),
+        tokenSymbol: tokenBSymbol,
         amount: 0,
-        decimals: 6,
+        decimals: getDecimals(tokenBSymbol, tokenList),
       },
     ]
     if (!from || !to) {
@@ -89,21 +73,21 @@ const Swap: FC<SwapProps> = (params) => {
       } else {
         newState = [
           {
-            tokenSymbol: String(defaultFrom.tokenSymbol),
+            tokenSymbol: defaultFrom.tokenSymbol,
             amount: 0,
-            decimals: 6,
+            decimals: getDecimals(defaultFrom.tokenSymbol, tokenList),
           },
           {
-            tokenSymbol: String(defaultTo.tokenSymbol),
+            tokenSymbol: defaultTo.tokenSymbol,
             amount: 0,
-            decimals: 6,
+            decimals: getDecimals(defaultTo.tokenSymbol, tokenList),
           },
         ]
         changeUrl(defaultFrom.tokenSymbol, defaultTo.tokenSymbol)
         setTokenSwapState(newState)
         setResetForm(true)
       }
-    } else if (tokenSymbols.includes(String(from)) && tokenSymbols.includes(String(to))) {
+    } else if (tokenSymbols.includes(from) && tokenSymbols.includes(to)) {
       setTokenSwapState(newState)
     } else {
       setResetForm(true)
@@ -129,9 +113,9 @@ const Swap: FC<SwapProps> = (params) => {
     }
     const newState: TokenItemState[] = [tokenA, tokenB]
     newState[index] = {
+      ...newState[index],
       tokenSymbol,
       amount: Number(amount),
-      decimals: 6,
     }
     setTokenSwapState(newState)
     changeUrl(newState[0].tokenSymbol, newState[1].tokenSymbol)
@@ -140,11 +124,11 @@ const Swap: FC<SwapProps> = (params) => {
   const onReverseDirection = () => {
     const A = {
       ...tokenB,
-      amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      amount: tokenA.amount || parseFloat(fromChainAmount(simulated?.amount, tokenA.decimals)),
     }
     const B = {
       ...tokenA,
-      amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount)),
+      amount: tokenB.amount || parseFloat(fromChainAmount(simulated?.amount, tokenB.decimals)),
     }
     changeUrl(tokenB.tokenSymbol, tokenA.tokenSymbol)
     setTokenSwapState([A, B])

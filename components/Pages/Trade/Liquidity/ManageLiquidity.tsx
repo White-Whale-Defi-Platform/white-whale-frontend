@@ -28,6 +28,7 @@ import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRouter } from 'next/router'
 import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import {
@@ -37,13 +38,15 @@ import {
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
-import { TxStep } from 'types/common'
+import { TokenItemState, TxStep } from 'types/common'
+import { getDecimals } from 'util/conversion/index'
 
 const ManageLiquidity = ({ poolIdFromUrl }) => {
   const [poolIdState, setPoolIdState] = useState(null)
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router = useRouter()
   const chains: Array<any> = useChainInfos()
+  const [tokenList] = useTokenList()
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address, openView } = useChain(walletChainName)
   const [reverse, setReverse] = useState<boolean>(false)
@@ -138,29 +141,18 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
         {
           tokenSymbol: tokenASymbol,
           amount: 0,
-          decimals: pool?.pool_assets.find((asset) => asset.symbol === tokenASymbol)?.decimals,
+          decimals: getDecimals(tokenASymbol, tokenList),
         },
         {
           tokenSymbol: tokenBSymbol,
           amount: 0,
-          decimals: pool?.pool_assets.find((asset) => asset.symbol === tokenBSymbol)?.decimals,
+          decimals: getDecimals(tokenBSymbol, tokenList),
         },
       ])
       setIsToken(true)
     }
     return () => {
-      setTokenItemState([
-        {
-          tokenSymbol: null,
-          amount: 0,
-          decimals: 6,
-        },
-        {
-          tokenSymbol: null,
-          amount: 0,
-          decimals: 6,
-        },
-      ])
+      setTokenItemState([])
       setIsToken(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -171,10 +163,12 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
       {
         ...tokenA,
         amount: 0,
+        decimals: getDecimals(tokenA.tokenSymbol, tokenList),
       },
       {
         ...tokenB,
         amount: 0,
+        decimals: getDecimals(tokenB.tokenSymbol, tokenList),
       },
     ])
     tx.reset()
@@ -185,8 +179,9 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
       tx.reset()
     }
 
-    const newState: any = [tokenA, tokenB]
+    const newState: [TokenItemState?, TokenItemState?] = [tokenA, tokenB]
     newState[index] = {
+      ...newState.find((item) => item.tokenSymbol === tokenSymbol),
       tokenSymbol,
       amount: Number(amount),
     }

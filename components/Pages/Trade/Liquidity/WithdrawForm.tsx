@@ -7,9 +7,11 @@ import useClaimableLP from 'components/Pages/Trade/Liquidity/hooks/useClaimableL
 import useWithdraw, { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
+import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { TxStep } from 'types/index'
+import { getDecimals } from 'util/conversion/index'
 
 type Props = {
   poolId: string
@@ -31,15 +33,15 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
 
   const claimableLP = useClaimableLP({ poolId })
   const [reverse, setReverse] = useState(false)
-  const [assetA, assetB] = poolId?.split('-') || []
+  const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || []
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
-
+  const [tokenList] = useTokenList()
   const { tokenABalance, tokenBBalance } = useMemo(() => {
     const [reserveA, reserveB] = liquidity?.reserves?.myNotLocked || []
 
     return {
-      tokenABalance: fromChainAmount(reserveA),
-      tokenBBalance: fromChainAmount(reserveB),
+      tokenABalance: fromChainAmount(reserveA, getDecimals(tokenSymbolA, tokenList)),
+      tokenBBalance: fromChainAmount(reserveB, getDecimals(tokenSymbolB, tokenList)),
     }
   }, [liquidity])
 
@@ -47,14 +49,14 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
     mode: 'onChange',
     defaultValues: {
       token1: {
-        tokenSymbol: assetA,
+        tokenSymbol: tokenSymbolA,
         amount: 0,
-        decimals: 6,
+        decimals: getDecimals(tokenSymbolA, tokenList),
       },
       token2: {
-        tokenSymbol: assetB,
+        tokenSymbol: tokenSymbolB,
         amount: 0,
-        decimals: 6,
+        decimals: getDecimals(tokenSymbolB, tokenList),
       },
     },
   })
@@ -66,8 +68,8 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
     tokenA: liquidity?.reserves?.myNotLocked?.[0],
     tokenB: liquidity?.reserves?.myNotLocked?.[1],
     amount: reverse
-      ? toChainAmount(tokenB.amount)
-      : toChainAmount(tokenA.amount),
+      ? toChainAmount(tokenB.amount, getDecimals(tokenSymbolB, tokenList))
+      : toChainAmount(tokenA.amount, getDecimals(tokenSymbolA, tokenList)),
     reverse,
   })
 
@@ -75,12 +77,12 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
     if (reverse) {
       setValue('token1', {
         ...tokenA,
-        amount: num(fromChainAmount(simulated)).toNumber(),
+        amount: num(fromChainAmount(simulated, tokenA.decimals)).toNumber(),
       })
     } else {
       setValue('token2', {
         ...tokenB,
-        amount: num(fromChainAmount(simulated)).toNumber(),
+        amount: num(fromChainAmount(simulated, tokenB.decimals)).toNumber(),
       })
     }
   }, [simulated])
@@ -113,9 +115,7 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
       setValue('token2', { ...tokenB,
         amount: 0 })
       clearForm()
-      // Tx?.reset()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.txStep])
 
   // On input change reset input or update value

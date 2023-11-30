@@ -22,7 +22,8 @@ import { TxStep } from 'types/common'
 
 const defaultToken = {
   tokenSymbol: WHALE_TOKEN_SYMBOL,
-  amount: '',
+  amount: 0,
+  decimals: 6,
 }
 
 type Props = {
@@ -61,11 +62,10 @@ const Create = ({ poolId }: Props) => {
         token={token}
         showList={true}
         mobile={isMobile}
-        // IsDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         onChange={(value) => {
           setToken({
             ...value,
-            amount: String(value.amount),
+            amount: value.amount || 0,
           })
           return value
         }}

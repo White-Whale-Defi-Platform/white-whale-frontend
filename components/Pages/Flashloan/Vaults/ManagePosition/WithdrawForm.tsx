@@ -4,10 +4,12 @@ import { Button, VStack, useToast } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import Finder from 'components/Finder'
 import useWithdraw from 'components/Pages/Flashloan/Vaults/hooks/useWithdraw'
+import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
+import { getDecimals } from 'util/conversion/index'
 
 type Props = {
   isWalletConnected: boolean
@@ -28,9 +30,11 @@ const WithdrawForm = ({
   lpToken,
   refetch,
 }: Props) => {
+  const [tokenList] = useTokenList()
   const [token, setToken] = useState({
     amount: 0,
     tokenSymbol: defaultToken,
+    decimals: getDecimals(defaultToken, tokenList),
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(chainState)

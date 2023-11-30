@@ -22,10 +22,12 @@ import {
   WALLET_CHAIN_NAMES_BY_CHAIN_ID,
 } from 'constants/index'
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { chainState, NetworkType } from 'state/chainState'
 import { TokenItemState } from 'types/index'
+import { getDecimals } from 'util/conversion/index'
 import { getPathName } from 'util/route'
 
 const Wallet = () => {
@@ -38,7 +40,7 @@ const Wallet = () => {
   const [currentConnectedChainIds, setCurrentConnectedChainIds] = useState([])
   const allChains = useChains(walletChains)
   const router = useRouter()
-
+  const [tokenList] = useTokenList()
   const [chainInfo] = useChainInfo(currentChainState.chainId)
   const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
   const queryClient = useQueryClient()
@@ -182,14 +184,14 @@ const Wallet = () => {
     const [defaultFrom, defaultTo] = defaultTokens[currentChainState.network][WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
     const newState: TokenItemState[] = [
       {
-        tokenSymbol: String(defaultFrom.tokenSymbol),
+        tokenSymbol: defaultFrom.tokenSymbol,
         amount: 0,
-        decimals: 6,
+        decimals: getDecimals(defaultFrom.tokenSymbol, tokenList),
       },
       {
-        tokenSymbol: String(defaultTo.tokenSymbol),
+        tokenSymbol: defaultTo.tokenSymbol,
         amount: 0,
-        decimals: 6,
+        decimals: getDecimals(defaultTo.tokenSymbol, tokenList),
       },
     ]
     setTokenSwapState(newState)

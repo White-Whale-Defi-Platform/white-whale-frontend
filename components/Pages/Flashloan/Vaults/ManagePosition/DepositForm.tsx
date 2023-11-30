@@ -4,9 +4,11 @@ import { Button, useMediaQuery, useToast, VStack } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import Finder from 'components/Finder'
 import useDeposit from 'components/Pages/Flashloan/Vaults/hooks/useDeposit'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
+import { getDecimals } from 'util/conversion/index'
 
 type Props = {
   isWalletConnected: boolean
@@ -28,9 +30,11 @@ const DepositForm = ({
   vaultAddress,
   refetch,
 }: Props) => {
+  const [tokenList] = useTokenList()
   const [token, setToken] = useState({
     amount: 0,
     tokenSymbol: defaultToken,
+    decimals: getDecimals(defaultToken, tokenList),
   })
   const toast = useToast()
   const { chainId } = useRecoilValue(chainState)
@@ -51,7 +55,6 @@ const DepositForm = ({
       isClosable: true,
     })
   },
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   [token])
 
   const { tx } = useDeposit({ vaultAddress,

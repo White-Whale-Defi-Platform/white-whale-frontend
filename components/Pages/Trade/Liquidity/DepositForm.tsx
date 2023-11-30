@@ -5,12 +5,14 @@ import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
 import { BondingDaysSlider } from 'components/Pages/Trade/Liquidity/BondingDaysSlider'
 import Multiplicator from 'components/Pages/Trade/Liquidity/Multiplicator'
+import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
 import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/index'
 import { num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { aprHelperState } from 'state/aprHelperState'
+import { chainState } from 'state/chainState'
 import { TokenItemState, TxStep } from 'types/index'
 
 type Props = {
@@ -48,11 +50,18 @@ const DepositForm = ({
   poolId,
   openView,
 }: Props) => {
+  const { walletChainName } = useRecoilValue(chainState)
+  const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || [defaultTokens.mainnet[walletChainName][0].tokenSymbol, defaultTokens.mainnet[walletChainName][1].tokenSymbol]
+
+  const token1 = useMemo(() => [tokenA, tokenB].find((token) => token?.tokenSymbol === tokenSymbolA),
+    [tokenA, tokenB, tokenSymbolA])
+  const token2 = useMemo(() => [tokenA, tokenB].find((token) => token?.tokenSymbol === tokenSymbolB),
+    [tokenA, tokenB, tokenSymbolB])
   const { control, handleSubmit, setValue, getValues } = useForm({
     mode: 'onChange',
     defaultValues: {
-      token1: tokenA,
-      token2: tokenB,
+      token1,
+      token2,
     },
   })
   const incentivesEnabled = useMemo(() => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
@@ -80,36 +89,36 @@ const DepositForm = ({
           amount: num(simulated).dp(6).
             toNumber() }, 0)
         setValue('token1', {
-          ...tokenA,
+          ...token1,
           amount: num(simulated).dp(6).
             toNumber(),
         })
       } else {
-        onInputChange({ ...tokenB,
+        onInputChange({ ...token2,
           amount: num(simulated).dp(6).
             toNumber() }, 1)
         setValue('token2', {
-          ...tokenA,
+          ...token1,
           amount: num(simulated).dp(6).
             toNumber(),
         })
       }
     } else {
       if (reverse) {
-        if (!tokenB.amount) {
-          setValue('token1', { ...tokenA,
+        if (!token2.amount) {
+          setValue('token1', { ...token1,
             amount: null })
         }
       } else {
-        if (!tokenA.amount) {
-          setValue('token2', { ...tokenB,
+        if (!token1.amount) {
+          setValue('token2', { ...token2,
             amount: null })
         }
       }
     }
 
     return () => {
-      onInputChange({ ...tokenA,
+      onInputChange({ ...token1,
         amount: 0 }, 0)
       tx?.reset()
     }
@@ -118,9 +127,9 @@ const DepositForm = ({
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
-      setValue('token1', { ...tokenA,
+      setValue('token1', { ...token1,
         amount: 0 })
-      setValue('token2', { ...tokenB,
+      setValue('token2', { ...token2,
         amount: 0 })
       clearForm()
       // Tx?.reset()
@@ -139,7 +148,7 @@ const DepositForm = ({
       return tx?.buttonLabel
     }
     return 'Deposit'
-  }, [tx?.buttonLabel, tokenB.tokenSymbol, isWalletConnected, amountA])
+  }, [tx?.buttonLabel, tokenB?.tokenSymbol, isWalletConnected, amountA])
 
   const apr = useMemo(() => `${(((poolAPRs?.fees || 0) * 100) + ((poolAPRs?.incentives || 0) * multiplicator)).toFixed(2)}`,
     [poolAPRs, multiplicator])
@@ -155,7 +164,7 @@ const DepositForm = ({
       <Input
         name="token1"
         control={control}
-        token={tokenA}
+        token={token1}
         mobile={mobile}
         isDisabled={isInputDisabled}
         onChange={(value) => {
@@ -166,7 +175,7 @@ const DepositForm = ({
       <Input
         name="token2"
         control={control}
-        token={tokenB}
+        token={token2}
         isDisabled={isInputDisabled || !tokenB?.tokenSymbol}
         mobile={mobile}
         onChange={(value) => {
