@@ -3,6 +3,7 @@ import { IncentiveTooltip } from 'components/InfoTooltip';
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
+import { formatPrice } from 'libs/num';
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -42,7 +43,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Apr apr={pool?.apr?.toString()}
+              <Apr apr={Number(pool?.apr).toFixed(2)}
                 flows={pool?.flows}/>
             </HStack>
 
@@ -56,11 +57,11 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
 
             <HStack width="full" justifyContent="space-between">
               <Liquidity
-                liquidity={pool.totalLiq?.toString()}
+                liquidity={`$${formatPrice(pool?.totalLiq)}`}
                 infos={pool}
               />
               {pool?.flows.length > 0 ? (pool.incentives) : null}
-              <Text>{` ${pool?.volume24hr}`}</Text>
+              <Text>{`$${formatPrice(pool?.volume24hr)}`}</Text>
             </HStack>
 
             <HStack height="24px" />
