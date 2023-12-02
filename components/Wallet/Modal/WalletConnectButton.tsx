@@ -75,7 +75,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       case WalletType.keplrMobile:
         return 'Keplr Wallet'
       case WalletType.terraExtension:
-        return 'Terra Station'
+        return 'Station'
       case WalletType.cosmoStationExtension:
         return 'Cosmostation'
       case WalletType.cosmoStationMobile:
