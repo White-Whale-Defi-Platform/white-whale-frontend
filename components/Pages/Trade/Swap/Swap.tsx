@@ -31,7 +31,7 @@ const Swap: FC<SwapProps> = (params) => {
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address } = useChain(walletChainName)
   const chains: Array<any> = useChainInfos()
-  const { tx, simulated, state, path, minReceive } = useSwap({ reverse })
+  const { tx, simulated, state, path, minReceive, priceImpact } = useSwap({ reverse })
   const currentChain = chains.find((row) => row.chainId === chainId)
   const currentChainId = currentChain?.label.toLowerCase()
 
@@ -168,6 +168,7 @@ const Swap: FC<SwapProps> = (params) => {
         resetForm={resetForm}
         setResetForm={clearForm}
         path={path}
+        priceImpact={priceImpact}
       />
     </VStack>
   )

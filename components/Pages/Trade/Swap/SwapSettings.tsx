@@ -28,10 +28,11 @@ const SwapSettings = () => {
 
   const onAuto = () => {
     setAuto.toggle()
+    console.log(slippage)
     if (!auto === true) {
       setSlippage(0)
     } else {
-      setSlippage(0.01)
+      setSlippage(1)
     }
   }
 

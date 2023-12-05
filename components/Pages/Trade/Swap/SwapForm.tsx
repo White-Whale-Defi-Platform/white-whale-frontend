@@ -37,6 +37,7 @@ type Props = {
   resetForm: boolean
   setResetForm: (value: boolean) => void
   path: string[]
+  priceImpact: string | number
 }
 
 const SwapForm: FC<Props> = ({
@@ -54,6 +55,7 @@ const SwapForm: FC<Props> = ({
   resetForm,
   setResetForm,
   path,
+  priceImpact,
 }) => {
   const { data: poolList } = usePoolsListQuery()
 
@@ -108,9 +110,14 @@ const SwapForm: FC<Props> = ({
   ])
 
   const [isMobile] = useMediaQuery('(max-width: 485px)')
-  const [isLabelOpen, setIsLabelOpen] = useState(false)
+  const [isLabelOpenRate, setIsLabelOpenRate] = useState(false)
+  const [isLabelOpenRecieve, setIsLabelOpenRecieve] = useState(false)
+  const [isLabelOpenImpact, setIsLabelOpenImpact] = useState(false)
+  const [isLabelOpenRoute, setIsLabelOpenRoute] = useState(false)
 
-  const ExplanationTooltip = (input: string) => (
+  const ExplanationTooltip = (
+    input: string, isLabelOpen:any, setIsLabelOpen:any,
+  ) => (
     <Tooltip
       label={input}
       padding="1rem"
@@ -164,6 +171,19 @@ const SwapForm: FC<Props> = ({
 
     onReverseDirection()
   }
+  const getPriceImpactColor = useMemo(() => {
+    if (!simulated) {
+      return null
+    }
+    if (Number(priceImpact) < 2) {
+      return 'brand.500';
+    }
+    if (Number(priceImpact) >= 2 && Number(priceImpact) < 4) {
+      return 'yellow';
+    }
+    return 'red';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [simulated])
 
   const rate = useMemo(() => {
     if (!simulated) {
@@ -339,7 +359,9 @@ const SwapForm: FC<Props> = ({
                 <Text color="brand.500" fontSize={12}>
                   Rate
                 </Text>
-                {ExplanationTooltip('Swap price is calculated based on the pool price and spread.')}
+                {ExplanationTooltip(
+                  'Swap price is calculated based on the pool price and spread.', isLabelOpenRate, setIsLabelOpenRate,
+                )}
               </HStack>
               <Text color="brand.500" fontSize={12}>
                 {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
@@ -358,10 +380,32 @@ const SwapForm: FC<Props> = ({
                   <Text color="brand.500" fontSize={12}>
                     Min Receive
                   </Text>
-                  {ExplanationTooltip('Expected minimum quantity to be received based on the current price, maximum spread, and trading fee')}
+                  {ExplanationTooltip(
+                    'Expected minimum quantity to be received based on the current price, maximum spread, and trading fee', isLabelOpenRecieve, setIsLabelOpenRecieve,
+                  )}
                 </HStack>
                 <Text color="brand.500" fontSize={12}>
                   {num(minReceive).toFixed(tokenBInfo?.decimals)}
+                </Text>
+              </HStack>
+            )}
+            {Number(priceImpact) > 0 && (
+              <HStack
+                justifyContent="space-between"
+                width="full"
+                style={{ marginTop: 'unset' }}
+                height="24px"
+              >
+                <HStack>
+                  <Text color="brand.500" fontSize={12}>
+                    Price Impact
+                  </Text>
+                  {ExplanationTooltip(
+                    'Expected price impact of your order. You can split your order if its too high', isLabelOpenImpact, setIsLabelOpenImpact,
+                  )}
+                </HStack>
+                <Text color={getPriceImpactColor} fontSize={12}>
+                  {priceImpact} %
                 </Text>
               </HStack>
             )}
@@ -378,7 +422,9 @@ const SwapForm: FC<Props> = ({
               <Text color="brand.500" fontSize={12}>
                 Route
               </Text>
-              {ExplanationTooltip('Optimized route for your optimal gain')}
+              {ExplanationTooltip(
+                'Optimized route for your optimal gain', isLabelOpenRoute, setIsLabelOpenRoute,
+              )}
             </HStack>
             <HStack maxW="70%" flexWrap="wrap">
               {path?.map((item, index) => (
