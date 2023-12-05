@@ -65,7 +65,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => (info.getValue() === 'n/a' ? (
-      <Text>{info.getValue()}</Text>
+      <Text>-</Text>
     ) : (
       <Apr
         apr={`${Number(info.getValue()).toFixed(2)}`}

@@ -90,7 +90,7 @@ export const getPairAprAndDailyVolume = async (pools: any[],
         usdVolume7d: pairInfo?.volume_7d,
         TVL: pairInfo?.TVL,
         apr7d: pairInfo?.APR,
-        ratio: Number(pairInfo?.Price),
+        ratio: Number(pairInfo?.Price || 0),
       } as PoolData
     })
   }
@@ -101,7 +101,7 @@ export const getPairAprAndDailyVolume = async (pools: any[],
     usdVolume24h: 'n/a',
     usdVolume7d: 'n/a',
     apr7d: 'n/a',
-    ratio: 'n/a',
+    ratio: 0,
   }))
 }
 export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<PoolData[]> => {
@@ -144,14 +144,14 @@ export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<
   }
   console.log('No pair infos found')
   return swapAddresses?.map((swapAddress: any) => {
-    const poolId = terraPoolConfig.pools.find((pool: any) => pool.swap_address === swapAddress).pool_id
+    const poolId = pools.find((pool: any) => pool.swap_address === swapAddress).pool_id
     return {
       pool_id: poolId,
       TVL: 'n/a',
       usdVolume24h: 'n/a',
       usdVolume7d: 'n/a',
       apr7d: 'n/a',
-      ratio: 'n/a',
+      ratio: 0,
     }
   })
 }
