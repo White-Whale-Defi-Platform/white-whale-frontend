@@ -2,7 +2,7 @@ import { POOL_INFO_BASE_URL } from 'constants/index'
 import fetch from 'isomorphic-unfetch'
 import terraPoolConfig from 'public/mainnet/phoenix-1/pools_list.json'
 
-export interface EnigmaPoolResponse {
+export interface PoolResponse {
   pool_id: string
   chain_name: string
   displayName: string
@@ -15,7 +15,7 @@ export interface EnigmaPoolResponse {
   APR: number | string
 }
 
-export interface EnigmaPoolData {
+export interface PoolData {
   pool_id: string
   usdVolume24h?: number | string
   usdVolume7d?: number | string
@@ -24,7 +24,7 @@ export interface EnigmaPoolData {
   ratio?: number | string
 }
 
-export const getPairInfos = async (chain: string): Promise<EnigmaPoolResponse[]> => {
+export const getPairInfos = async (chain: string): Promise<PoolResponse[]> => {
   if (!chain) {
     return []
   }
@@ -59,11 +59,8 @@ export const getPairInfos = async (chain: string): Promise<EnigmaPoolResponse[]>
   }
   return []
 }
-export const getPairInfosTerra = async (): Promise<any> => {
-  const swapAddresses = terraPoolConfig.pools.
-    map((pool: any) => pool.swap_address).
-    join(',')
-  const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses}`
+export const getCoinhallPairInfos = async (swapAddresses: any[]): Promise<any> => {
+  const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses.join(',')}`
   const chainDataResponse = await fetch(url)
   const data = await chainDataResponse.json()
 
@@ -73,9 +70,9 @@ export const getPairInfosTerra = async (): Promise<any> => {
   return []
 }
 export const getPairAprAndDailyVolume = async (pools: any[],
-  chainPrefix: any): Promise<EnigmaPoolData[]> => {
+  chainPrefix: any): Promise<PoolData[]> => {
   const poolIds = pools?.map((pool: any) => pool.pool_id)
-  const pairInfos: EnigmaPoolResponse[] = await getPairInfos(chainPrefix)
+  const pairInfos: PoolResponse[] = await getPairInfos(chainPrefix)
 
   // @ts-ignore
   if (window.debugLogsEnabled) {
@@ -94,7 +91,7 @@ export const getPairAprAndDailyVolume = async (pools: any[],
         TVL: pairInfo?.TVL,
         apr7d: pairInfo?.APR,
         ratio: Number(pairInfo?.Price),
-      } as EnigmaPoolData
+      } as PoolData
     })
   }
   console.log('No pair infos found')
@@ -107,14 +104,14 @@ export const getPairAprAndDailyVolume = async (pools: any[],
     ratio: 'n/a',
   }))
 }
-export const getPairAprAndDailyVolumeTerra = async (pools: any[]): Promise<EnigmaPoolData[]> => {
+export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<PoolData[]> => {
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
-  const pairInfos: any = await getPairInfosTerra()
+  const pairInfos: any = await getCoinhallPairInfos(swapAddresses)
 
   if (pairInfos && pairInfos.pools?.length > 0 && pools) {
     return swapAddresses?.map((swapAddress: string) => {
       const pairInfo = pairInfos.pools.find((row: any) => row.id === swapAddress)
-      const poolId = terraPoolConfig.pools.find((pool: any) => pool.swap_address === swapAddress)?.pool_id
+      const poolId = pools.find((pool: any) => pool.swap_address === swapAddress)?.pool_id
       const asset0Symbol = poolId?.split('-')[0]
       const chRatio =
         pairInfo?.assets[0].symbol === asset0Symbol
@@ -140,9 +137,9 @@ export const getPairAprAndDailyVolumeTerra = async (pools: any[]): Promise<Enigm
         usdVolume7d: pairInfo?.volume7d,
         totalLiquidity: pairInfo?.liquidity,
         TVL: pairInfo?.liquidity,
-        apr7d: pairInfo?.apr7d,
+        apr7d: pairInfo?.apr7d || 0,
         ratio: `${ratio.toFixed(3)}`,
-      } as EnigmaPoolData
+      } as PoolData
     })
   }
   console.log('No pair infos found')

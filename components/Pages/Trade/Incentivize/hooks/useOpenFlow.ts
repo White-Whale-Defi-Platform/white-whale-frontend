@@ -10,13 +10,14 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
+import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
+import dayjs from 'dayjs'
 import { useClients } from 'hooks/useClients'
 import useSimulate from 'hooks/useSimulate'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import useTxStatus from 'hooks/useTxStatus'
 import { num, toChainAmount } from 'libs/num'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
 import { TerraTreasuryService } from 'services/treasuryService'
@@ -25,7 +26,6 @@ import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
 } from 'util/messages/index'
-import dayjs from 'dayjs'
 
 interface Props {
   poolId: string
@@ -130,9 +130,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          msgs[0].value.funds, gas,
-        )
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(msgs[0].value.funds, gas)
       }
       return await signingClient.signAndBroadcast(
         address, msgs, fee, null,

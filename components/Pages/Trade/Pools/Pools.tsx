@@ -14,6 +14,11 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { ActionCTAs } from 'components/Pages/Trade/Pools/ActionCTAs'
 import AllPoolsTable from 'components/Pages/Trade/Pools/AllPoolsTable'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import {
+  PoolEntityTypeWithLiquidity,
+  useQueryPoolsLiquidity,
+} from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { Incentives } from 'components/Pages/Trade/Pools/Incentives'
 import MobilePools from 'components/Pages/Trade/Pools/MobilePools'
 import MyPoolsTable from 'components/Pages/Trade/Pools/MyPoolsTable'
@@ -22,18 +27,13 @@ import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useRouter } from 'next/router'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
-import {
-  PoolEntityTypeWithLiquidity,
-  useQueryPoolsLiquidity,
-} from 'queries/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { PoolData } from 'services/poolDataProvider'
 import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
 import { chainState } from 'state/chainState'
-import { EnigmaPoolData } from 'util/enigma'
 
-type PoolData = PoolEntityTypeWithLiquidity &
-  EnigmaPoolData & {
+type AllPoolData = PoolEntityTypeWithLiquidity &
+  PoolData & {
     displayName: string
     displayLogo1: string
     displayLogo2: string
@@ -91,7 +91,7 @@ const Pools = () => {
     console.log('Pair Infos: ', pairInfos)
   }
 
-  const calculateMyPosition = (pool: PoolData) => {
+  const calculateMyPosition = (pool: AllPoolData) => {
     const { dollarValue } = pool.liquidity?.providedTotal || {}
     return dollarValue.toFixed(2)
   }
@@ -111,7 +111,7 @@ const Pools = () => {
     const initPools = async () => {
       setInitLoading(true)
 
-      const _pools: PoolData[] = pools.map((pool: any) => ({
+      const _pools: AllPoolData[] = pools.map((pool: any) => ({
         ...pool,
         ...pairInfos.find((row: any) => row.pool_id === pool.pool_id),
       }))

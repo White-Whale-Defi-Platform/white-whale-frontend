@@ -1,9 +1,9 @@
-import { PoolTokenValue } from 'queries/useQueryPoolsLiquidity'
+import { PoolEntityType, TokenInfoWithReward } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolTokenValue } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { RewardsInfoResponse, getRewardsInfo } from 'services/rewards'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { InternalQueryContext } from './types'
-import { PoolEntityType, TokenInfoWithReward } from './usePoolsListQuery'
 
 const blocksPerSecond = 6
 const blocksPerYear = (525_600 * 60) / blocksPerSecond

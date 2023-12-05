@@ -2,10 +2,10 @@ import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite';
+import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
 import { useClients } from 'hooks/useClients';
 import useTxStatus from 'hooks/useTxStatus'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { TerraTreasuryService } from 'services/treasuryService';
 import { chainState } from 'state/chainState'
