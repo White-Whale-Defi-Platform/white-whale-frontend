@@ -30,11 +30,11 @@ import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRouter } from 'next/router'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
   useQueryPoolsLiquidity,
-} from 'queries/useQueryPoolsLiquidity'
+} from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'

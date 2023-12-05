@@ -1,4 +1,4 @@
-import { getPoolInfo } from 'services/swap'
+import { getPoolInfo } from 'services/swap/index'
 
 export const queryPoolInfo = async ({
   context: { cosmWasmClient },

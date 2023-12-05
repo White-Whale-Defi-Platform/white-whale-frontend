@@ -14,12 +14,12 @@ import {
 } from '@chakra-ui/react'
 import AssetInput from 'components/AssetInput/index'
 import DoubleArrowsIcon from 'components/Icons/DoubleArrowsIcon'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { Simulated } from 'components/Pages/Trade/Swap/hooks/useSimulate'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { fromChainAmount, num } from 'libs/num'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { TokenItemState, TxStep } from 'types/index'
 
 type Props = {

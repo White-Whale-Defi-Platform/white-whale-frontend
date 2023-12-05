@@ -9,11 +9,11 @@ import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactor
 import createLpMsg, { createLPExecuteMsgs } from 'components/Pages/Trade/Liquidity/hooks/createLPMsg'
 import useTransaction from 'components/Pages/Trade/Liquidity/hooks/useDepositTransaction'
 import useIsNewPosition from 'components/Pages/Trade/Liquidity/hooks/useIsNewPosition'
+import { useQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
+import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num, toChainAmount } from 'libs/num'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
-import { useQueryPoolLiquidity } from 'queries/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
@@ -181,7 +181,6 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
       Number(tokenAAmount) > 0 &&
       Number(tokenBAmount) > 0,
     swapAddress: bondingDays === 0 ? swapAddress : config?.frontend_helper,
-    swapAssets: [tokenA, tokenB],
     senderAddress: address,
     signingClient,
     msgs,

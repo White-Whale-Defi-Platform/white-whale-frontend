@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-import { TokenInfo, usePoolsListQuery } from 'queries/usePoolsListQuery'
+import { TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 

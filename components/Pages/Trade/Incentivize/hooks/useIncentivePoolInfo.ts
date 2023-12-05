@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import {
   Config,
   useConfig,
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useCurrentEpoch } from 'components/Pages/Trade/Incentivize/hooks/useCurrentEpoch'
-import { fetchTotalPoolSupply } from 'components/Pages/Trade/Pools/hooks/fetchTotalPoolLp'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
@@ -15,13 +15,13 @@ import {
 } from 'constants/index'
 import usePrices from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
+import {
+  PoolData,
+  getPairAprAndDailyVolume,
+  getPairAprAndDailyVolumeByCoinhall,
+} from 'services/poolDataProvider'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import {
-  EnigmaPoolData,
-  getPairAprAndDailyVolume,
-  getPairAprAndDailyVolumeTerra,
-} from 'util/enigma'
 
 export interface Flow {
   claimed_amount: string
@@ -58,6 +58,18 @@ export interface IncentivePoolInfo {
 
   poolId: string
 }
+export const fetchTotalPoolSupply = async (swapAddress: string,
+  client: CosmWasmClient) => {
+  if (!client || !swapAddress) {
+    return null
+  }
+  const { total_share: totalShare } = await client.queryContractSmart(swapAddress, {
+    pool: {},
+  })
+
+  return Number(totalShare)
+}
+
 const fetchFlows = async (client, address): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
 const getPoolFlowData = async (
   client,
@@ -177,7 +189,7 @@ export const useIncentivePoolInfo = (
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)
   const [poolsWithAprAnd24HrVolume, setPoolsWithAprAnd24HrVolume] = useState<
-    EnigmaPoolData[]
+    PoolData[]
   >([])
 
   useEffect(() => {
@@ -185,9 +197,15 @@ export const useIncentivePoolInfo = (
       currentChainPrefix = chainId === ChainId.terrac ? 'terra-classic' : currentChainPrefix
       const poolData =
         currentChainPrefix === 'terra' && chainId !== ChainId.terrac
-          ? await getPairAprAndDailyVolumeTerra(pools)
+          ? await getPairAprAndDailyVolumeByCoinhall(pools)
           : await getPairAprAndDailyVolume(pools, currentChainPrefix)
-      setPoolsWithAprAnd24HrVolume(poolData)
+      if (poolData[0]?.ratio === 0) {
+        console.log('No pair infos found, trying Coinhall')
+        const poolDataFromCoinhall = await getPairAprAndDailyVolumeByCoinhall(pools)
+        setPoolsWithAprAnd24HrVolume(poolDataFromCoinhall)
+      } else {
+        setPoolsWithAprAnd24HrVolume(poolData)
+      }
     }
     if (pools?.length > 0 && currentChainPrefix) {
       fetchPoolData()

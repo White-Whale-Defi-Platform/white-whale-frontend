@@ -4,7 +4,8 @@ import { useQueries } from 'react-query'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChain } from '@cosmos-kit/react-lite'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
-import { fetchTotalLockedLp } from 'components/Pages/Trade/Pools/hooks/fetchTotalLockedLp'
+import { queryPoolInfo } from 'components/Pages/Trade/Pools/hooks/queryPoolInfo'
+import { PoolEntityType, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
   AMP_WHALE_TOKEN_SYMBOL,
   B_WHALE_TOKEN_SYMBOL,
@@ -18,17 +19,15 @@ import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { protectAgainstNaN } from 'junoblocks'
 import { fromChainAmount } from 'libs/num'
-import { queryPoolInfo } from 'queries/queryPoolInfo'
-import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
-
-import { queryMyLiquidity } from './queryMyLiquidity'
+import { queryMyLiquidity } from 'queries/queryMyLiquidity'
 import {
   SerializedRewardsContract,
   queryRewardsContracts,
-} from './queryRewardsContracts'
-import { useGetTokenDollarValueQuery } from './useGetTokenDollarValueQuery'
-import { PoolEntityType, usePoolsListQuery } from './usePoolsListQuery'
+} from 'queries/queryRewardsContracts'
+import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
+import { useRecoilValue } from 'recoil'
+import { isNativeToken } from 'services/asset'
+import { chainState } from 'state/chainState'
 
 export type AssetType = [number?, number?]
 
@@ -119,6 +118,24 @@ const fetchMyLockedLp = async ({ pool, cosmWasmClient, address }) => {
       }).
       reduce((acc, p) => acc + Number(p.amount), 0) || 0
   )
+}
+
+export const fetchTotalLockedLp = async (
+  incentiveAddress: string,
+  lpAddress: string,
+  client: CosmWasmClient,
+) => {
+  if (!client || !incentiveAddress || !lpAddress) {
+    return null
+  }
+
+  const { balance, amount } = isNativeToken(lpAddress)
+    ? await client.getBalance(incentiveAddress, lpAddress)
+    : await client.queryContractSmart(lpAddress, {
+      balance: { address: incentiveAddress },
+    })
+
+  return Number(balance || amount)
 }
 
 export const useQueryPoolsLiquidity = ({

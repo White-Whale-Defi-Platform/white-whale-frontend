@@ -3,6 +3,7 @@ import { useMutation } from 'react-query'
 
 import { Button } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
+import { useQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { useClients } from 'hooks/useClients'
 import { useRefetchQueries } from 'hooks/useRefetchQueries'
@@ -15,7 +16,6 @@ import {
   UpRightArrow,
   Valid,
 } from 'junoblocks'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { passThroughTokenSwap } from 'services/swap/index'
 import { chainState } from 'state/chainState'
