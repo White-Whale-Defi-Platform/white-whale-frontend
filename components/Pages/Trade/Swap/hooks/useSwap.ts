@@ -20,7 +20,8 @@ const useSwap = ({ reverse }) => {
   const { signingClient, cosmWasmClient } = useClients(walletChainName)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
-  const slippage = useRecoilValue(slippageAtom)
+  let slippage = useRecoilValue(slippageAtom)
+  slippage = slippage === 0 ? 1 : slippage
   const { data: poolsList } = usePoolsListQuery()
   const amount = reverse
     ? swapTokenB?.amount > 0
