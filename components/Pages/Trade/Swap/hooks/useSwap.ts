@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { fromBase64, fromUtf8, toBase64, toUtf8 } from '@cosmjs/encoding'
 import { useChain } from '@cosmos-kit/react-lite'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import useRoute, { executeMessage } from 'components/Pages/Trade/Swap/hooks/useRoute'
@@ -11,7 +12,6 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { fromBase64, fromUtf8, toBase64, toUtf8 } from '@cosmjs/encoding'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -72,9 +72,9 @@ const useSwap = ({ reverse }) => {
     if (diff === 0) {
       // Vermeiden Sie eine Division durch Null, wenn der Durchschnitt 0 ist.
       return 0;
-  }
+    }
     const deviation = (diff / (simValue / 100)).toFixed(2)
-  return deviation;
+    return deviation;
   }, [simulated])
 
   const updatedExecMsgEncoded = useMemo(() => {
@@ -126,9 +126,9 @@ const useSwap = ({ reverse }) => {
     minReceive,
     state: { error,
       isLoading },
-    priceImpact
+    priceImpact,
   }),
-  [tx, simulated, error, isLoading, minReceive, path,priceImpact])
+  [tx, simulated, error, isLoading, minReceive, path, priceImpact])
 }
 
 export default useSwap
