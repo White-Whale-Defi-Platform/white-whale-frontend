@@ -11,7 +11,7 @@ import { useTokenInfo } from 'hooks/useTokenInfo'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { fromBase64, fromUtf8 } from '@cosmjs/encoding'
+import { fromBase64, fromUtf8, toBase64, toUtf8 } from '@cosmjs/encoding'
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -55,7 +55,6 @@ const useSwap = ({ reverse }) => {
     if (!simulated) {
       return null
     }
-    console.log(slippage, slippageToDecimal)
     const rate1 = num(1).minus(slippageToDecimal)
     const rate2 = num(1).minus(0.001)
     return fromChainAmount(num(simulated.amount).times(rate1).
@@ -95,8 +94,9 @@ const useSwap = ({ reverse }) => {
     } else if (executeMsg?.send) {
       const decodedMsg = JSON.parse(fromUtf8(fromBase64(executeMsg.send.msg)))
       decodedMsg.execute_swap_operations.minimum_receive = recieve
+      executeMsg.send.msg = toBase64(toUtf8(JSON.stringify(decodedMsg)))
       return [executeMessage(
-        decodedMsg,
+        executeMsg,
         num(amount).toFixed(0),
         tokenA,
         routerAddress,
