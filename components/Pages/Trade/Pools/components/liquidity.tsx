@@ -46,7 +46,10 @@ const Liquidity = ({ liquidity, infos }: Props) => {
                     {(
                       infos.liquidity.reserves.total[index] /
                         (10 ** infos.poolAssets[index].decimals)
-                    ).toFixed(2)}
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </Text>
                 </HStack>
                 {index !== assets.length - 1 && (
