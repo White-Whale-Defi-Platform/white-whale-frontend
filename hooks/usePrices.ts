@@ -1,17 +1,17 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { useClients } from 'hooks/useClients'
-import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import {
   PoolEntityType,
   TokenInfo,
   usePoolsListQuery,
-} from 'queries/usePoolsListQuery'
+} from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
   PoolMatchForSwap,
   findPoolForSwap,
-} from 'queries/useQueryMatchingPoolForSwap'
+} from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
+import { useClients } from 'hooks/useClients'
+import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import asyncForEach from 'util/asyncForEach'

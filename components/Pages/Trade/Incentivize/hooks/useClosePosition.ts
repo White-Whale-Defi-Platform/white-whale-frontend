@@ -2,10 +2,10 @@ import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
+import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
-import { usePoolFromListQueryById } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { TerraTreasuryService } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
@@ -69,9 +69,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
         const gas = Math.ceil(await signingClient.simulate(
           address, msg, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          null, gas,
-        )
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
       }
       return validateTransactionSuccess(await signingClient.signAndBroadcast(
         address, msg, fee, null,

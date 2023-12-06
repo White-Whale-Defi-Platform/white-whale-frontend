@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 
-import { TokenInfo } from 'queries/usePoolsListQuery'
+import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 
 import { useTokenList } from './useTokenList'
 

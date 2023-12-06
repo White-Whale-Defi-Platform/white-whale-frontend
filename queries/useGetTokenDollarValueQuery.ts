@@ -5,6 +5,7 @@
  */
 import { useCallback } from 'react'
 
+import { useGetQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
 import { useClients } from 'hooks/useClients'
 import { useTokenDollarValue } from 'hooks/useTokenDollarValue'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
@@ -12,7 +13,6 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import { tokenToTokenPriceQueryWithPools } from './tokenToTokenPriceQuery'
-import { useGetQueryMatchingPoolForSwap } from './useQueryMatchingPoolForSwap'
 
 export const useGetTokenDollarValueQuery = () => {
   const baseToken = useBaseTokenInfo()

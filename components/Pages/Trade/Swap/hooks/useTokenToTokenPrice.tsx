@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query'
 
+import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { useQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
 import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
-import { TokenInfo } from 'queries/usePoolsListQuery'
-import { useQueryMatchingPoolForSwap } from 'queries/useQueryMatchingPoolForSwap'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 

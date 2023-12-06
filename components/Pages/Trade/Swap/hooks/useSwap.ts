@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useChain } from '@cosmos-kit/react-lite'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import useRoute from 'components/Pages/Trade/Swap/hooks/useRoute'
 import useSimulate from 'components/Pages/Trade/Swap/hooks/useSimulate'
 import useTransaction from 'components/Pages/Trade/Swap/hooks/useTransaction'
@@ -8,7 +9,6 @@ import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAto
 import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 

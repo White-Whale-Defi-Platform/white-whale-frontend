@@ -19,6 +19,15 @@ interface TotalBondedInfo {
   total_bonded: string
 }
 
+const fetchTotalBonded = async (client: CosmWasmClient,
+  config: Config): Promise<TotalBondedInfo> => {
+  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
+    {
+      total_bonded: {},
+    })
+  return result as TotalBondedInfo
+}
+
 export const getTotalBonded = async (client: CosmWasmClient,
   config: Config) => {
   if (!client) {
@@ -34,12 +43,4 @@ export const getTotalBonded = async (client: CosmWasmClient,
   } catch (e) {
     return 0
   }
-}
-const fetchTotalBonded = async (client: CosmWasmClient,
-  config: Config): Promise<TotalBondedInfo> => {
-  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
-    {
-      total_bonded: {},
-    })
-  return result as TotalBondedInfo
 }

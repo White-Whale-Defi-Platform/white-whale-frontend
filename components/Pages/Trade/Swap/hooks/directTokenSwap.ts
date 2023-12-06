@@ -1,7 +1,7 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
+import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
-import { TokenInfo } from 'queries/usePoolsListQuery'
 import { TerraTreasuryService } from 'services/treasuryService'
 import {
   createExecuteMessage,
@@ -56,9 +56,7 @@ export const directTokenSwap = async ({
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, [execMsg], '',
     ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-      execMsg.value.funds, gas,
-    )
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
   }
   return await signingClient.signAndBroadcast(
     senderAddress, [execMsg], fee, '',

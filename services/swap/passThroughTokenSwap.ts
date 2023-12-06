@@ -1,6 +1,6 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
-import { TokenInfo } from 'queries/usePoolsListQuery'
+import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,

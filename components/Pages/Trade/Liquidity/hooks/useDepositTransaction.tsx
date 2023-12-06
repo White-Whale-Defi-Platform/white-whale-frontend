@@ -29,7 +29,6 @@ type Params = {
 export const useTransaction = ({
   enabled,
   swapAddress,
-  swapAssets,
   signingClient,
   senderAddress,
   msgs,
@@ -42,13 +41,11 @@ export const useTransaction = ({
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const toast = useToast()
-  const [tokenA, tokenB] = swapAssets
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
   const queryClient = useQueryClient()
-
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', tokenAAmount, tokenBAmount, debouncedMsgs, error],
@@ -142,10 +139,6 @@ export const useTransaction = ({
     },
   )
   const { mutate } = useMutation(() => executeAddLiquidity({
-    tokenA,
-    tokenB,
-    tokenAAmount,
-    tokenBAmount,
     signingClient,
     swapAddress,
     senderAddress,

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useTokenList } from 'hooks/useTokenList'
 import { num } from 'libs/num'
-import { usePoolsListQuery } from 'queries/usePoolsListQuery'
 import { toAssetInfo } from 'services/asset'
 import { toBase64 } from 'util/conversion/index'
 import { createExecuteMessage } from 'util/messages/index'
