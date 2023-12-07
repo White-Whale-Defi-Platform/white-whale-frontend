@@ -111,7 +111,7 @@ const SwapForm: FC<Props> = ({
 
   const [isMobile] = useMediaQuery('(max-width: 485px)')
   const [isLabelOpenRate, setIsLabelOpenRate] = useState(false)
-  const [isLabelOpenRecieve, setIsLabelOpenRecieve] = useState(false)
+  const [isLabelOpenReceive, setIsLabelOpenReceive] = useState(false)
   const [isLabelOpenImpact, setIsLabelOpenImpact] = useState(false)
   const [isLabelOpenRoute, setIsLabelOpenRoute] = useState(false)
 
@@ -381,7 +381,7 @@ const SwapForm: FC<Props> = ({
                     Min Receive
                   </Text>
                   {ExplanationTooltip(
-                    'Expected minimum quantity to be received based on the current price, maximum spread, and trading fee', isLabelOpenRecieve, setIsLabelOpenRecieve,
+                    'Expected minimum quantity to be received based on the current price, maximum spread, and trading fee', isLabelOpenReceive, setIsLabelOpenReceive,
                   )}
                 </HStack>
                 <Text color="brand.500" fontSize={12}>

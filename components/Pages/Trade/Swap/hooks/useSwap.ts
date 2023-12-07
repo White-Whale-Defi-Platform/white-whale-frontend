@@ -68,13 +68,12 @@ const useSwap = ({ reverse }) => {
     if (!simulated) {
       return null
     }
-    const simValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg.simulate_swap_operations?.offer_amount)
-    const diff = Math.abs(simValue - simulated.amount / Number(amount));
+    const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg.simulate_swap_operations?.offer_amount)
+    const diff = Math.abs(simulatedValue - simulated.amount / Number(amount));
     if (diff === 0) {
-      // Vermeiden Sie eine Division durch Null, wenn der Durchschnitt 0 ist.
       return 0;
     }
-    const deviation = (diff / (simValue / 100)).toFixed(2)
+    const deviation = (diff / (simulatedValue / 100)).toFixed(2)
     return deviation;
   }, [simulated])
 
@@ -82,9 +81,9 @@ const useSwap = ({ reverse }) => {
     if (!simulated) {
       return null
     }
-    const recieve = toChainAmount(minReceive, tokenB?.decimals)
+    const receive = toChainAmount(minReceive, tokenB?.decimals)
     if (executeMsg?.execute_swap_operations) {
-      executeMsg.execute_swap_operations.minimum_receive = recieve
+      executeMsg.execute_swap_operations.minimum_receive = receive
       return [executeMessage(
         executeMsg,
         num(amount).toFixed(0),
@@ -94,7 +93,7 @@ const useSwap = ({ reverse }) => {
       )]
     } else if (executeMsg?.send) {
       const decodedMsg = JSON.parse(fromUtf8(fromBase64(executeMsg.send.msg)))
-      decodedMsg.execute_swap_operations.minimum_receive = recieve
+      decodedMsg.execute_swap_operations.minimum_receive = receive
       executeMsg.send.msg = toBase64(toUtf8(JSON.stringify(decodedMsg)))
       return [executeMessage(
         executeMsg,
@@ -104,6 +103,7 @@ const useSwap = ({ reverse }) => {
         address,
       )]
     }
+    return null
   }, [minReceive, simulated])
 
   const tx = useTransaction({

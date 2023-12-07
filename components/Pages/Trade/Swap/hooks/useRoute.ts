@@ -170,19 +170,19 @@ const useRoute = ({
   }, [poolsList, tokenList, tokenA?.symbol, tokenB?.symbol])
 
   const refValue = useMemo(() => {
-    let simAmount = toChainAmount(1, tokenA?.decimal)
+    let simulatedAmount = toChainAmount(1, tokenA?.decimal)
     if (prices?.[tokenA.symbol]) {
-      const dollarAmt = 1 / Number(prices?.[tokenA.symbol])
-      simAmount = toChainAmount(dollarAmt, tokenA?.decimal)
+      const dollarAmount = 1 / Number(prices?.[tokenA.symbol])
+      simulatedAmount = toChainAmount(dollarAmount, tokenA?.decimal)
     }
     // @ts-ignore
     if (window.debugLogsEnabled) {
-      console.log('Reference Amount 1$: ', simAmount)
+      console.log('Reference Amount 1$: ', simulatedAmount)
       console.log('Prices: ', prices)
     }
     const refValue = createRouteMessage(
       route,
-      simAmount,
+      simulatedAmount,
       tokenA,
       reverse,
       routerAddress,
