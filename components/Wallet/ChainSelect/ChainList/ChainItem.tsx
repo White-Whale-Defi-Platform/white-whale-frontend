@@ -7,10 +7,8 @@ import { kBg } from 'constants/visualComponentConstants'
 
 const ChainItem = ({
   chain,
-  index,
   onChange,
   onClose,
-  chainList,
   active,
   walletConnected,
 }) => {
@@ -39,13 +37,11 @@ const ChainItem = ({
     >
       <ListItem
         justifyContent="space-between"
+        bg={'#444444'}
         display="flex"
+        px={3}
+        borderRadius={10}
         alignItems="center"
-        borderBottom={
-          index === chainList.length - 1
-            ? 'unset'
-            : '1px solid rgba(255, 255, 255, 0.1)'
-        }
         paddingY={1}
         opacity={active ? 1 : 0.3}
         cursor={walletConnected ? 'pointer' : 'default'}

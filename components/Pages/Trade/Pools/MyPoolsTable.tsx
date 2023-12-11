@@ -26,7 +26,7 @@ import {
 import { IncentiveTooltip } from 'components/InfoTooltip'
 import Loader from 'components/Loader'
 import Apr from 'components/Pages/Trade/Pools/components/Apr'
-import Liquidity from 'components/Pages/Trade/Pools/components/liquidity'
+import Liquidity from 'components/Pages/Trade/Pools/components/Liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'

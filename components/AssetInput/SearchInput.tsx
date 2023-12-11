@@ -28,7 +28,7 @@ const SearchInput: FC<Props> = ({ onChange }) => {
         <Input
           placeholder="Search Token"
           variant="unstyled"
-          color="brand.500"
+          color="whiteAlpha.600"
           onChange={({ target: { value } }) => setSearch(value.toLowerCase())}
         />
         <SearchIcon color="green.500" />

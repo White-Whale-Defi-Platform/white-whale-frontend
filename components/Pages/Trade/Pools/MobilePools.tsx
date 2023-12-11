@@ -1,5 +1,6 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { IncentiveTooltip } from 'components/InfoTooltip';
+import Liquidity from 'components/Pages/Trade/Pools/components/Liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
@@ -9,7 +10,6 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import Apr from './components/Apr'
-import Liquidity from './components/liquidity'
 
 type Props = {
   pools: Pool[]

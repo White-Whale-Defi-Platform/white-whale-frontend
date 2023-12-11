@@ -44,8 +44,8 @@ export const Incentives = ({ flows }) => {
       </PopoverTrigger>
       <PopoverContent
         background={'black'}
-        boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
-        borderRadius="5px"
+        boxShadow="0px 0px 4px 4px rgba(255, 255, 255, 0.25)"
+        borderRadius="10px"
         border="unset"
         width="auto"
       >
@@ -61,7 +61,7 @@ export const Incentives = ({ flows }) => {
             <Table size="sm" variant="unstyled">
               <Thead>
                 <Tr border="0">
-                  <Td color="gray.500">Token</Td>
+                  <Td color="whiteAlpha.600">Token</Td>
                 </Tr>
               </Thead>
               <Tbody>

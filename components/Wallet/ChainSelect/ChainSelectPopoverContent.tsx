@@ -16,7 +16,7 @@ const ChainSelectPopoverContent = ({ onChange, onClose, currentChainState, conne
   <PopoverContent
     borderColor={kBg}
     borderRadius={kBorderRadius}
-    backgroundColor={kBg}
+    backgroundColor={'#141414'}
     width="253px"
     marginTop={3}
   >

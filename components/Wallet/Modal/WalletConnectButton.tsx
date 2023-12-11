@@ -119,7 +119,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
   }
 
   return (
-    <Button variant="wallet" onClick={() => setWallet()} colorScheme="black">
+    <Button variant="wallet" onClick={() => setWallet()} bg={'#444444'}>
       <HStack justify="space-between" width="full">
         <Text>{renderContent()}</Text>
         {renderIcon()}

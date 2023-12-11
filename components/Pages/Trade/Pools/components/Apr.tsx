@@ -41,8 +41,8 @@ const Apr = ({ apr, flows }: Props) => {
       </PopoverTrigger>
       <PopoverContent
         background={'black'}
-        boxShadow={'0px 0px 50px rgba(0, 0, 0, 0.25)'}
-        borderRadius="5px"
+        boxShadow={'0px 0px 3px 3px rgba(255, 255, 255, 0.25)'}
+        borderRadius="10px"
         border="unset"
         width="auto"
       >
@@ -58,8 +58,8 @@ const Apr = ({ apr, flows }: Props) => {
             <Table size="sm" variant="unstyled">
               <Thead>
                 <Tr border="0">
-                  <Td color="gray.500">Source</Td>
-                  <Td color="gray.500" isNumeric>
+                  <Td color="whiteAlpha.600">Source</Td>
+                  <Td color="whiteAlpha.600" isNumeric>
                     APR
                   </Td>
                 </Tr>

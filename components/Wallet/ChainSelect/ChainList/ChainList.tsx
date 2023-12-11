@@ -35,26 +35,22 @@ const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) 
 
   return (
     <List spacing={1} color="white" width="full">
-      {connectedChains.map((chain, index) => (
+      {connectedChains.map((chain) => (
         <ChainItem
           key={chain?.chainId}
           chain={chain}
-          index={index}
           onChange={onChange}
           onClose={onClose}
-          chainList={connectedChains}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={true}
         />
       ))}
-      {removedChains.map((chain, index) => (
+      {removedChains.map((chain) => (
         <ChainItem
           key={chain?.chainId}
           chain={chain}
-          index={index}
           onChange={onChange}
           onClose={onClose}
-          chainList={connectedChains}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={false}
         />

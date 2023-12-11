@@ -10,7 +10,7 @@ export const backgrounds = {
   'uni-6':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 77, 0, 0.25) 97.47%)',
   'phoenix-1':
-    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(0, 117, 255, 0.25) 97.47%)',
+    'linear-gradient(135deg, rgba(15, 75, 85, 1) 0%, rgba(10, 135, 145, 1) 50%, rgba(60, 185, 195, 1) 100%)',
   'juno-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 77, 0, 0.25) 97.47%)',
   'chihuahua-1':
@@ -28,7 +28,7 @@ export const backgrounds = {
   'narwhal-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(43, 68, 46, 0.50) 97.47%)',
   'migaloo-1':
-    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(43, 68, 46, 0.50) 97.47%)',
+    'linear-gradient(135deg, rgba(15, 75, 45, 1) 0%, rgba(10, 105, 55, 1) 50%, rgba(60, 175, 80, 1) 100%)',
   'columbus-5':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 255, 0, 0.25) 50%, rgba(0, 117, 255, 0.25) 97.47%)',
   'rebel-2':
@@ -38,7 +38,7 @@ export const backgrounds = {
 
 const RadialGradient: FC = () => {
   const { chainId } = useRecoilValue(chainState)
-  const wallet = useMemo(() => backgrounds[chainId], [chainId])
+  const background = useMemo(() => backgrounds[chainId], [chainId])
 
   return (
     <Box
@@ -46,7 +46,7 @@ const RadialGradient: FC = () => {
       height="718px"
       left="-131px"
       top="-314px"
-      background={wallet}
+      background={background}
       width="full"
       filter="blur(250px)"
       borderTopRightRadius="20%"
