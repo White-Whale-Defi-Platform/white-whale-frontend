@@ -118,6 +118,98 @@
       "swap_address": "terra1wm3jtcq0fuftvmfq0skmqyxnl3x3j42x8ae56q7eg7v6jsf5eg4qmz36ts",
       "staking_address": "terra1w088w23xywkfndukqgcj3d9j73tsr459l370suycmvsj6yedr6qqfn2w7g",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "FROG-LUNC",
+      "lpOrder": [
+        "FROG",
+        "LUNC"
+      ],
+      "assetOrder": [
+        "FROG","LUNC"
+      ],
+      "displayName": "FROG-LUNC",
+      "displayLogo1": "",
+      "displayLogo2": "/logos/lunac.png",
+      "pool_assets": [
+        {
+          "chain_id": "columbus-5",
+          "token_address": "terra1wez9puj43v4s25vrex7cv3ut3w75w4h6j5e537sujyuxj0r5ne2qp9uwl9",
+          "symbol": "FROG",
+          "name": "Frog",
+          "decimals": 6,
+          "logoURI": "",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra1wez9puj43v4s25vrex7cv3ut3w75w4h6j5e537sujyuxj0r5ne2qp9uwl9"
+        },
+        {
+          "id": "terra-luna",
+          "chain_id": "columbus-5",
+          "token_address": "uluna",
+          "symbol": "LUNC",
+          "name": "Lunc",
+          "decimals": 6,
+          "logoURI": "/logos/lunc.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "terra1qhqzjmqchumnnffrns4sj5c83hul828hfjjcr03jr7pn49wszphqmxafpp",
+      "swap_address": "terra1lepapewkdnt9mclq6gp8zmtsvhpuzhvg4dg9pastdk4rvjcw6gaqpaqvpf",
+      "staking_address": "terra1djdcg0a5g6tj39ld6yewjvzgeyd0v4v7tdvdek7ljn53n79r7hgq0cmqsg",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "BASE-LUNC",
+      "lpOrder": [
+        "BASE",
+        "LUNC"
+      ],
+      "assetOrder": [
+        "BASE","LUNC"
+      ],
+      "displayName": "BASE-LUNC",
+      "displayLogo1": "",
+      "displayLogo2": "/logos/lunac.png",
+      "pool_assets": [
+        {
+          "chain_id": "columbus-5",
+          "token_address": "terra1uewxz67jhhhs2tj97pfm2egtk7zqxuhenm4y4m",
+          "symbol": "BASE",
+          "name": "BASE",
+          "decimals": 6,
+          "logoURI": "",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra1uewxz67jhhhs2tj97pfm2egtk7zqxuhenm4y4m"
+        },
+        {
+          "id": "terra-luna",
+          "chain_id": "columbus-5",
+          "token_address": "uluna",
+          "symbol": "LUNC",
+          "name": "Lunc",
+          "decimals": 6,
+          "logoURI": "/logos/lunc.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "terra1zkg24q3cxzag6md3lq9h7a69ekkwehf6p2x5mpc8ua5vhjq9hnyssk20qr",
+      "swap_address": "terra1znxah0scl3xq747wtuzjg3k0tlml3fvvmxgt0m3jywcmqwn5867s7x29tx",
+      "staking_address": "terra1tcuq2hr2dz4cazvely6capqtcjrc3gkz0k44lgt2pnuy76wl9tms23cmz4",
+      "rewards_tokens": []
     }
   ]
 }
