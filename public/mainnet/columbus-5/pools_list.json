@@ -129,7 +129,7 @@
         "FROG","LUNC"
       ],
       "displayName": "FROG-LUNC",
-      "displayLogo1": "",
+      "displayLogo1": "/logos/frogg.png",
       "displayLogo2": "/logos/lunac.png",
       "pool_assets": [
         {
@@ -138,7 +138,7 @@
           "symbol": "FROG",
           "name": "Frog",
           "decimals": 6,
-          "logoURI": "",
+          "logoURI": "/logos/frogg.png",
           "tags": [
             ""
           ],
