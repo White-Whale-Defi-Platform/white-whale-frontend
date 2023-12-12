@@ -7,23 +7,22 @@ type Props = {
   infos: any
 }
 
-const Liquidity = ({ liquidity, infos }: Props) => {
+export const Liquidity = ({ liquidity, infos }: Props) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   const assets = infos.poolAssets
-  const isTooltipDisabled = liquidity === 'n/a'
+  const tooltipDisabled = liquidity === 'n/a'
   return (
 
     <Tooltip
-      isDisabled={isTooltipDisabled}
-      isOpen={!isTooltipDisabled && isLabelOpen}
+      isDisabled={tooltipDisabled}
+      isOpen={!tooltipDisabled && isLabelOpen}
       sx={{ boxShadow: 'none' }}
       label={
         <VStack
           minW="250px"
           minH="fit-content"
           borderRadius="10px"
-          bg="black"
-          boxShadow={'0px 0px 3px 3px rgba(255, 255, 255, 0.25)'}
+          bg="blackAlpha.900"
           px="4"
           py="4"
           position="relative"
@@ -47,10 +46,7 @@ const Liquidity = ({ liquidity, infos }: Props) => {
                     {(
                       infos.liquidity.reserves.total[index] /
                         (10 ** infos.poolAssets[index].decimals)
-                    ).toLocaleString('en-US', {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    ).toFixed(2)}
                   </Text>
                 </HStack>
                 {index !== assets.length - 1 && (
@@ -70,7 +66,7 @@ const Liquidity = ({ liquidity, infos }: Props) => {
       <VStack alignItems="flex-start" minW={100}>
         <Text mb="-0.3rem" color="white">
           {
-            <HStack borderBottom={!isTooltipDisabled ? '1px dotted rgba(255, 255, 255, 0.5)' : 'InactiveBorder'} paddingTop={'2'}>
+            <HStack borderBottom={!tooltipDisabled ? '1px dotted rgba(255, 255, 255, 0.5)' : 'InactiveBorder'} paddingTop={'2'}>
               <Text align="right" onMouseEnter={() => setIsLabelOpen(true)}
                 onMouseLeave={() => setIsLabelOpen(false)}
                 onClick={() => setIsLabelOpen(!isLabelOpen)}>{liquidity}</Text>
@@ -99,4 +95,3 @@ const Liquidity = ({ liquidity, infos }: Props) => {
   )
 }
 
-export default Liquidity

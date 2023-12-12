@@ -25,7 +25,7 @@ import {
 import { IncentiveTooltip } from 'components/InfoTooltip'
 import Loader from 'components/Loader'
 import Apr from 'components/Pages/Trade/Pools/components/Apr'
-import Liquidity from 'components/Pages/Trade/Pools/components/Liquidity'
+import { Liquidity } from 'components/Pages/Trade/Pools/components/Liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
@@ -65,7 +65,7 @@ const columns = [
       </Text>
     ),
     cell: (info) => (info.getValue() === 'n/a' ? (
-      <Text>-</Text>
+      <Text>n/a</Text>
     ) : (
       <Apr
         apr={`${Number(info.getValue()).toFixed(2)}`}
@@ -78,7 +78,7 @@ const columns = [
     header: () => <Text align="right" color="brand.50" display="inline">
       24hr Volume
     </Text>,
-    cell: (info) => <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
+    cell: (info) => <Text align="right">{info.getValue() === 'n/a' ? info.getValue() : `$${formatPrice(info.getValue())}`}</Text>,
   }),
   columnHelper.accessor((row) => row.totalLiq, {
     id: 'totalLiq',

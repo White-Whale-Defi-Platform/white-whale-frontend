@@ -35,7 +35,7 @@ export const tokenSwapAtom = atom<[TokenItemState, TokenItemState]>({
 
 export const slippageAtom = atom<number>({
   key: 'slippageForSwap',
-  default: 0.1,
+  default: 1,
   effects_UNSTABLE: [
     ({ onSet, setSelf }) => {
       const slippage = localStorage.getItem('slippage')

@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { IncentiveTooltip } from 'components/InfoTooltip';
-import Liquidity from 'components/Pages/Trade/Pools/components/Liquidity'
+import { Liquidity } from 'components/Pages/Trade/Pools/components/Liquidity'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
@@ -43,8 +43,8 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
               />
-              <Apr apr={Number(pool?.apr).toFixed(2)}
-                flows={pool?.flows}/>
+              {pool?.apr === 'n/a' ? <Text>n/a</Text> : <Apr apr={Number(pool?.apr).toFixed(2)}
+                flows={pool?.flows} />}
             </HStack>
 
             <HStack height="24px" />
@@ -61,7 +61,7 @@ const MobilePools = ({ pools, ctaLabel }: Props) => {
                 infos={pool}
               />
               {pool?.flows.length > 0 ? (pool.incentives) : null}
-              <Text>{`$${formatPrice(pool?.volume24hr)}`}</Text>
+              <Text>{pool?.volume24hr === 'n/a' ? 'n/a' : `$${formatPrice(pool?.volume24hr)}`}</Text>
             </HStack>
 
             <HStack height="24px" />

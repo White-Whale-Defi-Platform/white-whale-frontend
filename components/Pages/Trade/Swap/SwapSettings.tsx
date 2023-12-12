@@ -31,7 +31,7 @@ const SwapSettings = () => {
     if (!auto === true) {
       setSlippage(0)
     } else {
-      setSlippage(0.01)
+      setSlippage(1)
     }
   }
 

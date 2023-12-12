@@ -2,8 +2,9 @@ import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import usePrices from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
-import { num } from 'libs/num'
+import { num, toChainAmount } from 'libs/num'
 import { toAssetInfo } from 'services/asset'
 import { toBase64 } from 'util/conversion/index'
 import { createExecuteMessage } from 'util/messages/index'
@@ -38,7 +39,6 @@ const createRouteMessage = (
   if (!amount || !route.length || !routerAddress) {
     return {}
   }
-
   const operations = route.map(([offerAsset, askAsset]) => {
     const offerAssetInfo = toAssetInfo(offerAsset?.denom, offerAsset?.native)
     const askAssetInfo = toAssetInfo(askAsset?.denom, askAsset?.native)
@@ -72,14 +72,13 @@ const createRouteMessage = (
       msg: toBase64(executeMsg),
     },
   }
-
   return {
     simulateMsg,
     executeMsg: token?.native ? executeMsg : nonNativeExecuteMsg,
   }
 }
 
-const executeMessage = (
+export const executeMessage = (
   message,
   amount,
   token,
@@ -89,7 +88,6 @@ const executeMessage = (
   if (!message || !routerAddress) {
     return null
   }
-
   return createExecuteMessage({
     senderAddress,
     contractAddress: token?.native ? routerAddress : token.token_address,
@@ -106,10 +104,10 @@ const useRoute = ({
   senderAddress,
   slippage,
 }) => {
+  const prices = usePrices()
   const [tokenList] = useTokenList()
   const { data: poolsList } = usePoolsListQuery()
   const { routerAddress } = poolsList || {}
-
   const { path, route } = useMemo(() => {
     if (!poolsList || !tokenList) {
       return {
@@ -171,11 +169,31 @@ const useRoute = ({
       route }
   }, [poolsList, tokenList, tokenA?.symbol, tokenB?.symbol])
 
+  const refValue = useMemo(() => {
+    let simulatedAmount = toChainAmount(1, tokenA?.decimal)
+    if (prices?.[tokenA.symbol]) {
+      const dollarAmount = 1 / Number(prices?.[tokenA.symbol])
+      simulatedAmount = toChainAmount(dollarAmount, tokenA?.decimal)
+    }
+    // @ts-ignore
+    if (window.debugLogsEnabled) {
+      console.log('Reference Amount 1$: ', simulatedAmount)
+      console.log('Prices: ', prices)
+    }
+    const refValue = createRouteMessage(
+      route,
+      simulatedAmount,
+      tokenA,
+      reverse,
+      routerAddress,
+    )
+    return refValue
+  }, [route, amount, reverse, slippage, prices])
+
   const { simulateMsg, executeMsg, encodedExecuteMsg } = useMemo(() => {
     if (route.length < 1) {
       return {}
     }
-
     const { simulateMsg, executeMsg } = createRouteMessage(
       route,
       amount,
@@ -196,12 +214,13 @@ const useRoute = ({
       executeMsg,
       encodedExecuteMsg: encodedMsgs ? [encodedMsgs] : null,
     }
-  }, [route, amount, reverse, slippage])
+  }, [route, amount, reverse, slippage, refValue])
 
   return { path,
     simulateMsg,
     encodedExecuteMsg,
-    executeMsg }
+    executeMsg,
+    refValue }
 }
 
 export default useRoute
