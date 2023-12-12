@@ -56,7 +56,7 @@ export const queryMyLiquidity = async ({
   return {
     totalAssets,
     totalAssetsInDollar: (totalAssetsInDollar[0] + totalAssetsInDollar[1]),
-    ratioFromPool: swap.token2_reserve / swap.token1_reserve,
+    ratioFromPool: convertMicroDenomToDenom(swap.token2_reserve, tokenBDecimals) / convertMicroDenomToDenom(swap.token1_reserve, tokenADecimals),
     myNotLockedAssets,
     myLockedAssets,
     totalLockedAssets,

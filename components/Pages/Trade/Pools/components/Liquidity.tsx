@@ -7,7 +7,7 @@ type Props = {
   infos: any
 }
 
-const Liquidity = ({ liquidity, infos }: Props) => {
+export const Liquidity = ({ liquidity, infos }: Props) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   const assets = infos.poolAssets
   const tooltipDisabled = liquidity === 'n/a'
@@ -95,4 +95,3 @@ const Liquidity = ({ liquidity, infos }: Props) => {
   )
 }
 
-export default Liquidity
