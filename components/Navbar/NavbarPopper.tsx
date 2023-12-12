@@ -71,7 +71,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       </PopoverTrigger>
 
       <PopoverContent
-        borderColor={kBg}
+        borderColor={'transparent'}
         borderRadius="25px"
         backgroundColor={kBg}
         width="auto"

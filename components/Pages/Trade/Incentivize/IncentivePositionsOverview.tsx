@@ -15,7 +15,6 @@ import {
 import { useClosePosition } from 'components/Pages/Trade/Incentivize/hooks/useClosePosition'
 import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
 import { IncentiveState } from 'constants/state'
-import { kBg } from 'constants/visualComponentConstants'
 import { num } from 'libs/num'
 
 type Props = {
@@ -108,7 +107,8 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
           display={['flex']}
           flexWrap={['wrap']}
           justifyContent="center"
-          background={kBg}
+          background={'black'}
+          borderRadius={10}
         >
           {STATES.map((item) => (
             <Tab key={`tab-${item}`}

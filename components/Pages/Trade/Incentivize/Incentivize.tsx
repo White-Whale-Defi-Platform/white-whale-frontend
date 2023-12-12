@@ -15,12 +15,12 @@ import {
 } from '@chakra-ui/react'
 import Create from 'components/Pages/Trade/Incentivize/Create'
 import { IncentivePositionsOverview } from 'components/Pages/Trade/Incentivize/IncentivePositionsOverview'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { useQueryPoolsLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useClients } from 'hooks/useClients'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { NextRouter, useRouter } from 'next/router'
-import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import { useQueryPoolsLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -99,7 +99,7 @@ const Incentivize: FC = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background={kBg}>
+            <TabList justifyContent="center" background={'black'} borderRadius={10}>
               <Tab>Overview</Tab>
               <Tab>Create</Tab>
             </TabList>

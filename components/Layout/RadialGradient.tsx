@@ -14,7 +14,7 @@ export const backgrounds = {
   'juno-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 77, 0, 0.25) 97.47%)',
   'chihuahua-1':
-    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 212, 52, 0.50) 97.47%)',
+    'linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(230, 210, 0, 1) 50%, rgba(255, 165, 0, 1) 100%)',
   'injective-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(82, 206, 252, 0.50) 97.47%)',
   'injective-888':
@@ -22,7 +22,7 @@ export const backgrounds = {
   'comdex-1':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 64, 74, 0.50) 97.47%)',
   'pacific-1':
-    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 64, 74, 0.50) 97.47%)',
+    'linear-gradient(90deg, rgba(0, 0, 0, 1) 0%,rgba(230, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)',
   'comdex-test2':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(250, 64, 74, 0.50) 97.47%)',
   'narwhal-1':
