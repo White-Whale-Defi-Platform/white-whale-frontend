@@ -16,10 +16,10 @@ export const queryMyLiquidity = async ({
     return {}
   }
 
-  const tokenASymbol = swap?.assetOrder[0] === AMP_WHALE_TOKEN_SYMBOL || swap?.assetOrder[0] === B_WHALE_TOKEN_SYMBOL ? WHALE_TOKEN_SYMBOL : swap?.assetOrder[0]
-  const tokenADecimals = swap?.pool_assets?.[0]?.decimals
-  const tokenBSymbol = swap?.assetOrder[1] === AMP_WHALE_TOKEN_SYMBOL || swap?.assetOrder[1] === B_WHALE_TOKEN_SYMBOL ? WHALE_TOKEN_SYMBOL : swap?.assetOrder[1]
-  const tokenBDecimals = swap?.pool_assets?.[1]?.decimals
+  const tokenASymbol = swap.assetOrder[0] === AMP_WHALE_TOKEN_SYMBOL || swap.assetOrder[0] === B_WHALE_TOKEN_SYMBOL ? WHALE_TOKEN_SYMBOL : swap.assetOrder[0]
+  const tokenADecimals = swap.pool_assets?.[0]?.decimals
+  const tokenBSymbol = swap.assetOrder[1] === AMP_WHALE_TOKEN_SYMBOL || swap.assetOrder[1] === B_WHALE_TOKEN_SYMBOL ? WHALE_TOKEN_SYMBOL : swap.assetOrder[1]
+  const tokenBDecimals = swap.pool_assets?.[1]?.decimals
   const isNative = isNativeToken(swap.lp_token)
   const myNotLockedLp = address
     ? await queryLiquidityBalance({
