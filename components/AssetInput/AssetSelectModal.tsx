@@ -67,7 +67,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
           md: '2xl' }}
       >
         <ModalOverlay />
-        <ModalContent backgroundColor="#212121">
+        <ModalContent backgroundColor="#1C1C1C">
           <ModalHeader>Select Token</ModalHeader>
           <ModalBody
             as={VStack}

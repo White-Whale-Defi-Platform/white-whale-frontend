@@ -23,6 +23,11 @@ import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
 import Overview from 'components/Pages/Trade/Liquidity/Overview'
 import WithdrawForm from 'components/Pages/Trade/Liquidity/WithdrawForm'
+import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import {
+  PoolEntityTypeWithLiquidity,
+  useQueryPoolsLiquidity,
+} from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
@@ -30,11 +35,6 @@ import usePrices from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRouter } from 'next/router'
-import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import {
-  PoolEntityTypeWithLiquidity,
-  useQueryPoolsLiquidity,
-} from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
@@ -242,7 +242,8 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
               display={['flex']}
               flexWrap={['wrap']}
               justifyContent="center"
-              background={kBg}
+              background={'black'}
+              borderRadius={10}
             >
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>

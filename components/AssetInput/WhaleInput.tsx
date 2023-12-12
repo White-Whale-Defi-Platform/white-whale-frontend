@@ -108,8 +108,9 @@ ref) => {
             type="number"
             value={value?.amount || ''}
             variant="unstyled"
-            color="brand.500"
+            color="white"
             placeholder="0.00"
+            _placeholder={{ color: 'whiteAlpha.700' }}
             disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
             onChange={({ target }) => {
               onChange({ ...token,

@@ -1,3 +1,3 @@
 export const kBorderRadius = '30px'
 
-export const kBg = '#1C1C1C'
+export const kBg = 'rgba(0, 0, 0, 0.5)'

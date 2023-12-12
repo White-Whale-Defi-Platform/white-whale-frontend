@@ -71,6 +71,7 @@ export const fetchTotalPoolSupply = async (swapAddress: string,
 }
 
 const fetchFlows = async (client, address): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
+
 const getPoolFlowData = async (
   client,
   pools,
@@ -96,7 +97,7 @@ const getPoolFlowData = async (
     const currentEpochId: number =
       Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
-    let lockedLpShare
+    let lockedLpShare: number
     try {
       const weight = await client.queryContractSmart(pool.staking_address,
         {
@@ -222,7 +223,7 @@ export const useIncentivePoolInfo = (
       ) => a.findIndex((t) => t.denom === v.denom) === i)
   }
   const { data: flowPoolData, isLoading } = useQuery(
-    ['apr', currentEpochData, pools, poolsWithAprAnd24HrVolume],
+    ['apr', currentEpochData, pools?.length, poolsWithAprAnd24HrVolume],
     () => getPoolFlowData(
       client,
       pools,

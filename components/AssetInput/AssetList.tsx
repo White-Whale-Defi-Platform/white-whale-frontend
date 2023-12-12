@@ -69,7 +69,6 @@ const AssetList: FC<AssetListProps> = ({
 
   return (
     <Box
-      borderY="1px solid rgba(0, 0, 0, 0.5)"
       paddingY={2}
       width="full"
       paddingX={6}
@@ -99,7 +98,7 @@ const AssetList: FC<AssetListProps> = ({
           borderBottom={
             index === (filterAssets?.length || 0) - 1
               ? 'unset'
-              : '1px solid rgba(0, 0, 0, 0.5)'
+              : '1px solid rgba(255, 255, 255, 0.2)'
           }
           onClick={() => onChange({
             tokenSymbol: item?.symbol,

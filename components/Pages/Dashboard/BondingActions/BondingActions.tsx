@@ -85,12 +85,17 @@ const BondingActions = ({ globalAction }) => {
       <Button
         sx={{
           '&:hover': {
-            backgroundColor: kBg,
+            backgroundColor: 'black',
             color: '#6ACA70',
           },
         }}
+        borderRadius={0}
+        borderBottomLeftRadius={action === ActionType.bond ? '10px' : 0}
+        borderBottomRightRadius={action === ActionType.withdraw ? '10px' : 0}
+        borderTopLeftRadius={action === ActionType.bond ? '10px' : 0}
+        borderTopRightRadius={action === ActionType.withdraw ? '10px' : 0}
         color={globalAction === action ? 'white' : 'grey'}
-        bg={kBg}
+        bg={'black'}
         fontSize={20}
         px={3}
         transform="translate(0%, -55%)"
