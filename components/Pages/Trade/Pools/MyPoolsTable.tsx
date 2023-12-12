@@ -178,7 +178,7 @@ const PoolsTable = ({
   return (
     <Flex
       px="30px"
-      background={'#212121'}
+      background={kBg}
       width={['full', 'auto']}
       boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
       borderRadius={kBorderRadius}
