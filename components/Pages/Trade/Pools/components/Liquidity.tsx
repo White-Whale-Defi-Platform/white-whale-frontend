@@ -7,15 +7,15 @@ type Props = {
   infos: any
 }
 
-const Liquidity = ({ liquidity, infos }: Props) => {
+export const Liquidity = ({ liquidity, infos }: Props) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   const assets = infos.poolAssets
-  const ttDisabled = liquidity === 'n/a'
+  const tooltipDisabled = liquidity === 'n/a'
   return (
 
     <Tooltip
-      isDisabled={ttDisabled}
-      isOpen={!ttDisabled && isLabelOpen}
+      isDisabled={tooltipDisabled}
+      isOpen={!tooltipDisabled && isLabelOpen}
       sx={{ boxShadow: 'none' }}
       label={
         <VStack
@@ -66,7 +66,7 @@ const Liquidity = ({ liquidity, infos }: Props) => {
       <VStack alignItems="flex-start" minW={100}>
         <Text mb="-0.3rem" color="white">
           {
-            <HStack borderBottom={!ttDisabled ? '1px dotted rgba(255, 255, 255, 0.5)' : 'InactiveBorder'} paddingTop={'2'}>
+            <HStack borderBottom={!tooltipDisabled ? '1px dotted rgba(255, 255, 255, 0.5)' : 'InactiveBorder'} paddingTop={'2'}>
               <Text align="right" onMouseEnter={() => setIsLabelOpen(true)}
                 onMouseLeave={() => setIsLabelOpen(false)}
                 onClick={() => setIsLabelOpen(!isLabelOpen)}>{liquidity}</Text>
@@ -95,4 +95,3 @@ const Liquidity = ({ liquidity, infos }: Props) => {
   )
 }
 
-export default Liquidity

@@ -61,11 +61,12 @@ export type PoolLiquidityState = {
   providedTotal: PoolTokenValue
 
   reserves: {
+    myNotLocked: AssetType
+    totalLocked: AssetType
+    myLocked: AssetType
     total: AssetType
-    provided: AssetType
-    totalStaked: AssetType
-    providedStaked: AssetType
-    totalProvided: AssetType
+    totalAssetsInDollar: number
+    ratioFromPool: number
   }
 
   rewards: {
@@ -264,6 +265,8 @@ export const useQueryPoolsLiquidity = ({
       totalLockedAssets,
       myLockedAssets,
       totalAssets,
+      totalAssetsInDollar,
+      ratioFromPool,
       myNotLockedLp,
     } = await queryMyLiquidity({
       context,
@@ -272,6 +275,7 @@ export const useQueryPoolsLiquidity = ({
       address,
       totalLockedLp,
       myLockedLp,
+      prices,
     })
 
     const getPoolTokensValues = (assets: any, lpTokenAmount = null) => {
@@ -340,6 +344,8 @@ export const useQueryPoolsLiquidity = ({
         totalLocked: totalLockedAssets,
         myLocked: myLockedAssets,
         total: totalAssets as AssetType,
+        totalAssetsInDollar,
+        ratioFromPool,
       },
       rewards: {
         annualYieldPercentageReturn,

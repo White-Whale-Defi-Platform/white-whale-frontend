@@ -120,7 +120,6 @@ const Pools = () => {
         const isUSDPool =
             STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
             STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
-
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
@@ -129,11 +128,11 @@ const Pools = () => {
           token2Img: pool?.displayLogo2,
           apr: pool?.apr7d,
           volume24hr: pool?.usdVolume24h,
-          totalLiq: pool?.TVL,
+          totalLiq: (pool?.TVL === 0 || pool?.TVL === 'n/a') ? pool?.liquidity?.reserves?.totalAssetsInDollar : pool?.TVL,
           myPosition: calculateMyPosition(pool),
           liquidity: pool?.liquidity,
           poolAssets: pool?.pool_assets,
-          price: pool?.ratio,
+          price: pool?.ratio === 0 ? pool?.liquidity?.reserves?.ratioFromPool : pool?.ratio,
           isUSDPool,
           flows: [],
           incentives: <Incentives key={pool.pool_id} flows={[]} />,
@@ -301,7 +300,6 @@ const Pools = () => {
             ></Switch>
           </Stack>
         </HStack>
-
         <AllPoolsTable
           pools={showAllPoolsList}
           isLoading={isLoading || isInitLoading || pairInfos.length === 0}
