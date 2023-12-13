@@ -55,15 +55,18 @@ export class TerraTreasuryService extends FCDBaseClient {
 
   async getTerraClassicFee(funds:any, gas:number): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === ChainId.terrac);
-
     let tax = null;
-    const am = funds?.find((elem) => elem.denom === terraClassic.stakeCurrency.coinMinimalDenom);
-    if (am?.amount) {
-      console.log(await this.getTerraTax(am.amount));
-      tax = await this.getTerraTax(am.amount);
+    let amountClassic = 0
+    funds?.map((elem) => {
+      if (elem.denom == terraClassic.stakeCurrency.coinMinimalDenom) {
+        amountClassic += Number(elem.amount)
+      }
+    })
+    if (amountClassic > 0) {
+      tax = await this.getTerraTax(amountClassic);
     }
 
-    let amounts = [];
+    const amounts = [];
     if (tax) {
       amounts.push({
         denom: terraClassic.stakeCurrency.coinMinimalDenom,
