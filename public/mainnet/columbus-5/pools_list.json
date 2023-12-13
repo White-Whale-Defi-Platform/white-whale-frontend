@@ -175,7 +175,7 @@
         "BASE","LUNC"
       ],
       "displayName": "BASE-LUNC",
-      "displayLogo1": "",
+      "displayLogo1": "/logos/base.png",
       "displayLogo2": "/logos/lunac.png",
       "pool_assets": [
         {
@@ -184,7 +184,7 @@
           "symbol": "BASE",
           "name": "BASE",
           "decimals": 6,
-          "logoURI": "",
+          "logoURI": "/logos/base.png",
           "tags": [
             ""
           ],
