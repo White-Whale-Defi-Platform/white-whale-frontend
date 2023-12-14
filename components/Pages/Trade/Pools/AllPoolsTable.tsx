@@ -148,7 +148,7 @@ const AllPoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['560px', '560px', '1160px']}
+        width={['full', 'auto']}
         background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius={kBorderRadius}
