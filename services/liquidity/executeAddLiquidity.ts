@@ -23,8 +23,8 @@ export const executeAddLiquidity = async ({
     ) * 1.3)
     const funds = msgs.flatMap((elem) => elem.value.funds)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(funds, gas)
-    return await signingClient.signAndBroadcast(
-      senderAddress, msgs, fee, '',
-    )
   }
+  return await signingClient.signAndBroadcast(
+    senderAddress, msgs, fee, '',
+  )
 }
