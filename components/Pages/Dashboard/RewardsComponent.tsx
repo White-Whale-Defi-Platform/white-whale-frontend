@@ -162,7 +162,7 @@ const RewardsComponent = ({
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
       return 'Connect Wallet'
-    } else if (claimableRewards === 0) {
+    } else if (claimableRewards === 0 && totalGlobalClaimable === 0) {
       return 'No Rewards'
     }
     return 'Claim'
@@ -266,7 +266,7 @@ const RewardsComponent = ({
             txStep === TxStep.Estimating ||
                 txStep === TxStep.Posting ||
                 txStep === TxStep.Broadcasting ||
-                (isWalletConnected && claimableRewards === 0)
+                (isWalletConnected && claimableRewards === 0 && totalGlobalClaimable === 0)
           }
           maxWidth={570}
           isLoading={
