@@ -182,7 +182,7 @@
           "chain_id": "columbus-5",
           "token_address": "terra1uewxz67jhhhs2tj97pfm2egtk7zqxuhenm4y4m",
           "symbol": "BASE",
-          "name": "BASE",
+          "name": "Base",
           "decimals": 6,
           "logoURI": "/logos/base.png",
           "tags": [
