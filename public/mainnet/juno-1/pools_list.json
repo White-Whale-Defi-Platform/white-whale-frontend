@@ -362,7 +362,7 @@
       "lpOrder": ["SGNL","JUNO"],
       "assetOrder": ["SGNL","JUNO"],
       "displayName": "SGNL-JUNO",
-      "displayLogo1": "/logos/signal.png",
+      "displayLogo1": "/logos/signal.svg",
       "displayLogo2": "/logos/juno.svg",
       "pool_assets": [
         {
@@ -371,7 +371,7 @@
           "symbol": "SGNL",
           "name": "Signal",
           "decimals": 6,
-          "logoURI": "/logos/signal.png",
+          "logoURI": "/logos/signal.svg",
           "tags": [],
           "native": false,
           "denom": "juno14lycavan8gvpjn97aapzvwmsj8kyrvf644p05r0hu79namyj3ens87650k"
