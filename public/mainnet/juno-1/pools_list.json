@@ -356,6 +356,43 @@
       "swap_address": "juno1qv337g245ger3cx294m3vu74z74ku7lpf4944qxf8nhx29s8568q4uwrmk",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "SGNL-JUNO",
+      "lpOrder": ["SGNL","JUNO"],
+      "assetOrder": ["SGNL","JUNO"],
+      "displayName": "SGNL-JUNO",
+      "displayLogo1": "/logos/signal.png",
+      "displayLogo2": "/logos/juno.svg",
+      "pool_assets": [
+        {
+          "chain_id": "juno-1",
+          "token_address": "juno14lycavan8gvpjn97aapzvwmsj8kyrvf644p05r0hu79namyj3ens87650k",
+          "symbol": "SGNL",
+          "name": "Signal",
+          "decimals": 6,
+          "logoURI": "/logos/signal.png",
+          "tags": [],
+          "native": false,
+          "denom": "juno14lycavan8gvpjn97aapzvwmsj8kyrvf644p05r0hu79namyj3ens87650k"
+        },
+        {
+          "id": "juno-network",
+          "chain_id": "juno-1",
+          "token_address": "ujuno",
+          "symbol": "JUNO",
+          "name": "Juno",
+          "decimals": 6,
+          "logoURI": "/logos/juno.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ujuno"
+        }
+      ],
+      "lp_token": "factory/juno1pkyvelj5vfp6r8dq2utruw86vw9fvkjrd5c2x7m43m6cext8lzxs4k57dt/uLP",
+      "swap_address": "juno1pkyvelj5vfp6r8dq2utruw86vw9fvkjrd5c2x7m43m6cext8lzxs4k57dt",
+      "staking_address": "juno1fgh87cfgm6nkezsjfsswtsfedvf2u2k63wynkvcw6900pv80rn0qxv0u9r",
+      "rewards_tokens": []
     }
   ],
   "version": {
