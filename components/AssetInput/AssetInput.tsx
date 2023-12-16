@@ -79,7 +79,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     return parts?.[1] ? parts.join('.') : parts?.[0]
   }
 
-  const numberOfTokens = useMemo(() => `${formatNumber(token?.amount, token?.decimals)} ${token?.tokenSymbol}`,
+  const tokenNumberString = useMemo(() => `${formatNumber(token?.amount, 2)} ${token?.tokenSymbol}`,
     [token])
   const prices = usePrices()
   const tokenSymbol = useMemo(() => (token?.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
@@ -102,7 +102,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
       <BalanceWithMaxNHalf
         balance={balanceWithDecimals}
         hideDollarValue={hideDollarValue}
-        numberOfTokens={numberOfTokens}
+        tokenNumberString={tokenNumberString}
         dollarValue={dollarValue}
         maxDisabled={maxDisabled}
         hideHalfMax={hideHalfMax}

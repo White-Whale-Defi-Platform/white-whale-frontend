@@ -94,13 +94,13 @@ const HalfButton = ({
 }
 
 type TokenToPriceProps = {
-  numberOfTokens: string
+  tokenNumberString: string
   dollarValue: number | string
   hide?: boolean
   mobile?: boolean
 }
 const TokenToPrice = ({
-  numberOfTokens,
+  tokenNumberString,
   dollarValue,
   hide,
   mobile,
@@ -108,14 +108,11 @@ const TokenToPrice = ({
   if (hide) {
     return <Box flex={1} />
   }
-  let amt = isNaN(Number(numberOfTokens)) ? numberOfTokens : 0
-  if (mobile) {
-    amt = 'Value:'
-  }
+
   return (
     <HStack spacing={0} gap={0} flex={1}>
       <Text color="brand.50" fontWeight={400} fontSize="14px">
-        {amt}≈
+        {mobile ? 'Value:' : tokenNumberString}≈
       </Text>
       <Text fontWeight={700} fontSize="14px">
         ${isNaN(Number(dollarValue)) ? 0 : dollarValue}
@@ -127,7 +124,7 @@ const TokenToPrice = ({
 type BalanceWithMaxProps = {
   balance: number | string
   maxDisabled?: boolean
-  numberOfTokens: string
+  tokenNumberString: string
   dollarValue: number | string
   onMaxClick: () => void
   onHalfClick: () => void
@@ -139,7 +136,7 @@ type BalanceWithMaxProps = {
 const BalanceWithMaxNHalf = ({
   balance,
   maxDisabled,
-  numberOfTokens,
+  tokenNumberString,
   dollarValue,
   onMaxClick,
   onHalfClick,
@@ -150,7 +147,7 @@ const BalanceWithMaxNHalf = ({
   <>
     <HStack width="full" px={5}>
       <TokenToPrice
-        numberOfTokens={numberOfTokens}
+        tokenNumberString={tokenNumberString}
         dollarValue={dollarValue}
         hide={hideDollarValue}
         mobile={mobile}
