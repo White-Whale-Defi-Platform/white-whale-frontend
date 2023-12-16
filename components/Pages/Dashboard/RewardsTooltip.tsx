@@ -44,6 +44,7 @@ export const RewardsTooltip = ({
             minH="fit-content"
             borderRadius="10px"
             bg="blackAlpha.900"
+            boxShadow="0px 0px 4px 4px rgba(255, 255, 255, 0.25)"
             px="2"
             py="2"
             position="relative"

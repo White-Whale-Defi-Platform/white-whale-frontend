@@ -120,9 +120,9 @@ const SwapForm: FC<Props> = ({
   ) => (
     <Tooltip
       label={input}
-      padding="1rem"
       bg="blackAlpha.900"
-      fontSize="xs"
+      borderRadius={10}
+      boxShadow="0px 0px 4px 4px rgba(255, 255, 255, 0.25)"
       maxW="330px"
       isOpen={isLabelOpen}
     >
@@ -133,8 +133,7 @@ const SwapForm: FC<Props> = ({
         alignItems="center"
         onMouseEnter={() => setIsLabelOpen(true)}
         onMouseLeave={() => setIsLabelOpen(false)}
-        onClick={() => setIsLabelOpen(!isLabelOpen)}
-      >
+        onClick={() => setIsLabelOpen(!isLabelOpen)}>
         <InfoOutlineIcon width=".7rem" height=".7rem" />
       </Box>
     </Tooltip>
@@ -276,7 +275,7 @@ const SwapForm: FC<Props> = ({
               hideHalfMax={false}
               mobile={isMobile}
               disabled={isInputDisabled}
-              onChange={(value, _) => {
+              onChange={(value) => {
                 setReverse(false)
                 onInputChange(value, 0)
                 field.onChange(value)

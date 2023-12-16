@@ -57,6 +57,7 @@ const MaxButton = ({
     <Button
       isDisabled={disabled}
       variant="outline"
+      borderColor="whiteAlpha.700"
       size={size}
       onClick={onClick}
       maxW={maxwidth}
@@ -81,6 +82,7 @@ const HalfButton = ({
     <Button
       isDisabled={disabled}
       variant="outline"
+      borderColor="whiteAlpha.700"
       size={size}
       onClick={onClick}
       maxW={maxwidth}
