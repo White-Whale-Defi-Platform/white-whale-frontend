@@ -23,6 +23,7 @@ export const Liquidity = ({ liquidity, infos }: Props) => {
           minH="fit-content"
           borderRadius="10px"
           bg="blackAlpha.900"
+          boxShadow={'0px 0px 3px 3px rgba(255, 255, 255, 0.25)'}
           px="4"
           py="4"
           position="relative"
