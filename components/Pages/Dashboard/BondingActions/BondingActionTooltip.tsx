@@ -32,8 +32,8 @@ export const BondingActionTooltip = ({ action }) => {
           minWidth="fit-content"
           borderRadius="10px"
           bg="black"
+          boxShadow="0px 0px 4px 4px rgba(255, 255, 255, 0.25)"
           color="white"
-          fontSize={14}
           p={4}
           whiteSpace="pre-wrap"
         >

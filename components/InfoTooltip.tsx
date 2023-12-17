@@ -12,6 +12,7 @@ const InfoTooltip = ({ iconSize, description }) => {
           maxWidth="250px"
           minWidth="fit-content"
           borderRadius="10px"
+          boxShadow="0px 0px 4px 4px rgba(255, 255, 255, 0.25)"
           bg="black"
           color="white"
           fontSize={14}

@@ -17,6 +17,7 @@ export const TooltipWithChildren = ({
       px="15px"
       py="10px"
       borderRadius="5px"
+      boxShadow="0px 0px 4px 4px rgba(255, 255, 255, 0.25)"
       bg="blackAlpha.900"
       maxW="330px"
       isDisabled={!showTooltip}

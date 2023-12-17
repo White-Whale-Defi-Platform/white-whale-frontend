@@ -31,6 +31,7 @@ const CloseAction = ({ poolId, flowId, isCreator }) => {
     <Button
       variant="outline"
       size="sm"
+      borderColor="whiteAlpha.700"
       disabled={!isCreator}
       isLoading={close?.isLoading}
       onClick={() => close?.submit({ flowId })}

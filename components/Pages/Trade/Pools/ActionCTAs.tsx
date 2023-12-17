@@ -25,12 +25,17 @@ export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {
 
   return (
     <HStack spacing={2}>
-      <Button variant="outline" size="sm" onClick={onManageLiquidityClick}>
+      <Button
+        variant="outline"
+        borderColor="whiteAlpha.700"
+        size="sm"
+        onClick={onManageLiquidityClick}>
         {' '}
         Manage
       </Button>
       <Button
         variant="outline"
+        borderColor="whiteAlpha.700"
         size="sm"
         onClick={onIncentivizeClick}
         isDisabled={!isIncentivized}

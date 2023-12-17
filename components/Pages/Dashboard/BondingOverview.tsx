@@ -162,6 +162,7 @@ const BondingOverview = ({
               key={`button-${e.actionType}`}
               alignSelf="flex-start"
               variant="outline"
+              borderColor="whiteAlpha.700"
               size="sm"
               w={110}
               style={{ textTransform: 'capitalize' }}

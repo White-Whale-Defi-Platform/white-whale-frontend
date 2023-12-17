@@ -239,7 +239,7 @@ const Wallet = () => {
           display="flex"
           gap="1"
           color="white"
-          borderColor="whiteAlpha.400"
+          borderColor="whiteAlpha.700"
           borderRadius="full"
           onClick={openView}
         >

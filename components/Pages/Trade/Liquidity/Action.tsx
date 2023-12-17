@@ -13,6 +13,7 @@ export const Action = ({ item, poolId }) => {
         width="full"
         variant="outline"
         size="sm"
+        borderColor="whiteAlpha.700"
         isLoading={close?.isLoading}
         onClick={() => close?.submit({ unbonding_duration: item?.unbonding_duration })
         }
