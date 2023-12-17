@@ -57,7 +57,8 @@ const AssetSelectTrigger = ({ tokenInfo, showIcon, symbol }) => {
           minW="1.5rem"
           maxW="1.5rem"
           maxH="1.5rem"
-          style={{ margin: 'unset' }}
+          style={{ margin: 'unset',
+            borderRadius: '50%' }}
           src={tokenInfo?.logoURI}
           alt="logo-small"
           fallback={<FallbackImage />}
