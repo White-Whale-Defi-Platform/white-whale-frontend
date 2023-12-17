@@ -133,7 +133,7 @@ const AllPoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', 'auto']}
+        width={['full', '1160px']}
         background={'transparent'}
         borderRadius={kBorderRadius}
         justifyContent="center"
