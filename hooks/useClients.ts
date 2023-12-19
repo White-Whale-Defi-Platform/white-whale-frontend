@@ -1,6 +1,9 @@
 import { useQueries } from 'react-query'
 
+import { GasPrice } from '@cosmjs/stargate';
 import { useChain } from '@cosmos-kit/react-lite'
+import { InjectiveStargate } from '@injectivelabs/sdk-ts'
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 
 export const useClients = (walletChainName: string) => {
   const {
@@ -9,6 +12,8 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet,
+    chain,
+    getOfflineSignerDirect,
   } = useChain(walletChainName)
   if (isWalletConnected && !wallet.name.includes('station')) {
     try {
@@ -28,7 +33,20 @@ export const useClients = (walletChainName: string) => {
     },
     {
       queryKey: ['signingClient', walletChainName],
-      queryFn: async () => await getSigningCosmWasmClient(),
+      queryFn: async () => {
+        if (!chain.chain_name.includes('injective')) {
+          return await getSigningCosmWasmClient()
+        } else { // Get the offline signer
+          const offlineSigner : any = await getOfflineSignerDirect();
+          const [account] = await offlineSigner.getAccounts();
+          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
+            'https://ww-injective-rpc.polkachu.com',
+            offlineSigner,
+          )
+          client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract);
+          return client
+        }
+      },
       enabled: isWalletConnected,
     },
   ])

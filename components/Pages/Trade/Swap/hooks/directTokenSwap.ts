@@ -57,8 +57,23 @@ export const directTokenSwap = async ({
       senderAddress, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
+  } else if (await signingClient.getChainId() === ChainId.injective) {
+    const gas = Math.ceil(await signingClient.simulate(
+      senderAddress, [execMsg], '',
+    ) * 1.3)
+
+    fee = {
+      amount: [
+        {
+          denom: 'inj',
+          amount: String(gas*160000000),
+        },
+      ],
+      gas: String(gas),
+    };
   }
-  return await signingClient.signAndBroadcast(
+  const tmp12 = await signingClient.signAndBroadcast(
     senderAddress, [execMsg], fee, '',
   )
+  return tmp12
 }
