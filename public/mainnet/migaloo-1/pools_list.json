@@ -315,7 +315,7 @@
         "WHALE"
       ],
       "assetOrder": [
-        
+
         "ampMNTA",
         "WHALE"
       ],
@@ -354,6 +354,53 @@
       "swap_address": "migaloo1wxnc6vd83pxudrfjf0ql8v73x3xute65fefxm7x5qxsehy5g0pzskclu2r",
       "lp_token": "factory/migaloo1wxnc6vd83pxudrfjf0ql8v73x3xute65fefxm7x5qxsehy5g0pzskclu2r/uLP",
       "staking_address": "migaloo1nplqhfd64jru7cj5ng2f3kh9g70gr3l3yut7wsu85z4q599hag5s0enjy8",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "SAYVE-WHALE",
+      "lpOrder": [
+        "SAYVE",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "SAYVE",
+        "WHALE"
+      ],
+      "displayName": "SAYVE-WHALE",
+      "displayLogo2": "/logos/whale.svg",
+      "displayLogo1": "/logos/sayve.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/106B438A78C581C5291E114B21588C41F98532E04D5369CFEE5825D95D465278",
+          "symbol": "SAYVE",
+          "name": "SAYVE",
+          "decimals": 6,
+          "logoURI": "/logos/sayve.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/106B438A78C581C5291E114B21588C41F98532E04D5369CFEE5825D95D465278"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo1ke0krjh5v3emzv5wdut6q7l0gednv7cx7naxqweae44jz8cxxq9srhy6dz",
+      "lp_token": "factory/migaloo1ke0krjh5v3emzv5wdut6q7l0gednv7cx7naxqweae44jz8cxxq9srhy6dz/uLP",
+      "staking_address": "",
       "rewards_tokens": []
     }
   ],
