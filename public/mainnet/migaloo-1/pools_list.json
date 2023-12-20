@@ -263,6 +263,52 @@
       "rewards_tokens": []
     },
     {
+      "pool_id": "GUPPY-ASH",
+      "lpOrder": [
+        "GUPPY",
+        "ASH"
+      ],
+      "assetOrder": [
+        "GUPPY",
+        "ASH"
+      ],
+      "displayName": "GUPPY-ASH",
+      "displayLogo2": "/logos/ash.svg",
+      "displayLogo1": "/logos/guppy.png",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy",
+          "symbol": "GUPPY",
+          "name": "GUPPY",
+          "decimals": 6,
+          "logoURI": "/logos/guppy.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy"
+        },
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash",
+          "symbol": "ASH",
+          "name": "ASH",
+          "decimals": 6,
+          "logoURI": "/logos/ash.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash"
+        }
+      ],
+      "swap_address": "migaloo16yra8pf3ntm6ljjnja2w046zka3wm68fvd3x08htfdpn2mumqwkst7mllv",
+      "lp_token": "factory/migaloo16yra8pf3ntm6ljjnja2w046zka3wm68fvd3x08htfdpn2mumqwkst7mllv/uLP",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
       "pool_id": "ampWHALE-arbWHALE",
       "lpOrder": [
         "ampWHALE",
