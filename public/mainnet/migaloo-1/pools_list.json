@@ -280,7 +280,7 @@
           "chain_id": "migaloo-1",
           "token_address": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy",
           "symbol": "GUPPY",
-          "name": "GUPPY",
+          "name": "Guppy",
           "decimals": 6,
           "logoURI": "/logos/guppy.png",
           "tags": [
@@ -293,7 +293,7 @@
           "chain_id": "migaloo-1",
           "token_address": "factory/migaloo1erul6xyq0gk6ws98ncj7lnq9l4jn4gnnu9we73gdz78yyl2lr7qqrvcgup/ash",
           "symbol": "ASH",
-          "name": "ASH",
+          "name": "Ash",
           "decimals": 6,
           "logoURI": "/logos/ash.svg",
           "tags": [
@@ -305,7 +305,7 @@
       ],
       "swap_address": "migaloo16yra8pf3ntm6ljjnja2w046zka3wm68fvd3x08htfdpn2mumqwkst7mllv",
       "lp_token": "factory/migaloo16yra8pf3ntm6ljjnja2w046zka3wm68fvd3x08htfdpn2mumqwkst7mllv/uLP",
-      "staking_address": "",
+      "staking_address": "migaloo1mh36nwy4et6fvku9e73m87g9dnhr7z3xge67d9g8f2yl7cn6lpuqyf3cnc",
       "rewards_tokens": []
     },
     {
