@@ -31,6 +31,7 @@ const useFilteredChains = (connectedChainIds) => {
 };
 
 const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) => {
+  const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
   const [connectedChains, removedChains] = useFilteredChains(connectedChainIds);
 
   return (
@@ -43,6 +44,7 @@ const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) 
           onClose={onClose}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={true}
+          walletType={walletType}
         />
       ))}
       {removedChains.map((chain) => (
@@ -53,6 +55,7 @@ const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) 
           onClose={onClose}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={false}
+          walletType={walletType}
         />
       ))}
     </List>
