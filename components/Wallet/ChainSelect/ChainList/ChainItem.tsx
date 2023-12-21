@@ -16,7 +16,7 @@ const ChainItem = ({
   const queryClient = useQueryClient()
   return (
     <Tooltip
-      label={ !walletConnected && !chain.chainName.includes('Injective') ? (
+      label={ !walletConnected && !chain.chainName?.includes('Injective') ? (
         <Box
           maxWidth="220px"
           minWidth="fit-content"
@@ -28,7 +28,7 @@ const ChainItem = ({
           whiteSpace="pre-wrap"
         >
         To access this chain, you must add it to your wallet.
-        </Box>) : !walletConnected && chain.chainName.includes('Injective') && walletType.includes('station') ? (
+        </Box>) : !walletConnected && chain.chainName?.includes('Injective') && walletType?.includes('station') ? (
         <Box
           maxWidth="220px"
           minWidth="fit-content"
