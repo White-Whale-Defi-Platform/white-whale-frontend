@@ -40,7 +40,7 @@ const BondingActions = ({ globalAction }) => {
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingAtom)
 
-  const [liquidBalances, __] = useMultipleTokenBalance(symbols)
+  const [liquidBalances, _] = useMultipleTokenBalance(symbols)
 
   const {
     bondedAssets,
@@ -235,7 +235,7 @@ const BondingActions = ({ globalAction }) => {
             alignSelf="center"
             bg="#6ACA70"
             borderRadius="full"
-            width="80%"
+            width="100%"
             variant="primary"
             isDisabled={
               txStep === TxStep.Estimating ||
@@ -248,7 +248,7 @@ const BondingActions = ({ globalAction }) => {
                 isWalletConnected) ||
               (totalWithdrawable === 0 && ActionType.withdraw === globalAction)
             }
-            maxWidth={570}
+            maxWidth={580}
             isLoading={
               txStep === TxStep.Estimating ||
               txStep === TxStep.Posting ||

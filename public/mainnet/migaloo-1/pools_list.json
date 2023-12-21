@@ -56,6 +56,7 @@
           "denom": "uwhale"
         },
         {
+          "id": "usd-coin",
           "chain_id": "phoenix-1",
           "token_address": "ibc/BC5C0BAFD19A5E4133FDA0F3E04AE1FBEE75A4A226554B2CBB021089FF2E1F8A",
           "symbol": "USDC",

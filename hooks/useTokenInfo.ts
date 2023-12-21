@@ -4,9 +4,6 @@ import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 
 import { useTokenList } from './useTokenList'
 
-/* Token selector functions */
-export const getBaseTokenFromTokenList = (tokenList: any): TokenInfo | undefined => tokenList?.base_token
-
 export const getTokenInfoFromTokenList = (tokenSymbol: string,
   tokensList: Array<TokenInfo>): TokenInfo | undefined => tokensList?.find((x) => x.symbol === tokenSymbol)
 /* /token selector functions */
@@ -31,5 +28,5 @@ export const useTokenInfo = (tokenSymbol: string) => useMultipleTokenInfo(useMem
 /* Hook for base token info retrieval */
 export const useBaseTokenInfo = () => {
   const [tokenList] = useTokenList()
-  return useMemo(() => getBaseTokenFromTokenList(tokenList), [tokenList])
+  return useMemo(() => tokenList.baseToken, [tokenList])
 }

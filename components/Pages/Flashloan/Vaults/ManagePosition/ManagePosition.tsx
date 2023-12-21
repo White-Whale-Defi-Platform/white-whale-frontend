@@ -113,7 +113,7 @@ const ManagePosition = () => {
           maxH="fit-content"
         >
           <Tabs variant="brand">
-            <TabList justifyContent="center" background={kBg}>
+            <TabList justifyContent="center" background={'black'} borderRadius={10}>
               <Tab>Deposit</Tab>
               <Tab>Withdraw</Tab>
             </TabList>
@@ -138,7 +138,7 @@ const ManagePosition = () => {
                     isWalletConnected={isWalletConnected}
                     isLoading={lpTokenBalanceLoading}
                     balance={lpTokenBalance?.lpBalance}
-                    assetBalance={lpTokenBalance?.underlyingAsset}
+                    assetBalance={lpTokenBalance?.underlyingAssetAmount}
                     defaultToken={vault?.vault_assets?.symbol}
                     refetch={refetch}
                   />

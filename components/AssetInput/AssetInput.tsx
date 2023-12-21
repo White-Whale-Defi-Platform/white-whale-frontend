@@ -2,12 +2,7 @@ import { useMemo } from 'react';
 
 import { VStack, forwardRef } from '@chakra-ui/react'
 import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
-import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
-  WHALE_TOKEN_SYMBOL,
-} from 'constants/index'
-import usePrices from 'hooks/usePrices'
+import { usePrices } from 'hooks/usePrices'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { num } from 'libs/num'
 
@@ -82,15 +77,11 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const tokenNumberString = useMemo(() => `${formatNumber(token?.amount, 2)} ${token?.tokenSymbol}`,
     [token])
   const prices = usePrices()
-  const tokenSymbol = useMemo(() => (token?.tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
-      token?.tokenSymbol === B_WHALE_TOKEN_SYMBOL
-    ? WHALE_TOKEN_SYMBOL
-    : token?.tokenSymbol),
-  [token])
-  const dollarValue = useMemo(() => num(prices?.[tokenSymbol]).times(token?.amount).
+
+  const dollarValue = useMemo(() => num(prices?.[token?.tokenSymbol]).times(token?.amount).
     dp(token?.decimals || 6).
     toFixed(2),
-  [tokenSymbol, prices, token])
+  [prices, token])
 
   const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).
     toString(),

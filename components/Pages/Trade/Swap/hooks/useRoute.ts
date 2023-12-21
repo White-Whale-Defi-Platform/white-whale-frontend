@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { coin } from '@cosmjs/proto-signing'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import usePrices from 'hooks/usePrices'
+import { usePrices } from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { num, toChainAmount } from 'libs/num'
 import { toAssetInfo } from 'services/asset'
@@ -180,14 +180,13 @@ const useRoute = ({
       console.log('Reference Amount 1$: ', simulatedAmount)
       console.log('Prices: ', prices)
     }
-    const refValue = createRouteMessage(
+    return createRouteMessage(
       route,
       simulatedAmount,
       tokenA,
       reverse,
       routerAddress,
     )
-    return refValue
   }, [route, amount, reverse, slippage, prices])
 
   const { simulateMsg, executeMsg, encodedExecuteMsg } = useMemo(() => {
