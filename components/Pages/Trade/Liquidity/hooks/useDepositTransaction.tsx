@@ -135,7 +135,7 @@ export const useTransaction: any = ({
       if (!txHash) {
         return null
       }
-      return signingClient.getTx(txHash)
+      return cosmWasmClient.getTx(txHash)
     },
     {
       enabled: Boolean(txHash),

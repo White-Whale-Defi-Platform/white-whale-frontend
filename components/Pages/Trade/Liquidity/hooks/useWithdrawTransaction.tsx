@@ -231,7 +231,7 @@ export const useWithdrawTransaction: any = ({
         return null
       }
 
-      return await signingClient.getTx(txHash)
+      return await cosmWasmClient.getTx(txHash)
     },
     {
       enabled: Boolean(txHash) && Boolean(signingClient),

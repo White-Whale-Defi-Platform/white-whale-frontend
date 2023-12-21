@@ -179,7 +179,7 @@ export const useTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => signingClient.getTx(txHash),
+    () => cosmWasmClient.getTx(txHash),
     {
       enabled: Boolean(txHash),
       retry: true,
