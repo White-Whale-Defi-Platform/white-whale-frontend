@@ -174,6 +174,8 @@ const useRoute = ({
     if (prices?.[tokenA.symbol]) {
       const dollarAmount = 1 / Number(prices?.[tokenA.symbol])
       simulatedAmount = toChainAmount(dollarAmount, tokenA?.decimals)
+    } else {
+      return null
     }
     // @ts-ignore
     if (window.debugLogsEnabled) {
