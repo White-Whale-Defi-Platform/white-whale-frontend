@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import Swap from 'components/Pages/Trade/Swap'
+import Swap from 'components/Pages/Trade/Swap/index'
 
 const getInitialTokenPairFromSearchParams = () => {
   const params = new URLSearchParams(location.search)

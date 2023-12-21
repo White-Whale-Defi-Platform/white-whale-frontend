@@ -28,5 +28,5 @@ export const useTokenInfo = (tokenSymbol: string) => useMultipleTokenInfo(useMem
 /* Hook for base token info retrieval */
 export const useBaseTokenInfo = () => {
   const [tokenList] = useTokenList()
-  return useMemo(() => tokenList.baseToken, [tokenList])
+  return useMemo(() => tokenList?.baseToken, [tokenList])
 }
