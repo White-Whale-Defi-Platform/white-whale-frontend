@@ -26,7 +26,6 @@ export const executeFlashloan = async ({
     const msgencoded = createExecuteMessage({ senderAddress,
       contractAddress,
       msgs })
-    console.log(msgencoded)
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, [msgencoded], '',
     ) * 1.3)

@@ -61,7 +61,6 @@ export const useWithdrawTransaction: any = ({
         return
       }
       try {
-        console.log(debouncedMsgs)
         const response = await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,

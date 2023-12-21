@@ -74,6 +74,9 @@ const useSwap = ({ reverse }) => {
       return 0;
     }
     const deviation = (diff / (simulatedValue / 100)).toFixed(2)
+    if (deviation.includes('infinity')) {
+      return 0;
+    }
     return deviation;
   }, [simulated])
 

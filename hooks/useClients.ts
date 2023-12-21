@@ -36,7 +36,6 @@ export const useClients = (walletChainName: string) => {
         if (!chain.chain_name.includes('injective')) {
           return await getSigningCosmWasmClient()
         } else {
-          console.log(chain)
           const offlineSigner : any = await getOfflineSignerDirect();
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
             'https://ww-injective-rpc.polkachu.com',
