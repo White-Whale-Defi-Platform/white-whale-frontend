@@ -78,7 +78,6 @@ const getPoolFlowData = async (
   currentEpochData,
   poolAssets,
   prices,
-  poolsWithAprAnd24HrVolume,
 ): Promise<IncentivePoolInfo[]> => await (pools
   ? Promise.all(pools.map(async (pool) => {
     if (pool.staking_address === '') {
@@ -87,8 +86,7 @@ const getPoolFlowData = async (
         flowData: null,
       } // Skip this iteration and continue with the next one.
     }
-    // TODO replace with own total liq calc
-    const totalLiquidity = poolsWithAprAnd24HrVolume.find((p) => p.pool_id === pool.pool_id)?.TVL
+    const totalLiquidity = pool?.liquidity?.reserves?.totalAssetsInDollar || 0
 
     const totalPoolLp = await fetchTotalPoolSupply(pool.swap_address,
       client)
@@ -223,22 +221,20 @@ export const useIncentivePoolInfo = (
       ) => a.findIndex((t) => t.denom === v.denom) === i)
   }
   const { data: flowPoolData, isLoading } = useQuery(
-    ['apr', currentEpochData, pools?.length, poolsWithAprAnd24HrVolume],
+    ['apr', currentEpochData, pools?.length],
     () => getPoolFlowData(
       client,
       pools,
       currentEpochData,
       poolAssets,
       prices,
-      poolsWithAprAnd24HrVolume,
     ),
     {
       enabled:
         Boolean(client) &&
         Boolean(currentEpochData) &&
         Boolean(pools) &&
-        Boolean(prices) &&
-        Boolean(poolsWithAprAnd24HrVolume),
+        Boolean(prices),
     },
   )
   return { flowPoolData,
