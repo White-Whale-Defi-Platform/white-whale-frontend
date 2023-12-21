@@ -70,7 +70,8 @@ const useSwap = ({ reverse }) => {
     }
     const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg.simulate_swap_operations?.offer_amount)
     const diff = Math.abs(simulatedValue - simulated.amount / Number(amount));
-    if (diff === 0) {
+    // No Price impact on orders below 1$ Value
+    if (diff === 0 || Number(simulated.amount) < Number(refSimulation.simulated?.amount)) {
       return 0;
     }
     const deviation = (diff / (simulatedValue / 100)).toFixed(2)
