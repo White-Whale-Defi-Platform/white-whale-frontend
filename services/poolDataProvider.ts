@@ -32,7 +32,7 @@ export const getPairInfos = async (chain: string): Promise<PoolResponse[]> => {
   const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${adjustedChain}/all/current`
 
   const fetchWithRetry = async (
-    url, retries = 5, interval = 3000,
+    url, retries = 2, interval = 3000,
   ) => {
     while (retries) {
       const response = await fetch(url)
