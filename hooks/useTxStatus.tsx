@@ -3,6 +3,7 @@ import { useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
 import useTxInfo from 'hooks/useTxInfo'
 import { useRecoilState } from 'recoil'
@@ -11,7 +12,7 @@ import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 
 type Props = {
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
   transactionType: string
 }
 const useTxStatus = ({ signingClient, transactionType }: Props) => {

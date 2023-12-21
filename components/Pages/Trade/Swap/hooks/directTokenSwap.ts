@@ -1,8 +1,11 @@
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
-import { TerraTreasuryService } from 'services/treasuryService'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
+import { TerraTreasuryService, getInjectiveFee } from 'services/treasuryService'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -14,9 +17,10 @@ type DirectTokenSwapArgs = {
   senderAddress: string
   swapAddress: string
   tokenA: TokenInfo
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
   msgs: Record<string, any>
   chainId?: string
+  cosmWasmClient: CosmWasmClient
 }
 
 export const directTokenSwap = async ({
@@ -25,6 +29,7 @@ export const directTokenSwap = async ({
   senderAddress,
   tokenAmount,
   signingClient,
+  cosmWasmClient,
   msgs,
 }: DirectTokenSwapArgs) => {
   let fee: any = 'auto'
@@ -61,19 +66,13 @@ export const directTokenSwap = async ({
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, [execMsg], '',
     ) * 1.3)
-
-    fee = {
-      amount: [
-        {
-          denom: 'inj',
-          amount: String(gas*160000000),
-        },
-      ],
-      gas: String(gas),
-    };
+    const injectiveTxData = await signingClient.sign(
+      senderAddress, [execMsg], getInjectiveFee(gas), '',
+    )
+    return await cosmWasmClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
-  const tmp12 = await signingClient.signAndBroadcast(
+
+  return await signingClient.signAndBroadcast(
     senderAddress, [execMsg], fee, '',
   )
-  return tmp12
 }

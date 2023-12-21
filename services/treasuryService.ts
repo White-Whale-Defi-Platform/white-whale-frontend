@@ -3,6 +3,20 @@ import { ChainId } from 'constants/index'
 import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
 
+export const getInjectiveFee = (gas:number) => {
+  //hardcoded until native cosmos-kit support
+  const fee = {
+    amount: [
+      {
+        denom: 'inj',
+        amount: String(gas * 160000000),
+      },
+    ],
+    gas: String(gas),
+  };
+  return fee
+}
+
 class FCDBaseClient {
   private readonly baseURL: string = 'https://terra-classic-lcd.publicnode.com/terra'
 

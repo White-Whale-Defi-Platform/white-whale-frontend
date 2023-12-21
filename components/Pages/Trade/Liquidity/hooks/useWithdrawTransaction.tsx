@@ -2,19 +2,22 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { coin } from '@cosmjs/stargate'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
 import { ChainId } from 'constants/index'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import useDebounceValue from 'hooks/useDebounceValue'
-import { TerraTreasuryService } from 'services/treasuryService'
+import { TerraTreasuryService, getInjectiveFee } from 'services/treasuryService'
 import { TxStep } from 'types/common'
 
 type Params = {
   lpTokenAddress: string
   swapAddress: string
   enabled: boolean
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  cosmWasmClient: CosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -25,11 +28,12 @@ type Params = {
   isNative?: boolean
 }
 
-export const useWithdrawTransaction = ({
+export const useWithdrawTransaction: any = ({
   lpTokenAddress,
   enabled,
   swapAddress,
   signingClient,
+  cosmWasmClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -57,6 +61,7 @@ export const useWithdrawTransaction = ({
         return
       }
       try {
+        console.log(debouncedMsgs)
         const response = await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
@@ -106,24 +111,42 @@ export const useWithdrawTransaction = ({
   )
 
   const { mutate } = useMutation(async () => {
+    let fee: any = 'auto'
     if (isNative) {
-      return signingClient.execute(
+      if (await signingClient.getChainId() === ChainId.terrac) {
+        const gas = Math.ceil(await signingClient.simulate(
+          senderAddress, debouncedMsgs, '',
+        ) * 1.3)
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
+      } else if (await signingClient.getChainId() === ChainId.injective) {
+        const gas = Math.ceil(await signingClient.simulate(
+          senderAddress, debouncedMsgs, '',
+        ) * 1.3)
+        const injectiveTxData = await signingClient.sign(
+          senderAddress, debouncedMsgs, getInjectiveFee(gas), '',
+        )
+        return await cosmWasmClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
+      }
+      return signingClient.signAndBroadcast(
         senderAddress,
-        swapAddress,
-        { withdraw_liquidity: {} },
-        'auto',
+        debouncedMsgs,
+        fee,
         null,
-        [coin(amount, lpTokenAddress)],
       )
     } else {
-      let fee: any = 'auto'
       if (await signingClient.getChainId() === ChainId.terrac) {
         const gas = Math.ceil(await signingClient.simulate(
           senderAddress, encodedMsgs, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          null, gas,
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
+      } else if (await signingClient.getChainId() === ChainId.injective) {
+        const gas = Math.ceil(await signingClient.simulate(
+          senderAddress, encodedMsgs, '',
+        ) * 1.3)
+        const injectiveTxData = await signingClient.sign(
+          senderAddress, encodedMsgs, getInjectiveFee(gas), '',
         )
+        return await cosmWasmClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       return signingClient.signAndBroadcast(
         senderAddress,

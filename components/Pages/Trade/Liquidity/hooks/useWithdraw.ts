@@ -30,7 +30,7 @@ const useWithdraw = ({
 }: Props) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, cosmWasmClient } = useClients(walletChainName)
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (parseFloat(amount) === 0 || !contract || !signingClient) {
@@ -64,6 +64,7 @@ const useWithdraw = ({
     amount,
     senderAddress: address,
     signingClient,
+    cosmWasmClient,
     isNative: isNativeToken(contract),
   })
 }

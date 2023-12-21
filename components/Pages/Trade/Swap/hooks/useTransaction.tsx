@@ -2,7 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 import useDebounceValue from 'hooks/useDebounceValue'
@@ -13,7 +15,8 @@ type Params = {
   swapAddress: string
   swapAssets: any[]
   price: number
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  cosmWasmClient: CosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -30,6 +33,7 @@ export const useTransaction = ({
   swapAddress,
   swapAssets,
   signingClient,
+  cosmWasmClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -37,7 +41,7 @@ export const useTransaction = ({
   onBroadcasting,
   onSuccess,
   onError,
-}: Params) => {
+}: Params): any => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
@@ -127,6 +131,7 @@ export const useTransaction = ({
     msgs,
     tokenAmount: amount,
     signingClient,
+    cosmWasmClient,
   }),
   {
     onMutate: () => {

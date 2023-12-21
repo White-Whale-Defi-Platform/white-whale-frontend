@@ -2,7 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { executeAddLiquidity } from 'services/liquidity/index'
@@ -13,7 +15,8 @@ type Params = {
   swapAddress: string
   swapAssets?: any[]
   price?: number
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  cosmWasmClient: CosmWasmClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -26,10 +29,11 @@ type Params = {
   onError?: (txHash?: string, txInfo?: any) => void
 }
 
-export const useTransaction = ({
+export const useTransaction: any = ({
   enabled,
   swapAddress,
   signingClient,
+  cosmWasmClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -140,6 +144,7 @@ export const useTransaction = ({
   )
   const { mutate } = useMutation(() => executeAddLiquidity({
     signingClient,
+    cosmWasmClient,
     swapAddress,
     senderAddress,
     msgs: debouncedMsgs,

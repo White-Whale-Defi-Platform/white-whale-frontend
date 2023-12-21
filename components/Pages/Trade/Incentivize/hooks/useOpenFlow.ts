@@ -12,6 +12,7 @@ import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
 import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import dayjs from 'dayjs'
 import { useClients } from 'hooks/useClients'
 import useSimulate from 'hooks/useSimulate'
@@ -20,7 +21,7 @@ import useTxStatus from 'hooks/useTxStatus'
 import { num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
-import { TerraTreasuryService } from 'services/treasuryService'
+import { TerraTreasuryService, getInjectiveFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import {
   createExecuteMessage,
@@ -36,7 +37,7 @@ interface Props {
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, cosmWasmClient } = useClients(walletChainName)
   const { address } = useChain(walletChainName)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
@@ -132,6 +133,14 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         ) * 1.3)
         const funds = msgs.flatMap((elem) => elem.value.funds)
         fee = await TerraTreasuryService.getInstance().getTerraClassicFee(funds, gas)
+      } else if (await signingClient.getChainId() === ChainId.injective) {
+        const gas = Math.ceil(await signingClient.simulate(
+          address, msgs, '',
+        ) * 1.3)
+        const injectiveTxData = await signingClient.sign(
+          address, msgs, getInjectiveFee(gas), '',
+        )
+        return await cosmWasmClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       return await signingClient.signAndBroadcast(
         address, msgs, fee, null,

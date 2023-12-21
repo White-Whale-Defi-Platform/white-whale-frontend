@@ -112,6 +112,7 @@ const useSwap = ({ reverse }) => {
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     signingClient,
+    cosmWasmClient,
     msgs: executeMsg,
     encodedMsgs: updatedExecMsgEncoded || encodedExecuteMsg,
     amount: reverse ? simulated?.amount : amount,

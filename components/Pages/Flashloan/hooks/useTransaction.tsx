@@ -2,7 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/index'
@@ -11,7 +13,8 @@ import { executeFlashloan } from './executeFlashloan'
 
 type Params = {
   enabled: boolean
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  cosmWasmClient: CosmWasmClient
   senderAddress: string
   encodedMsgs: any | null
   contractAddress: string | undefined
@@ -24,6 +27,7 @@ type Params = {
 export const useTransaction = ({
   enabled,
   signingClient,
+  cosmWasmClient,
   senderAddress,
   encodedMsgs,
   msgs,
@@ -107,6 +111,7 @@ export const useTransaction = ({
   const { mutate } = useMutation(() => executeFlashloan({
     msgs,
     signingClient,
+    cosmWasmClient,
     contractAddress,
     senderAddress,
   }),

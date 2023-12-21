@@ -5,10 +5,11 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useQueryIncentiveContracts } from 'components/Pages/Trade/Incentivize/hooks/useQueryIncentiveContracts'
 import { ChainId } from 'constants/index'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
-import { TerraTreasuryService } from 'services/treasuryService'
+import { TerraTreasuryService, getInjectiveFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
 
@@ -85,9 +86,15 @@ const useForceEpochAndTakingSnapshots = ({
         const gas = Math.ceil(await signingClient.simulate(
           address, msgs, '',
         ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          null, gas,
+        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
+      } else if (await signingClient.getChainId() === ChainId.injective) {
+        const gas = Math.ceil(await signingClient.simulate(
+          address, msgs, '',
+        ) * 1.3)
+        const injectiveTxData = await signingClient.sign(
+          address, msgs, getInjectiveFee(gas), '',
         )
+        return await cosmWasmClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       return await signingClient.signAndBroadcast(
         address, msgs, fee, null,
