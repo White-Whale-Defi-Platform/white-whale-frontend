@@ -351,12 +351,12 @@ export const useQueryPoolsLiquidity = ({
   }
 
   return useQueries((pools ?? []).map((pool) => ({
-    queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
+    queryKey: `@pool-liquidity/${pool.pool_id}`,
     enabled:
         Boolean(cosmWasmClient && pool.pool_id) &&
         tokenList.tokens.length > 0 &&
         Boolean(prices),
-    refetchOnMount: false as const,
+    refetchOnMount: false,
     refetchInterval: refetchInBackground
       ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
       : null,
