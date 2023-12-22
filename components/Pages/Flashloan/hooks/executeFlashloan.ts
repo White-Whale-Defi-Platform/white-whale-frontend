@@ -1,11 +1,10 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
+import { ChainId } from 'constants/index';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
-
-import { ChainId } from '../../../../constants';
-import { getInjectiveFee } from '../../../../services/treasuryService';
-import { createExecuteMessage } from '../../../../util/messages';
+import { getInjectiveFee } from 'services/treasuryService';
+import { createExecuteMessage } from 'util/messages';
 
 type ExecuteFlashloanArgs = {
   senderAddress: string
