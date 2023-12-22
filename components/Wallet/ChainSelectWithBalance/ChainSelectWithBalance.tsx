@@ -2,7 +2,7 @@ import React from 'react'
 
 import { HStack } from '@chakra-ui/react'
 import SelectChainModal from 'components/Wallet/ChainSelect/SelectChainModal'
-import DisplayBalance from 'components/Wallet/ChainSelectWithBalance/DisplayBalance'
+import { DisplayBalance } from 'components/Wallet/ChainSelectWithBalance/DisplayBalance'
 
 export const ChainSelectWithBalance = ({
   connected,

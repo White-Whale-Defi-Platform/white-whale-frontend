@@ -69,12 +69,11 @@ const useSwap = ({ reverse }) => {
       return null
     }
     const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg.simulate_swap_operations?.offer_amount)
-    const diff = Math.abs(simulatedValue - simulated.amount / Number(amount));
+    const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)));
     if (diff === 0) {
       return 0;
     }
-    const deviation = (diff / (simulatedValue / 100)).toFixed(2)
-    return deviation;
+    return (diff / (simulatedValue / 100)).toFixed(2);
   }, [simulated])
 
   const updatedExecMsgEncoded = useMemo(() => {

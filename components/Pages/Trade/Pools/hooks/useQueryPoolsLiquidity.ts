@@ -7,27 +7,18 @@ import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import { queryPoolInfo } from 'components/Pages/Trade/Pools/hooks/queryPoolInfo'
 import { PoolEntityType, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
   DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
-  POOL_REWARDS_ENABLED,
-  WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
 import { IncentiveState } from 'constants/state'
 import { useClients } from 'hooks/useClients'
-import usePrices from 'hooks/usePrices'
+import { usePrices } from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
-import { protectAgainstNaN } from 'junoblocks'
 import { fromChainAmount } from 'libs/num'
-import { queryMyLiquidity } from 'queries/queryMyLiquidity'
-import {
-  SerializedRewardsContract,
-  queryRewardsContracts,
-} from 'queries/queryRewardsContracts'
-import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
 import { useRecoilValue } from 'recoil'
 import { isNativeToken } from 'services/asset'
+import { queryLiquidityBalance } from 'services/liquidity'
 import { chainState } from 'state/chainState'
+import { convertMicroDenomToDenom, protectAgainstNaN } from 'util/conversion'
 
 export type AssetType = [number?, number?]
 
@@ -68,12 +59,6 @@ export type PoolLiquidityState = {
     totalAssetsInDollar: number
     ratioFromPool: number
   }
-
-  rewards: {
-    annualYieldPercentageReturn: number
-    contracts?: Array<SerializedRewardsContract>
-  }
-
   myFlows: Flow[]
 }
 
@@ -87,18 +72,61 @@ export type QueryMultiplePoolsArgs = {
   refetchInBackground?: boolean
   cosmWasmClient: CosmWasmClient
 }
-export const calculateRewardsAnnualYieldRate = ({
-  rewardsContracts,
-  totalStakedDollarValue,
+
+const queryMyLiquidity = async ({
+  swap,
+  address,
+  cosmWasmClient,
+  totalLockedLp,
+  myLockedLp,
+  prices,
 }) => {
-  if (!POOL_REWARDS_ENABLED) {
-    return 0
+  const tokenASymbol = swap?.assetOrder[0]
+  const tokenADecimals = swap.pool_assets?.[0]?.decimals
+  const tokenBSymbol = swap?.assetOrder[1]
+  const tokenBDecimals = swap.pool_assets?.[1]?.decimals
+  const isNative = isNativeToken(swap.lp_token)
+  const myNotLockedLp = address
+    ? await queryLiquidityBalance({
+      tokenAddress: swap.lp_token,
+      cosmWasmClient,
+      address,
+      isNative,
+    })
+    : 0
+
+  const totalAssets: [number, number] = [
+    protectAgainstNaN(swap.token1_reserve),
+    protectAgainstNaN(swap.token2_reserve),
+  ]
+  const totalAssetsInDollar: [number, number] = [
+    convertMicroDenomToDenom(protectAgainstNaN(swap.token1_reserve), tokenADecimals) * (prices?.[tokenASymbol] || 0),
+    convertMicroDenomToDenom(protectAgainstNaN(swap.token2_reserve), tokenBDecimals) * (prices?.[tokenBSymbol] || 0),
+  ]
+
+  const myNotLockedAssets: [number, number] = [
+    protectAgainstNaN(totalAssets[0] * (myNotLockedLp / swap.lp_token_supply)),
+    protectAgainstNaN(totalAssets[1] * (myNotLockedLp / swap.lp_token_supply)),
+  ]
+  const totalLockedAssets: [number, number] = [
+    protectAgainstNaN(totalAssets[0] * (totalLockedLp / swap.lp_token_supply)),
+    protectAgainstNaN(totalAssets[1] * (totalLockedLp / swap.lp_token_supply)),
+  ]
+
+  const myLockedAssets: [number, number] = [
+    protectAgainstNaN(totalAssets[0] * (myLockedLp / swap.lp_token_supply)),
+    protectAgainstNaN(totalAssets[1] * (myLockedLp / swap.lp_token_supply)),
+  ]
+
+  return {
+    totalAssets,
+    totalAssetsInDollar: (totalAssetsInDollar[0] + totalAssetsInDollar[1]),
+    ratioFromPool: convertMicroDenomToDenom(swap.token2_reserve, tokenBDecimals) / convertMicroDenomToDenom(swap.token1_reserve, tokenADecimals),
+    myNotLockedAssets,
+    myLockedAssets,
+    totalLockedAssets,
+    myNotLockedLp,
   }
-
-  const totalRewardRatePerYearInDollarValue = rewardsContracts.reduce((value, { rewardRate }) => value + rewardRate.ratePerYear.dollarValue,
-    0)
-
-  return protectAgainstNaN((totalRewardRatePerYearInDollarValue / totalStakedDollarValue) * 100)
 }
 
 const fetchMyLockedLp = async ({ pool, cosmWasmClient, address }) => {
@@ -144,8 +172,6 @@ export const useQueryPoolsLiquidity = ({
   refetchInBackground = false,
   cosmWasmClient,
 }: QueryMultiplePoolsArgs) => {
-  const [getTokenDollarValue, enabledGetTokenDollarValue] =
-    useGetTokenDollarValueQuery()
   const prices = usePrices()
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
@@ -153,18 +179,13 @@ export const useQueryPoolsLiquidity = ({
   const [tokenList] = useTokenList()
   const { epochToDate, currentEpoch } = useEpoch()
 
-  const context = {
-    cosmWasmClient,
-    getTokenDollarValue,
-  }
-
   const queryPoolLiquidity = async (pool: PoolEntityType): Promise<PoolEntityTypeWithLiquidity | any> => {
     if (!cosmWasmClient) {
       return pool
     }
 
     const poolInfo = await queryPoolInfo({
-      context,
+      cosmWasmClient,
       swap_address: pool.swap_address,
     })
 
@@ -269,7 +290,7 @@ export const useQueryPoolsLiquidity = ({
       ratioFromPool,
       myNotLockedLp,
     } = await queryMyLiquidity({
-      context,
+      cosmWasmClient,
       swap: { ...poolInfo,
         ...pool },
       address,
@@ -278,24 +299,12 @@ export const useQueryPoolsLiquidity = ({
       prices,
     })
 
-    const getPoolTokensValues = (assets: any, lpTokenAmount = null) => {
-      const tokenASymbol =
-        tokenA?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
-        tokenA?.symbol === B_WHALE_TOKEN_SYMBOL
-          ? WHALE_TOKEN_SYMBOL
-          : tokenA?.symbol
-      const tokenBSymbol =
-        tokenB?.symbol === AMP_WHALE_TOKEN_SYMBOL ||
-        tokenB?.symbol === B_WHALE_TOKEN_SYMBOL
-          ? WHALE_TOKEN_SYMBOL
-          : tokenB?.symbol
-      return {
-        tokenAmount: lpTokenAmount ?? (assets[1] + assets[0]),
-        dollarValue:
-          (Number(fromChainAmount(assets[0], tokenA?.decimals)) * (prices?.[tokenASymbol] || 0)) +
-          (Number(fromChainAmount(assets[1], tokenB?.decimals)) * (prices?.[tokenBSymbol] || 0)),
-      }
-    }
+    const getPoolTokensValues = (assets: any, lpTokenAmount = null) => ({
+      tokenAmount: lpTokenAmount ?? (assets[1] + assets[0]),
+      dollarValue:
+          (Number(fromChainAmount(assets[0], tokenA?.decimals)) * (prices?.[tokenA?.symbol] || 0)) +
+          (Number(fromChainAmount(assets[1], tokenB?.decimals)) * (prices?.[tokenB?.symbol] || 0)),
+    })
 
     const [myNotLockedLiquidity, totalLockedLiquidity, myLockedLiquidity] = [
       /* Calc provided liquidity dollar value */
@@ -305,21 +314,6 @@ export const useQueryPoolsLiquidity = ({
       /* Calc provided liquidity dollar value */
       getPoolTokensValues(myLockedAssets),
     ]
-    let annualYieldPercentageReturn = 0
-    let rewardsContracts: Array<SerializedRewardsContract> | undefined
-
-    const shouldQueryRewardsContracts = pool.rewards_tokens?.length > 0
-    if (shouldQueryRewardsContracts) {
-      rewardsContracts = await queryRewardsContracts({
-        swapAddress: pool.swap_address,
-        rewardsTokens: pool.rewards_tokens,
-        context,
-      })
-      annualYieldPercentageReturn = calculateRewardsAnnualYieldRate({
-        rewardsContracts,
-        totalStakedDollarValue: totalLockedLiquidity.dollarValue || 1,
-      })
-    }
 
     const myFlows = await getMyFlows({ cosmWasmClient,
       address })
@@ -347,10 +341,6 @@ export const useQueryPoolsLiquidity = ({
         totalAssetsInDollar,
         ratioFromPool,
       },
-      rewards: {
-        annualYieldPercentageReturn,
-        contracts: rewardsContracts,
-      },
     }
 
     return {
@@ -363,7 +353,7 @@ export const useQueryPoolsLiquidity = ({
   return useQueries((pools ?? []).map((pool) => ({
     queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
     enabled:
-        Boolean(cosmWasmClient && pool.pool_id && enabledGetTokenDollarValue) &&
+        Boolean(cosmWasmClient && pool.pool_id) &&
         tokenList.tokens.length > 0 &&
         Boolean(prices),
     refetchOnMount: false as const,

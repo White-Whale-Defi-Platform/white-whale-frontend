@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 export type TokenList = {
-  base_token: TokenInfo
+  baseToken: TokenInfo
   tokens: Array<TokenInfo>
   tokensBySymbol: Map<string, TokenInfo>
 }
@@ -28,7 +28,7 @@ export const useTokenList = () => {
       })
 
       return {
-        base_token: poolsListResponse.base_token,
+        baseToken: poolsListResponse.base_token,
         tokens: Array.from(tokenMapBySymbol.values()),
         tokensBySymbol: tokenMapBySymbol,
       }

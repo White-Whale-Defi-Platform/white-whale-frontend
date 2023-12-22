@@ -38,7 +38,7 @@ const MobileVaults = ({ vaults, ctaLabel }: Props) => {
                 vaultId={vault?.vaultId}
                 tokenImage={vault.tokenImage}
               />
-              <Text color="brand.50">{` ${Number(vault?.apr).toFixed(2)}`}</Text>
+              <Text color="brand.50">{`${Number(vault?.apr).toFixed(2)}`}</Text>
             </HStack>
 
             <HStack height="24px" />

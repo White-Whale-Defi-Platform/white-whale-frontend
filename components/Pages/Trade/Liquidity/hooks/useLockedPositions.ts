@@ -7,7 +7,7 @@ import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQue
 import { PositionState } from 'constants/state'
 import dayjs from 'dayjs'
 import { useClients } from 'hooks/useClients'
-import usePrices, { Prices } from 'hooks/usePrices'
+import { usePrices } from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
@@ -40,7 +40,7 @@ export const lpPositionToAssets = ({
 export const fetchPositions = async (
   poolId: string,
   cosmWasmClient: CosmWasmClient,
-  prices: Promise<Prices>,
+  prices: any,
   incentiveAddress: string,
   address: string,
   pool_assets: any[],
