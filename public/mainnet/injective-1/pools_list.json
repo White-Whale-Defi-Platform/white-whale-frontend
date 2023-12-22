@@ -60,6 +60,43 @@
       "swap_address": "inj1zfw930csx0k5qzf35vndaulwada4wa3pywekyx",
       "staking_address": "",
       "rewards_tokens": []
+    },{
+      "pool_id": "INJ-WHALE",
+      "lpOrder": ["INJ", "WHALE"],
+      "assetOrder": ["INJ", "WHALE"],
+      "displayName": "INJ-WHALE",
+      "displayLogo1": "/logos/injective.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "injective-1",
+          "id": "injective-protocol",
+          "token_address": "inj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 18,
+          "logoURI": "/logos/injective.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "inj"
+        },
+        {
+          "id" : "white-whale",
+          "chain_id": "injective-1",
+          "token_address": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
+        }
+      ],
+      "lp_token": "inj126raxkq6fvpqearfjpx3exa6rg26c6m7367de6",
+      "swap_address": "inj109ptsw60g2mx69guq0rzurvsw7krpcjzht3p5l",
+      "staking_address": "",
+      "rewards_tokens": []
     },
     {
       "pool_id": "ATOM-USDT",

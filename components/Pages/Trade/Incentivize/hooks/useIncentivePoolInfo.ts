@@ -8,12 +8,9 @@ import {
 } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { useCurrentEpoch } from 'components/Pages/Trade/Incentivize/hooks/useCurrentEpoch'
 import {
-  AMP_WHALE_TOKEN_SYMBOL,
-  B_WHALE_TOKEN_SYMBOL,
   ChainId,
-  WHALE_TOKEN_SYMBOL,
 } from 'constants/index'
-import usePrices from 'hooks/usePrices'
+import { usePrices } from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import {
   PoolData,
@@ -159,11 +156,7 @@ const getPoolFlowData = async (
       const poolAsset = poolAssets.find((asset) => asset.denom === flow.denom)
       const tokenSymbol = poolAsset?.symbol
       const logoURI = poolAsset?.logoURI
-      const price =
-        tokenSymbol === AMP_WHALE_TOKEN_SYMBOL ||
-        tokenSymbol === B_WHALE_TOKEN_SYMBOL
-          ? prices[WHALE_TOKEN_SYMBOL]
-          : prices[tokenSymbol]
+      const price = prices[tokenSymbol]
       return {
         ...flow,
         tokenSymbol,

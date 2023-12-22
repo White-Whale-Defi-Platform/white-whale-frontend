@@ -4,7 +4,7 @@ import { Spinner, Text } from '@chakra-ui/react'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useBaseTokenInfo } from 'hooks/useTokenInfo'
 
-function DisplayBalance() {
+export const DisplayBalance = () => {
   const baseToken = useBaseTokenInfo()
   const { balance, isLoading } = useTokenBalance(baseToken?.symbol)
 
@@ -20,5 +20,3 @@ function DisplayBalance() {
     </>
   )
 }
-
-export default DisplayBalance

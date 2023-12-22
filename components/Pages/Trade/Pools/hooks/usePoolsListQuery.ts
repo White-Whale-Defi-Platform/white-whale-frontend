@@ -56,6 +56,7 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
         ...tokenList,
         poolsById: tokenList.pools.reduce((poolsById, pool) => ((poolsById[pool.pool_id] = pool), poolsById),
           {}),
+        baseToken: tokenList.base_token,
       }
     },
     {

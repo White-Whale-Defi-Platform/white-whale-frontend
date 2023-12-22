@@ -132,10 +132,10 @@ const RewardsComponent = ({
 
   const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
     1)
-  const localEmission = annualRewards * (localWeight / globalInfo?.weight)
+  const localEmission = annualRewards * (localWeight / (globalInfo?.weight || 0))
   const localAPR = (localEmission / localTotalBonded) * 1_000_000 * 100
-  // Const defaultAPR = ((annualRewards * (1_000_000 / globalInfo?.weight)) / 1_000_000) * 1_000_000 * 100
-  const defaultAPR = (annualRewards * (1_000_000 / globalInfo?.weight)) * 100
+
+  const defaultAPR = (annualRewards * (1_000_000 / (globalInfo?.weight || 0))) * 100
   const apr = useMemo(() => (localAPR ? localAPR : defaultAPR),
     [annualRewards, globalTotalBonded])
 

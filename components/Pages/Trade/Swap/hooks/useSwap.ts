@@ -68,6 +68,7 @@ const useSwap = ({ reverse }) => {
     if (!simulated || reverse) {
       return null
     }
+
     // currently no refSimulation if tokenA. decimals == 18
     const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg?.simulate_swap_operations?.offer_amount)
     const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)));
@@ -81,6 +82,7 @@ const useSwap = ({ reverse }) => {
       return 0;
     }
     return deviation;
+
   }, [simulated])
 
   const updatedExecMsgEncoded = useMemo(() => {

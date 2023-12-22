@@ -7,10 +7,8 @@ import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Dashboard/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Dashboard/hooks/getWithdrawable'
-import {
-  WHALE_TOKEN_SYMBOL,
-} from 'constants/index'
-import usePrices from 'hooks/usePrices'
+import { WHALE_TOKEN_SYMBOL } from 'constants/index'
+import { usePrices } from 'hooks/usePrices'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -127,9 +125,8 @@ const Dashboard: FC = () => {
 
   const symbols = useMemo(() => {
     const tokenSymbols = config?.bonding_tokens?.map((token) => token.tokenSymbol) || [];
-    const uniqueSymbols = Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
-    return uniqueSymbols;
-  }, [config]);
+    return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
+  }, [config])
 
   const [liquidBalances, _] = useMultipleTokenBalance(symbols)
 

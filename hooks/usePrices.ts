@@ -1,130 +1,131 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import {
-  PoolEntityType,
-  TokenInfo,
-  usePoolsListQuery,
-} from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import {
-  PoolMatchForSwap,
-  findPoolForSwap,
-} from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
+import { PoolEntityType, TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useClients } from 'hooks/useClients'
-import { tokenToTokenPriceQueryWithPools } from 'queries/tokenToTokenPriceQuery'
+import useCoinGecko from 'hooks/useCoinGecko'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import asyncForEach from 'util/asyncForEach'
+import { convertMicroDenomToDenom } from 'util/conversion/index'
 
-import useCoinGecko from './useCoinGecko'
-import { useBaseTokenInfo } from './useTokenInfo'
-import { TokenList, useTokenList } from './useTokenList'
-
-export type Prices = {
-  [key: string]: {
-    usd: number
-  }
-}
-
-type GetMatchingPoolArgs = {
+type Params = {
   token: TokenInfo
-  poolsList: PoolEntityType[]
+  poolList: PoolEntityType[]
   baseToken: TokenInfo
-}
-
-type GetPrices = {
-  baseToken: TokenInfo
-  tokens: TokenInfo[]
+  baseTokenPrice: number
   cosmWasmClient: any
-  poolsList: PoolEntityType[]
-  coingecko: Prices
+}
+type PriceFromPoolParams = {
+  pool: PoolEntityType
+  baseToken: TokenInfo
+  baseTokenPrice: number
+  cosmWasmClient: any
 }
 
-const getMatchingPool = ({
-  token,
-  poolsList,
-  baseToken,
-}: GetMatchingPoolArgs): PoolMatchForSwap => {
-  if (!poolsList || !token || !baseToken) {
-    return null
-  }
+const getPriceFromPool = async ({ pool, baseToken, baseTokenPrice, cosmWasmClient }: PriceFromPoolParams) => {
+  const poolInfo = await cosmWasmClient.queryContractSmart(pool.swap_address, { pool: {} })
+  const isBaseTokenLast = pool.pool_assets[1].symbol === baseToken.symbol
+  const [asset1, asset2] = poolInfo?.assets || []
+  const ratioFromPool = convertMicroDenomToDenom(Number(asset2?.amount), pool.pool_assets[1].decimals) / convertMicroDenomToDenom(Number(asset1?.amount), pool.pool_assets[0].decimals)
+  const adjustedRatioFromPool = isBaseTokenLast ? ratioFromPool : 1 / ratioFromPool
 
-  return findPoolForSwap({
-    baseToken,
-    tokenA: token,
-    tokenB: baseToken,
-    poolsList,
-  })
+  return baseTokenPrice * adjustedRatioFromPool
+}
+
+const getTokenPrice = async ({
+  token,
+  poolList,
+  baseToken,
+  baseTokenPrice,
+  cosmWasmClient,
+}: Params) => {
+  const poolContainingTokenAndBaseToken = poolList.find((pool) => pool.pool_assets.some((poolAsset) => poolAsset.symbol === token.symbol) && pool.pool_assets.some((poolAsset) => poolAsset.symbol === baseToken.symbol))
+
+  if (!poolContainingTokenAndBaseToken) {
+    const poolsContainingToken = poolList.filter((pool) => pool.pool_assets.some((poolAsset) => poolAsset.symbol === token.symbol))
+
+    for (const pool of poolsContainingToken) {
+      const otherToken = pool.pool_assets.find((poolAsset) => poolAsset.symbol !== token.symbol)
+
+      const poolContainingOtherTokenAndBaseToken = poolList.find((pool) => pool.pool_assets.some((poolAsset) => poolAsset.symbol === otherToken.symbol) &&
+        pool.pool_assets.some((poolAsset) => poolAsset.symbol === baseToken.symbol))
+
+      if (poolContainingOtherTokenAndBaseToken) {
+        const otherTokenPrice = await getPriceFromPool({
+          pool: poolContainingOtherTokenAndBaseToken,
+          baseToken,
+          baseTokenPrice,
+          cosmWasmClient,
+        })
+        return await getPriceFromPool({
+          pool,
+          baseToken: otherToken,
+          baseTokenPrice: otherTokenPrice,
+          cosmWasmClient,
+        })
+      }
+    }
+  } else {
+    return getPriceFromPool({
+      pool: poolContainingTokenAndBaseToken,
+      baseToken,
+      baseTokenPrice,
+      cosmWasmClient,
+    })
+  }
 }
 
 const getPrices = async ({
   baseToken,
   tokens,
+  poolList,
   cosmWasmClient,
-  poolsList,
-  coingecko,
-}: GetPrices): Promise<Prices> => {
+  coingeckoPrices,
+}) => {
   const prices = {}
-  const baseTokenPrice = coingecko?.[baseToken?.id]?.usd || 0
+  const baseTokenPrice = coingeckoPrices[baseToken.id]?.usd
 
-  await asyncForEach(async (token: { symbol: any; id: any; chain_id?: string; token_address?: string; name?: string; decimals?: number; logoURI?: string; tags?: string[]; denom?: string; native?: boolean }) => {
-    const symbol = token?.symbol
-
-    if (token?.id) {
-      prices[symbol] = coingecko?.[token?.id]?.usd || 0
+  for (const token of tokens) {
+    if (coingeckoPrices[token.id]) {
+      prices[token.symbol] = coingeckoPrices[token.id].usd
     } else {
-      const matchingPools = getMatchingPool(<GetMatchingPoolArgs>{
+      prices[token.symbol] = await getTokenPrice({
         token,
-        poolsList,
+        poolList,
         baseToken,
+        baseTokenPrice,
+        cosmWasmClient,
       })
-
-      const { streamlinePoolBA, streamlinePoolAB } = matchingPools
-
-      if (Object.keys(matchingPools)?.length > 0) {
-        const value = await tokenToTokenPriceQueryWithPools(<any>{
-          matchingPools,
-          tokenA: streamlinePoolAB ? token : baseToken,
-          tokenB: streamlinePoolBA ? token : baseToken,
-          cosmWasmClient,
-          amount: 1,
-        })
-        const price = value * baseTokenPrice
-        prices[symbol] = price || 0
-      }
     }
-  }, tokens)
+  }
   return prices
 }
 
-const usePrices = () => {
+export const usePrices = () => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { data: poolsList } = usePoolsListQuery()
-  const baseToken = useBaseTokenInfo()
-  const [tokensList]: readonly [TokenList, boolean] = useTokenList()
-  const coingeckoIds = useMemo(() => tokensList?.tokens.map((token) => token.id),
-    [tokensList?.tokens])
-  const coingecko = useCoinGecko(coingeckoIds)
   const { cosmWasmClient } = useClients(walletChainName)
-  const { data: prices } = useQuery<Promise<Prices>>({
-    queryKey: ['prices', baseToken?.symbol, chainId],
-
+  const [tokenList] = useTokenList()
+  const coingeckoIds = useMemo(() => tokenList?.tokens.map((token) => token.id),
+    [tokenList?.tokens])
+  const coingeckoPrices = useCoinGecko(coingeckoIds)
+  const { data: prices } = useQuery({
+    queryKey: ['newPrices', tokenList?.baseToken, chainId],
     queryFn: async () => await getPrices({
-      baseToken,
-      tokens: tokensList?.tokens,
+      baseToken: tokenList.baseToken,
+      tokens: tokenList?.tokens,
+      poolList: poolsList?.pools,
       cosmWasmClient,
-      poolsList: poolsList?.pools,
-      coingecko,
+      coingeckoPrices,
     }),
     enabled:
-      Boolean(baseToken) &&
-      Boolean(tokensList) &&
+      Boolean(tokenList) &&
+      Boolean(poolsList.pools) &&
       Boolean(cosmWasmClient) &&
-      Boolean(coingecko),
+      Boolean(coingeckoPrices),
     refetchInterval: 30000,
   })
 
   return prices
 }
-
-export default usePrices

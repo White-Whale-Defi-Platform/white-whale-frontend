@@ -4,10 +4,11 @@ import { useQuery } from 'react-query'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useClients } from 'hooks/useClients'
-import { formatPrice, fromChainAmount } from 'libs/num'
-import { useGetTokenDollarValueQuery } from 'queries/useGetTokenDollarValueQuery'
+import { usePrices } from 'hooks/usePrices'
+import { formatPrice } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { convertMicroDenomToDenom } from 'util/conversion/index'
 
 export type TokenInfo = {
   id: string
@@ -65,16 +66,13 @@ const queryVault = async (
   cosmWasmClient: CosmWasmClient,
   contractAddress: string,
   tokenInfo: TokenInfo,
-  getTokenDollarValue: any,
+  prices: any,
 ) => {
   const info = await cosmWasmClient.queryContractSmart(contractAddress, {
     token_info: {},
   })
 
-  const dollarValue = await getTokenDollarValue({
-    tokenA: tokenInfo,
-    tokenAmountInDenom: fromChainAmount(info?.total_supply),
-  })
+  const dollarValue = prices[tokenInfo.symbol] * convertMicroDenomToDenom(info?.total_supply, tokenInfo.decimals)
 
   return { ...info,
     dollarValue: formatPrice(dollarValue) }
@@ -86,25 +84,22 @@ const queryBalance = async (
   address: string,
   vaultAddress: string,
   tokenInfo: TokenInfo,
-  getTokenDollarValue: any,
+  prices: any,
 ) => {
   const lpBalance = await cosmWasmClient.queryContractSmart(contractAddress, {
     balance: { address },
   })
 
-  const underlyingAsset = await queryShare(
+  const underlyingAssetAmount = await queryShare(
     cosmWasmClient,
     vaultAddress,
     lpBalance?.balance,
   )
-  const dollarValue = await getTokenDollarValue({
-    tokenA: tokenInfo,
-    tokenAmountInDenom: fromChainAmount(underlyingAsset),
-  })
+  const dollarValue = prices[tokenInfo.symbol] * convertMicroDenomToDenom(underlyingAssetAmount, tokenInfo.decimals)
 
   return {
     lpBalance: lpBalance?.balance,
-    underlyingAsset,
+    underlyingAssetAmount,
     dollarValue: formatPrice(dollarValue),
   }
 }
@@ -117,7 +112,7 @@ export const useVaultDeposit = (
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { cosmWasmClient } = useClients(walletChainName)
-  const [getTokenDollarValue] = useGetTokenDollarValueQuery()
+  const prices = usePrices()
 
   const {
     data: balance,
@@ -131,14 +126,14 @@ export const useVaultDeposit = (
       address,
       vaultAddress,
       tokenInfo,
-      getTokenDollarValue,
+      prices,
     ),
     {
       enabled:
         Boolean(chainId) &&
         Boolean(cosmWasmClient) &&
         Boolean(lpToken) &&
-        Boolean(getTokenDollarValue),
+        Boolean(prices),
     },
   )
 
@@ -150,27 +145,28 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { cosmWasmClient } = useClients(walletChainName)
-  const [getTokenDollarValue] = useGetTokenDollarValueQuery()
+  const prices = usePrices()
 
   const {
     data: balance,
     isLoading,
     refetch,
   } = useQuery(
-    ['vaultsDeposits', lpTokens, chainId],
+    ['vaultsDeposits', lpTokens, chainId, prices],
     async () => await Promise.all(lpTokens.map(({ lp_token, vault_address, vault_assets }) => queryBalance(
       cosmWasmClient,
       lp_token,
       address,
       vault_address,
       vault_assets,
-      getTokenDollarValue,
+      prices,
     ))),
     {
       enabled:
         Boolean(chainId) &&
         Boolean(cosmWasmClient) &&
-        Boolean(lpTokens?.length),
+        Boolean(lpTokens?.length) &&
+        Boolean(prices),
     },
   )
 
@@ -181,18 +177,19 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
 export const useVaultTotal = (lpTokenIds: any[]) => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient } = useClients(walletChainName)
-  const [getTokenDollarValue, isQueryLoading] = useGetTokenDollarValueQuery()
+  const prices = usePrices()
+
   const { data: balance, isLoading } = useQuery(
-    ['vaultsInfo', lpTokenIds, chainId, isQueryLoading],
+    ['vaultsInfo', lpTokenIds, chainId, prices],
     async () => await Promise.all(lpTokenIds.map(({ lp_token, vault_assets }) => queryVault(
       cosmWasmClient,
       lp_token,
       vault_assets,
-      getTokenDollarValue,
+      prices,
     ))),
     {
       enabled:
-        Boolean(chainId) && Boolean(lpTokenIds) && Boolean(getTokenDollarValue),
+        Boolean(chainId) && Boolean(lpTokenIds) && Boolean(prices),
       refetchOnMount: false,
     },
   )
@@ -216,7 +213,6 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
     },
   )
 
-  // Const lpTokens = useMemo(() => vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({ lp_token, vault_address, vault_assets })), [vaults])
   const { balance, refetch } = useVaultMultiDeposit(vaults?.vaults?.map(({ lp_token, vault_address, vault_assets }) => ({
     lp_token,
     vault_address,

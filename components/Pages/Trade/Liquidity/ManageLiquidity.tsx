@@ -31,7 +31,7 @@ import {
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
-import usePrices from 'hooks/usePrices'
+import { usePrices } from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRouter } from 'next/router'

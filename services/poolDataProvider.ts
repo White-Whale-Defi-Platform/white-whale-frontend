@@ -1,6 +1,5 @@
 import { POOL_INFO_BASE_URL } from 'constants/index'
 import fetch from 'isomorphic-unfetch'
-import terraPoolConfig from 'public/mainnet/phoenix-1/pools_list.json'
 
 export interface PoolResponse {
   pool_id: string
