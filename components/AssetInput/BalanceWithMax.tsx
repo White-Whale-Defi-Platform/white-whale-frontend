@@ -8,11 +8,11 @@ type BalanceProps = {
 }
 
 const Balance = ({ balance, mobile }: BalanceProps) => {
-  let shortBalance = balance
+  let shortBalance = Number(balance).toFixed(5)
   if (mobile) {
     shortBalance = Number(balance).toFixed(2)
-  } else {
-    shortBalance = Number(balance).toFixed(4)
+  } else if (balance === '0') {
+    shortBalance = '0'
   }
   return (
     <HStack>

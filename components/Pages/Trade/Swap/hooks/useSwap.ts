@@ -90,7 +90,7 @@ const useSwap = ({ reverse }) => {
       executeMsg.execute_swap_operations.minimum_receive = receive
       return [executeMessage(
         executeMsg,
-        num(amount).toFixed(0),
+        num(reverse ? simulated?.amount : amount).toFixed(0),
         tokenA,
         routerAddress,
         address,
@@ -101,7 +101,7 @@ const useSwap = ({ reverse }) => {
       executeMsg.send.msg = toBase64(toUtf8(JSON.stringify(decodedMsg)))
       return [executeMessage(
         executeMsg,
-        num(amount).toFixed(0),
+        num(reverse ? simulated?.amount : amount).toFixed(0),
         tokenA,
         routerAddress,
         address,
