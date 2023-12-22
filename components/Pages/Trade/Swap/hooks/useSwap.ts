@@ -65,17 +65,19 @@ const useSwap = ({ reverse }) => {
   }, [simulated, slippageToDecimal, tokenB?.decimals])
 
   const priceImpact = useMemo(() => {
-    if (!simulated) {
+    if (!simulated || reverse) {
       return null
     }
-    const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg.simulate_swap_operations?.offer_amount)
-    const diff = Math.abs(simulatedValue - simulated.amount / Number(amount));
+    // currently no refSimulation if tokenA. decimals == 18
+    const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg?.simulate_swap_operations?.offer_amount)
+    const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)));
     // No Price impact on orders below 1$ Value
     if (diff === 0 || Number(simulated.amount) < Number(refSimulation.simulated?.amount)) {
       return 0;
     }
     const deviation = (diff / (simulatedValue / 100)).toFixed(2)
-    if (deviation.includes('infinity')) {
+    // catch infinity for now
+    if (deviation.includes('Infinity')) {
       return 0;
     }
     return deviation;
