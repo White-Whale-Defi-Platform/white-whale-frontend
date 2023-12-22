@@ -4,7 +4,7 @@ import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
   chakra,
   Flex,
-  HStack,
+  HStack, Spinner,
   Table,
   TableContainer,
   Tbody,
@@ -65,7 +65,7 @@ const columns = [
         {'APR'}
       </Text>
     ),
-    cell: (info) => (info.getValue() === 'n/a' ? (
+    cell: (info) => (info.getValue() === -1 ? <Spinner alignSelf={'right'} textAlign={'right'} color="white" size="xs" /> : info.getValue() === 'n/a' ? (
       <Text>-</Text>
     ) : (
       <Apr
@@ -79,7 +79,8 @@ const columns = [
     header: () => <Text align="right" color="brand.50" display="inline">
       24hr Volume
     </Text>,
-    cell: (info) => <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
+    cell: (info) => (info.getValue() === -1 ? <Spinner color="white" size="xs" />
+      : <Text align="right">{info.getValue() === 'n/a' ? info.getValue() : `$${formatPrice(info.getValue())}`}</Text>),
   }),
   columnHelper.accessor((row) => row.totalLiq, {
     id: 'totalLiq',
