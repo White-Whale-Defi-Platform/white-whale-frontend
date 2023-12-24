@@ -9,7 +9,7 @@ import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-type DepostProps = {
+type DepositProps = {
   token: {
     amount: number
     tokenSymbol: string
@@ -19,10 +19,10 @@ type DepostProps = {
   vaultAddress: string
 }
 
-const useDeposit = ({ vaultAddress, token, onSuccess }: DepostProps) => {
+const useDeposit = ({ vaultAddress, token, onSuccess }: DepositProps) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const amount = toChainAmount(token?.amount, token.decimals)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -48,6 +48,7 @@ const useDeposit = ({ vaultAddress, token, onSuccess }: DepostProps) => {
     contractAddress: vaultAddress,
     enabled: Boolean(encodedMsgs),
     signingClient,
+    injectiveSigningClient,
     senderAddress: address,
     msgs,
     encodedMsgs,

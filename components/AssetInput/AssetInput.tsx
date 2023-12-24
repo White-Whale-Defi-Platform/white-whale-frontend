@@ -82,7 +82,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const dollarValue = useMemo(() => num(prices?.[token?.tokenSymbol]).times(token?.amount).
     dp(token?.decimals || 6).
     toFixed(2),
-  [tokenSymbol, prices, token])
+  [prices, token])
 
   const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).
     toString(),

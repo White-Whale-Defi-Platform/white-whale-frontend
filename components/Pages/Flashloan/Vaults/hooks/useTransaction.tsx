@@ -3,17 +3,19 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
 import { executeVault } from 'components/Pages/Flashloan/Vaults/hooks/executeVault'
+import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/index'
 
 type Params = {
-  // TokenInfo,
   isNative: boolean
   denom: string
   enabled: boolean
   signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   contractAddress: string
   msgs: any | null
@@ -34,6 +36,7 @@ export const useTransaction = ({
   contractAddress,
   enabled,
   signingClient,
+  injectiveSigningClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -76,11 +79,17 @@ export const useTransaction = ({
         return
       }
       try {
-        const response = await signingClient?.simulate(
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
         )
+
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -137,6 +146,7 @@ export const useTransaction = ({
     isNative,
     denom,
     signingClient,
+    injectiveSigningClient,
     contractAddress,
     senderAddress,
     msgs,

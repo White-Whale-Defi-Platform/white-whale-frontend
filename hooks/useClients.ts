@@ -11,7 +11,6 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet,
-    chain,
     getOfflineSignerDirect,
   } = useChain(walletChainName)
   if (isWalletConnected && !wallet.name.includes('station')) {
@@ -32,18 +31,16 @@ export const useClients = (walletChainName: string) => {
     },
     {
       queryKey: ['signingClient', walletChainName],
+      queryFn: async () => await getSigningCosmWasmClient(),
+      enabled: isWalletConnected,
+    }, {
+      queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
-        if (!chain.chain_name.includes('injective')) {
-          return await getSigningCosmWasmClient()
-        } else {
-          const offlineSigner : any = await getOfflineSignerDirect();
-          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
-            'https://ww-injective-rpc.polkachu.com',
-            offlineSigner,
-          )
-          client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract);
-          return client
-        }
+        const offlineSigner : any = await getOfflineSignerDirect();
+        const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://ww-injective-rpc.polkachu.com',
+          offlineSigner)
+        client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
+        return client
       },
       enabled: isWalletConnected,
     },
@@ -56,5 +53,6 @@ export const useClients = (walletChainName: string) => {
     isLoading,
     cosmWasmClient: queries[0].data,
     signingClient: queries[1].data,
+    injectiveSigningClient: queries[2].data,
   }
 }

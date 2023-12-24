@@ -24,7 +24,7 @@ export const useTransaction = () => {
   const toast = useToast()
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient, cosmWasmClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
   const [txHash, setTxHash] = useState<string>(null)
@@ -90,7 +90,7 @@ export const useTransaction = () => {
     if (data.bondingAction === ActionType.bond) {
       return await bondTokens(
         signingClient,
-        cosmWasmClient,
+        injectiveSigningClient,
         address,
         adjustedAmount,
         data.denom,
@@ -99,7 +99,7 @@ export const useTransaction = () => {
     } else if (data.bondingAction === ActionType.unbond) {
       return await unbondTokens(
         signingClient,
-        cosmWasmClient,
+        injectiveSigningClient,
         address,
         adjustedAmount,
         data.denom,
@@ -107,15 +107,15 @@ export const useTransaction = () => {
       )
     } else if (data.bondingAction === ActionType.withdraw) {
       return await withdrawTokens(
-        signingClient, cosmWasmClient, address, data.denom, config,
+        signingClient, injectiveSigningClient, address, data.denom, config,
       )
     } else if (data.bondingAction === ActionType.claim) {
       return await claimRewards(
-        signingClient, cosmWasmClient, address, config,
+        signingClient, injectiveSigningClient, address, config,
       )
     } else {
       return await createNewEpoch(
-        signingClient, cosmWasmClient, config, address,
+        signingClient, injectiveSigningClient, config, address,
       )
     }
   },

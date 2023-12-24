@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
+import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { executeAddLiquidity } from 'services/liquidity/index'
 import { TxStep } from 'types/common'
@@ -15,8 +15,8 @@ type Params = {
   swapAddress: string
   swapAssets?: any[]
   price?: number
-  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
-  cosmWasmClient: CosmWasmClient
+  signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -33,7 +33,7 @@ export const useTransaction: any = ({
   enabled,
   swapAddress,
   signingClient,
-  cosmWasmClient,
+  injectiveSigningClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -60,7 +60,13 @@ export const useTransaction: any = ({
         return
       }
       try {
-        const response = await signingClient?.simulate(
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -135,7 +141,7 @@ export const useTransaction: any = ({
       if (!txHash) {
         return null
       }
-      return cosmWasmClient.getTx(txHash)
+      return signingClient.getTx(txHash)
     },
     {
       enabled: Boolean(txHash),
@@ -144,7 +150,7 @@ export const useTransaction: any = ({
   )
   const { mutate } = useMutation(() => executeAddLiquidity({
     signingClient,
-    cosmWasmClient,
+    injectiveSigningClient,
     swapAddress,
     senderAddress,
     msgs: debouncedMsgs,

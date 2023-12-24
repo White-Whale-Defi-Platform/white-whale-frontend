@@ -41,7 +41,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
     });
   }
   const setWallet = useCallback(async () => {
-    let err = false
+    let error = false
     if (walletType === WalletType.keplrExtension && window.keplr) {
       const connected = (await window.keplr?.getChainInfosWithoutEndpoints()).map((elem) => elem.chainId)
       const keplrChains: any[] = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
@@ -57,15 +57,15 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       try {
         await (windowConnection.getKey(chainId))
       } catch (e) {
-        err = true
+        error = true
         console.error(`${chainId} not activated`)
         handleChainActivationError(chainName, toast);
       }
       if (walletType === WalletType.terraExtension && chainName.includes('injective')) {
-        err = true
+        error = true
       }
     }
-    if (!err) {
+    if (!error) {
       connect()
     }
     onCloseModal()

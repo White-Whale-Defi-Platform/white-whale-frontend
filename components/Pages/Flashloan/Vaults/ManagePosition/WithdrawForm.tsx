@@ -66,7 +66,7 @@ const WithdrawForm = ({
     } else if (!token?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
-      return tx?.buttonLabel
+      return tx?.buttonLabel as string
     }
     return 'Withdraw'
   }, [tx?.buttonLabel, isWalletConnected, token])
