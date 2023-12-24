@@ -120,6 +120,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const simulate = useSimulate({
     msgs,
     signingClient,
+    injectiveSigningClient,
     address,
     connected: Boolean(address),
     amount,

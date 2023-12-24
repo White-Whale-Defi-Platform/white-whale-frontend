@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { EncodeObject } from '@cosmjs/proto-signing'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import { ChainId } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
@@ -10,7 +11,8 @@ import { parseError } from 'util/parseError'
 
 type Simulate = {
   msgs: EncodeObject[]
-  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   address: string | undefined
   connected: boolean
   amount: string
@@ -21,6 +23,7 @@ type Simulate = {
 const useSimulate = ({
   msgs,
   signingClient,
+  injectiveSigningClient,
   address,
   connected,
   amount,
@@ -31,12 +34,13 @@ const useSimulate = ({
 
   const simulate = useQuery({
     queryKey: ['simulate', msgs, amount],
-    queryFn: () => {
+    queryFn: async () => {
       if (
         !connected ||
         Number(amount) <= 0 ||
         !address ||
         !signingClient ||
+        !injectiveSigningClient ||
         !msgs
       ) {
         return null
@@ -48,8 +52,10 @@ const useSimulate = ({
         error: null,
         buttonLabel: null,
       })
-
-      return signingClient?.simulate(
+      const isInjective = await signingClient.getChainId() === ChainId.injective
+      return isInjective ? injectiveSigningClient?.simulate(
+        address, msgs, null,
+      ) : signingClient?.simulate(
         address, msgs, null,
       )
     },
