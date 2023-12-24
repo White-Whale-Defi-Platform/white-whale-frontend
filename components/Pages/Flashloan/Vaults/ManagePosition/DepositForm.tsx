@@ -68,7 +68,7 @@ const DepositForm = ({
     } else if (!token?.amount) {
       return 'Enter Amount'
     } else if (tx?.buttonLabel) {
-      return tx?.buttonLabel
+      return tx?.buttonLabel as string
     }
     return 'Deposit'
   }, [tx?.buttonLabel, isWalletConnected, token])

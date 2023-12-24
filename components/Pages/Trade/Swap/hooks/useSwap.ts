@@ -17,7 +17,7 @@ const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient, cosmWasmClient } = useClients(walletChainName)
+  const { signingClient, cosmWasmClient, injectiveSigningClient } = useClients(walletChainName)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
   let slippage = useRecoilValue(slippageAtom)
@@ -69,20 +69,19 @@ const useSwap = ({ reverse }) => {
       return null
     }
 
-    // currently no refSimulation if tokenA. decimals == 18
+    // Currently no refSimulation if tokenA. decimals == 18
     const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg?.simulate_swap_operations?.offer_amount)
-    const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)));
+    const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)))
     // No Price impact on orders below 1$ Value
     if (diff === 0 || Number(simulated.amount) < Number(refSimulation.simulated?.amount)) {
-      return 0;
+      return 0
     }
     const deviation = (diff / (simulatedValue / 100)).toFixed(2)
-    // catch infinity for now
+    // Catch infinity for now
     if (deviation.includes('Infinity')) {
-      return 0;
+      return 0
     }
-    return deviation;
-
+    return deviation
   }, [simulated])
 
   const updatedExecMsgEncoded = useMemo(() => {
@@ -120,7 +119,7 @@ const useSwap = ({ reverse }) => {
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     signingClient,
-    cosmWasmClient,
+    injectiveSigningClient,
     msgs: executeMsg,
     encodedMsgs: updatedExecMsgEncoded || encodedExecuteMsg,
     amount: reverse ? simulated?.amount : amount,

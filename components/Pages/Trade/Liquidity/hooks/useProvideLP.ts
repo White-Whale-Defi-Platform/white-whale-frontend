@@ -22,7 +22,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenItemState)
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient, cosmWasmClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const config: Config = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
@@ -183,7 +183,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     swapAddress: bondingDays === 0 ? swapAddress : config?.frontend_helper,
     senderAddress: address,
     signingClient,
-    cosmWasmClient,
+    injectiveSigningClient,
     msgs,
     encodedMsgs,
     tokenAAmount: reverse

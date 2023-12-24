@@ -1,21 +1,17 @@
 import axios from 'axios'
-import { ChainId } from 'constants/index'
+import { ChainId } from 'constants'
 import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
-
-export const getInjectiveFee = (gas:number) => {
-  //hardcoded until native cosmos-kit support
-  const fee = {
-    amount: [
-      {
-        denom: 'inj',
-        amount: String(gas * 160000000),
-      },
-    ],
-    gas: String(gas),
-  };
-  return fee
-}
+// Hardcoded until native cosmos-kit support
+export const getInjectiveFee = (gas:number) => ({
+  amount: [
+    {
+      denom: 'inj',
+      amount: String(gas * 160_000_000),
+    },
+  ],
+  gas: String(gas),
+})
 
 class FCDBaseClient {
   private readonly baseURL: string = 'https://terra-classic-lcd.publicnode.com/terra'

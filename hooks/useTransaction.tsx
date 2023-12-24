@@ -2,7 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
+import { ChainId } from 'constants/index'
 import { TxStep } from 'types/index'
 
 import Finder from '../components/Finder'
@@ -12,7 +15,8 @@ type Params = {
   enabled: boolean
   swapAddress: string
   swapAssets: any[]
-  signingClient: any
+  signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -30,6 +34,7 @@ export const useTransaction = ({
   swapAddress,
   swapAssets,
   signingClient,
+  injectiveSigningClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -57,8 +62,15 @@ export const useTransaction = ({
         return
       }
       try {
-        const response = await signingClient?.simulate(
-          senderAddress, debouncedMsgs, '',
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
         )
         if (buttonLabel) {
           setButtonLabel(null)
@@ -122,6 +134,7 @@ export const useTransaction = ({
     msgs,
     tokenAmount: amount,
     signingClient,
+    injectiveSigningClient,
   }),
   {
     onMutate: () => {
@@ -170,7 +183,7 @@ export const useTransaction = ({
       toast({
         title: 'Swap Success.',
         description: (
-          <Finder txHash={data.transactionHash} chainId={signingClient.chainId}>
+          <Finder txHash={data.transactionHash} chainId={await signingClient.getChainId()}>
             {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
           </Finder>
@@ -212,7 +225,7 @@ export const useTransaction = ({
 
   useEffect(() => {
     if (txInfo && txHash) {
-      if (txInfo?.txResponse?.code) {
+      if (txInfo?.code) {
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
