@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 
+import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -8,9 +9,12 @@ import {
   Text,
   Tab,
   TabList,
-  TabPanel,
-  TabPanels,
   Tabs,
+  useMediaQuery,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuButton,
 } from '@chakra-ui/react'
 import { useClosePosition } from 'components/Pages/Trade/Incentivize/hooks/useClosePosition'
 import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
@@ -23,6 +27,67 @@ type Props = {
 }
 
 const STATES = [IncentiveState.all, IncentiveState.active, IncentiveState.upcoming, IncentiveState.over]
+
+const menuOrTab = (
+  activeButton:any, setActiveButton:any, setColumnFilters:any, isMobile:boolean
+) => {
+  if (isMobile) {
+    return (<Menu >
+      <MenuButton padding={'6px'} width={'100%'} as={Button} rightIcon={<ChevronDownIcon />} backgroundColor="rgba(0, 0, 0, 0.25)" minW={'fit-content'} color={'white'} justifyContent={'center'}>
+        {activeButton.toUpperCase()}
+      </MenuButton>
+      <MenuList backgroundColor="rgba(0, 0, 0, 1)" >
+        {STATES.map((item) => (
+          <MenuItem alignSelf={'center'}
+            backgroundColor="rgba(0, 0, 0, 0.25)"
+            key={item}
+            color="brand.700"
+            minW="120px"
+            maxWidth={'200px'}
+            textTransform="capitalize" onClick={() => {
+              setActiveButton(item)
+              setColumnFilters(item === IncentiveState.all
+                ? []
+                : [
+                  {
+                    id: 'state',
+                    value: item,
+                  },
+                ])
+            }}>{item}</MenuItem>))}
+      </MenuList>
+    </Menu>)
+  } else {
+    return (<Tabs variant="brand">
+      <TabList
+        display={['flex']}
+        flexWrap={['wrap']}
+        justifyContent="center"
+        background={'black'}
+        borderRadius={10}
+      >
+        {STATES.map((item) => (
+          <Tab key={`tab-${item}`}
+            onClick={() => {
+              setActiveButton(item)
+              setColumnFilters(item === IncentiveState.all
+                ? []
+                : [
+                  {
+                    id: 'state',
+                    value: item,
+                  },
+                ])
+            }}
+            textTransform="capitalize"
+          >
+            {item}
+          </Tab>
+        ))}
+      </TabList>
+    </Tabs>)
+  }
+}
 
 const CloseAction = ({ poolId, flowId, isCreator }) => {
   const close = useClosePosition({ poolId })
@@ -55,7 +120,8 @@ const Token = ({ imgUrl, symbol }) => (
 )
 
 export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
-  const [_, setActiveButton] = useState(IncentiveState.active)
+  const [isMobile] = useMediaQuery('(max-width: 755px)')
+  const [activeButton, setActiveButton] = useState(IncentiveState.active)
   const [columnFilters, setColumnFilters] = useState([
     {
       id: 'state',
@@ -94,53 +160,21 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
       </Box>
     )
   }
-  // TODO: Responsive Design
   return (
     <Box
       border="2px"
       borderColor="whiteAlpha.200"
       borderRadius="3xl"
-      pt="8"
+      pt={['2', '2', '8']}
       maxH="fit-content"
     >
-      <Tabs variant="brand">
-        <TabList
-          display={['flex']}
-          flexWrap={['wrap']}
-          justifyContent="center"
-          background={'black'}
-          borderRadius={10}
-        >
-          {STATES.map((item) => (
-            <Tab key={`tab-${item}`}
-              onClick={() => {
-                setActiveButton(item)
-                setColumnFilters(item === IncentiveState.all
-                  ? []
-                  : [
-                    {
-                      id: 'state',
-                      value: item,
-                    },
-                  ])
-              }}
-              textTransform="capitalize"
-            >
-              {item}
-            </Tab>
-          ))}
-        </TabList>
-        <TabPanels p={4}>
-          {STATES.map((item) => (
-            <TabPanel key={item} padding={4}>
-              <PositionsTable
-                columnFilters={columnFilters}
-                positions={positions}
-              />
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+      {menuOrTab(
+        activeButton, setActiveButton, setColumnFilters, isMobile,
+      )}
+      <PositionsTable
+        columnFilters={columnFilters}
+        positions={positions}
+      />
     </Box>
   )
 }
