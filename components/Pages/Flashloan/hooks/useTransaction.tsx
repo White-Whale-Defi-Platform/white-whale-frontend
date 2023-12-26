@@ -3,7 +3,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
+import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/index'
 
@@ -12,6 +14,7 @@ import { executeFlashloan } from './executeFlashloan'
 type Params = {
   enabled: boolean
   signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   encodedMsgs: any | null
   contractAddress: string | undefined
@@ -24,6 +27,7 @@ type Params = {
 export const useTransaction = ({
   enabled,
   signingClient,
+  injectiveSigningClient,
   senderAddress,
   encodedMsgs,
   msgs,
@@ -49,7 +53,12 @@ export const useTransaction = ({
         return
       }
       try {
-        const response = await signingClient?.simulate(
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -91,6 +100,7 @@ export const useTransaction = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
+        Boolean(injectiveSigningClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -107,6 +117,7 @@ export const useTransaction = ({
   const { mutate } = useMutation(() => executeFlashloan({
     msgs,
     signingClient,
+    injectiveSigningClient,
     contractAddress,
     senderAddress,
   }),

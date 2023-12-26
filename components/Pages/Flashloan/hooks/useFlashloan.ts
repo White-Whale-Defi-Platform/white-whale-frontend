@@ -12,7 +12,7 @@ import useTransaction from './useTransaction'
 const useFlashloan = ({ json }) => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const encodedMsgs = useMemo(() => {
     if (Object.keys(json).length === 0 || !chainId) {
       return null
@@ -26,9 +26,10 @@ const useFlashloan = ({ json }) => {
   }, [json, address, chainId])
 
   return useTransaction({
-    enabled: Boolean(signingClient) && Boolean(encodedMsgs),
+    enabled: Boolean(signingClient) && Boolean(injectiveSigningClient) && Boolean(encodedMsgs),
     msgs: json,
     signingClient,
+    injectiveSigningClient,
     senderAddress: address,
     encodedMsgs: [encodedMsgs],
     contractAddress: flashLoanContract[chainId],

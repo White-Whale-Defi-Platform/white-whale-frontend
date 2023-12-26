@@ -31,7 +31,7 @@ const useWithdraw = ({
 }: DepositProps) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const amount = toChainAmount(token?.amount, token?.decimals)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
@@ -60,6 +60,7 @@ const useWithdraw = ({
     contractAddress: lpToken,
     enabled: Boolean(encodedMsgs),
     signingClient,
+    injectiveSigningClient,
     senderAddress: address,
     msgs,
     encodedMsgs,

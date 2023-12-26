@@ -1,11 +1,15 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { ChainId } from 'constants/index'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { TerraTreasuryService } from 'services/treasuryService'
+import { getInjectiveTxData } from 'util/injective'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
-export const unbondTokens = async (
+export const unbondTokens: any = async (
   signingClient: SigningCosmWasmClient,
+  injectiveSigningClient: InjectiveSigningStargateClient,
   address: string,
   amount: number,
   denom: string,
@@ -33,9 +37,12 @@ export const unbondTokens = async (
     const gas = Math.ceil(await signingClient.simulate(
       address, [execMsg], '',
     ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-      null, gas,
+    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
+  } else if (await signingClient.getChainId() === ChainId.injective) {
+    const injectiveTxData = await getInjectiveTxData(
+      injectiveSigningClient, address, [execMsg],
     )
+    return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
     address, [execMsg], fee, '',

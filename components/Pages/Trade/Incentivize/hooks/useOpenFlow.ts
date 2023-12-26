@@ -12,6 +12,7 @@ import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
 import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ChainId } from 'constants/index'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import dayjs from 'dayjs'
 import { useClients } from 'hooks/useClients'
 import useSimulate from 'hooks/useSimulate'
@@ -22,6 +23,7 @@ import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
 import { TerraTreasuryService } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
+import { getInjectiveTxData } from 'util/injective'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -36,7 +38,7 @@ interface Props {
 
 export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const { address } = useChain(walletChainName)
   const config: Config = useConfig(network, chainId)
   const [pool] = usePoolFromListQueryById({ poolId })
@@ -118,6 +120,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const simulate = useSimulate({
     msgs,
     signingClient,
+    injectiveSigningClient,
     address,
     connected: Boolean(address),
     amount,
@@ -132,6 +135,11 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
         ) * 1.3)
         const funds = msgs.flatMap((elem) => elem.value.funds)
         fee = await TerraTreasuryService.getInstance().getTerraClassicFee(funds, gas)
+      } else if (await signingClient.getChainId() === ChainId.injective) {
+        const injectiveTxData = await getInjectiveTxData(
+          injectiveSigningClient, address, msgs,
+        )
+        return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       return await signingClient.signAndBroadcast(
         address, msgs, fee, null,

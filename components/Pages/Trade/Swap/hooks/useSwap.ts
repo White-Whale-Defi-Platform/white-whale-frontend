@@ -17,7 +17,7 @@ const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient, cosmWasmClient } = useClients(walletChainName)
+  const { signingClient, cosmWasmClient, injectiveSigningClient } = useClients(walletChainName)
   const tokenA = useTokenInfo(swapTokenA?.tokenSymbol)
   const tokenB = useTokenInfo(swapTokenB?.tokenSymbol)
   let slippage = useRecoilValue(slippageAtom)
@@ -65,15 +65,23 @@ const useSwap = ({ reverse }) => {
   }, [simulated, slippageToDecimal, tokenB?.decimals])
 
   const priceImpact = useMemo(() => {
-    if (!simulated) {
+    if (!simulated || reverse) {
       return null
     }
-    const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg.simulate_swap_operations?.offer_amount)
-    const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)));
-    if (diff === 0) {
-      return 0;
+
+    // Currently no refSimulation if tokenA. decimals == 18
+    const simulatedValue = Number(refSimulation.simulated?.amount) / Number(refValue?.simulateMsg?.simulate_swap_operations?.offer_amount)
+    const diff = Math.abs(simulatedValue - (simulated.amount / Number(amount)))
+    // No Price impact on orders below 1$ Value
+    if (diff === 0 || Number(simulated.amount) < Number(refSimulation.simulated?.amount)) {
+      return 0
     }
-    return (diff / (simulatedValue / 100)).toFixed(2);
+    const deviation = (diff / (simulatedValue / 100)).toFixed(2)
+    // Catch infinity for now
+    if (deviation.includes('Infinity')) {
+      return 0
+    }
+    return deviation
   }, [simulated])
 
   const updatedExecMsgEncoded = useMemo(() => {
@@ -85,7 +93,7 @@ const useSwap = ({ reverse }) => {
       executeMsg.execute_swap_operations.minimum_receive = receive
       return [executeMessage(
         executeMsg,
-        num(amount).toFixed(0),
+        num(reverse ? simulated?.amount : amount).toFixed(0),
         tokenA,
         routerAddress,
         address,
@@ -96,7 +104,7 @@ const useSwap = ({ reverse }) => {
       executeMsg.send.msg = toBase64(toUtf8(JSON.stringify(decodedMsg)))
       return [executeMessage(
         executeMsg,
-        num(amount).toFixed(0),
+        num(reverse ? simulated?.amount : amount).toFixed(0),
         tokenA,
         routerAddress,
         address,
@@ -111,6 +119,7 @@ const useSwap = ({ reverse }) => {
     swapAssets: [tokenA, tokenB],
     senderAddress: address,
     signingClient,
+    injectiveSigningClient,
     msgs: executeMsg,
     encodedMsgs: updatedExecMsgEncoded || encodedExecuteMsg,
     amount: reverse ? simulated?.amount : amount,

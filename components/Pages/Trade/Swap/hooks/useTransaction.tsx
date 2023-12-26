@@ -3,8 +3,10 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
+import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/index'
 
@@ -14,6 +16,7 @@ type Params = {
   swapAssets: any[]
   price: number
   signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -30,6 +33,7 @@ export const useTransaction = ({
   swapAddress,
   swapAssets,
   signingClient,
+  injectiveSigningClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -37,7 +41,7 @@ export const useTransaction = ({
   onBroadcasting,
   onSuccess,
   onError,
-}: Params) => {
+}: Params): any => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const [tokenA, tokenB] = swapAssets
   const toast = useToast()
@@ -57,7 +61,12 @@ export const useTransaction = ({
         return null
       }
       try {
-        const response = await signingClient?.simulate(
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -127,6 +136,7 @@ export const useTransaction = ({
     msgs,
     tokenAmount: amount,
     signingClient,
+    injectiveSigningClient,
   }),
   {
     onMutate: () => {

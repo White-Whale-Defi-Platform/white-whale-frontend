@@ -46,6 +46,7 @@
         {
           "chain_id": "injective-1",
           "token_address": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "id": "tether",
           "symbol": "USDT",
           "name": "USDT",
           "decimals": 6,

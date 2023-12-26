@@ -47,11 +47,12 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const baseToken = useBaseTokenInfo()
   const onMaxClick = () => {
     const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
+    const feeSubstraction = balance < 1 ? (balance / 100) * 0.01 : 0.1
     onChange({
       ...token,
       amount:
         isTokenAndBaseTokenSame && !ignoreSlack
-          ? num(balance === 0 ? 0 : balance - 0.1).toFixed(token?.decimals || 6)
+          ? num(balance === 0 ? 0 : balance - feeSubstraction).toFixed(token?.decimals || 6)
           : num(balance).toFixed(token?.decimals || 6),
     })
   }

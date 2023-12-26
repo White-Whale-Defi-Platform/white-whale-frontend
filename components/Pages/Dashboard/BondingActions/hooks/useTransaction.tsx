@@ -24,7 +24,7 @@ export const useTransaction = () => {
   const toast = useToast()
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [bondingAction, setBondingAction] = useState<ActionType>(null)
   const [txHash, setTxHash] = useState<string>(null)
@@ -72,7 +72,7 @@ export const useTransaction = () => {
       }
     },
     {
-      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient),
+      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient) && Boolean(injectiveSigningClient),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -90,6 +90,7 @@ export const useTransaction = () => {
     if (data.bondingAction === ActionType.bond) {
       return await bondTokens(
         signingClient,
+        injectiveSigningClient,
         address,
         adjustedAmount,
         data.denom,
@@ -98,6 +99,7 @@ export const useTransaction = () => {
     } else if (data.bondingAction === ActionType.unbond) {
       return await unbondTokens(
         signingClient,
+        injectiveSigningClient,
         address,
         adjustedAmount,
         data.denom,
@@ -105,15 +107,15 @@ export const useTransaction = () => {
       )
     } else if (data.bondingAction === ActionType.withdraw) {
       return await withdrawTokens(
-        signingClient, address, data.denom, config,
+        signingClient, injectiveSigningClient, address, data.denom, config,
       )
     } else if (data.bondingAction === ActionType.claim) {
       return await claimRewards(
-        signingClient, address, config,
+        signingClient, injectiveSigningClient, address, config,
       )
     } else {
       return await createNewEpoch(
-        signingClient, config, address,
+        signingClient, injectiveSigningClient, config, address,
       )
     }
   },

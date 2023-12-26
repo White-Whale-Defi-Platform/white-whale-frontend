@@ -30,7 +30,7 @@ const useWithdraw = ({
 }: Props) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
 
   const { msgs, encodedMsgs } = useMemo(() => {
     if (parseFloat(amount) === 0 || !contract || !signingClient) {
@@ -56,15 +56,13 @@ const useWithdraw = ({
   }, [amount, contract, swapAddress, stakingAddress, claimIncentive, address])
 
   return useWithdrawTransaction({
-    lpTokenAddress: contract,
-    swapAddress,
     enabled: Boolean(encodedMsgs),
     msgs,
     encodedMsgs,
     amount,
     senderAddress: address,
     signingClient,
-    isNative: isNativeToken(contract),
+    injectiveSigningClient,
   })
 }
 

@@ -3,18 +3,19 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { coin } from '@cosmjs/stargate'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
 import { ChainId } from 'constants/index'
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TerraTreasuryService } from 'services/treasuryService'
 import { TxStep } from 'types/common'
+import { getInjectiveTxData } from 'util/injective'
 
 type Params = {
-  lpTokenAddress: string
-  swapAddress: string
   enabled: boolean
-  signingClient: SigningCosmWasmClient
+  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -25,11 +26,10 @@ type Params = {
   isNative?: boolean
 }
 
-export const useWithdrawTransaction = ({
-  lpTokenAddress,
+export const useWithdrawTransaction: any = ({
   enabled,
-  swapAddress,
   signingClient,
+  injectiveSigningClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -37,7 +37,6 @@ export const useWithdrawTransaction = ({
   onBroadcasting,
   onSuccess,
   onError,
-  isNative = false,
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
   const toast = useToast()
@@ -57,7 +56,12 @@ export const useWithdrawTransaction = ({
         return
       }
       try {
-        const response = await signingClient?.simulate(
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -91,6 +95,7 @@ export const useWithdrawTransaction = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
+        Boolean(injectiveSigningClient) &&
         Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
@@ -106,32 +111,24 @@ export const useWithdrawTransaction = ({
   )
 
   const { mutate } = useMutation(async () => {
-    if (isNative) {
-      return signingClient.execute(
-        senderAddress,
-        swapAddress,
-        { withdraw_liquidity: {} },
-        'auto',
-        null,
-        [coin(amount, lpTokenAddress)],
+    let fee: any = 'auto'
+    if (await signingClient.getChainId() === ChainId.terrac) {
+      const gas = Math.ceil(await signingClient.simulate(
+        senderAddress, debouncedMsgs, '',
+      ) * 1.3)
+      fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
+    } else if (await signingClient.getChainId() === ChainId.injective) {
+      const injectiveTxData = await getInjectiveTxData(
+        injectiveSigningClient, senderAddress, debouncedMsgs,
       )
-    } else {
-      let fee: any = 'auto'
-      if (await signingClient.getChainId() === ChainId.terrac) {
-        const gas = Math.ceil(await signingClient.simulate(
-          senderAddress, encodedMsgs, '',
-        ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(
-          null, gas,
-        )
-      }
-      return signingClient.signAndBroadcast(
-        senderAddress,
-        encodedMsgs,
-        fee,
-        null,
-      )
+      return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
     }
+    return signingClient.signAndBroadcast(
+      senderAddress,
+      debouncedMsgs,
+      fee,
+      null,
+    )
   },
   {
     onMutate: () => {
@@ -211,7 +208,7 @@ export const useWithdrawTransaction = ({
       return await signingClient.getTx(txHash)
     },
     {
-      enabled: Boolean(txHash) && Boolean(signingClient),
+      enabled: Boolean(txHash) && Boolean(signingClient) && Boolean(injectiveSigningClient),
       retry: true,
     },
   )

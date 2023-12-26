@@ -32,7 +32,6 @@ const AssetList: FC<AssetListProps> = ({
   const [tokenList] = useTokenList()
 
   const { network, chainId } = useRecoilValue(chainState)
-
   const config = useConfig(network, chainId)
 
   const tokens = isBonding

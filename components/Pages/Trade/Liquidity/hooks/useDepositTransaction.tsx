@@ -3,7 +3,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import Finder from 'components/Finder'
+import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { executeAddLiquidity } from 'services/liquidity/index'
 import { TxStep } from 'types/common'
@@ -14,6 +16,7 @@ type Params = {
   swapAssets?: any[]
   price?: number
   signingClient: SigningCosmWasmClient
+  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -26,10 +29,11 @@ type Params = {
   onError?: (txHash?: string, txInfo?: any) => void
 }
 
-export const useTransaction = ({
+export const useTransaction: any = ({
   enabled,
   swapAddress,
   signingClient,
+  injectiveSigningClient,
   senderAddress,
   msgs,
   encodedMsgs,
@@ -56,7 +60,13 @@ export const useTransaction = ({
         return
       }
       try {
-        const response = await signingClient?.simulate(
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+
+        const response = isInjective ? await injectiveSigningClient?.simulate(
+          senderAddress,
+          debouncedMsgs,
+          '',
+        ) : await signingClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -108,6 +118,7 @@ export const useTransaction = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
+        Boolean(injectiveSigningClient) &&
         Boolean(senderAddress) &&
         enabled &&
         Boolean(swapAddress) &&
@@ -140,6 +151,7 @@ export const useTransaction = ({
   )
   const { mutate } = useMutation(() => executeAddLiquidity({
     signingClient,
+    injectiveSigningClient,
     swapAddress,
     senderAddress,
     msgs: debouncedMsgs,

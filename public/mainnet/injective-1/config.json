@@ -1,0 +1,14 @@
+{
+  "whale_lair": "inj1vz5g8pfdk4pjjhnf8vy000nq7evc2kgnfmrxt9",
+  "incentive_factory": "inj189rhgt2d78a7djv0x6mulwy7kre07n9x3z72nd",
+  "fee_distributor": "inj1s0q949jwm6n502sspvjmnaj4zjuv36fzpl33rr",
+  "frontend_helper": "inj1fwfudkjv95qtj9h32agcfwpg0wwzz352jlyk58",
+  "whale_base_token": {
+    "name": "WHALE",
+    "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",
+    "decimals": 6
+  },
+  "bonding_tokens": [
+  ]
+}
+

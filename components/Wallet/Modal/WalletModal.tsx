@@ -41,6 +41,15 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
     const inApp = isMobile && window.leap && window.leap.mode === 'mobile-web'
+    const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension)
+    if (inj) {
+      return true
+    } else if (chainId.includes('injective') && !inApp) {
+      return false
+    }
+    if (inj && inApp && walletName === WalletType.leapExtension) {
+      return true;
+    }
     if (inApp && walletName === WalletType.leapExtension) {
       return true;
     }

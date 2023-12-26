@@ -95,10 +95,18 @@ const Wallet = () => {
       };
       filterChains().then(async ([chainNames, ids]) => {
         if (chainNames.includes('injective')) {
-          try {
-            await walletWindowConnection.getKey(ChainId.injective)
-          } catch {
-            console.error('Injective not activated');
+          if (walletType !== WalletType.terraExtension) {
+            try {
+              await walletWindowConnection.getKey(ChainId.injective)
+            } catch {
+              console.error('Injective not activated');
+              const injIndex = chainNames.indexOf('injective')
+              if (injIndex !== -1) {
+                chainNames.splice(injIndex, 1)
+                ids.splice(injIndex, 1)
+              }
+            }
+          } else {
             const injIndex = chainNames.indexOf('injective')
             if (injIndex !== -1) {
               chainNames.splice(injIndex, 1)
