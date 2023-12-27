@@ -37,7 +37,6 @@ export const useClients = (walletChainName: string) => {
     }, {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
-        console.log(await getOfflineSigner())
         const offlineSigner : any = await getOfflineSignerDirect();
         const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
           offlineSigner)
