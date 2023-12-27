@@ -6,6 +6,7 @@ import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
+import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
@@ -39,9 +40,10 @@ const MyApp: FC<AppProps> = ({
   const wallets = [
     ...keplrWallets,
     ...cosmoStationWallets,
-    ...shellWallets,
     ...stationWallets,
     ...leapWallets,
+    ...ninjiWallets,
+    ...shellWallets,
   ]
 
   return (

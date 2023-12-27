@@ -5,6 +5,7 @@ import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
+import NinjiWalletIcon from 'components/Icons/NinjiWalletIcon'
 import TerraExtensionIcon from 'components/Icons/TerraExtensionIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import { useRecoilValue } from 'recoil'
@@ -24,6 +25,8 @@ export const ConnectedWalletIcon = () => {
       return <TerraExtensionIcon />
     case WalletType.leapSnap:
       return <LeapSnapIcon />
+    case WalletType.ninjiExtension:
+      return <NinjiWalletIcon />
     default:
       return <></>
   }

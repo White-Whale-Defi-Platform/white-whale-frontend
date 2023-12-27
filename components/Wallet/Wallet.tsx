@@ -44,7 +44,7 @@ const Wallet = () => {
   const [chainInfo] = useChainInfo(currentChainState.chainId)
   const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
   const queryClient = useQueryClient()
-
+  console.log(walletChains, isWalletConnected, allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]])
   const [chainIdParam, setChainIdParam] = useState<string>(null)
 
   useEffect(() => {
@@ -67,6 +67,10 @@ const Wallet = () => {
           preferNoSetFee: true,
         },
       }
+    }
+    if (walletType === WalletType.ninjiExtension) {
+      setWalletChains(['injective'])
+      setCurrentConnectedChainIds(['injective-1'])
     }
 
     if (walletType === WalletType.leapSnap) {

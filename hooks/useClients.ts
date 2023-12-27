@@ -12,6 +12,7 @@ export const useClients = (walletChainName: string) => {
     setDefaultSignOptions,
     wallet,
     getOfflineSignerDirect,
+    getOfflineSigner
   } = useChain(walletChainName)
   if (isWalletConnected && !wallet.name.includes('station')) {
     try {
@@ -36,7 +37,9 @@ export const useClients = (walletChainName: string) => {
     }, {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
+        console.log(await getOfflineSigner())
         const offlineSigner : any = await getOfflineSignerDirect();
+        console.log(offlineSigner)
         const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://ww-injective-rpc.polkachu.com',
           offlineSigner)
         client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
