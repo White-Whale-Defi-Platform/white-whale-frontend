@@ -123,6 +123,9 @@ const Wallet = () => {
     } else if (walletChains.length === 0) {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
       setWalletChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
+    } else if (walletType === WalletType.ninjiExtension) {
+      setCurrentConnectedChainIds(['injective-1'])
+      setWalletChains(['injective'])
     } else {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }
@@ -208,7 +211,8 @@ const Wallet = () => {
     setTokenSwapState(newState)
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
-      if (window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) !== WalletType.leapSnap && window.localStorage.getItem(COSMOS_KIT_WALLET_KEY) !== WalletType.terraExtension) {
+      const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
+      if (walletType !== WalletType.leapSnap && walletType !== WalletType.terraExtension && walletType !== WalletType.ninjiExtension) {
         await newChain.connect()
       } else {
         resetWallet()
