@@ -14,7 +14,7 @@ import { getInjectiveTxData } from 'util/injective'
 
 type Params = {
   enabled: boolean
-  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+  signingClient: SigningCosmWasmClient
   injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null

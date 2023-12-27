@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query'
 
-
 type TxInfo = {
   txHash: string | null
   signingClient: any

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { Link } from '@chakra-ui/react'
+import { Link, VStack, Text } from '@chakra-ui/react'
 import { ChainId } from 'constants/index'
 import { truncate } from 'libs/text'
 
@@ -42,13 +42,21 @@ const getUrl = (chainId: string, txHash: string) => {
 }
 
 const Finder = ({ children, txHash, chainId }: Props) => {
-  console.log({ chainId,
-    txHash })
-  return (
-    <Link isExternal href={getUrl(chainId, txHash)}>
-      {children} TxHash: {truncate(txHash, [4, 4])}
-    </Link>
-  )
+  if (chainId === ChainId.injective) {
+    return (<VStack align={'start'} alignItems={'start'}>
+      <Text>Secret Word😱: matrix </Text>
+      <Link isExternal href={getUrl(chainId, txHash)}>
+        {children} TxHash:{truncate(txHash, [4, 4])}
+      </Link>
+    </VStack>
+    )
+  } else {
+    return (
+      <Link isExternal href={getUrl(chainId, txHash)}>
+        {children} TxHash:{truncate(txHash, [4, 4])}
+      </Link>
+    )
+  }
 }
 
 export default Finder

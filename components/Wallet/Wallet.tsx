@@ -261,7 +261,7 @@ const Wallet = () => {
 
   return (
     <>
-      <Card paddingY={[0, 1]} paddingX={[2, 6]} gap={4}>
+      <Card paddingX={[2, 6]} gap={4}>
         <ChainSelectWithBalance
           connected={isWalletConnected}
           denom={denom}
