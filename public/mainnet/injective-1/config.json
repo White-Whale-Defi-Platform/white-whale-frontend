@@ -9,6 +9,16 @@
     "decimals": 6
   },
   "bonding_tokens": [
+    {
+      "tokenSymbol": "ampWHALE",
+      "denom": "ibc/168C3904C45C6FE3539AE85A8892DF87371D00EA7942515AFC50AA43C4BB0A32",
+      "decimals": 6
+    },
+    {
+      "tokenSymbol": "bWHALE",
+      "denom": "ibc/ECB0AA28D6001EF985047558C410B65581FC85BD92D4E3CFCCA0D3D964C67CC2",
+      "decimals": 6
+    }
   ]
 }
 

@@ -65,6 +65,7 @@ export const ACTIVE_BONDING_NETWORKS = [
   'phoenix-1',
   'pacific-1',
   'columbus-5',
+  'injective-1',
 ]
 export const ACTIVE_INCENTIVE_NETWORKS = [
   'chihuahua-1',
@@ -74,6 +75,7 @@ export const ACTIVE_INCENTIVE_NETWORKS = [
   'phoenix-1',
   'pacific-1',
   'columbus-5',
+  'injective-1',
 ]
 
 export const MAINNET_TESTNET_CHAIN_ID_MAP = {
