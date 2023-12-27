@@ -142,7 +142,7 @@ export const useDashboardData = (
   ])
 
   const isLoading = useMemo(() => queries.some((query) => (
-    query.isLoading || !query.data
+    query.isLoading || (!query.data && query.data !== 0)
   )),
   [queries])
 
