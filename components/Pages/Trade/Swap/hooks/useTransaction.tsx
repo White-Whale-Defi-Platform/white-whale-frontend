@@ -189,8 +189,7 @@ export const useTransaction = ({
             txHash={data.transactionHash || data?.txHash}
             chainId={await signingClient?.getChainId()}
           >
-            {' '}
-              From: {tokenA.symbol} To: {tokenB.symbol}{' '}
+            {`${tokenA.symbol} -> ${tokenB.symbol}`}
           </Finder>
         ),
         status: 'success',
