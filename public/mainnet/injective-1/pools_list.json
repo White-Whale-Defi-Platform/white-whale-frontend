@@ -208,6 +208,53 @@
       "swap_address": "inj17dez7atlgwrl7lxzszxjy7gzuj325n8re3f7mh",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "HACHI-WHALE",
+      "lpOrder": [
+        "HACHI",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "HACHI",
+        "WHALE"
+      ],
+      "displayName": "HACHI-WHALE",
+      "displayLogo2": "/logos/whale.svg",
+      "displayLogo1": "/logos/hachi.png",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/inj13ze65lwstqrz4qy6vvxx3lglnkkuan436aw45e/HACHI",
+          "symbol": "HACHI",
+          "name": "Hachi",
+          "decimals": 9,
+          "logoURI": "/logos/hachi.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/inj13ze65lwstqrz4qy6vvxx3lglnkkuan436aw45e/HACHI"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "inj1sgvrzysd32xdqtscaen2gprrjyg997lkn2h4wg",
+      "lp_token": "factory/inj1sgvrzysd32xdqtscaen2gprrjyg997lkn2h4wg/uLP",
+      "staking_address": "inj1zzejvfk8anr2skycj8et5zmhcuzlnn7se8zpca",
+      "rewards_tokens": []
     }
   ],
   "version": {
