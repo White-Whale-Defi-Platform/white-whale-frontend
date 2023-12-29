@@ -9,7 +9,7 @@ import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const createNewEpoch: any = async (
   signingClient: SigningCosmWasmClient,
-  injectiveSigningClient: InjectiveSigningStargateClient,
+  injectiveSigningClient: InjectiveSigningStargateClient | null,
   config: Config,
   address: string,
 ) => {
@@ -27,7 +27,7 @@ export const createNewEpoch: any = async (
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-  } else if (await signingClient.getChainId() === ChainId.injective) {
+  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await getInjectiveTxData(
       injectiveSigningClient, address, [execMsg],
     )

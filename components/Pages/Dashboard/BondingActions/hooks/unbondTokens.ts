@@ -9,7 +9,7 @@ import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const unbondTokens: any = async (
   signingClient: SigningCosmWasmClient,
-  injectiveSigningClient: InjectiveSigningStargateClient,
+  injectiveSigningClient: InjectiveSigningStargateClient | null,
   address: string,
   amount: number,
   denom: string,
@@ -38,7 +38,7 @@ export const unbondTokens: any = async (
       address, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-  } else if (await signingClient.getChainId() === ChainId.injective) {
+  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await getInjectiveTxData(
       injectiveSigningClient, address, [execMsg],
     )

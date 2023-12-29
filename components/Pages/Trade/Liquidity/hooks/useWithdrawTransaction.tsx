@@ -15,7 +15,7 @@ import { getInjectiveTxData } from 'util/injective'
 type Params = {
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -57,7 +57,7 @@ export const useWithdrawTransaction: any = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -117,7 +117,7 @@ export const useWithdrawTransaction: any = ({
         senderAddress, debouncedMsgs, '',
       ) * 1.3)
       fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-    } else if (await signingClient.getChainId() === ChainId.injective) {
+    } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
       const injectiveTxData = await getInjectiveTxData(
         injectiveSigningClient, senderAddress, debouncedMsgs,
       )

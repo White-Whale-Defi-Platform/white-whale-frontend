@@ -14,7 +14,7 @@ import { executeFlashloan } from './executeFlashloan'
 type Params = {
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   encodedMsgs: any | null
   contractAddress: string | undefined
@@ -54,7 +54,7 @@ export const useTransaction = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',

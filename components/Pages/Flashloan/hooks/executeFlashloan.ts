@@ -9,7 +9,7 @@ type ExecuteFlashloanArgs = {
   senderAddress: string
   contractAddress: string
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient | null
   msgs: any
 }
 
@@ -20,7 +20,7 @@ export const executeFlashloan = async ({
   contractAddress,
   senderAddress,
 }: ExecuteFlashloanArgs): Promise<any> => {
-  if (await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const execMsg = createExecuteMessage({ senderAddress,
       contractAddress,
       message: msgs })

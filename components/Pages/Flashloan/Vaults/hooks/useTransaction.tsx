@@ -15,7 +15,7 @@ type Params = {
   denom: string
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   contractAddress: string
   msgs: any | null
@@ -80,7 +80,7 @@ export const useTransaction = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',

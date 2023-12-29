@@ -11,7 +11,7 @@ type ExecuteAddLiquidityArgs = {
   senderAddress: string
   signingClient: SigningCosmWasmClient
   msgs: any
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient | null
 }
 
 export const executeAddLiquidity = async ({
@@ -27,7 +27,7 @@ export const executeAddLiquidity = async ({
     ) * 1.3)
     const funds = msgs.flatMap((elem) => elem.value.funds)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(funds, gas)
-  } else if (await signingClient.getChainId() === ChainId.injective) {
+  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await getInjectiveTxData(
       injectiveSigningClient, senderAddress, msgs,
     )

@@ -16,7 +16,7 @@ type Params = {
   swapAssets?: any[]
   price?: number
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -62,7 +62,7 @@ export const useTransaction: any = ({
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
 
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
