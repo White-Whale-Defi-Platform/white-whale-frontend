@@ -15,7 +15,6 @@ type Params = {
   denom: string
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   contractAddress: string
   msgs: any | null
@@ -25,6 +24,7 @@ type Params = {
   estimateEnabled?: boolean
   tokenAAmount?: number
   tokenBAmount?: number
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void

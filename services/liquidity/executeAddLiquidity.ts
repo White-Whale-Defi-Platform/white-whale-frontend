@@ -11,7 +11,7 @@ type ExecuteAddLiquidityArgs = {
   senderAddress: string
   signingClient: SigningCosmWasmClient
   msgs: any
-  injectiveSigningClient: InjectiveSigningStargateClient | null
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const executeAddLiquidity = async ({

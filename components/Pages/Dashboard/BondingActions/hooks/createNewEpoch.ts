@@ -9,9 +9,9 @@ import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const createNewEpoch: any = async (
   signingClient: SigningCosmWasmClient,
-  injectiveSigningClient: InjectiveSigningStargateClient | null,
   config: Config,
   address: string,
+  injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
     new_epoch: {},

@@ -12,10 +12,10 @@ import { parseError } from 'util/parseError'
 type Simulate = {
   msgs: EncodeObject[]
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient | null
   address: string | undefined
   connected: boolean
   amount: string
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onError?: (error: Error) => void
   onSuccess?: (data: any) => void
 }

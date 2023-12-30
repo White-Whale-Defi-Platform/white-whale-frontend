@@ -20,7 +20,7 @@ type DirectTokenSwapArgs = {
   signingClient: SigningCosmWasmClient
   msgs: Record<string, any>
   chainId?: string
-  injectiveSigningClient: InjectiveSigningStargateClient | null
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const directTokenSwap = async ({

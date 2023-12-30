@@ -9,10 +9,10 @@ import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const withdrawTokens: any = async (
   signingClient: SigningCosmWasmClient,
-  injectiveSigningClient: InjectiveSigningStargateClient | null,
   address: string,
   denom: string,
   config: Config,
+  injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
     withdraw: {

@@ -9,9 +9,9 @@ import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const claimRewards: any = async (
   signingClient: SigningCosmWasmClient,
-  injectiveSigningClient: InjectiveSigningStargateClient | null,
   address: string,
   config: Config,
+  injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
     claim: {},

@@ -16,7 +16,6 @@ type Params = {
   swapAssets?: any[]
   price?: number
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -24,6 +23,7 @@ type Params = {
   estimateEnabled?: boolean
   tokenAAmount?: string
   tokenBAmount?: string
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void

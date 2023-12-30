@@ -13,9 +13,9 @@ type ExecuteAddLiquidityArgs = {
   senderAddress: string
   contractAddress: string
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient | null
   msgs: any
   encodedMsgs: any
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const executeVault = async ({

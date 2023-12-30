@@ -90,32 +90,32 @@ export const useTransaction = () => {
     if (data.bondingAction === ActionType.bond) {
       return await bondTokens(
         signingClient,
-        injectiveSigningClient,
         address,
         adjustedAmount,
         data.denom,
         config,
+        injectiveSigningClient
       )
     } else if (data.bondingAction === ActionType.unbond) {
       return await unbondTokens(
         signingClient,
-        injectiveSigningClient,
         address,
         adjustedAmount,
         data.denom,
         config,
+        injectiveSigningClient
       )
     } else if (data.bondingAction === ActionType.withdraw) {
       return await withdrawTokens(
-        signingClient, injectiveSigningClient, address, data.denom, config,
+        signingClient, address, data.denom, config, injectiveSigningClient
       )
     } else if (data.bondingAction === ActionType.claim) {
       return await claimRewards(
-        signingClient, injectiveSigningClient, address, config,
+        signingClient, address, config, injectiveSigningClient
       )
     } else {
       return await createNewEpoch(
-        signingClient, injectiveSigningClient, config, address,
+        signingClient, config, address, injectiveSigningClient
       )
     }
   },

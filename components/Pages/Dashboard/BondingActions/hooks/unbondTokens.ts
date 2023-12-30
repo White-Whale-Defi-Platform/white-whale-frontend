@@ -9,11 +9,11 @@ import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const unbondTokens: any = async (
   signingClient: SigningCosmWasmClient,
-  injectiveSigningClient: InjectiveSigningStargateClient | null,
   address: string,
   amount: number,
   denom: string,
   config: Config,
+  injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
     unbond: {

@@ -15,7 +15,6 @@ import { getInjectiveTxData } from 'util/injective'
 type Params = {
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient | null
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -24,6 +23,7 @@ type Params = {
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
   isNative?: boolean
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const useWithdrawTransaction: any = ({
