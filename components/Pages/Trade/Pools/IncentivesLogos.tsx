@@ -20,6 +20,8 @@ export const IncentivesLogos = ({ logos, more }) => (
           <Image
             src={logo}
             width="auto"
+            style={{ margin: 'unset',
+              borderRadius: '50%' }}
             maxW="1.6rem"
             maxH="1.6rem"
             alt="token1-img"

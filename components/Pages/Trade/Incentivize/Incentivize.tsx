@@ -13,6 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import InfoTooltip from 'components/InfoTooltip'
 import Create from 'components/Pages/Trade/Incentivize/Create'
 import { IncentivePositionsOverview } from 'components/Pages/Trade/Incentivize/IncentivePositionsOverview'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
@@ -68,7 +69,6 @@ const Incentivize: FC = () => {
       <HStack
         justifyContent="space-between"
         width="full"
-        paddingY={5}
         paddingX={{ base: 4 }}
       >
         <IconButton
@@ -79,9 +79,17 @@ const Incentivize: FC = () => {
           icon={<ArrowBackIcon />}
           onClick={() => router.push(`/${chainName}/pools`)}
         />
-        <Text as="h2" fontSize="24" fontWeight="900">
+        <HStack
+        >
+          <InfoTooltip
+            description={
+              'For the creation of an incentive a fee of 1000 WHALE must be paid.'
+            }
+          />
+          <Text as="h2" fontSize="24" fontWeight="900">
           Manage Incentives
-        </Text>
+          </Text>
+        </HStack>
       </HStack>
 
       <Box

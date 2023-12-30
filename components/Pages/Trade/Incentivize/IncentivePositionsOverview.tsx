@@ -29,7 +29,7 @@ type Props = {
 const STATES = [IncentiveState.all, IncentiveState.active, IncentiveState.upcoming, IncentiveState.over]
 
 const menuOrTab = (
-  activeButton:any, setActiveButton:any, setColumnFilters:any, isMobile:boolean
+  activeButton:any, setActiveButton:any, setColumnFilters:any, isMobile:boolean,
 ) => {
   if (isMobile) {
     return (<Menu >
@@ -111,6 +111,8 @@ const Token = ({ imgUrl, symbol }) => (
     <Image
       src={imgUrl}
       width="auto"
+      style={{ margin: 'unset',
+        borderRadius: '50%' }}
       maxW="1.2rem"
       maxH="1.2rem"
       alt="token1-img"
