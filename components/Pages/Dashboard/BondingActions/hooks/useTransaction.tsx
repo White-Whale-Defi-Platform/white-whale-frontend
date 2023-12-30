@@ -72,7 +72,7 @@ export const useTransaction = () => {
       }
     },
     {
-      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient) && Boolean(injectiveSigningClient),
+      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,

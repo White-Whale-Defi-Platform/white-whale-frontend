@@ -95,7 +95,6 @@ export const useWithdrawTransaction: any = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
@@ -208,7 +207,7 @@ export const useWithdrawTransaction: any = ({
       return await signingClient.getTx(txHash)
     },
     {
-      enabled: Boolean(txHash) && Boolean(signingClient) && Boolean(injectiveSigningClient),
+      enabled: Boolean(txHash) && Boolean(signingClient),
       retry: true,
     },
   )

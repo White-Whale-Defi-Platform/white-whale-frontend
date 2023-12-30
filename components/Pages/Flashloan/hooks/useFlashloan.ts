@@ -26,7 +26,7 @@ const useFlashloan = ({ json }) => {
   }, [json, address, chainId])
 
   return useTransaction({
-    enabled: Boolean(signingClient) && Boolean(injectiveSigningClient) && Boolean(encodedMsgs),
+    enabled: Boolean(signingClient) && Boolean(encodedMsgs),
     msgs: json,
     signingClient,
     injectiveSigningClient,

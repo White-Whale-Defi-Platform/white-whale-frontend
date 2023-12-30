@@ -118,7 +118,6 @@ export const useTransaction: any = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         Boolean(senderAddress) &&
         enabled &&
         Boolean(swapAddress) &&

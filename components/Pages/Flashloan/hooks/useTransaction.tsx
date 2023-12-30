@@ -100,7 +100,6 @@ export const useTransaction = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
