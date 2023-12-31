@@ -16,13 +16,13 @@ type Params = {
   swapAddress: string
   swapAssets: any[]
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
   amount: string
   gasAdjustment?: number
   estimateEnabled?: boolean
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -63,7 +63,7 @@ export const useTransaction = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',

@@ -20,7 +20,7 @@ type DirectTokenSwapArgs = {
   signingClient: SigningCosmWasmClient
   msgs: Record<string, any>
   chainId?: string
-  injectiveSigningClient: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const directTokenSwap = async ({
@@ -62,7 +62,7 @@ export const directTokenSwap = async ({
       senderAddress, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
-  } else if (await signingClient.getChainId() === ChainId.injective) {
+  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await getInjectiveTxData(
       injectiveSigningClient, senderAddress, [execMsg],
     )

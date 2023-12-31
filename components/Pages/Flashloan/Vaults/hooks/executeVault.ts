@@ -13,9 +13,9 @@ type ExecuteAddLiquidityArgs = {
   senderAddress: string
   contractAddress: string
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   msgs: any
   encodedMsgs: any
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const executeVault = async ({
@@ -40,7 +40,7 @@ export const executeVault = async ({
 
   const funds = [coin(amount, denom)]
 
-  if (await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const execMsg = createExecuteMessage({ senderAddress,
       contractAddress,
       message: msgs })

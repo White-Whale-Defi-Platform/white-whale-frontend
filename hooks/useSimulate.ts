@@ -12,10 +12,10 @@ import { parseError } from 'util/parseError'
 type Simulate = {
   msgs: EncodeObject[]
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   address: string | undefined
   connected: boolean
   amount: string
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onError?: (error: Error) => void
   onSuccess?: (data: any) => void
 }
@@ -53,7 +53,7 @@ const useSimulate = ({
         buttonLabel: null,
       })
       const isInjective = await signingClient.getChainId() === ChainId.injective
-      return isInjective ? injectiveSigningClient?.simulate(
+      return isInjective && injectiveSigningClient ? injectiveSigningClient?.simulate(
         address, msgs, null,
       ) : signingClient?.simulate(
         address, msgs, null,

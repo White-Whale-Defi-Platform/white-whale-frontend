@@ -16,7 +16,6 @@ type Params = {
   swapAssets?: any[]
   price?: number
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -24,6 +23,7 @@ type Params = {
   estimateEnabled?: boolean
   tokenAAmount?: string
   tokenBAmount?: string
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -62,7 +62,7 @@ export const useTransaction: any = ({
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
 
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -118,7 +118,6 @@ export const useTransaction: any = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         Boolean(senderAddress) &&
         enabled &&
         Boolean(swapAddress) &&

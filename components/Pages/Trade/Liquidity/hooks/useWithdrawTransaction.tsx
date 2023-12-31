@@ -15,7 +15,6 @@ import { getInjectiveTxData } from 'util/injective'
 type Params = {
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   msgs: any | null
   encodedMsgs: any | null
@@ -24,6 +23,7 @@ type Params = {
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
   isNative?: boolean
+  injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const useWithdrawTransaction: any = ({
@@ -57,7 +57,7 @@ export const useWithdrawTransaction: any = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -95,7 +95,6 @@ export const useWithdrawTransaction: any = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         Number(amount) > 0 &&
         enabled,
       refetchOnWindowFocus: false,
@@ -117,7 +116,7 @@ export const useWithdrawTransaction: any = ({
         senderAddress, debouncedMsgs, '',
       ) * 1.3)
       fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-    } else if (await signingClient.getChainId() === ChainId.injective) {
+    } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
       const injectiveTxData = await getInjectiveTxData(
         injectiveSigningClient, senderAddress, debouncedMsgs,
       )
@@ -208,7 +207,7 @@ export const useWithdrawTransaction: any = ({
       return await signingClient.getTx(txHash)
     },
     {
-      enabled: Boolean(txHash) && Boolean(signingClient) && Boolean(injectiveSigningClient),
+      enabled: Boolean(txHash) && Boolean(signingClient),
       retry: true,
     },
   )

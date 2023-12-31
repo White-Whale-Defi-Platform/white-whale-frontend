@@ -15,7 +15,6 @@ type Params = {
   denom: string
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   contractAddress: string
   msgs: any | null
@@ -25,6 +24,7 @@ type Params = {
   estimateEnabled?: boolean
   tokenAAmount?: number
   tokenBAmount?: number
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -80,7 +80,7 @@ export const useTransaction = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -128,7 +128,6 @@ export const useTransaction = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,

@@ -14,11 +14,11 @@ import { executeFlashloan } from './executeFlashloan'
 type Params = {
   enabled: boolean
   signingClient: SigningCosmWasmClient
-  injectiveSigningClient: InjectiveSigningStargateClient
   senderAddress: string
   encodedMsgs: any | null
   contractAddress: string | undefined
   msgs: any | null
+  injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
   onError?: (txHash?: string, txInfo?: any) => void
@@ -27,11 +27,11 @@ type Params = {
 export const useTransaction = ({
   enabled,
   signingClient,
-  injectiveSigningClient,
   senderAddress,
   encodedMsgs,
-  msgs,
   contractAddress,
+  msgs,
+  injectiveSigningClient,
   onBroadcasting,
   onSuccess,
   onError,
@@ -54,7 +54,7 @@ export const useTransaction = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective ? await injectiveSigningClient?.simulate(
+        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,
           '',
@@ -100,7 +100,6 @@ export const useTransaction = ({
         txStep === TxStep.Idle &&
         !error &&
         Boolean(signingClient) &&
-        Boolean(injectiveSigningClient) &&
         enabled,
       refetchOnWindowFocus: false,
       retry: false,
@@ -117,9 +116,9 @@ export const useTransaction = ({
   const { mutate } = useMutation(() => executeFlashloan({
     msgs,
     signingClient,
-    injectiveSigningClient,
     contractAddress,
     senderAddress,
+    injectiveSigningClient,
   }),
   {
     onMutate: () => {
