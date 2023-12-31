@@ -50,7 +50,7 @@ const Multiplicator = ({ multiplicator, apr, show, incentivized }: Props) => {
         </TooltipWithChildren>
         <HStack>
           {incentivized && <InfoTooltip
-            iconSize={'3'}
+            iconSize={3}
             description={
               'This pool is currently incentivized. The creator can clawback all unclaimed rewards at anytime. Claim them regularly.'
             }

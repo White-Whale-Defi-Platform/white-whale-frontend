@@ -56,7 +56,6 @@ export const Incentives = ({ flows }) => {
           sx={{ '--popper-arrow-shadow-color': 'black' }}
         />
         <PopoverBody>
-          {/* TODO: add incentives table */}
           <TableContainer>
             <Table size="sm" variant="unstyled">
               <Thead>
@@ -65,7 +64,7 @@ export const Incentives = ({ flows }) => {
                 </Tr>
               </Thead>
               <Tbody>
-                {flows.map((flow, index) => (
+                {flows.map((flow: { tokenSymbol: string }, index: number) => (
                   <Tr
                     key={`${flow?.tokenSymbol}_${index}`}
                     borderBottom={
