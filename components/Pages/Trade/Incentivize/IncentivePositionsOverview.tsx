@@ -29,7 +29,7 @@ type Props = {
 const STATES = [IncentiveState.all, IncentiveState.active, IncentiveState.upcoming, IncentiveState.over]
 
 const menuOrTab = (
-  activeButton:any, setActiveButton:any, setColumnFilters:any, isMobile:boolean,
+  activeButton: any, setActiveButton: any, setColumnFilters: any, isMobile: boolean,
 ) => {
   if (isMobile) {
     return (<Menu >
@@ -111,8 +111,10 @@ const Token = ({ imgUrl, symbol }) => (
     <Image
       src={imgUrl}
       width="auto"
-      style={{ margin: 'unset',
-        borderRadius: '50%' }}
+      style={{
+        margin: 'unset',
+        borderRadius: '50%'
+      }}
       maxW="1.2rem"
       maxH="1.2rem"
       alt="token1-img"
@@ -142,9 +144,9 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
      */
     startDate: flow.startTime,
     endDate: flow.endTime,
-    value: num(flow.amount).
-      div(10 ** 6).
-      toNumber(),
+    value: Math.round(num(flow.amount).
+      div(10 ** flow?.token?.decimals || 6).
+      toNumber()),
     action: (
       <CloseAction
         poolId={poolId}
@@ -153,7 +155,7 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
       />
     ),
   })),
-  [flows])
+    [flows])
 
   if (positions.length === 0) {
     return (
