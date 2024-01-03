@@ -12,14 +12,14 @@ import { TxStep } from 'types/index'
 
 type Params = {
   isNative: boolean
-  denom: string
+  denom?: string
   enabled: boolean
   signingClient: SigningCosmWasmClient
   senderAddress: string
   contractAddress: string
   msgs: any | null
   encodedMsgs: any | null
-  amount?: string
+  amount?: string | number
   gasAdjustment?: number
   estimateEnabled?: boolean
   tokenAAmount?: number
@@ -31,7 +31,6 @@ type Params = {
 }
 
 export const useTransaction = ({
-  isNative,
   denom,
   contractAddress,
   enabled,
@@ -46,7 +45,6 @@ export const useTransaction = ({
   onError,
 }: Params) => {
   const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
-  // Const [tokenA, tokenB] = swapAssets
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
@@ -143,14 +141,12 @@ export const useTransaction = ({
 
   const { mutate } = useMutation(() => executeVault({
     amount,
-    isNative,
     denom,
     signingClient,
     injectiveSigningClient,
     contractAddress,
     senderAddress,
     msgs,
-    encodedMsgs,
   }),
   {
     onMutate: () => {
@@ -239,6 +235,7 @@ export const useTransaction = ({
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
+        console.log('onsucces')
         setTxStep(TxStep.Success)
         onSuccess?.(txHash, txInfo)
       }

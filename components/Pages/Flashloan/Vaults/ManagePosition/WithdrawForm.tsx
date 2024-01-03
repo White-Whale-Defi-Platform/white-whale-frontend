@@ -41,7 +41,7 @@ const WithdrawForm = ({
   const onSuccess = useCallback((txHash) => {
     refetch?.()
     toast({
-      title: 'Withdraw from Vault Success.',
+      title: 'Successful Withdrawal.',
       description: (
         <Finder txHash={txHash} chainId={chainId}>
           {' '}

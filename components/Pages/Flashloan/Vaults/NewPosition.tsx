@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
-import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
+import useVaults, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
@@ -14,7 +14,7 @@ import { chainState } from 'state/chainState'
 
 const NewPosition = () => {
   const router: NextRouter = useRouter()
-  const { vaults, refetch: vaultsRefetch } = useVault()
+  const { vaults, refetch: vaultsRefetch } = useVaults()
   const params = new URLSearchParams(location.search)
   const chains: Array<any> = useChainInfos()
   const { chainId, walletChainName } = useRecoilValue(chainState)

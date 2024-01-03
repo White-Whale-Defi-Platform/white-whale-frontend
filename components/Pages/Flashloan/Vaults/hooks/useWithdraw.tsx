@@ -10,6 +10,7 @@ import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
+import { isNativeToken } from 'services/asset'
 import { chainState } from 'state/chainState'
 
 type DepositProps = {
@@ -32,7 +33,7 @@ const useWithdraw = ({
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const amount = toChainAmount(token?.amount, token?.decimals)
+  const amount = toChainAmount(token?.amount)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
   const { msgs, encodedMsgs } = useMemo(() => {
@@ -55,9 +56,9 @@ const useWithdraw = ({
   }, [amount, tokenInfo, vaultAddress, address, lpToken])
 
   const tx = useTransaction({
-    isNative: false,
-    denom: tokenInfo?.denom,
-    contractAddress: lpToken,
+    isNative: isNativeToken(lpToken),
+    denom: lpToken,
+    contractAddress: vaultAddress,
     enabled: Boolean(encodedMsgs),
     signingClient,
     injectiveSigningClient,

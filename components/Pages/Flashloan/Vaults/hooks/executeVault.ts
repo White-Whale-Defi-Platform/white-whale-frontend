@@ -4,46 +4,34 @@ import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/c
 import { ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { getInjectiveTxData } from 'util/injective'
-import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
+import { createExecuteMessage } from 'util/messages/index'
 
 type ExecuteAddLiquidityArgs = {
-  isNative: boolean
   denom: string
-  amount: string
+  amount: string | number
   senderAddress: string
   contractAddress: string
   signingClient: SigningCosmWasmClient
   msgs: any
-  encodedMsgs: any
   injectiveSigningClient?: InjectiveSigningStargateClient
 }
 
 export const executeVault = async ({
-  isNative,
   denom,
   msgs,
-  encodedMsgs,
   amount,
   signingClient,
   injectiveSigningClient,
   contractAddress,
   senderAddress,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  if (!isNative) {
-    return validateTransactionSuccess(await signingClient.signAndBroadcast(
-      senderAddress,
-      encodedMsgs,
-      'auto',
-      null,
-    ))
-  }
-
   const funds = [coin(amount, denom)]
 
   if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const execMsg = createExecuteMessage({ senderAddress,
       contractAddress,
-      message: msgs })
+      message: msgs,
+      funds })
     const injectiveTxData = await getInjectiveTxData(
       injectiveSigningClient, senderAddress, [execMsg],
     )

@@ -7,6 +7,7 @@ import { useClients } from 'hooks/useClients'
 import { usePrices } from 'hooks/usePrices'
 import { formatPrice } from 'libs/num'
 import { useRecoilValue } from 'recoil'
+import { isNativeToken } from 'services/asset'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
@@ -64,17 +65,23 @@ const queryShare = (
 }
 const queryVault = async (
   cosmWasmClient: CosmWasmClient,
-  contractAddress: string,
-  tokenInfo: TokenInfo,
+  lpTokenAddress: string,
+  vaultAssetInfo: TokenInfo,
   prices: any,
+  vaultAddress: string,
 ) => {
-  const info = await cosmWasmClient.queryContractSmart(contractAddress, {
-    token_info: {},
-  })
+  let balance : any
+  if (isNativeToken(lpTokenAddress)) {
+    balance = (await cosmWasmClient.getBalance(vaultAddress, vaultAssetInfo?.denom))?.amount
+  } else {
+    balance = (await cosmWasmClient.queryContractSmart(lpTokenAddress, {
+      token_info: {},
+    }))?.total_supply
+  }
 
-  const dollarValue = prices[tokenInfo.symbol] * convertMicroDenomToDenom(info?.total_supply, tokenInfo.decimals)
-
-  return { ...info,
+  const dollarValue = prices[vaultAssetInfo.symbol] * convertMicroDenomToDenom(balance, vaultAssetInfo.decimals)
+  console.log('dollarvalue', dollarValue)
+  return {
     dollarValue: formatPrice(dollarValue) }
 }
 
@@ -83,22 +90,26 @@ const queryBalance = async (
   contractAddress: string,
   address: string,
   vaultAddress: string,
-  tokenInfo: TokenInfo,
+  vaultAssetInfo: TokenInfo,
   prices: any,
 ) => {
-  const lpBalance = await cosmWasmClient.queryContractSmart(contractAddress, {
-    balance: { address },
-  })
-
+  let lpBalance = 0
+  if (isNativeToken(contractAddress)) {
+    const balance = await cosmWasmClient.getBalance(address, contractAddress)
+    lpBalance = balance ? Number(balance.amount) : 0
+  } else {
+    lpBalance = (await cosmWasmClient.queryContractSmart(contractAddress, {
+      balance: { address },
+    }))?.balance
+  }
   const underlyingAssetAmount = await queryShare(
     cosmWasmClient,
     vaultAddress,
-    lpBalance?.balance,
+    lpBalance.toString(),
   )
-  const dollarValue = prices[tokenInfo.symbol] * convertMicroDenomToDenom(underlyingAssetAmount, tokenInfo.decimals)
-
+  const dollarValue = prices[vaultAssetInfo.symbol] * convertMicroDenomToDenom(underlyingAssetAmount, vaultAssetInfo.decimals)
   return {
-    lpBalance: lpBalance?.balance,
+    lpBalance,
     underlyingAssetAmount,
     dollarValue: formatPrice(dollarValue),
   }
@@ -174,22 +185,23 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     isLoading,
     refetch }
 }
-export const useVaultTotal = (lpTokenIds: any[]) => {
+export const useVaultTotal = (vaultParams: any[]) => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient } = useClients(walletChainName)
   const prices = usePrices()
 
   const { data: balance, isLoading } = useQuery(
-    ['vaultsInfo', lpTokenIds, chainId, prices],
-    async () => await Promise.all(lpTokenIds.map(({ lp_token, vault_assets }) => queryVault(
+    ['vaultsInfo', vaultParams, chainId, prices],
+    async () => await Promise.all(vaultParams.map(({ lp_token, vault_assets, vault_address }) => queryVault(
       cosmWasmClient,
       lp_token,
       vault_assets,
       prices,
+      vault_address,
     ))),
     {
       enabled:
-        Boolean(chainId) && Boolean(lpTokenIds) && Boolean(prices),
+        Boolean(chainId) && Boolean(vaultParams) && Boolean(prices),
       refetchOnMount: false,
     },
   )
@@ -218,9 +230,11 @@ export const useVaults = (options?: Parameters<typeof useQuery>[1]) => {
     vault_address,
     vault_assets,
   })))
-  const { balance: vaultInfo } = useVaultTotal(vaults?.vaults?.map(({ lp_token, vault_assets }) => ({
-    lp_token,
-    vault_assets,
+
+  const { balance: vaultInfo } = useVaultTotal(vaults?.vaults?.map((vault) => ({
+    lp_token: vault.lp_token,
+    vault_assets: vault.vault_assets,
+    vault_address: vault.vault_address,
   })))
 
   const withBalance = useMemo(() => {

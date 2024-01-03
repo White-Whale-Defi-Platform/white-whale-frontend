@@ -3,7 +3,7 @@ import { FC, useMemo, useState } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import AllVaultsTable from 'components/Pages/Flashloan/Vaults/AllVaultsTable'
-import useVault from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
+import useVaults from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -15,7 +15,7 @@ const Vaults: FC = () => {
     useState<boolean>(false)
   const { walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
-  const { vaults, isLoading } = useVault()
+  const { vaults, isLoading } = useVaults()
   const router = useRouter()
   const chainIdParam = router.query.chainId as string
 
