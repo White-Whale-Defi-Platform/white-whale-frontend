@@ -1,20 +1,20 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
-import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { TerraTreasuryService } from 'services/treasuryService'
 import { getInjectiveTxData } from 'util/injective'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
-export const claimRewards: any = async (
+export const createNewEpoch: any = async (
   signingClient: SigningCosmWasmClient,
-  address: string,
   config: Config,
+  address: string,
   injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
-    claim: {},
+    new_epoch: {},
   }
 
   const execMsg = createExecuteMessage({ senderAddress: address,

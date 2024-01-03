@@ -1,22 +1,30 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
-import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
+import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { TerraTreasuryService } from 'services/treasuryService'
 import { getInjectiveTxData } from 'util/injective'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
-export const withdrawTokens: any = async (
+export const unbondTokens: any = async (
   signingClient: SigningCosmWasmClient,
   address: string,
+  amount: number,
   denom: string,
   config: Config,
   injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
-    withdraw: {
-      denom,
+    unbond: {
+      asset: {
+        amount: amount.toString(),
+        info: {
+          native_token: {
+            denom,
+          },
+        },
+      },
     },
   }
 

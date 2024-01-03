@@ -4,7 +4,7 @@ import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import {
   Config,
   useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+} from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 

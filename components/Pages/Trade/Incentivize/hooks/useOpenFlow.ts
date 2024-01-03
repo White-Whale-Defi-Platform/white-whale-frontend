@@ -7,7 +7,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import {
   Config,
   useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+} from 'components/Pages/Bonding/hooks/useDashboardData'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
 import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'

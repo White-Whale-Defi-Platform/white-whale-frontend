@@ -1,32 +1,43 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMediaQuery, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import AssetInput from 'components/AssetInput/index'
-import { BondingTokenState, TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
-import { BondedData } from 'components/Pages/Dashboard/hooks/getBonded';
-import { useConfig } from 'components/Pages/Dashboard/hooks/useDashboardData';
+import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData';
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'
 
-const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
-  const { walletChainName, network, chainId } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+export interface BondingTokenState {
+  tokenSymbol: string
+  amount: number
+  decimals: number
+  denom: string
+}
+export interface TokenBalance {
+  amount: number
+  tokenSymbol: string
+}
+
+export const Bond = ({ balances, tokenSymbols }) => {
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)
-  const config = useConfig(network, chainId)
-  const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
+  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { isWalletConnected } = useChain(walletChainName)
+
+  const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
-    const newBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
-      tokenSymbol: asset.tokenSymbol }))
-    setBondedBalances(newBalances)
-  }, [bondedAssets])
+    if (balances && tokenSymbols) {
+      const newBalances = balances?.map((balance: number, idx: number) => ({ amount: balance,
+        tokenSymbol: tokenSymbols[idx] }))
+      setTokenBalances(newBalances)
+    }
+  }, [balances, tokenSymbols])
 
-  const onInputChange = useCallback((tokenSymbol: string | null, amount: number) => {
+  const onInputChange = (tokenSymbol: string | null, amount: number) => {
     if (tokenSymbol) {
       setCurrentBondState({
         ...currentBondState,
@@ -37,18 +48,16 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
       setCurrentBondState({ ...currentBondState,
         amount: Number(amount) })
     }
-  },
-  [currentBondState])
+  }
+  const config = useConfig(network, chainId)
 
   useEffect(() => {
     if (config) {
-      // eslint-disable-next-line prefer-destructuring
-      const firstToken = config.bonding_tokens[0]
       setCurrentBondState({
-        tokenSymbol: firstToken.tokenSymbol,
+        tokenSymbol: config.bonding_tokens[0].tokenSymbol,
         amount: 0,
         decimals: 6,
-        denom: firstToken.denom,
+        denom: config.bonding_tokens[0].denom,
       })
     }
   }, [isWalletConnected, config])
@@ -59,12 +68,10 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
       currentBondState,
     },
   })
-
-  const currentTokenBalance = useMemo(() => bondedBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol)?.amount,
-    [bondedBalances, currentBondState.tokenSymbol])
-
+  const currentTokenBalance = useMemo(() => tokenBalances?.find((balance) => balance.tokenSymbol === currentBondState.tokenSymbol)?.amount,
+    [tokenBalances, currentBondState.tokenSymbol])
   return (
-    <VStack px={7} width="full">
+    <VStack px={7} width="full" >
       <Controller
         name="currentBondState"
         control={control}
@@ -73,7 +80,6 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
           <AssetInput
             mobile={isMobile}
             isBonding={true}
-            unbondingBalances={bondedBalances}
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
@@ -102,5 +108,3 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
     </VStack>
   )
 }
-
-export default Unbond

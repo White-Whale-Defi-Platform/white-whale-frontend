@@ -11,13 +11,13 @@ import {
   keyframes,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
-import { BondingActionTooltip } from 'components/Pages/Dashboard/BondingActions/BondingActionTooltip'
-import useTransaction from 'components/Pages/Dashboard/BondingActions/hooks/useTransaction'
+import { BondingActionTooltip } from 'components/Pages/Bonding/BondingActions/BondingActionTooltip'
+import useTransaction from 'components/Pages/Bonding/BondingActions/hooks/useTransaction'
 import {
   Config,
   useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { RewardsTooltip } from 'components/Pages/Dashboard/RewardsTooltip'
+} from 'components/Pages/Bonding/hooks/useDashboardData'
+import { RewardsTooltip } from 'components/Pages/Bonding/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { kBorderRadius, kBg } from 'constants/visualComponentConstants'
 import { useRecoilValue } from 'recoil'

@@ -1,4 +1,4 @@
-import { BondingTokenState } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { BondingTokenState } from 'components/Pages/Bonding/BondingActions/Bond'
 import { atom } from 'recoil'
 
 export const bondingAtom = atom<BondingTokenState>({

@@ -10,7 +10,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { Asset } from 'types/index'
 
 import AssetList from './AssetList'

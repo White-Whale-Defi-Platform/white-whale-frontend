@@ -1,4 +1,4 @@
-import Dashboard from 'components/Pages/Dashboard'
+import Dashboard from 'components/Pages/Bonding'
 
 const DashboardPage = () => <Dashboard />
 

@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import {
   Config,
   useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+} from 'components/Pages/Bonding/hooks/useDashboardData'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useClients } from 'hooks/useClients'

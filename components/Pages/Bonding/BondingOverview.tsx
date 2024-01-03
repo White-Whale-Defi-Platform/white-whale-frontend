@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
-import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
-import { BondingData } from 'components/Pages/Dashboard/types/BondingData'
+import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
+import { BondingData } from 'components/Pages/Bonding/types/BondingData'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 import { Cell, Pie, PieChart } from 'recharts'

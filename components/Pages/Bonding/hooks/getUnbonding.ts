@@ -1,5 +1,5 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { fetchConfig } from 'components/Pages/Dashboard/hooks/getBondingConfig'
+import { fetchConfig } from 'components/Pages/Bonding/hooks/getBondingConfig'
 import { convertMicroDenomToDenom } from 'util/conversion'
 import { nanoToMilli } from 'util/conversion/timeUtil'
 
