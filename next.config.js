@@ -40,6 +40,11 @@ const config = {
         permanent: false,
       },
       {
+        source: '/bonding',
+        destination: '/migaloo/bonding',
+        permanent: false,
+      },
+      {
         source: '/pools',
         destination: '/migaloo/pools',
         permanent: false,

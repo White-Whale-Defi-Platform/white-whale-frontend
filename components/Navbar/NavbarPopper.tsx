@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -14,13 +14,12 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { BRIDGE_NETWORK_DEFAULTS } from 'constants/index'
 import { kBg } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'
 
-const NavbarPopper = ({ menu, currentChainName, chainId }) => {
+const NavbarPopper = ({ menu, currentChainName }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
   const numberOfLinks = menu.children?.length
@@ -35,23 +34,14 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
     return Boolean(linkInAsPath)
   }, [asPath, menu])
 
-  const openLink =
-    (url: string): (() => void) => () => {
-      window.open(url, '_blank')
-    }
-
   return (
     <Popover
       placement="bottom"
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      // Children defining sub menu items
-      onOpen={
-        menu.isExternal
-          ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
-          : !menu?.children
-            ? () => window.location.assign(`/${currentChainName}${menu.link}`)
-            : onOpen
+      onOpen={!menu?.children
+        ? () => window.location.assign(`/${currentChainName}${menu.link}`)
+        : onOpen
       }
       onClose={onClose}
     >
@@ -63,9 +53,6 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
           >
             {menu.label}
             {menu.children ? <ChevronDownIcon /> : null}
-            {menu.isExternal ? (
-              <ExternalLinkIcon paddingLeft={''} paddingBottom={'1'} />
-            ) : null}
           </Text>
         </HStack>
       </PopoverTrigger>
