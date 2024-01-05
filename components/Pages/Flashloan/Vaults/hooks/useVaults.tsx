@@ -54,13 +54,13 @@ export type VaultsResponse = {
 const queryShare = (
   cosmWasmClient: CosmWasmClient,
   contractAddress: string,
-  amount: string,
+  amount: number,
 ) => {
   if (!amount) {
     return null
   }
   return cosmWasmClient.queryContractSmart(contractAddress, {
-    share: { amount },
+    share: { amount: amount.toString() },
   })
 }
 const queryVault = async (
@@ -80,7 +80,7 @@ const queryVault = async (
   }
 
   const dollarValue = prices[vaultAssetInfo.symbol] * convertMicroDenomToDenom(balance, vaultAssetInfo.decimals)
-  console.log('dollarvalue', dollarValue)
+
   return {
     dollarValue: formatPrice(dollarValue) }
 }
@@ -105,7 +105,7 @@ const queryBalance = async (
   const underlyingAssetAmount = await queryShare(
     cosmWasmClient,
     vaultAddress,
-    lpBalance.toString(),
+    lpBalance,
   )
   const dollarValue = prices[vaultAssetInfo.symbol] * convertMicroDenomToDenom(underlyingAssetAmount, vaultAssetInfo.decimals)
   return {
@@ -130,7 +130,7 @@ export const useVaultDeposit = (
     isLoading,
     refetch,
   } = useQuery(
-    ['vaultsDeposit', lpToken, chainId],
+    ['vaultsDeposit', lpToken, chainId, address],
     async () => await queryBalance(
       cosmWasmClient,
       lpToken,
@@ -163,7 +163,7 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     isLoading,
     refetch,
   } = useQuery(
-    ['vaultsDeposits', lpTokens, chainId, prices],
+    ['vaultsDeposits', lpTokens, chainId, prices, address],
     async () => await Promise.all(lpTokens.map(({ lp_token, vault_address, vault_assets }) => queryBalance(
       cosmWasmClient,
       lp_token,
@@ -175,6 +175,7 @@ export const useVaultMultiDeposit = (lpTokens: any[]) => {
     {
       enabled:
         Boolean(chainId) &&
+        Boolean(address) &&
         Boolean(cosmWasmClient) &&
         Boolean(lpTokens?.length) &&
         Boolean(prices),

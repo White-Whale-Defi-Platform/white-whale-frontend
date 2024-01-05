@@ -11,19 +11,11 @@ import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/index'
 
 type Params = {
-  isNative: boolean
-  denom?: string
   enabled: boolean
   signingClient: SigningCosmWasmClient
   senderAddress: string
-  contractAddress: string
-  msgs: any | null
-  encodedMsgs: any | null
+  executionMsgs: any | null
   amount?: string | number
-  gasAdjustment?: number
-  estimateEnabled?: boolean
-  tokenAAmount?: number
-  tokenBAmount?: number
   injectiveSigningClient?: InjectiveSigningStargateClient
   onBroadcasting?: (txHash: string) => void
   onSuccess?: (txHash: string, txInfo?: any) => void
@@ -31,20 +23,17 @@ type Params = {
 }
 
 export const useTransaction = ({
-  denom,
-  contractAddress,
   enabled,
   signingClient,
   injectiveSigningClient,
   senderAddress,
-  msgs,
-  encodedMsgs,
   amount,
+  executionMsgs,
   onBroadcasting,
   onSuccess,
   onError,
 }: Params) => {
-  const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
+  const debouncedMsgs = useDebounceValue(executionMsgs, 200)
   const toast = useToast()
 
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
@@ -103,10 +92,6 @@ export const useTransaction = ({
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
           throw new Error('Insufficient Funds')
-        } else if ((/account sequence mismatch/u).test(error?.toString())) {
-          setError('You have pending transaction')
-          setButtonLabel('You have pending transaction')
-          throw new Error('You have pending transaction')
         } else if ((/Max spread assertion/u).test(error.toString())) {
           console.error(error)
           setTxStep(TxStep.Idle)
@@ -140,13 +125,10 @@ export const useTransaction = ({
   )
 
   const { mutate } = useMutation(() => executeVault({
-    amount,
-    denom,
     signingClient,
     injectiveSigningClient,
-    contractAddress,
     senderAddress,
-    msgs,
+    executionMsgs,
   }),
   {
     onMutate: () => {
@@ -209,7 +191,7 @@ export const useTransaction = ({
       onBroadcasting?.(data.transactionHash || data?.txHash)
       queryClient.invalidateQueries([
         'vaultsInfo',
-        'vaultsDposits',
+        'vaultsDeposits',
         'vaultsDeposit',
         'multipleTokenBalances',
         'tokenBalance',
@@ -224,10 +206,10 @@ export const useTransaction = ({
   }
 
   const submit = useCallback(() => {
-    if (!(!fee || !msgs || msgs.length < 1)) {
+    if (!(!fee || !executionMsgs || executionMsgs.length < 1)) {
       mutate()
     }
-  }, [msgs, fee, mutate])
+  }, [executionMsgs, fee, mutate])
 
   useEffect(() => {
     if (txInfo && txHash) {
@@ -235,12 +217,11 @@ export const useTransaction = ({
         setTxStep(TxStep.Failed)
         onError?.(txHash, txInfo)
       } else {
-        console.log('onsucces')
         setTxStep(TxStep.Success)
         onSuccess?.(txHash, txInfo)
       }
     }
-  }, [txInfo, onError, onSuccess, txHash])
+  }, [txInfo, txHash])
 
   useEffect(() => {
     if (error) {

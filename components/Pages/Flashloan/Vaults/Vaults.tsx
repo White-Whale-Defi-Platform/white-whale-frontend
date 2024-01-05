@@ -26,18 +26,16 @@ const Vaults: FC = () => {
     setAllVaultsInitialized(true)
 
     return vaults?.vaults.map((vault) => {
-      const ctaLabel = vault?.hasDeposit ? 'Manage Position' : 'New Position'
-      const url = `/${chainIdParam}/vaults/${
-        vault?.hasDeposit ? 'manage_position' : 'new_position'
-      }?vault=${vault.vault_assets?.symbol}`
+      const ctaLabel = 'Manage Position'
+      const url = `/${chainIdParam}/vaults/manage_position?vault=${vault.vault_assets?.symbol}`
       return {
         vaultId: vault?.pool_id,
         tokenImage: vault.vault_assets?.logoURI,
         apr: 'coming soon',
         totalDeposits: vault?.totalDeposit
           ? `$${vault?.totalDeposit?.dollarValue}`
-          : 'n/a',
-        myDeposit: vault?.deposits ? `$${vault?.deposits?.dollarValue}` : 'n/a',
+          : '$0',
+        myDeposit: vault?.deposits ? `$${vault?.deposits?.dollarValue}` : '$0',
         cta: () => router.push(url),
         ctaLabel,
       }

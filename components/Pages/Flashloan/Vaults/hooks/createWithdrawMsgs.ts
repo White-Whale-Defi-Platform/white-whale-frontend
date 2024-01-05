@@ -21,8 +21,9 @@ export const createWithdrawExecuteMsgs = ({
   senderAddress,
 }) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
+  const isNative = isNativeToken(lpToken)
 
-  if (!isNativeToken(lpToken)) {
+  if (!isNative) {
     increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
       tokenAmount: amount,
       tokenAddress: lpToken,
@@ -34,11 +35,14 @@ export const createWithdrawExecuteMsgs = ({
     ...increaseAllowanceMessages,
     createExecuteMessage({
       senderAddress,
-      contractAddress: isNativeToken(lpToken) ? vaultAddress : lpToken,
-      message: isNativeToken(lpToken) ? {
-        withdraw: {
-        } } : createWithdrawMsg({ amount,
-        vaultAddress }),
-      funds: isNativeToken(lpToken) ? [coin(amount, lpToken)] : [] }),
+      contractAddress: isNative ? vaultAddress : lpToken,
+      message: isNative ? {
+        withdraw: {},
+      } : createWithdrawMsg({
+        amount,
+        vaultAddress,
+      }),
+      funds: isNative ? [coin(amount, lpToken)] : [],
+    }),
   ]
 }
