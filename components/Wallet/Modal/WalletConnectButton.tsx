@@ -5,6 +5,7 @@ import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
+import NinjiWalletIcon from 'components/Icons/NinjiWalletIcon'
 import { ShellWalletIcon } from 'components/Icons/ShellWalletIcon'
 import { TerraStationWalletIcon } from 'components/Icons/TerraStationWalletIcon'
 import { WalletConnectIcon } from 'components/Icons/WalletConnectIcon'
@@ -91,6 +92,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return 'Leap Wallet'
       case WalletType.leapSnap:
         return 'Leap Metamask Snap'
+      case WalletType.ninjiExtension:
+        return 'Ninji Wallet'
       default:
         return null
     }
@@ -116,6 +119,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return <WalletConnectIcon />
       case WalletType.leapSnap:
         return <LeapSnapIcon />
+      case WalletType.ninjiExtension:
+        return <NinjiWalletIcon />
       default:
         return null
     }
