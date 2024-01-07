@@ -68,7 +68,7 @@ export const getCoinhallPairInfos = async (swapAddresses: any[]): Promise<any> =
   }
   return []
 }
-export const getPairAprAndDailyVolume = async (pools: any[],
+export const getPairAprAndDailyVolumeByEnigma = async (pools: any[],
   chainPrefix: any): Promise<PoolData[]> => {
   const poolIds = pools?.map((pool: any) => pool.pool_id)
   const pairInfos: PoolResponse[] = await getPairInfos(chainPrefix)
@@ -93,7 +93,7 @@ export const getPairAprAndDailyVolume = async (pools: any[],
       } as PoolData
     })
   }
-  console.log('No pair infos found')
+  console.log('No enigma pair infos found')
   return poolIds?.map((poolId: any) => ({
     pool_id: poolId,
     TVL: 'n/a',
@@ -141,7 +141,7 @@ export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<
       } as PoolData
     })
   }
-  console.log('No pair infos found')
+  console.log('No coinhall pair infos found')
   return swapAddresses?.map((swapAddress: any) => {
     const poolId = pools.find((pool: any) => pool.swap_address === swapAddress).pool_id
     return {

@@ -43,6 +43,7 @@ type AllPoolData = PoolEntityTypeWithLiquidity &
 const Pools = () => {
   const [allPools, setAllPools] = useState<any[]>([])
   const [isInitLoading, setInitLoading] = useState<boolean>(true)
+  const [externalStatsLoading, setExternalStatsLoading] = useState<boolean>(true)
 
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
@@ -74,11 +75,9 @@ const Pools = () => {
   const {
     flowPoolData: incentivePoolInfos,
     poolsWithAprAnd24HrVolume: pairInfos,
-    isLoading: isIncentivePoolInfoLoading,
   } = useIncentivePoolInfo(
     cosmWasmClient, pools, currentChainPrefix,
   )
-
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
@@ -108,6 +107,11 @@ const Pools = () => {
         const isUSDPool =
             STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
             STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+
+        if (externalStatsLoading) {
+          setExternalStatsLoading((pool?.liquidity?.reserves?.totalAssetsInDollar || 0) === 0)
+        }
+
         return {
           contract: pool?.swap_address,
           pool: pool?.displayName,
@@ -143,19 +147,36 @@ const Pools = () => {
   }, [pools])
 
   useEffect(() => {
-    if (isIncentivePoolInfoLoading || pairInfos.length === 0) {
+    if (pairInfos.length === 0) {
       return
     }
-    const updatedPools = allPools.map((pool) => {
+    let updatedPools = allPools.map((pool) => {
       const pairInfo = pairInfos.find((pairInfo) => pairInfo.pool_id === pool.poolId)
       return {
         ...pool,
         volume24hr: pairInfo?.usdVolume24h,
         apr: pairInfo?.apr7d,
+        totalLiq: pool.totalLiq === 0 ? pairInfo?.TVL : pool.totalLiq,
       }
     })
+
+    if (myPoolsLength > 0) {
+      const myPools = pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+      const myPoolIds = myPools.map((pool) => pool.pool_id)
+      updatedPools = updatedPools.map((pool) => {
+        if (myPoolIds.includes(pool.poolId)) {
+          return {
+            ...pool,
+            liquidity: myPools.find((row) => row.pool_id === pool.poolId).
+              liquidity,
+          }
+        }
+        return pool
+      })
+    }
     setAllPools(updatedPools)
-  }, [pairInfos, isIncentivePoolInfoLoading])
+    setExternalStatsLoading(false)
+  }, [myPoolsLength, pairInfos?.length])
 
   const flowLength = useMemo(() => incentivePoolInfos?.
     map((info) => info.flowData?.length ?? 0).
@@ -188,24 +209,6 @@ const Pools = () => {
     })
     setAllPools(updatedPools)
   }, [flowLength, isInitLoading])
-
-  useEffect(() => {
-    if (myPoolsLength > 0) {
-      const myPools = pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-      const myPoolIds = myPools.map((pool) => pool.pool_id)
-      const updatedPools = allPools.map((pool) => {
-        if (myPoolIds.includes(pool.poolId)) {
-          return {
-            ...pool,
-            liquidity: myPools.find((row) => row.pool_id === pool.poolId).
-              liquidity,
-          }
-        }
-        return pool
-      })
-      setAllPools(updatedPools)
-    }
-  }, [myPoolsLength])
 
   const [myPools, setMyPools] = useState([])
 
@@ -250,7 +253,7 @@ const Pools = () => {
           <MyPoolsTable
             show={true}
             pools={myPools}
-            isLoading={isLoading || isInitLoading}
+            isLoading={isLoading || isInitLoading || externalStatsLoading}
           />
           <MobilePools pools={myPools} />
         </Box>
@@ -300,7 +303,7 @@ const Pools = () => {
         </HStack>
         <AllPoolsTable
           pools={showAllPoolsList}
-          isLoading={isLoading || isInitLoading}
+          isLoading={isLoading || isInitLoading || externalStatsLoading}
         />
         <MobilePools pools={showAllPoolsList} ctaLabel="Manage" />
       </Box>
