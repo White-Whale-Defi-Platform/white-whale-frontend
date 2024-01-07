@@ -142,6 +142,7 @@ export const useVaultDeposit = (
     {
       enabled:
         Boolean(chainId) &&
+        Boolean(address) &&
         Boolean(cosmWasmClient) &&
         Boolean(lpToken) &&
         Boolean(prices),
@@ -202,7 +203,7 @@ export const useVaultTotal = (vaultParams: any[]) => {
     ))),
     {
       enabled:
-        Boolean(chainId) && Boolean(vaultParams) && Boolean(prices),
+        Boolean(chainId) && Boolean(vaultParams) && Boolean(prices) && Boolean(cosmWasmClient) && Boolean(vaultParams?.length),
       refetchOnMount: false,
     },
   )
