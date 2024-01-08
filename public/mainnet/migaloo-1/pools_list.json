@@ -449,6 +449,100 @@
       "lp_token": "factory/migaloo1ke0krjh5v3emzv5wdut6q7l0gednv7cx7naxqweae44jz8cxxq9srhy6dz/uLP",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "OPHIR-WHALE",
+      "lpOrder": [
+        "OPHIR",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "OPHIR",
+        "WHALE"
+      ],
+      "displayName": "OPHIR-WHALE",
+      "displayLogo1": "/logos/ophir.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1t862qdu9mj5hr3j727247acypym3ej47axu22rrapm4tqlcpuseqltxwq5/ophir",
+          "symbol": "OPHIR",
+          "name": "OPHIR",
+          "decimals": 6,
+          "logoURI": "/logos/ophir.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1t862qdu9mj5hr3j727247acypym3ej47axu22rrapm4tqlcpuseqltxwq5/ophir"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo1p5adwk3nl9pfmjjx6fu9mzn4xfjry4l2x086yq8u8sahfv6cmuyspryvyu",
+      "lp_token": "factory/migaloo1p5adwk3nl9pfmjjx6fu9mzn4xfjry4l2x086yq8u8sahfv6cmuyspryvyu/uLP",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "PLNK-WHALE",
+      "lpOrder": [
+        "PLNK",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "PLNK",
+        "WHALE"
+      ],
+      "displayName": "PLNK-WHALE",
+      "displayLogo1": "/logos/plnk.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/E49A6D116739E0920F8F2D68A8F0A8E07DC272FA1421F70CAD738463AA296724",
+          "symbol": "PLNK",
+          "name": "PLNK",
+          "decimals": 6,
+          "logoURI": "/logos/plnk.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/E49A6D116739E0920F8F2D68A8F0A8E07DC272FA1421F70CAD738463AA296724"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo195rkvthzyndrguzxhulca4wmgten7aja49vvj4pq9wfm7azd3ahq84r3d2",
+      "lp_token": "factory/migaloo195rkvthzyndrguzxhulca4wmgten7aja49vvj4pq9wfm7azd3ahq84r3d2/uLP",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
