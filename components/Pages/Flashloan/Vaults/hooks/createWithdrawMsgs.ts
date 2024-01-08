@@ -1,4 +1,6 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import { coin } from '@cosmjs/stargate'
+import { isNativeToken } from 'services/asset'
 import { toBase64 } from 'util/conversion/index'
 import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages/index'
 
@@ -19,21 +21,28 @@ export const createWithdrawExecuteMsgs = ({
   senderAddress,
 }) => {
   const increaseAllowanceMessages: Array<MsgExecuteContractEncodeObject> = []
+  const isNative = isNativeToken(lpToken)
 
-  increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
-    tokenAmount: amount,
-    tokenAddress: lpToken,
-    senderAddress,
-    swapAddress: vaultAddress,
-  }))
-
+  if (!isNative) {
+    increaseAllowanceMessages.push(createIncreaseAllowanceMessage({
+      tokenAmount: amount,
+      tokenAddress: lpToken,
+      senderAddress,
+      swapAddress: vaultAddress,
+    }))
+  }
   return [
     ...increaseAllowanceMessages,
     createExecuteMessage({
       senderAddress,
-      contractAddress: lpToken,
-      message: createWithdrawMsg({ amount,
-        vaultAddress }),
+      contractAddress: isNative ? vaultAddress : lpToken,
+      message: isNative ? {
+        withdraw: {},
+      } : createWithdrawMsg({
+        amount,
+        vaultAddress,
+      }),
+      funds: isNative ? [coin(amount, lpToken)] : [],
     }),
   ]
 }

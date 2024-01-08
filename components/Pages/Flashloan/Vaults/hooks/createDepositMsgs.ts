@@ -2,10 +2,6 @@ import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages/index'
 
-export const createDepositMsg = ({ amount }) => ({
-  deposit: { amount },
-})
-
 export const createDepositExecuteMsgs = ({
   amount,
   vaultAddress,
@@ -28,7 +24,9 @@ export const createDepositExecuteMsgs = ({
     createExecuteMessage({
       senderAddress,
       contractAddress: vaultAddress,
-      message: createDepositMsg({ amount }),
+      message: {
+        deposit: { amount },
+      },
       funds: [tokenInfo?.native && coin(amount, tokenInfo.denom)].filter(Boolean),
     }),
   ]

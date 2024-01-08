@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import { createDepositExecuteMsgs, createDepositMsg } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
+import { createDepositExecuteMsgs } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
 import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useClients } from 'hooks/useClients'
 import { useTokenInfo } from 'hooks/useTokenInfo'
@@ -26,32 +26,25 @@ const useDeposit = ({ vaultAddress, token, onSuccess }: DepositProps) => {
   const amount = toChainAmount(token?.amount, token.decimals)
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
 
-  const { msgs, encodedMsgs } = useMemo(() => {
+  const executionMsgs = useMemo(() => {
     if (!tokenInfo || !Number(amount)) {
-      return {}
+      return null
     }
 
-    return {
-      msgs: createDepositMsg({ amount }),
-      encodedMsgs: createDepositExecuteMsgs({
-        amount,
-        senderAddress: address,
-        vaultAddress,
-        tokenInfo,
-      }),
-    }
+    return createDepositExecuteMsgs({
+      amount,
+      senderAddress: address,
+      vaultAddress,
+      tokenInfo,
+    })
   }, [amount, tokenInfo, vaultAddress, address])
 
   const tx = useTransaction({
-    isNative: tokenInfo?.native,
-    denom: tokenInfo?.denom,
-    contractAddress: vaultAddress,
-    enabled: Boolean(encodedMsgs),
+    enabled: Boolean(executionMsgs),
     signingClient,
     injectiveSigningClient,
     senderAddress: address,
-    msgs,
-    encodedMsgs,
+    executionMsgs,
     amount,
     onSuccess,
   })
