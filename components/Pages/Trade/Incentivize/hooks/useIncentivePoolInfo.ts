@@ -14,7 +14,7 @@ import { usePrices } from 'hooks/usePrices'
 import { useRecoilValue } from 'recoil'
 import {
   PoolData,
-  getPairAprAndDailyVolume,
+  getPairAprAndDailyVolumeByEnigma,
   getPairAprAndDailyVolumeByCoinhall,
 } from 'services/poolDataProvider'
 import { chainState } from 'state/chainState'
@@ -193,7 +193,7 @@ export const useIncentivePoolInfo = (
       const poolData =
         currentChainPrefix === 'terra' && chainId !== ChainId.terrac
           ? await getPairAprAndDailyVolumeByCoinhall(pools)
-          : await getPairAprAndDailyVolume(pools, currentChainPrefix)
+          : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
       if (poolData[0]?.ratio === 0) {
         console.log('No pair infos found, trying Coinhall')
         const poolDataFromCoinhall = await getPairAprAndDailyVolumeByCoinhall(pools)
