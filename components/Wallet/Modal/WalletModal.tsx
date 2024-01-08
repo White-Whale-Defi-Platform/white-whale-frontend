@@ -24,7 +24,8 @@ export enum WalletType {
   leapMobile = 'leap-cosmos-mobile',
   leapSnap = 'leap-metamask-cosmos-snap',
   cosmoStationExtension = 'cosmostation-extension',
-  cosmoStationMobile = 'cosmostation-mobile'
+  cosmoStationMobile = 'cosmostation-mobile',
+  ninjiExtension = 'ninji-extension',
 }
 
 export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
@@ -41,10 +42,12 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
     const inApp = isMobile && window.leap && window.leap.mode === 'mobile-web'
-    const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension)
+    const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension || walletName === WalletType.ninjiExtension)
     if (inj) {
       return true
     } else if (chainId.includes('injective') && !inApp) {
+      return false
+    } else if (walletName === WalletType.ninjiExtension && !chainId.includes('injective')) {
       return false
     }
     if (inj && inApp && walletName === WalletType.leapExtension) {

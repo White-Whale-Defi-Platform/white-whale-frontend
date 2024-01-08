@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
-import useVault, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
+import useVaults, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
 import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePosition/WithdrawForm'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
@@ -26,7 +26,7 @@ import { chainState } from 'state/chainState'
 
 const ManagePosition = () => {
   const router: NextRouter = useRouter()
-  const { vaults, refetch: vaultsRefetch } = useVault()
+  const { vaults, refetch: vaultsRefetch } = useVaults()
   const chains: Array<any> = useChainInfos()
   const params = new URLSearchParams(location.search)
   const { chainId, walletChainName } = useRecoilValue(chainState)
@@ -75,9 +75,7 @@ const ManagePosition = () => {
       width={{ base: '100%',
         md: '700px' }}
       alignItems="center"
-      padding={5}
-      // Margin="auto"
-    >
+      padding={5}>
       <HStack
         justifyContent="space-between"
         width="full"

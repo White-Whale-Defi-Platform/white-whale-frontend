@@ -11,7 +11,7 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet,
-    getOfflineSignerDirect,
+    getOfflineSignerDirect
   } = useChain(walletChainName)
   if (isWalletConnected && !wallet.name.includes('station')) {
     try {

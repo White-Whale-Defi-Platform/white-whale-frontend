@@ -43,7 +43,7 @@ const DepositForm = ({
   const onSuccess = useCallback((txHash) => {
     refetch?.()
     toast({
-      title: 'Deposit to Vault Success.',
+      title: 'Deposit To Vault Successful.',
       description: (
         <Finder txHash={txHash} chainId={chainId}>
           {' '}
