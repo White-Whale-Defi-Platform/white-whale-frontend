@@ -107,7 +107,7 @@ const RewardsComponent = ({
   isWalletConnected,
   whalePrice,
   currentEpoch,
-  localTotalBonded,
+  myTotalBonding,
   globalTotalBonded,
   feeDistributionConfig,
   annualRewards,
@@ -128,22 +128,22 @@ const RewardsComponent = ({
 
   const genesisStartTimeInNano = Number(feeDistributionConfig?.epoch_config?.genesis_epoch ?? 0)
 
-  const localWeight = Number(weightInfo?.weight)
+  const myWeight = Number(weightInfo?.weight)
 
-  const multiplierRatio = Math.max((localWeight || 0) / (localTotalBonded || 1),
+  const multiplierRatio = Math.max((myWeight || 0) / (myTotalBonding || 1),
     1)
-  const localEmission = annualRewards * (localWeight / (globalInfo?.weight || 0))
-  const localAPR = (localEmission / localTotalBonded) * 1_000_000 * 100
+  const myYearlyEmission = annualRewards * (myWeight / (globalInfo?.weight || 0))
+  const myApr = (myYearlyEmission / myTotalBonding) * 1_000_000 * 100
 
-  const defaultAPR = (annualRewards * (1_000_000 / (globalInfo?.weight || 0))) * 100
-  const apr = useMemo(() => (localAPR ? localAPR : defaultAPR),
+  const defaultApr = (annualRewards * (1_000_000 / (globalInfo?.weight || 0))) * 100
+  const apr = useMemo(() => (myApr ? myApr : defaultApr),
     [annualRewards, globalTotalBonded])
 
   const { txStep, submit } = useTransaction()
 
   if (window.debugLogsEnabled) {
     console.log('new APR: ', apr)
-    console.log('default APR: ', defaultAPR)
+    console.log('default APR: ', defaultApr)
     console.log('old APR with multiplier: ', ((annualRewards || 0) / (globalTotalBonded || 1)) * 100 * multiplierRatio)
     console.log('old APR w/o multiplier: ', ((annualRewards || 0) / (globalTotalBonded || 1)) * 100)
   }

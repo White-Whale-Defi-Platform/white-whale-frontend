@@ -5,7 +5,24 @@
   },
   {
     "label": "Bonding",
-    "link": "/bonding"
+    "children": [
+      {
+        "label": "Overview",
+        "link": "/bonding"
+      },
+      {
+        "label": "Bond",
+        "link": "/bonding/bond"
+      },
+      {
+        "label": "Unbond",
+        "link": "/bonding/unbond"
+      },
+      {
+        "label": "Withdraw",
+        "link": "/bonding/withdraw"
+      }
+    ]
   },
   {
     "label": "Trade",

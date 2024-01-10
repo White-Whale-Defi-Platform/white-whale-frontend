@@ -156,7 +156,7 @@ const Pools = () => {
         ...pool,
         volume24hr: pairInfo?.usdVolume24h,
         apr: pairInfo?.apr7d,
-        totalLiq: pool.totalLiq === 0 ? pairInfo?.TVL : pool.totalLiq,
+        totalLiq: pool.totalLiq === 0 ? pairInfo?.tvl : pool.totalLiq,
       }
     })
 

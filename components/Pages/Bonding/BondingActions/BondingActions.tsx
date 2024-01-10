@@ -40,10 +40,10 @@ const BondingActions = ({ globalAction }) => {
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingAtom)
 
-  const [liquidBalances, _] = useMultipleTokenBalance(symbols)
+  const [liquidBalances] = useMultipleTokenBalance(symbols)
 
   const {
-    bondedAssets,
+    myBondedAssets,
     withdrawableInfos,
     bondingConfig,
     unbondingRequests,
@@ -78,7 +78,7 @@ const BondingActions = ({ globalAction }) => {
     const onClick = async () => {
       setCurrentBondState({ ...currentBondState,
         amount: 0 })
-      await router.push(`/${chainName}/dashboard/${actionString}`)
+      await router.push(`/${chainName}/bonding/${actionString}`)
     }
 
     return (
@@ -134,7 +134,7 @@ const BondingActions = ({ globalAction }) => {
           aria-label="go back"
           icon={<ArrowBackIcon />}
           onClick={async () => {
-            await router.push(`/${chainName}/dashboard`)
+            await router.push(`/${chainName}/bonding`)
             setCurrentBondState({ ...currentBondState,
               amount: 0 })
           }}
@@ -217,7 +217,7 @@ const BondingActions = ({ globalAction }) => {
                     <Bond balances={liquidBalances} tokenSymbols={symbols} />
                   )
                 case ActionType.unbond:
-                  return <Unbond bondedAssets={bondedAssets} />
+                  return <Unbond bondedAssets={myBondedAssets} />
                 case ActionType.withdraw:
                   return (
                     <Withdraw

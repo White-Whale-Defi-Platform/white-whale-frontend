@@ -92,7 +92,6 @@ const Navbar = () => {
               key={menu.label}
               menu={menu}
               currentChainName={chainName}
-              chainId={chainId}
             />
           ))}
         </Card>

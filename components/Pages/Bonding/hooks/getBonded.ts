@@ -46,13 +46,13 @@ export const getBonded = async (
     return null
   }
 
-  const bondedInfo = await fetchBonded(
+  const myBondedInfo = await fetchBonded(
     client, address, config,
   )
 
-  const localTotalBonded = Number(bondedInfo?.total_bonded ?? 0)
+  const myTotalBonding = Number(myBondedInfo?.total_bonded ?? 0)
 
-  const bondedAssets: BondedData[] = bondedInfo?.bonded_assets.map((asset) => {
+  const myBondedAssets: BondedData[] = myBondedInfo?.bonded_assets.map((asset) => {
     const { denom } = asset.info.native_token
     const tokenSymbol = config.bonding_tokens.find((token) => token.denom === denom)?.tokenSymbol
 
@@ -62,6 +62,6 @@ export const getBonded = async (
       tokenSymbol,
     }
   })
-  return { bondedAssets,
-    localTotalBonded }
+  return { myBondedAssets,
+    myTotalBonding }
 }

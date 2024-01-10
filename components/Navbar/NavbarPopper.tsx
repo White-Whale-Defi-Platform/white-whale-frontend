@@ -24,6 +24,8 @@ const NavbarPopper = ({ menu, currentChainName }) => {
   const firstFieldRef = React.useRef(null)
   const numberOfLinks = menu.children?.length
 
+  const router = useRouter()
+
   const { asPath } = useRouter()
 
   const isActiveLink = useMemo(() => {
@@ -40,7 +42,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
       onOpen={!menu?.children
-        ? () => window.location.assign(`/${currentChainName}${menu.link}`)
+        ? () => router.push(`/${currentChainName}${menu.link}`)
         : onOpen
       }
       onClose={onClose}
@@ -60,7 +62,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       <PopoverContent
         borderColor={'transparent'}
         borderRadius="25px"
-        backgroundColor={kBg}
+        backgroundColor={'#141414'}
         width="auto"
       >
         <PopoverArrow

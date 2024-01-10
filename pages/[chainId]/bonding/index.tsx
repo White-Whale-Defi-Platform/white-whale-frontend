@@ -1,5 +1,5 @@
-import Dashboard from 'components/Pages/Bonding'
+import Bonding from 'components/Pages/Bonding'
 
-const DashboardPage = () => <Dashboard />
+const BondingPage = () => <Bonding />
 
-export default DashboardPage
+export default BondingPage

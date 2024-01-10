@@ -18,7 +18,7 @@ import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 
-const Dashboard: FC = () => {
+const Bonding: FC = () => {
   const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address } = useChain(walletChainName)
 
@@ -133,8 +133,8 @@ const Dashboard: FC = () => {
   const {
     feeDistributionConfig,
     globalTotalBonded,
-    localTotalBonded,
-    bondedAssets,
+    myTotalBonding,
+    myBondedAssets,
     withdrawableInfos,
     unbondingRequests,
     weightInfo,
@@ -150,7 +150,7 @@ const Dashboard: FC = () => {
   )
 
   useEffect(() => {
-    setBondedTokens(bondedAssets)
+    setBondedTokens(myBondedAssets)
     setLiquidTokens(liquidBalances, symbols)
     setUnbondingTokens(unbondingRequests)
     setWithdrawableTokens(withdrawableInfos)
@@ -159,7 +159,7 @@ const Dashboard: FC = () => {
     isWalletConnected,
     isLoading,
     unbondingRequests,
-    bondedAssets,
+    myBondedAssets,
     withdrawableInfos,
     liquidBalances,
     symbols,
@@ -208,7 +208,7 @@ const Dashboard: FC = () => {
               isWalletConnected={isWalletConnected}
               whalePrice={whalePrice}
               currentEpoch={currentEpoch}
-              localTotalBonded={localTotalBonded}
+              myTotalBonding={myTotalBonding}
               globalTotalBonded={globalTotalBonded}
               feeDistributionConfig={feeDistributionConfig}
               annualRewards={annualRewards}
@@ -223,4 +223,4 @@ const Dashboard: FC = () => {
       </VStack>) }</>
 }
 
-export default Dashboard
+export default Bonding

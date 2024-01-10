@@ -9,7 +9,7 @@ export interface GlobalIndexInfo {
   timestamp: string
 }
 
-const fetchGlobalIndex = async (client: CosmWasmClient,
+export const fetchGlobalIndex = async (client: CosmWasmClient,
   config: Config): Promise<GlobalIndexInfo> => {
   const result: JsonObject = await client.queryContractSmart(config.whale_lair,
     {
