@@ -14,7 +14,7 @@ export const bondTokens: any = async (
   amount: number,
   denom: string,
   config: Config,
-  injectiveSigningClient?: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
   const handleMsg = {
     bond: {

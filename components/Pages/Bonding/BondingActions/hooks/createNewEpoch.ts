@@ -11,7 +11,7 @@ export const createNewEpoch: any = async (
   signingClient: SigningCosmWasmClient,
   config: Config,
   address: string,
-  injectiveSigningClient?: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
   const handleMsg = {
     new_epoch: {},
