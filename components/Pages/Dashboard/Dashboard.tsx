@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { Divider, VStack } from '@chakra-ui/react'
 import Loader from 'components/Loader'
@@ -7,6 +7,8 @@ import { Header } from 'components/Pages/Dashboard/Header'
 import { useGetBondingAprs } from 'components/Pages/Dashboard/hooks/useGetBondingAprs'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
 import { WalletChainName } from 'constants/index'
+import { useRecoilState } from 'recoil'
+import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { getDashboardData } from 'util/getDashboardData'
 
@@ -18,8 +20,7 @@ export type DashboardData = {
   apr: number
 }
 export const Dashboard: FC = () => {
-  const [dashboardData, setDashboardData] = useState<DashboardData[]>([])
-  const [initialized, setInitialized] = useState<boolean>(false)
+  const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
   const { data: aprs, isLoading } = useGetBondingAprs()
 
   useEffect(() => {
@@ -35,21 +36,23 @@ export const Dashboard: FC = () => {
           apr: apr ? apr : 0,
         } as DashboardData)
       })
-      setDashboardData(mappedDashboardData)
-      setInitialized(true)
+      setDashboardDataState({
+        data: mappedDashboardData,
+        isInitialized: true })
     }
-    if (!initialized && !isLoading) {
+    if (!dashboardState.isInitialized && !isLoading) {
       fetchDashboardData()
     }
-  }, [initialized, isLoading])
+  }, [dashboardState.isInitialized, isLoading])
+
   return <VStack width={'full'}>
-    <Header dashboardData={dashboardData}/>
+    <Header dashboardData={dashboardState.data}/>
     <Divider borderColor="white"/>
-    {!initialized && <Loader /> }
-    {initialized && <><StatsTable dashboardData={dashboardData} initialized={initialized} />
-      <DashboardPieChart dashboardData={dashboardData} chainStat={ChainStat.apr} />
-      <DashboardPieChart dashboardData={dashboardData} chainStat={ChainStat.tvl} />
-      <DashboardPieChart dashboardData={dashboardData} chainStat={ChainStat.volume24h} /></>
+    {!dashboardState.isInitialized && <Loader /> }
+    {dashboardState.isInitialized && <><StatsTable dashboardData={dashboardState.data} />
+      <DashboardPieChart dashboardData={dashboardState.data} chainStat={ChainStat.apr} />
+      <DashboardPieChart dashboardData={dashboardState.data} chainStat={ChainStat.tvl} />
+      <DashboardPieChart dashboardData={dashboardState.data} chainStat={ChainStat.volume24h} /></>
     }
   </VStack>
 }

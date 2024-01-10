@@ -88,7 +88,7 @@ const columns: ColumnDef<DashboardData, any>[] = [
   }),
 ]
 
-export const StatsTable = ({ dashboardData, initialized }) => {
+export const StatsTable = ({ dashboardData }) => {
   const { walletChainName } = useRecoilValue(chainState)
   const [sorting, setSorting] = useState<any>([
     {
@@ -119,7 +119,7 @@ export const StatsTable = ({ dashboardData, initialized }) => {
 
   return (
     <VStack width="full" borderRadius={'30px'} pb={5}>
-      {initialized && table.getHeaderGroups()?.map((headerGroup) => (
+      {table.getHeaderGroups()?.map((headerGroup) => (
         <HStack
           key={headerGroup.id}
           width="full"
@@ -181,7 +181,7 @@ export const StatsTable = ({ dashboardData, initialized }) => {
           ))}
         </HStack>
       ))}
-      {(dashboardData?.length === 0 && initialized) && (
+      {(dashboardData?.length === 0) && (
         <Text color="brand.50" fontSize="sm" textTransform="capitalize">
           Chain data currently not available...
         </Text>
