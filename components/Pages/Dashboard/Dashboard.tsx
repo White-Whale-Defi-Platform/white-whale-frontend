@@ -30,7 +30,7 @@ export const Dashboard: FC = () => {
         const apr = aprs.find((apr) => apr.chainName === data.chainName)?.apr
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
-          chainName: data.chainName === WalletChainName.terra ? 'Terra' : data.chainName === WalletChainName.terrac ? 'Terra-Classic' : data.chainName,
+          chainName: data.chainName,
           tvl: data.tvl,
           volume24h: data.volume24h,
           apr: apr ? apr : 0,

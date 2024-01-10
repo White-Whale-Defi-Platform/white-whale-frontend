@@ -12,6 +12,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { DashboardData } from 'components/Pages/Dashboard/Dashboard'
+import { WalletChainName } from 'constants/index'
 import { formatPrice } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -41,7 +42,7 @@ const columns: ColumnDef<DashboardData, any>[] = [
         Chain
       </Text>
     ),
-    cell: (info) => <Text fontWeight={'bold'}>{info.getValue().charAt(0).
+    cell: (info) => <Text fontWeight={'bold'}>{info.getValue() === WalletChainName.terra ? 'Terra' : info.getValue() === WalletChainName.terrac ? 'Terra-Classic' : info.getValue().charAt(0).
       toUpperCase() + info.getValue().slice(1)}</Text>,
   }),
   columnHelper.accessor('tvl', {
