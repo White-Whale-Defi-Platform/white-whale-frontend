@@ -4,14 +4,15 @@ const Cors = async (req, res) => {
   const { url } = req.query
 
   try {
-    const _res = await axios.get(url)
-    res.status(200).send(_res.data)
-    /*
-     * Add a cache of 10 seconds to avoid constantly returning the same data
-     * res.setHeader('Cache-Control', 's-maxage=10')
-     */
+    const config = {
+      headers: {
+        'x-whitewhale': '5C23Quwy2eLTaCvE',
+      },
+    }
+    const _res = await axios.get(url, config)
+    res.status(200).send(_res.data);
   } catch (error) {
-    res.status(400).send(error.toString())
+    res.status(400).send(error.toString());
   }
 }
 
