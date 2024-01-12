@@ -93,8 +93,8 @@ export const StatsTable = ({ dashboardData }) => {
   const { walletChainName } = useRecoilValue(chainState)
   const [sorting, setSorting] = useState<any>([
     {
-      desc: false,
-      id: 'chainName',
+      desc: true,
+      id: 'tvl',
     },
   ])
 

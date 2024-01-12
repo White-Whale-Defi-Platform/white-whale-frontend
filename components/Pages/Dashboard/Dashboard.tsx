@@ -6,7 +6,6 @@ import { ChainStat, DashboardPieChart } from 'components/Pages/Dashboard/Dashboa
 import { Header } from 'components/Pages/Dashboard/Header'
 import { useGetBondingAprs } from 'components/Pages/Dashboard/hooks/useGetBondingAprs'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
-import { WalletChainName } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
