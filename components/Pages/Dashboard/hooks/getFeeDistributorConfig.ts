@@ -1,6 +1,7 @@
 import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
+import { API_URL } from '../../../../constants'
 
 export interface FeeDistributionConfig {
   owner: string
@@ -20,6 +21,9 @@ export interface FeeDistributionConfig {
 
 const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<FeeDistributionConfig> => {
+
+  // TODO: API
+
   const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
     {
       config: {},

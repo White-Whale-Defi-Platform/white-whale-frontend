@@ -194,6 +194,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
     }
 
     const flows = pools.find((p) => p.pool_id === poolIdFromUrl)
+    console.log(flows)
     return flows?.liquidity?.myFlows || []
   }, [pools, poolIdFromUrl])
 

@@ -19,7 +19,6 @@ import 'theme/global.css'
 import AppLoading from 'components/AppLoading'
 import AppLayout from 'components/Layout/AppLayout'
 import WalletModal from 'components/Wallet/Modal/WalletModal'
-import { endpointOptions } from 'constants/endpointOptions'
 import { signerOptions } from 'constants/signerOptions'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -27,6 +26,7 @@ import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
+import { endpointOptions } from '../constants/endpointOptions'
 
 const MyApp: FC<AppProps> = ({
   Component,
@@ -45,7 +45,6 @@ const MyApp: FC<AppProps> = ({
     ...ninjiWallets,
     ...shellWallets,
   ]
-
   return (
     <>
       {typeof window !== 'undefined' ? (

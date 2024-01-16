@@ -9,3 +9,5 @@ export const POOL_INFO_BASE_URL =
   'https://www.api-white-whale.enigma-validator.com/summary'
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
+
+export const API_URL = 'http://188.172.229.26:8001'

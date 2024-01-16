@@ -2,6 +2,7 @@ import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { Config } from './useDashboardData'
+import { API_URL } from '../../../../constants'
 
 interface NativeTokenInfo {
   native_token: {
@@ -21,6 +22,7 @@ interface TotalBondedInfo {
 
 const fetchTotalBonded = async (client: CosmWasmClient,
   config: Config): Promise<TotalBondedInfo> => {
+  // TODO: API
   const result: JsonObject = await client.queryContractSmart(config.whale_lair,
     {
       total_bonded: {},

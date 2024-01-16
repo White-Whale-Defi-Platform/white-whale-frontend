@@ -1,6 +1,7 @@
 import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
+import { API_URL } from '../../../../constants'
 
 interface NativeToken {
   denom: string
@@ -28,6 +29,7 @@ export const getBondingConfig = async (client: CosmWasmClient | null,
 
 export const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<BondingContractConfig> => {
+  //TODO: API
   const result: JsonObject = await client.queryContractSmart(config.whale_lair,
     {
       config: {},

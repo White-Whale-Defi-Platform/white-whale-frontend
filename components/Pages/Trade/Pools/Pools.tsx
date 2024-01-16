@@ -195,7 +195,7 @@ const Pools = () => {
 
       updateAPRHelperState(
         pool?.poolId,
-        pairInfo?.apr7d.toString(),
+        pairInfo?.apr7d?.toString(),
         incentiveBaseApr,
         setAprHelperState,
       )

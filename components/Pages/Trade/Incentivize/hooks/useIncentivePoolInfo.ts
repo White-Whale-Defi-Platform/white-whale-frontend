@@ -19,6 +19,8 @@ import {
 } from 'services/poolDataProvider'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
+import { getAPRData, getFlowsFromAPI } from 'services/useAPI'
+import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
 
 export interface Flow {
   claimed_amount: string
@@ -60,14 +62,10 @@ export const fetchTotalPoolSupply = async (swapAddress: string,
   if (!client || !swapAddress) {
     return null
   }
-  const { total_share: totalShare } = await client.queryContractSmart(swapAddress, {
-    pool: {},
-  })
-
-  return Number(totalShare)
+  const queried = await getPoolInfo(swapAddress, client)
+  return Number(queried.total_share)
 }
-
-const fetchFlows = async (client, address): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
+const fetchFlows = async (client, address): Promise<Flow[]> => await getFlowsFromAPI(await client.getChainId(), address) || await client?.queryContractSmart(address, { flows: {} })
 
 const getPoolFlowData = async (
   client,
@@ -87,8 +85,9 @@ const getPoolFlowData = async (
 
     const totalPoolLp = await fetchTotalPoolSupply(pool.swap_address,
       client)
-
+    console.log(totalPoolLp)
     const flows = await fetchFlows(client, pool.staking_address)
+    console.log(flows)
     const currentEpochId: number =
       Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
@@ -132,7 +131,7 @@ const getPoolFlowData = async (
           // Every new entry contains overall emitted token value
           const emittedTokens: number =
             flow.emitted_tokens &&
-            Object.keys(flow.emitted_tokens).length !== 0
+              Object.keys(flow.emitted_tokens).length !== 0
               ? Math.max(...Object.values(flow.emitted_tokens).map(Number))
               : 0
 
@@ -147,7 +146,7 @@ const getPoolFlowData = async (
             (flow.start_epoch +
               (flow.end_epoch - flow.start_epoch) -
               Number(currentEpochData.currentEpoch.epoch.id)),
-          poolAsset?.decimals || 6)
+            poolAsset?.decimals || 6)
           const uniqueFlow = uniqueFlowList.find((f) => f.denom === flowDenom)
           uniqueFlow.dailyEmission += emission
         }
@@ -179,7 +178,7 @@ const getPoolFlowData = async (
 export const useIncentivePoolInfo = (
   client, pools, currentChainPrefix,
 ) => {
-  const { chainId, network } = useRecoilValue(chainState)
+  const { chainId, network, walletChainName} = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)
@@ -194,6 +193,8 @@ export const useIncentivePoolInfo = (
         currentChainPrefix === 'terra' && chainId !== ChainId.terrac
           ? await getPairAprAndDailyVolumeByCoinhall(pools)
           : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
+      console.log(poolData)
+      console.log(await getAPRData(walletChainName))
       if (poolData[0]?.ratio === 0) {
         console.log('No pair infos found, trying Coinhall')
         const poolDataFromCoinhall = await getPairAprAndDailyVolumeByCoinhall(pools)
@@ -202,6 +203,7 @@ export const useIncentivePoolInfo = (
         setPoolsWithAprAnd24HrVolume(poolData)
       }
     }
+    console.log(poolsWithAprAnd24HrVolume)
     if (pools?.length > 0 && currentChainPrefix) {
       fetchPoolData()
     }
@@ -233,7 +235,9 @@ export const useIncentivePoolInfo = (
         Boolean(prices),
     },
   )
-  return { flowPoolData,
+  return {
+    flowPoolData,
     poolsWithAprAnd24HrVolume,
-    isLoading }
+    isLoading
+  }
 }

@@ -18,7 +18,7 @@ type FactoryConfig = {
 const useFactoryConfig = (incentiveFactory: string) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient } = useClients(walletChainName)
-
+  // TODO: API
   const { data: config } = useQuery<FactoryConfig>({
     queryKey: ['factoryConfig', incentiveFactory],
     queryFn: () => cosmWasmClient?.

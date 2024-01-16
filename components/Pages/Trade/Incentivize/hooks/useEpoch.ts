@@ -10,6 +10,7 @@ import utc from 'dayjs/plugin/utc'
 import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { API_URL } from '../../../../../constants'
 
 dayjs.extend(utc)
 interface Epoch {
@@ -86,9 +87,12 @@ const useEpoch = () => {
   const { cosmWasmClient } = useClients(walletChainName)
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
-    queryFn: async () => await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
+    queryFn: async () => 
+    {
+      // TODO: API
+      return await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
       config: {},
-    }),
+    })},
     enabled: Boolean(contracts) && Boolean(cosmWasmClient),
   })
 

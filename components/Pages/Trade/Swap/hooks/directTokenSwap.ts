@@ -53,6 +53,7 @@ export const directTokenSwap = async ({
       null,
     ))
   }
+  console.log(signingClient)
   const execMsg = createExecuteMessage({ senderAddress,
     contractAddress: swapAddress,
     message: msgs,
