@@ -34,9 +34,9 @@ export const lpPositionToAssets = ({
   totalLpSupply,
   myLockedLp,
 }) => [
-  protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
-  protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
-]
+    protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
+    protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
+  ]
 export const fetchPositions = async (
   poolId: string,
   cosmWasmClient: CosmWasmClient,

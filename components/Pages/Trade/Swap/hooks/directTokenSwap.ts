@@ -2,10 +2,9 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 import { coin } from '@cosmjs/stargate'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import { ChainId } from 'constants/index'
+import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
-import { TerraTreasuryService } from 'services/treasuryService'
-import { getInjectiveTxData } from 'util/injective'
+import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -46,7 +45,7 @@ export const directTokenSwap = async ({
       contractAddress: tokenA.token_address,
       message: msgs,
     })
-    return validateTransactionSuccess(await signingClient.signAndBroadcast(
+    return await validateTransactionSuccess(await signingClient.signAndBroadcast(
       senderAddress,
       [increaseAllowanceMessage, executeMessage],
       'auto',
@@ -54,23 +53,24 @@ export const directTokenSwap = async ({
     ))
   }
   console.log(signingClient)
-  const execMsg = createExecuteMessage({ senderAddress,
+  const execMsg = createExecuteMessage({
+    senderAddress,
     contractAddress: swapAddress,
     message: msgs,
-    funds: [coin(tokenAmount, tokenA.denom)] })
+    funds: [coin(tokenAmount, tokenA.denom)]
+  })
   if (await signingClient.getChainId() === ChainId.terrac) {
     const gas = Math.ceil(await signingClient.simulate(
       senderAddress, [execMsg], '',
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
   } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
-    const injectiveTxData = await getInjectiveTxData(
-      injectiveSigningClient, senderAddress, [execMsg],
+    const injectiveTxData = await injectiveSigningClient.sign(
+      senderAddress, [execMsg], await createGasFee(injectiveSigningClient, senderAddress, [execMsg], null), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
-
   return await signingClient.signAndBroadcast(
-    senderAddress, [execMsg], fee, '',
+    senderAddress, [execMsg], await createGasFee(signingClient, senderAddress, [execMsg], null), ADV_MEMO,
   )
 }

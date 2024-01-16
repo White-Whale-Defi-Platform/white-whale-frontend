@@ -10,4 +10,6 @@ export const POOL_INFO_BASE_URL =
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
 
-export const API_URL = 'http://188.172.229.26:8001'
+export const API_URL = 'http://localhost:8001'
+
+export const ADV_MEMO = 'app.whitewhale.money'

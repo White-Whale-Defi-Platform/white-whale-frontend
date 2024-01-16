@@ -2,10 +2,9 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 import { coin } from '@cosmjs/stargate'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
-import { ChainId } from 'constants/index'
+import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
-import { TerraTreasuryService } from 'services/treasuryService'
-import { getInjectiveTxData } from 'util/injective'
+import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const bondTokens: any = async (
@@ -28,10 +27,12 @@ export const bondTokens: any = async (
       },
     },
   }
-  const execMsg = createExecuteMessage({ senderAddress: address,
+  const execMsg = createExecuteMessage({
+    senderAddress: address,
     contractAddress: config.whale_lair,
     message: handleMsg,
-    funds: [coin(amount, denom)] })
+    funds: [coin(amount, denom)]
+  })
   let fee: any = 'auto'
   if (await signingClient.getChainId() === ChainId.terrac) {
     const gas = Math.ceil(await signingClient.simulate(
@@ -39,13 +40,13 @@ export const bondTokens: any = async (
     ) * 1.3)
     fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
   } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
-    const injectiveTxData = await getInjectiveTxData(
-      injectiveSigningClient, address, [execMsg],
+    const injectiveTxData = await injectiveSigningClient.sign(
+      address, [execMsg], await createGasFee(injectiveSigningClient,address,[execMsg],null), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    address, [execMsg], fee, '',
+    address, [execMsg], await createGasFee(signingClient, address, [execMsg], null), ADV_MEMO,
   )
 }
 

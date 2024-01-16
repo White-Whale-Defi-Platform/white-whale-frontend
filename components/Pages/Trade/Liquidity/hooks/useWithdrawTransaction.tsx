@@ -5,12 +5,11 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
-import { ChainId } from 'constants/index'
+import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import useDebounceValue from 'hooks/useDebounceValue'
-import { TerraTreasuryService } from 'services/treasuryService'
+import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
 import { TxStep } from 'types/common'
-import { getInjectiveTxData } from 'util/injective'
 
 type Params = {
   enabled: boolean
@@ -52,7 +51,7 @@ export const useWithdrawTransaction: any = ({
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
-      if (!signingClient) {
+      if (!signingClient || !debouncedMsgs || debouncedMsgs?.length == 0) {
         return
       }
       try {
@@ -117,16 +116,13 @@ export const useWithdrawTransaction: any = ({
       ) * 1.3)
       fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
     } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
-      const injectiveTxData = await getInjectiveTxData(
-        injectiveSigningClient, senderAddress, debouncedMsgs,
+      const injectiveTxData = await injectiveSigningClient.sign(
+        senderAddress, debouncedMsgs, await createGasFee(injectiveSigningClient,senderAddress,debouncedMsgs,null), ADV_MEMO,
       )
       return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
     }
-    return signingClient.signAndBroadcast(
-      senderAddress,
-      debouncedMsgs,
-      fee,
-      null,
+    return await signingClient.signAndBroadcast(
+      senderAddress, debouncedMsgs, await createGasFee(signingClient, senderAddress, debouncedMsgs, null), ADV_MEMO,
     )
   },
   {

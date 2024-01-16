@@ -15,7 +15,7 @@ export const Action = ({ item, poolId }) => {
         size="sm"
         borderColor="whiteAlpha.700"
         isLoading={close?.isLoading}
-        onClick={() => close?.submit({ unbonding_duration: item?.unbonding_duration })
+        onClick={async () => close?.submit({ unbonding_duration: item?.unbonding_duration })
         }
       >
         Close
@@ -34,7 +34,7 @@ export const Action = ({ item, poolId }) => {
         variant="primary"
         size="sm"
         isLoading={withdraw?.isLoading}
-        onClick={() => withdraw?.submit()}
+        onClick={async () => withdraw?.submit()}
       >
         Unlock LP
       </Button>
