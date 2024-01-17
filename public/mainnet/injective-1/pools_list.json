@@ -268,7 +268,7 @@
           "chain_id": "injective-1",
           "token_address": "factory/inj1qczkutnsy3nmt909xtyjy4rsrkl2q4dm6aq960/coping",
           "symbol": "CPINJ",
-          "name": "CPINJ",
+          "name": "Coping",
           "decimals": 6,
           "logoURI": "/logos/cpinj.png",
           "tags": ["native"],
