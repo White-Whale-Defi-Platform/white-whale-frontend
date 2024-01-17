@@ -255,6 +255,43 @@
       "lp_token": "factory/inj1sgvrzysd32xdqtscaen2gprrjyg997lkn2h4wg/uLP",
       "staking_address": "inj1zzejvfk8anr2skycj8et5zmhcuzlnn7se8zpca",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "CPINJ-WHALE",
+      "lpOrder": ["CPINJ", "WHALE"],
+      "assetOrder": ["CPINJ", "WHALE"],
+      "displayName": "CPINJ-WHALE",
+      "displayLogo1": "/logos/cpinj.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "injective-1",
+          "token_address": "factory/inj1qczkutnsy3nmt909xtyjy4rsrkl2q4dm6aq960/coping",
+          "symbol": "CPINJ",
+          "name": "CPINJ",
+          "decimals": 6,
+          "logoURI": "/logos/cpinj.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/inj1qczkutnsy3nmt909xtyjy4rsrkl2q4dm6aq960/coping"
+        },
+        {
+          "id" : "white-whale",
+          "chain_id": "injective-1",
+          "token_address": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
