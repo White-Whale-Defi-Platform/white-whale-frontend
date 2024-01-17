@@ -85,9 +85,7 @@ const getPoolFlowData = async (
 
     const totalPoolLp = await fetchTotalPoolSupply(pool.swap_address,
       client)
-    console.log(totalPoolLp)
     const flows = await fetchFlows(client, pool.staking_address)
-    console.log(flows)
     const currentEpochId: number =
       Number(currentEpochData?.currentEpoch?.epoch.id) || 0
 
@@ -152,6 +150,7 @@ const getPoolFlowData = async (
         }
       })
     }
+
     const uniqueFlowsWithEmissionAndApr = uniqueFlowList.map((flow) => {
       const poolAsset = poolAssets.find((asset) => asset.denom === flow.denom)
       const tokenSymbol = poolAsset?.symbol
@@ -178,7 +177,7 @@ const getPoolFlowData = async (
 export const useIncentivePoolInfo = (
   client, pools, currentChainPrefix,
 ) => {
-  const { chainId, network, walletChainName} = useRecoilValue(chainState)
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)
@@ -189,25 +188,26 @@ export const useIncentivePoolInfo = (
   useEffect(() => {
     const fetchPoolData = async () => {
       currentChainPrefix = chainId === ChainId.terrac ? 'terra-classic' : currentChainPrefix
-      const poolData =
-        currentChainPrefix === 'terra' && chainId !== ChainId.terrac
-          ? await getPairAprAndDailyVolumeByCoinhall(pools)
-          : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
-      console.log(poolData)
-      console.log(await getAPRData(walletChainName))
-      if (poolData[0]?.ratio === 0) {
-        console.log('No pair infos found, trying Coinhall')
-        const poolDataFromCoinhall = await getPairAprAndDailyVolumeByCoinhall(pools)
-        setPoolsWithAprAnd24HrVolume(poolDataFromCoinhall)
-      } else {
+      let poolData = await getAPRData(walletChainName)
+      if (poolData?.length == 0) {
+        poolData =
+          currentChainPrefix === 'terra' && chainId !== ChainId.terrac
+            ? await getPairAprAndDailyVolumeByCoinhall(pools)
+            : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
+        if (poolData[0]?.ratio === 0) {
+          console.log('No pair infos found, trying Coinhall')
+          const poolDataFromCoinhall = await getPairAprAndDailyVolumeByCoinhall(pools)
+          setPoolsWithAprAnd24HrVolume(poolDataFromCoinhall)
+        } else {
+          setPoolsWithAprAnd24HrVolume(poolData)
+        }
+      } 
         setPoolsWithAprAnd24HrVolume(poolData)
-      }
     }
-    console.log(poolsWithAprAnd24HrVolume)
     if (pools?.length > 0 && currentChainPrefix) {
       fetchPoolData()
     }
-  }, [currentChainPrefix, pools?.length, client])
+  }, [currentChainPrefix, pools?.length, client, prices])
 
   let poolAssets = []
 

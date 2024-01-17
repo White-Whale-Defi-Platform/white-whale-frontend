@@ -14,7 +14,7 @@ export const getGasFees = async (gas: number, price: number, denom: string) => (
   amount: [
     {
       denom: denom,
-      amount: String(gas * price),
+      amount: String(Math.ceil(Number(gas * price))),
     },
   ],
   gas: String(gas),
