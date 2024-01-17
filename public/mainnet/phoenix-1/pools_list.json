@@ -542,6 +542,44 @@
       "swap_address": "terra1d8ap3zyd6tfnruuuwvs0t927lr4zwptruhulfwnxjpqzudvyn8usfgl8ze",
       "staking_address": "terra1zudg2pz9qcr2dazx70tth0kudvel0zcx69zc9k64nh6uaj3w0lgqgt4s3g",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "GUPPY-ROAR",
+      "lpOrder": ["GUPPY", "ROAR"],
+      "assetOrder": ["GUPPY", "ROAR"],
+      "displayName": "GUPPY-ROAR",
+      "displayLogo1": "/logos/guppy.png",
+      "displayLogo2": "/logos/lion.png",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "id": "white-whale",
+          "token_address": "ibc/C17F17047DCB2187CA917A5C9FE99E9AF5B17760BF7D0C2274B5AE0961F02E15",
+          "symbol": "GUPPY",
+          "name": "Guppy",
+          "decimals": 6,
+          "logoURI": "/logos/guppy.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "ibc/C17F17047DCB2187CA917A5C9FE99E9AF5B17760BF7D0C2274B5AE0961F02E15"
+        },
+        {
+          "id": "lion-dao",
+          "chain_id": "phoenix-1",
+          "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
+          "symbol": "ROAR",
+          "name": "Roar",
+          "decimals": 6,
+          "logoURI": "/logos/lion.png",
+          "tags": [""],
+          "native": false,
+          "denom": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
