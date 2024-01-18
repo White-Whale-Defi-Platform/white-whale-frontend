@@ -3,6 +3,11 @@
   "incentive_factory": "juno1gg3y2f3kn337qhxwsumpd7wt4avl7knadp7vne4278whw0n3qf5quksw06",
   "fee_distributor": "juno184ghwgprva7dlr2hwhzgvt6mem6zx78fygk0cpw7klssmzyf67tqdtwt3h",
   "frontend_helper": "juno150j5gxsepfcaa7lrre3nue23shddw99fuv6kf4m2pvv9ay8glltszmk67f",
+  "fee_collector": "juno1dk7uekpslkla89cdh83tgjejhara7c4aasdnc9a2hq9d0652pqmsdr4ldy",
+  "pool_factory": "juno14m9rd2trjytvxvu4ldmqvru50ffxsafs8kequmfky7jh97uyqrxqs5xrnx",
+  "pool_router": "juno128lewlw6kv223uw4yzdffl8rnh3k9qs8vrf6kef28579w8ygccyq7m90n2",
+  "vault_factory": "juno1qnfsrwx4c0qnvcnscwm7r55nxr8rpfckq6v8yvuvg7zuqj0uk2hsrssj2n",
+  "vault_router": "juno1qa7vdlm6zgq3radal5sltyl4t4qd32feug9qs50kcxda46q230pqzny48s",
   "whale_base_token": {
     "name": "WHALE",
     "denom": "ibc/3A6ADE78FB8169C034C29C4F2E1A61CE596EC8235366F22381D981A98F1F5A5C",

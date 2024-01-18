@@ -3,6 +3,11 @@
   "incentive_factory": "migaloo1rqfr752hn6auzm3vzzyr2pd8rt6fapf208vm8qfpejstt69uxfwqcdrdq3",
   "fee_distributor": "migaloo13e3ywqudfz92pq2sxwuwf35rdtp3hvz7xu0danyk38dchevywraswfgnqx",
   "frontend_helper": "migaloo1yk896ldldnfd4y4f3xgxwnpapmyezgdqw5czp4zz6nnvetl70lkq42mp8u",
+  "fee_collector": "migaloo14dcwvg4zplrc28g5q3802n2mmnp3fsp2yh7mn7gkxssnrjqp4ycq76wy6h",
+  "pool_factory": "migaloo1z89funaazn4ka8vrmmw4q27csdykz63hep4ay8q2dmlspc6wtdgq92u369",
+  "pool_router": "migaloo1tma28exp38q92c69r8uujhphxy95xa4awq2cudqqg3nhzkhnrg5s4r60en",
+  "vault_factory": "migaloo1g2xwx805epc897rwyrykskjque07yxfmc4qq2p4ef5dwd6znl30qkgw8w7",
+  "vault_router": "migaloo19pze0n07guzj6yla2708q2feh38q9n8gxmkk8fjnuprfh6y9ngjqs90hcy",
   "whale_base_token": {
     "name": "WHALE",
     "denom": "uwhale",
@@ -21,4 +26,3 @@
     }
   ]
 }
-

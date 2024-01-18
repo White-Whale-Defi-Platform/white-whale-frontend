@@ -3,6 +3,11 @@
   "incentive_factory": "inj189rhgt2d78a7djv0x6mulwy7kre07n9x3z72nd",
   "fee_distributor": "inj1s0q949jwm6n502sspvjmnaj4zjuv36fzpl33rr",
   "frontend_helper": "inj1fwfudkjv95qtj9h32agcfwpg0wwzz352jlyk58",
+  "fee_collector": "inj1g6kht9c5s4jwn4akfjt3zmsfh4nvguewuevmk0",
+  "pool_factory": "inj1x22q8lfhz7qcvtzs0dakhgx2th64l79kfye5lk",
+  "pool_router": "inj1657pee2jhf4jk8pq6yq64e758ngvum45nft8rf",
+  "vault_factory": "inj1wastjc07zuuy46mzzl3egz4uzy6fs59758vrwr",
+  "vault_router": "inj1hyja4uyjktpeh0fxzuw2fmjudr85rk2qxgqkvu",
   "whale_base_token": {
     "name": "WHALE",
     "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",

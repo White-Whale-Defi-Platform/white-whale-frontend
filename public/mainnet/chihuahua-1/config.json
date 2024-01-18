@@ -3,6 +3,11 @@
   "incentive_factory": "chihuahua1wzde4vn8p8deskata2vy7z4cfvfzll0syjg8x659suhxnwqy7a8s6fhl4w",
   "fee_distributor": "chihuahua15umr63cfrav8qk572x57rzjfcyqtfnret6rpfasju9ayeqmxrhjq5k0y8c",
   "frontend_helper": "chihuahua1u28kmt7m6vkfjpxq0gz6vgud59ahwfd3vsewarjjtgdtrtlcvmhq79qws0",
+  "fee_collector": "chihuahua1z6fjtpsa9fhnkuxvef5lkcaafuw40zc3hr0wml0tngqahtl0s58sxdkwrm",
+  "pool_factory": "chihuahua1s8ehad3r9wxyk08ls2nmz8mqh4vlfmaxd2nw0crxwh04t4l5je4s8ljv0j",
+  "pool_router": "chihuahua1w3z9kpv08ya8ketrd8sc9008wxq6ygeuur40dlvh3df2u54pcdmq52sguh",
+  "vault_factory": "chihuahua1mlhardte7nznkkupn64vw58nt48fa5r5frluxt7y5gkrkws39scqagvdm7",
+  "vault_router": "chihuahua1qe6jsllyvrlmtz2xqef9k7q67xeyj3zcuc09wzptnvev3wyyd4fs4y4ce9",
   "whale_base_token": {
     "name": "WHALE",
     "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
