@@ -63,7 +63,14 @@ const Wallet = () => {
       setWalletChains(['injective'])
       setCurrentConnectedChainIds(['injective-1'])
     }
-
+    if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
+      // Window.leap.defaultOptions
+      window.leap.defaultOptions = {
+        sign: {
+          preferNoSetFee: true,
+        },
+      }
+    }
     if (walletType === WalletType.leapSnap) {
       const snapChainIds = chains.
         filter((row) => row.coinType === 118).

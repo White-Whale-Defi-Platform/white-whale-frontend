@@ -42,7 +42,7 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
     const inAppLeap = isMobile && window.leap && window.leap.mode === 'mobile-web'
-    const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web'
+    const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web' && !inAppLeap
     const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension || walletName === WalletType.ninjiExtension)
     if (inj) {
       return true
@@ -69,7 +69,7 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
     if (!(inAppLeap || inAppKeplr) && isMobile && !wallet.isModeExtension) {
       return true;
     }
-    if ((!inAppLeap || inAppKeplr) && !isMobile && wallet.isModeExtension) {
+    if (!(inAppLeap || inAppKeplr) && !isMobile && wallet.isModeExtension) {
       return true;
     }
   }
