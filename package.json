@@ -28,7 +28,7 @@
     "@cosmos-kit/ninji": "^2.6.5",
     "@cosmos-kit/react-lite": "^2.6.5",
     "@cosmos-kit/shell": "^2.6.5",
-    "@cosmos-kit/station": "^2.5.5",
+    "@cosmos-kit/station": "^2.4.7",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@injectivelabs/sdk-ts": "^1.14.5",
