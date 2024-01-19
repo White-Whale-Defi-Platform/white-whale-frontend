@@ -10,6 +10,8 @@ export const POOL_INFO_BASE_URL =
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
 
-export const API_URL = 'http://localhost:8001'
+//Set for testing
+
+export const API_URL = 'https://auli6d9hg59vj31b0dtoi9nll4.ingress.europlots.com'
 
 export const ADV_MEMO = 'app.whitewhale.money'
