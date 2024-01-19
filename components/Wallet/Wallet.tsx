@@ -59,14 +59,6 @@ const Wallet = () => {
 
     const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
 
-    if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
-      // Window.leap.defaultOptions
-      window.leap.defaultOptions = {
-        sign: {
-          preferNoSetFee: true,
-        },
-      }
-    }
     if (walletType === WalletType.ninjiExtension) {
       setWalletChains(['injective'])
       setCurrentConnectedChainIds(['injective-1'])
@@ -212,7 +204,7 @@ const Wallet = () => {
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
       const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
-      if (walletType !== WalletType.leapSnap && walletType !== WalletType.terraExtension && walletType !== WalletType.ninjiExtension) {
+      if (walletType !== WalletType.leapSnap && walletType !== WalletType.ninjiExtension) {
         await newChain.connect()
       } else {
         resetWallet()

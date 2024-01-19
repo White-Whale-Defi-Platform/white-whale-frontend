@@ -28,10 +28,12 @@ export const bondTokens: any = async (
       },
     },
   }
-  const execMsg = createExecuteMessage({ senderAddress: address,
+  const execMsg = createExecuteMessage({
+    senderAddress: address,
     contractAddress: config.whale_lair,
     message: handleMsg,
-    funds: [coin(amount, denom)] })
+    funds: [coin(amount, denom)]
+  })
   let fee: any = 'auto'
   if (await signingClient.getChainId() === ChainId.terrac) {
     const gas = Math.ceil(await signingClient.simulate(

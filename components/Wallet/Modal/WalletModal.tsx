@@ -41,28 +41,35 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
 
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
-    const inApp = isMobile && window.leap && window.leap.mode === 'mobile-web'
+    const inAppLeap = isMobile && window.leap && window.leap.mode === 'mobile-web'
+    const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web'
     const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension || walletName === WalletType.ninjiExtension)
     if (inj) {
       return true
-    } else if (chainId.includes('injective') && !inApp) {
+    } else if (chainId.includes('injective') && !inAppLeap) {
       return false
     } else if (walletName === WalletType.ninjiExtension && !chainId.includes('injective')) {
       return false
     }
-    if (inj && inApp && walletName === WalletType.leapExtension) {
+    if (inj && inAppLeap && walletName === WalletType.leapExtension) {
       return true;
     }
-    if (inApp && walletName === WalletType.leapExtension) {
+    if (inAppLeap && walletName === WalletType.leapExtension) {
       return true;
     }
-    if (!inApp && walletName.toLowerCase().includes('metamask') && !snap) {
+    if (inj && inAppKeplr && walletName === WalletType.keplrExtension) {
+      return true;
+    }
+    if (inAppKeplr && walletName === WalletType.keplrExtension) {
+      return true;
+    }
+    if (!inAppLeap && walletName.toLowerCase().includes('metamask') && !snap) {
       return false;
     }
-    if (!inApp && isMobile && !wallet.isModeExtension) {
+    if (!(inAppLeap || inAppKeplr) && isMobile && !wallet.isModeExtension) {
       return true;
     }
-    if (!inApp && !isMobile && wallet.isModeExtension) {
+    if ((!inAppLeap || inAppKeplr) && !isMobile && wallet.isModeExtension) {
       return true;
     }
   }

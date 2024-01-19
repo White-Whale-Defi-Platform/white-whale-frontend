@@ -18,7 +18,7 @@ const MobileNotSupportedModal = () => (
     <ModalContent border="1px" borderColor="gray.200" padding="1" margin="4">
       <ModalHeader>
         <VStack>
-          <Text>Currently, only Leaps in-app browser is supported on mobile.</Text>
+          <Text>Currently, only Leaps or Keplr in-app browser is supported on mobile.</Text>
           <Link href="https://www.leapwallet.io/" isExternal>
             <Image flex={'1'} maxBlockSize={'12'} src="https://assets-global.website-files.com/63af9e8fb337a641e2075c4f/63afa06f10dd572ce7252901_logo.svg" alt="Leap Logo" />
           </Link>
