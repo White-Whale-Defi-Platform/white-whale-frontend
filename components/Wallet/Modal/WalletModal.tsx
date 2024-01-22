@@ -57,7 +57,7 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
     if (inAppLeap && walletName === WalletType.leapExtension) {
       return true;
     }
-    if (inj && inAppKeplr && walletName === WalletType.keplrExtension) {
+    if (inAppKeplr && walletName === WalletType.keplrExtension) {
       return true;
     }
     if (inAppKeplr && walletName === WalletType.keplrExtension) {
