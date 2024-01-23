@@ -410,5 +410,22 @@
       "ibc-go"
     ],
     "beta": true
+  },
+  {
+    "chainId": "osmosis-1",
+    "chainName": "Osmosis",
+    "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
+    "label": "Osmosis",
+    "icon": "/logos/osmo.svg",
+    "rpc": "https://osmosis-rpc.polkachu.com",
+    "rest": "https://osmosis-api.polkachu.com",
+    "currencies": [
+      {
+        "coinDenom": "OSMO",
+      "coinMinimalDenom": "uosmo",
+      "coinDecimals": 6,
+        "coinGeckoId": "osmosis"
+      }
+    ]
   }
 ]

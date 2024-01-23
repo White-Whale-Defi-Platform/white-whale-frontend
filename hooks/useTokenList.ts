@@ -13,7 +13,6 @@ export type TokenList = {
 export const useTokenList = () => {
   const { data: poolsListResponse } = usePoolsListQuery()
   const { chainId, network } = useRecoilValue(chainState)
-
   /* Generate token list off pool list and store it in cache */
   const { data } = useQuery<TokenList>(
     ['@token-list', chainId, network],
