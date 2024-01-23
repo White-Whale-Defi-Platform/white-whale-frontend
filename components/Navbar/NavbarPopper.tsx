@@ -25,7 +25,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
   const firstFieldRef = React.useRef(null)
   const numberOfLinks = menu.children?.length
 
-  const { asPath } = useRouter()
+  const { asPath, push } = useRouter()
 
   const isActiveLink = useMemo(() => {
     const [linkInAsPath] =
@@ -50,7 +50,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
         menu.isExternal
           ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
           : !menu?.children
-            ? () => window.location.assign(`/${currentChainName}${menu.link}`)
+            ? () => push(`/${currentChainName}${menu.link}`)
             : onOpen
       }
       onClose={onClose}
