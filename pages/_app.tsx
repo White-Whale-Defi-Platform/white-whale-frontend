@@ -10,10 +10,7 @@ import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
-import {
-  StaticWalletProvider,
-  WalletControllerChainOptions,
-} from '@terra-money/wallet-provider'
+
 import { chains, assets } from 'chain-registry'
 import 'theme/global.css'
 import AppLoading from 'components/AppLoading'
@@ -31,114 +28,68 @@ import theme from 'theme'
 const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
-  defaultNetwork,
-}: AppProps & WalletControllerChainOptions) => {
+}: AppProps) => {
   const [mounted, setMounted] = useState<boolean>(false)
   useEffect(() => {
     setMounted(true)
   }, [])
   const wallets = [
     ...keplrWallets,
-    ...cosmoStationWallets,
-    ...stationWallets,
     ...leapWallets,
+    ...stationWallets,
+    ...cosmoStationWallets,
     ...ninjiWallets,
     ...shellWallets,
   ]
-
   return (
-    <>
-      {typeof window !== 'undefined' ? (
-        <>
-          <Head>
-            <link rel="shortcut icon" href="/favicon.ico" />
-          </Head>
-          <RecoilRoot>
-            <QueryClientProvider client={queryClient}>
-              <ChakraProvider theme={theme}>
-                <ChainProvider
-                  chains={chains} // Supported chains
-                  assetLists={assets} // Supported asset lists
-                  wallets={wallets} // Supported wallets
-                  walletModal={WalletModal}
-                  signerOptions={signerOptions}
-                  endpointOptions={endpointOptions}
-                  walletConnectOptions={{
-                    signClient: {
-                      projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
-                      relayUrl: 'wss://relay.walletconnect.org',
-                      metadata: {
-                        name: 'White Whale',
-                        description: 'test',
-                        url: 'https://app.whitewhale.money/',
-                        icons: [
-                          'https://raw.githubusercontent.com/cosmology-tech/cosmos-kit/main/packages/docs/public/favicon-96x96.png',
-                        ],
-                      },
-                    },
-                  }}
-                >
-                  <CSSReset />
-                  {!mounted ? (
-                    <AppLoading />
-                  ) : (
-                    <AppLayout>
-                      <Component {...pageProps} />
-                    </AppLayout>
-                  )}
-                </ChainProvider>
-              </ChakraProvider>
-              <Toaster
-                position="top-right"
-                toastOptions={{ duration: 10000 }}
-              />
-              {/* </ErrorBoundary> */}
-            </QueryClientProvider>
-          </RecoilRoot>
-        </>
-      ) : (
-        <StaticWalletProvider defaultNetwork={defaultNetwork}>
-          <>
-            <Head>
-              <link rel="shortcut icon" href="/favicon.ico" />
-            </Head>
-            <RecoilRoot>
-              <QueryClientProvider client={queryClient}>
-                <ChakraProvider theme={theme}>
-                  <CSSReset />
-                  {!mounted ? (
-                    <AppLoading />
-                  ) : (
-                    <AppLayout>
-                      <Component {...pageProps} />
-                    </AppLayout>
-                  )}
-                </ChakraProvider>
-                <Toaster
-                  position="top-right"
-                  toastOptions={{ duration: 10000 }}
-                />
-                {/* </ErrorBoundary> */}
-              </QueryClientProvider>
-            </RecoilRoot>
-          </>
-        </StaticWalletProvider>
-      )}
-      <Script src="/logs.js" />
-    </>
+        <><>
+      <Head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </Head>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <ChakraProvider theme={theme}>
+            <ChainProvider
+              chains={chains} // Supported chains
+              assetLists={assets} // Supported asset lists
+              wallets={wallets} // Supported wallets
+              walletModal={WalletModal}
+              signerOptions={signerOptions}
+              endpointOptions={endpointOptions}
+              walletConnectOptions={{
+                signClient: {
+                  projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+                  relayUrl: 'wss://relay.walletconnect.org',
+                  metadata: {
+                    name: 'White Whale',
+                    description: 'test',
+                    url: 'https://app.whitewhale.money/',
+                    icons: [
+                      'https://raw.githubusercontent.com/cosmology-tech/cosmos-kit/main/packages/docs/public/favicon-96x96.png',
+                    ],
+                  },
+                },
+              }}
+            >
+              <CSSReset />
+              {!mounted ? (
+                <AppLoading />
+              ) : (
+                <AppLayout>
+                  <Component {...pageProps} />
+                </AppLayout>
+              )}
+            </ChainProvider>
+          </ChakraProvider>
+          <Toaster
+            position="top-right"
+            toastOptions={{ duration: 10000 }} />
+          {/* </ErrorBoundary> */}
+        </QueryClientProvider>
+      </RecoilRoot>
+    </><Script src="/logs.js" /></>
   )
 }
 
-/*
- * TODO: Removed this for now to improve page load, Failed to fetch chains.json TypeError: fetch failed is currently returned in a lot of cases
- * Instead the page loads and we get the chainOptions after
- * In future we should use ServerStaticProps rather than InitialProps, InitialProps is deprecated
- * MyApp.getInitialProps = async () => {
- *   const chainOptions = await getChainOptions()
- *   return {
- *     ...chainOptions,
- *   }
- * }
- */
 
 export default MyApp
