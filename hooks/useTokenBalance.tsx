@@ -109,10 +109,10 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?
   const [ibcAssetsList] = useIBCAssetList()
 
   if (isBonding && config?.bonding_tokens) {
-    for (const token of config?.bonding_tokens) {
-      const added = tokenList?.tokens.find((elem)=> elem.denom == token.denom)
-      if (!added) {
-        tokenList?.tokens.push(token)
+    for (const newToken of config.bonding_tokens) {
+      const isTokenAdded = tokenList?.tokens.find((existingToken) => existingToken.denom === newToken.denom);
+      if (!isTokenAdded) {
+        tokenList?.tokens.push(newToken);
       }
     }
   }

@@ -33,13 +33,13 @@ export const backgrounds = {
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 255, 0, 0.25) 50%, rgba(0, 117, 255, 0.25) 97.47%)',
   'rebel-2':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 255, 0, 0.25) 50%, rgba(0, 117, 255, 0.25) 97.47%)',
-
+  'osmosis-1':
+    'linear-gradient(135deg, rgba(20, 15, 52, 0.75) 0%, rgba(20, 15, 52, 0.75) 50%, rgba(20, 15, 52, 0.75) 100%)',
 }
 
 const RadialGradient: FC = () => {
   const { chainId } = useRecoilValue(chainState)
   const background = useMemo(() => backgrounds[chainId], [chainId])
-
   return (
     <Box
       position="absolute"

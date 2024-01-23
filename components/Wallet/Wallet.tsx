@@ -238,7 +238,6 @@ const Wallet = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChainState.chainId, isInitialized])
-  console.log(denom.coinDenom)
   if (!isWalletConnected) {
     return (
       <><HStack align="right" boxSize={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>
