@@ -41,8 +41,10 @@ const fetchUnbonding = async (
   address: string,
   config: Config,
 ): Promise<UnbondingInfo[]> => await Promise.all(Object.entries(config.bonding_tokens).map(async ([_, token]) => await client.queryContractSmart(config.whale_lair, {
-  unbonding: { address,
-    denom: token.denom },
+  unbonding: {
+    address,
+    denom: token.denom
+  },
 })))
 
 export const getUnbonding = async (
@@ -72,7 +74,7 @@ export const getUnbonding = async (
   }
   const unbondingRequests: UnbondingData[] = filterAndBundleUnbondingRequests(unbondingInfos).
     sort((a, b) => new Date(nanoToMilli(Number(a.timestamp))).getTime() -
-        new Date(nanoToMilli(Number(b.timestamp))).getTime()).
+      new Date(nanoToMilli(Number(b.timestamp))).getTime()).
     map((req) => {
       const tokenSymbol = config.bonding_tokens.find((token) => token.denom === req.asset.info.native_token.denom)?.tokenSymbol
 
