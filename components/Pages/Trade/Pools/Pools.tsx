@@ -112,6 +112,7 @@ const Pools = () => {
             STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
 
         if (externalStatsLoading) {
+          console.log('externalStatsLoading: ', (pool?.liquidity?.reserves?.totalAssetsInDollar || 0) === 0)
           setExternalStatsLoading((pool?.liquidity?.reserves?.totalAssetsInDollar || 0) === 0)
         }
 
@@ -178,6 +179,8 @@ const Pools = () => {
       })
     }
     setAllPools(updatedPools)
+    console.log('setting false ')
+
     setExternalStatsLoading(false)
   }, [myPoolsLength, pairInfos?.length])
 
