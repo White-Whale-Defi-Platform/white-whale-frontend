@@ -5,4 +5,5 @@ export const BRIDGE_NETWORK_DEFAULTS = {
   'juno-1': 'migaloo-1',
   'migaloo-1': 'phoenix-1',
   'phoenix-1': 'migaloo-1',
+  'osmosis-1': 'migaloo-1',
 }
