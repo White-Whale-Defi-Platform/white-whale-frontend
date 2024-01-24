@@ -64,6 +64,9 @@
       "bech32PrefixConsAddr": "osmovalcons",
       "bech32PrefixConsPub": "osmovalconspub"
     },
+    "bip44": {
+      "coinType": 118
+    },
     "feeCurrencies": [
       {
         "coinDenom": "OSMO",
