@@ -56,6 +56,22 @@
     "icon": "/logos/osmo.svg",
     "rpc": "https://osmosis-rpc.polkachu.com",
     "rest": "https://osmosis-api.polkachu.com",
+    "bech32Config": {
+      "bech32PrefixAccAddr": "osmo",
+      "bech32PrefixAccPub": "osmopub",
+      "bech32PrefixValAddr": "osmovaloper",
+      "bech32PrefixValPub": "osmovaloperpub",
+      "bech32PrefixConsAddr": "osmovalcons",
+      "bech32PrefixConsPub": "osmovalconspub"
+    },
+    "feeCurrencies": [
+      {
+        "coinDenom": "OSMO",
+        "coinMinimalDenom": "uosmo",
+        "coinDecimals": 6,
+        "coingeckoId": "osmosis"
+      }
+    ],
     "currencies": [
       {
         "coinDenom": "OSMO",
