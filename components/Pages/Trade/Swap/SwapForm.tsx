@@ -189,9 +189,10 @@ const SwapForm: FC<Props> = ({
       return null
     }
 
-    const e = num(tokenA?.amount).times(10 ** tokenBInfo.decimals)
-    return num(simulated?.amount).div(e).
-      toFixed(6)
+    const tokenAAmount = num(tokenA?.amount).times(10 ** tokenAInfo.decimals)
+    const tokenBAmount = num(tokenB?.amount).times(10 ** tokenBInfo.decimals)
+    const rate = isReverse ? (Number(simulated?.amount) / Number(tokenBAmount)) : (Number(tokenAAmount) / Number(simulated?.amount))
+    return rate.toFixed(6)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulated, tokenA?.amount])
 

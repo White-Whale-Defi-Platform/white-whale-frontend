@@ -58,7 +58,8 @@ const useSwap = ({ reverse }) => {
     }
     const rate1 = num(1).minus(slippageToDecimal)
     const rate2 = num(1).minus(0.001)
-    return fromChainAmount(((reverse ? swapTokenB.amount * (10 ** swapTokenB.decimals) : (Number(simulated.amount))) * Number(rate1) * Number(rate2)).toFixed(tokenB?.decimals),
+    const minReceiveBaseAmount = reverse ? (swapTokenB.amount * (10 ** swapTokenB.decimals)) : Number(simulated.amount)
+    return fromChainAmount((minReceiveBaseAmount * Number(rate1) * Number(rate2)).toFixed(tokenB?.decimals),
       tokenB?.decimals)
   }, [simulated, slippageToDecimal, tokenB?.decimals])
 
