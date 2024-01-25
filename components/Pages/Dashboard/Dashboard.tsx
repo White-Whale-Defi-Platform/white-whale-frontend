@@ -128,7 +128,7 @@ const Dashboard: FC = () => {
     return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
   }, [config])
 
-  const [liquidBalances, _] = useMultipleTokenBalance(symbols,true)
+  const [liquidBalances, _] = useMultipleTokenBalance(symbols, true)
   const {
     feeDistributionConfig,
     globalTotalBonded,

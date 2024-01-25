@@ -13,13 +13,29 @@ export const parseError = (error: Error) => {
       message: 'Exceeds maximum allowed flows',
     },
     {
-      regex: /Flow start timestamp is too far into the future/u,
+      regex: /flow start timestamp is too far into the future/u,
       message: 'Start date is too far in future',
+    },
+    {
+      regex: /account sequence mismatch/u,
+      message: 'You have pending transaction',
+    },
+    {
+      regex: /out of gas/u,
+      message: 'Out of gas, try increasing gas limit on wallet.',
+    },
+    {
+      regex: /before the new\/latest epoch/u,
+      message: 'Epoch not yet created.',
+    },
+    {
+      regex: /there are unclaimed rewards available./u,
+      message: 'There are unclaimed rewards available.',
     },
   ]
 
   return (
-    customErrors.find(({ regex }) => regex.test(error?.message || ''))?.
+    customErrors.find(({ regex }) => regex.test(error?.message.toLowerCase() || ''))?.
       message || 'Failed to execute transaction'
   )
 }

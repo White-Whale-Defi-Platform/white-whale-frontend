@@ -8,7 +8,7 @@ export const ACTIVE_NETWORKS = {
     terra: 'phoenix-1',
     sei: 'pacific-1',
     'terra-classic': 'columbus-5',
-    osmosis: 'osmosis-1'
+    osmosis: 'osmosis-1',
   },
   testnet: {
     comdex: 'comdex-test2',
@@ -31,7 +31,7 @@ export const ACTIVE_NETWORKS_WALLET_NAMES = {
     'terra2',
     'sei',
     'terra',
-    'osmosis'
+    'osmosis',
   ],
   testnet: [
     'injectivetestnet',

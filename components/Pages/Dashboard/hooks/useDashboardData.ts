@@ -16,8 +16,8 @@ import { useClients } from 'hooks/useClients'
 import { debounce } from 'lodash'
 import { NetworkType } from 'state/chainState'
 
-import { getGlobalIndex } from './getGlobalIndex'
 import { TokenInfo } from '../../Trade/Pools/hooks/usePoolsListQuery'
+import { getGlobalIndex } from './getGlobalIndex'
 
 export interface TokenDetails {
   tokenSymbol: string

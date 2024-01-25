@@ -11,11 +11,11 @@ import { CW20 } from 'services/cw20'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
+import { useConfig } from '../components/Pages/Dashboard/hooks/useDashboardData'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
-import { useConfig } from '../components/Pages/Dashboard/hooks/useDashboardData'
 
 const fetchTokenBalance = async ({
   cosmWasmClient,
@@ -96,7 +96,7 @@ export const useTokenBalance = (tokenSymbol: string) => {
   return {
     balance,
     isLoading,
-    refetch
+    refetch,
   }
 }
 
@@ -116,7 +116,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?
       }
     }
   }
-  
+
   const queryKey = useMemo(() => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
     [tokenSymbols])
 
