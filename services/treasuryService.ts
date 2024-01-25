@@ -2,16 +2,40 @@ import axios from 'axios'
 import { ChainId } from 'constants'
 import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
-// Hardcoded until native cosmos-kit support
-export const getInjectiveFee = (gas:number) => ({
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { getGasPricesAPI } from './useAPI'
+import { WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/'
+import { getGasPrices } from '../constants/signerOptions'
+import { chains as chainRegistry } from 'chain-registry'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+
+
+export const getGasFees = async (gas: number, price: number, denom: string) => ({
   amount: [
     {
-      denom: 'inj',
-      amount: String(gas * 160_000_000),
+      denom: denom,
+      amount: String(Math.ceil(Number(gas * price))),
     },
   ],
   gas: String(gas),
 })
+
+export async function createGasFee(client: SigningCosmWasmClient | InjectiveSigningStargateClient, address: string, msgs: Array<any>, gas: number | null) {
+  let outGas: number = gas
+  let chainid = await client.getChainId()
+  const prices = await getGasPricesAPI()
+  if (!gas) {
+    outGas = Math.ceil(await client.simulate(
+      address, msgs, '',
+    ) * 1.3)
+  }
+  let chainFee = prices[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainid]]
+  if (!chainFee) {
+    const chainEntry = chainRegistry.find((chain: any) => chain.chain_name == WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainid])
+    chainFee = await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainid], chainEntry)
+  }
+  return getGasFees(outGas, chainFee.amount, chainFee.denom)
+}
 
 class FCDBaseClient {
   private readonly baseURL: string = 'https://terra-classic-lcd.publicnode.com/terra'
@@ -63,7 +87,7 @@ export class TerraTreasuryService extends FCDBaseClient {
     return Math.ceil(Math.min(Number(amount) * Number(taxRate), Number(taxCap)))
   }
 
-  async getTerraClassicFee(funds:any, gas:number): Promise<any> {
+  async getTerraClassicFee(funds: any, gas: number): Promise<any> {
     const terraClassic = chains.find((chain) => chain.chainId === ChainId.terrac);
     let tax = null;
     const amountClassic = funds?.reduce((total, elem) => {

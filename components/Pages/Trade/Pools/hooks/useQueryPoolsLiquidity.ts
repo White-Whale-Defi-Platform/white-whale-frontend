@@ -202,10 +202,9 @@ export const useQueryPoolsLiquidity = ({
       ) {
         return []
       }
-      const flows = await cosmWasmClient?.queryContractSmart(pool.staking_address,
-        {
-          flows: {},
-        })
+
+     // TODO: DONE
+      const flows = await getFlows(cosmWasmClient)
       return flows?.map((flow) => {
         const denom =
           flow?.flow_asset?.info?.token?.contract_addr ||
@@ -222,10 +221,8 @@ export const useQueryPoolsLiquidity = ({
       ) {
         return []
       }
-      return cosmWasmClient?.
-        queryContractSmart(pool.staking_address, {
-          flows: {},
-        }).
+      // TODO DONE
+      return getFlows(cosmWasmClient).
         then((flows) => {
           const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch

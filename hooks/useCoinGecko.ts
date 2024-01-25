@@ -1,11 +1,16 @@
 import { useQuery } from 'react-query'
 
 import { isDevMode } from 'util/isDevMode'
+import { getPricesAPI } from 'services/useAPI'
 
 const getCoinGecko = async (ids = []) => {
   const newApiIds = [...new Set(ids)].filter((elem) => typeof elem === 'string').join()
-  const response = isDevMode() ? await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds.split(',')}&vs_currencies=usd`) : await fetch(`/api/coingecko?ids=${newApiIds}`);
-  return await response.json()
+  let apiValues: any = await getPricesAPI(newApiIds.split(','))
+  if (!apiValues) {
+    const response = isDevMode() ? await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds.split(',')}&vs_currencies=usd`) : await fetch(`/api/coingecko?ids=${newApiIds}`);
+    apiValues = await response.json()
+  }
+  return apiValues
 }
 
 const useCoinGecko = (ids: string[]) => {

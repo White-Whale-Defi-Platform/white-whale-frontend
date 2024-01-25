@@ -8,6 +8,7 @@ import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
+import { getPoolInfo } from '../components/Pages/Trade/Pools/hooks/queryPoolInfo'
 
 type Params = {
   token: TokenInfo
@@ -24,7 +25,7 @@ type PriceFromPoolParams = {
 }
 
 const getPriceFromPool = async ({ pool, baseToken, baseTokenPrice, cosmWasmClient }: PriceFromPoolParams) => {
-  const poolInfo = await cosmWasmClient.queryContractSmart(pool.swap_address, { pool: {} })
+  const poolInfo = await getPoolInfo(pool.swap_address, cosmWasmClient)
   const isBaseTokenLast = pool.pool_assets[1].symbol === baseToken.symbol
   const [asset1, asset2] = poolInfo?.assets || []
   const ratioFromPool = convertMicroDenomToDenom(Number(asset2?.amount), pool.pool_assets[1].decimals) / convertMicroDenomToDenom(Number(asset1?.amount), pool.pool_assets[0].decimals)
