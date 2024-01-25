@@ -10,7 +10,7 @@ export const claimRewards: any = async (
   signingClient: SigningCosmWasmClient,
   address: string,
   config: Config,
-  injectiveSigningClient?: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
   const handleMsg = {
     claim: {},

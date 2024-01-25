@@ -11,6 +11,7 @@ import { CW20 } from 'services/cw20'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
+import { useConfig } from '../components/Pages/Dashboard/hooks/useDashboardData'
 import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
 import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
@@ -92,17 +93,29 @@ export const useTokenBalance = (tokenSymbol: string) => {
       refetchIntervalInBackground: true,
     },
   )
-  return { balance,
+  return {
+    balance,
     isLoading,
-    refetch }
+    refetch,
+  }
 }
 
-export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
+export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?: boolean) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient, signingClient } = useClients(walletChainName)
   const { address, isWalletConnected } = useChain(walletChainName)
   const [tokenList] = useTokenList()
+  const config = useConfig(network, chainId)
   const [ibcAssetsList] = useIBCAssetList()
+
+  if (isBonding && config?.bonding_tokens) {
+    for (const newToken of config.bonding_tokens) {
+      const isTokenAdded = tokenList?.tokens.find((existingToken) => existingToken.denom === newToken.denom);
+      if (!isTokenAdded) {
+        tokenList?.tokens.push(newToken);
+      }
+    }
+  }
 
   const queryKey = useMemo(() => `multipleTokenBalances/${tokenSymbols?.join('+')}`,
     [tokenSymbols])
@@ -115,15 +128,15 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>) => {
       signingClient,
       address,
       token:
-              getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
-              mapIbcTokenToNative(getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)) ||
-              {},
+        getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
+        mapIbcTokenToNative(getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)) ||
+        {},
     }))),
     {
       enabled: Boolean(isWalletConnected &&
-          tokenSymbols?.length &&
-          tokenList?.tokens &&
-          cosmWasmClient),
+        tokenSymbols?.length &&
+        tokenList?.tokens &&
+        cosmWasmClient),
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,

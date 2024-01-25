@@ -83,6 +83,9 @@ const Pools = () => {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
     console.log('Pair-Infos: ', pairInfos)
+    console.log('Loading: ', isLoading)
+    console.log('Init Loading: ', isInitLoading)
+    console.log('External Loading: ', externalStatsLoading)
   }
 
   const calculateMyPosition = (pool: AllPoolData) => {

@@ -32,7 +32,7 @@ const BondingActions = ({ globalAction }) => {
 
   const config: Config = useConfig(network, chainId)
 
-  const symbols = useMemo(() => config?.bonding_tokens.map((token) => token.tokenSymbol),
+  const symbols = useMemo(() => config?.bonding_tokens.map((token) => token.symbol),
     [config])
 
   const { txStep, submit } = useTransaction()
@@ -256,7 +256,7 @@ const BondingActions = ({ globalAction }) => {
             }
             onClick={ () => {
               if (isWalletConnected) {
-                let { denom } = config.bonding_tokens.find((token) => token.tokenSymbol === currentBondState.tokenSymbol)
+                let { denom } = config.bonding_tokens.find((token) => token.symbol === currentBondState.tokenSymbol)
                 if (globalAction === ActionType.withdraw) {
                   denom = getFirstDenomWithPositiveAmount(withdrawableInfos,
                     config)

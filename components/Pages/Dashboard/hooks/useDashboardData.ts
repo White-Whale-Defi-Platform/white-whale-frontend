@@ -16,6 +16,7 @@ import { useClients } from 'hooks/useClients'
 import { debounce } from 'lodash'
 import { NetworkType } from 'state/chainState'
 
+import { TokenInfo } from '../../Trade/Pools/hooks/usePoolsListQuery'
 import { getGlobalIndex } from './getGlobalIndex'
 
 export interface TokenDetails {
@@ -30,7 +31,7 @@ export interface Config {
   incentive_factory: string
   frontend_helper: string
   whale_base_token: TokenDetails
-  bonding_tokens: TokenDetails[]
+  bonding_tokens: TokenInfo[]
 }
 
 export const useConfig = (network: NetworkType, chainId: string) => {

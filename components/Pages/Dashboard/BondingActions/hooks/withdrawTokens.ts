@@ -11,7 +11,7 @@ export const withdrawTokens: any = async (
   address: string,
   denom: string,
   config: Config,
-  injectiveSigningClient?: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
   const handleMsg = {
     withdraw: {

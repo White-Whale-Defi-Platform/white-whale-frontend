@@ -15,9 +15,18 @@
   },
   "bonding_tokens": [
     {
-      "tokenSymbol": "WHALE",
-      "denom": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB",
-      "decimals": 6
+      "id": "white-whale",
+      "chain_id": "columbus-5",
+      "token_address": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB",
+      "symbol": "WHALE",
+      "name": "Whale",
+      "decimals": 6,
+      "logoURI": "/logos/whale.svg",
+      "tags": [
+        "native"
+      ],
+      "native": true,
+      "denom": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB"
     }
   ]
 }

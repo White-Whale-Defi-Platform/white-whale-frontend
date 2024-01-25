@@ -21,7 +21,6 @@ const Overview = ({ poolId, dailyEmissions }: Props) => {
   })),
   [positionData])
 
-
   return (
     <VStack alignItems="flex-start" gap="16px" py={5}>
       <Rewards
