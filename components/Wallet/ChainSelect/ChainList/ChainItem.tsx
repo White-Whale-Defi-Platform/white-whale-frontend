@@ -28,7 +28,7 @@ const ChainItem = ({
           whiteSpace="pre-wrap"
         >
         To access this chain, you must add it to your wallet.
-        </Box>) : !walletConnected && chain.chainName?.includes('Injective') && walletType !== 'station-extension' ? (
+        </Box>) : !walletConnected && chain.chainName?.includes('Injective') && walletType !== 'station-extension'? (
         <Box
           maxWidth="220px"
           minWidth="fit-content"

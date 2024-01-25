@@ -15,26 +15,14 @@
   },
   "bonding_tokens": [
     {
-      "chain_id": "chihuahua-1",
-      "token_address": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF",
-      "symbol": "ampWHALE",
-      "name": "ampWHALE",
-      "decimals": 6,
-      "logoURI": "/logos/ampWhale.svg",
-      "tags": ["native"],
-      "native": true,
-      "denom": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF"
+      "tokenSymbol": "ampWHALE",
+      "denom": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF",
+      "decimals": 6
     },
     {
-      "chain_id": "chihuahua-1",
-      "token_address": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
-      "symbol": "bWHALE",
-      "name": "bWHALE",
-      "decimals": 6,
-      "logoURI": "/logos/bWHALE.png",
-      "tags": ["native"],
-      "native": true,
-      "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7"
+      "tokenSymbol": "bWHALE",
+      "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
+      "decimals": 6
     }
   ]
 }

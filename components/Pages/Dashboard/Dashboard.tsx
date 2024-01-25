@@ -124,11 +124,12 @@ const Dashboard: FC = () => {
   const config: Config = useConfig(network, chainId)
 
   const symbols = useMemo(() => {
-    const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || [];
+    const tokenSymbols = config?.bonding_tokens?.map((token) => token.tokenSymbol) || [];
     return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
   }, [config])
 
-  const [liquidBalances, _] = useMultipleTokenBalance(symbols, true)
+  const [liquidBalances, _] = useMultipleTokenBalance(symbols)
+
   const {
     feeDistributionConfig,
     globalTotalBonded,

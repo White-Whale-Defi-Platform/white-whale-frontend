@@ -20,14 +20,14 @@ const menuOrTab = (
       <MenuList backgroundColor="rgba(0, 0, 0, 1)" >
 
         {[PositionState.all, PositionState.active, PositionState.unbonding, PositionState.withdraw].map((item) => (
-          <MenuItem
+          <MenuItem 
             alignSelf={'center'}
             backgroundColor="rgba(0, 0, 0, 0.25)"
             key={item}
             color="white"
             minW="120px"
             maxWidth={'200px'}
-            textTransform="capitalize"
+            textTransform="capitalize" 
             onClick={() => {
               setActiveButton(item)
               setColumnFilters(item === PositionState.all

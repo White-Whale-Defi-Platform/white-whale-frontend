@@ -86,6 +86,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
 },
 ref) => {
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
+
   return (
     <Stack
       direction={['column-reverse', 'row']}
@@ -142,7 +143,7 @@ ref) => {
             <AssetSelectTrigger
               tokenInfo={tokenInfo}
               showIcon={showLogo}
-              symbol={token?.symbol}
+              symbol={token?.tokenSymbol}
             />
             {showList && (
               <IconButton

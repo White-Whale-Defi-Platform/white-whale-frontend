@@ -54,7 +54,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
   useEffect(() => {
     if (config) {
       setCurrentBondState({
-        tokenSymbol: config.bonding_tokens[0].symbol,
+        tokenSymbol: config.bonding_tokens[0].tokenSymbol,
         amount: 0,
         decimals: 6,
         denom: config.bonding_tokens[0].denom,

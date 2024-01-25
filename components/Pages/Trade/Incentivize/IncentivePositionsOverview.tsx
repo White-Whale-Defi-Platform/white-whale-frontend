@@ -113,7 +113,7 @@ const Token = ({ imgUrl, symbol }) => (
       width="auto"
       style={{
         margin: 'unset',
-        borderRadius: '50%',
+        borderRadius: '50%'
       }}
       maxW="1.2rem"
       maxH="1.2rem"
@@ -155,7 +155,7 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
       />
     ),
   })),
-  [flows])
+    [flows])
 
   if (positions.length === 0) {
     return (

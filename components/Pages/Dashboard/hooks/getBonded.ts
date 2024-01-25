@@ -54,7 +54,7 @@ export const getBonded = async (
 
   const bondedAssets: BondedData[] = bondedInfo?.bonded_assets.map((asset) => {
     const { denom } = asset.info.native_token
-    const tokenSymbol = config.bonding_tokens.find((token) => token.denom === denom)?.symbol
+    const tokenSymbol = config.bonding_tokens.find((token) => token.denom === denom)?.tokenSymbol
 
     return {
       amount: convertMicroDenomToDenom(asset.amount, 6),

@@ -64,7 +64,7 @@ const Withdraw = ({
       // eslint-disable-next-line prefer-destructuring
       const firstToken = config.bonding_tokens[0]
       setCurrentBondState({
-        tokenSymbol: firstToken.symbol,
+        tokenSymbol: firstToken.tokenSymbol,
         amount: 0,
         decimals: 6,
         denom: firstToken.denom,

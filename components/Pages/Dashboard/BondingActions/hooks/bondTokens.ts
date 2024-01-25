@@ -13,7 +13,7 @@ export const bondTokens: any = async (
   amount: number,
   denom: string,
   config: Config,
-  injectiveSigningClient?: InjectiveSigningStargateClient,
+  injectiveSigningClient?: InjectiveSigningStargateClient
 ) => {
   const handleMsg = {
     bond: {
@@ -31,7 +31,7 @@ export const bondTokens: any = async (
     senderAddress: address,
     contractAddress: config.whale_lair,
     message: handleMsg,
-    funds: [coin(amount, denom)],
+    funds: [coin(amount, denom)]
   })
   let fee: any = 'auto'
   if (await signingClient.getChainId() === ChainId.terrac) {

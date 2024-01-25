@@ -34,9 +34,5 @@ export const endpointOptions = {
       rpc: ['https://sei-rpc.polkachu.com'],
       rest: ['https://sei-api.polkachu.com'],
     },
-    osmosis: {
-      rpc: ['https://osmosis-rpc.polkachu.com'],
-      rest: ['https://osmosis-api.polkachu.com'],
-    },
   },
 }

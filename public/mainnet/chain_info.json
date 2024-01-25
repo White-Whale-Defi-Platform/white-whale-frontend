@@ -49,202 +49,6 @@
     ]
   },
   {
-    "chainId": "osmosis-1",
-    "chainName": "Osmosis",
-    "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
-    "label": "Osmosis",
-    "icon": "/logos/osmo.svg",
-    "rpc": "https://osmosis-rpc.polkachu.com",
-    "rest": "https://osmosis-api.polkachu.com",
-    "bech32Config": {
-      "bech32PrefixAccAddr": "osmo",
-      "bech32PrefixAccPub": "osmopub",
-      "bech32PrefixValAddr": "osmovaloper",
-      "bech32PrefixValPub": "osmovaloperpub",
-      "bech32PrefixConsAddr": "osmovalcons",
-      "bech32PrefixConsPub": "osmovalconspub"
-    },
-    "bip44": {
-      "coinType": 118
-    },
-    "coinType": 118,
-    "feeCurrencies": [
-      {
-        "coinDenom": "OSMO",
-        "coinMinimalDenom": "uosmo",
-        "coinDecimals": 6,
-        "coingeckoId": "osmosis"
-      }
-    ],
-    "currencies": [
-      {
-        "coinDenom": "OSMO",
-        "coinMinimalDenom": "uosmo",
-        "coinDecimals": 6,
-        "coinGeckoId": "osmosis"
-      }
-    ]
-  },
-  {
-    "chainId": "phoenix-1",
-    "chainName": "Terra Mainnet",
-    "label": "Terra",
-    "icon": "/logos/terra.png",
-    "rpc": "https://ww-terra-rpc.polkachu.com",
-    "rest": "https://ww-terra-rest.polkachu.com",
-    "stakeCurrency": {
-      "coinDenom": "LUNA",
-      "coinMinimalDenom": "uluna",
-      "coinDecimals": 6
-    },
-    "bip44": {
-      "coinType": 330
-    },
-    "bech32Config": {
-      "bech32PrefixAccAddr": "terra",
-      "bech32PrefixAccPub": "terrapub",
-      "bech32PrefixValAddr": "terravaloper",
-      "bech32PrefixValPub": "terravaloperpub",
-      "bech32PrefixConsAddr": "terravalcons",
-      "bech32PrefixConsPub": "terravalconspub"
-    },
-    "currencies": [
-      {
-        "coinDenom": "LUNA",
-        "coinMinimalDenom": "uluna",
-        "coinDecimals": 6,
-        "coinGeckoId": "terra-luna-2"
-      }
-    ],
-    "feeCurrencies": [
-      {
-        "coinDenom": "LUNA",
-        "coinMinimalDenom": "uluna",
-        "coinDecimals": 6,
-        "coinGeckoId": "terra-luna-2"
-      }
-    ],
-    "coinType": 330,
-    "gasPriceStep": {
-      "low": 0.07,
-      "average": 0.15,
-      "high": 0.2
-    },
-    "features": [
-      "cosmwasm"
-    ]
-  },
-  {
-    "chainId": "injective-1",
-    "chainName": "Injective",
-    "rpc": "https://ww-injective-rpc.polkachu.com",
-    "rest": "https://ww-injective-rest.polkachu.com",
-    "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
-    "label": "Injective",
-    "icon": "/logos/injective.png",
-    "stakeCurrency": {
-      "coinDenom": "INJ",
-      "coinMinimalDenom": "inj",
-      "coinDecimals": 18,
-      "coinGeckoId": "injective-protocol"
-    },
-    "walletUrl": "https://hub.injective.dev/",
-    "walletUrlForStaking": "https://hub.injective.dev/",
-    "bip44": {
-      "coinType": 60
-    },
-    "bech32Config": {
-      "bech32PrefixAccAddr": "inj",
-      "bech32PrefixAccPub": "injpub",
-      "bech32PrefixValAddr": "injvaloper",
-      "bech32PrefixValPub": "injvaloperpub",
-      "bech32PrefixConsAddr": "injvalcons",
-      "bech32PrefixConsPub": "injvalconspub"
-    },
-    "currencies": [
-      {
-        "coinDenom": "INJ",
-        "coinMinimalDenom": "inj",
-        "coinDecimals": 18,
-        "coinGeckoId": "injective-protocol"
-      }
-    ],
-    "feeCurrencies": [
-      {
-        "coinDenom": "INJ",
-        "coinMinimalDenom": "inj",
-        "coinDecimals": 18,
-        "coinGeckoId": "injective-protocol",
-        "gasPriceStep": {
-          "low": 9000000000,
-          "average": 50000000000,
-          "high": 80000000000
-        }
-      }
-    ],
-    "gasPriceStep": {
-      "low": 9000000000,
-      "average": 50000000000,
-      "high": 80000000000
-    },
-    "coinType": 60,
-    "features": [
-      "ibc-transfer",
-      "ibc-go",
-      "eth-address-gen",
-      "eth-key-sign"
-    ]
-  },
-  {
-    "chainId": "chihuahua-1",
-    "chainName": "Chihuahua mainnet",
-    "label": "Chihuahua",
-    "icon": "/logos/huahua.png",
-    "rpc": "https://ww-chihuahua-rpc.polkachu.com",
-    "rest": "https://ww-chihuahua-rest.polkachu.com",
-    "stakeCurrency": {
-      "coinDenom": "huahua",
-      "coinMinimalDenom": "uhuahua",
-      "coinDecimals": 6
-    },
-    "bip44": {
-      "coinType": 118
-    },
-    "bech32Config": {
-      "bech32PrefixAccAddr": "chihuahua",
-      "bech32PrefixAccPub": "chihuahuapub",
-      "bech32PrefixValAddr": "chihuahuavaloper",
-      "bech32PrefixValPub": "chihuahuavaloperpub",
-      "bech32PrefixConsAddr": "chihuahuavalcons",
-      "bech32PrefixConsPub": "chihuahuavalconspub"
-    },
-    "currencies": [
-      {
-        "coinDenom": "Chihuahua",
-        "coinMinimalDenom": "uhuahua",
-        "coinDecimals": 6,
-        "coinGeckoId": "chihuahua-token"
-      }
-    ],
-    "feeCurrencies": [
-      {
-        "coinDenom": "Chihuahua",
-        "coinMinimalDenom": "uhuahua",
-        "coinDecimals": 6,
-        "coinGeckoId": "chihuahua-token"
-      }
-    ],
-    "coinType": 118,
-    "gasPriceStep": {
-      "low": 1,
-      "average": 5,
-      "high": 10
-    },
-    "features": [
-      "cosmwasm"
-    ]
-  },
-  {
     "chainId": "pacific-1",
     "chainName": "SEI Mainnet",
     "rpc": "https://sei-rpc.polkachu.com",
@@ -389,6 +193,165 @@
     },
     "features": [
       "cosmwasm"
+    ]
+  },
+  {
+    "chainId": "phoenix-1",
+    "chainName": "Terra Mainnet",
+    "label": "Terra",
+    "icon": "/logos/terra.png",
+    "rpc": "https://ww-terra-rpc.polkachu.com",
+    "rest": "https://ww-terra-rest.polkachu.com",
+    "stakeCurrency": {
+      "coinDenom": "LUNA",
+      "coinMinimalDenom": "uluna",
+      "coinDecimals": 6
+    },
+    "bip44": {
+      "coinType": 330
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "terra",
+      "bech32PrefixAccPub": "terrapub",
+      "bech32PrefixValAddr": "terravaloper",
+      "bech32PrefixValPub": "terravaloperpub",
+      "bech32PrefixConsAddr": "terravalcons",
+      "bech32PrefixConsPub": "terravalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "LUNA",
+        "coinMinimalDenom": "uluna",
+        "coinDecimals": 6,
+        "coinGeckoId": "terra-luna-2"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "LUNA",
+        "coinMinimalDenom": "uluna",
+        "coinDecimals": 6,
+        "coinGeckoId": "terra-luna-2"
+      }
+    ],
+    "coinType": 330,
+    "gasPriceStep": {
+      "low": 0.07,
+      "average": 0.15,
+      "high": 0.2
+    },
+    "features": [
+      "cosmwasm"
+    ]
+  },
+  {
+    "chainId": "chihuahua-1",
+    "chainName": "Chihuahua mainnet",
+    "label": "Chihuahua",
+    "icon": "/logos/huahua.png",
+    "rpc": "https://ww-chihuahua-rpc.polkachu.com",
+    "rest": "https://ww-chihuahua-rest.polkachu.com",
+    "stakeCurrency": {
+      "coinDenom": "huahua",
+      "coinMinimalDenom": "uhuahua",
+      "coinDecimals": 6
+    },
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "chihuahua",
+      "bech32PrefixAccPub": "chihuahuapub",
+      "bech32PrefixValAddr": "chihuahuavaloper",
+      "bech32PrefixValPub": "chihuahuavaloperpub",
+      "bech32PrefixConsAddr": "chihuahuavalcons",
+      "bech32PrefixConsPub": "chihuahuavalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "Chihuahua",
+        "coinMinimalDenom": "uhuahua",
+        "coinDecimals": 6,
+        "coinGeckoId": "chihuahua-token"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "Chihuahua",
+        "coinMinimalDenom": "uhuahua",
+        "coinDecimals": 6,
+        "coinGeckoId": "chihuahua-token"
+      }
+    ],
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 1,
+      "average": 5,
+      "high": 10
+    },
+    "features": [
+      "cosmwasm"
+    ]
+  },
+  {
+    "chainId": "injective-1",
+    "chainName": "Injective",
+    "rpc": "https://ww-injective-rpc.polkachu.com",
+    "rest": "https://ww-injective-rest.polkachu.com",
+    "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
+    "label": "Injective",
+    "icon": "/logos/injective.png",
+    "stakeCurrency": {
+      "coinDenom": "INJ",
+      "coinMinimalDenom": "inj",
+      "coinDecimals": 18,
+      "coinGeckoId": "injective-protocol"
+    },
+    "walletUrl": "https://hub.injective.dev/",
+    "walletUrlForStaking": "https://hub.injective.dev/",
+    "bip44": {
+      "coinType": 60
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "inj",
+      "bech32PrefixAccPub": "injpub",
+      "bech32PrefixValAddr": "injvaloper",
+      "bech32PrefixValPub": "injvaloperpub",
+      "bech32PrefixConsAddr": "injvalcons",
+      "bech32PrefixConsPub": "injvalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "INJ",
+        "coinMinimalDenom": "inj",
+        "coinDecimals": 18,
+        "coinGeckoId": "injective-protocol"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "INJ",
+        "coinMinimalDenom": "inj",
+        "coinDecimals": 18,
+        "coinGeckoId": "injective-protocol",
+        "gasPriceStep": {
+          "low": 9000000000,
+          "average": 50000000000,
+          "high": 80000000000
+        }
+      }
+    ],
+    "gasPriceStep": {
+      "low": 9000000000,
+      "average": 50000000000,
+      "high": 80000000000
+    },
+    "coinType": 60,
+    "features": [
+      "ibc-transfer",
+      "ibc-go",
+      "eth-address-gen",
+      "eth-key-sign"
     ]
   },
   {

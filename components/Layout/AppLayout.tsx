@@ -29,8 +29,8 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
           background: background.replace('linear', 'radial').replace('90deg', 'circle'),
         }}
       ></div>}
-      {((isMobile || isMobileView) && !(mobileBrowserLEAP || mobileBrowserKeplr)) && <MobileNotSupportedModal />}
-      {(!(isMobile || isMobileView) || (mobileBrowserLEAP || mobileBrowserKeplr)) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
+      {((isMobile || isMobileView) && !(mobileBrowserLEAP||mobileBrowserKeplr)) && <MobileNotSupportedModal />}
+      {(!(isMobile || isMobileView) || (mobileBrowserLEAP||mobileBrowserKeplr)) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
         <RadialGradient />
         <Navbar />
         <Flex
