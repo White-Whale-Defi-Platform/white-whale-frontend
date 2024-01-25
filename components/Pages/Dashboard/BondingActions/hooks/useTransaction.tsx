@@ -94,7 +94,7 @@ export const useTransaction = () => {
         adjustedAmount,
         data.denom,
         config,
-        injectiveSigningClient
+        injectiveSigningClient,
       )
     } else if (data.bondingAction === ActionType.unbond) {
       return await unbondTokens(
@@ -103,19 +103,19 @@ export const useTransaction = () => {
         adjustedAmount,
         data.denom,
         config,
-        injectiveSigningClient
+        injectiveSigningClient,
       )
     } else if (data.bondingAction === ActionType.withdraw) {
       return await withdrawTokens(
-        signingClient, address, data.denom, config, injectiveSigningClient
+        signingClient, address, data.denom, config, injectiveSigningClient,
       )
     } else if (data.bondingAction === ActionType.claim) {
       return await claimRewards(
-        signingClient, address, config, injectiveSigningClient
+        signingClient, address, config, injectiveSigningClient,
       )
     } else {
       return await createNewEpoch(
-        signingClient, config, address, injectiveSigningClient
+        signingClient, config, address, injectiveSigningClient,
       )
     }
   },

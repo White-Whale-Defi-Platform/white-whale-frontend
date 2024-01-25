@@ -33,7 +33,7 @@ const AssetList: FC<AssetListProps> = ({
 
   const { network, chainId } = useRecoilValue(chainState)
   const config = useConfig(network, chainId)
-  let tokens = isBonding
+  const tokens = isBonding
     ? config?.bonding_tokens
     : tokenList?.tokens
   const [tokenBalance = []] =
@@ -41,7 +41,7 @@ const AssetList: FC<AssetListProps> = ({
       ? [
         tokens?.map(({ symbol }) => unbondingBalances.find((b) => b.tokenSymbol === symbol)?.amount),
       ]
-      : useMultipleTokenBalance(tokens?.map(({ symbol }) => symbol),isBonding)
+      : useMultipleTokenBalance(tokens?.map(({ symbol }) => symbol), isBonding)
 
   const tokensWithBalance = useMemo(() => {
     if (tokenBalance.length === 0) {

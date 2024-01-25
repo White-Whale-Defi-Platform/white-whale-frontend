@@ -46,7 +46,7 @@ export const getWithdrawable = async (
   const withdrawableInfos: WithdrawableInfo[] = withdrawableData?.
     flatMap((item) => item).
     map((item) => {
-      const tokenSymbol = config.bonding_tokens.find((token) => token.denom === item.denom)?.tokenSymbol
+      const tokenSymbol = config.bonding_tokens.find((token) => token.denom === item.denom)?.symbol
 
       return {
         amount: item.amount,
