@@ -13,6 +13,8 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
+const SLIPPAGE = ["osmosis", "injective"]
+
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
   const { walletChainName } = useRecoilValue(chainState)
@@ -33,10 +35,14 @@ const useSwap = ({ reverse }) => {
   const { routerAddress } = poolsList || {}
   const slippageToDecimal = slippage / 100
   const { simulateMsg, encodedExecuteMsg, executeMsg, path, refValue } = useRoute({
-    tokenA: { ...tokenA,
-      ...swapTokenA },
-    tokenB: { ...tokenB,
-      ...swapTokenB },
+    tokenA: {
+      ...tokenA,
+      ...swapTokenA
+    },
+    tokenB: {
+      ...tokenB,
+      ...swapTokenB
+    },
     amount,
     reverse,
     senderAddress: address,
@@ -89,7 +95,11 @@ const useSwap = ({ reverse }) => {
     }
     const receive = toChainAmount(minReceive, tokenB?.decimals)
     if (executeMsg?.execute_swap_operations) {
-      executeMsg.execute_swap_operations.minimum_receive = receive
+      if (SLIPPAGE.includes(walletChainName)) {
+        executeMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
+      } else {
+        executeMsg.execute_swap_operations.minimum_receive = receive
+      }
       return [executeMessage(
         executeMsg,
         num(reverse ? simulated?.amount : amount).toFixed(0),
@@ -99,7 +109,11 @@ const useSwap = ({ reverse }) => {
       )]
     } else if (executeMsg?.send) {
       const decodedMsg = JSON.parse(fromUtf8(fromBase64(executeMsg.send.msg)))
-      decodedMsg.execute_swap_operations.minimum_receive = receive
+      if (SLIPPAGE.includes(walletChainName)) {
+        decodedMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
+      } else {
+        decodedMsg.execute_swap_operations.minimum_receive = receive
+      }
       executeMsg.send.msg = toBase64(toUtf8(JSON.stringify(decodedMsg)))
       return [executeMessage(
         executeMsg,
@@ -124,19 +138,21 @@ const useSwap = ({ reverse }) => {
     amount: reverse ? simulated?.amount : amount,
     price: num(simulated?.price).dp(6).
       toNumber(),
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: () => { },
+    onError: () => { },
   })
   return useMemo(() => ({
     path,
     tx,
     simulated,
     minReceive,
-    state: { error,
-      isLoading },
+    state: {
+      error,
+      isLoading
+    },
     priceImpact,
   }),
-  [tx, simulated, error, isLoading, minReceive, path, priceImpact])
+    [tx, simulated, error, isLoading, minReceive, path, priceImpact])
 }
 
 export default useSwap
