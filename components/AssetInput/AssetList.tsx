@@ -35,7 +35,7 @@ const AssetList: FC<AssetListProps> = ({
   const config = useConfig(network, chainId)
   const tokens = isBonding
     ? config?.bonding_tokens
-    : tokenList?.tokens
+    : [...tokenList?.tokensBySymbol.values()]
   const [tokenBalance = []] =
     unbondingBalances
       ? [
