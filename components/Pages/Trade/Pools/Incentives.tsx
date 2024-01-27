@@ -23,14 +23,13 @@ export const Incentives = ({ flows }) => {
     more = [],
     hasIncentives = false,
   } = useMemo(() => {
-    const logos = flows.slice(0, 2).map((flow) => flow?.logoURI)
-    const more = flows.slice(3).length
+    const logos = flows.slice(0, 3).map((flow) => flow?.logoURI)
+    const more = flows.slice(4).length
     const hasIncentives = flows.length > 0
     return { logos,
       more,
       hasIncentives }
   }, [flows])
-
   // Show dash if no incentives
   if (!hasIncentives) {
     return <Text>-</Text>
