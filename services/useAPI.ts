@@ -102,7 +102,6 @@ export async function getPricesAPI(ids: Array<string>) {
     try {
         const response = await fetch(API_URL + '/api/prices')
         const out = await response.json()
-        console.log(out)
         ids.forEach((chainID: string) => {
             if (!out.data[chainID]) {
                 throw new Error('Price not found on api: ' + chainID)
@@ -121,7 +120,6 @@ export async function getHealthyRESTS(chainnameid: string) {
     let local = rests[chainnameid]
     const time = Date.now()
     if (local && local.time > time) {
-        console.log(true)
         return local.data
     }
     try {
@@ -139,7 +137,7 @@ export async function getHealthyRESTS(chainnameid: string) {
     }
 }
 
-
+//Not used yet
 export async function createEndpointOptions(chains: any) {
     const endpoints: Record<string, any> = {}
     CHAINNAMES.forEach(async (chain: string) => {
@@ -154,7 +152,6 @@ export async function createEndpointOptions(chains: any) {
             endpoints[chain] = { rpc: rpcs, rest: rests }
         }
     })
-    console.log(endpoints)
     return endpoints
 }
 
@@ -178,20 +175,18 @@ export async function getGasPricesAPI() {
     return data?.data || null;
 }
 
-
+// Not used yet
 export async function getAPRData(chain_name: string) {
     let data: any = null;
     let local = APRData[chain_name]
     const time = Date.now()
     if (local && local?.data && local?.time > time) {
-        console.log('cacheApi')
         return local.data
     }
     if (API_URL) {
         try {
             const response = await fetch(`${API_URL}/api/pools/${chain_name}`);
             data = await response.json();
-            console.log('refetch api')
             APRData[chain_name] = { data: data.data, time: time + 300000 }
         } catch (error) {
             console.error(error);

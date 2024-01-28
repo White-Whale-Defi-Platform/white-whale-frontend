@@ -109,13 +109,7 @@ export const useWithdrawTransaction: any = ({
   )
 
   const { mutate } = useMutation(async () => {
-    let fee: any = 'auto'
-    if (await signingClient.getChainId() === ChainId.terrac) {
-      const gas = Math.ceil(await signingClient.simulate(
-        senderAddress, debouncedMsgs, '',
-      ) * 1.3)
-      fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-    } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+    if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
       const injectiveTxData = await injectiveSigningClient.sign(
         senderAddress, debouncedMsgs, await createGasFee(injectiveSigningClient,senderAddress,debouncedMsgs,null), ADV_MEMO,
       )

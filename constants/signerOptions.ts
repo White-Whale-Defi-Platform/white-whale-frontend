@@ -10,7 +10,7 @@ export const getGasPrices = async (chainName:string, chain:Chain) => {
       ? feeTokens?.low_gas_price || feeTokens?.fixed_min_gas_price || feeTokens?.average_gas_price || 0
       : 0;
     return {
-      gasPrice: GasPrice.fromString(String(price) + chain.fees.fee_tokens[0].denom),
+      gasPrice: GasPrice.fromString(String(price) + chain.fees?.fee_tokens[0].denom),
     }
   }
 }

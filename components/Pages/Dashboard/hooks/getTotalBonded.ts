@@ -2,7 +2,6 @@ import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { Config } from './useDashboardData'
-import { API_URL } from '../../../../constants'
 
 interface NativeTokenInfo {
   native_token: {

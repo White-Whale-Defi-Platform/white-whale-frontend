@@ -8,9 +8,9 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients';
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
-import { TerraTreasuryService, createGasFee } from 'services/treasuryService';
+import { createGasFee } from 'services/treasuryService';
 import { chainState } from 'state/chainState'
-import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
+import { createExecuteMessage } from 'util/messages/index'
 
 export const useWithdrawPosition = ({ poolId }) => {
   const { walletChainName } = useRecoilValue(chainState)
@@ -35,13 +35,7 @@ export const useWithdrawPosition = ({ poolId }) => {
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {
-      let fee: any = 'auto'
-      if (await signingClient.getChainId() === ChainId.terrac) {
-        const gas = Math.ceil(await signingClient.simulate(
-          address, msgs, '',
-        ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-      } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+      if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
           address, msgs, await createGasFee(injectiveSigningClient, address, msgs, null), ADV_MEMO,
         )

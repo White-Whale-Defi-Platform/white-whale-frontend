@@ -55,7 +55,7 @@ const MyApp: FC<AppProps> = ({
   
     wallets = [...wallets, ...unavailableWallets];
   } catch (error) {
-    console.error(error);
+    //
   }
   return (
     <><>

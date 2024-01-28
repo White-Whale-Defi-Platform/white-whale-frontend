@@ -10,7 +10,6 @@ import utc from 'dayjs/plugin/utc'
 import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { API_URL } from '../../../../../constants'
 
 dayjs.extend(utc)
 interface Epoch {

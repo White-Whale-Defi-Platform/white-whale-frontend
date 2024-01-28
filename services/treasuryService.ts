@@ -34,6 +34,10 @@ export async function createGasFee(client: SigningCosmWasmClient | InjectiveSign
     const chainEntry = chainRegistry.find((chain: any) => chain.chain_name == WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainid])
     chainFee = await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainid], chainEntry)
   }
+  if (chainid == ChainId.terrac){
+    const funds = msgs.flatMap((elem) => elem.value.funds)
+    return await TerraTreasuryService.getInstance().getTerraClassicFee(funds, outGas)
+  }
   return getGasFees(outGas, chainFee.amount, chainFee.denom)
 }
 

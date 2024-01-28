@@ -62,13 +62,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
         }
       }
 
-      let fee: any = 'auto'
-      if (await signingClient.getChainId() === ChainId.terrac) {
-        const gas = Math.ceil(await signingClient.simulate(
-          address, msg, '',
-        ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-      } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+      if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
           address, msg, await createGasFee(injectiveSigningClient,address,msg,null), ADV_MEMO,
         )

@@ -1,7 +1,6 @@
 import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
-import { API_URL } from '../../../../constants'
 
 interface NativeToken {
   denom: string

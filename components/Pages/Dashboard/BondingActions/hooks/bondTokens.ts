@@ -33,13 +33,7 @@ export const bondTokens: any = async (
     message: handleMsg,
     funds: [coin(amount, denom)]
   })
-  let fee: any = 'auto'
-  if (await signingClient.getChainId() === ChainId.terrac) {
-    const gas = Math.ceil(await signingClient.simulate(
-      address, [execMsg], '',
-    ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
-  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       address, [execMsg], await createGasFee(injectiveSigningClient,address,[execMsg],null), ADV_MEMO,
     )

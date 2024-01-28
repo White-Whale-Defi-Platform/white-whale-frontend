@@ -3,9 +3,7 @@ import { useQueries } from 'react-query'
 import { useChain } from '@cosmos-kit/react-lite'
 import { InjectiveStargate } from '@injectivelabs/sdk-ts'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { getRandomRPC } from '../services/useAPI';
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
 
 
@@ -17,10 +15,7 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet,
-    chainWallet,
-    getOfflineSignerDirect,
-    getOfflineSigner
-  } = useChain(walletChainName)
+    getOfflineSignerDirect } = useChain(walletChainName)
   if (isWalletConnected && wallet?.name !== 'station-extension') {
     try {
       setDefaultSignOptions({
@@ -45,8 +40,8 @@ export const useClients = (walletChainName: string) => {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
-          const offlineSigner : any = await getOfflineSignerDirect();
-          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(await getRandomRPC('injective'),
+          const offlineSigner: any = await getOfflineSignerDirect();
+          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)
           client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
           return client
@@ -67,16 +62,4 @@ export const useClients = (walletChainName: string) => {
     signingClient: queries[1].data,
     injectiveSigningClient: queries[2].data,
   }
-}
-
-async function createCosmWasmClient(chainName:string) {
-  const rpcEndpoint = await getRandomRPC(chainName)
-  console.log(rpcEndpoint)
-  return await CosmWasmClient.connect(rpcEndpoint)
-}
-
-async function createSigningCosmWasmClient(chainName:string, getOfflineSignerAmino: any, chainRecord:any) {
-  const rpcEndpoint = await getRandomRPC(chainName)
-  const signer = await getOfflineSignerAmino()
-  return await SigningCosmWasmClient.connectWithSigner(rpcEndpoint,signer,await chainRecord.clientOptions?.signingCosmwasm)
 }

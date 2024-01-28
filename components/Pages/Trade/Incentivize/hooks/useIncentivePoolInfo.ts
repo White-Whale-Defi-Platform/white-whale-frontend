@@ -19,7 +19,7 @@ import {
 } from 'services/poolDataProvider'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import { getAPRData, getFlowsFromAPI } from 'services/useAPI'
+import { getFlowsFromAPI } from 'services/useAPI'
 import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
 
 export interface Flow {
@@ -177,7 +177,7 @@ const getPoolFlowData = async (
 export const useIncentivePoolInfo = (
   client, pools, currentChainPrefix,
 ) => {
-  const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const { chainId, network } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)

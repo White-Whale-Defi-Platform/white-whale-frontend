@@ -52,19 +52,13 @@ export const directTokenSwap = async ({
       null,
     ))
   }
-  console.log(signingClient)
   const execMsg = createExecuteMessage({
     senderAddress,
     contractAddress: swapAddress,
     message: msgs,
     funds: [coin(tokenAmount, tokenA.denom)]
   })
-  if (await signingClient.getChainId() === ChainId.terrac) {
-    const gas = Math.ceil(await signingClient.simulate(
-      senderAddress, [execMsg], '',
-    ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(execMsg.value.funds, gas)
-  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       senderAddress, [execMsg], await createGasFee(injectiveSigningClient, senderAddress, [execMsg], null), ADV_MEMO,
     )

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { Link, VStack, Text } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/react'
 import { ChainId } from 'constants/index'
 import { truncate } from 'libs/text'
 
