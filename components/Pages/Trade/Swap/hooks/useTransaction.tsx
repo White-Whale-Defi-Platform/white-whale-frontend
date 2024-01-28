@@ -176,7 +176,7 @@ export const useTransaction = ({
     },
     onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
-      setTxHash(data.transactionHash || data?.txHash)
+      setTxHash(data.transactionHash || data.txHash)
       onBroadcasting?.(data.transactionHash)
       await queryClient.invalidateQueries([
         'multipleTokenBalances',
@@ -186,7 +186,7 @@ export const useTransaction = ({
         title: 'Swap Success.',
         description: (
           <Finder
-            txHash={data.transactionHash || data?.txHash}
+            txHash={data.transactionHash || data.txHash}
             chainId={await signingClient?.getChainId()}
           >
             {`${tokenA.symbol} -> ${tokenB.symbol}`}

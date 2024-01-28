@@ -4,7 +4,7 @@ import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/c
 import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
-import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
+import { createGasFee } from 'services/treasuryService'
 import {
   createExecuteMessage,
   createIncreaseAllowanceMessage,
@@ -31,7 +31,6 @@ export const directTokenSwap = async ({
   injectiveSigningClient,
   msgs,
 }: DirectTokenSwapArgs) => {
-  let fee: any = 'auto'
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,

@@ -8,7 +8,7 @@ import Finder from 'components/Finder'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import useDebounceValue from 'hooks/useDebounceValue'
-import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
+import { createGasFee } from 'services/treasuryService'
 import { TxStep } from 'types/common'
 
 type Params = {

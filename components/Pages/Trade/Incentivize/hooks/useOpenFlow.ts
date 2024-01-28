@@ -21,7 +21,7 @@ import useTxStatus from 'hooks/useTxStatus'
 import { num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { createAsset } from 'services/asset'
-import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
+import { createGasFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import {
   createExecuteMessage,

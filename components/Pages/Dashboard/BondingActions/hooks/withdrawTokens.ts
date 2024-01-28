@@ -3,7 +3,7 @@ import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/c
 import { Config } from 'components/Pages/Dashboard/hooks/useDashboardData'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
-import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
+import { createGasFee } from 'services/treasuryService'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const withdrawTokens: any = async (

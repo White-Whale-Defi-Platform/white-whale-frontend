@@ -8,7 +8,7 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
-import { TerraTreasuryService, createGasFee } from 'services/treasuryService'
+import { createGasFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const useClaim = ({ poolId }: Props) => {
-  const { walletChainName, chainId } = useRecoilValue(chainState)
+  const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const [pool] = usePoolFromListQueryById({ poolId })

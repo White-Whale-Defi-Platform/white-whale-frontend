@@ -3,7 +3,6 @@ import { useQueries } from 'react-query'
 import { useChain } from '@cosmos-kit/react-lite'
 import { InjectiveStargate } from '@injectivelabs/sdk-ts'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
-import { getRandomRPC } from '../services/useAPI';
 
 
 
