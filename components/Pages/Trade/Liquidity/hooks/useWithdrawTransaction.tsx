@@ -51,7 +51,7 @@ export const useWithdrawTransaction: any = ({
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
-      if (!signingClient || !debouncedMsgs || debouncedMsgs?.length == 0) {
+      if (!signingClient || !debouncedMsgs || debouncedMsgs?.length === 0) {
         return
       }
       try {
@@ -111,12 +111,16 @@ export const useWithdrawTransaction: any = ({
   const { mutate } = useMutation(async () => {
     if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
       const injectiveTxData = await injectiveSigningClient.sign(
-        senderAddress, debouncedMsgs, await createGasFee(injectiveSigningClient,senderAddress,debouncedMsgs,null), ADV_MEMO,
+        senderAddress, debouncedMsgs, await createGasFee(
+          injectiveSigningClient, senderAddress, debouncedMsgs,
+        ), ADV_MEMO,
       )
       return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
     }
     return await signingClient.signAndBroadcast(
-      senderAddress, debouncedMsgs, await createGasFee(signingClient, senderAddress, debouncedMsgs, null), ADV_MEMO,
+      senderAddress, debouncedMsgs, await createGasFee(
+        signingClient, senderAddress, debouncedMsgs,
+      ), ADV_MEMO,
     )
   },
   {

@@ -10,7 +10,7 @@ export const claimRewards: any = async (
   signingClient: SigningCosmWasmClient,
   address: string,
   config: Config,
-  injectiveSigningClient?: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
   const handleMsg = {
     claim: {},
@@ -20,13 +20,17 @@ export const claimRewards: any = async (
     contractAddress: config.fee_distributor,
     message: handleMsg,
     funds: [] })
-   if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
-      address, [execMsg], await createGasFee(injectiveSigningClient,address,[execMsg],null), ADV_MEMO,
+      address, [execMsg], await createGasFee(
+        injectiveSigningClient, address, [execMsg],
+      ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    address, [execMsg], await createGasFee(signingClient, address, [execMsg], null), ADV_MEMO,
+    address, [execMsg], await createGasFee(
+      signingClient, address, [execMsg],
+    ), ADV_MEMO,
   )
 }

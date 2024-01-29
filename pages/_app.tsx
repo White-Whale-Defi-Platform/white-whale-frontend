@@ -28,35 +28,42 @@ const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
+  const [wallets, setWallets] = useState<any[]>([])
+  const [unavailableWallets, setUnavailableWallets] = useState<any[]>([])
   const [mounted, setMounted] = useState<boolean>(false)
   useEffect(() => {
     setMounted(true)
+    const walletProviders = [
+      { name: 'keplr',
+        wallet: keplrWallets },
+      { name: 'station',
+        wallet: stationWallets },
+      { name: 'leap',
+        wallet: leapWallets },
+      { name: 'ninji',
+        wallet: ninjiWallets },
+      { name: 'shellwallet',
+        wallet: shellWallets },
+      { name: 'cosmostationWallet',
+        wallet: cosmoStationWallets },
+    ];
+
+    // Reorder Wallets so available are connected first. Avoid blocking cosmos-kit error for users.
+    try {
+      walletProviders.forEach(({ name, wallet }) => {
+        if (!window?.[name]) {
+          setUnavailableWallets([...unavailableWallets, ...wallet])
+        } else {
+          setWallets([...wallets, ...wallet])
+        }
+      });
+
+      setWallets([...wallets, ...unavailableWallets])
+    } catch (error) {
+      console.error(error)
+    }
   }, [])
-  let wallets = []
-  let unavailableWallets = [];
-  const walletProviders = [
-    { name: 'keplr', wallet: keplrWallets },
-    { name: 'station', wallet: stationWallets },
-    { name: 'leap', wallet: leapWallets },
-    { name: 'ninji', wallet: ninjiWallets },
-    { name: 'shellwallet', wallet: shellWallets },
-    { name: 'cosmostationWallet', wallet: cosmoStationWallets },
-  ];
-  
-  //Reorder Wallets so available are connected first. Avoid blocking cosmos-kit error for users.
-  try {
-    walletProviders.forEach(({ name, wallet }) => {
-      if (!window?.[name]) {
-        unavailableWallets.push(...wallet);
-      } else {
-        wallets.push(...wallet);
-      }
-    });
-  
-    wallets = [...wallets, ...unavailableWallets];
-  } catch (error) {
-    //
-  }
+
   return (
     <><>
       <Head>

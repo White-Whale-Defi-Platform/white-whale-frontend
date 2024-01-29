@@ -50,13 +50,17 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
       const msgs = createClosPositionMessage(unbonding_duration)
       if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
-          address, msgs, await createGasFee(injectiveSigningClient,address,msgs,null), ADV_MEMO,
+          address, msgs, await createGasFee(
+            injectiveSigningClient, address, msgs,
+          ), ADV_MEMO,
         )
         return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       // TODO check if returns promise
       return await validateTransactionSuccess(await signingClient.signAndBroadcast(
-        address, msgs, await createGasFee(signingClient, address, msgs, null), ADV_MEMO,
+        address, msgs, await createGasFee(
+          signingClient, address, msgs,
+        ), ADV_MEMO,
       ))
     },
     onError,

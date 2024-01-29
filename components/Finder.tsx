@@ -43,12 +43,10 @@ const getUrl = (chainId: string, txHash: string) => {
   }
 }
 
-const Finder = ({ children, txHash, chainId }: Props) => {
-  return (
-    <Link isExternal href={getUrl(chainId, txHash)}>
-      {children} TxHash:{truncate(txHash, [4, 4])}
-    </Link>
-  )
-}
+const Finder = ({ children, txHash, chainId }: Props) => (
+  <Link isExternal href={getUrl(chainId, txHash)}>
+    {children} TxHash:{truncate(txHash, [4, 4])}
+  </Link>
+)
 
 export default Finder

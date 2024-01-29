@@ -203,8 +203,10 @@ export const useQueryPoolsLiquidity = ({
         return []
       }
 
-     // TODO: DONE
-      const flows = await getFlows(cosmWasmClient)
+      const flows = await cosmWasmClient?.queryContractSmart(pool.staking_address,
+        {
+          flows: {},
+        })
       return flows?.map((flow) => {
         const denom =
           flow?.flow_asset?.info?.token?.contract_addr ||

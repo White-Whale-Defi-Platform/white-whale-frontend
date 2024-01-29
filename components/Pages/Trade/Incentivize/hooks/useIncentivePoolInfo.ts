@@ -17,9 +17,10 @@ import {
   getPairAprAndDailyVolumeByEnigma,
   getPairAprAndDailyVolumeByCoinhall,
 } from 'services/poolDataProvider'
+import { getFlowsFromAPI } from 'services/useAPI'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import { getFlowsFromAPI } from 'services/useAPI'
+
 import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
 
 export interface Flow {
@@ -144,7 +145,7 @@ const getPoolFlowData = async (
             (flow.start_epoch +
               (flow.end_epoch - flow.start_epoch) -
               Number(currentEpochData.currentEpoch.epoch.id)),
-            poolAsset?.decimals || 6)
+          poolAsset?.decimals || 6)
           const uniqueFlow = uniqueFlowList.find((f) => f.denom === flowDenom)
           uniqueFlow.dailyEmission += emission
         }
@@ -198,7 +199,6 @@ export const useIncentivePoolInfo = (
           break
       }
 
-      
       const poolData =
         ((currentChainPrefix === 'terra' && chainId !== ChainId.terrac) || chainId === ChainId.osmosis)
           ? await getPairAprAndDailyVolumeByCoinhall(pools)
@@ -245,6 +245,6 @@ export const useIncentivePoolInfo = (
   return {
     flowPoolData,
     poolsWithAprAnd24HrVolume,
-    isLoading
+    isLoading,
   }
 }

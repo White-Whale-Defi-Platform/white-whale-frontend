@@ -37,12 +37,16 @@ export const useWithdrawPosition = ({ poolId }) => {
     mutationFn: async () => {
       if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
-          address, msgs, await createGasFee(injectiveSigningClient, address, msgs, null), ADV_MEMO,
+          address, msgs, await createGasFee(
+            injectiveSigningClient, address, msgs,
+          ), ADV_MEMO,
         )
         return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       return await signingClient.signAndBroadcast(
-        address, msgs, await createGasFee(signingClient, address, msgs, null), ADV_MEMO,
+        address, msgs, await createGasFee(
+          signingClient, address, msgs,
+        ), ADV_MEMO,
       )
     },
     onError,
@@ -54,5 +58,5 @@ export const useWithdrawPosition = ({ poolId }) => {
     ...state,
     ...tx,
   }),
-    [tx, state, submit])
+  [tx, state, submit])
 }

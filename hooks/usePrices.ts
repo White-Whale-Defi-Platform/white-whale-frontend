@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { getPoolInfo } from 'components/Pages/Trade/Pools/hooks/queryPoolInfo'
 import { PoolEntityType, TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useClients } from 'hooks/useClients'
 import useCoinGecko from 'hooks/useCoinGecko'
@@ -8,7 +9,6 @@ import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import { getPoolInfo } from '../components/Pages/Trade/Pools/hooks/queryPoolInfo'
 
 type Params = {
   token: TokenInfo

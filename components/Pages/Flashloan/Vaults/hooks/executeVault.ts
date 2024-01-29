@@ -19,11 +19,15 @@ export const executeVault = async ({
 }: ExecuteAddLiquidityArgs): Promise<any> => {
   if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
-      senderAddress, executionMsgs, await createGasFee(injectiveSigningClient,senderAddress,executionMsgs,null), ADV_MEMO,
+      senderAddress, executionMsgs, await createGasFee(
+        injectiveSigningClient, senderAddress, executionMsgs,
+      ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    senderAddress, executionMsgs, await createGasFee(signingClient, senderAddress, executionMsgs, null), ADV_MEMO,
+    senderAddress, executionMsgs, await createGasFee(
+      signingClient, senderAddress, executionMsgs,
+    ), ADV_MEMO,
   )
 }

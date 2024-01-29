@@ -39,12 +39,16 @@ export const useClaim = ({ poolId }: Props) => {
     mutationFn: async () => {
       if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
-          address, [msg], await createGasFee(injectiveSigningClient,address,[msg],null), ADV_MEMO,
+          address, [msg], await createGasFee(
+            injectiveSigningClient, address, [msg],
+          ), ADV_MEMO,
         )
         return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
       return await signingClient.signAndBroadcast(
-        address, [msg], await createGasFee(signingClient, address, [msg], null), ADV_MEMO,
+        address, [msg], await createGasFee(
+          signingClient, address, [msg],
+        ), ADV_MEMO,
       )
     },
     onError,

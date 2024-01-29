@@ -13,7 +13,7 @@ export const bondTokens: any = async (
   amount: number,
   denom: string,
   config: Config,
-  injectiveSigningClient?: InjectiveSigningStargateClient
+  injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
   const handleMsg = {
     bond: {
@@ -31,16 +31,20 @@ export const bondTokens: any = async (
     senderAddress: address,
     contractAddress: config.whale_lair,
     message: handleMsg,
-    funds: [coin(amount, denom)]
+    funds: [coin(amount, denom)],
   })
   if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
-      address, [execMsg], await createGasFee(injectiveSigningClient,address,[execMsg],null), ADV_MEMO,
+      address, [execMsg], await createGasFee(
+        injectiveSigningClient, address, [execMsg],
+      ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    address, [execMsg], await createGasFee(signingClient, address, [execMsg], null), ADV_MEMO,
+    address, [execMsg], await createGasFee(
+      signingClient, address, [execMsg],
+    ), ADV_MEMO,
   )
 }
 

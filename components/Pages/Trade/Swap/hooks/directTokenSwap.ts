@@ -55,15 +55,19 @@ export const directTokenSwap = async ({
     senderAddress,
     contractAddress: swapAddress,
     message: msgs,
-    funds: [coin(tokenAmount, tokenA.denom)]
+    funds: [coin(tokenAmount, tokenA.denom)],
   })
   if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
-      senderAddress, [execMsg], await createGasFee(injectiveSigningClient, senderAddress, [execMsg], null), ADV_MEMO,
+      senderAddress, [execMsg], await createGasFee(
+        injectiveSigningClient, senderAddress, [execMsg],
+      ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    senderAddress, [execMsg], await createGasFee(signingClient, senderAddress, [execMsg], null), ADV_MEMO,
+    senderAddress, [execMsg], await createGasFee(
+      signingClient, senderAddress, [execMsg],
+    ), ADV_MEMO,
   )
 }

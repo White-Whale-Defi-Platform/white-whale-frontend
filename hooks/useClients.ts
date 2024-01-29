@@ -4,9 +4,6 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { InjectiveStargate } from '@injectivelabs/sdk-ts'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 
-
-
-
 export const useClients = (walletChainName: string) => {
   const {
     getCosmWasmClient,

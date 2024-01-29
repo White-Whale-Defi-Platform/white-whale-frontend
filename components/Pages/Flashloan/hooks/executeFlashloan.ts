@@ -2,8 +2,8 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingco
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { ADV_MEMO, ChainId } from 'constants/index';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
-import { createExecuteMessage } from 'util/messages'
 import { createGasFee } from 'services/treasuryService';
+import { createExecuteMessage } from 'util/messages'
 
 type ExecuteFlashloanArgs = {
   senderAddress: string
@@ -23,15 +23,19 @@ export const executeFlashloan = async ({
   const execMsg = createExecuteMessage({
     senderAddress,
     contractAddress,
-    message: msgs
+    message: msgs,
   })
   if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
-      contractAddress, [execMsg], await createGasFee(injectiveSigningClient, contractAddress, [execMsg], null), ADV_MEMO,
+      contractAddress, [execMsg], await createGasFee(
+        injectiveSigningClient, contractAddress, [execMsg],
+      ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    contractAddress, [execMsg], await createGasFee(signingClient, contractAddress, [execMsg], null), ADV_MEMO,
+    contractAddress, [execMsg], await createGasFee(
+      signingClient, contractAddress, [execMsg],
+    ), ADV_MEMO,
   )
 }
