@@ -66,7 +66,7 @@ export const fetchTotalPoolSupply = async (swapAddress: string,
   const queried = await getPoolInfo(swapAddress, client)
   return Number(queried.total_share)
 }
-const fetchFlows = async (client, address): Promise<Flow[]> => await getFlowsFromAPI(await client.getChainId(), address) || await client.queryContractSmart(address, { flows: {} })
+export const fetchFlows = async (client, address): Promise<Flow[]> => await getFlowsFromAPI(await client.getChainId(), address) || await client.queryContractSmart(address, { flows: {} })
 
 const getPoolFlowData = async (
   client,

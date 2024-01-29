@@ -19,6 +19,7 @@ import { isNativeToken } from 'services/asset'
 import { queryLiquidityBalance } from 'services/liquidity'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom, protectAgainstNaN } from 'util/conversion'
+import { fetchFlows } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 
 export type AssetType = [number?, number?]
 
@@ -142,8 +143,10 @@ const fetchMyLockedLp = async ({ pool, cosmWasmClient, address }) => {
     positions?.
       map((p) => {
         const { open_position = {}, closed_position = {} } = p
-        return { ...open_position,
-          ...closed_position }
+        return {
+          ...open_position,
+          ...closed_position
+        }
       }).
       reduce((acc, p) => acc + Number(p.amount), 0) || 0
   )
@@ -203,10 +206,7 @@ export const useQueryPoolsLiquidity = ({
         return []
       }
 
-      const flows = await cosmWasmClient?.queryContractSmart(pool.staking_address,
-        {
-          flows: {},
-        })
+      const flows = await fetchFlows(cosmWasmClient, pool.staking_address)
       return flows?.map((flow) => {
         const denom =
           flow?.flow_asset?.info?.token?.contract_addr ||
@@ -271,9 +271,11 @@ export const useQueryPoolsLiquidity = ({
     }
 
     const flows = await getFlows({ cosmWasmClient })
-    const myLockedLp = await fetchMyLockedLp({ pool,
+    const myLockedLp = await fetchMyLockedLp({
+      pool,
       cosmWasmClient,
-      address })
+      address
+    })
     const totalLockedLp = await fetchTotalLockedLp(
       pool.staking_address,
       pool.lp_token,
@@ -290,8 +292,10 @@ export const useQueryPoolsLiquidity = ({
       myNotLockedLp,
     } = await queryMyLiquidity({
       cosmWasmClient,
-      swap: { ...poolInfo,
-        ...pool },
+      swap: {
+        ...poolInfo,
+        ...pool
+      },
       address,
       totalLockedLp,
       myLockedLp,
@@ -301,8 +305,8 @@ export const useQueryPoolsLiquidity = ({
     const getPoolTokensValues = (assets: any, lpTokenAmount = null) => ({
       tokenAmount: lpTokenAmount ?? (assets[1] + assets[0]),
       dollarValue:
-          (Number(fromChainAmount(assets[0], tokenA?.decimals)) * (prices?.[tokenA?.symbol] || 0)) +
-          (Number(fromChainAmount(assets[1], tokenB?.decimals)) * (prices?.[tokenB?.symbol] || 0)),
+        (Number(fromChainAmount(assets[0], tokenA?.decimals)) * (prices?.[tokenA?.symbol] || 0)) +
+        (Number(fromChainAmount(assets[1], tokenB?.decimals)) * (prices?.[tokenB?.symbol] || 0)),
     })
 
     const [myNotLockedLiquidity, totalLockedLiquidity, myLockedLiquidity] = [
@@ -314,8 +318,10 @@ export const useQueryPoolsLiquidity = ({
       getPoolTokensValues(myLockedAssets),
     ]
 
-    const myFlows = await getMyFlows({ cosmWasmClient,
-      address })
+    const myFlows = await getMyFlows({
+      cosmWasmClient,
+      address
+    })
     const liquidity = {
       available: {
         totalLpAmount: poolInfo.lp_token_supply,
@@ -352,9 +358,9 @@ export const useQueryPoolsLiquidity = ({
   return useQueries((pools ?? []).map((pool) => ({
     queryKey: `@pool-liquidity/${pool.pool_id}`,
     enabled:
-        Boolean(cosmWasmClient && pool.pool_id) &&
-        tokenList.tokens.length > 0 &&
-        Boolean(prices),
+      Boolean(cosmWasmClient && pool.pool_id) &&
+      tokenList.tokens.length > 0 &&
+      Boolean(prices),
     refetchOnMount: false,
     refetchInterval: refetchInBackground
       ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL
