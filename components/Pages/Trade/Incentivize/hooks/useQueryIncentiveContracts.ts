@@ -8,10 +8,10 @@ import {
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-const fetchIncentiveContracts = async (client : CosmWasmClient,
+const fetchIncentiveContracts = async (client: CosmWasmClient,
   config: Config): Promise<Array<string>> => {
   const data = await client.queryContractSmart(config.incentive_factory, {
-    incentives: {},
+    incentives: { limit: 100 },
   })
   return data?.map((incentive: { incentive_address: string }) => incentive.incentive_address)
 }

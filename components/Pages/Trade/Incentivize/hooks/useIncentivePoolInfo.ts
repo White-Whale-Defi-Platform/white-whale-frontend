@@ -189,9 +189,19 @@ export const useIncentivePoolInfo = (
 
   useEffect(() => {
     const fetchPoolData = async () => {
-      currentChainPrefix = chainId === ChainId.terrac ? 'terra-classic' : currentChainPrefix
+      switch (chainId) {
+        case ChainId.terrac:
+          currentChainPrefix = 'terra-classic'
+          break
+        case ChainId.osmosis:
+          currentChainPrefix = 'osmosis';
+          break
+        default:
+          break
+      }
+
       const poolData =
-        currentChainPrefix === 'terra' && chainId !== ChainId.terrac
+        ((currentChainPrefix === 'terra' && chainId !== ChainId.terrac) || chainId === ChainId.osmosis)
           ? await getPairAprAndDailyVolumeByCoinhall(pools)
           : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
       if (poolData[0]?.ratio === 0) {

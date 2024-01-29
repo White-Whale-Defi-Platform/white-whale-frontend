@@ -9,7 +9,9 @@ interface ChainInfoResponse {
 
 export const getDashboardData = async (): Promise<ChainInfoResponse[]> => {
   const response = await fetch(`${ENIGMA_URL}/chains/dashboard`)
+
   const data : ChainInfoResponse[] = await response.json()
+  console.log(data)
   return data.map((res) => {
     if (res.chainName === 'terra-classic') {
       return {

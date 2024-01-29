@@ -468,6 +468,42 @@
       "swap_address": "chihuahua1vl35p9erd4g7ytwwc3fcux30c7jnhnp2tas7zp837wrl65073cws57qwve",
       "staking_address": "chihuahua1rweychser0d7qcg5qfglaqp7l8w425z5edpfrya2jx4gpzwc83aqj9qm83",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "BADDOG-HUAHUA",
+      "lpOrder": ["BADDOG", "HUAHUA"],
+      "assetOrder": ["BADDOG", "HUAHUA"],
+      "displayName": "BADDOG-HUAHUA",
+      "displayLogo1": "/logos/baddog.png",
+      "displayLogo2": "/logos/huahua.png",
+      "pool_assets": [
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "factory/chihuahua1x4q2vkrz4dfgd9hcw0p5m2f2nuv2uqmt9xr8k2/achihuahuawifhat",
+          "symbol": "BADDOG",
+          "name": "BADDOG",
+          "decimals": 6,
+          "logoURI": "/logos/baddog.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/chihuahua1x4q2vkrz4dfgd9hcw0p5m2f2nuv2uqmt9xr8k2/achihuahuawifhat"
+        },
+        {
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "Huahua",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "uhuahua"
+        }
+      ],
+      "lp_token": "chihuahua1z2syjz0hmpvf36m3jpa9xdx4uj0890xwftcn8rghp04gyqq294esdfea6m",
+      "swap_address": "chihuahua1gt0h2h3mgv7tp2fv2wyvh7mpncc8j0j4qal5q0wjhy859h0kfczsutmqru",
+      "staking_address": "chihuahua1phnpz3cwhtel6z42wt04dzytrdvfqkxr9lcllepufhlrgeamxmxqepy2g4",
+      "rewards_tokens": []
     }
   ],
   "version": {

@@ -9,7 +9,7 @@ const bondingActionText = (action: ActionType) => {
     case ActionType.bond:
       return 'Bond tokens to earn rewards. Tokens are locked up.'
     case ActionType.unbond:
-      return 'Unbonding duration of 14 days, no rewards during that period. Unable to stop or abort the process once initiated.'
+      return 'Unbonding duration of 1 Day, no rewards during that period. Unable to stop or abort the process once initiated.'
     case ActionType.withdraw:
       return 'Withdrawing of tokens once unbonded.'
     case ActionType.claim:

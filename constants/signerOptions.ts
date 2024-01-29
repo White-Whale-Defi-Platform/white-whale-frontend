@@ -14,7 +14,7 @@ const getGasPrices = (chainName:string, chain:Chain) => {
     if (chainName === 'migaloo') {
       price = 2;
     }
-    
+
     return {
       gasPrice: GasPrice.fromString(String(price) + chain.fees.fee_tokens[0].denom),
     }

@@ -543,6 +543,53 @@
       "lp_token": "factory/migaloo195rkvthzyndrguzxhulca4wmgten7aja49vvj4pq9wfm7azd3ahq84r3d2/uLP",
       "staking_address": "migaloo1sf6nld2a56urwvxf8aj4964c5v3awt0hxjnz88dx9f9r4c2cjtxqr3842d",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "GUPPY-WHALE",
+      "lpOrder": [
+        "GUPPY",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "GUPPY",
+        "WHALE"
+      ],
+      "displayName": "GUPPY-WHALE",
+      "displayLogo1": "/logos/guppy.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy",
+          "symbol": "GUPPY",
+          "name": "Guppy",
+          "decimals": 6,
+          "logoURI": "/logos/guppy.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "swap_address": "migaloo14p3r422qp04p345mnqe5umjy3vqx75hpxf54f8enf59wf27fksvqltavjp",
+      "lp_token": "factory/migaloo14p3r422qp04p345mnqe5umjy3vqx75hpxf54f8enf59wf27fksvqltavjp/uLP",
+      "staking_address": "migaloo1ur4j7x270ascx74k5j65r6zd2dyq0y407jdewk2nse9gpzg9mrds5czrtn",
+      "rewards_tokens": []
     }
   ],
   "version": {

@@ -45,7 +45,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
       // eslint-disable-next-line prefer-destructuring
       const firstToken = config.bonding_tokens[0]
       setCurrentBondState({
-        tokenSymbol: firstToken.tokenSymbol,
+        tokenSymbol: firstToken.symbol,
         amount: 0,
         decimals: 6,
         denom: firstToken.denom,

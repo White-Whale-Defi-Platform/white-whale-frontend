@@ -89,10 +89,12 @@ export const useTransaction = ({
         } else if ((/Max spread assertion/u).test(error.toString())) {
           setTxStep(TxStep.Idle)
           setError('Try increasing slippage')
+          setButtonLabel('Try increasing slippage or a smaller amount')
           throw new Error('Try increasing slippage')
         } else if ((/Spread limit exceeded/u).test(error.toString())) {
           setTxStep(TxStep.Idle)
-          setError('Try increasing slippage or with a smaller amount')
+          setButtonLabel('Try increasing slippage or a smaller amount')
+          setError('Try increasing slippage or a smaller amount')
           throw new Error('Try increasing slippage')
         } else {
           console.error(error)
@@ -144,7 +146,6 @@ export const useTransaction = ({
     },
     onError: (e: any) => {
       let message = ''
-      console.error({ message: e?.message() })
       console.error(e?.toString())
       if (
         (/insufficient funds/u).test(e?.toString()) ||
@@ -244,7 +245,6 @@ export const useTransaction = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedMsgs])
-
   return useMemo(() => ({
     fee,
     buttonLabel,

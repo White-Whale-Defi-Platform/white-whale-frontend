@@ -47,7 +47,7 @@ const Pools = () => {
 
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
-  const [_, setAprHelperState] = useRecoilState(aprHelperState)
+  const [currentAprHelperState, setAprHelperState] = useRecoilState(aprHelperState)
 
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const { cosmWasmClient } = useClients(walletChainName)
@@ -83,6 +83,9 @@ const Pools = () => {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
     console.log('Pair-Infos: ', pairInfos)
+    console.log('Loading: ', isLoading)
+    console.log('Init Loading: ', isInitLoading)
+    console.log('External Loading: ', externalStatsLoading)
   }
 
   const calculateMyPosition = (pool: AllPoolData) => {
@@ -191,10 +194,11 @@ const Pools = () => {
 
       const incentiveBaseApr = flows.reduce((total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
         0)
-
+      const pairInfo = pairInfos.find((pairInfo) => pairInfo.pool_id === pool.poolId)
+      const poolState = currentAprHelperState?.find((state) => state.poolId === pool.poolId)
       updateAPRHelperState(
         pool?.poolId,
-        pool?.apr,
+        pairInfo ? pairInfo?.apr7d?.toString() : (poolState?.fees.toString() || '0'),
         incentiveBaseApr,
         setAprHelperState,
       )

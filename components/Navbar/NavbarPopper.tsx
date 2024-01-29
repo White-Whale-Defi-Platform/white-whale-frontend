@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -14,19 +14,18 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import { BRIDGE_NETWORK_DEFAULTS } from 'constants/index'
 import { kBg } from 'constants/visualComponentConstants'
 import { useRouter } from 'next/router'
 
 import NavbarLink from './NavbarLink'
 
-const NavbarPopper = ({ menu, currentChainName }) => {
+const NavbarPopper = ({ menu, currentChainName, chainId }) => {
   const { onOpen, onClose, isOpen } = useDisclosure()
   const firstFieldRef = React.useRef(null)
   const numberOfLinks = menu.children?.length
 
-  const router = useRouter()
-
-  const { asPath } = useRouter()
+  const { asPath, push } = useRouter()
 
   const isActiveLink = useMemo(() => {
     const [linkInAsPath] =
@@ -36,14 +35,23 @@ const NavbarPopper = ({ menu, currentChainName }) => {
     return Boolean(linkInAsPath)
   }, [asPath, menu])
 
+  const openLink =
+    (url: string): (() => void) => () => {
+      window.open(url, '_blank')
+    }
+
   return (
     <Popover
       placement="bottom"
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      onOpen={!menu?.children
-        ? () => router.push(`/${currentChainName}${menu.link}`)
-        : onOpen
+      // Children defining sub menu items
+      onOpen={
+        menu.isExternal
+          ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
+          : !menu?.children
+            ? () => push(`/${currentChainName}${menu.link}`)
+            : onOpen
       }
       onClose={onClose}
     >
@@ -55,6 +63,9 @@ const NavbarPopper = ({ menu, currentChainName }) => {
           >
             {menu.label}
             {menu.children ? <ChevronDownIcon /> : null}
+            {menu.isExternal ? (
+              <ExternalLinkIcon paddingLeft={''} paddingBottom={'1'} />
+            ) : null}
           </Text>
         </HStack>
       </PopoverTrigger>
@@ -62,7 +73,7 @@ const NavbarPopper = ({ menu, currentChainName }) => {
       <PopoverContent
         borderColor={'transparent'}
         borderRadius="25px"
-        backgroundColor={'#141414'}
+        backgroundColor={kBg}
         width="auto"
       >
         <PopoverArrow
