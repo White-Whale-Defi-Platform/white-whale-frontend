@@ -53,7 +53,7 @@ export const getHealthyRestEndpoints = async (chainNameId: string) => {
   try {
     const response = await fetch(`${API_URL}/api/rests/${chainNameId}`);
     const json = await response.json();
-    if (json.data !== 'Chain not found') {
+    if (json?.data !== 'Chain not found') {
       return json?.data
     } else {
       return null
