@@ -182,7 +182,7 @@ const RewardsComponent = ({
       background={kBg}
       borderRadius={kBorderRadius}
       alignItems="center"
-      minH={320}
+      minH={317}
       width="flex"
       gap={4}
       overflow="hidden"
@@ -276,7 +276,7 @@ const RewardsComponent = ({
         <Button
           alignSelf="center"
           bg="#6ACA70"
-          mt={1}
+          mt={0.5}
           borderRadius="full"
           variant="primary"
           width={'100%'}
