@@ -132,9 +132,9 @@ const BondingOverview = ({
                 actionType: ActionType
                 tokenType: TokenType
                 tokenBalances: TokenBalance[]
-              }) => (
+              }, index) => (
             <WhaleTooltip
-              key={`${e.tokenType}${e.actionType}`}
+              key={`${e.tokenType}${index}`}
               label={
                 e?.value && isWalletConnected
                   ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
@@ -157,9 +157,9 @@ const BondingOverview = ({
           <Text mb={-2} color="whiteAlpha.600">
               Actions
           </Text>
-          {data?.map((e: { actionType: ActionType }) => (
+          {data?.map((e: { actionType: ActionType }, index) => (
             <Button
-              key={`button-${e.actionType}`}
+              key={`button-${index}`}
               alignSelf="flex-start"
               variant="outline"
               borderColor="whiteAlpha.700"
