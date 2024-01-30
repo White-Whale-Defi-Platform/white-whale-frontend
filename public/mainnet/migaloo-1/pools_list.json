@@ -635,7 +635,7 @@
       ],
       "lp_token": "factory/migaloo1j2dtdu2kjf7l555fkej9cv5cmp79c6g5q8p67gt3yhvm2auzclvsq429y3/uLP",
       "swap_address": "migaloo1j2dtdu2kjf7l555fkej9cv5cmp79c6g5q8p67gt3yhvm2auzclvsq429y3",
-      "staking_address": "",
+      "staking_address": "migaloo17m88zthuym6rajrfl8gjnh9j3hzu3zhkmmsrys9qp6y28v58vgus3hwksm",
       "rewards_tokens": []
     },
     {
@@ -683,7 +683,7 @@
       ],
       "lp_token": "factory/migaloo1huj5syg78rm3nuslzf9py73ccegcth2lkfpf5pvaq6q68pakldmsahxmfl/uLP",
       "swap_address": "migaloo1huj5syg78rm3nuslzf9py73ccegcth2lkfpf5pvaq6q68pakldmsahxmfl",
-      "staking_address": "",
+      "staking_address": "migaloo10knl076uc8sjqsz6k49j94phv5aqqp0v7u8aaqjx6s3pdrmtsmzskjepd6",
       "rewards_tokens": []
     }
   ],
