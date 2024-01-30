@@ -205,7 +205,7 @@ const RewardsComponent = ({
               ${whalePrice?.toFixed(6)}
         </Text>
       </HStack>
-      <HStack justify={'space-between'} maxWidth={350}>
+      <HStack justify={'space-between'} width={340}>
         <VStack border="0.5px solid"
           borderColor="whiteAlpha.400"
           borderRadius="10px"
@@ -213,7 +213,7 @@ const RewardsComponent = ({
           pt={1}
           alignItems={'start'}
           h={68}
-          w={166}>
+          w={163}>
           <Text color="whiteAlpha.600">
             APR
           </Text>
@@ -224,7 +224,7 @@ const RewardsComponent = ({
           borderRadius="10px"
           px={4}
           pt={1}
-          alignItems={'start'} h={68} w={166}
+          alignItems={'start'} h={68} w={163}
           justifyContent="space-between">
           <HStack>
             <Text color="whiteAlpha.600">Rewards</Text>
