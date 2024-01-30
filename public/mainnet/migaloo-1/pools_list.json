@@ -362,7 +362,6 @@
         "WHALE"
       ],
       "assetOrder": [
-
         "ampMNTA",
         "WHALE"
       ],
@@ -589,6 +588,102 @@
       "swap_address": "migaloo14p3r422qp04p345mnqe5umjy3vqx75hpxf54f8enf59wf27fksvqltavjp",
       "lp_token": "factory/migaloo14p3r422qp04p345mnqe5umjy3vqx75hpxf54f8enf59wf27fksvqltavjp/uLP",
       "staking_address": "migaloo1ur4j7x270ascx74k5j65r6zd2dyq0y407jdewk2nse9gpzg9mrds5czrtn",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALE-wBTC",
+      "lpOrder": [
+        "WHALE",
+        "wBTC"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "wBTC"
+      ],
+      "displayName": "WHALE-wBTC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/wBTC.png",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        },
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/B65E189D3168DB40C88C6A6C92CA3D3BB0A8B6310325D4C43AB5702F06ECD60B",
+          "symbol": "wBTC",
+          "name": "wBTC",
+          "decimals": 8,
+          "logoURI": "/logos/wBTC.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/B65E189D3168DB40C88C6A6C92CA3D3BB0A8B6310325D4C43AB5702F06ECD60B"
+        }
+      ],
+      "lp_token": "factory/migaloo1j2dtdu2kjf7l555fkej9cv5cmp79c6g5q8p67gt3yhvm2auzclvsq429y3/uLP",
+      "swap_address": "migaloo1j2dtdu2kjf7l555fkej9cv5cmp79c6g5q8p67gt3yhvm2auzclvsq429y3",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "GUPPY-gASH",
+      "lpOrder": [
+        "GUPPY",
+        "gASH"
+      ],
+      "assetOrder": [
+        "GUPPY",
+        "gASH"
+      ],
+      "displayName": "GUPPY-gASH",
+      "displayLogo1": "/logos/guppy.png",
+      "displayLogo2": "/logos/gASH.png",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy",
+          "symbol": "GUPPY",
+          "name": "GUPPY",
+          "decimals": 6,
+          "logoURI": "/logos/guppy.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy"
+        },
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1r9x8fz4alekzr78k42rpmr9unpa7egsldpqeynmwl2nfvzexue9sn8l5rg/gash",
+          "symbol": "gASH",
+          "name": "gASH",
+          "decimals": 6,
+          "logoURI": "/logos/gASH.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1r9x8fz4alekzr78k42rpmr9unpa7egsldpqeynmwl2nfvzexue9sn8l5rg/gash"
+        }
+      ],
+      "lp_token": "factory/migaloo1huj5syg78rm3nuslzf9py73ccegcth2lkfpf5pvaq6q68pakldmsahxmfl/uLP",
+      "swap_address": "migaloo1huj5syg78rm3nuslzf9py73ccegcth2lkfpf5pvaq6q68pakldmsahxmfl",
+      "staking_address": "",
       "rewards_tokens": []
     }
   ],
