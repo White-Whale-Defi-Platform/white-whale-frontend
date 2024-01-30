@@ -34,7 +34,7 @@ const Navbar = () => {
   const links = [
     {
       label: 'Dashboard',
-      link: `/${currentChainName}/dashboard`,
+      link: `/${currentChainName}/bonding`,
     },
     {
       label: 'Swap',

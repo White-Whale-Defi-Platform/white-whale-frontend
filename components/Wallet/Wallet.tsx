@@ -185,7 +185,7 @@ const Wallet = () => {
   const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any }; label:string }) => {
     if (
       !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
-      router.pathname.includes('dashboard')
+      router.pathname.includes('bonding')
     ) {
       await router.push('/swap')
     }

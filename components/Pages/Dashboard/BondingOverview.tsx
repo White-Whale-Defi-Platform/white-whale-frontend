@@ -157,7 +157,7 @@ const BondingOverview = ({
           <Text mb={-2} color="whiteAlpha.600">
               Actions
           </Text>
-          {data?.map((e: { actionType: ActionType }, index) => (
+          {data?.map((e: { actionType: ActionType }, index) => (e.actionType !== ActionType.buy ? (
             <Button
               key={`button-${index}`}
               alignSelf="flex-start"
@@ -170,7 +170,7 @@ const BondingOverview = ({
                 if (e.actionType === ActionType.buy) {
                   await router.push(`/${currentChainName}/swap`)
                 } else {
-                  await router.push(`/${currentChainName}/dashboard/${
+                  await router.push(`/${currentChainName}/bonding/${
                     ActionType[e.actionType]
                   }`)
                 }
@@ -178,7 +178,7 @@ const BondingOverview = ({
             >
               {ActionType[e.actionType]}
             </Button>
-          ))}
+          ) : <Box key={'buy-placeholder'} height={27}/>))}
         </VStack>
       </HStack>
     </VStack>

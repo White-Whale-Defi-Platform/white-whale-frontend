@@ -1,8 +1,8 @@
 [
   {
-    "label": "Dashboard",
+    "label": "Bonding",
     "isExternal" : false,
-    "link": "/dashboard"
+    "link": "/bonding"
   },
   {
     "label": "Trade",
