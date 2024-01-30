@@ -144,7 +144,7 @@ export const useTransaction = () => {
         message = 'Out of gas, try increasing gas limit on wallet.'
       } else if ((/before the new\/latest epoch/u).test(e?.toString())) {
         setError('Epoch not yet created.')
-        message = 'Please force the pending epoch on the dashboard.'
+        message = 'Please force the pending epoch on the bonding page.'
       } else if (
         (/There are unclaimed rewards available./u).test(e?.toString())
       ) {

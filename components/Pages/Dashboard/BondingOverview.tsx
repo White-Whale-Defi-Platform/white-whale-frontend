@@ -132,9 +132,9 @@ const BondingOverview = ({
                 actionType: ActionType
                 tokenType: TokenType
                 tokenBalances: TokenBalance[]
-              }) => (
+              }, index) => (
             <WhaleTooltip
-              key={`${e.tokenType}${e.actionType}`}
+              key={`${e.tokenType}${index}`}
               label={
                 e?.value && isWalletConnected
                   ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
@@ -157,9 +157,9 @@ const BondingOverview = ({
           <Text mb={-2} color="whiteAlpha.600">
               Actions
           </Text>
-          {data?.map((e: { actionType: ActionType }) => (
+          {data?.map((e: { actionType: ActionType }, index) => (e.actionType !== ActionType.buy ? (
             <Button
-              key={`button-${e.actionType}`}
+              key={`button-${index}`}
               alignSelf="flex-start"
               variant="outline"
               borderColor="whiteAlpha.700"
@@ -170,7 +170,7 @@ const BondingOverview = ({
                 if (e.actionType === ActionType.buy) {
                   await router.push(`/${currentChainName}/swap`)
                 } else {
-                  await router.push(`/${currentChainName}/dashboard/${
+                  await router.push(`/${currentChainName}/bonding/${
                     ActionType[e.actionType]
                   }`)
                 }
@@ -178,7 +178,7 @@ const BondingOverview = ({
             >
               {ActionType[e.actionType]}
             </Button>
-          ))}
+          ) : <Box key={'buy-placeholder'} height={27}/>))}
         </VStack>
       </HStack>
     </VStack>

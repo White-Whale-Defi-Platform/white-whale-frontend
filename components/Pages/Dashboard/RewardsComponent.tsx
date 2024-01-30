@@ -78,8 +78,8 @@ const ProgressBar = ({ progress, currentEpochStartTimeInNano }) => {
   return (
     <Box
       h="7px"
-      width={[280, 380]}
-      maxWidth={390}
+      width={[280, 340]}
+      maxWidth={360}
       bg={
         percent === 100 && currentEpochStartTimeInNano > 0
           ? 'transparent'
@@ -178,11 +178,11 @@ const RewardsComponent = ({
     [genesisStartTimeInNano])
   return (
     <VStack
-      px={4}
+      px={8}
       background={kBg}
       borderRadius={kBorderRadius}
       alignItems="center"
-      minH={320}
+      minH={317}
       width="flex"
       gap={4}
       overflow="hidden"
@@ -190,7 +190,7 @@ const RewardsComponent = ({
       display="flex"
       justifyContent="flex-start"
     >
-      <HStack spacing={['100', '170']} align="stretch" mt={7}>
+      <HStack spacing={['100', '150']} align="stretch" mt={5}>
         <HStack flex="1">
           <a>
             <Image
@@ -205,26 +205,29 @@ const RewardsComponent = ({
               ${whalePrice?.toFixed(6)}
         </Text>
       </HStack>
-      <VStack>
-        <HStack justifyContent="space-between" minWidth={['280', '380']}>
-          <Text color="whiteAlpha.600">Next rewards in</Text>
-          <Text>{durationString}</Text>
-        </HStack>
-        <ProgressBar
-          progress={progress}
-          currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)}
-        />
-      </VStack>
-      <Box
-        border="0.5px solid"
-        borderColor="whiteAlpha.400"
-        borderRadius="10px"
-        p={4}
-        minW={['290', '390']}
-      >
-        <HStack justifyContent="space-between">
+      <HStack justify={'space-between'} width={340}>
+        <VStack border="0.5px solid"
+          borderColor="whiteAlpha.400"
+          borderRadius="10px"
+          px={4}
+          pt={1}
+          alignItems={'start'}
+          h={68}
+          w={163}>
+          <Text color="whiteAlpha.600">
+            APR
+          </Text>
+          <Text fontWeight={'bold'}>{`${apr.toFixed(2)}%`}</Text>
+        </VStack>
+        <VStack border="0.5px solid"
+          borderColor="whiteAlpha.400"
+          borderRadius="10px"
+          px={4}
+          pt={1}
+          alignItems={'start'} h={68} w={163}
+          justifyContent="space-between">
           <HStack>
-            <Text color="whiteAlpha.600">Estimated Rewards</Text>
+            <Text color="whiteAlpha.600">Rewards</Text>
             <BondingActionTooltip action={ActionType.claim} />
           </HStack>
           <RewardsTooltip
@@ -237,28 +240,43 @@ const RewardsComponent = ({
             amount={claimableRewards.toFixed(6)}
             daysSinceLastClaim={daysSinceLastClaim}
           />
+        </VStack>
+
+      </HStack>
+
+      <HStack
+        border="0.5px solid"
+        borderColor="whiteAlpha.400"
+        borderRadius="10px"
+        py={3}
+        px={4}
+        minWidth={340}
+        spacing={['100', '215']} align="stretch"
+        justifyContent="space-between">
+        <Text color="whiteAlpha.600" fontSize={13}>
+            Multiplier
+        </Text>
+        <Text fontSize={13}>
+          {isWalletConnected
+            ? `${((multiplierRatio - 1) * 100).toFixed(2)}%`
+            : 'n/a'}
+        </Text>
+      </HStack>
+      <VStack mt={-1}>
+        <HStack justifyContent="space-between" minWidth={['280', '340']}>
+          <Text color="whiteAlpha.600" fontSize={14}>Next rewards in</Text>
+          <Text fontSize={14}>{durationString}</Text>
         </HStack>
-        <HStack>
-          <Text color="whiteAlpha.600" fontSize={11}>
-                Estimated APR
-          </Text>
-          <Text fontSize={11}>{`${apr.toFixed(2)}%`}</Text>
-        </HStack>
-        <HStack>
-          <Text color="whiteAlpha.600" fontSize={11}>
-                Multiplier
-          </Text>
-          <Text fontSize={11}>
-            {isWalletConnected
-              ? `${((multiplierRatio - 1) * 100).toFixed(2)}%`
-              : 'n/a'}
-          </Text>
-        </HStack>
-      </Box>
-      <HStack w={[290, 390]}>
+        <ProgressBar
+          progress={progress}
+          currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)}
+        />
+      </VStack>
+      <HStack w={[290, 345]}>
         <Button
           alignSelf="center"
           bg="#6ACA70"
+          mt={0.5}
           borderRadius="full"
           variant="primary"
           width={'100%'}

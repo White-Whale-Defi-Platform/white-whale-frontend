@@ -35,8 +35,8 @@ const config = {
         permanent: false,
       },
       {
-        source: '/dashboard',
-        destination: '/migaloo/dashboard',
+        source: '/bonding',
+        destination: '/migaloo/bonding',
         permanent: false,
       },
       {

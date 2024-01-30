@@ -78,7 +78,7 @@ const BondingActions = ({ globalAction }) => {
     const onClick = async () => {
       setCurrentBondState({ ...currentBondState,
         amount: 0 })
-      await router.push(`/${chainName}/dashboard/${actionString}`)
+      await router.push(`/${chainName}/bonding/${actionString}`)
     }
 
     return (
@@ -134,7 +134,7 @@ const BondingActions = ({ globalAction }) => {
           aria-label="go back"
           icon={<ArrowBackIcon />}
           onClick={async () => {
-            await router.push(`/${chainName}/dashboard`)
+            await router.push(`/${chainName}/bonding`)
             setCurrentBondState({ ...currentBondState,
               amount: 0 })
           }}
