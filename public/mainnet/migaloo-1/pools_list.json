@@ -653,7 +653,6 @@
       "displayLogo2": "/logos/gASH.png",
       "pool_assets": [
         {
-          "id": "",
           "chain_id": "migaloo-1",
           "token_address": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy",
           "symbol": "GUPPY",
@@ -667,7 +666,6 @@
           "denom": "factory/migaloo1etlu2h30tjvv8rfa4fwdc43c92f6ul5w9acxzk/uguppy"
         },
         {
-          "id": "",
           "chain_id": "migaloo-1",
           "token_address": "factory/migaloo1r9x8fz4alekzr78k42rpmr9unpa7egsldpqeynmwl2nfvzexue9sn8l5rg/gash",
           "symbol": "gASH",
