@@ -76,11 +76,16 @@ export const getRandomREST = async (chainNameId:string) => {
 
 export const getPricesAPI = async (ids: Array<string>) => {
   try {
-    const response = await fetch(`${API_URL}/api/prices`)
-    const json = await response.json()
-    ids.forEach((chainID: string) => {
-      if (!json.data[chainID]) {
-        throw new Error(`Price not found on api: ${chainID}`)
+    let response = await fetch(`${API_URL}/api/prices`)
+    let res = await response.text()
+    while (!res){
+        response = await fetch(`${API_URL}/api/prices`)
+        res = await response.text()
+    }
+    const json = JSON.parse(res)
+    ids.forEach((geckoID: string) => {
+      if (geckoID && !json.data[geckoID]) {
+        throw new Error(`Price not found on api: ${geckoID}`)
       }
     })
     return json?.data

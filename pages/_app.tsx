@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
@@ -28,42 +28,36 @@ const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
-  const [wallets, setWallets] = useState<any[]>([])
-  const [unavailableWallets, setUnavailableWallets] = useState<any[]>([])
-  const [mounted, setMounted] = useState<boolean>(false)
-  useEffect(() => {
-    setMounted(true)
-    const walletProviders = [
-      { name: 'keplr',
-        wallet: keplrWallets },
-      { name: 'station',
-        wallet: stationWallets },
-      { name: 'leap',
-        wallet: leapWallets },
-      { name: 'ninji',
-        wallet: ninjiWallets },
-      { name: 'shellwallet',
-        wallet: shellWallets },
-      { name: 'cosmostationWallet',
-        wallet: cosmoStationWallets },
-    ];
 
-    // Reorder Wallets so available are connected first. Avoid blocking cosmos-kit error for users.
+  const [mounted, setMounted] = useState<boolean>(false)
+  
+  const walletProviders = [
+    { name: 'keplr', wallet: keplrWallets },
+    { name: 'station', wallet: stationWallets },
+    { name: 'leap', wallet: leapWallets },
+    { name: 'ninji', wallet: ninjiWallets },
+    { name: 'shellwallet', wallet: shellWallets },
+    { name: 'cosmostationWallet', wallet: cosmoStationWallets },
+  ];
+
+
+  const reorderWallets = useMemo(() => {
+    let newWallets: any[] = [];
+    let newUnavailableWallets: any[] = [];
     try {
       walletProviders.forEach(({ name, wallet }) => {
         if (!window?.[name]) {
-          setUnavailableWallets([...unavailableWallets, ...wallet])
+          newUnavailableWallets.push(...wallet);
         } else {
-          setWallets([...wallets, ...wallet])
+          newWallets.push(...wallet);
         }
       });
-
-      setWallets([...wallets, ...unavailableWallets])
-    } catch (error) {
-      console.error(error)
+      return [...newWallets, ...newUnavailableWallets];
+    } catch {
+      return []
     }
-  }, [])
-
+  }, []);
+  useEffect(() => { setMounted(true) }, [reorderWallets])
   return (
     <><>
       <Head>
@@ -75,7 +69,7 @@ const MyApp: FC<AppProps> = ({
             <ChainProvider
               chains={chains} // Supported chains
               assetLists={assets} // Supported asset lists
-              wallets={wallets} // Supported wallets
+              wallets={reorderWallets} // Supported wallets
               walletModal={WalletModal}
               signerOptions={signerOptions}
               endpointOptions={endpointOptions}
