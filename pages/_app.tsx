@@ -32,12 +32,18 @@ const MyApp: FC<AppProps> = ({
   const [mounted, setMounted] = useState<boolean>(false)
   
   const walletProviders = [
-    { name: 'keplr', wallet: keplrWallets },
-    { name: 'station', wallet: stationWallets },
-    { name: 'leap', wallet: leapWallets },
-    { name: 'ninji', wallet: ninjiWallets },
-    { name: 'shellwallet', wallet: shellWallets },
-    { name: 'cosmostationWallet', wallet: cosmoStationWallets },
+    { name: 'keplr',
+      wallet: keplrWallets },
+    { name: 'station',
+      wallet: stationWallets },
+    { name: 'leap',
+      wallet: leapWallets },
+    { name: 'ninji',
+      wallet: ninjiWallets },
+    { name: 'shellwallet',
+      wallet: shellWallets },
+    { name: 'cosmostationWallet',
+      wallet: cosmoStationWallets },
   ];
 
 
