@@ -364,7 +364,7 @@ const SwapForm: FC<Props> = ({
                 )}
               </HStack>
               <Text color="brand.500" fontSize={12}>
-                {rate} {tokenB?.tokenSymbol} per {tokenA?.tokenSymbol}
+                {rate} {tokenA?.tokenSymbol} per {tokenB?.tokenSymbol}
                 {/* {rate} {tokenA?.tokenSymbol} per {tokenB?.tokenSymbol} */}
               </Text>
             </HStack>
