@@ -20,6 +20,7 @@
 *.pem
 .idea
 *.client-test.*
+app_version.json
 
 # debug
 npm-debug.log*

@@ -4,6 +4,7 @@ import { useQueries } from 'react-query'
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { useChain } from '@cosmos-kit/react-lite'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
+import { fetchFlows } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { queryPoolInfo } from 'components/Pages/Trade/Pools/hooks/queryPoolInfo'
 import { PoolEntityType, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
@@ -19,7 +20,6 @@ import { isNativeToken } from 'services/asset'
 import { queryLiquidityBalance } from 'services/liquidity'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom, protectAgainstNaN } from 'util/conversion'
-import { fetchFlows } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 
 export type AssetType = [number?, number?]
 
@@ -145,7 +145,7 @@ const fetchMyLockedLp = async ({ pool, cosmWasmClient, address }) => {
         const { open_position = {}, closed_position = {} } = p
         return {
           ...open_position,
-          ...closed_position
+          ...closed_position,
         }
       }).
       reduce((acc, p) => acc + Number(p.amount), 0) || 0
@@ -222,7 +222,7 @@ export const useQueryPoolsLiquidity = ({
       ) {
         return []
       }
-      return fetchFlows(cosmWasmClient,pool?.staking_address ).
+      return fetchFlows(cosmWasmClient, pool?.staking_address).
         then((flows) => {
           const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch
@@ -272,7 +272,7 @@ export const useQueryPoolsLiquidity = ({
     const myLockedLp = await fetchMyLockedLp({
       pool,
       cosmWasmClient,
-      address
+      address,
     })
     const totalLockedLp = await fetchTotalLockedLp(
       pool.staking_address,
@@ -292,7 +292,7 @@ export const useQueryPoolsLiquidity = ({
       cosmWasmClient,
       swap: {
         ...poolInfo,
-        ...pool
+        ...pool,
       },
       address,
       totalLockedLp,
@@ -318,7 +318,7 @@ export const useQueryPoolsLiquidity = ({
 
     const myFlows = await getMyFlows({
       cosmWasmClient,
-      address
+      address,
     })
     const liquidity = {
       available: {

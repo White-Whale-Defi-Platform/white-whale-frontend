@@ -23,33 +23,44 @@ import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
+import version from 'app_version.json'
 
 const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
-
   const [mounted, setMounted] = useState<boolean>(false)
-  
+
   const walletProviders = [
-    { name: 'keplr',
-      wallet: keplrWallets },
-    { name: 'station',
-      wallet: stationWallets },
-    { name: 'leap',
-      wallet: leapWallets },
-    { name: 'ninji',
-      wallet: ninjiWallets },
-    { name: 'shellwallet',
-      wallet: shellWallets },
-    { name: 'cosmostationWallet',
-      wallet: cosmoStationWallets },
+    {
+      name: 'keplr',
+      wallet: keplrWallets,
+    },
+    {
+      name: 'station',
+      wallet: stationWallets,
+    },
+    {
+      name: 'leap',
+      wallet: leapWallets,
+    },
+    {
+      name: 'ninji',
+      wallet: ninjiWallets,
+    },
+    {
+      name: 'shellwallet',
+      wallet: shellWallets,
+    },
+    {
+      name: 'cosmostationWallet',
+      wallet: cosmoStationWallets,
+    },
   ];
 
-
   const reorderWallets = useMemo(() => {
-    let newWallets: any[] = [];
-    let newUnavailableWallets: any[] = [];
+    const newWallets: any[] = [];
+    const newUnavailableWallets: any[] = [];
     try {
       walletProviders.forEach(({ name, wallet }) => {
         if (!window?.[name]) {
@@ -63,7 +74,14 @@ const MyApp: FC<AppProps> = ({
       return []
     }
   }, []);
-  useEffect(() => { setMounted(true) }, [reorderWallets])
+  useEffect(() => {
+    const localVersion = localStorage.getItem('ww-version');
+    if (!localVersion || version?.version !== localVersion) {
+      localStorage.clear()
+      localStorage.setItem('ww-version', version?.version)
+    }
+    setMounted(true)
+  }, [reorderWallets])
   return (
     <><>
       <Head>
