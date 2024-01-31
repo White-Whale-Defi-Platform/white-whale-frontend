@@ -57,7 +57,6 @@ const columns = [
         {'RATIO'}
       </Text>
     ),
-    //
     cell: (info) => Ratio(info.getValue()),
   }),
   columnHelper.accessor((row) => row.apr, {
