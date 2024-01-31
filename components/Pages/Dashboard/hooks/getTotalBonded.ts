@@ -21,6 +21,7 @@ interface TotalBondedInfo {
 
 const fetchTotalBonded = async (client: CosmWasmClient,
   config: Config): Promise<TotalBondedInfo> => {
+  // TODO: API
   const result: JsonObject = await client.queryContractSmart(config.whale_lair,
     {
       total_bonded: {},

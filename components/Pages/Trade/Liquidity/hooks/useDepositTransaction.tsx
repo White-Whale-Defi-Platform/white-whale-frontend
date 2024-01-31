@@ -56,7 +56,7 @@ export const useTransaction: any = ({
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)
-      if (!signingClient) {
+      if (!signingClient || !debouncedMsgs || debouncedMsgs?.length == 0) {
         return
       }
       try {

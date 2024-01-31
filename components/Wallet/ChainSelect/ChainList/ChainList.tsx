@@ -8,7 +8,7 @@ import { useChainInfos } from 'hooks/useChainInfo';
 import ChainItem from './ChainItem';
 
 const useFilteredChains = (connectedChainIds) => {
-  const chains = useChainInfos()
+  const chains = useChainInfos();
   const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
 
   const connectedChains = [];

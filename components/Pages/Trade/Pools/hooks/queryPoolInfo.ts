@@ -1,14 +1,19 @@
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { getPoolFromAPI } from 'services/useAPI'
 
 export type PoolInfoResponse = {
   total_share: string
   lp_token_address: string
   assets: any
 }
-const getPoolInfo = async (swapAddress: string,
+export const getPoolInfo = async (swapAddress: string,
   client: CosmWasmClient): Promise<PoolInfoResponse> => {
   if (!swapAddress || !client) {
     return null
+  }
+  const apiValues = await getPoolFromAPI(await client.getChainId(), swapAddress)
+  if (apiValues) {
+    return apiValues
   }
   return await client.queryContractSmart(swapAddress, {
     pool: {},

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
@@ -28,12 +28,9 @@ const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
+
   const [mounted, setMounted] = useState<boolean>(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-  let wallets = []
-  let unavailableWallets = [];
+  
   const walletProviders = [
     { name: 'keplr', wallet: keplrWallets },
     { name: 'station', wallet: stationWallets },
@@ -42,21 +39,25 @@ const MyApp: FC<AppProps> = ({
     { name: 'shellwallet', wallet: shellWallets },
     { name: 'cosmostationWallet', wallet: cosmoStationWallets },
   ];
-  
-  //Reorder Wallets so available are connected first. Avoid blocking cosmos-kit error for users.
-  try {
-    walletProviders.forEach(({ name, wallet }) => {
-      if (!window?.[name]) {
-        unavailableWallets.push(...wallet);
-      } else {
-        wallets.push(...wallet);
-      }
-    });
-  
-    wallets = [...wallets, ...unavailableWallets];
-  } catch (error) {
-    console.error(error);
-  }
+
+
+  const reorderWallets = useMemo(() => {
+    let newWallets: any[] = [];
+    let newUnavailableWallets: any[] = [];
+    try {
+      walletProviders.forEach(({ name, wallet }) => {
+        if (!window?.[name]) {
+          newUnavailableWallets.push(...wallet);
+        } else {
+          newWallets.push(...wallet);
+        }
+      });
+      return [...newWallets, ...newUnavailableWallets];
+    } catch {
+      return []
+    }
+  }, []);
+  useEffect(() => { setMounted(true) }, [reorderWallets])
   return (
     <><>
       <Head>
@@ -68,7 +69,7 @@ const MyApp: FC<AppProps> = ({
             <ChainProvider
               chains={chains} // Supported chains
               assetLists={assets} // Supported asset lists
-              wallets={wallets} // Supported wallets
+              wallets={reorderWallets} // Supported wallets
               walletModal={WalletModal}
               signerOptions={signerOptions}
               endpointOptions={endpointOptions}
