@@ -31,6 +31,7 @@ import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { formatPrice } from 'libs/num'
+
 import { Ratio } from './components/Ratio'
 
 const columnHelper = createColumnHelper<Pool>()

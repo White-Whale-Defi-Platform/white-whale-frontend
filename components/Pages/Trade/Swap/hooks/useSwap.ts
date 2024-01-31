@@ -13,7 +13,7 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-const SLIPPAGE = ["osmosis", "injective"]
+const SLIPPAGE = ['osmosis', 'injective']
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -37,11 +37,11 @@ const useSwap = ({ reverse }) => {
   const { simulateMsg, encodedExecuteMsg, executeMsg, path, refValue } = useRoute({
     tokenA: {
       ...tokenA,
-      ...swapTokenA
+      ...swapTokenA,
     },
     tokenB: {
       ...tokenB,
-      ...swapTokenB
+      ...swapTokenB,
     },
     amount,
     reverse,
@@ -148,11 +148,11 @@ const useSwap = ({ reverse }) => {
     minReceive,
     state: {
       error,
-      isLoading
+      isLoading,
     },
     priceImpact,
   }),
-    [tx, simulated, error, isLoading, minReceive, path, priceImpact])
+  [tx, simulated, error, isLoading, minReceive, path, priceImpact])
 }
 
 export default useSwap

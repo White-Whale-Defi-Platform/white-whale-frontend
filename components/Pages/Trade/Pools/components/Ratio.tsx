@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 
 import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 
-
 export const Ratio = (number: number) => {
-  let expo: string = number.toExponential(2)
+  const expo: string = number.toExponential(2)
   if (Number(number.toFixed(3)) != 0) {
     return (<Text align="right">{`${number.toFixed(3)}`}</Text>)
   }

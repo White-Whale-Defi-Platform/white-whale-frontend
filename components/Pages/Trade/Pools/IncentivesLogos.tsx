@@ -1,6 +1,5 @@
 import { Box, HStack, Image, Text } from '@chakra-ui/react'
 
-
 export const IncentivesLogos = ({ logos, more }) => (
   <>
     {logos && logos.length > 0 && (
@@ -16,8 +15,8 @@ export const IncentivesLogos = ({ logos, more }) => (
             key={`${logo}-${i}`}
             boxShadow="lg"
             borderRadius="full"
-            position="absolute" 
-            left={i * 10 + 'px'} 
+            position="absolute"
+            left={`${i * 10}px`}
           >
             <Image
               src={logo}

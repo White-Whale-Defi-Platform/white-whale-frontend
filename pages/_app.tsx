@@ -33,17 +33,23 @@ const MyApp: FC<AppProps> = ({
     setMounted(true)
   }, [])
   let wallets = []
-  let unavailableWallets = [];
+  const unavailableWallets = [];
   const walletProviders = [
-    { name: 'keplr', wallet: keplrWallets },
-    { name: 'station', wallet: stationWallets },
-    { name: 'leap', wallet: leapWallets },
-    { name: 'ninji', wallet: ninjiWallets },
-    { name: 'shellwallet', wallet: shellWallets },
-    { name: 'cosmostationWallet', wallet: cosmoStationWallets },
+    { name: 'keplr',
+      wallet: keplrWallets },
+    { name: 'station',
+      wallet: stationWallets },
+    { name: 'leap',
+      wallet: leapWallets },
+    { name: 'ninji',
+      wallet: ninjiWallets },
+    { name: 'shellwallet',
+      wallet: shellWallets },
+    { name: 'cosmostationWallet',
+      wallet: cosmoStationWallets },
   ];
-  
-  //Reorder Wallets so available are connected first. Avoid blocking cosmos-kit error for users.
+
+  // Reorder Wallets so available are connected first. Avoid blocking cosmos-kit error for users.
   try {
     walletProviders.forEach(({ name, wallet }) => {
       if (!window?.[name]) {
@@ -52,7 +58,7 @@ const MyApp: FC<AppProps> = ({
         wallets.push(...wallet);
       }
     });
-  
+
     wallets = [...wallets, ...unavailableWallets];
   } catch (error) {
     console.error(error);
