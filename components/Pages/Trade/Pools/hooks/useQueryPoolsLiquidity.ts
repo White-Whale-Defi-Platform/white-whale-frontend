@@ -205,7 +205,6 @@ export const useQueryPoolsLiquidity = ({
       ) {
         return []
       }
-
       const flows = await fetchFlows(cosmWasmClient, pool.staking_address)
       return flows?.map((flow) => {
         const denom =
@@ -223,8 +222,7 @@ export const useQueryPoolsLiquidity = ({
       ) {
         return []
       }
-      // TODO DONE
-      return getFlows(cosmWasmClient).
+      return fetchFlows(cosmWasmClient,pool?.staking_address ).
         then((flows) => {
           const flowTokens = flows?.map((flow) => {
             const startEpoch = flow.start_epoch
