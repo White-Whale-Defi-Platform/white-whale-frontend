@@ -8,8 +8,8 @@ import { BondedData } from 'components/Pages/Bonding/hooks/getBonded'
 import { UnbondingData } from 'components/Pages/Bonding/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Bonding/hooks/getWithdrawable'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
-import { usePrices } from 'hooks/usePrices'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
+import { useWhalePrice } from 'hooks/useWhalePrice'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -110,21 +110,12 @@ const Bonding: FC = () => {
     )
   }
 
-  const prices = usePrices()
-
-  const whalePrice = useMemo(() => {
-    // @ts-ignore
-    if (prices && prices?.WHALE) {
-      // @ts-ignore
-      return prices?.WHALE
-    }
-    return 0 // Default value
-  }, [prices])
+  const whalePrice = useWhalePrice()
 
   const config: Config = useConfig(network, chainId)
 
   const symbols = useMemo(() => {
-    const tokenSymbols = config?.bonding_tokens?.map((token) => token.tokenSymbol) || [];
+    const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || [];
     return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
   }, [config])
 

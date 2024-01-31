@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { Box, HStack, Text, VStack, Image } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack, Image } from '@chakra-ui/react'
 import {
   ColumnDef,
   createColumnHelper, flexRender,
@@ -162,23 +162,45 @@ export const StatsTable = ({ dashboardData }) => {
           ))}
         </HStack>
       ))}
-      {table.getRowModel().rows?.map((row) => (
+      {table.getRowModel().rows?.filter((row) => row.original.chainName === walletChainName).map((row) => (
         <HStack
           key={row.id}
           width="full"
-          borderRadius="30px"
+          borderRadius="10px"
+          backgroundColor="rgba(0, 0, 0, 0.5)"
+          py="5"
+          px="8"
+          border={'2px solid #00FFB0'}>
+          {row.getVisibleCells().map((cell, index) => (
+            <><Text
+              key={cell.id}
+              minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset'}
+            >
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </Text>
+            {index === 4 ? <Text pl={20} color={'#00FFB0'}>Selected</Text> : null}
+            </>
+          ))}
+        </HStack>
+      ))}
+      {table.getRowModel().rows?.filter((row) => row.original.chainName !== walletChainName).map((row) => (
+        <HStack
+          key={row.id}
+          width="full"
+          borderRadius="10px"
           backgroundColor="rgba(0, 0, 0, 0.5)"
           py="5"
           px="8"
           border={walletChainName === row.original.chainName ? '2px solid #00FFB0' : 'none'}
         >
           {row.getVisibleCells().map((cell, index) => (
-            <Text
+            <><Text
               key={cell.id}
               minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
+            </>
           ))}
         </HStack>
       ))}

@@ -23,7 +23,7 @@ export const RewardsTooltip = ({
       <Text color="whiteAlpha.600" fontSize={14}>
         {WHALE_TOKEN_SYMBOL}
       </Text>
-      <Text fontSize={14}>{isWalletConnected ? amount : 'n/a'}</Text>
+      <Text>{isWalletConnected ? amount : 'n/a'}</Text>
     </HStack>
   )
 
@@ -64,10 +64,10 @@ export const RewardsTooltip = ({
       } // Displaying nothing when wallet disconnected
       bg="transparent"
     >
-      <VStack alignItems="flex-start" minW={50} onMouseEnter={() => setIsLabelOpen(true)}
+      <VStack alignItems="flex-start" minW={50} mt={-2} onMouseEnter={() => setIsLabelOpen(true)}
         onMouseLeave={() => setIsLabelOpen(false)}
         onClick={() => setIsLabelOpen(!isLabelOpen)}>
-        <Text ref={textRef} mb="-0.3rem" color="white">
+        <Text ref={textRef} mb="-0.3rem" color="white" fontWeight={'bold'}>
           {dollarValue}
         </Text>
         <Box pb={1}>

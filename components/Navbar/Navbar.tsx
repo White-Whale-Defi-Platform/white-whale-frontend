@@ -34,7 +34,7 @@ const Navbar = () => {
   const links = [
     {
       label: 'Dashboard',
-      link: `/${currentChainName}/dashboard`,
+      link: `/${currentChainName}/bonding`,
     },
     {
       label: 'Bonding',
@@ -92,6 +92,7 @@ const Navbar = () => {
               key={menu.label}
               menu={menu}
               currentChainName={chainName}
+              chainId={chainId}
             />
           ))}
         </Card>
