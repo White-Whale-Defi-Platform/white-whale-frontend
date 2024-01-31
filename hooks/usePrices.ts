@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
+import { getPoolInfo } from 'components/Pages/Trade/Pools/hooks/queryPoolInfo'
 import { PoolEntityType, TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useClients } from 'hooks/useClients'
 import useCoinGecko from 'hooks/useCoinGecko'
@@ -24,7 +25,7 @@ type PriceFromPoolParams = {
 }
 
 const getPriceFromPool = async ({ pool, baseToken, baseTokenPrice, cosmWasmClient }: PriceFromPoolParams) => {
-  const poolInfo = await cosmWasmClient.queryContractSmart(pool.swap_address, { pool: {} })
+  const poolInfo = await getPoolInfo(pool.swap_address, cosmWasmClient)
   const isBaseTokenLast = pool.pool_assets[1].symbol === baseToken.symbol
   const [asset1, asset2] = poolInfo?.assets || []
   const ratioFromPool = convertMicroDenomToDenom(Number(asset2?.amount), pool.pool_assets[1].decimals) / convertMicroDenomToDenom(Number(asset1?.amount), pool.pool_assets[0].decimals)
