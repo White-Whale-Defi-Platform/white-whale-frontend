@@ -110,7 +110,7 @@ export const Header = ({ dashboardData }) => {
       h={200}
       w={340}>
       <Text color="whiteAlpha.600">
-        Volume
+        Volume 24h
       </Text>
       <DashboardPieChart dashboardData={dashboardState.data} chainStat={ChainStat.volume24h} />
     </Box>
