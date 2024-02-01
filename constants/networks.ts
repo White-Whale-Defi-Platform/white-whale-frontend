@@ -112,6 +112,7 @@ export const NETWORK_MAP = {
   testnet: 'mainnet',
 }
 
+// Chain names by cosmos kit
+export enum WalletChainName { terrac = 'terra', terra = 'terra2', migaloo= 'migaloo', juno= 'juno', sei= 'sei', comdex= 'comdex', injective= 'injective', chihuahua= 'chihuahua', osmosis= 'osmosis' }
 export const CHAIN_NAMES = [...ACTIVE_NETWORKS_WALLET_NAMES.mainnet, ...ACTIVE_NETWORKS_WALLET_NAMES.testnet]
-
 export enum ChainId { terrac = 'columbus-5', terra = 'phoenix-1', migaloo = 'migaloo-1', juno = 'juno-1', sei = 'pacific-1', comdex = 'comdex-1', injective = 'injective-1', chihuahua = 'chihuahua-1', narwhal = 'narwhal-1', pisco = 'pisco-1', osmosis = 'osmosis-1' }

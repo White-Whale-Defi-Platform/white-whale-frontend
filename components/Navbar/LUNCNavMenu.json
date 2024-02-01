@@ -1,12 +1,14 @@
 [
   {
+    "label": "Dashboard",
+    "link": "/dashboard"
+  },
+  {
     "label": "Bonding",
-    "isExternal" : false,
     "link": "/bonding"
   },
   {
     "label": "Trade",
-    "isExternal" : false,
     "children": [
       {
         "label": "Swap",
@@ -17,10 +19,5 @@
         "link": "/pools"
       }
     ]
-  },
-  {
-    "label": "Bridge",
-    "isExternal" : true,
-    "link": "https://tfm.com/bridge"
   }
 ]

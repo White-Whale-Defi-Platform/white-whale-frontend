@@ -28,9 +28,8 @@ const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
-
   const [mounted, setMounted] = useState<boolean>(false)
-  
+
   const walletProviders = [
     { name: 'keplr',
       wallet: keplrWallets },
@@ -46,10 +45,9 @@ const MyApp: FC<AppProps> = ({
       wallet: cosmoStationWallets },
   ];
 
-
   const reorderWallets = useMemo(() => {
-    let newWallets: any[] = [];
-    let newUnavailableWallets: any[] = [];
+    const newWallets: any[] = [];
+    const newUnavailableWallets: any[] = [];
     try {
       walletProviders.forEach(({ name, wallet }) => {
         if (!window?.[name]) {
@@ -63,7 +61,9 @@ const MyApp: FC<AppProps> = ({
       return []
     }
   }, []);
-  useEffect(() => { setMounted(true) }, [reorderWallets])
+  useEffect(() => {
+    setMounted(true)
+  }, [reorderWallets])
   return (
     <><>
       <Head>

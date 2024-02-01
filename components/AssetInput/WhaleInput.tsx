@@ -11,7 +11,7 @@ import {
   forwardRef,
 } from '@chakra-ui/react'
 import FallbackImage from 'components/FallbackImage'
-import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 

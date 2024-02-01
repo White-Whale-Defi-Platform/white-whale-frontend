@@ -156,7 +156,6 @@ export const useTransaction = ({
     },
     onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
-      console.log({ data })
       setTxHash(data.transactionHash || data?.txHash)
       await queryClient.invalidateQueries([
         '@pool-liquidity',

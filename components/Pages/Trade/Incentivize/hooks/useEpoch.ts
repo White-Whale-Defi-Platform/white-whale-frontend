@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import {
   Config,
   useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+} from 'components/Pages/Bonding/hooks/useDashboardData'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useClients } from 'hooks/useClients'
@@ -87,7 +87,6 @@ const useEpoch = () => {
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
     queryFn: async () =>
-
       // TODO: API
       await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
         config: {},

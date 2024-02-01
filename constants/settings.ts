@@ -5,8 +5,10 @@ export const POOL_REWARDS_ENABLED = JSON.parse(process.env.NEXT_PUBLIC_ENABLE_FE
 
 export const STABLE_COIN_LIST = ['CMST', 'USDT', 'axlUSDC']
 
+export const ENIGMA_URL = 'https://www.api-white-whale.enigma-validator.com'
+
 export const POOL_INFO_BASE_URL =
-  'https://www.api-white-whale.enigma-validator.com/summary'
+  `${ENIGMA_URL}/summary`
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
 
