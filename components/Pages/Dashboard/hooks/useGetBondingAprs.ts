@@ -20,6 +20,7 @@ export const useGetBondingAprs = () => {
   const injectiveConfig: Config = useConfig(network, ChainId.injective)
   const chihuahuaConfig: Config = useConfig(network, ChainId.chihuahua)
   const terracConfig: Config = useConfig(network, ChainId.terrac)
+  const osmosisConfig: Config = useConfig(network, ChainId.osmosis)
 
   const { cosmWasmClient: migalooClient } = useClients(WalletChainName.migaloo)
   const { cosmWasmClient: terraClient } = useClients(WalletChainName.terra)
@@ -28,6 +29,7 @@ export const useGetBondingAprs = () => {
   const { cosmWasmClient: injectiveClient } = useClients(WalletChainName.injective)
   const { cosmWasmClient: chihuahuaClient } = useClients(WalletChainName.chihuahua)
   const { cosmWasmClient: terracClient } = useClients(WalletChainName.terrac)
+  const { cosmWasmClient: osmosisClient } = useClients(WalletChainName.osmosis)
 
   const queries = useQueries([
     {
@@ -72,6 +74,12 @@ export const useGetBondingAprs = () => {
       enabled: Boolean(terracClient) && Boolean(terracConfig),
       refetchOnMount: false,
     },
+    {
+      queryKey: ['osmosisApr', network, osmosisConfig],
+      queryFn: () => getParamsAndCalculateApr(osmosisConfig, osmosisClient),
+      enabled: Boolean(osmosisConfig) && Boolean(osmosisClient),
+      refetchOnMount: false,
+    },
   ])
 
   const isLoading = useMemo(() => queries.some((query) => (
@@ -93,6 +101,7 @@ export const useGetBondingAprs = () => {
     const injectiveApr = queries[4].data
     const chihuahuaApr = queries[5].data
     const terracApr = queries[6].data
+    const osmosisApr = queries[7].data
     return [
       { chainName: WalletChainName.migaloo,
         apr: migalooApr },
@@ -108,6 +117,8 @@ export const useGetBondingAprs = () => {
         apr: chihuahuaApr },
       { chainName: WalletChainName.terrac,
         apr: terracApr },
+      { chainName: WalletChainName.osmosis,
+        apr: osmosisApr },
     ]
   }, [queries])
 

@@ -20,6 +20,8 @@ export interface FeeDistributionConfig {
 
 const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<FeeDistributionConfig> => {
+  // TODO: API
+
   const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
     {
       config: {},

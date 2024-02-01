@@ -17,8 +17,11 @@ import {
   getPairAprAndDailyVolumeByEnigma,
   getPairAprAndDailyVolumeByCoinhall,
 } from 'services/poolDataProvider'
+import { getFlowsFromAPI } from 'services/useAPI'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
+
+import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
 
 export interface Flow {
   claimed_amount: string
@@ -60,14 +63,10 @@ export const fetchTotalPoolSupply = async (swapAddress: string,
   if (!client || !swapAddress) {
     return null
   }
-  const { total_share: totalShare } = await client.queryContractSmart(swapAddress, {
-    pool: {},
-  })
-
-  return Number(totalShare)
+  const queried = await getPoolInfo(swapAddress, client)
+  return Number(queried.total_share)
 }
-
-const fetchFlows = async (client, address): Promise<Flow[]> => await client?.queryContractSmart(address, { flows: {} })
+export const fetchFlows = async (client, address): Promise<Flow[]> => await getFlowsFromAPI(await client.getChainId(), address) || await client.queryContractSmart(address, { flows: {} })
 
 const getPoolFlowData = async (
   client,
@@ -87,7 +86,6 @@ const getPoolFlowData = async (
 
     const totalPoolLp = await fetchTotalPoolSupply(pool.swap_address,
       client)
-
     const flows = await fetchFlows(client, pool.staking_address)
     const currentEpochId: number =
       Number(currentEpochData?.currentEpoch?.epoch.id) || 0
@@ -132,7 +130,7 @@ const getPoolFlowData = async (
           // Every new entry contains overall emitted token value
           const emittedTokens: number =
             flow.emitted_tokens &&
-            Object.keys(flow.emitted_tokens).length !== 0
+              Object.keys(flow.emitted_tokens).length !== 0
               ? Math.max(...Object.values(flow.emitted_tokens).map(Number))
               : 0
 
@@ -153,6 +151,7 @@ const getPoolFlowData = async (
         }
       })
     }
+
     const uniqueFlowsWithEmissionAndApr = uniqueFlowList.map((flow) => {
       const poolAsset = poolAssets.find((asset) => asset.denom === flow.denom)
       const tokenSymbol = poolAsset?.symbol
@@ -243,7 +242,9 @@ export const useIncentivePoolInfo = (
         Boolean(prices),
     },
   )
-  return { flowPoolData,
+  return {
+    flowPoolData,
     poolsWithAprAnd24HrVolume,
-    isLoading }
+    isLoading,
+  }
 }

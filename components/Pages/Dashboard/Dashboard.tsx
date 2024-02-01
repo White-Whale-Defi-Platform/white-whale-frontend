@@ -50,19 +50,15 @@ export const Dashboard: FC = () => {
   }, [dashboardState.isInitialized, isLoading])
 
   useEffect(() => {
-    if (prices) {
-      setDashboardDataState({ ...dashboardState,
-        whalePrice: prices.WHALE,
-      })
-    }
-
     const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
+    console.log({ marketCap })
     if (marketCap !== dashboardState.marketCap) {
       setDashboardDataState({ ...dashboardState,
+        whalePrice: prices?.WHALE ? prices.WHALE : dashboardState.whalePrice,
         marketCap,
       })
     }
-  }, [prices, circulatingWhaleSupply])
+  }, [prices?.WHALE, circulatingWhaleSupply])
 
   return <VStack width={'full'}>
     <Header dashboardData={dashboardState.data}/>

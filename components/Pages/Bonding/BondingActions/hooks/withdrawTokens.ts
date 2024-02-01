@@ -1,10 +1,9 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
-import { ChainId } from 'constants/index'
+import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
-import { TerraTreasuryService } from 'services/treasuryService'
-import { getInjectiveTxData } from 'util/injective'
+import { createGasFee } from 'services/treasuryService'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
 export const withdrawTokens: any = async (
@@ -24,19 +23,17 @@ export const withdrawTokens: any = async (
     contractAddress: config.whale_lair,
     message: handleMsg,
     funds: [] })
-  let fee: any = 'auto'
-  if (await signingClient.getChainId() === ChainId.terrac) {
-    const gas = Math.ceil(await signingClient.simulate(
-      address, [execMsg], '',
-    ) * 1.3)
-    fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-  } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
-    const injectiveTxData = await getInjectiveTxData(
-      injectiveSigningClient, address, [execMsg],
+  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+    const injectiveTxData = await injectiveSigningClient.sign(
+      address, [execMsg], await createGasFee(
+        injectiveSigningClient, address, [execMsg],
+      ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
   }
   return await signingClient.signAndBroadcast(
-    address, [execMsg], fee, '',
+    address, [execMsg], await createGasFee(
+      signingClient, address, [execMsg],
+    ), ADV_MEMO,
   )
 }

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { ChainStat, DashboardPieChart } from 'components/Pages/Dashboard/DashboardPieChart'
@@ -13,6 +13,18 @@ export type Token = {
 }
 export const Header = ({ dashboardData }) => {
   const dashboardState = useRecoilValue(dashboardDataState)
+  const [price, setPrice] = useState(0)
+  const [marketCap, setMarketCap] = useState(0)
+
+  useEffect(() => {
+    setPrice(dashboardState.whalePrice)
+  }, [dashboardState.whalePrice])
+
+  useEffect(() => {
+    setMarketCap(dashboardState.marketCap)
+  }, [dashboardState.marketCap])
+
+  console.log({ dashboardState })
   const totalTvl = useMemo(() => dashboardData.reduce((acc, data) => acc + data.tvl, 0), [dashboardData])
   const totalVolume24h = useMemo(() => dashboardData.reduce((acc, data) => acc + data.volume24h, 0), [dashboardData])
 
@@ -30,7 +42,7 @@ export const Header = ({ dashboardData }) => {
         <Text color="whiteAlpha.600">
           WHALE Price
         </Text>
-        <Text fontSize={24}>{`$${dashboardState.whalePrice}`}</Text>
+        <Text fontSize={24}>{`$${price}`}</Text>
       </Box>
       <Box bg={kBg}
         boxShadow={boxShadow}
@@ -43,10 +55,7 @@ export const Header = ({ dashboardData }) => {
         <Text color="whiteAlpha.600">
           Market Cap
         </Text>
-        <Text fontSize={24}>{`$${(dashboardState.marketCap).toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}`}</Text>
+        <Text fontSize={24}>{`$${formatPrice(marketCap)}`}</Text>
       </Box>
     </VStack>
     <VStack alignItems={'flex-start'}>

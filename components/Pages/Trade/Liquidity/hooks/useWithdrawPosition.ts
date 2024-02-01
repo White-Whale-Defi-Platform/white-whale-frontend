@@ -3,15 +3,14 @@ import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite';
 import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import { ChainId } from 'constants/index'
+import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients';
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
-import { TerraTreasuryService } from 'services/treasuryService';
+import { createGasFee } from 'services/treasuryService';
 import { chainState } from 'state/chainState'
-import { getInjectiveTxData } from 'util/injective'
-import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
+import { createExecuteMessage } from 'util/messages/index'
 
 export const useWithdrawPosition = ({ poolId }) => {
   const { walletChainName } = useRecoilValue(chainState)
@@ -36,21 +35,19 @@ export const useWithdrawPosition = ({ poolId }) => {
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {
-      let fee: any = 'auto'
-      if (await signingClient.getChainId() === ChainId.terrac) {
-        const gas = Math.ceil(await signingClient.simulate(
-          address, msgs, '',
-        ) * 1.3)
-        fee = await TerraTreasuryService.getInstance().getTerraClassicFee(null, gas)
-      } else if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
-        const injectiveTxData = await getInjectiveTxData(
-          injectiveSigningClient, address, msgs,
+      if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+        const injectiveTxData = await injectiveSigningClient.sign(
+          address, msgs, await createGasFee(
+            injectiveSigningClient, address, msgs,
+          ), ADV_MEMO,
         )
         return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
-      return validateTransactionSuccess(await signingClient.signAndBroadcast(
-        address, msgs, fee, null,
-      ))
+      return await signingClient.signAndBroadcast(
+        address, msgs, await createGasFee(
+          signingClient, address, msgs,
+        ), ADV_MEMO,
+      )
     },
     onError,
     onSuccess,
