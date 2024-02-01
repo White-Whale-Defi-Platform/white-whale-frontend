@@ -51,11 +51,10 @@ export const Dashboard: FC = () => {
 
   useEffect(() => {
     const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
-    console.log({ marketCap })
     if (marketCap !== dashboardState.marketCap) {
       setDashboardDataState({ ...dashboardState,
         whalePrice: prices?.WHALE ? prices.WHALE : dashboardState.whalePrice,
-        marketCap,
+        marketCap: marketCap ? marketCap : dashboardState.marketCap,
       })
     }
   }, [prices?.WHALE, circulatingWhaleSupply])

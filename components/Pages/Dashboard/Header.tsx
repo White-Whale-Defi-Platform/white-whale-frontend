@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { ChainStat, DashboardPieChart } from 'components/Pages/Dashboard/DashboardPieChart'
 import { kBg } from 'constants/visualComponentConstants'
 import { formatPrice } from 'libs/num'
@@ -30,61 +30,66 @@ export const Header = ({ dashboardData }) => {
 
   const width = 265
   const boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.4)'
-  return <HStack pt={50} px={0} pb={7} width={'full'} justify={'space-between'}>
-    <VStack alignItems={'flex-start'}>
-      <Box bg={kBg}
-        boxShadow={boxShadow}
-        borderRadius="10px"
-        px={4}
-        pt={3}
-        h={90}
-        w={width}>
-        <Text color="whiteAlpha.600">
+  return <Flex direction={{
+    base: 'column',
+    xl: 'row',
+  }} alignItems="center" gap={5} pt={50} px={0} pb={7} width={'full'} justify={'space-between'}>
+    <HStack gap={5} >
+      <VStack alignItems={'flex-start'}>
+        <Box bg={kBg}
+          boxShadow={boxShadow}
+          borderRadius="10px"
+          px={4}
+          pt={3}
+          h={90}
+          w={width}>
+          <Text color="whiteAlpha.600">
           WHALE Price
-        </Text>
-        <Text fontSize={24}>{`$${price}`}</Text>
-      </Box>
-      <Box bg={kBg}
-        boxShadow={boxShadow}
-        borderRadius="10px"
-        px={4}
-        mt={3}
-        pt={3}
-        h={90}
-        w={width}>
-        <Text color="whiteAlpha.600">
+          </Text>
+          <Text fontSize={24}>{`$${price}`}</Text>
+        </Box>
+        <Box bg={kBg}
+          boxShadow={boxShadow}
+          borderRadius="10px"
+          px={4}
+          mt={3}
+          pt={3}
+          h={90}
+          w={width}>
+          <Text color="whiteAlpha.600">
           Market Cap
-        </Text>
-        <Text fontSize={24}>{`$${formatPrice(marketCap)}`}</Text>
-      </Box>
-    </VStack>
-    <VStack alignItems={'flex-start'}>
-      <Box bg={kBg}
-        boxShadow={boxShadow}
-        borderRadius="10px"
-        px={4}
-        pt={3}
-        h={90}
-        w={width}>
-        <Text color="whiteAlpha.600">
+          </Text>
+          <Text fontSize={24}>{`$${formatPrice(marketCap)}`}</Text>
+        </Box>
+      </VStack>
+      <VStack alignItems={'flex-start'}>
+        <Box bg={kBg}
+          boxShadow={boxShadow}
+          borderRadius="10px"
+          px={4}
+          pt={3}
+          h={90}
+          w={width}>
+          <Text color="whiteAlpha.600">
           Total DEX TVL
-        </Text>
-        <Text fontSize={24}>{`${formatPrice(totalTvl)}`}</Text>
-      </Box>
-      <Box bg={kBg}
-        boxShadow={boxShadow}
-        borderRadius="10px"
-        px={4}
-        pt={3}
-        h={90}
-        mt={3}
-        w={width}>
-        <Text color="whiteAlpha.600">
+          </Text>
+          <Text fontSize={24}>{`${formatPrice(totalTvl)}`}</Text>
+        </Box>
+        <Box bg={kBg}
+          boxShadow={boxShadow}
+          borderRadius="10px"
+          px={4}
+          pt={3}
+          h={90}
+          mt={3}
+          w={width}>
+          <Text color="whiteAlpha.600">
           24h DEX Volume
-        </Text>
-        <Text fontSize={24}>{`${formatPrice(totalVolume24h)}`}</Text>
-      </Box>
-    </VStack>
+          </Text>
+          <Text fontSize={24}>{`${formatPrice(totalVolume24h)}`}</Text>
+        </Box>
+      </VStack>
+    </HStack>
     <Box bg={kBg}
       boxShadow={boxShadow}
       borderRadius="10px"
@@ -109,5 +114,5 @@ export const Header = ({ dashboardData }) => {
       </Text>
       <DashboardPieChart dashboardData={dashboardState.data} chainStat={ChainStat.volume24h} />
     </Box>
-  </HStack>
+  </Flex>
 }
