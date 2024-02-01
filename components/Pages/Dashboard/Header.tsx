@@ -24,7 +24,6 @@ export const Header = ({ dashboardData }) => {
     setMarketCap(dashboardState.marketCap)
   }, [dashboardState.marketCap])
 
-  console.log({ dashboardState })
   const totalTvl = useMemo(() => dashboardData.reduce((acc, data) => acc + data.tvl, 0), [dashboardData])
   const totalVolume24h = useMemo(() => dashboardData.reduce((acc, data) => acc + data.volume24h, 0), [dashboardData])
 
