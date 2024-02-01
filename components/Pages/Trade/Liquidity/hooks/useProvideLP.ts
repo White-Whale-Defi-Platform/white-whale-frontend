@@ -4,7 +4,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import {
   Config,
   useConfig,
-} from 'components/Pages/Dashboard/hooks/useDashboardData'
+} from 'components/Pages/Bonding/hooks/useDashboardData'
 import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactoryConfig'
 import createLpMsg, { createLPExecuteMsgs } from 'components/Pages/Trade/Liquidity/hooks/createLPMsg'
 import useTransaction from 'components/Pages/Trade/Liquidity/hooks/useDepositTransaction'

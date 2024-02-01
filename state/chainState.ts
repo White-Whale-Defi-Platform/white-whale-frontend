@@ -1,3 +1,4 @@
+import { ChainId, WalletChainName } from 'constants/index'
 import { atom } from 'recoil'
 
 export enum NetworkType {
@@ -24,11 +25,11 @@ const createWalletState = ({
 }: CreateWalletStateArgs<NonNullable<unknown>>) => atom<GeneratedWalletState<NonNullable<unknown>>>({
   key,
   default: {
-    chainId: 'migaloo-1',
-    chainName: 'migaloo',
+    chainId: ChainId.migaloo,
+    chainName: WalletChainName.migaloo,
     network: NetworkType.mainnet,
     activeWallet: '',
-    walletChainName: 'migaloo',
+    walletChainName: WalletChainName.migaloo,
     ...defaultState,
   },
   dangerouslyAllowMutability: true,

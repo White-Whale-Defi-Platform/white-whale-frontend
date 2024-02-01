@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { VStack, forwardRef } from '@chakra-ui/react'
-import { TokenBalance } from 'components/Pages/Dashboard/BondingActions/Bond'
+import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { usePrices } from 'hooks/usePrices'
 import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
 import { num } from 'libs/num'

@@ -13,7 +13,7 @@ import RadialGradient, { backgrounds } from './RadialGradient'
 const AppLayout: FC<ReactNode> = ({ children }) => {
   const { chainId } = useRecoilValue(chainState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
-  const mobileBrowserLEAP = window.leap && window.leap.mode === 'mobile-web'
+  const mobileBrowserLeap = window.leap && window.leap.mode === 'mobile-web'
   const mobileBrowserKeplr = window.keplr && window.keplr.mode === 'mobile-web'
   const background = useMemo(() => backgrounds[chainId], [chainId])
   return (
@@ -29,8 +29,8 @@ const AppLayout: FC<ReactNode> = ({ children }) => {
           background: background.replace('linear', 'radial').replace('90deg', 'circle'),
         }}
       ></div>}
-      {((isMobile || isMobileView) && !(mobileBrowserLEAP || mobileBrowserKeplr)) && <MobileNotSupportedModal />}
-      {(!(isMobile || isMobileView) || (mobileBrowserLEAP || mobileBrowserKeplr)) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
+      {((isMobile || isMobileView) && !(mobileBrowserLeap || mobileBrowserKeplr)) && <MobileNotSupportedModal />}
+      {(!(isMobile || isMobileView) || (mobileBrowserLeap || mobileBrowserKeplr)) && (<Flex direction="column" backgroundColor="transparent" height="100vh">
         <RadialGradient />
         <Navbar />
         <Flex

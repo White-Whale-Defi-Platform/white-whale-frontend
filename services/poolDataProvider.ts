@@ -7,9 +7,9 @@ export interface PoolResponse {
   displayName: string
   displayLogo1: string
   displayLogo2: string
-  volume_24h: number | string
+  volume24h: number | string
   volume_7d: number | string
-  TVL: number | string
+  tvl: number | string
   Price: string
   APR: number | string
 }
@@ -19,7 +19,7 @@ export interface PoolData {
   usdVolume24h?: number | string
   usdVolume7d?: number | string
   apr7d?: number | string
-  TVL?: number | string
+  tvl?: number | string
   ratio?: number | string
 }
 
@@ -85,9 +85,9 @@ export const getPairAprAndDailyVolumeByEnigma = async (pools: any[],
       const pairInfo = pairInfos.find((row: any) => row.pool_id === poolId)
       return {
         pool_id: poolId,
-        usdVolume24h: pairInfo?.volume_24h,
+        usdVolume24h: pairInfo?.volume24h,
         usdVolume7d: pairInfo?.volume_7d,
-        TVL: pairInfo?.TVL,
+        tvl: pairInfo?.tvl,
         apr7d: pairInfo?.APR,
         ratio: Number(pairInfo?.Price || 0),
       } as PoolData
@@ -96,7 +96,7 @@ export const getPairAprAndDailyVolumeByEnigma = async (pools: any[],
   console.log('No enigma pair infos found')
   return poolIds?.map((poolId: any) => ({
     pool_id: poolId,
-    TVL: 'n/a',
+    tvl: 'n/a',
     usdVolume24h: 'n/a',
     usdVolume7d: 'n/a',
     apr7d: 'n/a',
@@ -135,7 +135,7 @@ export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<
         usdVolume24h: pairInfo?.volume24h,
         usdVolume7d: pairInfo?.volume7d,
         totalLiquidity: pairInfo?.liquidity,
-        TVL: pairInfo?.liquidity,
+        tvl: pairInfo?.liquidity,
         apr7d: pairInfo?.apr7d || 0,
         ratio: `${ratio.toFixed(3)}`,
       } as PoolData
@@ -146,7 +146,7 @@ export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<
     const poolId = pools.find((pool: any) => pool.swap_address === swapAddress).pool_id
     return {
       pool_id: poolId,
-      TVL: 'n/a',
+      tvl: 'n/a',
       usdVolume24h: 'n/a',
       usdVolume7d: 'n/a',
       apr7d: 'n/a',
