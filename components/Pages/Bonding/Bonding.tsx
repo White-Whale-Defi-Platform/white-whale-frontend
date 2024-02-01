@@ -211,6 +211,20 @@ const Bonding: FC = () => {
             />
           </VStack>
         </Flex>
+        <VStack alignItems={'start'} width={'full'} pt={11}>
+          <Text fontSize="12" paddingLeft={5}>
+            • Bond to any White Whale satellite DEX to earn a share of the swap fees of that DEX
+          </Text>
+          <Text fontSize="12" paddingLeft={5}>
+            • ampWHALE or bWHALE is required to bond
+          </Text>
+          <Text fontSize="12" paddingLeft={5}>
+            • Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned, unbonding resets multiplier
+          </Text>
+          <Text fontSize="12" paddingLeft={5}>
+            • 1 day cool down period after unbonding, after which tokens can be withdrawn
+          </Text>
+        </VStack>
       </VStack>) }</>
 }
 
