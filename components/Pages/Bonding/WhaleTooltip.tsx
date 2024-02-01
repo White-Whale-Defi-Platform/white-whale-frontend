@@ -95,7 +95,7 @@ export const WhaleTooltip = ({
                 </Text>
               ) : (
                 <>
-                  {summedBalanceList?.map((token, index) => (
+                  {summedBalanceList.map((token, index) => (
                     <React.Fragment key={token.tokenSymbol}>
                       <TokenDetail token={token} />
                       {index === 0 && summedBalanceList.length > 1 && (

@@ -65,7 +65,7 @@ const Bonding: FC = () => {
     value: number,
     tokenBalances: TokenBalance[],
   ) => {
-    const specificBondingData = data?.find((e) => e.tokenType === tokenType)
+    const specificBondingData = data.find((e) => e.tokenType === tokenType)
     specificBondingData.value = value ?? 0
     specificBondingData.tokenBalances = tokenBalances ?? []
   }

@@ -192,7 +192,7 @@ const SwapForm: FC<Props> = ({
     const tokenAAmount = num(tokenA?.amount).times(10 ** tokenAInfo.decimals)
     const tokenBAmount = num(tokenB?.amount).times(10 ** tokenBInfo.decimals)
 
-    const decimalDifference = (tokenAInfo?.decimals || 6) - (tokenBInfo?.decimals || 6)
+    const decimalDifference = tokenAInfo.decimals - tokenBInfo.decimals
     const reverseRate = Number(simulated?.amount) / (Number(tokenBAmount) * (10 ** decimalDifference))
     const rate = (Number(tokenAAmount) * (10 ** -decimalDifference)) / Number(simulated?.amount)
     return (isReverse ? reverseRate : rate).toFixed(6)

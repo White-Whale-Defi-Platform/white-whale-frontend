@@ -139,7 +139,7 @@ export const StatsTable = ({ dashboardData }) => {
                   {flexRender(header.column.columnDef.header,
                     header.getContext())}
                 </Box>
-                {header?.column?.columnDef?.enableSorting && (
+                {header.column?.columnDef?.enableSorting && (
                   <VStack width="fit-content" p="0" m="0" spacing="0">
                     <TriangleUpIcon
                       fontSize="8px"
@@ -172,14 +172,13 @@ export const StatsTable = ({ dashboardData }) => {
           px="8"
           border={'2px solid #00FFB0'}>
           {row.getVisibleCells().map((cell, index) => (
-            <><Text
-              key={cell.id}
+            <React.Fragment key={cell.id}><Text
               minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
             {index === 4 ? <Text pl={20} color={'#00FFB0'}>Selected</Text> : null}
-            </>
+            </React.Fragment>
           ))}
         </HStack>
       ))}
@@ -194,13 +193,12 @@ export const StatsTable = ({ dashboardData }) => {
           border={walletChainName === row.original.chainName ? '2px solid #00FFB0' : 'none'}
         >
           {row.getVisibleCells().map((cell, index) => (
-            <><Text
-              key={cell.id}
+            <React.Fragment key={cell.id}><Text
               minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
-            </>
+            </React.Fragment>
           ))}
         </HStack>
       ))}

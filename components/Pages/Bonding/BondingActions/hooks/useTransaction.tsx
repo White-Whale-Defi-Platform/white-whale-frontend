@@ -285,7 +285,7 @@ export const useTransaction = () => {
     error,
     reset,
   }),
-  [txStep, txInfo, txHash, error, reset, fee])
+  [txStep, txInfo, txHash, error, fee])
 }
 
 export default useTransaction

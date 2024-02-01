@@ -136,7 +136,7 @@ const BondingOverview = ({
             <WhaleTooltip
               key={`${e.tokenType}${index}`}
               label={
-                e?.value && isWalletConnected
+                e.value && isWalletConnected
                   ? `$${(Number(e.value) * Number(whalePrice)).toFixed(2)}`
                   : 'n/a'
               }
