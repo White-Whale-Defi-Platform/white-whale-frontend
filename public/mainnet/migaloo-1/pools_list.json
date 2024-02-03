@@ -683,8 +683,100 @@
       "swap_address": "migaloo1huj5syg78rm3nuslzf9py73ccegcth2lkfpf5pvaq6q68pakldmsahxmfl",
       "staking_address": "migaloo10knl076uc8sjqsz6k49j94phv5aqqp0v7u8aaqjx6s3pdrmtsmzskjepd6",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampWHALEt-ampWHALE",
+      "lpOrder": [
+        "ampWHALEt",
+        "ampWHALE"
+      ],
+      "assetOrder": [
+        "ampWHALEt",
+        "ampWHALE"
+      ],
+      "displayName": "ampWHALEt-ampWHALE",
+      "displayLogo1": "/logos/ampwhalet.svg",
+      "displayLogo2": "/logos/ampWhale.svg",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/EA459CE57199098BA5FFDBD3194F498AA78439328A92C7D136F06A5220903DA6",
+          "symbol": "ampWHALEt",
+          "name": "ampWHALEt",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhalet.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/EA459CE57199098BA5FFDBD3194F498AA78439328A92C7D136F06A5220903DA6"
+        },
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE",
+          "symbol": "ampWHALE",
+          "name": "ampWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/ampWhale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bWHALEt-bWHALE",
+      "lpOrder": [
+        "bWHALEt",
+        "bWHALE"
+      ],
+      "assetOrder": [
+        "bWHALEt",
+        "bWHALE"
+      ],
+      "displayName": "bWHALEt-bWHALE",
+      "displayLogo1": "/logos/bwhalet.svg",
+      "displayLogo2": "/logos/bWHALE.png",
+      "pool_assets": [
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/E54A0C1E4A2A79FD4F92765F68E38939867C3DA36E2EA6BBB2CE81C43F4C8ADC",
+          "symbol": "bWHALEt",
+          "name": "bWHALEt",
+          "decimals": 6,
+          "logoURI": "/logos/bwhalet.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/E54A0C1E4A2A79FD4F92765F68E38939867C3DA36E2EA6BBB2CE81C43F4C8ADC"
+        },
+        {
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale",
+          "symbol": "bWHALE",
+          "name": "bWHALE",
+          "decimals": 6,
+          "logoURI": "/logos/bWHALE.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
     }
-  ],
+    ],
   "version": {
     "major": 0,
     "minor": 1,
