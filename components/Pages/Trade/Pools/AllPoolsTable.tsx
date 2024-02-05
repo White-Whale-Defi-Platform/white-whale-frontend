@@ -32,8 +32,6 @@ import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { formatPrice } from 'libs/num'
 
-import { Ratio } from './components/Ratio'
-
 const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
@@ -50,15 +48,6 @@ const columns = [
         token2Img={info.row.original?.token2Img}
       />
     ),
-  }),
-  columnHelper.accessor((row) => row.price, {
-    id: 'price',
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'RATIO'}
-      </Text>
-    ),
-    cell: (info) => Ratio(info.getValue()),
   }),
   columnHelper.accessor((row) => row.apr, {
     id: 'apr',

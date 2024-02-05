@@ -10,6 +10,7 @@ import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
+import version from 'app_version.json'
 import { chains, assets } from 'chain-registry'
 import 'theme/global.css'
 import AppLoading from 'components/AppLoading'
@@ -23,7 +24,6 @@ import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
 import theme from 'theme'
-import version from 'app_version.json'
 
 const MyApp: FC<AppProps> = ({
   Component,
