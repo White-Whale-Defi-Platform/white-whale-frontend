@@ -47,7 +47,7 @@ export const directTokenSwap = async ({
     return await validateTransactionSuccess(await signingClient.signAndBroadcast(
       senderAddress,
       [increaseAllowanceMessage, executeMessage],
-      'auto',
+      await createGasFee(signingClient,senderAddress,[increaseAllowanceMessage, executeMessage]),
       null,
     ))
   }
@@ -64,7 +64,7 @@ export const directTokenSwap = async ({
       ), ADV_MEMO,
     )
     return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
-  }
+  } 
   return await signingClient.signAndBroadcast(
     senderAddress, [execMsg], await createGasFee(
       signingClient, senderAddress, [execMsg],
