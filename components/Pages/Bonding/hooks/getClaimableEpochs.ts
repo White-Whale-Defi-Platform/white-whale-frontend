@@ -42,7 +42,14 @@ export const getClaimableEpochs = async (client: CosmWasmClient,
     return null
   }
 
-  const data = await fetchClaimableEpoch(client, config)
+  let data : any
+  try {
+    data = await fetchClaimableEpoch(client, config)
+  } catch (error) {
+    console.error('Error fetching claimable epochs', config)
+    return { globalAvailableRewards: 0,
+      annualRewards: 0 }
+  }
 
   const rewardData = data?.epochs.
     flatMap((e) => e.total.map((a) => a.amount)).

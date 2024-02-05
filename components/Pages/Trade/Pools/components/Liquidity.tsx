@@ -9,7 +9,8 @@ type Props = {
 
 export const Liquidity = ({ liquidity, infos }: Props) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
-  const assets = infos.poolAssets
+  const { poolAssets } = infos
+  const { price } = infos
   const tooltipDisabled = liquidity === 'n/a'
   return (
 
@@ -31,8 +32,7 @@ export const Liquidity = ({ liquidity, infos }: Props) => {
           justifyContent="center"
           alignItems="center">
           <>
-            {<> </>}
-            {assets.map((name, index) => (
+            {poolAssets.map((name, index) => (
               <React.Fragment key={name.name}>
                 <HStack
                   justify="space-between"
@@ -53,7 +53,7 @@ export const Liquidity = ({ liquidity, infos }: Props) => {
                     })}
                   </Text>
                 </HStack>
-                {index !== assets.length - 1 && (
+                {index !== poolAssets.length - 1 && (
                   <Divider
                     width="93%"
                     borderWidth="0.1px"
@@ -62,6 +62,24 @@ export const Liquidity = ({ liquidity, infos }: Props) => {
                 )}
               </React.Fragment>
             ))}
+            <Divider
+              width="93%"
+              borderWidth="0.1px"
+              color="whiteAlpha.300"
+            />
+            <HStack
+              justify="space-between"
+              direction="row"
+              width="full"
+              px={2}
+            >
+              <Text color="whiteAlpha.600" fontSize={14}>
+                {'Ratio'}
+              </Text>
+              <Text fontSize={14}>
+                {price.toLocaleString()}
+              </Text>
+            </HStack>
           </>
         </VStack>
       } // Displaying nothing when wallet disconnected
