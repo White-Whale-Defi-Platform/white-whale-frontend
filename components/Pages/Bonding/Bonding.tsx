@@ -123,7 +123,6 @@ const Bonding: FC = () => {
 
   const {
     feeDistributionConfig,
-    globalTotalBonded,
     myTotalBonding,
     myBondedAssets,
     withdrawableInfos,
@@ -200,7 +199,6 @@ const Bonding: FC = () => {
               whalePrice={whalePrice}
               currentEpoch={currentEpoch}
               myTotalBonding={myTotalBonding}
-              globalTotalBonded={globalTotalBonded}
               feeDistributionConfig={feeDistributionConfig}
               annualRewards={annualRewards}
               globalAvailableRewards={globalAvailableRewards}

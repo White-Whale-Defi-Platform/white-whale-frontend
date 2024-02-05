@@ -108,7 +108,6 @@ const RewardsComponent = ({
   whalePrice,
   currentEpoch,
   myTotalBonding,
-  globalTotalBonded,
   feeDistributionConfig,
   annualRewards,
   globalAvailableRewards,
