@@ -176,7 +176,7 @@ export const useDashboardData = (
       ...claimableEpochsData,
       ...claimableRewardsData,
       ...bondingConfigData,
-      ...globalIndexData,
+      globalIndexInfo: globalIndexData,
     }
   }, [queries])
 
