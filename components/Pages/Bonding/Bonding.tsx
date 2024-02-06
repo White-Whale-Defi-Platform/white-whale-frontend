@@ -7,7 +7,8 @@ import { Button, Flex, HStack, Text, useDisclosure, useMediaQuery, VStack, Modal
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton } from '@chakra-ui/react'
+  ModalCloseButton, 
+  Stack} from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
@@ -185,7 +186,7 @@ const Bonding: FC = () => {
               base: 3,
               md: 5,
             }}>
-              <HStack>
+              <Stack direction={['column', 'row']} >
                 <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
               Bonding - Earn swap fees with ampWhale or bWhale.
                 </Text>
@@ -198,7 +199,7 @@ const Bonding: FC = () => {
                   How it works
                 </Button>
                 <ChevronDownIcon mt={1} ml={-1} fontSize={24} color="white" />
-              </HStack>
+              </Stack>
             </HStack>
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
