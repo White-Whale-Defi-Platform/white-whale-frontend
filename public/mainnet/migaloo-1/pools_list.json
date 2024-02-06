@@ -725,8 +725,8 @@
           "denom": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE"
         }
       ],
-      "lp_token": "",
-      "swap_address": "",
+      "lp_token": "factory/migaloo1ugv3g8lckm70np3u50u5wetnv2dfda073gyazy2v50t5c3wza3xqj5drtk/uLP",
+      "swap_address": "migaloo1ugv3g8lckm70np3u50u5wetnv2dfda073gyazy2v50t5c3wza3xqj5drtk",
       "staking_address": "",
       "rewards_tokens": []
     },
@@ -771,8 +771,8 @@
           "denom": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale"
         }
       ],
-      "lp_token": "",
-      "swap_address": "",
+      "lp_token": "factory/migaloo1azqqmeg7zcj9vdtqpc65dmr2fkmkf3x6dcyhnau6d6er0w2r3arq470dzj/uLP",
+      "swap_address": "migaloo1azqqmeg7zcj9vdtqpc65dmr2fkmkf3x6dcyhnau6d6er0w2r3arq470dzj",
       "staking_address": "",
       "rewards_tokens": []
     }
