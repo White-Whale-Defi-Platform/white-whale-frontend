@@ -27,6 +27,7 @@ type Props = {
   positions: any[]
 }
 type TableProps = {
+  token: JSX.Element
   startDate: string
   endDate: string
   value: string

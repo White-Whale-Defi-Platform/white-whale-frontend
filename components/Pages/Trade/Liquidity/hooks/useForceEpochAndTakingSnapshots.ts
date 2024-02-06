@@ -42,7 +42,7 @@ const useForceEpochAndTakingSnapshots = ({
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType:
       mode === Force.epochAndSnapshots
-        ? 'Epoch Created And Snapshots Taken'
+        ? 'Epoch Creation And Snapshots Taken'
         : 'Taking Snapshots',
     signingClient,
   })

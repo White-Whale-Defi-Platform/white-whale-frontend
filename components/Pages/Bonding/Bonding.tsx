@@ -1,6 +1,13 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
+import { ChevronDownIcon } from '@chakra-ui/icons'
+import { Button, Flex, HStack, Text, useDisclosure, useMediaQuery, VStack, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
@@ -154,7 +161,7 @@ const Bonding: FC = () => {
     liquidBalances,
     symbols,
   ])
-
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return <>{isLoading && isWalletConnected ?
     <HStack
       width="full"
@@ -178,10 +185,39 @@ const Bonding: FC = () => {
               base: 3,
               md: 5,
             }}>
-              <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
-              Bonding
-              </Text>
+              <HStack>
+                <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
+              Bonding - Earn swap fees with ampWhale or bWhale.
+                </Text>
+                <Button
+                  variant="link"
+                  color="white"
+                  fontSize={20}
+                  textDecoration={'underline'}
+                  onClick={onOpen}>
+                  How it works
+                </Button>
+                <ChevronDownIcon mt={1} ml={-1} fontSize={24} color="white" />
+              </HStack>
             </HStack>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>How Bonding Works</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Text>• Bond to any White Whale satellite DEX to earn a share of the swap fees of that DEX</Text>
+                  <Text>• ampWHALE or bWHALE is required to bond</Text>
+                  <Text>• Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned, unbonding resets multiplier</Text>
+                  <Text>• 1 day cool down period after unbonding, after which tokens can be withdrawn</Text>
+                </ModalBody>
+                <ModalFooter>
+                  <Button width="full" variant="outline" size="sm" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
             <BondingOverview
               isWalletConnected={isWalletConnected}
               data={updatedData}
@@ -209,20 +245,6 @@ const Bonding: FC = () => {
             />
           </VStack>
         </Flex>
-        <VStack alignItems={'start'} width={'full'} pt={11}>
-          <Text fontSize="12" paddingLeft={5}>
-            • Bond to any White Whale satellite DEX to earn a share of the swap fees of that DEX
-          </Text>
-          <Text fontSize="12" paddingLeft={5}>
-            • ampWHALE or bWHALE is required to bond
-          </Text>
-          <Text fontSize="12" paddingLeft={5}>
-            • Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned, unbonding resets multiplier
-          </Text>
-          <Text fontSize="12" paddingLeft={5}>
-            • 1 day cool down period after unbonding, after which tokens can be withdrawn
-          </Text>
-        </VStack>
       </VStack>) }</>
 }
 

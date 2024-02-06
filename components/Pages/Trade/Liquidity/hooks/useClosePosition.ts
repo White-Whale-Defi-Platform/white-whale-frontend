@@ -26,7 +26,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     signingClient,
   })
 
-  const createClosPositionMessage = (unbonding_duration: number) => {
+  const createClosePositionMessage = (unbonding_duration: number) => {
     const msg = createExecuteMessage({
       message: {
         close_position: {
@@ -47,7 +47,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     }: {
       unbonding_duration: number
     }) => {
-      const msgs = createClosPositionMessage(unbonding_duration)
+      const msgs = createClosePositionMessage(unbonding_duration)
       if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
           address, msgs, await createGasFee(

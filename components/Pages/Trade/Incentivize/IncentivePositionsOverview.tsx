@@ -92,7 +92,7 @@ const menuOrTab = (
 const CloseAction = ({ poolId, flowId, isCreator }) => {
   const close = useClosePosition({ poolId })
 
-  return (
+  return isCreator ? (
     <Button
       variant="outline"
       size="sm"
@@ -103,7 +103,7 @@ const CloseAction = ({ poolId, flowId, isCreator }) => {
     >
       Close
     </Button>
-  )
+  ) : <Box />
 }
 
 const Token = ({ imgUrl, symbol }) => (
@@ -145,7 +145,7 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
     startDate: flow.startTime,
     endDate: flow.endTime,
     value: Math.round(num(flow.amount).
-      div(10 ** flow?.token?.decimals || 6).
+      div(10 ** (flow?.token?.decimals || 6)).
       toNumber()),
     action: (
       <CloseAction

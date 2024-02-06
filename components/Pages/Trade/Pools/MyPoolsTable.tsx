@@ -111,7 +111,7 @@ const columns = [
   }),
 ]
 
-const PoolsTable = ({
+const MyPoolsTable = ({
   show,
   pools,
   isLoading,
@@ -255,4 +255,4 @@ const PoolsTable = ({
   )
 }
 
-export default PoolsTable
+export default MyPoolsTable
