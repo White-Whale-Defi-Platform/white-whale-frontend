@@ -197,8 +197,8 @@ const Bonding: FC = () => {
                   textDecoration={'underline'}
                   onClick={onOpen}>
                   How it works
+                  <ChevronDownIcon pl={2} mt={1} ml={-1} fontSize={24} color="white" />
                 </Button>
-                <ChevronDownIcon mt={1} ml={-1} fontSize={24} color="white" />
               </Stack>
             </HStack>
             <Modal isOpen={isOpen} onClose={onClose}>
