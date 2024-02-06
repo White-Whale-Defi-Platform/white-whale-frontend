@@ -32,8 +32,6 @@ import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { formatPrice } from 'libs/num'
 
-import { Ratio } from './components/Ratio'
-
 const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
@@ -50,15 +48,6 @@ const columns = [
         token2Img={info.row.original?.token2Img}
       />
     ),
-  }),
-  columnHelper.accessor((row) => row.price, {
-    id: 'price',
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'RATIO'}
-      </Text>
-    ),
-    cell: (info) => Ratio(info.getValue()),
   }),
   columnHelper.accessor((row) => row.apr, {
     id: 'apr',
@@ -197,11 +186,7 @@ const PoolsTable = ({
               <Th></Th>
               <Th></Th>
               <Th></Th>
-              <Th
-                bg="rgba(255, 255, 255, 0.05)"
-                p="2px"
-                borderTopRadius="10px"
-              ></Th>
+              <Th></Th>
               <Th></Th>
               <Th isNumeric></Th>
             </Tr>
@@ -211,9 +196,6 @@ const PoolsTable = ({
                   <Th
                     key={header.id}
                     color="brand.50"
-                    bg={
-                      header.id === 'myPosition' && 'rgba(255, 255, 255, 0.05)'
-                    }
                     onClick={
                       header.id === 'action' || header.id === 'incentives' || header.id === 'pool'
                         ? null
@@ -250,10 +232,6 @@ const PoolsTable = ({
                 {row.getVisibleCells().map((cell) => (
                   <Td
                     key={cell.id}
-                    bg={
-                      cell?.column?.id === 'myPosition' &&
-                      'rgba(255, 255, 255, 0.05)'
-                    }
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
@@ -268,11 +246,7 @@ const PoolsTable = ({
               <Td></Td>
               <Td></Td>
               <Td></Td>
-              <Td
-                bg="rgba(255, 255, 255, 0.05)"
-                p="2px"
-                borderBottomRadius="10px"
-              ></Td>
+              <Td ></Td>
             </Tr>
           </Tfoot>
         </Table>

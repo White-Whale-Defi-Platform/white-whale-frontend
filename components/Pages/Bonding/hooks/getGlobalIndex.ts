@@ -20,15 +20,14 @@ export const fetchGlobalIndex = async (client: CosmWasmClient,
 }
 
 export const getGlobalIndex = async (client: CosmWasmClient,
-  config: Config) => {
+  config: Config): Promise<GlobalIndexInfo> => {
   if (!client) {
     return null
   }
   try {
-    const globalIndexInfo = await fetchGlobalIndex(client, config)
-    return { globalIndexInfo }
+    return await fetchGlobalIndex(client, config)
   } catch (e) {
-    return 0
+    return null
   }
 }
 
