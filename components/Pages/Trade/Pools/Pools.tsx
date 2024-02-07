@@ -48,7 +48,7 @@ const Pools = () => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const [currentAprHelperState, setAprHelperState] = useRecoilState(aprHelperState)
-
+  console.log("isWalletConnected", isWalletConnected)
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const { cosmWasmClient } = useClients(walletChainName)
 

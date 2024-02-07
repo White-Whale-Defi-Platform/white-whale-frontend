@@ -195,12 +195,12 @@ const Bonding: FC = () => {
             xl: 'flex-start',
           }}>
             <HStack ml={{
-              base: -100,
+              base: !isMobile && -100,
               xl: 0,
             }} paddingY={{
               base: 3,
               md: 5,
-            }} justifyItems={'flex-start'}>
+            }} px={{base:3}} justifyItems={'flex-start'}>
               <Stack direction={['column', 'row']}>
                 <Text as="h2" fontSize="24" fontWeight="900">
                   Bonding - Earn swap fees with ampWhale or bWhale.
