@@ -180,7 +180,7 @@ const MyPoolsTable = ({
       display={['none', 'none', 'none', 'flex']}
       flexDirection="column"
     >
-      {<VStack ml={5} mr={75} mb={-9} mt={5} alignItems={'flex-start'}>
+      {<VStack ml={5} mr={45} mb={-9} mt={5} alignItems={'flex-start'}>
         <HStack mb={1}>
           <Text color={'brand.50'} fontWeight={'bold'} fontSize={13}>Total Supplied:</Text>
           <Text fontWeight={'bold'}>{`$${aggregatedSupply.toFixed(2)}`}</Text>

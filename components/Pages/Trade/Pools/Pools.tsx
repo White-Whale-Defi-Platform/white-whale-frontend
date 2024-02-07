@@ -146,8 +146,7 @@ const Pools = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
     initPools()
-  }, [pools, isWalletConnected])
-
+  }, [pools?.length])
 
   useEffect(() => {
     if (pairInfos.length === 0) {
@@ -223,9 +222,16 @@ const Pools = () => {
   }, [isWalletConnected])
 
   useEffect(() => {
-    if (allPools && isWalletConnected) {
-      const pools = allPools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-      setMyPools(pools)
+    if (pools && allPools && isWalletConnected) {
+      const myLiquidityPools = pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+      const updatedPools = allPools.filter((pool) => myLiquidityPools.map((myPool) => myPool.pool_id).includes(pool.poolId)).map((pool) => {
+        const myPool = myLiquidityPools.find((myPool) => myPool.pool_id === pool.poolId)
+        return {
+          ...pool,
+          myPosition: calculateMyPosition(myPool),
+        }
+      })
+      setMyPools(updatedPools)
     }
   }, [allPools, isWalletConnected])
 
@@ -260,7 +266,7 @@ const Pools = () => {
           <MyPoolsTable
             show={true}
             pools={myPools}
-            isLoading={isLoading || isInitLoading || externalStatsLoading}
+            isLoading={(isLoading || !pools) || isInitLoading || externalStatsLoading}
             aggregatedAdjustedTotalPoolApr={aggregatedAdjustedTotalPoolApr}
             aggregatedSupply={aggregatedSupply}
           />
@@ -314,7 +320,7 @@ const Pools = () => {
         </HStack>
         <AllPoolsTable
           pools={showAllPoolsList}
-          isLoading={isLoading || isInitLoading || externalStatsLoading}
+          isLoading={(isLoading || !pools) || isInitLoading || externalStatsLoading}
         />
         <MobilePools pools={showAllPoolsList} ctaLabel="Manage" />
       </Box>
