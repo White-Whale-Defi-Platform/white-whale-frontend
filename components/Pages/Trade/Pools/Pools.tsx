@@ -270,7 +270,8 @@ const Pools = () => {
       )}
 
       <Box width={'100%'} px={{ base: 5 }}>
-        <HStack justifyContent="space-between" width="full" paddingTop={10} paddingBottom={5}>
+        <HStack justifyContent="space-between" width={{ base: 'full',
+          xl: 'container.xl' }} paddingTop={10} paddingBottom={5}>
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
