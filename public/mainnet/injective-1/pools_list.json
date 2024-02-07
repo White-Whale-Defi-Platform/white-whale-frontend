@@ -239,7 +239,7 @@
         {
           "id": "white-whale",
           "chain_id": "migaloo-1",
-          "token_address": "uwhale",
+          "token_address": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",
           "symbol": "WHALE",
           "name": "Whale",
           "decimals": 6,
@@ -248,7 +248,7 @@
             "native"
           ],
           "native": true,
-          "denom": "uwhale"
+          "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
         }
       ],
       "swap_address": "inj1sgvrzysd32xdqtscaen2gprrjyg997lkn2h4wg",
