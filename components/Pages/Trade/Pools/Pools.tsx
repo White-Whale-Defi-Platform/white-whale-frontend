@@ -249,14 +249,12 @@ const Pools = () => {
 
   return (
     <VStack
-      width={{ base: '100%',
-        md: 'auto' }}
       alignItems="center"
       margin="auto"
     >
       {myPools?.length > 0 && (
-        <Box width={{ base: '100%' }}>
-          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5} paddingTop={10} paddingBottom={5}>
+        <Box width={'100%'} px={{ base: 5 }}>
+          <Text as="h2" fontSize="24" fontWeight="700" paddingTop={10} paddingBottom={5}>
           Supplied
           </Text>
           <MyPoolsTable
@@ -271,9 +269,9 @@ const Pools = () => {
         </Box>
       )}
 
-      <Box width={{ base: '100%' }}>
+      <Box width={'100%'} px={{ base: 5 }}>
         <HStack justifyContent="space-between" width="full" paddingTop={10} paddingBottom={5}>
-          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
+          <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
           <Stack direction="row">

@@ -1,14 +1,16 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import { Button, Flex, HStack, Text, useDisclosure, useMediaQuery, VStack, Modal,
+import {
+  Button, Flex, HStack, Text, useDisclosure, useMediaQuery, VStack, Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton, 
-  Stack} from '@chakra-ui/react'
+  ModalCloseButton,
+  Stack,
+} from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
@@ -78,8 +80,10 @@ const Bonding: FC = () => {
     specificBondingData.tokenBalances = tokenBalances ?? []
   }
   const setBondedTokens = (bondedAssets: BondedData[]) => {
-    const tokenBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
-      tokenSymbol: asset.tokenSymbol }))
+    const tokenBalances = bondedAssets?.map((asset: BondedData) => ({
+      amount: asset.amount,
+      tokenSymbol: asset.tokenSymbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
     setValues(
       TokenType.bonded, total, tokenBalances,
@@ -98,8 +102,10 @@ const Bonding: FC = () => {
   }
 
   const setUnbondingTokens = (unbondingRequests: UnbondingData[]) => {
-    const tokenBalances = unbondingRequests?.map((req) => ({ amount: req.amount,
-      tokenSymbol: req.tokenSymbol }))
+    const tokenBalances = unbondingRequests?.map((req) => ({
+      amount: req.amount,
+      tokenSymbol: req.tokenSymbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
 
     setValues(
@@ -109,8 +115,10 @@ const Bonding: FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const setWithdrawableTokens = (withdrawableInfos: WithdrawableInfo[]) => {
-    const tokenBalances = withdrawableInfos?.map((info) => ({ amount: info.amount,
-      tokenSymbol: info.tokenSymbol }))
+    const tokenBalances = withdrawableInfos?.map((info) => ({
+      amount: info.amount,
+      tokenSymbol: info.tokenSymbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
 
     setValues(
@@ -123,8 +131,8 @@ const Bonding: FC = () => {
   const config: Config = useConfig(network, chainId)
 
   const symbols = useMemo(() => {
-    const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || [];
-    return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
+    const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || []
+    return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]))
   }, [config])
 
   const [liquidBalances, _] = useMultipleTokenBalance(symbols)
@@ -171,24 +179,31 @@ const Bonding: FC = () => {
       alignItems="center">
       <Loader />
     </HStack> : (
-      <VStack width={'full'} alignSelf="center" paddingLeft={['5', '5', '10']}>
+      <VStack width={'full'} alignSelf="center" maxWidth={'container.xl'}>
         <Flex
           direction={{
             base: 'column',
             xl: 'row',
           }}
           gap={5}
+          width={'full'}
+          maxWidth={'container.xl'}
           justifyContent="space-between"
-          alignItems="flex-end"
         >
-          <VStack width="flex">
-            <HStack width="full" paddingY={{
+          <VStack width="flex" alignItems={{
+            base: 'center',
+            xl: 'flex-start',
+          }}>
+            <HStack ml={{
+              base: -100,
+              xl: 0,
+            }} paddingY={{
               base: 3,
               md: 5,
-            }}>
-              <Stack direction={['column', 'row']} >
-                <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
-              Bonding - Earn swap fees with ampWhale or bWhale.
+            }} justifyItems={'flex-start'}>
+              <Stack direction={['column', 'row']}>
+                <Text as="h2" fontSize="24" fontWeight="900">
+                  Bonding - Earn swap fees with ampWhale or bWhale.
                 </Text>
                 <Button
                   variant="link"
@@ -209,7 +224,8 @@ const Bonding: FC = () => {
                 <ModalBody>
                   <Text>• Bond to any White Whale satellite DEX to earn a share of the swap fees of that DEX</Text>
                   <Text>• ampWHALE or bWHALE is required to bond</Text>
-                  <Text>• Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned, unbonding resets multiplier</Text>
+                  <Text>• Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned,
+                    unbonding resets multiplier</Text>
                   <Text>• 1 day cool down period after unbonding, after which tokens can be withdrawn</Text>
                 </ModalBody>
                 <ModalFooter>
@@ -246,7 +262,7 @@ const Bonding: FC = () => {
             />
           </VStack>
         </Flex>
-      </VStack>) }</>
+      </VStack>)}</>
 }
 
 export default Bonding

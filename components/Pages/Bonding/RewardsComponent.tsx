@@ -172,6 +172,7 @@ const RewardsComponent = ({
     <VStack
       px={8}
       background={kBg}
+      boxShadow={'0px 0px 10px rgba(0, 0, 0, 0.4)'}
       borderRadius={kBorderRadius}
       alignItems="center"
       minH={317}
