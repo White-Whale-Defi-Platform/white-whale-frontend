@@ -241,6 +241,11 @@ const Pools = () => {
       ? pools
       : pools.filter((item) => item.totalLiq > 1000)
   }, [allPoolsForShown, showAllPools])
+  const aggregatedSupply = myPools.reduce((acc, pool) => acc + Number(pool.myPosition), 0)
+  const aggregatedAdjustedTotalPoolApr = myPools.map((pool) => {
+    const aprState = currentAprHelperState.find((aprState) => pool.poolId === aprState.poolId)
+    return (Number(pool.myPosition) / aggregatedSupply) * (aprState.incentives + aprState.fees)
+  }).reduce((acc, adjustedApr) => acc + adjustedApr, 0)
 
   return (
     <VStack
@@ -251,20 +256,23 @@ const Pools = () => {
     >
       {myPools?.length > 0 && (
         <Box width={{ base: '100%' }}>
-          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5} paddingY={10}>
-          My Pools
+          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5} paddingTop={10} paddingBottom={5}>
+          Supplied
           </Text>
           <MyPoolsTable
             show={true}
             pools={myPools}
             isLoading={isLoading || isInitLoading || externalStatsLoading}
+            aggregatedAdjustedTotalPoolApr={aggregatedAdjustedTotalPoolApr}
+            aggregatedSupply={aggregatedSupply}
           />
-          <MobilePools pools={myPools} />
+          <MobilePools pools={myPools} aggregatedAdjustedTotalPoolApr={aggregatedAdjustedTotalPoolApr}
+            aggregatedSupply={aggregatedSupply} />
         </Box>
       )}
 
       <Box width={{ base: '100%' }}>
-        <HStack justifyContent="space-between" width="full" paddingY={10}>
+        <HStack justifyContent="space-between" width="full" paddingTop={10} paddingBottom={5}>
           <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
             All Pools
           </Text>

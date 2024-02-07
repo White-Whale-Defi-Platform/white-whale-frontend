@@ -2,7 +2,7 @@ import React from 'react'
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import {
-  chakra,
+  chakra, Divider,
   Flex,
   HStack, Spinner,
   Table,
@@ -13,7 +13,7 @@ import {
   Tfoot,
   Th,
   Thead,
-  Tr,
+  Tr, VStack,
 } from '@chakra-ui/react'
 import {
   createColumnHelper,
@@ -115,10 +115,14 @@ const MyPoolsTable = ({
   show,
   pools,
   isLoading,
+  aggregatedSupply,
+  aggregatedAdjustedTotalPoolApr,
 }: {
   show: boolean
   pools: Pool[]
   isLoading: boolean
+  aggregatedSupply: number
+  aggregatedAdjustedTotalPoolApr: number
 }) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
   if (!show) {
@@ -158,8 +162,7 @@ const MyPoolsTable = ({
         background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius={kBorderRadius}
-        justifyContent="center"
-      >
+        justifyContent="center">
         <Text py={10} color="white">
           {'Your active liquidity positions will appear here.'}
         </Text>
@@ -177,6 +180,16 @@ const MyPoolsTable = ({
       display={['none', 'none', 'none', 'flex']}
       flexDirection="column"
     >
+      {<VStack ml={5} mr={75} mb={-9} mt={5} alignItems={'flex-start'}>
+        <HStack mb={1}>
+          <Text color={'brand.50'} fontWeight={'bold'} fontSize={13}>Total Supplied:</Text>
+          <Text fontWeight={'bold'}>{`$${aggregatedSupply.toFixed(2)}`}</Text>
+          <Divider orientation={'vertical'} height="20px" />
+          <Text color={'brand.50'} fontWeight={'bold'} fontSize={13}>Total APR:</Text>
+          <Text fontWeight={'bold'}>{`${aggregatedAdjustedTotalPoolApr.toFixed(2)}%`}</Text>
+        </HStack>
+        <Divider border={'0.5px solid rgba(255, 255, 255, 1)'} />
+      </VStack>}
       <TableContainer width="full" overflowX="hidden">
         <Table variant="unstyled">
           <Thead>
@@ -221,18 +234,12 @@ const MyPoolsTable = ({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row, index) => (
+            {table.getRowModel().rows.map((row) => (
               <Tr
                 key={row.id}
-                borderBottom={
-                  index !== table.getRowModel().rows.length - 1 &&
-                  '1px solid rgba(255, 255, 255, 0.1)'
-                }
               >
                 {row.getVisibleCells().map((cell) => (
-                  <Td
-                    key={cell.id}
-                  >
+                  <Td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 ))}
