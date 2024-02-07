@@ -48,7 +48,6 @@ const Pools = () => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const [currentAprHelperState, setAprHelperState] = useRecoilState(aprHelperState)
-  console.log("isWalletConnected", isWalletConnected)
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const { cosmWasmClient } = useClients(walletChainName)
 
@@ -147,7 +146,8 @@ const Pools = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
     initPools()
-  }, [pools])
+  }, [pools, isWalletConnected])
+
 
   useEffect(() => {
     if (pairInfos.length === 0) {

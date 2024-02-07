@@ -46,6 +46,16 @@ const Wallet = () => {
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
 
+  // Workaround for propagating isWalletConnected which apparently does not work as expected
+  useEffect(() => {
+    if (isWalletConnected) {
+      setCurrentChainState({
+        ...currentChainState,
+        walletChainName: currentChainState.walletChainName,
+      })
+    }
+  }, [isWalletConnected])
+
   useEffect(() => {
     if (chainName && currentChainState.network === NetworkType.mainnet) {
       setCurrentChainState({

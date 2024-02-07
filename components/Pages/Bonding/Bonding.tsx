@@ -200,7 +200,7 @@ const Bonding: FC = () => {
             }} paddingY={{
               base: 3,
               md: 5,
-            }} px={{base:3}} justifyItems={'flex-start'}>
+            }} px={{ base: 3 }} justifyItems={'flex-start'}>
               <Stack direction={['column', 'row']}>
                 <Text as="h2" fontSize="24" fontWeight="900">
                   Bonding - Earn swap fees with ampWhale or bWhale.
