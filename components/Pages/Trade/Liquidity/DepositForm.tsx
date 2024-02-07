@@ -150,7 +150,7 @@ const DepositForm = ({
     return 'Deposit'
   }, [tx?.buttonLabel, tokenB?.tokenSymbol, isWalletConnected, amountA])
 
-  const apr = useMemo(() => `${(((poolAPRs?.fees || 0) * 100) + ((poolAPRs?.incentives || 0) * multiplicator)).toFixed(2)}`,
+  const apr = useMemo(() => `${(((poolAPRs?.fees || 0)) + ((poolAPRs?.incentives || 0) * multiplicator)).toFixed(2)}`,
     [poolAPRs, multiplicator])
 
   return (
