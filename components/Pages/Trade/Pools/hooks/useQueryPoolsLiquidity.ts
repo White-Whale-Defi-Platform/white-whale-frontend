@@ -354,7 +354,7 @@ export const useQueryPoolsLiquidity = ({
   }
 
   return useQueries((pools ?? []).map((pool) => ({
-    queryKey: `@pool-liquidity/${pool.pool_id}`,
+    queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
     enabled:
       Boolean(cosmWasmClient && pool.pool_id) &&
       tokenList.tokens.length > 0 &&

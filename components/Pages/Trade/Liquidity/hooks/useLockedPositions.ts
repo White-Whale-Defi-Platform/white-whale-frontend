@@ -47,6 +47,10 @@ export const fetchPositions = async (
   totalAssets: any,
   totalLpSupply: any,
 ) => {
+  // address can be undefined
+  if (!address) {
+    return { data: [] }
+  }
   const data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
     positions: { address },
   })

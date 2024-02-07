@@ -92,8 +92,8 @@ const BondingOverview = ({
 
   return (
     <VStack
-      width="full"
       background={kBg}
+      boxShadow={'0px 0px 10px rgba(0, 0, 0, 0.4)'}
       borderRadius={kBorderRadius}
       alignItems="flex-start"
       verticalAlign="center"
@@ -108,6 +108,7 @@ const BondingOverview = ({
         justifyContent="flex-start"
         paddingLeft={4}
         pt={5}
+        px={5}
         spacing={['2', '5']}
       >
         {piechart()}

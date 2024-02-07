@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { IncentiveTooltip } from 'components/InfoTooltip';
 import { Liquidity } from 'components/Pages/Trade/Pools/components/Liquidity'
@@ -14,13 +16,31 @@ import Apr from './components/Apr'
 type Props = {
   pools: Pool[]
   ctaLabel?: string
+  aggregatedAdjustedTotalPoolApr?: number
+  aggregatedSupply?: number
 }
 
-const MobilePools = ({ pools, ctaLabel }: Props) => {
+const MobilePools = ({ pools, ctaLabel, aggregatedAdjustedTotalPoolApr,
+  aggregatedSupply }: Props) => {
   const router = useRouter()
   const { chainName } = useRecoilValue(chainState)
   return (
     <VStack width="full" display={['flex', 'flex', 'flex', 'none']} gap={8}>
+      {aggregatedAdjustedTotalPoolApr && aggregatedSupply && (
+        <HStack background={kBg}
+          boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
+          borderRadius={kBorderRadius}
+          justifyContent="space-between"
+          px={9}
+          py={3}
+          width={['full']}
+        >
+          <Text color={'brand.50'} fontWeight={'bold'} fontSize={13}>Total Supplied:</Text>
+          <Text fontWeight={'bold'}>{`$${aggregatedSupply.toFixed(2)}`}</Text>
+          <Text color={'brand.50'} fontWeight={'bold'} fontSize={13}>Total APR:</Text>
+          <Text fontWeight={'bold'}>{`${aggregatedAdjustedTotalPoolApr.toFixed(2)}%`}</Text>
+        </HStack>
+      )}
       {pools &&
         pools.map((pool) => (
           <VStack

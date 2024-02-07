@@ -30,7 +30,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     const msg = createExecuteMessage({
       message: {
         close_flow: {
-          flow_id,
+          flow_identifier: { id: flow_id },
         },
       },
       senderAddress: address,

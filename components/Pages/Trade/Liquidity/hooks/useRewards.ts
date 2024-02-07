@@ -76,7 +76,7 @@ const useRewards = (poolId: string): RewardsResult => {
       rewards: { address },
     }),
     select: (data) => data?.rewards || [],
-    enabled: Boolean(staking_address) && Boolean(address),
+    enabled: Boolean(staking_address) && Boolean(address) && Boolean(cosmWasmClient),
   })
   // @ts-ignore
   if (window.debugLogsEnabled) {

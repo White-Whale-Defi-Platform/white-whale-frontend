@@ -30,7 +30,11 @@ export const parseError = (error: Error) => {
     },
     {
       regex: /there are unclaimed rewards available./u,
-      message: 'There are unclaimed rewards available.',
+      message: 'There are unclaimed rewards available. Claim first.',
+    },
+    {
+      regex: /pending rewards to be claimed before you can execute this action/u,
+      message: 'There are unclaimed rewards available. Claim first.',
     },
   ]
 

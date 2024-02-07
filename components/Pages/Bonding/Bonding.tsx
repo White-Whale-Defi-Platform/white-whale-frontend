@@ -1,6 +1,16 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { Flex, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react'
+import { ChevronDownIcon } from '@chakra-ui/icons'
+import {
+  Button, Flex, HStack, Text, useDisclosure, useMediaQuery, VStack, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Stack,
+} from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
@@ -70,8 +80,10 @@ const Bonding: FC = () => {
     specificBondingData.tokenBalances = tokenBalances ?? []
   }
   const setBondedTokens = (bondedAssets: BondedData[]) => {
-    const tokenBalances = bondedAssets?.map((asset: BondedData) => ({ amount: asset.amount,
-      tokenSymbol: asset.tokenSymbol }))
+    const tokenBalances = bondedAssets?.map((asset: BondedData) => ({
+      amount: asset.amount,
+      tokenSymbol: asset.tokenSymbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
     setValues(
       TokenType.bonded, total, tokenBalances,
@@ -90,8 +102,10 @@ const Bonding: FC = () => {
   }
 
   const setUnbondingTokens = (unbondingRequests: UnbondingData[]) => {
-    const tokenBalances = unbondingRequests?.map((req) => ({ amount: req.amount,
-      tokenSymbol: req.tokenSymbol }))
+    const tokenBalances = unbondingRequests?.map((req) => ({
+      amount: req.amount,
+      tokenSymbol: req.tokenSymbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
 
     setValues(
@@ -101,8 +115,10 @@ const Bonding: FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const setWithdrawableTokens = (withdrawableInfos: WithdrawableInfo[]) => {
-    const tokenBalances = withdrawableInfos?.map((info) => ({ amount: info.amount,
-      tokenSymbol: info.tokenSymbol }))
+    const tokenBalances = withdrawableInfos?.map((info) => ({
+      amount: info.amount,
+      tokenSymbol: info.tokenSymbol,
+    }))
     const total = tokenBalances?.reduce((acc, e) => acc + e.amount, 0)
 
     setValues(
@@ -115,8 +131,8 @@ const Bonding: FC = () => {
   const config: Config = useConfig(network, chainId)
 
   const symbols = useMemo(() => {
-    const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || [];
-    return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]));
+    const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || []
+    return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]))
   }, [config])
 
   const [liquidBalances, _] = useMultipleTokenBalance(symbols)
@@ -154,7 +170,7 @@ const Bonding: FC = () => {
     liquidBalances,
     symbols,
   ])
-
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return <>{isLoading && isWalletConnected ?
     <HStack
       width="full"
@@ -163,25 +179,62 @@ const Bonding: FC = () => {
       alignItems="center">
       <Loader />
     </HStack> : (
-      <VStack width={'full'} alignSelf="center" paddingLeft={['5', '5', '10']}>
+      <VStack width={'full'} alignSelf="center" maxWidth={'container.xl'}>
         <Flex
           direction={{
             base: 'column',
             xl: 'row',
           }}
           gap={5}
+          width={'full'}
+          maxWidth={'container.xl'}
           justifyContent="space-between"
-          alignItems="flex-end"
         >
-          <VStack width="flex">
-            <HStack width="full" paddingY={{
+          <VStack width="flex" alignItems={{
+            base: 'center',
+            xl: 'flex-start',
+          }}>
+            <HStack ml={{
+              base: !isMobile && -100,
+              xl: 0,
+            }} paddingY={{
               base: 3,
               md: 5,
-            }}>
-              <Text as="h2" fontSize="24" fontWeight="900" paddingLeft={5}>
-              Bonding
-              </Text>
+            }} px={{ base: 3 }} justifyItems={'flex-start'}>
+              <Stack direction={['column', 'row']}>
+                <Text as="h2" fontSize="24" fontWeight="900">
+                  Bonding - Earn swap fees with ampWhale or bWhale.
+                </Text>
+                <Button
+                  variant="link"
+                  color="white"
+                  fontSize={20}
+                  textDecoration={'underline'}
+                  onClick={onOpen}>
+                  How it works
+                  <ChevronDownIcon pl={2} mt={1} ml={-1} fontSize={24} color="white" />
+                </Button>
+              </Stack>
             </HStack>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>How Bonding Works</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Text>• Bond to any White Whale satellite DEX to earn a share of the swap fees of that DEX</Text>
+                  <Text>• ampWHALE or bWHALE is required to bond</Text>
+                  <Text>• Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned,
+                    unbonding resets multiplier</Text>
+                  <Text>• 1 day cool down period after unbonding, after which tokens can be withdrawn</Text>
+                </ModalBody>
+                <ModalFooter>
+                  <Button width="full" variant="outline" size="sm" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
             <BondingOverview
               isWalletConnected={isWalletConnected}
               data={updatedData}
@@ -209,21 +262,7 @@ const Bonding: FC = () => {
             />
           </VStack>
         </Flex>
-        <VStack alignItems={'start'} width={'full'} pt={11}>
-          <Text fontSize="12" paddingLeft={5}>
-            • Bond to any White Whale satellite DEX to earn a share of the swap fees of that DEX
-          </Text>
-          <Text fontSize="12" paddingLeft={5}>
-            • ampWHALE or bWHALE is required to bond
-          </Text>
-          <Text fontSize="12" paddingLeft={5}>
-            • Keeping tokens bonded increases multiplier over time, increasing share of the rewards earned, unbonding resets multiplier
-          </Text>
-          <Text fontSize="12" paddingLeft={5}>
-            • 1 day cool down period after unbonding, after which tokens can be withdrawn
-          </Text>
-        </VStack>
-      </VStack>) }</>
+      </VStack>)}</>
 }
 
 export default Bonding
