@@ -181,8 +181,8 @@
         {
           "chain_id": "columbus-5",
           "token_address": "terra13ckj8swv4xpnh98z4ltpa664ryg7suu89tlqlz8zecwp9pc2r2xstdn7r2",
-          "symbol": "FROG",
-          "name": "Frog",
+          "symbol": "sFROG",
+          "name": "sFrog",
           "decimals": 6,
           "logoURI": "/logos/sfrog.png",
           "tags": [
