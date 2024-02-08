@@ -591,18 +591,18 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "WHALE-wBTC",
+      "pool_id": "WHALE-wBTC.axl",
       "lpOrder": [
         "WHALE",
-        "wBTC"
+        "wBTC.axl"
       ],
       "assetOrder": [
         "WHALE",
-        "wBTC"
+        "wBTC.axl"
       ],
-      "displayName": "WHALE-wBTC",
+      "displayName": "WHALE-wBTC.axl",
       "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/wBTC.png",
+      "displayLogo2": "/logos/wbtc.axl.svg",
       "pool_assets": [
         {
           "id": "white-whale",
@@ -622,10 +622,10 @@
           "id": "wrapped-bitcoin",
           "chain_id": "migaloo-1",
           "token_address": "ibc/B65E189D3168DB40C88C6A6C92CA3D3BB0A8B6310325D4C43AB5702F06ECD60B",
-          "symbol": "wBTC",
-          "name": "wBTC",
+          "symbol": "wBTC.axl",
+          "name": "wBTC.axl",
           "decimals": 8,
-          "logoURI": "/logos/wBTC.png",
+          "logoURI": "/logos/wbtc.axl.svg",
           "tags": [
             "native"
           ],
@@ -775,8 +775,56 @@
       "swap_address": "migaloo1azqqmeg7zcj9vdtqpc65dmr2fkmkf3x6dcyhnau6d6er0w2r3arq470dzj",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALE-wBTC",
+      "lpOrder": [
+        "WHALE",
+        "wBTC"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "wBTC"
+      ],
+      "displayName": "WHALE-wBTC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "/logos/wbtc.svg",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        },
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/6E5BF71FE1BEBBD648C8A7CB7A790AEF0081120B2E5746E6563FC95764716D61",
+          "symbol": "wBTC",
+          "name": "wBTC",
+          "decimals": 8,
+          "logoURI": "/logos/wbtc.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/6E5BF71FE1BEBBD648C8A7CB7A790AEF0081120B2E5746E6563FC95764716D61"
+        }
+      ],
+      "lp_token": "factory/migaloo1axtz4y7jyvdkkrflknv9dcut94xr5k8m6wete4rdrw4fuptk896su44x2z/uLP",
+      "swap_address": "migaloo1axtz4y7jyvdkkrflknv9dcut94xr5k8m6wete4rdrw4fuptk896su44x2z",
+      "staking_address": "",
+      "rewards_tokens": []
     }
-    ],
+  ],
   "version": {
     "major": 0,
     "minor": 1,

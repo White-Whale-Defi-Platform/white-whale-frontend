@@ -164,6 +164,51 @@
       "swap_address": "terra1lepapewkdnt9mclq6gp8zmtsvhpuzhvg4dg9pastdk4rvjcw6gaqpaqvpf",
       "staking_address": "terra1djdcg0a5g6tj39ld6yewjvzgeyd0v4v7tdvdek7ljn53n79r7hgq0cmqsg",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "sFROG-FROG",
+      "lpOrder": [
+        "sFROG",
+        "FROG"
+      ],
+      "assetOrder": [
+        "sFROG","FROG"
+      ],
+      "displayName": "sFROG-FROG",
+      "displayLogo1": "/logos/sfrog.png",
+      "displayLogo2": "/logos/frogg.png",
+      "pool_assets": [
+        {
+          "chain_id": "columbus-5",
+          "token_address": "terra13ckj8swv4xpnh98z4ltpa664ryg7suu89tlqlz8zecwp9pc2r2xstdn7r2",
+          "symbol": "FROG",
+          "name": "Frog",
+          "decimals": 6,
+          "logoURI": "/logos/sfrog.png",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra13ckj8swv4xpnh98z4ltpa664ryg7suu89tlqlz8zecwp9pc2r2xstdn7r2"
+        },
+        {
+          "chain_id": "columbus-5",
+          "token_address": "terra1wez9puj43v4s25vrex7cv3ut3w75w4h6j5e537sujyuxj0r5ne2qp9uwl9",
+          "symbol": "FROG",
+          "name": "Frog",
+          "decimals": 6,
+          "logoURI": "/logos/frogg.png",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra1wez9puj43v4s25vrex7cv3ut3w75w4h6j5e537sujyuxj0r5ne2qp9uwl9"
+        }
+      ],
+      "lp_token": "terra1gjejk5vmncvzh67eh8vvhll4symzc2kdgtucg9fm5s9fckaezqnsmwfe5k",
+      "swap_address": "terra1mzgu3gxar6j707ns7f0h8n7ase0sne8yq9c9kmd95qp5qj056tjsq734v0",
+      "staking_address": "terra1cq382eerwanlf03rwtsselxrs75tjn25mzcjg039gd38kulx8hwsfr77yg",
+      "rewards_tokens": []
     }
   ]
 }
