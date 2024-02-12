@@ -49,7 +49,7 @@ export const Liquidity = ({ liquidity, infos }: Props) => {
                         (10 ** infos.poolAssets[index].decimals)
                     ).toLocaleString('en-US', {
                       minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
+                      maximumFractionDigits: 8,
                     })}
                   </Text>
                 </HStack>
@@ -77,7 +77,10 @@ export const Liquidity = ({ liquidity, infos }: Props) => {
                 {'Ratio'}
               </Text>
               <Text fontSize={14}>
-                {price.toLocaleString()}
+                {price.toLocaleString('en-US', {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 6,
+                })}
               </Text>
             </HStack>
           </>
