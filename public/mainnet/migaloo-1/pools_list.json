@@ -823,6 +823,54 @@
       "swap_address": "migaloo1azqqmeg7zcj9vdtqpc65dmr2fkmkf3x6dcyhnau6d6er0w2r3arq470dzj",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "SHD-WHALE",
+      "lpOrder": [
+        "SHD",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "SHD",
+        "WHALE"
+      ],
+      "displayName": "SHD-WHALE",
+      "displayLogo1": "/logos/shd.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "shade-protocol",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/6A171A9A6DBBF5DDB976CD215EAA667641FA8EE35EDC95ACDBF68C810B62F0F5",
+          "symbol": "SHD",
+          "name": "SHD",
+          "decimals": 8,
+          "logoURI": "/logos/shd.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/6A171A9A6DBBF5DDB976CD215EAA667641FA8EE35EDC95ACDBF68C810B62F0F5"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
