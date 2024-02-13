@@ -87,7 +87,7 @@ const Claim = ({ poolId }: Props) => {
         isConnected={true}
         txStep={TxStep.Ready}
         isDisabled={(!isClaimable && allSnapshotsTaken) && isWalletConnected}
-        isLoading={claim.isLoading}
+        isLoading={ [TxStep.Estimating, TxStep.Posting, TxStep.Broadcasting].includes(claim.txStep)}
         onClick={() => {
           if (isWalletConnected && allSnapshotsTaken && rewards.length !== 0) {
             claim.submit()

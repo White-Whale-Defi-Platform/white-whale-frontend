@@ -32,8 +32,6 @@ import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { formatPrice } from 'libs/num'
 
-import { Ratio } from './components/Ratio'
-
 const columnHelper = createColumnHelper<Pool>()
 
 const columns = [
@@ -50,15 +48,6 @@ const columns = [
         token2Img={info.row.original?.token2Img}
       />
     ),
-  }),
-  columnHelper.accessor((row) => row.price, {
-    id: 'price',
-    header: () => (
-      <Text align="right" color="brand.50" display="inline">
-        {'RATIO'}
-      </Text>
-    ),
-    cell: (info) => Ratio(info.getValue()),
   }),
   columnHelper.accessor((row) => row.apr, {
     id: 'apr',
@@ -137,7 +126,8 @@ const AllPoolsTable = ({
     return (
       <Flex
         padding={10}
-        width={['full', '1160px']}
+        width={{ base: 'full',
+          xl: 'container.xl' }}
         background={kBg}
         boxShadow="0px 0px 50px rgba(0, 0, 0, 0.25)"
         borderRadius={kBorderRadius}

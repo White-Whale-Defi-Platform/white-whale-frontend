@@ -7,7 +7,7 @@ export interface PoolResponse {
   displayName: string
   displayLogo1: string
   displayLogo2: string
-  volume24h: number | string
+  volume_24h: number | string
   volume_7d: number | string
   tvl: number | string
   Price: string
@@ -85,7 +85,7 @@ export const getPairAprAndDailyVolumeByEnigma = async (pools: any[],
       const pairInfo = pairInfos.find((row: any) => row.pool_id === poolId)
       return {
         pool_id: poolId,
-        usdVolume24h: pairInfo?.volume24h,
+        usdVolume24h: pairInfo?.volume_24h,
         usdVolume7d: pairInfo?.volume_7d,
         tvl: pairInfo?.tvl,
         apr7d: pairInfo?.APR,

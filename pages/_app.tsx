@@ -10,6 +10,7 @@ import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
+import version from 'app_version.json'
 import { chains, assets } from 'chain-registry'
 import 'theme/global.css'
 import AppLoading from 'components/AppLoading'
@@ -31,18 +32,30 @@ const MyApp: FC<AppProps> = ({
   const [mounted, setMounted] = useState<boolean>(false)
 
   const walletProviders = [
-    { name: 'keplr',
-      wallet: keplrWallets },
-    { name: 'station',
-      wallet: stationWallets },
-    { name: 'leap',
-      wallet: leapWallets },
-    { name: 'ninji',
-      wallet: ninjiWallets },
-    { name: 'shellwallet',
-      wallet: shellWallets },
-    { name: 'cosmostationWallet',
-      wallet: cosmoStationWallets },
+    {
+      name: 'keplr',
+      wallet: keplrWallets,
+    },
+    {
+      name: 'station',
+      wallet: stationWallets,
+    },
+    {
+      name: 'leap',
+      wallet: leapWallets,
+    },
+    {
+      name: 'ninji',
+      wallet: ninjiWallets,
+    },
+    {
+      name: 'shellwallet',
+      wallet: shellWallets,
+    },
+    {
+      name: 'cosmostationWallet',
+      wallet: cosmoStationWallets,
+    },
   ];
 
   const reorderWallets = useMemo(() => {
@@ -62,6 +75,11 @@ const MyApp: FC<AppProps> = ({
     }
   }, []);
   useEffect(() => {
+    const localVersion = localStorage.getItem('ww-version');
+    if (!localVersion || version?.version !== localVersion) {
+      localStorage.clear()
+      localStorage.setItem('ww-version', version?.version)
+    }
     setMounted(true)
   }, [reorderWallets])
   return (

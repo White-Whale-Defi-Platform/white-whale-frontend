@@ -168,6 +168,53 @@
       "swap_address": "osmo18r35luyyfqp7jter6jc93vzhft5zjgvsgt2tgx76qez2lpjpzfxqwx4ynk",
       "staking_address": "osmo1xrs9qtmvvv69xh34r9gtd0w0v8y99n8ywn89saryd923e5aay4aqev2zxn",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "ROAR-OSMO",
+      "lpOrder": [
+        "ROAR",
+        "OSMO"
+      ],
+      "assetOrder": [
+        "ROAR",
+        "OSMO"
+      ],
+      "displayName": "ROAR-OSMO",
+      "displayLogo1": "/logos/lion.png",
+      "displayLogo2": "/logos/osmo.svg",
+      "pool_assets": [
+        {
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/98BCD43F190C6960D0005BC46BB765C827403A361C9C03C2FF694150A30284B0",
+          "symbol": "ROAR",
+          "name": "Roar",
+          "decimals": 6,
+          "logoURI": "/logos/lion.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/98BCD43F190C6960D0005BC46BB765C827403A361C9C03C2FF694150A30284B0"
+        },
+        {
+          "id": "osmosis",
+          "chain_id": "osmosis-1",
+          "token_address": "uosmo",
+          "symbol": "OSMO",
+          "name": "OSMO",
+          "decimals": 6,
+          "logoURI": "/logos/osmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uosmo"
+        }
+      ],
+      "lp_token": "factory/osmo13c5k2wxq3cx5xanqnqjdyrwvgw0qs8ea7k8c9dzdddlthg55suhqpvjnq7/uLP",
+      "swap_address": "osmo13c5k2wxq3cx5xanqnqjdyrwvgw0qs8ea7k8c9dzdddlthg55suhqpvjnq7",
+      "staking_address": "osmo17w06dzncqlsz9m2assacrzmrqvmlc7y79updfzd0834q2jty9w6qwdvg9q",
+      "rewards_tokens": []
     }
   ]
 }

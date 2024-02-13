@@ -48,7 +48,6 @@ const Pools = () => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
   const [currentAprHelperState, setAprHelperState] = useRecoilState(aprHelperState)
-
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const { cosmWasmClient } = useClients(walletChainName)
 
@@ -147,7 +146,7 @@ const Pools = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
     initPools()
-  }, [pools])
+  }, [pools?.length])
 
   useEffect(() => {
     if (pairInfos.length === 0) {
@@ -223,9 +222,16 @@ const Pools = () => {
   }, [isWalletConnected])
 
   useEffect(() => {
-    if (allPools && isWalletConnected) {
-      const pools = allPools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
-      setMyPools(pools)
+    if (pools && allPools && isWalletConnected) {
+      const myLiquidityPools = pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
+      const updatedPools = allPools.filter((pool) => myLiquidityPools.map((myPool) => myPool.pool_id).includes(pool.poolId)).map((pool) => {
+        const myPool = myLiquidityPools.find((myPool) => myPool.pool_id === pool.poolId)
+        return {
+          ...pool,
+          myPosition: calculateMyPosition(myPool),
+        }
+      })
+      setMyPools(updatedPools)
     }
   }, [allPools, isWalletConnected])
 
@@ -241,31 +247,38 @@ const Pools = () => {
       ? pools
       : pools.filter((item) => item.totalLiq > 1000)
   }, [allPoolsForShown, showAllPools])
+  const aggregatedSupply = myPools.reduce((acc, pool) => acc + Number(pool.myPosition), 0)
+  const aggregatedAdjustedTotalPoolApr = myPools.map((pool) => {
+    const aprState = currentAprHelperState.find((aprState) => pool.poolId === aprState.poolId)
+    return (Number(pool.myPosition) / aggregatedSupply) * (aprState.incentives + aprState.fees)
+  }).reduce((acc, adjustedApr) => acc + adjustedApr, 0)
 
   return (
     <VStack
-      width={{ base: '100%',
-        md: 'auto' }}
       alignItems="center"
       margin="auto"
     >
       {myPools?.length > 0 && (
-        <Box width={{ base: '100%' }}>
-          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5} paddingY={10}>
-          My Pools
+        <Box width={'100%'} px={{ base: 5 }}>
+          <Text as="h2" fontSize="24" fontWeight="700" paddingTop={10} paddingBottom={5}>
+          Supplied
           </Text>
           <MyPoolsTable
             show={true}
             pools={myPools}
-            isLoading={isLoading || isInitLoading || externalStatsLoading}
+            isLoading={(isLoading || !pools) || isInitLoading || externalStatsLoading}
+            aggregatedAdjustedTotalPoolApr={aggregatedAdjustedTotalPoolApr}
+            aggregatedSupply={aggregatedSupply}
           />
-          <MobilePools pools={myPools} />
+          <MobilePools pools={myPools} aggregatedAdjustedTotalPoolApr={aggregatedAdjustedTotalPoolApr}
+            aggregatedSupply={aggregatedSupply} />
         </Box>
       )}
 
-      <Box width={{ base: '100%' }}>
-        <HStack justifyContent="space-between" width="full" paddingY={10}>
-          <Text as="h2" fontSize="24" fontWeight="700" paddingLeft={5}>
+      <Box width={'100%'} px={{ base: 5 }}>
+        <HStack justifyContent="space-between" width={{ base: 'full',
+          xl: 'container.xl' }} paddingTop={10} paddingBottom={5}>
+          <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
           <Stack direction="row">
@@ -307,7 +320,7 @@ const Pools = () => {
         </HStack>
         <AllPoolsTable
           pools={showAllPoolsList}
-          isLoading={isLoading || isInitLoading || externalStatsLoading}
+          isLoading={(isLoading || !pools) || isInitLoading || externalStatsLoading}
         />
         <MobilePools pools={showAllPoolsList} ctaLabel="Manage" />
       </Box>

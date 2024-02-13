@@ -108,7 +108,6 @@ const RewardsComponent = ({
   whalePrice,
   currentEpoch,
   myTotalBonding,
-  globalTotalBonded,
   feeDistributionConfig,
   annualRewards,
   globalAvailableRewards,
@@ -137,7 +136,7 @@ const RewardsComponent = ({
 
   const defaultApr = (annualRewards * (1_000_000 / (globalInfo?.weight || 0))) * 100
   const apr = useMemo(() => (myApr ? myApr : defaultApr),
-    [annualRewards, globalTotalBonded])
+    [myApr, defaultApr])
 
   const { txStep, submit } = useTransaction()
 
@@ -147,7 +146,6 @@ const RewardsComponent = ({
     noSnapshotTakenAddresses: null,
     config,
   })
-
   const currentEpochStartDateTimeInMilli = new Date(nanoToMilli(Number(currentEpoch?.epoch?.start_time))).getTime()
 
   const passedTimeSinceCurrentEpochStartedInMilli =
@@ -174,6 +172,7 @@ const RewardsComponent = ({
     <VStack
       px={8}
       background={kBg}
+      boxShadow={'0px 0px 10px rgba(0, 0, 0, 0.4)'}
       borderRadius={kBorderRadius}
       alignItems="center"
       minH={317}

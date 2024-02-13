@@ -73,7 +73,7 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       <PopoverContent
         borderColor={'transparent'}
         borderRadius="25px"
-        backgroundColor={kBg}
+        backgroundColor={'rgba(0, 0, 0, 0.8)'}
         width="auto"
       >
         <PopoverArrow

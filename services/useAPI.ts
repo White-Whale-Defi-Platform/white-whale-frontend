@@ -78,9 +78,9 @@ export const getPricesAPI = async (ids: Array<string>) => {
   try {
     let response = await fetch(`${API_URL}/api/prices`)
     let res = await response.text()
-    while (!res){
-        response = await fetch(`${API_URL}/api/prices`)
-        res = await response.text()
+    while (!res) {
+      response = await fetch(`${API_URL}/api/prices`)
+      res = await response.text()
     }
     const json = JSON.parse(res)
     ids.forEach((geckoID: string) => {
