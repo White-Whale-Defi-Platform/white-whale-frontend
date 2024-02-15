@@ -16,7 +16,7 @@ export const backgrounds = {
   'chihuahua-1':
     'linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(230, 210, 0, 1) 50%, rgba(255, 165, 0, 1) 100%)',
   'injective-1':
-    'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(82, 206, 252, 0.50) 97.47%)',
+    'linear-gradient(90deg, rgba(0, 174, 255, 0.6) 0%, rgba(0, 123, 255, 0.8) 100%)',
   'injective-888':
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(82, 206, 252, 0.50) 97.47%)',
   'comdex-1':

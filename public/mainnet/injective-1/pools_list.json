@@ -1,7 +1,9 @@
 {
   "name": "Pools list on Injective mainnet",
   "logoURI": "/logos/logo.svg",
-  "keywords": ["special tokens"],
+  "keywords": [
+    "special tokens"
+  ],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -17,7 +19,9 @@
     "name": "INJ",
     "decimals": 18,
     "logoURI": "/logos/injective.png",
-    "tags": ["native"],
+    "tags": [
+      "native"
+    ],
     "native": true,
     "denom": "inj"
   },
@@ -25,8 +29,14 @@
   "pools": [
     {
       "pool_id": "INJ-USDT",
-      "lpOrder": ["INJ", "USDT"],
-      "assetOrder": ["INJ", "USDT"],
+      "lpOrder": [
+        "INJ",
+        "USDT"
+      ],
+      "assetOrder": [
+        "INJ",
+        "USDT"
+      ],
       "displayName": "INJ-USDT",
       "displayLogo1": "/logos/injective.png",
       "displayLogo2": "/logos/usdt.png",
@@ -39,7 +49,9 @@
           "name": "INJ",
           "decimals": 18,
           "logoURI": "/logos/injective.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "inj"
         },
@@ -60,10 +72,17 @@
       "swap_address": "inj1zfw930csx0k5qzf35vndaulwada4wa3pywekyx",
       "staking_address": "",
       "rewards_tokens": []
-    },{
+    },
+    {
       "pool_id": "INJ-WHALE",
-      "lpOrder": ["INJ", "WHALE"],
-      "assetOrder": ["INJ", "WHALE"],
+      "lpOrder": [
+        "INJ",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "INJ",
+        "WHALE"
+      ],
       "displayName": "INJ-WHALE",
       "displayLogo1": "/logos/injective.png",
       "displayLogo2": "/logos/whale.svg",
@@ -76,19 +95,23 @@
           "name": "INJ",
           "decimals": 18,
           "logoURI": "/logos/injective.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "inj"
         },
         {
-          "id" : "white-whale",
+          "id": "white-whale",
           "chain_id": "injective-1",
           "token_address": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",
           "symbol": "WHALE",
           "name": "WHALE",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
         }
@@ -100,8 +123,14 @@
     },
     {
       "pool_id": "ATOM-USDT",
-      "lpOrder": ["ATOM", "USDT"],
-      "assetOrder": ["ATOM", "USDT"],
+      "lpOrder": [
+        "ATOM",
+        "USDT"
+      ],
+      "assetOrder": [
+        "ATOM",
+        "USDT"
+      ],
       "displayName": "ATOM-USDT",
       "displayLogo1": "/logos/atom.png",
       "displayLogo2": "/logos/usdt.png",
@@ -114,7 +143,9 @@
           "name": "ATOM",
           "decimals": 6,
           "logoURI": "/logos/atom.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
         },
@@ -137,8 +168,14 @@
     },
     {
       "pool_id": "ampWHALE-WHALE",
-      "lpOrder": ["ampWHALE", "WHALE"],
-      "assetOrder": ["ampWHALE", "WHALE"],
+      "lpOrder": [
+        "ampWHALE",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "ampWHALE",
+        "WHALE"
+      ],
       "displayName": "ampWHALE-WHALE",
       "displayLogo1": "/logos/ampWhale.svg",
       "displayLogo2": "/logos/whale.svg",
@@ -151,7 +188,9 @@
           "name": "WHALE",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
         },
@@ -162,7 +201,9 @@
           "name": "ampWHALE",
           "decimals": 6,
           "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/168C3904C45C6FE3539AE85A8892DF87371D00EA7942515AFC50AA43C4BB0A32"
         }
@@ -174,8 +215,14 @@
     },
     {
       "pool_id": "bWHALE-WHALE",
-      "lpOrder": ["WHALE", "bWHALE"],
-      "assetOrder": ["bWHALE", "WHALE"],
+      "lpOrder": [
+        "WHALE",
+        "bWHALE"
+      ],
+      "assetOrder": [
+        "bWHALE",
+        "WHALE"
+      ],
       "displayName": "bWHALE-WHALE",
       "displayLogo1": "/logos/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
@@ -188,7 +235,9 @@
           "name": "WHALE",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
         },
@@ -199,7 +248,9 @@
           "name": "bWHALE",
           "decimals": 6,
           "logoURI": "/logos/bWHALE.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/ECB0AA28D6001EF985047558C410B65581FC85BD92D4E3CFCCA0D3D964C67CC2"
         }
@@ -258,8 +309,14 @@
     },
     {
       "pool_id": "CPINJ-WHALE",
-      "lpOrder": ["CPINJ", "WHALE"],
-      "assetOrder": ["CPINJ", "WHALE"],
+      "lpOrder": [
+        "CPINJ",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "CPINJ",
+        "WHALE"
+      ],
       "displayName": "CPINJ-WHALE",
       "displayLogo1": "/logos/cpinj.png",
       "displayLogo2": "/logos/whale.svg",
@@ -271,19 +328,23 @@
           "name": "Coping",
           "decimals": 6,
           "logoURI": "/logos/cpinj.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "factory/inj1qczkutnsy3nmt909xtyjy4rsrkl2q4dm6aq960/coping"
         },
         {
-          "id" : "white-whale",
+          "id": "white-whale",
           "chain_id": "injective-1",
           "token_address": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445",
           "symbol": "WHALE",
           "name": "WHALE",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/D6E6A20ABDD600742D22464340A7701558027759CE14D12590F8EA869CCCF445"
         }
