@@ -200,7 +200,7 @@ export const useIncentivePoolInfo = (
       }
 
       const poolData =
-        ((currentChainPrefix === 'terra' && chainId !== ChainId.terrac) || chainId === ChainId.osmosis)
+        ((currentChainPrefix === 'terra' && chainId !== ChainId.terrac) || chainId === ChainId.osmosis || chainId === ChainId.injective)
           ? await getPairAprAndDailyVolumeByCoinhall(pools)
           : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
       if (poolData[0]?.ratio === 0) {
