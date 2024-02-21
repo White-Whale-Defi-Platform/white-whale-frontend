@@ -119,10 +119,10 @@ export const getGasPricesAPI = async () => {
   try {
     const response = await fetch(`${API_URL}/api/gasprices`)
     const json = await response.json()
-    return json?.data || null
+    return json?.data || {}
   } catch (error) {
     console.error(error)
-    return null
+    return {}
   }
 }
 

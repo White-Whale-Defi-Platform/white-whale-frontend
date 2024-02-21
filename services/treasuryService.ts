@@ -32,7 +32,7 @@ export async function createGasFee(
   let chainFee = prices[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId]]
   if (!chainFee) {
     const chainEntry = chainRegistry.find((chain: any) => chain.chain_name === WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId])
-    chainFee = await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId], chainEntry)
+    chainFee = (await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId], chainEntry)).gasPrice
   }
   if (chainId === ChainId.terrac) {
     const funds = msgs.flatMap((elem) => elem.value.funds)
