@@ -138,7 +138,7 @@ const Wallet = () => {
     } else if (walletType === WalletType.ninjiExtension) {
       setCurrentConnectedChainIds(['injective-1'])
       setWalletChains(['injective'])
-    } if (walletType === WalletType.okxwallet) {
+    } else if (walletType === WalletType.okxwallet) {
       setWalletChains(['osmosis','juno','sei'])
       setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1'])
     } else {
