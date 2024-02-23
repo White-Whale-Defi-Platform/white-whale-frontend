@@ -26,13 +26,13 @@ export enum WalletType {
   cosmoStationExtension = 'cosmostation-extension',
   cosmoStationMobile = 'cosmostation-mobile',
   ninjiExtension = 'ninji-extension',
+  okxwallet = 'okxwallet-extension',
 }
 
 export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
   const { chainId } = useRecoilValue(chainState);
   const chainInfos: any = useChainInfos();
   const snap = Boolean(chainInfos.find((elem: { chainId: string; coinType: number; }) => elem.chainId === chainId && elem.coinType === 118));
-
   const onCloseModal = () => {
     if (isOpen) {
       setOpen(false);
@@ -41,9 +41,13 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
 
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
+    const okxchains = ["osmosis-1","jun-1","pacific-1"]
     const inAppLeap = isMobile && window.leap && window.leap.mode === 'mobile-web'
     const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web' && !inAppLeap
     const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension || walletName === WalletType.ninjiExtension)
+    if (walletName === WalletType.okxwallet && !okxchains.includes(chainId)){
+      return false
+    }
     if (inj) {
       return true
     } else if (chainId.includes('injective') && !inAppLeap) {

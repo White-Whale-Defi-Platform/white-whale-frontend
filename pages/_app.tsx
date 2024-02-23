@@ -10,6 +10,8 @@ import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
+import { wallets as okxwallet } from '@cosmos-kit/okxwallet'
+
 import version from 'app_version.json'
 import { chains, assets } from 'chain-registry'
 import 'theme/global.css'
@@ -55,6 +57,10 @@ const MyApp: FC<AppProps> = ({
     {
       name: 'cosmostationWallet',
       wallet: cosmoStationWallets,
+    },
+    {
+      name: 'okxwallet',
+      wallet: okxwallet,
     },
   ];
 

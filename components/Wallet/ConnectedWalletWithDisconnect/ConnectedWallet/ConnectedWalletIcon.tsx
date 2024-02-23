@@ -6,10 +6,12 @@ import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
 import NinjiWalletIcon from 'components/Icons/NinjiWalletIcon'
+import OKXWalletIcon from 'components/Icons/OKXWalletIcon'
 import TerraExtensionIcon from 'components/Icons/TerraExtensionIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+
 
 export const ConnectedWalletIcon = () => {
   const { walletChainName } = useRecoilValue(chainState)
@@ -27,6 +29,8 @@ export const ConnectedWalletIcon = () => {
       return <LeapSnapIcon />
     case WalletType.ninjiExtension:
       return <NinjiWalletIcon />
+    case WalletType.okxwallet:
+      return <OKXWalletIcon />
     default:
       return <></>
   }
