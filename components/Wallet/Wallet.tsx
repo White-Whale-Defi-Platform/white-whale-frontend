@@ -73,6 +73,10 @@ const Wallet = () => {
       setWalletChains(['injective'])
       setCurrentConnectedChainIds(['injective-1'])
     }
+    if (walletType === WalletType.okxwallet) {
+      setWalletChains(['osmosis','juno','sei'])
+      setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1'])
+    }
     if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
       // Window.leap.defaultOptions
       window.leap.defaultOptions = {
@@ -90,7 +94,6 @@ const Wallet = () => {
       setCurrentConnectedChainIds(snapChainIds)
     } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
       const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
-
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection?.getChainInfosWithoutEndpoints()
         if (!chainInfos) {
@@ -135,6 +138,9 @@ const Wallet = () => {
     } else if (walletType === WalletType.ninjiExtension) {
       setCurrentConnectedChainIds(['injective-1'])
       setWalletChains(['injective'])
+    } if (walletType === WalletType.okxwallet) {
+      setWalletChains(['osmosis','juno','sei'])
+      setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1'])
     } else {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }

@@ -6,6 +6,7 @@ import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
 import NinjiWalletIcon from 'components/Icons/NinjiWalletIcon'
+import OKXWalletIcon from 'components/Icons/OKXWalletIcon'
 import { ShellWalletIcon } from 'components/Icons/ShellWalletIcon'
 import { TerraStationWalletIcon } from 'components/Icons/TerraStationWalletIcon'
 import { WalletConnectIcon } from 'components/Icons/WalletConnectIcon'
@@ -26,7 +27,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
   const getKeplrChains = async (chains: Array<string>) => {
     const response = await fetch('https://keplr-chain-registry.vercel.app/api/chains');
     const registry = await response.json();
-    return Object.values(registry.chains).filter((elem : {chainId: string}) => chains.includes(elem.chainId));
+    return Object.values(registry.chains).filter((elem: { chainId: string }) => chains.includes(elem.chainId));
   }
   const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1)
   const handleChainActivationError = (chainName: string, toast) => {
@@ -48,7 +49,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       const keplrChains: any[] = await getKeplrChains(Object.values(ACTIVE_NETWORKS[network]))
       for (const chain of keplrChains) {
         if (!connected?.includes(chain.chainId)) {
-        // eslint-disable-next-line no-await-in-loop
+          // eslint-disable-next-line no-await-in-loop
           await window.keplr.experimentalSuggestChain(chain)
         }
       }
@@ -94,6 +95,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return 'Leap Metamask Snap'
       case WalletType.ninjiExtension:
         return 'Ninji Wallet'
+      case WalletType.okxwallet:
+        return 'OKX Wallet'
       default:
         return null
     }
@@ -106,13 +109,13 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       case WalletType.keplrMobile:
         return <WalletConnectIcon />
       case WalletType.terraExtension:
-        return <TerraStationWalletIcon/>
+        return <TerraStationWalletIcon />
       case WalletType.cosmoStationExtension:
         return <CosmostationWalletIcon />
       case WalletType.cosmoStationMobile:
         return <WalletConnectIcon />
       case WalletType.shellExtension:
-        return <ShellWalletIcon/>
+        return <ShellWalletIcon />
       case WalletType.leapExtension:
         return <LeapWalletIcon />
       case WalletType.leapMobile:
@@ -121,6 +124,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return <LeapSnapIcon />
       case WalletType.ninjiExtension:
         return <NinjiWalletIcon />
+      case WalletType.okxwallet:
+        return <OKXWalletIcon />
       default:
         return null
     }

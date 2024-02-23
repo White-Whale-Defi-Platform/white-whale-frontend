@@ -26,6 +26,7 @@
     "@cosmos-kit/keplr": "^2.6.9",
     "@cosmos-kit/leap": "^2.6.9",
     "@cosmos-kit/ninji": "^2.6.9",
+    "@cosmos-kit/okxwallet": "^2.4.9",
     "@cosmos-kit/react-lite": "^2.6.9",
     "@cosmos-kit/shell": "^2.6.9",
     "@cosmos-kit/station": "^2.5.9",
