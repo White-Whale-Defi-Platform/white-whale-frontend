@@ -13,7 +13,6 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-const SLIPPAGE = ['osmosis', 'injective']
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -93,7 +92,6 @@ const useSwap = ({ reverse }) => {
     if (!simulated) {
       return null
     }
-    const receive = toChainAmount(minReceive, tokenB?.decimals)
     if (executeMsg?.execute_swap_operations) {
       executeMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
       return [executeMessage(
