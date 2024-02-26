@@ -501,7 +501,7 @@
         "JUNO"
       ],
       "displayName": "WIND-JUNO",
-      "displayLogo1": "/logos/wind.svg",
+      "displayLogo1": "/logos/wind.png",
       "displayLogo2": "/logos/juno.svg",
       "pool_assets": [
         {
@@ -511,7 +511,7 @@
           "symbol": "WIND",
           "name": "WIND",
           "decimals": 6,
-          "logoURI": "/logos/wind.svg",
+          "logoURI": "/logos/wind.png",
           "tags": [
             "native"
           ],
