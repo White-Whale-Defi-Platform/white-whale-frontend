@@ -139,8 +139,8 @@ const Wallet = () => {
       setCurrentConnectedChainIds(['injective-1'])
       setWalletChains(['injective'])
     } else if (walletType === WalletType.okxwallet) {
-      setWalletChains(['osmosis','juno','sei'])
-      setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1'])
+      setWalletChains(['osmosis','juno','sei', 'injective'])
+      setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1', 'injective-1'])
     } else {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }

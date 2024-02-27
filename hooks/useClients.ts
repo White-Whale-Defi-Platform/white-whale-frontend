@@ -11,7 +11,7 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet,
-    getOfflineSignerDirect } = useChain(walletChainName)
+    getOfflineSignerDirect, getOfflineSigner } = useChain(walletChainName)
   if (isWalletConnected && wallet?.name !== 'station-extension') {
     try {
       setDefaultSignOptions({
@@ -35,13 +35,24 @@ export const useClients = (walletChainName: string) => {
     }, {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
+        let offlineSigner:any
         try {
-          const offlineSigner: any = await getOfflineSignerDirect();
+          try {
+           offlineSigner = await getOfflineSignerDirect();
+          } catch {
+            // getOfflineSignerDirect not available for OKX-WALLET in cosmos-kit
+             offlineSigner = await getOfflineSigner()
+          }
+          //DEBUG for OKX-WALLET 
+          console.log('1) getKey() response from Keplr on injective', await window.keplr.getKey('injective-1'),'2) getKey() response from OKX-Wallet on injective',await window.okxwallet.keplr.getKey('injective-1'))
+          console.log('1) getKey() response from Keplr on osmosis', await window.keplr.getKey('osmosis-1'),'2) getKey() response from OKX-Wallet on osmosis' ,await window.okxwallet.keplr.getKey('osmosis-1'))
+          console.log('osmosis works, injective not. Difference in pub key algo and pub key length')
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)
           client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
           return client
-        } catch {
+        } catch (e){
+          console.log(e)
           return null
         }
       },
