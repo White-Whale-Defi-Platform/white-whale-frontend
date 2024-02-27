@@ -13,7 +13,6 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-const SLIPPAGE = ['osmosis', 'injective']
 
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
@@ -93,13 +92,8 @@ const useSwap = ({ reverse }) => {
     if (!simulated) {
       return null
     }
-    const receive = toChainAmount(minReceive, tokenB?.decimals)
     if (executeMsg?.execute_swap_operations) {
-      if (SLIPPAGE.includes(walletChainName)) {
-        executeMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
-      } else {
-        executeMsg.execute_swap_operations.minimum_receive = receive
-      }
+      executeMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
       return [executeMessage(
         executeMsg,
         num(reverse ? simulated?.amount : amount).toFixed(0),
@@ -109,11 +103,7 @@ const useSwap = ({ reverse }) => {
       )]
     } else if (executeMsg?.send) {
       const decodedMsg = JSON.parse(fromUtf8(fromBase64(executeMsg.send.msg)))
-      if (SLIPPAGE.includes(walletChainName)) {
-        decodedMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
-      } else {
-        decodedMsg.execute_swap_operations.minimum_receive = receive
-      }
+      decodedMsg.execute_swap_operations.max_spread = String(slippageToDecimal)
       executeMsg.send.msg = toBase64(toUtf8(JSON.stringify(decodedMsg)))
       return [executeMessage(
         executeMsg,

@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import { TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { useConfig } from '../components/Pages/Bonding/hooks/useDashboardData'
 
 export type TokenList = {
   baseToken: TokenInfo
@@ -13,6 +14,7 @@ export type TokenList = {
 export const useTokenList = () => {
   const { data: poolsListResponse } = usePoolsListQuery()
   const { chainId, network } = useRecoilValue(chainState)
+  const config = useConfig(network, chainId)
 
   /* Generate token list off pool list and store it in cache */
   const { data } = useQuery<TokenList>(
@@ -26,7 +28,12 @@ export const useTokenList = () => {
           }
         })
       })
-
+      config.bonding_tokens?.forEach((token:any) => {
+        if (!tokenMapBySymbol.has(token.symbol)) {
+          token.withoutPool = true
+          tokenMapBySymbol.set(token.symbol, token)
+        }
+      })
       return {
         baseToken: poolsListResponse.base_token,
         tokens: Array.from(tokenMapBySymbol.values()),
@@ -34,7 +41,7 @@ export const useTokenList = () => {
       }
     },
     {
-      enabled: Boolean(poolsListResponse?.pools),
+      enabled: Boolean(poolsListResponse?.pools && config),
       refetchOnMount: false,
       onError(e) {
         console.error('Error generating token list:', e)
