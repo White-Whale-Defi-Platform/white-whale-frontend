@@ -43,7 +43,8 @@ export const useClients = (walletChainName: string) => {
             // getOfflineSignerDirect not available for OKX-WALLET in cosmos-kit
              offlineSigner = await getOfflineSigner()
           }
-          //DEBUG for OKX-WALLET 
+          // DEBUG for OKX-WALLET 
+          // difference can only be reproduced with Keplr Extension installed as well
           console.log('1) getKey() response from Keplr on injective', await window.keplr.getKey('injective-1'),'2) getKey() response from OKX-Wallet on injective',await window.okxwallet.keplr.getKey('injective-1'))
           console.log('1) getKey() response from Keplr on osmosis', await window.keplr.getKey('osmosis-1'),'2) getKey() response from OKX-Wallet on osmosis' ,await window.okxwallet.keplr.getKey('osmosis-1'))
           console.log('osmosis works, injective not. Difference in pub key algo and pub key length')
