@@ -36,7 +36,7 @@ export const useClients = (walletChainName: string) => {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
-          const offlineSigner: any = await getOfflineSignerDirect();
+          const offlineSigner: any = await getOfflineSignerDirect()
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)
           client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
