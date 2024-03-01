@@ -1,19 +1,17 @@
 import { useMemo } from 'react'
 
 import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useConnect } from '@quirks/react'
 import { AvailableRewards } from 'components/Pages/Trade/Liquidity/AvailableRewards'
 import { RewardToolTip } from 'components/RewardToolTip'
-import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
 
 export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
   const totalUsdValue = useMemo(() => dailyEmissions.reduce((total, item) => total + (isNaN(item.dailyUsdEmission) ? 0 : item.dailyUsdEmission),
     0),
   [dailyEmissions])
 
-  const { walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { connected } = useConnect()
+
   return (
     <VStack
       alignItems="flex-start"
@@ -30,7 +28,7 @@ export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
         <RewardToolTip
           label={`$${totalValue}`}
           showTooltip={rewards.length > 0}
-          isWalletConnected={isWalletConnected}
+          isWalletConnected={connected}
         >
           <AvailableRewards data={rewards} />
         </RewardToolTip>
@@ -45,7 +43,7 @@ export const Rewards = ({ rewards = [], totalValue, dailyEmissions = [] }) => {
         <RewardToolTip
           label={`$${totalUsdValue.toFixed(2)}`}
           showTooltip={dailyEmissions.length > 0}
-          isWalletConnected={isWalletConnected}
+          isWalletConnected={connected}
         >
           <AvailableRewards data={dailyEmissions} />
         </RewardToolTip>

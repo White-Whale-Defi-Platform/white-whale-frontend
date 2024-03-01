@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMediaQuery, VStack } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useConnect } from '@quirks/react'
 import AssetInput from 'components/AssetInput/index'
 import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData';
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -24,8 +24,8 @@ export const Bond = ({ balances, tokenSymbols }) => {
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)
-  const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { network, chainId } = useRecoilValue(chainState)
+  const { connected } = useConnect()
 
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 
@@ -60,7 +60,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
         denom: config.bonding_tokens[0].denom,
       })
     }
-  }, [isWalletConnected, config])
+  }, [connected, config])
 
   const { control } = useForm({
     mode: 'onChange',

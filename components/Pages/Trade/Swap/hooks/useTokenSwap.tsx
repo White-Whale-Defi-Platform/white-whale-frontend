@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast'
 import { useMutation } from 'react-query'
 
 import { Button } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useChain, useConnect } from '@quirks/react'
 import { useQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { useClients } from 'hooks/useClients'
@@ -40,7 +40,8 @@ export const useTokenSwap = ({
   tokenToTokenPrice,
 }: UseTokenSwapArgs) => {
   const { walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
   const { signingClient } = useClients(walletChainName)
   const setTransactionState = useSetRecoilState(transactionStatusState)
   const slippage = useRecoilValue(slippageAtom)
@@ -55,7 +56,7 @@ export const useTokenSwap = ({
   return useMutation(
     'swapTokens',
     () => {
-      if (!isWalletConnected) {
+      if (!connected) {
         throw new Error('Please connect your wallet.')
       }
 

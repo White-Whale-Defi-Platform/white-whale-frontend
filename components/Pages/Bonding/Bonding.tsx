@@ -11,7 +11,7 @@ import {
   ModalCloseButton,
   Stack,
 } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useChain, useConnect } from '@quirks/react'
 import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Bonding/hooks/getBonded'
@@ -30,7 +30,8 @@ import { BondingData } from './types/BondingData'
 
 const Bonding: FC = () => {
   const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
 
   const data: BondingData[] = [
     {
@@ -162,7 +163,7 @@ const Bonding: FC = () => {
     setWithdrawableTokens(withdrawableInfos)
     setData(data)
   }, [
-    isWalletConnected,
+    connected,
     isLoading,
     unbondingRequests,
     myBondedAssets,
@@ -171,7 +172,7 @@ const Bonding: FC = () => {
     symbols,
   ])
   const { isOpen, onOpen, onClose } = useDisclosure()
-  return <>{isLoading && isWalletConnected ?
+  return <>{isLoading && connected ?
     <HStack
       width="full"
       alignContent="center"
@@ -236,7 +237,7 @@ const Bonding: FC = () => {
               </ModalContent>
             </Modal>
             <BondingOverview
-              isWalletConnected={isWalletConnected}
+              isWalletConnected={connected}
               data={updatedData}
               whalePrice={whalePrice}
               currentChainName={chainName}
@@ -248,7 +249,7 @@ const Bonding: FC = () => {
             xl: 'end',
           }}>
             <RewardsComponent
-              isWalletConnected={isWalletConnected}
+              isWalletConnected={connected}
               whalePrice={whalePrice}
               currentEpoch={currentEpoch}
               myTotalBonding={myTotalBonding}

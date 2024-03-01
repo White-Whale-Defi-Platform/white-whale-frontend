@@ -14,7 +14,7 @@ import {
   VStack,
   useMediaQuery,
 } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useChain, useConnect } from '@quirks/react'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Trade/Incentivize/hooks/usePoolUserShare'
 import { IncentivePositionsOverview } from 'components/Pages/Trade/Incentivize/IncentivePositionsOverview';
@@ -34,6 +34,7 @@ import { useClients } from 'hooks/useClients'
 import { usePrices } from 'hooks/usePrices'
 import { useQueriesDataSelector } from 'hooks/useQueriesDataSelector'
 import { useTokenList } from 'hooks/useTokenList'
+import { useWalletModal } from 'hooks/useWalletModal'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -48,7 +49,9 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   const chains: Array<any> = useChainInfos()
   const [tokenList] = useTokenList()
   const { chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address, openView } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
+  const { openModal } = useWalletModal()
   const [reverse, setReverse] = useState<boolean>(false)
   const [isTokenSet, setIsToken] = useState<boolean>(false)
   const { data: poolData } = usePoolsListQuery()
@@ -262,7 +265,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
                     bondingDays={bondingDays}
                     setReverse={setReverse}
                     reverse={reverse}
-                    isWalletConnected={isWalletConnected}
+                    isWalletConnected={connected}
                     tokenA={tokenA}
                     tokenB={tokenB}
                     onInputChange={onInputChange}
@@ -272,17 +275,17 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
                     chainId={chainId}
                     poolId={poolIdFromUrl}
                     mobile={isMobile}
-                    openView={openView}
+                    openView={openModal}
                   />
                 )}
               </TabPanel>
               <TabPanel padding={4}>
                 <WithdrawForm
-                  isWalletConnected={isWalletConnected}
+                  isWalletConnected={connected}
                   clearForm={clearForm}
                   poolId={poolIdFromUrl}
                   mobile={isMobile}
-                  openView={openView}
+                  openView={openModal}
                 />
               </TabPanel>
               <TabPanel padding={4}>

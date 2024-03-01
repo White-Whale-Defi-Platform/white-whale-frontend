@@ -7,7 +7,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useConnect } from '@quirks/react'
 import { BondingTokenState } from 'components/Pages/Bonding/BondingActions/Bond'
 import { UnbondingData } from 'components/Pages/Bonding/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Bonding/hooks/getWithdrawable'
@@ -30,8 +30,8 @@ const Withdraw = ({
   withdrawableInfos,
   unbondingPeriodInNano,
 }: Props) => {
-  const { walletChainName, network, chainId } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { network, chainId } = useRecoilValue(chainState)
+  const { connected } = useConnect()
 
   const prices = usePrices()
 
@@ -70,7 +70,7 @@ const Withdraw = ({
         denom: firstToken.denom,
       })
     }
-  }, [isWalletConnected, config])
+  }, [connected, config])
 
   const withdrawableTokens = withdrawableInfos?.map((row) => ({
     ...row,
@@ -103,10 +103,10 @@ const Withdraw = ({
         <WhaleTooltip
           label={label}
           tokens={tokens}
-          isWalletConnected={isWalletConnected}
+          isWalletConnected={connected}
         />
         <Text mb="-0.2rem" fontSize={23} fontWeight="bold">
-          {isWalletConnected ? `$${dollarValue.toLocaleString()}` : 'n/a'}
+          {connected ? `$${dollarValue.toLocaleString()}` : 'n/a'}
         </Text>
       </Box>
     )
@@ -146,7 +146,7 @@ const Withdraw = ({
         <TokenBox label="Unbonding" tokens={unbondingTokens} />
         <TokenBox label="Withdrawable" tokens={withdrawableTokens} />
       </Stack>
-      {isWalletConnected &&
+      {connected &&
         unbondingRequests &&
         unbondingRequests?.length > 0 && (
         <Box

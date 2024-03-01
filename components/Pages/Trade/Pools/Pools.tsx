@@ -10,7 +10,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useConnect } from '@quirks/react'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { ActionCTAs } from 'components/Pages/Trade/Pools/ActionCTAs'
 import AllPoolsTable from 'components/Pages/Trade/Pools/AllPoolsTable'
@@ -46,7 +46,7 @@ const Pools = () => {
   const [externalStatsLoading, setExternalStatsLoading] = useState<boolean>(true)
 
   const { chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { connected } = useConnect()
   const [currentAprHelperState, setAprHelperState] = useRecoilState(aprHelperState)
   const [showAllPools, setShowAllPools] = useState<boolean>(false)
   const { cosmWasmClient } = useClients(walletChainName)
@@ -216,13 +216,13 @@ const Pools = () => {
   const [myPools, setMyPools] = useState([])
 
   useEffect(() => {
-    if (!isWalletConnected) {
+    if (!connected) {
       setMyPools([])
     }
-  }, [isWalletConnected])
+  }, [connected])
 
   useEffect(() => {
-    if (pools && allPools && isWalletConnected) {
+    if (pools && allPools && connected) {
       const myLiquidityPools = pools.filter(({ liquidity }) => liquidity?.providedTotal?.tokenAmount > 0)
       const updatedPools = allPools.filter((pool) => myLiquidityPools.map((myPool) => myPool.pool_id).includes(pool.poolId)).map((pool) => {
         const myPool = myLiquidityPools.find((myPool) => myPool.pool_id === pool.poolId)
@@ -233,7 +233,7 @@ const Pools = () => {
       })
       setMyPools(updatedPools)
     }
-  }, [allPools, isWalletConnected])
+  }, [allPools, connected])
 
   // Get a list of all myPools pools
   const myPoolsId = useMemo(() => myPools?.map(({ pool }) => pool), [myPools])

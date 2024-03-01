@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { HStack, VStack } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
+import { useConnect } from '@quirks/react'
 import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
 import ClaimTable from 'components/Pages/Trade/Liquidity/ClaimTable'
 import { useCheckIncentiveSnapshots } from 'components/Pages/Trade/Liquidity/hooks/useCheckIncentiveSnapshots'
@@ -11,6 +11,7 @@ import useRewards from 'components/Pages/Trade/Liquidity/hooks/useRewards'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { useClients } from 'hooks/useClients'
+import { useWalletModal } from 'hooks/useWalletModal'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
@@ -47,7 +48,8 @@ const Claim = ({ poolId }: Props) => {
   const claim = useClaim({ poolId })
 
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, openView } = useChain(walletChainName)
+  const { connected } = useConnect()
+  const { openModal } = useWalletModal()
   const { cosmWasmClient } = useClients(walletChainName)
 
   const config = useConfig(network, chainId)
@@ -68,7 +70,7 @@ const Claim = ({ poolId }: Props) => {
     return rewardsSum > 0
   }, [rewards])
   const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) {
+    if (!connected) {
       return 'Connect Wallet'
     } else if (Number(totalValue) === 0) {
       return 'No Rewards'
@@ -76,7 +78,7 @@ const Claim = ({ poolId }: Props) => {
       return 'Take Snapshots'
     }
     return 'Claim'
-  }, [isWalletConnected, totalValue, allSnapshotsTaken])
+  }, [connected, totalValue, allSnapshotsTaken])
   return (
     <VStack gap={10} py={5}>
       <AvailableRewards totalValue={totalValue} />
@@ -86,13 +88,13 @@ const Claim = ({ poolId }: Props) => {
         label={buttonLabel}
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={(!isClaimable && allSnapshotsTaken) && isWalletConnected}
+        isDisabled={(!isClaimable && allSnapshotsTaken) && connected}
         isLoading={ [TxStep.Estimating, TxStep.Posting, TxStep.Broadcasting].includes(claim.txStep)}
         onClick={() => {
-          if (isWalletConnected && allSnapshotsTaken && rewards.length !== 0) {
+          if (connected && allSnapshotsTaken && rewards.length !== 0) {
             claim.submit()
-          } else if (!isWalletConnected) {
-            openView()
+          } else if (!connected) {
+            openModal()
           } else {
             forceSnapshots.submit()
           }

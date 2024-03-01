@@ -10,7 +10,6 @@ import {
   VStack,
   keyframes,
 } from '@chakra-ui/react'
-import { useChain } from '@quirks/react'
 import { BondingActionTooltip } from 'components/Pages/Bonding/BondingActions/BondingActionTooltip'
 import useTransaction from 'components/Pages/Bonding/BondingActions/hooks/useTransaction'
 import {
@@ -20,6 +19,7 @@ import {
 import { RewardsTooltip } from 'components/Pages/Bonding/RewardsTooltip'
 import useForceEpochAndTakingSnapshots from 'components/Pages/Trade/Liquidity/hooks/useForceEpochAndTakingSnapshots'
 import { kBorderRadius, kBg } from 'constants/visualComponentConstants'
+import { useWalletModal } from 'hooks/useWalletModal'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
@@ -116,9 +116,9 @@ const RewardsComponent = ({
   weightInfo,
   globalInfo,
 }) => {
-  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { network, chainId } = useRecoilValue(chainState)
 
-  const { openView } = useChain(walletChainName)
+  const { openModal } = useWalletModal()
 
   const claimableRewards = useMemo(() => totalGlobalClaimable * Number(weightInfo?.share || 0),
     [totalGlobalClaimable, weightInfo])
@@ -291,7 +291,7 @@ const RewardsComponent = ({
                 ActionType.claim, null, null,
               )
             } else {
-              openView()
+              openModal()
             }
           }}
           style={{ textTransform: 'capitalize' }}
