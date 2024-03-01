@@ -13,8 +13,6 @@ const getCosmWasmClient = async (walletChainName: string) => {
 
   const { CosmWasmClient } = await import('@cosmjs/cosmwasm-stargate');
 
-  console.log(endpoint)
-
   return CosmWasmClient.connect(endpoint.rpc.address);
 }
 
