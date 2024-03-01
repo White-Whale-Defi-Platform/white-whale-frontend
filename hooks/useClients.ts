@@ -1,42 +1,42 @@
 import { useQueries } from 'react-query'
 
-import { useChain } from '@cosmos-kit/react-lite'
 import { InjectiveStargate } from '@injectivelabs/sdk-ts'
+import { getEndpoint, assertIsDefined } from '@quirks/core'
+import { useConnect } from '@quirks/react';
+import { getOfflineSigner, getSigningCosmWasmClient, store } from '@quirks/store';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 
+const getCosmWasmClient = async (walletChainName: string) => {
+  const state = store.getState();
+
+  const chain = store.getState().chains.find((el) => el.chain_name === walletChainName);
+  assertIsDefined(chain);
+  const endpoint = getEndpoint(walletChainName, state.chains);
+
+  const { CosmWasmClient } = await import('@cosmjs/cosmwasm-stargate');
+
+  console.log(endpoint)
+
+  return CosmWasmClient.connect(endpoint.rpc.address);
+}
+
 export const useClients = (walletChainName: string) => {
-  const {
-    getCosmWasmClient,
-    getSigningCosmWasmClient,
-    isWalletConnected,
-    setDefaultSignOptions,
-    wallet,
-    getOfflineSignerDirect } = useChain(walletChainName)
-  if (isWalletConnected && wallet?.name !== 'station-extension') {
-    try {
-      setDefaultSignOptions({
-        preferNoSetFee: true,
-        preferNoSetMemo: true,
-        disableBalanceCheck: true,
-      })
-    } catch {
-      console.error(`unable to set Default option for: ${wallet.name}`)
-    }
-  }
+  const { connected } = useConnect();
+
   const queries = useQueries([
     {
       queryKey: ['cosmWasmClient', walletChainName],
-      queryFn: async () => await getCosmWasmClient(),
+      queryFn: async () => await getCosmWasmClient(walletChainName),
     },
     {
       queryKey: ['signingClient', walletChainName],
-      queryFn: async () => await getSigningCosmWasmClient(),
-      enabled: isWalletConnected,
+      queryFn: async () => await getSigningCosmWasmClient(walletChainName),
+      enabled: connected,
     }, {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
-          const offlineSigner: any = await getOfflineSignerDirect();
+          const offlineSigner: any = await getOfflineSigner(walletChainName, 'direct');
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)
           client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
@@ -45,7 +45,7 @@ export const useClients = (walletChainName: string) => {
           return null
         }
       },
-      enabled: isWalletConnected,
+      enabled: connected,
     },
   ])
 

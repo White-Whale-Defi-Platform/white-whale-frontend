@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useChain } from '@cosmos-kit/react-lite'
+import { useConnect } from '@quirks/react'
 import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
 import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
@@ -9,14 +9,11 @@ import NinjiWalletIcon from 'components/Icons/NinjiWalletIcon'
 import OKXWalletIcon from 'components/Icons/OKXWalletIcon'
 import TerraExtensionIcon from 'components/Icons/TerraExtensionIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
-import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
-
 
 export const ConnectedWalletIcon = () => {
-  const { walletChainName } = useRecoilValue(chainState)
-  const { wallet } = useChain(walletChainName)
-  switch (wallet?.name) {
+  const { wallet } = useConnect()
+
+  switch (wallet?.options.wallet_name) {
     case WalletType.keplrExtension || WalletType.keplrMobile:
       return <KeplrWalletIcon />
     case WalletType.leapExtension || WalletType.leapMobile:

@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain, useConnect } from '@quirks/react'
 import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'
 import { useClients } from 'hooks/useClients'
@@ -103,7 +103,8 @@ export const useTokenBalance = (tokenSymbol: string) => {
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?: boolean) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient, signingClient } = useClients(walletChainName)
-  const { address, isWalletConnected } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
   const [tokenList] = useTokenList()
   const config = useConfig(network, chainId)
   const [ibcAssetsList] = useIBCAssetList()
@@ -133,7 +134,7 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?
         {},
     }))),
     {
-      enabled: Boolean(isWalletConnected &&
+      enabled: Boolean(connected &&
         tokenSymbols?.length &&
         tokenList?.tokens &&
         cosmWasmClient),

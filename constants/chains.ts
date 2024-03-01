@@ -27,12 +27,12 @@ export const chains: Chain[] = [
     apis: {
       rpc: [
         {
-          address: 'https://migaloo-api.polkachu.com',
+          address: 'https://migaloo-rpc.polkachu.com',
         },
       ],
       rest: [
         {
-          address: 'https://migaloo-rpc.polkachu.com',
+          address: 'https://migaloo-api.polkachu.com',
         },
       ],
     },

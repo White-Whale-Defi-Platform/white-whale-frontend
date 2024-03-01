@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { fromBase64, fromUtf8, toBase64, toUtf8 } from '@cosmjs/encoding'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import useRoute, { executeMessage } from 'components/Pages/Trade/Swap/hooks/useRoute'
 import useSimulate from 'components/Pages/Trade/Swap/hooks/useSimulate'

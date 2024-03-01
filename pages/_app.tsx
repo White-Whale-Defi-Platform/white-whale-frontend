@@ -1,4 +1,3 @@
-import { type FC } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClientProvider } from 'react-query';
 
@@ -15,6 +14,7 @@ import {
 } from '@quirks/wallets';
 import 'theme/global.css';
 import AppLayout from 'components/Layout/AppLayout';
+import WalletModal from 'components/Wallet/Modal/WalletModal';
 import { chains, assetsLists } from 'constants/chains';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -31,9 +31,14 @@ const config: Config = {
     shellExtension,
     cosmostationExtension,
     okxExtension,
-  ], // Use a list of wallet, like keplr and leap, from wallets
-  chains, // Use a list of chains, like osmosis, from chain-registry
-  assetsLists, // Use a list of assetlist, like the osmosis one, from chain-registry
+  ],
+  chains,
+  assetsLists,
+  signOptions: {
+    preferNoSetFee: true,
+    preferNoSetMemo: true,
+    disableBalanceCheck: true,
+  },
   walletConnectOptions: {
     providerOpts: {
       projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
@@ -49,7 +54,7 @@ const config: Config = {
   },
 };
 
-const App: FC<AppProps> = ({ Component, pageProps }: AppProps) => (
+const App = ({ Component, pageProps }: AppProps) => (
   <>
     <Head>
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -62,6 +67,7 @@ const App: FC<AppProps> = ({ Component, pageProps }: AppProps) => (
               <CSSReset />
               <AppLayout>
                 <Component {...pageProps} />
+                <WalletModal />
               </AppLayout>
             </QuirksConfig>
           </QuirksNextProvider>
