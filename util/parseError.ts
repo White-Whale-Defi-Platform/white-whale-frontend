@@ -36,6 +36,10 @@ export const parseError = (error: Error) => {
       regex: /pending rewards to be claimed before you can execute this action/u,
       message: 'There are unclaimed rewards available. Claim first.',
     },
+    {
+      regex: /does not exist on chain\./u,
+      message: 'Current account does not exist on chain. Send some tokens there and please try again.',
+    },
   ]
 
   return (
