@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { useChain } from '@cosmos-kit/react-lite'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useChain } from '@quirks/react'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
 import { fetchFlows } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { queryPoolInfo } from 'components/Pages/Trade/Pools/hooks/queryPoolInfo'

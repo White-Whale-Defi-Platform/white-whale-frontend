@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
 export interface AddressInfo {
   address: string

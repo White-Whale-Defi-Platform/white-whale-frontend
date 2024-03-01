@@ -1,8 +1,7 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
+import { type SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { type InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
 import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { ADV_MEMO, ChainId } from 'constants/index'
-import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { createGasFee } from 'services/treasuryService'
 import { createExecuteMessage } from 'util/messages/createExecuteMessage'
 
@@ -12,6 +11,7 @@ export const claimRewards: any = async (
   config: Config,
   injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
+  const { TxRaw } = await import('cosmjs-types/cosmos/tx/v1beta1/tx')
   const handleMsg = {
     claim: {},
   }

@@ -1,4 +1,4 @@
-import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
 

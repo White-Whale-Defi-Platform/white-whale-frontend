@@ -1,13 +1,13 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import type { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import type { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import axios from 'axios'
-import { chains as chainRegistry } from 'chain-registry'
 import { ChainId, WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/'
 import { getGasPrices } from 'constants/signerOptions'
 import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
 
 import { getGasPricesAPI } from './useAPI'
+import { store } from '@quirks/store'
 
 export const getGasFees = async (
   gas: number, price: number, denom: string,
@@ -31,7 +31,8 @@ export async function createGasFee(
   ) * 1.3)
   let chainFee = prices[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId]]
   if (!chainFee) {
-    const chainEntry = chainRegistry.find((chain: any) => chain.chain_name === WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId])
+
+    const chainEntry = store.getState().chains.find((chain: any) => chain.chain_name === WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId])
     chainFee = (await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId], chainEntry)).gasPrice
   }
   if (chainId === ChainId.terrac) {

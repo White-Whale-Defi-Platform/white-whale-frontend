@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { useChain, useConnect } from '@quirks/react'
 import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/index'

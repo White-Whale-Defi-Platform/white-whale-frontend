@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import type { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import type { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
 import { ADV_MEMO, ChainId } from 'constants/index'
-import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import useDebounceValue from 'hooks/useDebounceValue'
 import { createGasFee } from 'services/treasuryService'
 import { TxStep } from 'types/common'
@@ -109,6 +108,7 @@ export const useWithdrawTransaction: any = ({
   )
 
   const { mutate } = useMutation(async () => {
+    const { TxRaw } = await import('cosmjs-types/cosmos/tx/v1beta1/tx')
     if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
       const injectiveTxData = await injectiveSigningClient.sign(
         senderAddress, debouncedMsgs, await createGasFee(

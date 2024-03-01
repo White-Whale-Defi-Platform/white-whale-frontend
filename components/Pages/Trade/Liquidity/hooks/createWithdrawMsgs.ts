@@ -1,4 +1,4 @@
-import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import type { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/stargate'
 import { toBase64 } from 'util/conversion/index'
 import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages/index'

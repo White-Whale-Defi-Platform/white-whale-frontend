@@ -1,9 +1,9 @@
 import { Chain } from '@chain-registry/types'
-import { GasPrice } from '@cosmjs/stargate'
 
 import { CHAIN_NAMES } from './networks'
 
 export const getGasPrices = async (chainName:string, chain:Chain) => {
+  const { GasPrice } = await import('@cosmjs/stargate')
   if (CHAIN_NAMES.includes(chainName)) {
     const [feeTokens] = chain.fees.fee_tokens;
     const price = feeTokens

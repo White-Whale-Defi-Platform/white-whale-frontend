@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { fetchConfig } from 'components/Pages/Bonding/hooks/getBondingConfig'
 import { convertMicroDenomToDenom } from 'util/conversion'
 import { nanoToMilli } from 'util/conversion/timeUtil'

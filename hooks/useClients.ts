@@ -1,10 +1,8 @@
 import { useQueries } from 'react-query'
 
-import { InjectiveStargate } from '@injectivelabs/sdk-ts'
 import { getEndpoint, assertIsDefined } from '@quirks/core'
 import { useConnect } from '@quirks/react';
 import { getOfflineSigner, getSigningCosmWasmClient, store } from '@quirks/store';
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 
 const getCosmWasmClient = async (walletChainName: string) => {
   const state = store.getState();
@@ -36,6 +34,8 @@ export const useClients = (walletChainName: string) => {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
+          const { InjectiveStargate } = await import('@injectivelabs/sdk-ts')
+          const { MsgExecuteContract } = await import('cosmjs-types/cosmwasm/wasm/v1/tx')
           const offlineSigner: any = await getOfflineSigner(walletChainName, 'direct');
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)

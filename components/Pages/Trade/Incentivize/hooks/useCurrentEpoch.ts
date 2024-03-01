@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { fetchCurrentEpoch } from 'components/Pages/Bonding/hooks/getCurrentEpoch'
 import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
 

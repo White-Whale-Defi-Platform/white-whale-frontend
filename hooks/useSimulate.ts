@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query'
 
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { EncodeObject } from '@cosmjs/proto-signing'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import type { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import type { EncodeObject } from '@cosmjs/proto-signing'
+import type { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { ChainId } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { txRecoilState } from 'state/txRecoilState'
