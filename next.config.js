@@ -1,9 +1,8 @@
+const million = require('million/compiler')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
-
-
 
 /**
  * @0xFable - Suppress errant recoil errors which seem to occur due to hot reloading
@@ -88,7 +87,7 @@ const config = {
       },
     ];
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
   // TODO: Needed to disabled all build error checking and eslint checking due to error with usage of Controller component, to fix that needs to be fixed
   typescript: {
     // !! WARN !!
@@ -131,4 +130,8 @@ const config = {
   },
 }
 
-module.exports = withBundleAnalyzer(config)
+const millionConfig = {
+  auto: true,// if you're using RSC: auto: { rsc: true },
+};
+
+module.exports = million.next(withBundleAnalyzer(config), millionConfig)
