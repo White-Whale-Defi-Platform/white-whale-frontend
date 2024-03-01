@@ -113,8 +113,15 @@ ref) => {
             _placeholder={{ color: 'whiteAlpha.700' }}
             disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
             onChange={({ target }) => {
-              onChange({ ...token,
-                amount: target.value })
+              const amount = target.value.
+                slice(0, 32).
+                replace(/^0{2,}\./u, '0.').
+                replace(/^0+(?=[0-9])/u, '');
+
+              onChange({
+                ...token,
+                amount,
+              });
             }}
           />
         </HStack>
