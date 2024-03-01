@@ -1,7 +1,7 @@
 import { FC, useMemo, useState } from 'react'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import AllVaultsTable from 'components/Pages/Flashloan/Vaults/AllVaultsTable'
 import useVaults from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import { useRouter } from 'next/router'

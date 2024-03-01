@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useClients } from 'hooks/useClients'

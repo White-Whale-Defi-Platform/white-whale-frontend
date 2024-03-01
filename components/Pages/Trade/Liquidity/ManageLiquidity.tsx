@@ -14,7 +14,7 @@ import {
   VStack,
   useMediaQuery,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { usePoolUserShare } from 'components/Pages/Trade/Incentivize/hooks/usePoolUserShare'
 import { IncentivePositionsOverview } from 'components/Pages/Trade/Incentivize/IncentivePositionsOverview';

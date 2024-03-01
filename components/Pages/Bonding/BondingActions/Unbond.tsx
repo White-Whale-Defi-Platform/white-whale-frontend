@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMediaQuery, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import AssetInput from 'components/AssetInput/index'
 import { BondingTokenState, TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Bonding/hooks/getBonded';

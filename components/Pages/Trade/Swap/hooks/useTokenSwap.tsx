@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast'
 import { useMutation } from 'react-query'
 
 import { Button } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { useQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
 import { slippageAtom, tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { useClients } from 'hooks/useClients'

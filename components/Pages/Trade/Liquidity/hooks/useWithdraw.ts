@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import {
   createWithdrawExecuteMsgs,
   createWithdrawMsg,

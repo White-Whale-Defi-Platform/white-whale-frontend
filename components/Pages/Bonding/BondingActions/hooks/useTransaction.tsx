@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import Finder from 'components/Finder'
 import { bondTokens } from 'components/Pages/Bonding/BondingActions/hooks/bondTokens'
 import { claimRewards } from 'components/Pages/Bonding/BondingActions/hooks/claimRewards'

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import Loader from 'components/Loader'
 import { Bond, BondingTokenState } from 'components/Pages/Bonding/BondingActions/Bond'
 import { bondingAtom } from 'components/Pages/Bonding/BondingActions/bondAtoms'

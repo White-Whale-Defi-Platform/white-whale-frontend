@@ -11,7 +11,7 @@ import {
   ModalCloseButton,
   Stack,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import Loader from 'components/Loader'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Bonding/hooks/getBonded'

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import flashLoanContract from 'constants/vaultRouterAddresses.json'
 import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'

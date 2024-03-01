@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { AvailableRewards } from 'components/Pages/Trade/Liquidity/AvailableRewards'
 import { RewardToolTip } from 'components/RewardToolTip'
 import { useRecoilValue } from 'recoil'

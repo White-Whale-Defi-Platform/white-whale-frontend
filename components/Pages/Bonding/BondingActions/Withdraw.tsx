@@ -7,7 +7,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { BondingTokenState } from 'components/Pages/Bonding/BondingActions/Bond'
 import { UnbondingData } from 'components/Pages/Bonding/hooks/getUnbonding'
 import { WithdrawableInfo } from 'components/Pages/Bonding/hooks/getWithdrawable'

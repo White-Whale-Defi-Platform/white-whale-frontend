@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { HStack, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
 import ClaimTable from 'components/Pages/Trade/Liquidity/ClaimTable'
 import { useCheckIncentiveSnapshots } from 'components/Pages/Trade/Liquidity/hooks/useCheckIncentiveSnapshots'

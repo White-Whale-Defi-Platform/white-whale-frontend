@@ -10,7 +10,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
 import { ActionCTAs } from 'components/Pages/Trade/Pools/ActionCTAs'
 import AllPoolsTable from 'components/Pages/Trade/Pools/AllPoolsTable'

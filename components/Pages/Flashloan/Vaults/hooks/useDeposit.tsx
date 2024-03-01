@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { createDepositExecuteMsgs } from 'components/Pages/Flashloan/Vaults/hooks/createDepositMsgs'
 import useTransaction from 'components/Pages/Flashloan/Vaults/hooks/useTransaction'
 import { useClients } from 'hooks/useClients'

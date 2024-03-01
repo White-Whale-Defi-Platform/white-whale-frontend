@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import useVaults, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
 import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePosition/WithdrawForm'

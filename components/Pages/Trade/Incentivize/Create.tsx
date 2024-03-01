@@ -9,7 +9,7 @@ import {
   Stack,
   useMediaQuery,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import Input from 'components/AssetInput/Input'
 import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlow'
 import SubmitButton from 'components/SubmitButton'

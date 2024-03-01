@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useQueryIncentiveContracts } from 'components/Pages/Trade/Incentivize/hooks/useQueryIncentiveContracts'
 import { ADV_MEMO, ChainId } from 'constants/index'
