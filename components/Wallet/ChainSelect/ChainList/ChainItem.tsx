@@ -3,6 +3,7 @@ import { BsCircleFill } from 'react-icons/bs'
 import { useQueryClient } from 'react-query'
 
 import { Box, HStack, Image, ListIcon, ListItem, Text, Tooltip } from '@chakra-ui/react'
+import { WalletType } from 'components/Wallet/Modal/WalletModal';
 import { kBg } from 'constants/visualComponentConstants'
 
 const ChainItem = ({
@@ -28,7 +29,7 @@ const ChainItem = ({
           whiteSpace="pre-wrap"
         >
         To access this chain, you must add it to your wallet.
-        </Box>) : !walletConnected && chain.chainName?.includes('Injective') && walletType !== 'station-extension' ? (
+        </Box>) : !walletConnected && chain.chainName?.includes('Injective') && walletType !== WalletType.terraExtension ? (
         <Box
           maxWidth="220px"
           minWidth="fit-content"
