@@ -11,7 +11,7 @@ import { useRecoilState } from 'recoil'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { getDashboardData } from 'util/getDashboardData'
-import { getBondingAPRsAPI } from '../../../services/useAPI'
+import { getBondingAPRsAPI } from 'services/useAPI'
 
 export type DashboardData = {
   logoUrl: string
