@@ -359,9 +359,9 @@ export const useQueryPoolsLiquidity = ({
       Boolean(
         cosmWasmClient &&
         pool.pool_id &&
+        tokenList &&
         tokenList.tokens &&
-        tokenList.tokens.length > 0
-      ) &&
+        tokenList.tokens.length > 0) &&
       Boolean(prices),
     refetchOnMount: false,
     refetchInterval: refetchInBackground
