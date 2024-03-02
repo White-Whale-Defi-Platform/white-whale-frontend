@@ -1,8 +1,11 @@
 import { useQueryClient } from 'react-query'
 
 import { Switch } from '@chakra-ui/react'
+import { useConnect } from '@quirks/react'
+import { store } from '@quirks/store'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
+import { assetsLists, chains, testnetAssetsLists, testnetChains } from 'constants/chains'
 import { MAINNET_TESTNET_CHAIN_ID_MAP, NETWORK_MAP, WALLET_CHAIN_NAME_MAINNET_TESTNET_MAP } from 'constants/index'
 import { useRecoilState } from 'recoil'
 import { NetworkType, chainState } from 'state/chainState'
@@ -13,6 +16,7 @@ export const NetworkSwitch = () => {
   const [currentChainState, setCurrentChainState] = useRecoilState(chainState)
   const [_, setTokenSwapState] =
     useRecoilState<TokenItemState[]>(tokenSwapAtom)
+  const { disconnect, connected } = useConnect();
 
   const changeNetwork = () => {
     queryClient.clear()
@@ -31,10 +35,26 @@ export const NetworkSwitch = () => {
     // eslint-disable-next-line prefer-destructuring
     const updatedChainName = updatedChainId.split('-')[0]
 
+    const network = NetworkType[updatedNetwork];
+    const currentWalletName = store.getState().walletName;
+
+    if (connected) {
+      disconnect();
+    }
+
+    store.setState({
+      chains: network === NetworkType.testnet ? testnetChains : chains,
+      assetsLists: network === NetworkType.testnet ? testnetAssetsLists : assetsLists,
+    })
+
+    if (currentWalletName) {
+      store.getState().connect(currentWalletName);
+    }
+
     setCurrentChainState({
       ...currentChainState,
       chainName: updatedChainName,
-      network: NetworkType[updatedNetwork],
+      network,
       chainId: updatedChainId,
       walletChainName: updatedWalletChainName,
     })

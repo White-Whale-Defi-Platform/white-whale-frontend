@@ -19,7 +19,33 @@ import {
   terraAssetList,
   seiAssetList,
   osmosisAssetList,
+  migalootestnet,
+  terra2Testnet,
+  junotestnet,
+  seitestnet,
+  injectivetestnet,
+  migalootestnetAssetList,
+  terra2TestnetAssetList,
+  seitestnetAssetList,
+  junotestnetAssetList,
+  injectivetestnetAssetList,
 } from '@nabla-studio/chain-registry';
+
+export const testnetChains: Chain[] = [
+  migalootestnet,
+  terra2Testnet,
+  seitestnet,
+  junotestnet,
+  injectivetestnet,
+];
+
+export const testnetAssetsLists: AssetLists[] = [
+  migalootestnetAssetList,
+  terra2TestnetAssetList,
+  seitestnetAssetList,
+  junotestnetAssetList,
+  injectivetestnetAssetList,
+];
 
 export const chains: Chain[] = [
   {
