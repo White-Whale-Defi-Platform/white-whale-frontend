@@ -126,10 +126,20 @@ export const getGasPricesAPI = async () => {
   }
 }
 
-// Not used yet
-export const getAprData = async (chain_name: string) => {
+export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
   try {
     const response = await fetch(`${API_URL}/api/pools/${chain_name}`)
+    const json = await response.json()
+    return json?.data || null
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export const getBondingAPRsAPI = async () => {
+  try {
+    const response = await fetch(`${API_URL}/apex/bonding/aprs`)
     const json = await response.json()
     return json?.data || null
   } catch (error) {

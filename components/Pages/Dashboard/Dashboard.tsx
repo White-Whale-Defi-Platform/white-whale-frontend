@@ -11,6 +11,7 @@ import { useRecoilState } from 'recoil'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { getDashboardData } from 'util/getDashboardData'
+import { getBondingAPRsAPI } from '../../../services/useAPI'
 
 export type DashboardData = {
   logoUrl: string
@@ -21,15 +22,15 @@ export type DashboardData = {
 }
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
-  const { data: aprs, isLoading } = useGetBondingAprs()
   const prices = usePrices()
   const circulatingWhaleSupply: number = useFetchCirculatingSupply()
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       const mockData = await getDashboardData()
+      const aprs = await getBondingAPRsAPI()
       const mappedDashboardData = mockData.map((data) => {
-        const apr = aprs.find((apr) => apr.chainName === data.chainName)?.apr
+        const apr = aprs[data.chainName].bondingAPR
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
           chainName: data.chainName,
@@ -44,10 +45,10 @@ export const Dashboard: FC = () => {
         isInitialized: true,
       })
     }
-    if (!dashboardState.isInitialized && !isLoading) {
+    if (!dashboardState.isInitialized) {
       fetchDashboardData()
     }
-  }, [dashboardState.isInitialized, isLoading])
+  }, [dashboardState.isInitialized])
 
   useEffect(() => {
     const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)

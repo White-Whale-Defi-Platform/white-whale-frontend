@@ -130,9 +130,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return null
     }
   }
-
   return (
-    <Button variant="wallet" onClick={() => setWallet()} bg={'#444444'}>
+    <Button isDisabled={walletType == WalletType.terraExtension} variant="wallet" onClick={() => setWallet()} bg={'#444444'}>
       <HStack justify="space-between" width="full">
         <Text>{renderContent()}</Text>
         {renderIcon()}
