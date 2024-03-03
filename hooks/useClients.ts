@@ -35,6 +35,7 @@ export const useClients = (walletChainName: string) => {
           const { InjectiveStargate } = await import('@injectivelabs/sdk-ts')
           const { MsgExecuteContract } = await import('cosmjs-types/cosmwasm/wasm/v1/tx')
           const offlineSigner: any = await getOfflineSigner(walletChainName, 'direct');
+
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)
           client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
