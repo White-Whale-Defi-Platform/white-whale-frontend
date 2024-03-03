@@ -105,6 +105,14 @@ const config = {
   images: {
     loader: 'cloudinary',
     path: 'https://res.cloudinary.com/dk8s7xjsl/image/upload/',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
   webpack(config, { webpack }) {
     config.plugins.push(
