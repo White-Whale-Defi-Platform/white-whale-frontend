@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { protectAgainstNaN } from 'util/conversion/index'
 
 type QueryLiquidityBalanceArgs = {

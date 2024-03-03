@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain, useConnect } from '@quirks/react'
 import Loader from 'components/Loader'
 import { Bond, BondingTokenState } from 'components/Pages/Bonding/BondingActions/Bond'
 import { bondingAtom } from 'components/Pages/Bonding/BondingActions/bondAtoms'
@@ -19,6 +19,7 @@ import {
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
+import { useWalletModal } from 'hooks/useWalletModal'
 import { useRouter } from 'next/router'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
@@ -26,7 +27,9 @@ import { TxStep } from 'types/index'
 
 const BondingActions = ({ globalAction }) => {
   const { chainId, network, chainName, walletChainName } = useRecoilValue(chainState)
-  const { address, isWalletConnected, openView } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
+  const { openModal } = useWalletModal()
 
   const router = useRouter()
 
@@ -57,7 +60,7 @@ const BondingActions = ({ globalAction }) => {
     0)
 
   const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) {
+    if (!connected) {
       return 'Connect Wallet'
     } else if (
       currentBondState?.amount === 0 &&
@@ -71,7 +74,7 @@ const BondingActions = ({ globalAction }) => {
       return 'No Withdrawals'
     }
     return ActionType[globalAction]
-  }, [isWalletConnected, currentBondState, globalAction, totalWithdrawable])
+  }, [connected, currentBondState, globalAction, totalWithdrawable])
 
   const BondingActionButton = ({ action }) => {
     const actionString = ActionType[action].toString()
@@ -153,7 +156,7 @@ const BondingActions = ({ globalAction }) => {
         </HStack>
       </HStack>
       (
-      {isLoading && isWalletConnected ? (
+      {isLoading && connected ? (
         <VStack
           width="full"
           background={kBg}
@@ -242,10 +245,10 @@ const BondingActions = ({ globalAction }) => {
               txStep === TxStep.Posting ||
               txStep === TxStep.Broadcasting ||
               (globalAction === ActionType.bond && currentBondState.amount <= 0 &&
-                isWalletConnected) ||
+                connected) ||
               (currentBondState.amount === 0 &&
                 globalAction === ActionType.unbond &&
-                isWalletConnected) ||
+                connected) ||
               (totalWithdrawable === 0 && ActionType.withdraw === globalAction)
             }
             maxWidth={580}
@@ -255,7 +258,7 @@ const BondingActions = ({ globalAction }) => {
               txStep === TxStep.Broadcasting
             }
             onClick={ () => {
-              if (isWalletConnected) {
+              if (connected) {
                 let { denom } = config.bonding_tokens.find((token) => token.symbol === currentBondState.tokenSymbol)
                 if (globalAction === ActionType.withdraw) {
                   denom = getFirstDenomWithPositiveAmount(withdrawableInfos,
@@ -265,7 +268,7 @@ const BondingActions = ({ globalAction }) => {
                   globalAction, currentBondState.amount, denom,
                 )
               } else {
-                openView()
+                openModal()
               }
             }}
             style={{ textTransform: 'capitalize' }}

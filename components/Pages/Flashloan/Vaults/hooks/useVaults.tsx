@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import { useChain } from '@cosmos-kit/react-lite'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import { useChain } from '@quirks/react'
 import { useClients } from 'hooks/useClients'
 import { usePrices } from 'hooks/usePrices'
 import { formatPrice } from 'libs/num'

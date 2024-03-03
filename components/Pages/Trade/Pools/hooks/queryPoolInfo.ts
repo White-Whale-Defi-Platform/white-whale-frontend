@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { getPoolFromAPI } from 'services/useAPI'
 
 export type PoolInfoResponse = {

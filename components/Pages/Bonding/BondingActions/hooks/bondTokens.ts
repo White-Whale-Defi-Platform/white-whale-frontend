@@ -1,6 +1,5 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { coin } from '@cosmjs/stargate'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import { type SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import { type InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
@@ -15,6 +14,8 @@ export const bondTokens: any = async (
   config: Config,
   injectiveSigningClient?: InjectiveSigningStargateClient,
 ) => {
+  const { coin } = await import('@cosmjs/stargate');
+
   const handleMsg = {
     bond: {
       asset: {

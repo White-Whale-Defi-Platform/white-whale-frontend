@@ -1,4 +1,4 @@
-import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { Config } from './useDashboardData'
@@ -34,6 +34,15 @@ interface Epoch {
 
 interface Data {
   epochs: Epoch[]
+}
+
+export const fetchClaimableEpoch = async (client: CosmWasmClient,
+  config: Config): Promise<Data> => {
+  const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
+    {
+      claimable_epochs: {},
+    })
+  return result as Data
 }
 
 export const getClaimableEpochs = async (client: CosmWasmClient,
@@ -74,13 +83,4 @@ export const getClaimableEpochs = async (client: CosmWasmClient,
 
   return { globalAvailableRewards,
     annualRewards }
-}
-
-export const fetchClaimableEpoch = async (client: CosmWasmClient,
-  config: Config): Promise<Data> => {
-  const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
-    {
-      claimable_epochs: {},
-    })
-  return result as Data
 }

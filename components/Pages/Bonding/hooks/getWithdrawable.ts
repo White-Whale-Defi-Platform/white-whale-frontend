@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
 import { Config } from './useDashboardData'

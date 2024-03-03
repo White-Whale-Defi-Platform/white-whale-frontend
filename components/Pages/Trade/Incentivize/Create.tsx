@@ -9,14 +9,13 @@ import {
   Stack,
   useMediaQuery,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useConnect } from '@quirks/react'
 import Input from 'components/AssetInput/Input'
 import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlow'
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
 import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 
@@ -47,8 +46,7 @@ const Create = ({ poolId }: Props) => {
   })
   const formData = watch()
 
-  const { walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { connected } = useConnect();
   const { txStep } = useRecoilValue(txRecoilState)
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const { simulate, submit } = useOpenFlow({ poolId,
@@ -138,7 +136,7 @@ const Create = ({ poolId }: Props) => {
           txStep === TxStep.Posting ||
           txStep === TxStep.Broadcasting
         }
-        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
+        isDisabled={!isValid || txStep !== TxStep.Ready || !connected}
       />
     </Stack>
   )

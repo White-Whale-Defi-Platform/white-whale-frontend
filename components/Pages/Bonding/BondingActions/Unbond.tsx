@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useMediaQuery, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useConnect } from '@quirks/react'
 import AssetInput from 'components/AssetInput/index'
 import { BondingTokenState, TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { BondedData } from 'components/Pages/Bonding/hooks/getBonded';
@@ -12,8 +12,8 @@ import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'
 
 const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
-  const { walletChainName, network, chainId } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { network, chainId } = useRecoilValue(chainState)
+  const { connected } = useConnect()
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)
@@ -51,7 +51,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
         denom: firstToken.denom,
       })
     }
-  }, [isWalletConnected, config])
+  }, [connected, config])
 
   const { control } = useForm({
     mode: 'onChange',

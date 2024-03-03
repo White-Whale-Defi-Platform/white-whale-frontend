@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { useChain } from '@cosmos-kit/react-lite'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { useChain } from '@quirks/react'
 import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { PositionState } from 'constants/state'
@@ -47,7 +47,7 @@ export const fetchPositions = async (
   totalAssets: any,
   totalLpSupply: any,
 ) => {
-  // address can be undefined
+  // Address can be undefined
   if (!address) {
     return { data: [] }
   }

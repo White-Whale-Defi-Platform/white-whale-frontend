@@ -1,4 +1,4 @@
-import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
 
@@ -17,15 +17,6 @@ export interface BondingContractConfig {
   bonding_assets: BondingAsset[]
 }
 
-export const getBondingConfig = async (client: CosmWasmClient | null,
-  config: Config) => {
-  if (!client && !config) {
-    return null
-  }
-  const bondingConfig = await fetchConfig(client, config)
-  return { bondingConfig }
-}
-
 export const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<BondingContractConfig> => {
   // TODO: API
@@ -35,4 +26,13 @@ export const fetchConfig = async (client: CosmWasmClient,
     })
 
   return result as BondingContractConfig
+}
+
+export const getBondingConfig = async (client: CosmWasmClient | null,
+  config: Config) => {
+  if (!client && !config) {
+    return null
+  }
+  const bondingConfig = await fetchConfig(client, config)
+  return { bondingConfig }
 }

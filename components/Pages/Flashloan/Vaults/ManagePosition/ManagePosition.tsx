@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain, useConnect } from '@quirks/react'
 import useVaults, { useVaultDeposit } from 'components/Pages/Flashloan/Vaults/hooks/useVaults'
 import DepositForm from 'components/Pages/Flashloan/Vaults/ManagePosition/DepositForm'
 import WithdrawForm from 'components/Pages/Flashloan/Vaults/ManagePosition/WithdrawForm'
@@ -30,7 +30,8 @@ const ManagePosition = () => {
   const chains: Array<any> = useChainInfos()
   const params = new URLSearchParams(location.search)
   const { chainId, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
   const vaultId = params.get('vault') || 'JUNO'
 
   const vault = useMemo(() => vaults?.vaults.find((v) => v.vault_assets?.symbol === vaultId),
@@ -120,7 +121,7 @@ const ManagePosition = () => {
                 {vault?.vault_assets?.symbol && (
                   <DepositForm
                     vaultAddress={vault?.vault_address}
-                    isWalletConnected={isWalletConnected}
+                    isWalletConnected={connected}
                     isLoading={tokenBalanceLoading}
                     balance={tokenBalance}
                     defaultToken={vault?.vault_assets?.symbol}
@@ -133,7 +134,7 @@ const ManagePosition = () => {
                   <WithdrawForm
                     vaultAddress={vault?.vault_address}
                     lpToken={vault?.lp_token}
-                    isWalletConnected={isWalletConnected}
+                    isWalletConnected={connected}
                     isLoading={lpTokenBalanceLoading}
                     balance={lpTokenBalance?.lpBalance}
                     assetBalance={lpTokenBalance?.underlyingAssetAmount}

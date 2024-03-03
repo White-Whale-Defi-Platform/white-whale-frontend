@@ -1,9 +1,8 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
+import type { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { coin } from '@cosmjs/stargate'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
+import type { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ADV_MEMO, ChainId } from 'constants/index'
-import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { createGasFee } from 'services/treasuryService'
 import {
   createExecuteMessage,
@@ -31,6 +30,7 @@ export const directTokenSwap = async ({
   injectiveSigningClient,
   msgs,
 }: DirectTokenSwapArgs) => {
+  const { TxRaw } = await import('cosmjs-types/cosmos/tx/v1beta1/tx')
   if (!tokenA.native) {
     const increaseAllowanceMessage = createIncreaseAllowanceMessage({
       senderAddress,

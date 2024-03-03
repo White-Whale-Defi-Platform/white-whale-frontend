@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Text } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { truncate } from 'util/truncate'

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Button, HStack, useToast } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain } from '@quirks/react'
 import {
   ConnectedWalletIcon,
 } from 'components/Wallet/ConnectedWalletWithDisconnect/ConnectedWallet/ConnectedWalletIcon'

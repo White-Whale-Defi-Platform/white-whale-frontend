@@ -10,10 +10,8 @@ import {
   VStack,
   Stack,
 } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useConnect } from '@quirks/react'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
-import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
 
 import Editor from './Editor'
@@ -44,8 +42,7 @@ const FlashloanForm = () => {
   const containerRef = useRef(null)
   const [error, setError] = useState(null)
   const [json, setJson] = useState(defaultJson)
-  const { walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected } = useChain(walletChainName)
+  const { connected } = useConnect();
 
   const tx = useFlashloan({ json })
 
@@ -86,7 +83,7 @@ const FlashloanForm = () => {
   }, [containerRef, editorRef, options])
 
   const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) {
+    if (!connected) {
       return 'Connect Wallet'
     } else if (error) {
       return error
@@ -175,7 +172,7 @@ const FlashloanForm = () => {
                 tx?.txStep === TxStep.Posting ||
                 tx?.txStep === TxStep.Broadcasting
               }
-              disabled={Boolean(error) || !isWalletConnected}
+              disabled={Boolean(error) || !connected}
             >
               {buttonLabel}
             </Button>

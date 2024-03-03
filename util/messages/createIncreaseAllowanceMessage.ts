@@ -1,4 +1,4 @@
-import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import type { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { toUtf8 } from '@cosmjs/encoding'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 

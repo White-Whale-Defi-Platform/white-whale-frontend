@@ -1,37 +1,46 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { List } from '@chakra-ui/react';
+import { useConnect } from '@quirks/react';
 import { WalletType } from 'components/Wallet/Modal/WalletModal';
-import { COSMOS_KIT_WALLET_KEY } from 'constants/index';
 import { useChainInfos } from 'hooks/useChainInfo';
 
 import ChainItem from './ChainItem';
 
 const useFilteredChains = (connectedChainIds) => {
   const chains = useChainInfos();
-  const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
+  const { wallet } = useConnect();
 
-  const connectedChains = [];
-  const removedChains = [];
-
-  chains.forEach((chain) => {
+  const connectedChains = useMemo(() => chains.filter((chain) => {
     const isChainConnected =
-      walletType === WalletType.leapSnap
+      wallet?.options.wallet_name === WalletType.leapSnap
         ? chain.coinType === 118
         : connectedChainIds.includes(chain.chainId);
 
-    if (isChainConnected) {
-      connectedChains.push(chain);
-    } else {
-      removedChains.push(chain);
-    }
-  });
+    return isChainConnected;
+  }),
+  [chains, wallet, connectedChainIds]);
+
+  const removedChains = useMemo(() => chains.filter((chain) => {
+    const isChainConnected =
+      wallet?.options.wallet_name === WalletType.leapSnap
+        ? chain.coinType === 118
+        : connectedChainIds.includes(chain.chainId);
+
+    return !isChainConnected;
+  }),
+  [chains, wallet, connectedChainIds]);
 
   return [connectedChains, removedChains];
 };
 
-const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) => {
-  const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY);
+const ChainList = ({
+  onChange,
+  onClose,
+  currentChainState,
+  connectedChainIds,
+}) => {
+  const { wallet } = useConnect();
   const [connectedChains, removedChains] = useFilteredChains(connectedChainIds);
 
   return (
@@ -44,7 +53,7 @@ const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) 
           onClose={onClose}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={true}
-          walletType={walletType}
+          walletType={wallet?.options.wallet_name}
         />
       ))}
       {removedChains.map((chain) => (
@@ -55,7 +64,7 @@ const ChainList = ({ onChange, onClose, currentChainState, connectedChainIds }) 
           onClose={onClose}
           active={currentChainState?.chainId === chain?.chainId}
           walletConnected={false}
-          walletType={walletType}
+          walletType={wallet?.options.wallet_name}
         />
       ))}
     </List>

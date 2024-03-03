@@ -1,6 +1,6 @@
 import { toUtf8 } from '@cosmjs/encoding'
-import { Coin } from '@cosmjs/launchpad'
-import { EncodeObject } from '@cosmjs/proto-signing'
+import type { Coin } from '@cosmjs/launchpad'
+import type { EncodeObject } from '@cosmjs/proto-signing'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 
 type CreateExecuteMessageArgs = {

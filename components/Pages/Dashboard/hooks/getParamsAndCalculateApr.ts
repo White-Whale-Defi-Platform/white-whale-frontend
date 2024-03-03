@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { getClaimableEpochs } from 'components/Pages/Bonding/hooks/getClaimableEpochs'
 import { getGlobalIndex } from 'components/Pages/Bonding/hooks/getGlobalIndex'
 import { Config } from 'components/Pages/Bonding/hooks/useDashboardData'

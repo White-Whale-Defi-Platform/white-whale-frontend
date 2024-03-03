@@ -1,4 +1,4 @@
-import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
+import type { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { createExecuteMessage, createIncreaseAllowanceMessage } from 'util/messages/index'
 

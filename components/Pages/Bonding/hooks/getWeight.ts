@@ -1,4 +1,4 @@
-import { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
+import type { CosmWasmClient, JsonObject } from '@cosmjs/cosmwasm-stargate'
 
 import { Config } from './useDashboardData'
 
@@ -8,6 +8,19 @@ export interface WeightInfo {
   global_weight: string
   share: string
   timestamp: string
+}
+
+const fetchWeight = async (
+  client: CosmWasmClient,
+  address: string,
+  config: Config,
+): Promise<WeightInfo> => {
+  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
+    {
+      weight: { address },
+    })
+
+  return result as WeightInfo
 }
 
 export const getWeight = async (
@@ -27,17 +40,4 @@ export const getWeight = async (
   } catch (e) {
     return 0
   }
-}
-
-const fetchWeight = async (
-  client: CosmWasmClient,
-  address: string,
-  config: Config,
-): Promise<WeightInfo> => {
-  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
-    {
-      weight: { address },
-    })
-
-  return result as WeightInfo
 }

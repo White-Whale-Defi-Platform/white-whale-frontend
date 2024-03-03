@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
-import { useChain } from '@cosmos-kit/react-lite'
+import { useChain, useConnect } from '@quirks/react'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
 import useSwap from 'components/Pages/Trade/Swap/hooks/useSwap'
 import { tokenSwapAtom } from 'components/Pages/Trade/Swap/swapAtoms'
@@ -29,7 +29,8 @@ const Swap: FC<SwapProps> = (params) => {
   const [resetForm, setResetForm] = useState<boolean>(false)
 
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address } = useChain(walletChainName)
+  const { address } = useChain(walletChainName)
+  const { connected } = useConnect()
   const chains: Array<any> = useChainInfos()
   const { tx, simulated, state, path, minReceive, priceImpact } = useSwap({ reverse })
   const currentChain = chains.find((row) => row.chainId === chainId)
@@ -154,7 +155,7 @@ const Swap: FC<SwapProps> = (params) => {
         <SwapSettings />
       </HStack>
       <SwapForm
-        isWalletConnected={isWalletConnected}
+        isWalletConnected={connected}
         tokenA={tokenA}
         tokenB={tokenB}
         onReverseDirection={onReverseDirection}

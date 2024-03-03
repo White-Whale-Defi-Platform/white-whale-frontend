@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
-import { useChains } from '@cosmos-kit/react-lite'
+import { useConnect } from '@quirks/react'
 import Card from 'components/Card'
 import WalletIcon from 'components/Icons/WalletIcon'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
@@ -23,6 +23,7 @@ import {
 } from 'constants/index'
 import { useChainInfo, useChainInfos } from 'hooks/useChainInfo'
 import { useTokenList } from 'hooks/useTokenList'
+import { useWalletModal } from 'hooks/useWalletModal'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { chainState, NetworkType } from 'state/chainState'
@@ -38,23 +39,13 @@ const Wallet = () => {
   const [walletChains, setWalletChains] = useState<string[]>([])
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
   const [currentConnectedChainIds, setCurrentConnectedChainIds] = useState([])
-  const allChains = useChains(walletChains)
+  const { disconnect, connected } = useConnect();
+  const { openModal } = useWalletModal();
   const router = useRouter()
   const [tokenList] = useTokenList()
   const [chainInfo] = useChainInfo(currentChainState.chainId)
-  const { isWalletConnected, disconnect, openView } = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[ACTIVE_NETWORKS[currentChainState.network][chainName]]] || {}
   const queryClient = useQueryClient()
   const [chainIdParam, setChainIdParam] = useState<string>(null)
-
-  // Workaround for propagating isWalletConnected which apparently does not work as expected
-  useEffect(() => {
-    if (isWalletConnected) {
-      setCurrentChainState({
-        ...currentChainState,
-        walletChainName: currentChainState.walletChainName,
-      })
-    }
-  }, [isWalletConnected])
 
   useEffect(() => {
     if (chainName && currentChainState.network === NetworkType.mainnet) {
@@ -224,7 +215,7 @@ const Wallet = () => {
       },
     ]
     setTokenSwapState(newState)
-    if (isWalletConnected) {
+    /* if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
       const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
       if (walletType !== WalletType.leapSnap && walletType !== WalletType.terraExtension && walletType !== WalletType.ninjiExtension) {
@@ -232,7 +223,7 @@ const Wallet = () => {
       } else {
         resetWallet()
       }
-    }
+    } */
     // eslint-disable-next-line react-hooks/rules-of-hooks
   }
 
@@ -254,11 +245,12 @@ const Wallet = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChainState.chainId, isInitialized])
-  if (!isWalletConnected) {
+
+  if (!connected) {
     return (
       <><HStack align="right" boxSize={'flex'} paddingLeft={'1'} spacing={'2'} paddingTop={['2', '2', '0']}>
         <SelectChainModal
-          connected={isWalletConnected}
+          connected={connected}
           denom={denom?.coinDenom}
           onChange={onChainChange}
           currentChainState={currentChainState}
@@ -271,7 +263,7 @@ const Wallet = () => {
           color="white"
           borderColor="whiteAlpha.700"
           borderRadius="full"
-          onClick={openView}
+          onClick={openModal}
         >
           <WalletIcon/>
           <Text>Connect</Text>
@@ -285,7 +277,7 @@ const Wallet = () => {
     <>
       <Card paddingX={[2, 6]} gap={4}>
         <ChainSelectWithBalance
-          connected={isWalletConnected}
+          connected={connected}
           denom={denom}
           onChainChange={onChainChange}
           currentChainState={currentChainState}
