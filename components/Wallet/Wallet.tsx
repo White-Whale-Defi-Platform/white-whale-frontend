@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react'
-import { useConfig, useConnect } from '@quirks/react'
+import { useConnect } from '@quirks/react'
 import Card from 'components/Card'
 import WalletIcon from 'components/Icons/WalletIcon'
 import defaultTokens from 'components/Pages/Trade/Swap/defaultTokens.json'
