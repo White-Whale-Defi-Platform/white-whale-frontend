@@ -199,13 +199,10 @@ export const useIncentivePoolInfo = (
           break
       }
 
-      const poolData =
-        ((currentChainPrefix === 'terra' && chainId !== ChainId.terrac) || chainId === ChainId.osmosis || chainId === ChainId.injective)
-          ? await getPairAprAndDailyVolumeByCoinhall(pools)
-          : await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
+      const poolData = await getPairAprAndDailyVolumeByCoinhall(pools)
       if (poolData[0]?.ratio === 0) {
-        console.log('No pair infos found, trying Coinhall')
-        const poolDataFromCoinhall = await getPairAprAndDailyVolumeByCoinhall(pools)
+        console.log('No pair infos found, trying Enigma')
+        const poolDataFromCoinhall = await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
         setPoolsWithAprAnd24HrVolume(poolDataFromCoinhall)
       } else {
         setPoolsWithAprAnd24HrVolume(poolData)

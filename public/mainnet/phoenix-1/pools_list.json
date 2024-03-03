@@ -358,21 +358,21 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "wBTC-LUNA",
-      "lpOrder": ["wBTC", "LUNA"],
-      "assetOrder": ["wBTC", "LUNA"],
+      "pool_id": "wBTC.axl-LUNA",
+      "lpOrder": ["wBTC.axl", "LUNA"],
+      "assetOrder": ["wBTC.axl", "LUNA"],
       "displayName": "wBTC-LUNA",
-      "displayLogo1": "/logos/wBTC.png",
+      "displayLogo1": "/logos/wBTC.axl.svg",
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
           "id": "wrapped-bitcoin",
           "chain_id": "phoenix-1",
           "token_address": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD",
-          "symbol": "wBTC",
-          "name": "wBTC",
+          "symbol": "wBTC.axl",
+          "name": "wBTC.axl",
           "decimals": 8,
-          "logoURI": "/logos/wBTC.png",
+          "logoURI": "/logos/wBTC.axl.svg",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD"
