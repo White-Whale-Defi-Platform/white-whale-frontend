@@ -1,5 +1,5 @@
-import { API_URL, ENIGMA_URL } from 'constants/index'
-import fetch from 'isomorphic-unfetch'
+import { ENIGMA_URL } from 'constants/index'
+import { fetchWithTimeout, getFastestAPI } from 'services/useAPI';
 
 interface ChainInfoResponse {
   chainName: string;
@@ -8,9 +8,9 @@ interface ChainInfoResponse {
 }
 
 export const getDashboardData = async (): Promise<ChainInfoResponse[]> => {
-  const response = await fetch(`${API_URL}/api/dashboard`) || await fetch(`${ENIGMA_URL}/chains/dashboard`)
+  const response = await fetchWithTimeout(`${await getFastestAPI()}/api/dashboard`, 5000) || await fetch(`${ENIGMA_URL}/chains/dashboard`)
 
-  let data : ChainInfoResponse[] | any = await response.json()
+  let data: ChainInfoResponse[] | any = await response.json()
   data = data?.data ? data.data : data
   return data.map((res) => {
     if (res.chainName === 'terra-classic') {
