@@ -16,7 +16,7 @@ import { useWalletModal } from 'hooks/useWalletModal';
 export enum WalletType {
   keplrExtension = 'keplrextension',
   keplrMobile = 'keplrmobile',
-  terraExtension = 'station-extension',
+  terraExtension = 'stationextension',
   shellExtension = 'shellextension',
   leapExtension = 'leapextension',
   leapMobile = 'leapmobile',
