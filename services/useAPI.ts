@@ -154,7 +154,7 @@ export const getGasPricesAPI = async () => {
 
 export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/pools/${chain_name}`, 2500)
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/pools/${chain_name}`, 5000)
     const json = await response.json()
     return json?.data || null
   } catch (error) {
@@ -165,7 +165,7 @@ export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
 
 export const getBondingAPRsAPI = async () => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 5000)
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 10000)
     const json = await response.json()
     return json?.data || null
   } catch (error) {
