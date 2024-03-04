@@ -74,8 +74,8 @@ const Wallet = () => {
       setCurrentConnectedChainIds(['injective-1'])
     }
     if (walletType === WalletType.okxwallet) {
-      setWalletChains(['osmosis','juno','sei'])
-      setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1'])
+      setWalletChains(['osmosis', 'juno', 'sei', 'injective'])
+      setCurrentConnectedChainIds(['osmosis-1', 'juno-1', 'pacific-1', 'injective-1'])
     }
     if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
       // Window.leap.defaultOptions
@@ -139,8 +139,8 @@ const Wallet = () => {
       setCurrentConnectedChainIds(['injective-1'])
       setWalletChains(['injective'])
     } else if (walletType === WalletType.okxwallet) {
-      setWalletChains(['osmosis','juno','sei'])
-      setCurrentConnectedChainIds(['osmosis-1','juno-1','pacific-1'])
+      setWalletChains(['osmosis', 'juno', 'sei', 'injective'])
+      setCurrentConnectedChainIds(['osmosis-1', 'juno-1', 'pacific-1', 'injective-1'])
     } else {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }
@@ -198,17 +198,19 @@ const Wallet = () => {
     currentChainState.activeWallet,
   ])
 
-  const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any }; label:string }) => {
+  const onChainChange = async (chain: { chainId: string; bech32Config: { bech32PrefixAccAddr: any }; label: string }) => {
     if (
       !ACTIVE_BONDING_NETWORKS.includes(chain.chainId) &&
       router.pathname.includes('bonding')
     ) {
       await router.push('/swap')
     }
-    setCurrentChainState({ ...currentChainState,
+    setCurrentChainState({
+      ...currentChainState,
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
-      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId] })
+      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]
+    })
     queryClient.clear()
     const [defaultFrom, defaultTo] = defaultTokens[currentChainState.network][WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
     const newState: TokenItemState[] = [
@@ -273,7 +275,7 @@ const Wallet = () => {
           borderRadius="full"
           onClick={openView}
         >
-          <WalletIcon/>
+          <WalletIcon />
           <Text>Connect</Text>
           <Text display={['none', 'none', 'contents']}>Wallet</Text>
         </Button></HStack>
@@ -291,8 +293,10 @@ const Wallet = () => {
           currentChainState={currentChainState}
           currentConnectedChainIds={currentConnectedChainIds}
         />
-        <Box display={{ base: 'block',
-          md: 'block' }}>
+        <Box display={{
+          base: 'block',
+          md: 'block'
+        }}>
           <Divider
             orientation="vertical"
             borderColor="rgba(255, 255, 255, 0.1);"
