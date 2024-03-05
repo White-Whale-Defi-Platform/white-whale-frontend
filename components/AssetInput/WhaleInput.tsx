@@ -16,6 +16,7 @@ import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 
+import { amountInputValidation } from '../../util/amountInputValidation'
 import AssetSelectModal from './AssetSelectModal'
 
 interface AssetInputProps {
@@ -121,21 +122,9 @@ ref) => {
               placeholder="0.00"
               disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
               onChange={({ target }) => {
-                let amount = target.value.
-                // Limiting the number of characters to be 32
-                  slice(0, 32).
-                // Disallowing leading decimal place and multiple zeros before decimal place
-                  replace(/^(?:\.|0{2,}\.)/u, '0.').
-                // Eliminating multiple leading zeros before the numbers between 1-9
-                  replace(/^0+(?=[0-9])/u, '')
-                // Ensuring multiple decimal points can't be used
-                amount = amount.indexOf('.') !== amount.lastIndexOf('.') ?
-                  amount.slice(0, amount.indexOf('.') + 1) + amount.slice(amount.indexOf('.')).replaceAll('.', '')
-                  : amount;
-
                 onChange({
                   ...token,
-                  amount,
+                  amount: amountInputValidation(target.value),
                 });
               }}
             />
