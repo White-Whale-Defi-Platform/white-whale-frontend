@@ -5,9 +5,10 @@ import {
   Button,
   HStack,
   IconButton,
-  Input,
   InputGroup,
   InputRightElement,
+  NumberInput,
+  NumberInputField,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -21,8 +22,11 @@ import { slippageAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useRecoilState } from 'recoil'
 
+import { amountInputValidation } from '../../../../util/amountInputValidation'
+
 const SwapSettings = () => {
   const [slippage, setSlippage] = useRecoilState(slippageAtom)
+  const [slippageDisplay, setSlippageDisplay] = useState('')
   const [auto, setAuto] = useBoolean(slippage === 0)
   const [error, setError] = useState(false)
 
@@ -36,6 +40,9 @@ const SwapSettings = () => {
   }
 
   const onSlippageChange = ({ target }) => {
+    // Set the visual display and then after store the numerical value
+    setSlippageDisplay(amountInputValidation(target?.value || ''))
+
     if (auto === true) {
       setAuto.off()
     }
@@ -96,26 +103,32 @@ const SwapSettings = () => {
                 borderRadius="100px"
                 border="1px solid rgba(255, 255, 255, 0.1)"
                 borderColor={slippage === 0 ? 'white' : 'brand.500'}
-                paddingY={1}
               >
-                <Input
-                  type="number"
-                  variant="unstyled"
-                  borderRadius={kBorderRadius}
-                  placeholder="Custom"
-                  color="brand.500"
-                  // BorderColor="rgba(255, 255, 255, 0.1)"
+                <NumberInput
+                  variant="unstylized"
+                  padding={0}
                   size="sm"
-                  textAlign="right"
-                  value={slippage === 0 ? '' : slippage}
-                  onChange={onSlippageChange}
-                />
+                  isValidCharacter={(char) => Boolean(char.match(/[.0-9]/u))}
+                  value={slippageDisplay}
+                >
+                  <NumberInputField
+                    paddingRight="2rem"
+                    borderRadius={kBorderRadius}
+                    placeholder="Custom"
+                    color="brand.500"
+                    backgroundColor="transparent"
+                    // BorderColor="rgba(255, 255, 255, 0.1)"
+                    textAlign="right"
+                    value={slippage === 0 ? '' : slippage}
+                    onChange={onSlippageChange}
+                  />
+                </NumberInput>
                 <InputRightElement
                   color={slippage === 0 ? '#718096' : 'brand.500'}
-                  paddingBottom="10px"
+                  paddingBottom="7px"
                   pointerEvents="none"
                 >
-                  %
+                    %
                 </InputRightElement>
               </InputGroup>
             </HStack>
