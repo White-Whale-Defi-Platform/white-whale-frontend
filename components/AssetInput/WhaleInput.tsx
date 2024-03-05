@@ -5,7 +5,8 @@ import {
   HStack,
   IconButton,
   Image,
-  Input,
+  NumberInput,
+  NumberInputField,
   Stack,
   Text,
   forwardRef,
@@ -103,27 +104,42 @@ ref) => {
         paddingRight={3}
       >
         <HStack flex={1}>
-          <Input
+          <NumberInput
+            variant="unstylized"
+            flex={1}
             ref={ref}
-            type="number"
-            value={value?.amount || ''}
-            variant="unstyled"
-            color="white"
-            placeholder="0.00"
-            _placeholder={{ color: 'whiteAlpha.700' }}
-            disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
-            onChange={({ target }) => {
-              const amount = target.value.
-                slice(0, 32).
-                replace(/^0{2,}\./u, '0.').
-                replace(/^0+(?=[0-9])/u, '');
+            isValidCharacter={(char) => Boolean(char.match(/[.0-9]/u))}
+            value={value.amount || ''}
+          >
+            <NumberInputField
+              color="white"
+              padding={0}
+              backgroundColor="transparent"
+              _placeholder={{ color: 'whiteAlpha.700' }}
+              value={value?.amount || ''}
+              inputMode="numeric"
+              placeholder="0.00"
+              disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
+              onChange={({ target }) => {
+                let amount = target.value.
+                // Limiting the number of characters to be 32
+                  slice(0, 32).
+                // Disallowing leading decimal place and multiple zeros before decimal place
+                  replace(/^(?:\.|0{2,}\.)/u, '0.').
+                // Eliminating multiple leading zeros before the numbers between 1-9
+                  replace(/^0+(?=[0-9])/u, '')
+                // Ensuring multiple decimal points can't be used
+                amount = amount.indexOf('.') !== amount.lastIndexOf('.') ?
+                  amount.slice(0, amount.indexOf('.') + 1) + amount.slice(amount.indexOf('.')).replaceAll('.', '')
+                  : amount;
 
-              onChange({
-                ...token,
-                amount,
-              });
-            }}
-          />
+                onChange({
+                  ...token,
+                  amount,
+                });
+              }}
+            />
+          </NumberInput>
         </HStack>
       </HStack>
 
