@@ -22,11 +22,9 @@ import { slippageAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useRecoilState } from 'recoil'
 
-import { amountInputValidation } from '../../../../util/amountInputValidation'
 
 const SwapSettings = () => {
   const [slippage, setSlippage] = useRecoilState(slippageAtom)
-  const [slippageDisplay, setSlippageDisplay] = useState('')
   const [auto, setAuto] = useBoolean(slippage === 0)
   const [error, setError] = useState(false)
 
@@ -40,14 +38,11 @@ const SwapSettings = () => {
   }
 
   const onSlippageChange = ({ target }) => {
-    // Set the visual display and then after store the numerical value
-    setSlippageDisplay(amountInputValidation(target?.value || ''))
 
     if (auto === true) {
       setAuto.off()
     }
-
-    if (target?.value && Number(target?.value) < 100) {
+    if (target?.value && Number(target?.value) <= 100 && (Number(target?.value) >= 0.01 || Number(target?.value) == 0) && String(target.value).length <= 4) {
       if (error) {
         setError(false)
       }
@@ -109,7 +104,7 @@ const SwapSettings = () => {
                   padding={0}
                   size="sm"
                   isValidCharacter={(char) => Boolean(char.match(/[.0-9]/u))}
-                  value={slippageDisplay}
+                  value={slippage === 0 ? '' : slippage}
                 >
                   <NumberInputField
                     paddingRight="2rem"
@@ -128,14 +123,14 @@ const SwapSettings = () => {
                   paddingBottom="7px"
                   pointerEvents="none"
                 >
-                    %
+                  %
                 </InputRightElement>
               </InputGroup>
             </HStack>
             <HStack width="full" justifyContent="end">
               {error && (
                 <Text fontSize="12px" color="red">
-                  Slippage must be under 100
+                  Slippage must be between 0.01 - 100 %
                 </Text>
               )}
             </HStack>
