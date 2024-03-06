@@ -542,6 +542,43 @@
       "swap_address": "terra1d8ap3zyd6tfnruuuwvs0t927lr4zwptruhulfwnxjpqzudvyn8usfgl8ze",
       "staking_address": "terra1zudg2pz9qcr2dazx70tth0kudvel0zcx69zc9k64nh6uaj3w0lgqgt4s3g",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "MOAR-ROAR",
+      "lpOrder": ["MOAR", "ROAR"],
+      "assetOrder": ["MOAR", "ROAR"],
+      "displayName": "MOAR-ROAR",
+      "displayLogo1": "/logos/moar.png",
+      "displayLogo2": "/logos/lion.png",
+      "pool_assets": [
+        {
+          "chain_id": "phoenix-1",
+          "token_address": "factory/terra1dndhtdr2v7ca8rrn67chlqw3cl3xhm3m2uxls62vghcg3fsh5tpss5xmcu/MOAR",
+          "symbol": "MOAR",
+          "name": "MOAR",
+          "decimals": 6,
+          "logoURI": "/logos/moar.png",
+          "tags": ["native"],
+          "native": true,
+          "denom": "factory/terra1dndhtdr2v7ca8rrn67chlqw3cl3xhm3m2uxls62vghcg3fsh5tpss5xmcu/MOAR"
+        },
+        {
+          "id": "lion-dao",
+          "chain_id": "phoenix-1",
+          "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
+          "symbol": "ROAR",
+          "name": "ROAR",
+          "decimals": 6,
+          "logoURI": "/logos/lion.png",
+          "tags": [""],
+          "native": false,
+          "denom": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv"
+        }
+      ],
+      "lp_token": "factory/terra1j0ackj0wru4ndj74e3mhhq6rffe63y8xd0e56spqcjygv2r0cfsqxr36k6/uLP",
+      "swap_address": "terra1j0ackj0wru4ndj74e3mhhq6rffe63y8xd0e56spqcjygv2r0cfsqxr36k6",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

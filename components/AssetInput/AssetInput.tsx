@@ -29,6 +29,7 @@ interface AssetInputProps {
   isBonding?: boolean
   unbondingBalances?: TokenBalance[]
   mobile?: boolean
+  fee: any
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, _) => {
@@ -42,10 +43,13 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     hideHalfMax,
     hideDollarValue,
     mobile,
+    fee = null
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const baseToken = useBaseTokenInfo()
   const onMaxClick = () => {
+    // TODO: subtract fee from max amount
+    console.log(fee)
     const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
     const feeSubtraction = balance < 1 ? (balance / 100) * 0.01 : 0.1
     onChange({
@@ -82,11 +86,11 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const dollarValue = useMemo(() => num(prices?.[token?.tokenSymbol]).times(token?.amount).
     dp(token?.decimals || 6).
     toFixed(2),
-  [prices, token])
+    [prices, token])
 
   const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).
     toString(),
-  [balance, token?.decimals])
+    [balance, token?.decimals])
 
   return (
     <VStack width="full">

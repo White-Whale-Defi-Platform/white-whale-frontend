@@ -9,6 +9,7 @@ import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSw
 import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
 import { TxStep } from 'types/index'
+import { createGasFee } from 'services/treasuryService';
 
 type Params = {
   enabled: boolean
@@ -61,21 +62,12 @@ export const useTransaction = ({
         return null
       }
       try {
-        const isInjective = await signingClient.getChainId() === ChainId.injective
-        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
-          senderAddress,
-          debouncedMsgs,
-          '',
-        ) : await signingClient?.simulate(
-          senderAddress,
-          debouncedMsgs,
-          '',
-        )
+        const sim = await createGasFee(signingClient,senderAddress,debouncedMsgs) 
         if (buttonLabel) {
           setButtonLabel(null)
         }
         setTxStep(TxStep.Ready)
-        return response
+        return sim
       } catch (error) {
         if (
           (/insufficient funds/u).test(error.toString()) ||

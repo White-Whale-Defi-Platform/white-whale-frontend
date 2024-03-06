@@ -675,8 +675,8 @@
           "denom": "uhuahua"
         }
       ],
-      "lp_token": "",
-      "swap_address": "",
+      "lp_token": "factory/chihuahua1e85rxa4r8utk6ee0j93serytcchgeayqteeystkshqsvryk55egs6l9jhu/uLP",
+      "swap_address": "chihuahua1e85rxa4r8utk6ee0j93serytcchgeayqteeystkshqsvryk55egs6l9jhu",
       "staking_address": "",
       "rewards_tokens": []
     }
