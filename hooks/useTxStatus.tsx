@@ -87,7 +87,7 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
 
     toast({
       title: `${transactionType} Success.`,
-      description: description(data.transactionHash),
+      description: await description(data.transactionHash),
       status: 'success',
       duration: 9000,
       position: 'top-right',
