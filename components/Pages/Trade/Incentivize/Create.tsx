@@ -57,6 +57,9 @@ const Create = ({ poolId }: Props) => {
   const { simulate, submit } = useOpenFlow({ poolId,
     ...formData })
 
+  const startDate = formData.startDate === '' ? dayjs() : dayjs(formData.startDate)
+  const endDateMinimum = startDate.add(1, 'day');
+
   return (
     <Stack as="form" gap="5" onSubmit={handleSubmit(() => submit())}>
       <Input
@@ -122,7 +125,7 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 paddingEnd={'2px'}
-                min={dayjs().add(1, 'day').
+                min={endDateMinimum.
                   format('YYYY-MM-DD')}
                 focusBorderColor="brand.500"
               />
