@@ -4,9 +4,11 @@ import { Controller, useForm } from 'react-hook-form'
 import {
   Box,
   Input as ChakraInput,
+  Divider,
   HStack,
   InputGroup,
   Stack,
+  Text,
   useMediaQuery,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
@@ -129,6 +131,19 @@ const Create = ({ poolId }: Props) => {
         />
       </HStack>
 
+      <Divider opacity="0.2" />
+
+      <HStack justifyContent="space-between" minWidth={['280', '340']}>
+        <Text color="whiteAlpha.600">Fee</Text>
+        <HStack spacing="1" direction="row" alignItems={'baseline'}>
+          <Text >
+        1000</Text>
+          <Text fontSize={12} >
+          WHALE
+          </Text>
+        </HStack>
+      </HStack>
+
       <SubmitButton
         label={simulate.buttonLabel || 'Submit'}
         isConnected={true}
@@ -140,6 +155,7 @@ const Create = ({ poolId }: Props) => {
         }
         isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
       />
+
     </Stack>
   )
 }
