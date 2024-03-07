@@ -5,9 +5,10 @@ import {
   Button,
   HStack,
   IconButton,
-  Input,
   InputGroup,
   InputRightElement,
+  NumberInput,
+  NumberInputField,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -20,6 +21,7 @@ import {
 import { slippageAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useRecoilState } from 'recoil'
+
 
 const SwapSettings = () => {
   const [slippage, setSlippage] = useRecoilState(slippageAtom)
@@ -36,11 +38,11 @@ const SwapSettings = () => {
   }
 
   const onSlippageChange = ({ target }) => {
+
     if (auto === true) {
       setAuto.off()
     }
-
-    if (target?.value && Number(target?.value) < 100) {
+    if (target?.value && Number(target?.value) <= 100 && (Number(target?.value) >= 0.01 || Number(target?.value) == 0) && String(target.value).length <= 4) {
       if (error) {
         setError(false)
       }
@@ -96,23 +98,29 @@ const SwapSettings = () => {
                 borderRadius="100px"
                 border="1px solid rgba(255, 255, 255, 0.1)"
                 borderColor={slippage === 0 ? 'white' : 'brand.500'}
-                paddingY={1}
               >
-                <Input
-                  type="number"
-                  variant="unstyled"
-                  borderRadius={kBorderRadius}
-                  placeholder="Custom"
-                  color="brand.500"
-                  // BorderColor="rgba(255, 255, 255, 0.1)"
+                <NumberInput
+                  variant="unstylized"
+                  padding={0}
                   size="sm"
-                  textAlign="right"
+                  isValidCharacter={(char) => Boolean(char.match(/[.0-9]/u))}
                   value={slippage === 0 ? '' : slippage}
-                  onChange={onSlippageChange}
-                />
+                >
+                  <NumberInputField
+                    paddingRight="2rem"
+                    borderRadius={kBorderRadius}
+                    placeholder="Custom"
+                    color="brand.500"
+                    backgroundColor="transparent"
+                    // BorderColor="rgba(255, 255, 255, 0.1)"
+                    textAlign="right"
+                    value={slippage === 0 ? '' : slippage}
+                    onChange={onSlippageChange}
+                  />
+                </NumberInput>
                 <InputRightElement
                   color={slippage === 0 ? '#718096' : 'brand.500'}
-                  paddingBottom="10px"
+                  paddingBottom="7px"
                   pointerEvents="none"
                 >
                   %
@@ -122,7 +130,7 @@ const SwapSettings = () => {
             <HStack width="full" justifyContent="end">
               {error && (
                 <Text fontSize="12px" color="red">
-                  Slippage must be under 100
+                  Slippage must be between 0.01 - 100 %
                 </Text>
               )}
             </HStack>
