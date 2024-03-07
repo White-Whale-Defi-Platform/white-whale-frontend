@@ -155,7 +155,6 @@ const Create = ({ poolId }: Props) => {
         }
         isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
       />
-
     </Stack>
   )
 }
