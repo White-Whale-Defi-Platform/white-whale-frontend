@@ -334,6 +334,7 @@ const SwapForm: FC<Props> = ({
                 onInputChange(value, 1)
                 field.onChange(value)
               }}
+              fee={tx?.fee}
             />
           )}
         />

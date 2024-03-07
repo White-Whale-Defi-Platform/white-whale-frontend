@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { VStack, forwardRef } from '@chakra-ui/react'
 import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { usePrices } from 'hooks/usePrices'
-import { useBaseTokenInfo, useTokenInfo } from 'hooks/useTokenInfo'
+import { useTokenInfo } from 'hooks/useTokenInfo'
 import { num } from 'libs/num'
 
 import BalanceWithMaxNHalf from './BalanceWithMax'
@@ -29,7 +29,7 @@ interface AssetInputProps {
   isBonding?: boolean
   unbondingBalances?: TokenBalance[]
   mobile?: boolean
-  fee: any
+  fee?: any
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, _) => {
@@ -46,24 +46,19 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     fee = null
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
-  const baseToken = useBaseTokenInfo()
+  const [maxClicked, setMaxClicked] = useState(false)
   const onMaxClick = () => {
-    // TODO: subtract fee from max amount
-    console.log(fee)
-    const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
-    const feeSubtraction = balance < 1 ? (balance / 100) * 0.01 : 0.1
     onChange({
       ...token,
       amount:
-        isTokenAndBaseTokenSame && !ignoreSlack
-          ? num(balance === 0 ? 0 : balance - feeSubtraction).toFixed(token?.decimals || 6)
-          : num(balance).toFixed(token?.decimals || 6),
+        num(balance).toFixed(tokenInfo?.decimals || 6),
     })
+    setMaxClicked(true)
   }
   const onHalfClick = () => {
     onChange({
       ...token,
-      amount: num(balance === 0 ? 0 : balance / 2).toFixed(token?.decimals || 6),
+      amount: num(balance === 0 ? 0 : balance / 2).toFixed(tokenInfo?.decimals || 6),
     })
   }
   const maxDisabled = useMemo(() => disabled || (!isSingleInput && !tokenInfo?.symbol),
@@ -92,6 +87,27 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     toString(),
     [balance, token?.decimals])
 
+  useEffect(() => {
+    const isTokenAndBaseTokenSame = tokenInfo?.denom === fee?.amount[0].denom
+    if (isTokenAndBaseTokenSame && maxClicked && fee) {
+      const cost = (Number(fee?.amount[0].amount) * 3) / Math.pow(10, (tokenInfo?.decimals || 6))
+      onChange({
+        ...token,
+        amount:
+          isTokenAndBaseTokenSame && !ignoreSlack
+            ? num(balance === 0 ? 0 : balance - cost).toFixed(tokenInfo?.decimals || 6)
+            : num(balance).toFixed(tokenInfo?.decimals || 6),
+      })
+      setMaxClicked(false)
+    } else if (maxClicked && fee) {
+      onChange({
+        ...token,
+        amount:
+          num(balance).toFixed(tokenInfo?.decimals || 6),
+      })
+      setMaxClicked(false)
+    }
+  }, [maxClicked, fee])
   return (
     <VStack width="full">
       <WhaleInput {...props} />
