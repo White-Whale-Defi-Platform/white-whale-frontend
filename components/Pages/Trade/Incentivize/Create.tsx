@@ -58,7 +58,8 @@ const Create = ({ poolId }: Props) => {
     ...formData })
 
   const startDate = formData.startDate === '' ? dayjs() : dayjs(formData.startDate)
-  const endDateMinimum = startDate.add(1, 'day');
+  const endDateMinimum = startDate.add(1, 'day')
+  const startDateInvalid = startDate.isBefore(dayjs(), 'day')
 
   return (
     <Stack as="form" gap="5" onSubmit={handleSubmit(() => submit())}>
@@ -148,7 +149,7 @@ const Create = ({ poolId }: Props) => {
       </HStack>
 
       <SubmitButton
-        label={simulate.buttonLabel || 'Submit'}
+        label={(startDateInvalid && 'Start date invalid') || simulate.buttonLabel || 'Submit'}
         isConnected={true}
         txStep={TxStep?.Ready}
         isLoading={
@@ -156,7 +157,7 @@ const Create = ({ poolId }: Props) => {
           txStep === TxStep.Posting ||
           txStep === TxStep.Broadcasting
         }
-        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
+        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected || startDateInvalid}
       />
     </Stack>
   )
