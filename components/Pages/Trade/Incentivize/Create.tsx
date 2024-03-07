@@ -17,6 +17,7 @@ import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlo
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
+import dayjs from 'dayjs'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { txRecoilState } from 'state/txRecoilState'
@@ -93,8 +94,7 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 paddingEnd={'2px'}
-                min={new Date().toISOString().
-                  slice(0, 16)}
+                min={dayjs().format('YYYY-MM-DD')}
                 focusBorderColor="brand.500"
               />
             </InputGroup>
@@ -122,8 +122,8 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 paddingEnd={'2px'}
-                min={new Date().toISOString().
-                  slice(0, 16)}
+                min={dayjs().add(1, 'day').
+                  format('YYYY-MM-DD')}
                 focusBorderColor="brand.500"
               />
             </InputGroup>
