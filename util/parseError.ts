@@ -16,6 +16,10 @@ export const parseError = (error: Error) => {
       regex: /flow start timestamp is too far into the future/u,
       message: 'Start date is too far in future',
     },
+    { regex: /flow start timestamp is after the end timestamp/u,
+      message: 'Start date is after the end date' },
+    { regex: /the flow you are intending to create doesn't meet the minimum/u,
+      message: '1000 WHALE minimum incentives' },
     {
       regex: /account sequence mismatch/u,
       message: 'You have pending transaction',

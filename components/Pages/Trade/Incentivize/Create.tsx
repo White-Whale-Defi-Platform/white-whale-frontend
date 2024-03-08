@@ -4,9 +4,12 @@ import { Controller, useForm } from 'react-hook-form'
 import {
   Box,
   Input as ChakraInput,
+  Divider,
   HStack,
   InputGroup,
+  Spacer,
   Stack,
+  Text,
   useMediaQuery,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
@@ -15,6 +18,7 @@ import { useOpenFlow } from 'components/Pages/Trade/Incentivize/hooks/useOpenFlo
 import SubmitButton from 'components/SubmitButton'
 import { TooltipWithChildren } from 'components/TooltipWithChildren'
 import { WHALE_TOKEN_SYMBOL } from 'constants/index'
+import dayjs from 'dayjs'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { txRecoilState } from 'state/txRecoilState'
@@ -54,6 +58,10 @@ const Create = ({ poolId }: Props) => {
   const { simulate, submit } = useOpenFlow({ poolId,
     ...formData })
 
+  const startDate = formData.startDate === '' ? dayjs() : dayjs(formData.startDate)
+  const endDateMinimum = startDate.add(1, 'day')
+  const startDateInvalid = startDate.isBefore(dayjs(), 'day')
+
   return (
     <Stack as="form" gap="5" onSubmit={handleSubmit(() => submit())}>
       <Input
@@ -91,8 +99,7 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 paddingEnd={'2px'}
-                min={new Date().toISOString().
-                  slice(0, 16)}
+                min={dayjs().format('YYYY-MM-DD')}
                 focusBorderColor="brand.500"
               />
             </InputGroup>
@@ -120,8 +127,8 @@ const Create = ({ poolId }: Props) => {
                 h="50px"
                 type="date"
                 paddingEnd={'2px'}
-                min={new Date().toISOString().
-                  slice(0, 16)}
+                min={endDateMinimum.
+                  format('YYYY-MM-DD')}
                 focusBorderColor="brand.500"
               />
             </InputGroup>
@@ -129,8 +136,16 @@ const Create = ({ poolId }: Props) => {
         />
       </HStack>
 
+      <Divider opacity="0.2" paddingY={'2'}/>
+      <HStack justifyContent="space-between">
+        <Text color="whiteAlpha.600">Fee</Text>
+        <Spacer />
+        <Text>1000</Text>
+        <Text fontSize={12}>WHALE</Text>
+      </HStack>
+
       <SubmitButton
-        label={simulate.buttonLabel || 'Submit'}
+        label={(startDateInvalid && 'Start date invalid') || simulate.buttonLabel || 'Submit'}
         isConnected={true}
         txStep={TxStep?.Ready}
         isLoading={
@@ -138,7 +153,7 @@ const Create = ({ poolId }: Props) => {
           txStep === TxStep.Posting ||
           txStep === TxStep.Broadcasting
         }
-        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected}
+        isDisabled={!isValid || txStep !== TxStep.Ready || !isWalletConnected || startDateInvalid}
       />
     </Stack>
   )
