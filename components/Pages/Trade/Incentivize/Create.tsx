@@ -7,6 +7,7 @@ import {
   Divider,
   HStack,
   InputGroup,
+  Spacer,
   Stack,
   Text,
   useMediaQuery,
@@ -135,17 +136,12 @@ const Create = ({ poolId }: Props) => {
         />
       </HStack>
 
-      <Divider opacity="0.2" />
-
-      <HStack justifyContent="space-between" minWidth={['280', '340']}>
+      <Divider opacity="0.2" paddingY={'2'}/>
+      <HStack justifyContent="space-between">
         <Text color="whiteAlpha.600">Fee</Text>
-        <HStack spacing="1" direction="row" alignItems={'baseline'}>
-          <Text >
-        1000</Text>
-          <Text fontSize={12} >
-          WHALE
-          </Text>
-        </HStack>
+        <Spacer />
+        <Text>1000</Text>
+        <Text fontSize={12}>WHALE</Text>
       </HStack>
 
       <SubmitButton
