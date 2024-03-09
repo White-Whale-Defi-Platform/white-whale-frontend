@@ -1,4 +1,26 @@
 {
   "factory": "osmo1c2zsgzl2cjua4e7f0yxkfy48n7ezhspv7htahdrhsxuqhgy97sas4lscwq",
-  "vaults": []
+  "vaults": [
+    {
+      "pool_id": "OSMO",
+      "vault_assets": {
+        "id": "osmosis",
+        "chain_id": "osmosis-1",
+        "token_address": "uosmo",
+        "symbol": "OSMO",
+        "name": "OSMO",
+        "decimals": 6,
+        "logoURI": "/logos/osmo.svg",
+        "tags": [
+          "native"
+        ],
+        "native": true,
+        "denom": "uosmo"
+      },
+      "lp_token": "factory/osmo16sglseg74nl8enfnxya3puggezdpttpp2cs5gjf5el0q82thpnusx4rran/uLP",
+      "vault_address": "osmo16sglseg74nl8enfnxya3puggezdpttpp2cs5gjf5el0q82thpnusx4rran",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
+  ]
 }
