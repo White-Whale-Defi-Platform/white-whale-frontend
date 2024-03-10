@@ -49,7 +49,7 @@ export const useTransaction = ({
         return null
       }
 
-      return signingClient.getTx(txHash)
+      return signingClient?.getTx(txHash)
     },
     {
       enabled: Boolean(txHash),

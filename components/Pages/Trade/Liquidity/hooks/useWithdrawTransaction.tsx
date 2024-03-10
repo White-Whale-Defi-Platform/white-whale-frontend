@@ -198,7 +198,7 @@ export const useWithdrawTransaction: any = ({
         return null
       }
 
-      return await signingClient.getTx(txHash)
+      return await signingClient?.getTx(txHash)
     },
     {
       enabled: Boolean(txHash) && Boolean(signingClient),

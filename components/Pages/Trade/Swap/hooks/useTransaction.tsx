@@ -62,7 +62,8 @@ export const useTransaction = ({
         return null
       }
       try {
-        const sim = await createGasFee(signingClient,senderAddress,debouncedMsgs) 
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const sim = await createGasFee(isInjective ? injectiveSigningClient : signingClient,senderAddress,debouncedMsgs) 
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -195,7 +196,7 @@ export const useTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => signingClient.getTx(txHash),
+    () => signingClient?.getTx(txHash),
     {
       enabled: Boolean(txHash),
       retry: true,

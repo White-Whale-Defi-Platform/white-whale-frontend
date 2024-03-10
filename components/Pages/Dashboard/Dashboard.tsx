@@ -24,9 +24,12 @@ export const Dashboard: FC = () => {
   const prices = usePrices()
   useEffect(() => {
     const fetchDashboardData = async () => {
-      const circulatingWhaleSupply: number = ((await fetchSupply()).circulating / (10 ** 6))
-      const mockData = await getDashboardData()
-      const aprs = await getBondingAPRsAPI()
+      let [circulatingWhaleSupply, mockData, aprs]: any = await Promise.all([
+        fetchSupply(),
+        getDashboardData(),
+        getBondingAPRsAPI(),
+      ]);
+      circulatingWhaleSupply = circulatingWhaleSupply?.circulating / (10 ** 6) || 0
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
       const mappedDashboardData = mockData.map((data) => {
         const apr = aprs[data.chainName].bondingAPR
