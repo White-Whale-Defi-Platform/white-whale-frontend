@@ -23,6 +23,7 @@ export const Incentives = ({ flows }) => {
     more = [],
     hasIncentives = false,
   } = useMemo(() => {
+    flows.sort((a, b) => b.apr - a.apr)
     const logos = flows.slice(0, 3).map((flow) => flow?.logoURI)
     const more = flows.slice(4).length
     const hasIncentives = flows.length > 0

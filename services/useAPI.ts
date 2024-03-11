@@ -1,5 +1,5 @@
-import { endpointOptions } from 'constants/endpointOptions';
 import { API_URLS, CHAIN_NAMES } from 'constants/';
+import { endpointOptions } from 'constants/endpointOptions';
 
 export const getFastestAPI = async (recheck = false) => {
   let storageAPI = localStorage.getItem('ww-api')
@@ -9,7 +9,7 @@ export const getFastestAPI = async (recheck = false) => {
     for (const api of API_URLS) {
       try {
         await fetchWithTimeout(api, 1000)
-        const queryPerformance = performance.getEntriesByName(api + '/')
+        const queryPerformance = performance.getEntriesByName(`${api}/`)
         if (duration > queryPerformance[queryPerformance.length - 1]?.duration) {
           duration = queryPerformance[queryPerformance.length - 1]?.duration
           storageAPI = api
@@ -22,7 +22,6 @@ export const getFastestAPI = async (recheck = false) => {
   }
 
   return storageAPI
-
 }
 
 export const getPoolFromAPI = async (chainNameId: string, address: string) => {
@@ -134,7 +133,7 @@ export const createEndpointOptions = (chains: any) => {
       const rpcs = registry.apis.rpc.map((elem: any) => elem.address)
       endpoints[chain] = {
         rpc: rpcs,
-        rest: rests
+        rest: rests,
       }
     }
   })
@@ -175,12 +174,11 @@ export const getBondingAPRsAPI = async () => {
 }
 
 export async function fetchWithTimeout(url: string, timoutMS = 10000) {
-
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timoutMS);
 
   const response = await fetch(url, {
-    signal: controller.signal
+    signal: controller.signal,
   });
   clearTimeout(id);
 

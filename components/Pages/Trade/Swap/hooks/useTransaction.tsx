@@ -8,8 +8,8 @@ import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { TxStep } from 'types/index'
 import { createGasFee } from 'services/treasuryService';
+import { TxStep } from 'types/index'
 
 type Params = {
   enabled: boolean
@@ -62,7 +62,10 @@ export const useTransaction = ({
         return null
       }
       try {
-        const sim = await createGasFee(signingClient,senderAddress,debouncedMsgs) 
+        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const sim = await createGasFee(
+          isInjective ? injectiveSigningClient : signingClient, senderAddress, debouncedMsgs,
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -195,7 +198,7 @@ export const useTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => signingClient.getTx(txHash),
+    () => signingClient?.getTx(txHash),
     {
       enabled: Boolean(txHash),
       retry: true,

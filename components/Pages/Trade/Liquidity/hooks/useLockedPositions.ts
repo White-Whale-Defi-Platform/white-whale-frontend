@@ -47,7 +47,7 @@ export const fetchPositions = async (
   totalAssets: any,
   totalLpSupply: any,
 ) => {
-  // address can be undefined
+  // Address can be undefined
   if (!address) {
     return { data: [] }
   }

@@ -43,7 +43,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     hideHalfMax,
     hideDollarValue,
     mobile,
-    fee = null
+    fee = null,
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const [maxClicked, setMaxClicked] = useState(false)
@@ -81,16 +81,16 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const dollarValue = useMemo(() => num(prices?.[token?.tokenSymbol]).times(token?.amount).
     dp(token?.decimals || 6).
     toFixed(2),
-    [prices, token])
+  [prices, token])
 
   const balanceWithDecimals = useMemo(() => num(balance).dp(token?.decimals || 6).
     toString(),
-    [balance, token?.decimals])
+  [balance, token?.decimals])
 
   useEffect(() => {
     const isTokenAndBaseTokenSame = tokenInfo?.denom === fee?.amount[0].denom
     if (isTokenAndBaseTokenSame && maxClicked && fee) {
-      const cost = (Number(fee?.amount[0].amount) * 3) / Math.pow(10, (tokenInfo?.decimals || 6))
+      const cost = (Number(fee?.amount[0].amount) * 3) / 10 ** (tokenInfo?.decimals || 6)
       onChange({
         ...token,
         amount:

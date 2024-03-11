@@ -28,6 +28,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryPoolsLiquidity,
 } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
+import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/networks'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
@@ -40,7 +41,6 @@ import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 import { TokenItemState, TxStep } from 'types/common'
 import { getDecimals } from 'util/conversion/index'
-import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/networks'
 
 const ManageLiquidity = ({ poolIdFromUrl }) => {
   const [poolIdState, setPoolIdState] = useState(null)
@@ -57,7 +57,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   const [bondingDays, setBondingDays] = useState(0)
   const { simulated, tx } = useProvideLP({
     reverse,
-    bondingDays
+    bondingDays,
   })
   const { cosmWasmClient } = useClients(walletChainName)
 
@@ -70,7 +70,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   const prices = usePrices()
   const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
-    [chains, chainId])
+  [chains, chainId])
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
     cosmWasmClient,
     pools,
@@ -207,7 +207,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
       w="auto"
       minWidth={{
         base: '100%',
-        md: '800'
+        md: '800',
       }}
       alignItems="center"
       padding={5}

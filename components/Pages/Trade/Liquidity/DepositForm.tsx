@@ -50,7 +50,7 @@ const DepositForm = ({
   mobile,
   poolId,
   openView,
-  incentivesEnabled = false
+  incentivesEnabled = false,
 }: Props) => {
   const { walletChainName } = useRecoilValue(chainState)
   const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || [defaultTokens.mainnet[walletChainName][0].tokenSymbol, defaultTokens.mainnet[walletChainName][1].tokenSymbol]

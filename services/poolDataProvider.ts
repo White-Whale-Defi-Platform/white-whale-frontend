@@ -60,14 +60,12 @@ export const getPairInfos = async (chain: string): Promise<PoolResponse[]> => {
 }
 export const getCoinhallPairInfos = async (swapAddresses: any[]): Promise<any> => {
   const chunkSize = 15
-  const chunks = Array.from({ length: Math.ceil(swapAddresses.length / chunkSize) }, (_, index) =>
-    swapAddresses.slice(index * chunkSize, (index + 1) * chunkSize)
-  )
+  const chunks = Array.from({ length: Math.ceil(swapAddresses.length / chunkSize) }, (_, index) => swapAddresses.slice(index * chunkSize, (index + 1) * chunkSize))
   const fetchPoolData = async (addresses: string[]) => {
     const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${addresses.join(',')}`
     const chainDataResponse = await fetch(url)
     const data = await chainDataResponse.json()
-    
+
     if (chainDataResponse.status === 200 && data) {
       return data.pools
     } else {
@@ -80,7 +78,7 @@ export const getCoinhallPairInfos = async (swapAddresses: any[]): Promise<any> =
     const pools = poolChunks.flat()
     return pools
   } catch (error) {
-    console.error("Error fetching pool data:", error)
+    console.error('Error fetching pool data:', error)
     return []
   }
 }

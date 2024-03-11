@@ -1,16 +1,16 @@
 import React, { FC, useEffect } from 'react'
 
-import { VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import Loader from 'components/Loader'
 import { Header } from 'components/Pages/Dashboard/Header'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
-import { useFetchCirculatingSupply } from 'hooks/useFetchCirculatingSupply'
 import { usePrices } from 'hooks/usePrices'
+import { fetchSupply } from 'libs/fetchSupply'
 import { useRecoilState } from 'recoil'
+import { getBondingAPRsAPI } from 'services/useAPI'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { getDashboardData } from 'util/getDashboardData'
-import { getBondingAPRsAPI } from 'services/useAPI'
 
 export type DashboardData = {
   logoUrl: string
@@ -22,12 +22,15 @@ export type DashboardData = {
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
   const prices = usePrices()
-  const circulatingWhaleSupply: number = useFetchCirculatingSupply()
-
   useEffect(() => {
     const fetchDashboardData = async () => {
-      const mockData = await getDashboardData()
-      const aprs = await getBondingAPRsAPI()
+      let [circulatingWhaleSupply, mockData, aprs]: any = await Promise.all([
+        fetchSupply(),
+        getDashboardData(),
+        getBondingAPRsAPI(),
+      ]);
+      circulatingWhaleSupply = circulatingWhaleSupply?.circulating / (10 ** 6) || 0
+      const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
       const mappedDashboardData = mockData.map((data) => {
         const apr = aprs[data.chainName].bondingAPR
         return ({
@@ -38,30 +41,29 @@ export const Dashboard: FC = () => {
           apr: apr ? apr : 0,
         } as DashboardData)
       })
-
-      setDashboardDataState({ ...dashboardState,
+      setDashboardDataState({
+        ...dashboardState,
         data: mappedDashboardData,
-        isInitialized: true,
+        whalePrice: prices?.WHALE ? prices.WHALE : 0,
+        marketCap: marketCap ? marketCap : 0,
+        isInitialized: prices?.WHALE !== 0 && marketCap !== 0,
       })
     }
     if (!dashboardState.isInitialized) {
       fetchDashboardData()
     }
-  }, [dashboardState.isInitialized])
-
-  useEffect(() => {
-    const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
-    if (marketCap !== dashboardState.marketCap) {
-      setDashboardDataState({ ...dashboardState,
-        whalePrice: prices?.WHALE ? prices.WHALE : dashboardState.whalePrice,
-        marketCap: marketCap ? marketCap : dashboardState.marketCap,
-      })
-    }
-  }, [prices?.WHALE, circulatingWhaleSupply])
+  }, [prices, dashboardState.isInitialized])
 
   return <VStack width={'full'}>
-    <Header dashboardData={dashboardState.data}/>
-    {!dashboardState.isInitialized && <Loader /> }
+    {dashboardState.isInitialized && <Header dashboardData={dashboardState.data} />}
+    {!dashboardState.isInitialized && (<HStack
+      paddingTop={'20%'}
+      width="full"
+      alignContent="center"
+      justifyContent="center"
+      alignItems="center">
+      <Loader />
+    </HStack>)}
     {dashboardState.isInitialized && <StatsTable dashboardData={dashboardState.data} />}
   </VStack>
 }

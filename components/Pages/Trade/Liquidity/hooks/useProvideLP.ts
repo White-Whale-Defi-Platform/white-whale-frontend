@@ -40,7 +40,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
   // Const [pool] = usePoolFromListQueryById({ poolId })
   const isNewPosition = useIsNewPosition({
     bondingDays,
-    poolId
+    poolId,
   })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
@@ -92,8 +92,8 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     ) {
       return null
     }
-    let decimals = (provideInitialLiquidity ? !reverse : reverse) ? tokenInfoB?.decimals : tokenInfoA?.decimals
-    let normalizedValue = (provideInitialLiquidity ? !reverse : reverse) ? lpTokenB.amount : lpTokenA.amount || 0
+    const decimals = (provideInitialLiquidity ? !reverse : reverse) ? tokenInfoB?.decimals : tokenInfoA?.decimals
+    const normalizedValue = (provideInitialLiquidity ? !reverse : reverse) ? lpTokenB.amount : lpTokenA.amount || 0
     if (provideInitialLiquidity) {
       return num(normalizedValue).
         toFixed(decimals)
@@ -169,7 +169,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
             ? tokenBAmount
             : toChainAmount(simulated, tokenInfoB?.decimals),
       },
-        address),
+      address),
     }
   }, [
     simulated,
@@ -182,7 +182,6 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     bondingDays,
     isNewPosition,
   ])
-
 
   const tx = useTransaction({
     enabled:
@@ -219,10 +218,10 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     simulated,
     tx: {
       ...tx,
-      ...noMatchingPool
-    }
+      ...noMatchingPool,
+    },
   }),
-    [simulated, tx])
+  [simulated, tx])
 }
 
 export default useProvideLP

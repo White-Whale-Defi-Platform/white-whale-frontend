@@ -141,7 +141,7 @@ export const useTransaction: any = ({
       if (!txHash) {
         return null
       }
-      return signingClient.getTx(txHash)
+      return signingClient?.getTx(txHash)
     },
     {
       enabled: Boolean(txHash),
