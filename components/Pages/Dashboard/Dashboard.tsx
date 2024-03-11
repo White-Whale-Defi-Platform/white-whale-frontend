@@ -5,12 +5,12 @@ import Loader from 'components/Loader'
 import { Header } from 'components/Pages/Dashboard/Header'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
 import { usePrices } from 'hooks/usePrices'
+import { fetchSupply } from 'libs/fetchSupply'
 import { useRecoilState } from 'recoil'
+import { getBondingAPRsAPI } from 'services/useAPI'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { getDashboardData } from 'util/getDashboardData'
-import { getBondingAPRsAPI } from 'services/useAPI'
-import { fetchSupply } from 'libs/fetchSupply'
 
 export type DashboardData = {
   logoUrl: string

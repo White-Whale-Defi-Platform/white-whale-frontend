@@ -22,7 +22,6 @@ import { slippageAtom } from 'components/Pages/Trade/Swap/swapAtoms'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useRecoilState } from 'recoil'
 
-
 const SwapSettings = () => {
   const [slippage, setSlippage] = useRecoilState(slippageAtom)
   const [auto, setAuto] = useBoolean(slippage === 0)
@@ -38,7 +37,6 @@ const SwapSettings = () => {
   }
 
   const onSlippageChange = ({ target }) => {
-
     if (auto === true) {
       setAuto.off()
     }

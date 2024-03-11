@@ -7,11 +7,10 @@ import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
 import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
+import { wallets as okxwallet } from '@cosmos-kit/okxwallet'
 import { ChainProvider } from '@cosmos-kit/react-lite'
 import { wallets as shellWallets } from '@cosmos-kit/shell'
 import { wallets as stationWallets } from '@cosmos-kit/station'
-import { wallets as okxwallet } from '@cosmos-kit/okxwallet'
-
 import version from 'app_version.json'
 import { chains, assets } from 'chain-registry'
 import 'theme/global.css'
@@ -25,15 +24,15 @@ import Head from 'next/head'
 import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
-import theme from 'theme'
 import { getFastestAPI } from 'services/useAPI'
+import theme from 'theme'
 
 const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps) => {
   const [mounted, setMounted] = useState<boolean>(false)
-  const [api, setApi] = useState<string>("")
+  const [api, setApi] = useState<string>('')
 
   const walletProviders = [
     {

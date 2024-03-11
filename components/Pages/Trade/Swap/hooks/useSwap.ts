@@ -13,7 +13,6 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-
 const useSwap = ({ reverse }) => {
   const [swapTokenA, swapTokenB] = useRecoilValue(tokenSwapAtom)
   const { walletChainName } = useRecoilValue(chainState)

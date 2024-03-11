@@ -209,7 +209,7 @@ const Wallet = () => {
       ...currentChainState,
       chainId: chain.chainId,
       chainName: chain.label.toLowerCase(),
-      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]
+      walletChainName: WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId],
     })
     queryClient.clear()
     const [defaultFrom, defaultTo] = defaultTokens[currentChainState.network][WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
@@ -295,7 +295,7 @@ const Wallet = () => {
         />
         <Box display={{
           base: 'block',
-          md: 'block'
+          md: 'block',
         }}>
           <Divider
             orientation="vertical"

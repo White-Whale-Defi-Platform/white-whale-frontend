@@ -8,8 +8,8 @@ import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { TxStep } from 'types/index'
 import { createGasFee } from 'services/treasuryService';
+import { TxStep } from 'types/index'
 
 type Params = {
   enabled: boolean
@@ -63,7 +63,9 @@ export const useTransaction = ({
       }
       try {
         const isInjective = await signingClient.getChainId() === ChainId.injective
-        const sim = await createGasFee(isInjective ? injectiveSigningClient : signingClient,senderAddress,debouncedMsgs) 
+        const sim = await createGasFee(
+          isInjective ? injectiveSigningClient : signingClient, senderAddress, debouncedMsgs,
+        )
         if (buttonLabel) {
           setButtonLabel(null)
         }
