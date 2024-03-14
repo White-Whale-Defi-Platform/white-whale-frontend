@@ -215,6 +215,53 @@
       "swap_address": "osmo13c5k2wxq3cx5xanqnqjdyrwvgw0qs8ea7k8c9dzdddlthg55suhqpvjnq7",
       "staking_address": "osmo17w06dzncqlsz9m2assacrzmrqvmlc7y79updfzd0834q2jty9w6qwdvg9q",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "SHARK-OSMO",
+      "lpOrder": [
+        "SHARK",
+        "OSMO"
+      ],
+      "assetOrder": [
+        "SHARK",
+        "OSMO"
+      ],
+      "displayName": "SHARK-OSMO",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/shark.png",
+      "displayLogo2": "/logos/osmo.svg",
+      "pool_assets": [
+        {
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/64D56DF9EC69BE554F49EBCE0199611062FF1137EF105E2F645C1997344F3834",
+          "symbol": "SHARK",
+          "name": "SHARK",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/shark.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/64D56DF9EC69BE554F49EBCE0199611062FF1137EF105E2F645C1997344F3834"
+        },
+        {
+          "id": "osmosis",
+          "chain_id": "osmosis-1",
+          "token_address": "uosmo",
+          "symbol": "OSMO",
+          "name": "OSMO",
+          "decimals": 6,
+          "logoURI": "/logos/osmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uosmo"
+        }
+      ],
+      "lp_token": "factory/osmo1nkjck7774semslqk6f8n058m4gwcw5spqtza0hrjf8e2kshn4x6svjrc0m/uLP",
+      "swap_address": "osmo1nkjck7774semslqk6f8n058m4gwcw5spqtza0hrjf8e2kshn4x6svjrc0m",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ]
 }
