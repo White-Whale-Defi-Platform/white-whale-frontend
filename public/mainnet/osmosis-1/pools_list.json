@@ -309,6 +309,54 @@
       "swap_address": "osmo166yrd7anjg3h7epjsjghlf2uu403phjflk4gygmlelykwlustwysxvgv4c",
       "staking_address": "osmo1fzmaeuptmzv2l5la7trmv7ez6uhsr3tde0l2vqm4sazcfg7jd78slvhzek",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALE-WBTC",
+      "lpOrder": [
+        "WHALE",
+        "WBTC"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "WBTC"
+      ],
+      "displayName": "WHALE-WBTC",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/wbtc.svg",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/EDD6F0D66BCD49C1084FB2C35353B4ACD7B9191117CE63671B61320548F7C89D",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/EDD6F0D66BCD49C1084FB2C35353B4ACD7B9191117CE63671B61320548F7C89D"
+        },
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "osmosis-1",
+          "token_address": "factory/osmo1z0qrq605sjgcqpylfl4aa6s90x738j7m58wyatt0tdzflg2ha26q67k743/wbtc",
+          "symbol": "WBTC",
+          "name": "WBTC",
+          "decimals": 8,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/wbtc.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/osmo1z0qrq605sjgcqpylfl4aa6s90x738j7m58wyatt0tdzflg2ha26q67k743/wbtc"
+        }
+      ],
+      "lp_token": "factory/osmo1ycg9k5dj3pd0szt4f7ladzam8u6rvs472z6ckx4p82u00cetdnzqxw4vwm/uLP",
+      "swap_address": "osmo1ycg9k5dj3pd0szt4f7ladzam8u6rvs472z6ckx4p82u00cetdnzqxw4vwm",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ]
 }
