@@ -262,6 +262,53 @@
       "swap_address": "osmo1nkjck7774semslqk6f8n058m4gwcw5spqtza0hrjf8e2kshn4x6svjrc0m",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "bOSMO-OSMO",
+      "lpOrder": [
+        "bOSMO",
+        "OSMO"
+      ],
+      "assetOrder": [
+        "bOSMO",
+        "OSMO"
+      ],
+      "displayName": "bOSMO-OSMO",
+      "displayLogo1": "",
+      "displayLogo2": "/logos/osmo.svg",
+      "pool_assets": [
+        {
+          "chain_id": "osmosis-1",
+          "token_address": "factory/osmo1s3l0lcqc7tu0vpj6wdjz9wqpxv8nk6eraevje4fuwkyjnwuy82qsx3lduv/boneOsmo",
+          "symbol": "bOSMO",
+          "name": "bOSMO",
+          "decimals": 6,
+          "logoURI": "factory/osmo1s3l0lcqc7tu0vpj6wdjz9wqpxv8nk6eraevje4fuwkyjnwuy82qsx3lduv/boneOsmo",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": ""
+        },
+        {
+          "id": "osmosis",
+          "chain_id": "osmosis-1",
+          "token_address": "uosmo",
+          "symbol": "OSMO",
+          "name": "OSMO",
+          "decimals": 6,
+          "logoURI": "/logos/osmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uosmo"
+        }
+      ],
+      "lp_token": "factory/osmo166yrd7anjg3h7epjsjghlf2uu403phjflk4gygmlelykwlustwysxvgv4c/uLP",
+      "swap_address": "osmo166yrd7anjg3h7epjsjghlf2uu403phjflk4gygmlelykwlustwysxvgv4c",
+      "staking_address": "osmo1fzmaeuptmzv2l5la7trmv7ez6uhsr3tde0l2vqm4sazcfg7jd78slvhzek",
+      "rewards_tokens": []
     }
   ]
 }
