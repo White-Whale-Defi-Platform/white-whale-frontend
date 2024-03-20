@@ -229,7 +229,7 @@ const Wallet = () => {
     if (isWalletConnected) {
       const newChain = allChains[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId]]
       const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
-      if (walletType !== WalletType.leapSnap && walletType !== WalletType.terraExtension && walletType !== WalletType.ninjiExtension) {
+      if (walletType !== WalletType.leapSnap && walletType !== WalletType.ninjiExtension) {
         await newChain.connect()
       } else {
         resetWallet()
