@@ -937,7 +937,7 @@
         {
           "id": "",
           "chain_id": "migaloo-1",
-          "token_address": "uwhale",
+          "token_address": "factory/migaloo1p3aj9f09d7c4jxhgue0hpdpw370j6gzc59nxxx6l8d0gc9f9rfwsdwetus/lsdSHARK",
           "symbol": "lsdSHARK",
           "name": "lsdSHARK",
           "decimals": 6,
@@ -946,7 +946,7 @@
             "native"
           ],
           "native": true,
-          "denom": "uwhale"
+          "denom": "factory/migaloo1p3aj9f09d7c4jxhgue0hpdpw370j6gzc59nxxx6l8d0gc9f9rfwsdwetus/lsdSHARK"
         },
         {
           "id": "",
