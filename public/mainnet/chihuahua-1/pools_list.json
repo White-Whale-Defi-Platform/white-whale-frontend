@@ -306,43 +306,6 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "LVN-HUAHUA",
-      "lpOrder": ["LVN", "HUAHUA"],
-      "assetOrder": ["LVN", "HUAHUA"],
-      "displayName": "LVN-HUAHUA",
-      "displayLogo1": "/logos/levana.png",
-      "displayLogo2": "/logos/huahua.png",
-      "pool_assets": [
-        {
-          "chain_id": "chihuahua-1",
-          "token_address": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d",
-          "symbol": "LVN",
-          "name": "Levana",
-          "decimals": 6,
-          "logoURI": "/logos/levana.png",
-          "tags": [""],
-          "native": false,
-          "denom": "chihuahua1xu6hgwy3rayh4e8s43nhz5x9js9gd20fsl8zpem67mkynyl5hs6qsxar2d"
-        },
-        {
-          "id": "chihuahua-token",
-          "chain_id": "chihuahua-1",
-          "token_address": "uhuahua",
-          "symbol": "HUAHUA",
-          "name": "Huahua",
-          "decimals": 6,
-          "logoURI": "/logos/huahua.png",
-          "tags": ["native"],
-          "native": true,
-          "denom": "uhuahua"
-        }
-      ],
-      "lp_token": "chihuahua1zcv45lr7gu7amg6plr6z0rmx29wts3d9gklm9g53klwj45qat84qm2cvld",
-      "swap_address": "chihuahua1a6xwgvyvrmzgue6hectem3fwdzquny44a4y20a9wvlrtalhlsk9sryz5t9",
-      "staking_address": "chihuahua1ec5ntzgj3mmw6enqhwcccvu9v620hm32jxknfnnncnfajuunvl0syc53yw",
-      "rewards_tokens": []
-    },
-    {
       "pool_id": "ampWHALE-WHALE",
       "lpOrder": [
         "ampWHALE",
