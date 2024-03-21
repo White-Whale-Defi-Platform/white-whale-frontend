@@ -6,6 +6,7 @@ import {
   createIncreaseAllowanceMessage,
   validateTransactionSuccess,
 } from 'util/messages'
+
 import { createGasFee } from '../treasuryService'
 
 type PassThroughTokenSwapArgs = {
@@ -57,7 +58,9 @@ export const passThroughTokenSwap = async ({
     return validateTransactionSuccess(await signingClient.signAndBroadcast(
       senderAddress,
       [increaseAllowanceMessage, executeMessage],
-      await createGasFee(signingClient, senderAddress, [increaseAllowanceMessage, executeMessage]),
+      await createGasFee(
+        signingClient, senderAddress, [increaseAllowanceMessage, executeMessage],
+      ),
       null,
     ))
   }

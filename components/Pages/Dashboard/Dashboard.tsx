@@ -1,9 +1,9 @@
 import React, { FC, useEffect } from 'react'
 
-import { VStack } from '@chakra-ui/react'
+import { VStack, Text, HStack } from '@chakra-ui/react'
 import Loader from 'components/Loader'
 import { Header } from 'components/Pages/Dashboard/Header'
-import { useGetBondingAprs } from 'components/Pages/Dashboard/hooks/useGetBondingAprs'
+import { useGetBondingAprsAndDailyBuybacks } from 'components/Pages/Dashboard/hooks/useGetBondingAprsAndDailyBuybacks'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
 import { useFetchCirculatingSupply } from 'hooks/useFetchCirculatingSupply'
 import { usePrices } from 'hooks/usePrices'
@@ -18,24 +18,27 @@ export type DashboardData = {
   tvl: number
   volume24h: number
   apr: number
+  buyback: number
 }
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
-  const { data: aprs, isLoading } = useGetBondingAprs()
+  const { data: aprAndBuybackData, isLoading } = useGetBondingAprsAndDailyBuybacks()
   const prices = usePrices()
   const circulatingWhaleSupply: number = useFetchCirculatingSupply()
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      const mockData = await getDashboardData()
-      const mappedDashboardData = mockData.map((data) => {
-        const apr = aprs.find((apr) => apr.chainName === data.chainName)?.apr
+      const dashboardData = await getDashboardData()
+      const mappedDashboardData = dashboardData.map((data) => {
+        const apr = aprAndBuybackData.find((d) => d.chainName === data.chainName)?.apr
+        const buyback = aprAndBuybackData.find((d) => d.chainName === data.chainName)?.buyback
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
           chainName: data.chainName,
           tvl: data.tvl,
           volume24h: data.volume24h,
           apr: apr ? apr : 0,
+          buyback: buyback ? buyback : 0,
         } as DashboardData)
       })
 
@@ -63,5 +66,6 @@ export const Dashboard: FC = () => {
     <Header dashboardData={dashboardState.data}/>
     {!dashboardState.isInitialized && <Loader /> }
     {dashboardState.isInitialized && <StatsTable dashboardData={dashboardState.data} />}
+    {dashboardState.isInitialized && <HStack alignSelf={'start'}><Text fontWeight={'bold'}>{`Total Daily Dex Buybacks: ${dashboardState.data.reduce((acc, data) => acc + data.buyback, 0).toFixed(2)} WHALE`}</Text></HStack>}
   </VStack>
 }

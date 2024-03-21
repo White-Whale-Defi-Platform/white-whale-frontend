@@ -87,6 +87,21 @@ const columns: ColumnDef<DashboardData, any>[] = [
     ),
     cell: (info) => <Text fontWeight={'bold'}>{ info.getValue() === 0 ? '-' : `${info.getValue().toFixed(2)}%`}</Text>,
   }),
+  columnHelper.accessor('buyback', {
+    enableSorting: true,
+    header: () => (
+      <Text
+        as="span"
+        color="white"
+        minW="150px"
+        fontSize="16px"
+        fontWeight={'bold'}
+      >
+        Daily Buyback
+      </Text>
+    ),
+    cell: (info) => <Text fontWeight={'bold'}>{ info.getValue() === 0 ? '-' : `${formatPrice(info.getValue().toFixed(2))} WHALE`}</Text>,
+  }),
 ]
 
 export const StatsTable = ({ dashboardData }) => {
@@ -130,7 +145,7 @@ export const StatsTable = ({ dashboardData }) => {
           {headerGroup.headers.map((header, index) => (
             <Box
               key={header.id}
-              minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset' }
+              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '145px' : index === 5 ? '170px' : 'unset' }
               cursor={header.column.getCanSort() ? 'pointer' : 'default'}
               onClick={header.column.getToggleSortingHandler()}
             >
@@ -173,11 +188,11 @@ export const StatsTable = ({ dashboardData }) => {
           border={'2px solid #00FFB0'}>
           {row.getVisibleCells().map((cell, index) => (
             <React.Fragment key={cell.id}><Text
-              minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset'}
+              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '145px' : index === 5 ? '170px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
-            {index === 4 ? <Text pl={20} color={'#00FFB0'}>Selected</Text> : null}
+            {index === 6 ? <Text pl={10} color={'#00FFB0'}>Selected</Text> : null}
             </React.Fragment>
           ))}
         </HStack>
@@ -194,7 +209,7 @@ export const StatsTable = ({ dashboardData }) => {
         >
           {row.getVisibleCells().map((cell, index) => (
             <React.Fragment key={cell.id}><Text
-              minW={index === 0 ? '150px' : index === 1 ? '200px' : index === 2 ? '250px' : index === 3 ? '225px' : index === 4 ? '145px' : 'unset'}
+              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '145px' : index === 5 ? '170px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
@@ -208,6 +223,6 @@ export const StatsTable = ({ dashboardData }) => {
         </Text>
       )}
     </VStack>
-  );
-};
+  )
+}
 

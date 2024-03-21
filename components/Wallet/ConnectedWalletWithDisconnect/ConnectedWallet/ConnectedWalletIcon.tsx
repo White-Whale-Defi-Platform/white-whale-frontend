@@ -12,7 +12,6 @@ import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-
 export const ConnectedWalletIcon = () => {
   const { walletChainName } = useRecoilValue(chainState)
   const { wallet } = useChain(walletChainName)

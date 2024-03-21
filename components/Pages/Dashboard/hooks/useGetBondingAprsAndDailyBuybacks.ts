@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useQueries } from 'react-query'
 
 import { Config, useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
+import { getDailyBuybacks } from 'components/Pages/Dashboard/hooks/getDailyBuybacks'
 import { getParamsAndCalculateApr } from 'components/Pages/Dashboard/hooks/getParamsAndCalculateApr'
 import { ChainId, WalletChainName } from 'constants/index'
 import { useClients } from 'hooks/useClients'
@@ -9,7 +10,7 @@ import { debounce } from 'lodash'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
-export const useGetBondingAprs = () => {
+export const useGetBondingAprsAndDailyBuybacks = () => {
   const { network } = useRecoilValue(chainState)
   const debouncedRefetch = useMemo(() => debounce((refetchFunc) => refetchFunc(), 500),
     [])
@@ -80,6 +81,54 @@ export const useGetBondingAprs = () => {
       enabled: Boolean(osmosisConfig) && Boolean(osmosisClient),
       refetchOnMount: false,
     },
+    {
+      queryKey: ['migalooBuyback', network, migalooConfig],
+      queryFn: () => getDailyBuybacks(migalooConfig, migalooClient),
+      enabled: Boolean(migalooClient) && Boolean(migalooConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['terraBuyback', network, terraConfig],
+      queryFn: () => getDailyBuybacks(terraConfig, terraClient),
+      enabled: Boolean(terraClient) && Boolean(terraConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['junoBuyback', network, junoConfig],
+      queryFn: () => getDailyBuybacks(junoConfig, junoClient),
+      enabled: Boolean(junoClient) && Boolean(junoConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['seiBuyback', network, seiConfig],
+      queryFn: () => getDailyBuybacks(seiConfig, seiClient),
+      enabled: Boolean(seiClient) && Boolean(seiConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['injectiveBuyback', network, injectiveConfig],
+      queryFn: () => getDailyBuybacks(injectiveConfig, injectiveClient),
+      enabled: Boolean(injectiveClient) && Boolean(injectiveConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['chihuahuaBuyback', network, chihuahuaConfig],
+      queryFn: () => getDailyBuybacks(chihuahuaConfig, chihuahuaClient),
+      enabled: Boolean(chihuahuaClient) && Boolean(chihuahuaConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['terracBuyback', network, terracConfig],
+      queryFn: () => getDailyBuybacks(terracConfig, terracClient),
+      enabled: Boolean(terracClient) && Boolean(terracConfig),
+      refetchOnMount: false,
+    },
+    {
+      queryKey: ['osmosisBuyback', network, osmosisConfig],
+      queryFn: () => getDailyBuybacks(osmosisConfig, osmosisClient),
+      enabled: Boolean(osmosisConfig) && Boolean(osmosisClient),
+      refetchOnMount: false,
+    },
   ])
 
   const isLoading = useMemo(() => queries.some((query) => (
@@ -102,23 +151,40 @@ export const useGetBondingAprs = () => {
     const chihuahuaApr = queries[5].data
     const terracApr = queries[6].data
     const osmosisApr = queries[7].data
+    const migalooBuyback = queries[8].data
+    const terraBuyback = queries[9].data
+    const junoBuyback = queries[10].data
+    const seiBuyback = queries[11].data
+    const injectiveBuyback = queries[12].data
+    const chihuahuaBuyback = queries[13].data
+    const terracBuyback = queries[14].data
+    const osmosisBuyback = queries[15].data
+
     return [
       { chainName: WalletChainName.migaloo,
-        apr: migalooApr },
+        apr: migalooApr,
+        buyback: migalooBuyback },
       { chainName: WalletChainName.terra,
-        apr: terraApr },
+        apr: terraApr,
+        buyback: terraBuyback },
       { chainName: WalletChainName.juno,
-        apr: junoApr },
+        apr: junoApr,
+        buyback: junoBuyback },
       { chainName: WalletChainName.sei,
-        apr: seiApr },
+        apr: seiApr,
+        buyback: seiBuyback },
       { chainName: WalletChainName.injective,
-        apr: injectiveApr },
+        apr: injectiveApr,
+        buyback: injectiveBuyback },
       { chainName: WalletChainName.chihuahua,
-        apr: chihuahuaApr },
+        apr: chihuahuaApr,
+        buyback: chihuahuaBuyback },
       { chainName: WalletChainName.terrac,
-        apr: terracApr },
+        apr: terracApr,
+        buyback: terracBuyback },
       { chainName: WalletChainName.osmosis,
-        apr: osmosisApr },
+        apr: osmosisApr,
+        buyback: osmosisBuyback },
     ]
   }, [queries])
 

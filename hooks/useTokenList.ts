@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import { TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+
 import { useConfig } from '../components/Pages/Bonding/hooks/useDashboardData'
 
 export type TokenList = {

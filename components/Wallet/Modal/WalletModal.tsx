@@ -41,11 +41,11 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
 
   const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
     const { walletName } = wallet
-    const okxchains = ["osmosis-1","jun-1","pacific-1"]
+    const okxchains = ['osmosis-1', 'jun-1', 'pacific-1']
     const inAppLeap = isMobile && window.leap && window.leap.mode === 'mobile-web'
     const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web' && !inAppLeap
     const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension || walletName === WalletType.ninjiExtension)
-    if (walletName === WalletType.okxwallet && !okxchains.includes(chainId)){
+    if (walletName === WalletType.okxwallet && !okxchains.includes(chainId)) {
       return false
     }
     if (inj) {
