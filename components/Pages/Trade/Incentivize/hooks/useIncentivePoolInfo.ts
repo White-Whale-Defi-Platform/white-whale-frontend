@@ -55,7 +55,6 @@ export interface FlowData {
 }
 export interface IncentivePoolInfo {
   flowData?: FlowData[]
-
   poolId: string
 }
 export const fetchTotalPoolSupply = async (swapAddress: string,
