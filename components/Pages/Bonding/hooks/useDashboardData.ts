@@ -11,12 +11,12 @@ import { getTotalBonded } from 'components/Pages/Bonding/hooks/getTotalBonded'
 import { getUnbonding } from 'components/Pages/Bonding/hooks/getUnbonding'
 import { getWeight } from 'components/Pages/Bonding/hooks/getWeight'
 import { getWithdrawable } from 'components/Pages/Bonding/hooks/getWithdrawable'
+import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL } from 'constants/settings'
 import { useClients } from 'hooks/useClients'
 import { debounce } from 'lodash'
 import { NetworkType } from 'state/chainState'
 
-import { TokenInfo } from '../../Trade/Pools/hooks/usePoolsListQuery'
 import { getGlobalIndex } from './getGlobalIndex'
 
 export interface TokenDetails {

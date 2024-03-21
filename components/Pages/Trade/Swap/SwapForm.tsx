@@ -243,7 +243,6 @@ const SwapForm: FC<Props> = ({
   }, [simulated])
 
   const isInputDisabled = tx?.txStep === TxStep.Posting
-
   return (
     <VStack
       paddingX={{ base: 6,
@@ -284,6 +283,7 @@ const SwapForm: FC<Props> = ({
                 onInputChange(value, 0)
                 field.onChange(value)
               }}
+              fee={tx?.fee}
             />
           )}
         />
@@ -334,6 +334,7 @@ const SwapForm: FC<Props> = ({
                 onInputChange(value, 1)
                 field.onChange(value)
               }}
+              fee={tx?.fee}
             />
           )}
         />

@@ -11,7 +11,7 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet,
-    getOfflineSignerDirect } = useChain(walletChainName)
+    getOfflineSignerDirect, getOfflineSigner } = useChain(walletChainName)
   if (isWalletConnected && wallet?.name !== 'station-extension') {
     try {
       setDefaultSignOptions({
@@ -36,7 +36,12 @@ export const useClients = (walletChainName: string) => {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
-          const offlineSigner: any = await getOfflineSignerDirect()
+          let offlineSigner
+          if (wallet.name.includes('okx')) {
+            offlineSigner = await getOfflineSigner()
+          } else {
+            offlineSigner = await getOfflineSignerDirect()
+          }
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
             offlineSigner)
           client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)

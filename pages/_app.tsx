@@ -24,6 +24,7 @@ import Head from 'next/head'
 import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
+import { getFastestAPI } from 'services/useAPI'
 import theme from 'theme'
 
 const MyApp: FC<AppProps> = ({
@@ -31,6 +32,7 @@ const MyApp: FC<AppProps> = ({
   pageProps,
 }: AppProps) => {
   const [mounted, setMounted] = useState<boolean>(false)
+  const [api, setApi] = useState<string>('')
 
   const walletProviders = [
     {
@@ -85,8 +87,10 @@ const MyApp: FC<AppProps> = ({
       localStorage.clear()
       localStorage.setItem('ww-version', version?.version)
     }
+    const setAPI = async () => setApi(await getFastestAPI(true))
+    setAPI()
     setMounted(true)
-  }, [reorderWallets])
+  }, [reorderWallets, api])
   return (
     <><>
       <Head>

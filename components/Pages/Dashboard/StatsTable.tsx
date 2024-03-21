@@ -145,7 +145,7 @@ export const StatsTable = ({ dashboardData }) => {
           {headerGroup.headers.map((header, index) => (
             <Box
               key={header.id}
-              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '145px' : index === 5 ? '170px' : 'unset' }
+              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '175px' : 'unset' }
               cursor={header.column.getCanSort() ? 'pointer' : 'default'}
               onClick={header.column.getToggleSortingHandler()}
             >
@@ -188,11 +188,11 @@ export const StatsTable = ({ dashboardData }) => {
           border={'2px solid #00FFB0'}>
           {row.getVisibleCells().map((cell, index) => (
             <React.Fragment key={cell.id}><Text
-              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '145px' : index === 5 ? '170px' : 'unset'}
+              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '175px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
-            {index === 6 ? <Text pl={10} color={'#00FFB0'}>Selected</Text> : null}
+            {index === 5 ? <Text pl={20} color={'#00FFB0'}>Selected</Text> : null}
             </React.Fragment>
           ))}
         </HStack>
@@ -209,7 +209,7 @@ export const StatsTable = ({ dashboardData }) => {
         >
           {row.getVisibleCells().map((cell, index) => (
             <React.Fragment key={cell.id}><Text
-              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '145px' : index === 5 ? '170px' : 'unset'}
+              minW={index === 0 ? '120px' : index === 1 ? '170px' : index === 2 ? '220px' : index === 3 ? '175px' : index === 4 ? '175px' : 'unset'}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>

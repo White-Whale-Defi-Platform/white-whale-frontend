@@ -183,7 +183,7 @@ export const useTransaction = ({
 
   const { data: txInfo } = useQuery(
     ['txInfo', txHash],
-    () => signingClient.getTx(txHash),
+    () => signingClient?.getTx(txHash),
     {
       enabled: Boolean(txHash),
       retry: true,

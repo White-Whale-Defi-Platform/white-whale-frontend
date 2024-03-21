@@ -28,6 +28,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryPoolsLiquidity,
 } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
+import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/networks'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
@@ -54,8 +55,10 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   const { data: poolData } = usePoolsListQuery()
   const [[tokenA, tokenB], setTokenItemState] = useRecoilState(tokenItemState)
   const [bondingDays, setBondingDays] = useState(0)
-  const { simulated, tx } = useProvideLP({ reverse,
-    bondingDays })
+  const { simulated, tx } = useProvideLP({
+    reverse,
+    bondingDays,
+  })
   const { cosmWasmClient } = useClients(walletChainName)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
@@ -76,6 +79,8 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
 
   const pool = useMemo(() => poolData?.pools.find((pool: any) => pool.pool_id === poolIdFromUrl),
     [poolIdFromUrl, poolData])
+
+  const incentivesEnabled = pool?.staking_address && pool?.staking_address !== '' && ACTIVE_INCENTIVE_NETWORKS.includes(chainId)
   // TODO pool user share might be falsy
   const poolUserShare = usePoolUserShare(
     cosmWasmClient,
@@ -200,8 +205,10 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
   return (
     <VStack
       w="auto"
-      minWidth={{ base: '100%',
-        md: '800' }}
+      minWidth={{
+        base: '100%',
+        md: '800',
+      }}
       alignItems="center"
       padding={5}
     >
@@ -273,6 +280,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
                     poolId={poolIdFromUrl}
                     mobile={isMobile}
                     openView={openView}
+                    incentivesEnabled={incentivesEnabled}
                   />
                 )}
               </TabPanel>
@@ -286,7 +294,7 @@ const ManageLiquidity = ({ poolIdFromUrl }) => {
                 />
               </TabPanel>
               <TabPanel padding={4}>
-                <Claim poolId={poolIdFromUrl}/>
+                <Claim poolId={poolIdFromUrl} />
               </TabPanel>
               {dailyEmissionData.length > 0 ? (
                 <TabPanel padding={4}>

@@ -17,7 +17,7 @@ import {
   getPairAprAndDailyVolumeByEnigma,
   getPairAprAndDailyVolumeByCoinhall,
 } from 'services/poolDataProvider'
-import { getFlowsFromAPI } from 'services/useAPI'
+import { getFlowsFromAPI, getPairAprAndDailyVolumeAPI } from 'services/useAPI'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
@@ -177,14 +177,13 @@ const getPoolFlowData = async (
 export const useIncentivePoolInfo = (
   client, pools, currentChainPrefix,
 ) => {
-  const { chainId, network } = useRecoilValue(chainState)
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)
   const [poolsWithAprAnd24HrVolume, setPoolsWithAprAnd24HrVolume] = useState<
     PoolData[]
   >([])
-
   useEffect(() => {
     const fetchPoolData = async () => {
       switch (chainId) {
@@ -198,7 +197,7 @@ export const useIncentivePoolInfo = (
           break
       }
 
-      const poolData = await getPairAprAndDailyVolumeByCoinhall(pools)
+      const poolData = await getPairAprAndDailyVolumeAPI(walletChainName) || await getPairAprAndDailyVolumeByCoinhall(pools)
       if (poolData[0]?.ratio === 0) {
         console.log('No pair infos found, trying Enigma')
         const poolDataFromCoinhall = await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)

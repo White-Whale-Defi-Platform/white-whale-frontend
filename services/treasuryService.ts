@@ -26,9 +26,11 @@ export async function createGasFee(
 ) {
   const chainId = await client.getChainId()
   const prices = await getGasPricesAPI()
-  const outGas = Math.ceil(await client.simulate(
+  let sim = await client.simulate(
     address, msgs, '',
-  ) * 1.3)
+  ) * 1.3
+  sim = Math.ceil(sim)
+
   let chainFee = prices[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId]]
   if (!chainFee) {
     const chainEntry = chainRegistry.find((chain: any) => chain.chain_name === WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId])
@@ -36,10 +38,10 @@ export async function createGasFee(
   }
   if (chainId === ChainId.terrac) {
     const funds = msgs.flatMap((elem) => elem.value.funds)
-    return await TerraTreasuryService.getInstance().getTerraClassicFee(funds, outGas)
+    return await TerraTreasuryService.getInstance().getTerraClassicFee(funds, sim)
   }
   return getGasFees(
-    outGas, chainFee.amount, chainFee.denom,
+    sim, chainFee.amount, chainFee.denom,
   )
 }
 

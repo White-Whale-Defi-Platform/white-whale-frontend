@@ -871,6 +871,102 @@
       "swap_address": "migaloo1vvv0v0cptqnnltwu5y50uf3aw0ky8jfk7zr8yjqlw0sfwzan6xasmewu40",
       "staking_address": "migaloo12pgljfldvucca4s2v5szlyf7vff4hy45fwfurvna03s4x9kwydlqcpnlzr",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "SHARK-WHALE",
+      "lpOrder": [
+        "SHARK",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "SHARK",
+        "WHALE"
+      ],
+      "displayName": "SHARK-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/shark.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/shark",
+          "symbol": "SHARK",
+          "name": "SHARK",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/shark.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/shark"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "factory/migaloo14emfp5urhu0nnnk5warexg3fdfl8gltru9y3ylzx6cay6utdgpdsyh99r7/uLP",
+      "swap_address": "migaloo14emfp5urhu0nnnk5warexg3fdfl8gltru9y3ylzx6cay6utdgpdsyh99r7",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "lsdSHARK-SHARK",
+      "lpOrder": [
+        "lsdSHARK",
+        "SHARK"
+      ],
+      "assetOrder": [
+        "lsdSHARK",
+        "SHARK"
+      ],
+      "displayName": "lsdSHARK-SHARK",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/lsdshark.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/shark.png",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1p3aj9f09d7c4jxhgue0hpdpw370j6gzc59nxxx6l8d0gc9f9rfwsdwetus/lsdSHARK",
+          "symbol": "lsdSHARK",
+          "name": "lsdSHARK",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/lsdshark.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1p3aj9f09d7c4jxhgue0hpdpw370j6gzc59nxxx6l8d0gc9f9rfwsdwetus/lsdSHARK"
+        },
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/shark",
+          "symbol": "SHARK",
+          "name": "SHARK",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/shark.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/shark"
+        }
+      ],
+      "lp_token": "factory/migaloo17gjad4n0draqe4mrftf84ser2hdwtuf5698xmkhphzxhjc5wweuqyhv6k5/uLP",
+      "swap_address": "migaloo17gjad4n0draqe4mrftf84ser2hdwtuf5698xmkhphzxhjc5wweuqyhv6k5",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

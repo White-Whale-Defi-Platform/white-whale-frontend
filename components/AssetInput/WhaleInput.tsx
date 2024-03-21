@@ -5,7 +5,8 @@ import {
   HStack,
   IconButton,
   Image,
-  Input,
+  NumberInput,
+  NumberInputField,
   Stack,
   Text,
   forwardRef,
@@ -15,6 +16,7 @@ import { TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
 import { kBorderRadius } from 'constants/visualComponentConstants'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 
+import { amountInputValidation } from '../../util/amountInputValidation'
 import AssetSelectModal from './AssetSelectModal'
 
 interface AssetInputProps {
@@ -103,20 +105,30 @@ ref) => {
         paddingRight={3}
       >
         <HStack flex={1}>
-          <Input
+          <NumberInput
+            variant="unstylized"
+            flex={1}
             ref={ref}
-            type="number"
-            value={value?.amount || ''}
-            variant="unstyled"
-            color="white"
-            placeholder="0.00"
-            _placeholder={{ color: 'whiteAlpha.700' }}
-            disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
-            onChange={({ target }) => {
-              onChange({ ...token,
-                amount: target.value })
-            }}
-          />
+            isValidCharacter={(char) => Boolean(char.match(/[.0-9]/u))}
+            value={value.amount || ''}
+          >
+            <NumberInputField
+              color="white"
+              padding={0}
+              backgroundColor="transparent"
+              _placeholder={{ color: 'whiteAlpha.700' }}
+              value={value?.amount || ''}
+              inputMode="numeric"
+              placeholder="0.00"
+              disabled={disabled || (!isSingleInput && !tokenInfo?.symbol)}
+              onChange={({ target }) => {
+                onChange({
+                  ...token,
+                  amount: amountInputValidation(target.value),
+                });
+              }}
+            />
+          </NumberInput>
         </HStack>
       </HStack>
 

@@ -31,6 +31,7 @@ type Props = {
   mobile?: boolean
   poolId: string
   openView: any
+  incentivesEnabled?:boolean
 }
 
 const DepositForm = ({
@@ -49,6 +50,7 @@ const DepositForm = ({
   mobile,
   poolId,
   openView,
+  incentivesEnabled = false,
 }: Props) => {
   const { walletChainName } = useRecoilValue(chainState)
   const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || [defaultTokens.mainnet[walletChainName][0].tokenSymbol, defaultTokens.mainnet[walletChainName][1].tokenSymbol]
@@ -64,8 +66,6 @@ const DepositForm = ({
       token2,
     },
   })
-  const incentivesEnabled = useMemo(() => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
-    [chainId])
   const currentAprHelperState = useRecoilValue(aprHelperState)
 
   const poolAPRs = useMemo(() => currentAprHelperState.find((poolAPRs) => poolAPRs.poolId === poolId),

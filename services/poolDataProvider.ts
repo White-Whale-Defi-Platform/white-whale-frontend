@@ -59,14 +59,28 @@ export const getPairInfos = async (chain: string): Promise<PoolResponse[]> => {
   return []
 }
 export const getCoinhallPairInfos = async (swapAddresses: any[]): Promise<any> => {
-  const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${swapAddresses.join(',')}`
-  const chainDataResponse = await fetch(url)
-  const data = await chainDataResponse.json()
+  const chunkSize = 15
+  const chunks = Array.from({ length: Math.ceil(swapAddresses.length / chunkSize) }, (_, index) => swapAddresses.slice(index * chunkSize, (index + 1) * chunkSize))
+  const fetchPoolData = async (addresses: string[]) => {
+    const url = `/api/cors?url=https://api.seer.coinhall.org/api/coinhall/pools?addresses=${addresses.join(',')}`
+    const chainDataResponse = await fetch(url)
+    const data = await chainDataResponse.json()
 
-  if (chainDataResponse.status === 200 && data) {
-    return data
+    if (chainDataResponse.status === 200 && data) {
+      return data.pools
+    } else {
+      return []
+    }
   }
-  return []
+
+  try {
+    const poolChunks = await Promise.all(chunks.map(fetchPoolData))
+    const pools = poolChunks.flat()
+    return pools
+  } catch (error) {
+    console.error('Error fetching pool data:', error)
+    return []
+  }
 }
 export const getPairAprAndDailyVolumeByEnigma = async (pools: any[],
   chainPrefix: any): Promise<PoolData[]> => {
@@ -105,11 +119,11 @@ export const getPairAprAndDailyVolumeByEnigma = async (pools: any[],
 }
 export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<PoolData[]> => {
   const swapAddresses = pools?.map((pool: any) => pool.swap_address)
-  const pairInfos: any = await getCoinhallPairInfos(swapAddresses)
+  const pairInfos: Array<any> = await getCoinhallPairInfos(swapAddresses)
 
-  if (pairInfos && pairInfos.pools?.length > 0 && pools) {
+  if (pairInfos && pairInfos?.length > 0 && pools) {
     return swapAddresses?.map((swapAddress: string) => {
-      const pairInfo = pairInfos.pools.find((row: any) => row.id === swapAddress)
+      const pairInfo = pairInfos.find((row: any) => row.id === swapAddress)
       const poolId = pools.find((pool: any) => pool.swap_address === swapAddress)?.pool_id
       const asset0Symbol = poolId?.split('-')[0]
       const chRatio =

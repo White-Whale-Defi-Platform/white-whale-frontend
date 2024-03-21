@@ -38,8 +38,10 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     matchingPools?.streamlinePoolBA?.lpOrder
 
   // Const [pool] = usePoolFromListQueryById({ poolId })
-  const isNewPosition = useIsNewPosition({ bondingDays,
-    poolId })
+  const isNewPosition = useIsNewPosition({
+    bondingDays,
+    poolId,
+  })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
   let minUnbondingDuration = 86400
@@ -49,9 +51,11 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
 
   const [{ swap_address: swapAddress = null, liquidity = {} } = {}, isLoading] =
     useQueryPoolLiquidity({ poolId })
-
   // Const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
-
+  let provideInitialLiquidity = false
+  if (liquidity?.reserves?.total[0] == 0 && window.debugLogsEnabled) {
+    provideInitialLiquidity = true
+  }
   const [tokenA, tokenB, flipped] = useMemo(() => {
     if (!lpOrder) {
       return [tokenInfoA, tokenInfoB, false]
@@ -81,15 +85,19 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
   const simulated = useMemo(() => {
     if (
       (!reverse && !lpTokenA?.amount) ||
-      (reverse && !lpTokenB?.amount) ||
-      tokenAReserve === 0 ||
-      tokenBReserve === 0
+      (reverse && !lpTokenB?.amount) || (
+        (tokenAReserve === 0 ||
+        tokenBReserve === 0) &&
+        !provideInitialLiquidity)
     ) {
       return null
     }
-
-    const decimals = reverse ? tokenInfoB?.decimals : tokenInfoA?.decimals
-    const normalizedValue = reverse ? lpTokenB.amount : lpTokenA.amount || 0
+    const decimals = (provideInitialLiquidity ? !reverse : reverse) ? tokenInfoB?.decimals : tokenInfoA?.decimals
+    const normalizedValue = (provideInitialLiquidity ? !reverse : reverse) ? lpTokenB.amount : lpTokenA.amount || 0
+    if (provideInitialLiquidity) {
+      return num(normalizedValue).
+        toFixed(decimals)
+    }
     const tokenA = num(tokenAReserve).
       div(10 ** (tokenInfoA?.decimals || 6)).
       toNumber()
@@ -144,7 +152,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
         bondingDays,
         pairAddress: swapAddress,
         stakingProxy:
-            bondingDays === 0 ? swapAddress : config?.frontend_helper,
+          bondingDays === 0 ? swapAddress : config?.frontend_helper,
         amountA: reverse
           ? flipped
             ? tokenAAmount
@@ -196,8 +204,8 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
       : flipped
         ? tokenBAmount
         : toChainAmount(simulated, tokenInfoB?.decimals),
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: () => { },
+    onError: () => { },
   })
   const noMatchingPool =
     !swapAddress && !isLoading
@@ -206,9 +214,13 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
       }
       : {}
 
-  return useMemo(() => ({ simulated,
-    tx: { ...tx,
-      ...noMatchingPool } }),
+  return useMemo(() => ({
+    simulated,
+    tx: {
+      ...tx,
+      ...noMatchingPool,
+    },
+  }),
   [simulated, tx])
 }
 
