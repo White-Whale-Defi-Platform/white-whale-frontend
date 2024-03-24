@@ -103,7 +103,6 @@ export const useGetDailyBuybacks = () => {
     const terracBuyback = queries[6].data
     const osmosisBuyback = queries[7].data
 
-
     return [
       { chainName: WalletChainName.migaloo,
         buyback: migalooBuyback },

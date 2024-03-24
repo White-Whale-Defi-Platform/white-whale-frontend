@@ -53,11 +53,13 @@ export const useClients = (walletChainName: string) => {
           };
           const registry = new Registry(protoRegistry);
           const aminoTypes = new AminoTypes(aminoConverters);
-          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
+          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
+            'https://sentry.tm.injective.network:443',
             offlineSigner, {
               registry,
               aminoTypes,
-            })
+            },
+          )
           return client
         } catch {
           return null

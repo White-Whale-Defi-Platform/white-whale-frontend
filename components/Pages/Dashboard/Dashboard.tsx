@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react'
+
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import Loader from 'components/Loader'
 import { Header } from 'components/Pages/Dashboard/Header'
@@ -10,7 +11,8 @@ import { getBondingAPRsAPI } from 'services/useAPI'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { getDashboardData } from 'util/getDashboardData'
-  import { useGetDailyBuybacks } from './hooks/useGetDailyBuybacks'
+
+import { useGetDailyBuybacks } from './hooks/useGetDailyBuybacks'
 
 export type DashboardData = {
   logoUrl: string
@@ -35,7 +37,7 @@ export const Dashboard: FC = () => {
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
       const mappedDashboardData = mockData.map((data) => {
         const apr = aprs[data.chainName].bondingAPR
-        const buyback = buybackData.find(buybackData=> buybackData.chainName === data.chainName)?.buyback
+        const buyback = buybackData.find((buybackData) => buybackData.chainName === data.chainName)?.buyback
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
           chainName: data.chainName,
