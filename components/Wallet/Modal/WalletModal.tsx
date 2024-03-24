@@ -39,12 +39,18 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
     }
   }
 
-  const shouldRenderButton = (wallet: { walletName: string, isModeExtension: boolean }) => {
+  const shouldRenderButton = (wallet: { walletName: WalletType, isModeExtension: boolean }) => {
     const { walletName } = wallet
     const okxchains = ['osmosis-1', 'juno-1', 'pacific-1', 'injective-1']
     const inAppLeap = isMobile && window.leap && window.leap.mode === 'mobile-web'
     const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web' && !inAppLeap
-    const inj = chainId.includes('injective') && (walletName === WalletType.keplrExtension || walletName === WalletType.leapExtension || walletName === WalletType.ninjiExtension || walletName === WalletType.okxwallet)
+    const inj = chainId.includes('injective') && [
+      WalletType.terraExtension,
+      WalletType.keplrExtension,
+      WalletType.leapExtension,
+      WalletType.ninjiExtension,
+      WalletType.okxwallet,
+    ].includes(walletName);
     if (walletName === WalletType.okxwallet && !okxchains.includes(chainId)) {
       return false
     }
