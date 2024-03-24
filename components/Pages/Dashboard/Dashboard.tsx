@@ -5,14 +5,11 @@ import Loader from 'components/Loader'
 import { Header } from 'components/Pages/Dashboard/Header'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
 import { usePrices } from 'hooks/usePrices'
-import { fetchSupply } from 'libs/fetchSupply'
 import { useRecoilState } from 'recoil'
-import { getBondingAPRsAPI } from 'services/useAPI'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
-import { getDashboardData } from 'util/getDashboardData'
 
-import { useGetDailyBuybacks } from './hooks/useGetDailyBuybacks'
+import { useGetDashboardDataAPI } from './hooks/getDashboardDataAPI'
 
 export type DashboardData = {
   logoUrl: string
@@ -24,20 +21,15 @@ export type DashboardData = {
 }
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
-  const { data: buybackData, isLoading } = useGetDailyBuybacks()
+  const { data: dashData, isLoading } = useGetDashboardDataAPI()
   const prices = usePrices()
   useEffect(() => {
     const fetchDashboardData = async () => {
-      let [circulatingWhaleSupply, mockData, aprs]: any = await Promise.all([
-        fetchSupply(),
-        getDashboardData(),
-        getBondingAPRsAPI(),
-      ])
-      circulatingWhaleSupply = circulatingWhaleSupply?.circulating / (10 ** 6) || 0
+      const circulatingWhaleSupply = dashData.supply?.circulating / (10 ** 6) || 0
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
-      const mappedDashboardData = mockData.map((data) => {
-        const apr = aprs[data.chainName].bondingAPR
-        const buyback = buybackData.find((buybackData) => buybackData.chainName === data.chainName)?.buyback
+      const mappedDashboardData = dashData.dashboardData?.map((data) => {
+        const apr = dashData.bondingInfos[data.chainName].bondingAPR
+        const buyback = dashData.bondingInfos[data.chainName].bondingAPR?.buyback
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
           chainName: data.chainName,

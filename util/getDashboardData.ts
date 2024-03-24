@@ -1,7 +1,7 @@
 import { ENIGMA_URL } from 'constants/index'
 import { fetchWithTimeout, getFastestAPI } from 'services/useAPI';
 
-interface ChainInfoResponse {
+export interface ChainInfoResponse {
   chainName: string;
   tvl: number;
   volume24h: number
