@@ -26,7 +26,7 @@ export const Dashboard: FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       const circulatingWhaleSupply = dashData.supply?.circulating / (10 ** 6) || 0
-      const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0)
+      const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
       const mappedDashboardData = dashData.dashboardData?.map((data) => {
         const apr = dashData.bondingInfos[data.chainName]?.bondingAPR
         const buyback = dashData.bondingInfos[data.chainName]?.buyback
@@ -44,7 +44,7 @@ export const Dashboard: FC = () => {
         data: mappedDashboardData,
         whalePrice: prices?.WHALE ? prices.WHALE : 0,
         marketCap: marketCap ? marketCap : 0,
-        isInitialized: prices?.WHALE !== 0 && marketCap !== 0,
+        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && dashData.dashboardData?.length > 0,
       })
     }
     if (!dashboardState.isInitialized) {
@@ -53,7 +53,7 @@ export const Dashboard: FC = () => {
   }, [prices, dashboardState.isInitialized, isLoading])
 
   return <VStack width={'full'}>
-    {dashboardState.isInitialized && <Header dashboardData={dashboardState.data} />}
+    {dashboardState.isInitialized && <Header dashboardData={dashboardState?.data} />}
     {!dashboardState.isInitialized && (<HStack
       paddingTop={'20%'}
       width="full"
@@ -62,7 +62,7 @@ export const Dashboard: FC = () => {
       alignItems="center">
       <Loader />
     </HStack>)}
-    {dashboardState.isInitialized && <StatsTable dashboardData={dashboardState.data} />}
-    {dashboardState.isInitialized && <HStack alignSelf={'start'}><Text fontWeight={'bold'}>{`Total Daily Dex Buybacks: ${dashboardState.data.reduce((acc, data) => acc + data.buyback, 0).toFixed(2)} WHALE`}</Text></HStack>}
+    {dashboardState.isInitialized && <StatsTable dashboardData={dashboardState?.data} />}
+    {dashboardState.isInitialized && <HStack alignSelf={'start'}><Text fontWeight={'bold'}>{`Total Daily Dex Buybacks: ${dashboardState.data?.reduce((acc, data) => acc + data.buyback, 0).toFixed(2)} WHALE`}</Text></HStack>}
   </VStack>
 }

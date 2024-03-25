@@ -74,7 +74,7 @@ export const getRandomRPC = async (chainNameId: string) => {
 
 export const getHealthyRestEndpoints = async (chainNameId: string) => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/rests/${chainNameId}`, 1000);
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/rests/${chainNameId}`);
     const json = await response.json();
     if (json?.data !== 'Chain not found') {
       return json?.data
@@ -99,10 +99,10 @@ export const getRandomREST = async (chainNameId: string) => {
 
 export const getPricesAPI = async (ids: Array<string>) => {
   try {
-    let response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices`, 1000)
+    let response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices`)
     let res = await response.text()
     while (!response.ok) {
-      response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices`, 1000)
+      response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices`)
       res = await response.text()
     }
     const json = JSON.parse(res)
@@ -142,7 +142,7 @@ export const createEndpointOptions = (chains: any) => {
 
 export const getGasPricesAPI = async () => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/gasprices`, 1000)
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/gasprices`)
     const json = await response.json()
     return json?.data || {}
   } catch (error) {
@@ -153,7 +153,7 @@ export const getGasPricesAPI = async () => {
 
 export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/pools/${chain_name}`, 5000)
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/pools/${chain_name}`, 50000)
     const json = await response.json()
     return json?.data || null
   } catch (error) {
@@ -164,7 +164,7 @@ export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
 
 export const getBondingAPRsAPI = async () => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 10000)
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 50000)
     const json = await response.json()
     return json?.data || null
   } catch (error) {
