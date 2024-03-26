@@ -21,15 +21,15 @@ export type DashboardData = {
 }
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
-  const { data: dashData, isLoading } = useGetDashboardDataAPI()
+  const { data: dashboardData, isLoading } = useGetDashboardDataAPI()
   const prices = usePrices()
   useEffect(() => {
     const fetchDashboardData = async () => {
-      const circulatingWhaleSupply = dashData.supply?.circulating / (10 ** 6) || 0
+      const circulatingWhaleSupply = dashboardData.supply?.circulating / (10 ** 6) || 0
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
-      const mappedDashboardData = dashData.dashboardData?.map((data) => {
-        const apr = dashData.bondingInfos[data.chainName]?.bondingAPR
-        const buyback = dashData.bondingInfos[data.chainName]?.buyback
+      const mappedDashboardData = dashboardData.dashboardData?.map((data) => {
+        const apr = dashboardData.bondingInfos[data.chainName]?.bondingAPR
+        const buyback = dashboardData.bondingInfos[data.chainName]?.buyback
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
           chainName: data.chainName,
@@ -44,7 +44,7 @@ export const Dashboard: FC = () => {
         data: mappedDashboardData,
         whalePrice: prices?.WHALE ? prices.WHALE : 0,
         marketCap: marketCap ? marketCap : 0,
-        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && dashData.dashboardData?.length > 0,
+        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && dashboardData.dashboardData?.length > 0,
       })
     }
     if (!dashboardState.isInitialized) {

@@ -44,11 +44,11 @@ export const useGetDashboardDataAPI = () => {
 
   const data = useMemo(() => {
     const supply = queries[0].data
-    const dashBoardData = queries[1].data
+    const dashboardData = queries[1].data
     const bondingInfos = queries[2].data
 
     return { supply,
-      dashboardData: dashBoardData,
+      dashboardData,
       bondingInfos }
   }, [queries])
 
