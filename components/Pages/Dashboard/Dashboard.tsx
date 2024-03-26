@@ -44,7 +44,7 @@ export const Dashboard: FC = () => {
         data: mappedDashboardData,
         whalePrice: prices?.WHALE ? prices.WHALE : 0,
         marketCap: marketCap ? marketCap : 0,
-        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && dashboardData.dashboardData?.length > 0,
+        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && mappedDashboardData?.length > 0,
       })
     }
     if (!dashboardState.isInitialized) {

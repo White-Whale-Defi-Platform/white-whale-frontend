@@ -35,6 +35,7 @@
     "@emotion/styled": "^11",
     "@injectivelabs/sdk-ts": "^1.14.6",
     "@next/bundle-analyzer": "^14.1.0",
+    "@nick134-bit/nicks-injectivejs": "^0.0.2",
     "@tanstack/react-table": "^8.12.0",
     "@terra-money/feather.js": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.19.0",

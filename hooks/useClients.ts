@@ -9,7 +9,7 @@ import {
   cosmosProtoRegistry,
   cosmwasmAminoConverters,
   cosmwasmProtoRegistry,
-} from 'util/inj-types';
+} from '@nick134-bit/nicks-injectivejs/dist/codegen';
 
 export const useClients = (walletChainName: string) => {
   const {
