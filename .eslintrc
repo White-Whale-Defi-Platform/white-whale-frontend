@@ -21,6 +21,7 @@
     "eslint-plugin-import-helpers",
     "@typescript-eslint"
   ],
+  "ignorePatterns": ["**/util/inj-types/**"],
   "rules": {
     // Possible Problems
     "array-callback-return": [

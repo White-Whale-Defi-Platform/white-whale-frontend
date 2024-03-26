@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "git rev-parse HEAD | xargs -I '{}' echo '{\"version\": \"{}\"}' > app_version.json && next build",
+    "prep-build": "next build",
     "start": "next start",
     "lint": "npx eslint . --fix",
     "unimported": "npx unimported",

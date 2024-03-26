@@ -12,6 +12,6 @@ export const POOL_INFO_BASE_URL =
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
 
-export const API_URLS = ['https://fd60qhijvtes7do71ou6moc14s.ingress.pcgameservers.com']
+export const API_URLS = ['https://fd60qhijvtes7do71ou6moc14s.ingress.pcgameservers.com', 'https://9c0pbpbijhepr6ijm4lk85uiuc.ingress.europlots.com']
 
 export const ADV_MEMO = 'app.whitewhale.money'

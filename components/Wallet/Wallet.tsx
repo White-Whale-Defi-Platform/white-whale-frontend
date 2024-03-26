@@ -110,27 +110,19 @@ const Wallet = () => {
       };
       filterChains().then(async ([chainNames, ids]) => {
         if (chainNames.includes('injective')) {
-          if (walletType !== WalletType.terraExtension) {
-            try {
-              await walletWindowConnection.getKey(ChainId.injective)
-            } catch {
-              console.error('Injective not activated');
-              const injIndex = chainNames.indexOf('injective')
-              if (injIndex !== -1) {
-                chainNames.splice(injIndex, 1)
-                ids.splice(injIndex, 1)
-              }
-            }
-          } else {
+          try {
+            await walletWindowConnection.getKey(ChainId.injective)
+          } catch {
+            console.error('Injective not activated');
             const injIndex = chainNames.indexOf('injective')
             if (injIndex !== -1) {
               chainNames.splice(injIndex, 1)
               ids.splice(injIndex, 1)
             }
           }
+          setWalletChains(chainNames)
+          setCurrentConnectedChainIds(ids)
         }
-        setWalletChains(chainNames)
-        setCurrentConnectedChainIds(ids)
       });
     } else if (walletChains.length === 0) {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))

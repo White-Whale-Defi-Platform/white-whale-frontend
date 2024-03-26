@@ -63,9 +63,6 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         console.error(`${chainId} not activated`)
         handleChainActivationError(chainName, toast);
       }
-      if (walletType === WalletType.terraExtension && chainName.includes('injective')) {
-        error = true
-      }
     }
     if (!error) {
       connect()

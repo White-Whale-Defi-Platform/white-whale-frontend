@@ -11,12 +11,11 @@ const ChainItem = ({
   onClose,
   active,
   walletConnected,
-  walletType,
 }) => {
   const queryClient = useQueryClient()
   return (
     <Tooltip
-      label={ !walletConnected && !chain.chainName?.includes('Injective') ? (
+      label={ !walletConnected ? (
         <Box
           maxWidth="220px"
           minWidth="fit-content"
@@ -28,18 +27,6 @@ const ChainItem = ({
           whiteSpace="pre-wrap"
         >
         To access this chain, you must add it to your wallet.
-        </Box>) : !walletConnected && chain.chainName?.includes('Injective') && walletType !== 'station-extension' ? (
-        <Box
-          maxWidth="220px"
-          minWidth="fit-content"
-          borderRadius="10px"
-          bg="black"
-          color="white"
-          fontSize={14}
-          p={4}
-          whiteSpace="pre-wrap"
-        >
-        Injective with Station not supported. Please try Keplr or Leap.
         </Box>) : null
       }
       bg="transparent"

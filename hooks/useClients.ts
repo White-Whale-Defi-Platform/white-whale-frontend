@@ -1,8 +1,15 @@
 import { useQueries } from 'react-query'
 
+import { GeneratedType, Registry } from '@cosmjs/proto-signing';
+import { AminoTypes } from '@cosmjs/stargate';
 import { useChain } from '@cosmos-kit/react-lite'
 import { InjectiveStargate } from '@injectivelabs/sdk-ts'
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
+import {
+  cosmosAminoConverters,
+  cosmosProtoRegistry,
+  cosmwasmAminoConverters,
+  cosmwasmProtoRegistry,
+} from 'util/inj-types';
 
 export const useClients = (walletChainName: string) => {
   const {
@@ -10,8 +17,7 @@ export const useClients = (walletChainName: string) => {
     getSigningCosmWasmClient,
     isWalletConnected,
     setDefaultSignOptions,
-    wallet,
-    getOfflineSignerDirect, getOfflineSigner } = useChain(walletChainName)
+    wallet, getOfflineSigner } = useChain(walletChainName)
   if (isWalletConnected && wallet?.name !== 'station-extension') {
     try {
       setDefaultSignOptions({
@@ -36,15 +42,24 @@ export const useClients = (walletChainName: string) => {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
-          let offlineSigner
-          if (wallet.name.includes('okx')) {
-            offlineSigner = await getOfflineSigner()
-          } else {
-            offlineSigner = await getOfflineSignerDirect()
-          }
-          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner('https://sentry.tm.injective.network:443',
-            offlineSigner)
-          client.registry.register('/cosmwasm.wasm.v1.MsgExecuteContract', MsgExecuteContract)
+          const offlineSigner: any = await getOfflineSigner()
+          const protoRegistry: ReadonlyArray<[string, GeneratedType]> = [
+            ...cosmosProtoRegistry,
+            ...cosmwasmProtoRegistry,
+          ];
+          const aminoConverters = {
+            ...cosmosAminoConverters,
+            ...cosmwasmAminoConverters,
+          };
+          const registry = new Registry(protoRegistry);
+          const aminoTypes = new AminoTypes(aminoConverters);
+          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
+            'https://sentry.tm.injective.network:443',
+            offlineSigner, {
+              registry,
+              aminoTypes,
+            },
+          )
           return client
         } catch {
           return null

@@ -274,7 +274,7 @@
         "OSMO"
       ],
       "displayName": "bOSMO-OSMO",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/bosmo.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/bOSMO.png",
       "displayLogo2": "/logos/osmo.svg",
       "pool_assets": [
         {
@@ -283,7 +283,7 @@
           "symbol": "bOSMO",
           "name": "bOSMO",
           "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/bosmo.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/bOSMO.png",
           "tags": [
             "native"
           ],
