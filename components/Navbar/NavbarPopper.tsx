@@ -47,11 +47,15 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
       initialFocusRef={firstFieldRef}
       // Children defining sub menu items
       onOpen={
-        menu.isExternal
-          ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
-          : !menu?.children
-            ? () => push(`/${currentChainName}${menu.link}`)
-            : onOpen
+        // For a menu item that should open in a new tab
+        menu.targetBlank
+          ? openLink(menu.link)
+          // Specifically meant for linking to the TFM Bridge page
+          : menu.isExternal
+            ? openLink(`${menu.link}/?chainFrom=${chainId}&chainTo=${BRIDGE_NETWORK_DEFAULTS[chainId]}`)
+            : !menu?.children
+              ? () => push(`/${currentChainName}${menu.link}`)
+              : onOpen
       }
       onClose={onClose}
     >
