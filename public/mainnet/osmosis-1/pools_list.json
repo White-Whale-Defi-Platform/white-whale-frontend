@@ -370,7 +370,7 @@
       ],
       "displayName": "LAB-OSMO",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/LAB.png",
-      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/wbtc.svg",
+      "displayLogo2": "/logos/osmo.svg",
       "pool_assets": [
         {
           "chain_id": "osmosis-1",
