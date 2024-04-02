@@ -357,6 +357,53 @@
       "swap_address": "osmo1ycg9k5dj3pd0szt4f7ladzam8u6rvs472z6ckx4p82u00cetdnzqxw4vwm",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "LAB-OSMO",
+      "lpOrder": [
+        "LAB",
+        "OSMO"
+      ],
+      "assetOrder": [
+        "LAB",
+        "OSMO"
+      ],
+      "displayName": "LAB-OSMO",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/LAB.png",
+      "displayLogo2": "/logos/osmo.svg",
+      "pool_assets": [
+        {
+          "chain_id": "osmosis-1",
+          "token_address": "factory/osmo17fel472lgzs87ekt9dvk0zqyh5gl80sqp4sk4n/LAB",
+          "symbol": "LAB",
+          "name": "LAB",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/LAB.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/osmo17fel472lgzs87ekt9dvk0zqyh5gl80sqp4sk4n/LAB"
+        },
+        {
+          "id": "osmosis",
+          "chain_id": "osmosis-1",
+          "token_address": "uosmo",
+          "symbol": "OSMO",
+          "name": "OSMO",
+          "decimals": 6,
+          "logoURI": "/logos/osmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uosmo"
+        }
+      ],
+      "lp_token": "factory/osmo12zk0xmacanpz9huy8huth2wee98smf9kktg4lltu9zrk3x9w58aq7k64cz/uLP",
+      "swap_address": "osmo12zk0xmacanpz9huy8huth2wee98smf9kktg4lltu9zrk3x9w58aq7k64cz",
+      "staking_address": "osmo1ux4t64n28drgq8xcv42lswfjeqfn3syzutjs80t3c97al7caan4s8h5nsn",
+      "rewards_tokens": []
     }
   ]
 }
