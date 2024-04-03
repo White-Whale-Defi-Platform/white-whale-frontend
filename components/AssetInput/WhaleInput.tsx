@@ -110,7 +110,7 @@ ref) => {
             flex={1}
             ref={ref}
             isValidCharacter={(char) => Boolean(char.match(/[.0-9]/u))}
-            value={value.amount || ''}
+            value={value?.amount || ''}
           >
             <NumberInputField
               color="white"

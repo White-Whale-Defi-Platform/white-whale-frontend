@@ -29,6 +29,7 @@
   "pools": [
     {
       "pool_id": "ampOSMO-OSMO",
+      "osmo_pool_id": 1461,
       "lpOrder": [
         "ampOSMO",
         "OSMO"
@@ -76,6 +77,7 @@
     },
     {
       "pool_id": "SAIL-WHALE",
+      "osmo_pool_id": 1462,
       "lpOrder": [
         "SAIL",
         "WHALE"
@@ -123,6 +125,7 @@
     },
     {
       "pool_id": "WHALE-OSMO",
+      "osmo_pool_id": 1463,
       "lpOrder": [
         "WHALE",
         "OSMO"
@@ -171,6 +174,7 @@
     },
     {
       "pool_id": "ROAR-OSMO",
+      "osmo_pool_id": 1575,
       "lpOrder": [
         "ROAR",
         "OSMO"
@@ -218,6 +222,7 @@
     },
     {
       "pool_id": "SHARK-OSMO",
+      "osmo_pool_id": 1584,
       "lpOrder": [
         "SHARK",
         "OSMO"
@@ -265,6 +270,7 @@
     },
     {
       "pool_id": "bOSMO-OSMO",
+      "osmo_pool_id": 1643,
       "lpOrder": [
         "bOSMO",
         "OSMO"
@@ -312,6 +318,7 @@
     },
     {
       "pool_id": "WHALE-WBTC",
+      "osmo_pool_id": 1644,
       "lpOrder": [
         "WHALE",
         "WBTC"
@@ -360,6 +367,7 @@
     },
     {
       "pool_id": "LAB-OSMO",
+      "osmo_pool_id": 1642,
       "lpOrder": [
         "LAB",
         "OSMO"

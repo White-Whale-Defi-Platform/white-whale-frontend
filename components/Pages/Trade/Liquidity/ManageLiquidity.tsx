@@ -42,7 +42,10 @@ import { tokenItemState } from 'state/tokenItemState'
 import { TokenItemState, TxStep } from 'types/common'
 import { getDecimals } from 'util/conversion/index'
 
-const ManageLiquidity = ({ poolIdFromUrl }) => {
+interface ManageLiquidityProps {
+  poolIdFromUrl?: string
+}
+const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   const [poolIdState, setPoolIdState] = useState(null)
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router = useRouter()
