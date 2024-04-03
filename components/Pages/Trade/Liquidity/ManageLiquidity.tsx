@@ -129,14 +129,11 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
         if (pools && !pools.find((pool: any) => pool.pool_id === poolIdState)) {
           router.push(`/${chainName.toLowerCase()}/pools`)
         } else {
-          console.log('poolIdState', poolIdState)
           router.push(`/${chainName.toLowerCase()}/pools/manage_liquidity?poolId=${poolIdState}`)
         }
       } else {
         if (poolData?.pools) {
           const defaultPoolId = poolData.pools[0].pool_id
-          console.log('defaultPoolId', defaultPoolId)
-
           router.push(`/${chainName}/pools/manage_liquidity?poolId=${defaultPoolId}`)
         }
       }
