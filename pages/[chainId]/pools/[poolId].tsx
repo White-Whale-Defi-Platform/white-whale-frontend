@@ -1,4 +1,4 @@
-import { ACTIVE_NETWORKS, ChainId } from 'constants/index'
+import { ACTIVE_NETWORKS } from 'constants/index'
 import { promises as fs } from 'fs'
 import path from 'path'
 
@@ -13,11 +13,9 @@ export async function getServerSideProps(context) {
     // Read the file from the filesystem
     const jsonData = await fs.readFile(filePath, 'utf8')
     const poolData = JSON.parse(jsonData)
-    let pool = poolData.pools.find((pool) => pool.pool_id === poolId)
+    const pool = poolData.pools.find((pool) => (chainId === 'osmosis' ? pool.osmo_pool_id === Number(poolId) : pool.pool_id === poolId))
     if (!pool) {
       // If no pool matches, redirect to a custom 404 page or another page
-      const isOsmosisRedirect = chainId == ChainId.osmosis
-      pool = isOsmosisRedirect ? poolData.pools.find((pool) => pool.osmo_pool_id === Number(poolId)) : pool
       if (!pool) {
         return {
           redirect: {
@@ -36,7 +34,7 @@ export async function getServerSideProps(context) {
     } else {
       return {
         redirect: {
-          destination: `/${chainId}/pools/manage_liquidity?poolId=${poolId}`,
+          destination: `/${chainId}/pools/manage_liquidity?poolId=${pool.pool_id}`,
           permanent: false,
         },
       }
