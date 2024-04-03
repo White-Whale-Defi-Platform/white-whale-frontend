@@ -105,12 +105,12 @@ const DepositForm = ({
       }
     } else {
       if (reverse) {
-        if (!token2.amount) {
+        if (!token2?.amount) {
           setValue('token1', { ...token1,
             amount: null })
         }
       } else {
-        if (!token1.amount) {
+        if (!token1?.amount) {
           setValue('token2', { ...token2,
             amount: null })
         }
