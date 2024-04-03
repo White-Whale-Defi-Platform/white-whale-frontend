@@ -46,7 +46,7 @@ interface ManageLiquidityProps {
   poolIdFromUrl?: string
 }
 const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
-  const [poolIdState, setPoolIdState] = useState(null)
+  const [poolIdState, setPoolIdState] = useState('')
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const router = useRouter()
   const chains: Array<any> = useChainInfos()
@@ -84,8 +84,10 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
     if (!pool && chainId == ChainId.osmosis) {
       pool = poolData?.pools.find((pool: any) => pool?.osmo_pool_id === Number(poolIdFromUrl))
     }
-    if (pool) { 
-      setPoolIdState(pool?.pool_id) 
+    if (pool && !poolIdState) {
+      setPoolIdState(pool?.pool_id)
+    } else if (poolIdState == '' && !pool) {
+      setPoolIdState(null)
     }
     return pool
   },
@@ -135,10 +137,13 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
         } else {
           router.push(`/${chainName.toLowerCase()}/pools/manage_liquidity?poolId=${poolIdState}`)
         }
-      } else {
+      } else if (poolIdState === null) {
         if (poolData?.pools) {
+
           const defaultPoolId = poolData.pools[0].pool_id
+
           router.push(`/${chainName}/pools/manage_liquidity?poolId=${defaultPoolId}`)
+
         }
       }
     }
