@@ -3,7 +3,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 
 export async function getServerSideProps(context) {
-  const { chainId, poolAddress } = context.params
+  const { chainId, poolId } = context.params
 
   // Construct the file path to the JSON file in the public directory
   const filePath = path.join(
@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
     const jsonData = await fs.readFile(filePath, 'utf8')
     const poolData = JSON.parse(jsonData)
 
-    const pool = poolData.pools.find((pool) => pool.swap_address === poolAddress)
+    const pool = poolData.pools.find((pool) => pool.pool_id === poolId)
 
     if (!pool) {
       // If no pool matches, redirect to a custom 404 page or another page
@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
     } else {
       return {
         redirect: {
-          destination: `/${chainId}/pools/manage_liquidity?poolId=${pool.pool_id}`,
+          destination: `/${chainId}/pools/manage_liquidity?poolId=${poolId}`,
           permanent: false,
         },
       }
