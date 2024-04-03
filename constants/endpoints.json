@@ -65,10 +65,10 @@
     },
     "osmosis": {
         "rpc": [
-            "https://osmosis-rpc.polkachu.com"
+            "https://osmosis-rpc.publicnode.com:443"
         ],
         "rest": [
-            "https://osmosis-api.polkachu.com"
+            "https://osmosis-rest.publicnode.com"
         ]
     }
 }
