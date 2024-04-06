@@ -11,10 +11,6 @@ export const getPoolInfo = async (swapAddress: string,
   if (!swapAddress || !client) {
     return null
   }
-  const apiValues = await getPoolFromAPI(await client.getChainId(), swapAddress)
-  if (apiValues) {
-    return apiValues
-  }
   return await client.queryContractSmart(swapAddress, {
     pool: {},
   })
