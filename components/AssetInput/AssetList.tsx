@@ -18,6 +18,7 @@ type AssetListProps = {
   amount?: number
   isBonding?: boolean
   unbondingBalances?: TokenBalance[]
+  isIncentives?: boolean
 }
 
 const AssetList: FC<AssetListProps> = ({
@@ -27,15 +28,22 @@ const AssetList: FC<AssetListProps> = ({
   amount,
   edgeTokenList = [],
   isBonding = false,
+  isIncentives = false,
   unbondingBalances = null,
 }) => {
   const [tokenList] = useTokenList()
-
   const { network, chainId } = useRecoilValue(chainState)
   const config = useConfig(network, chainId)
-  const tokens = isBonding
-    ? config?.bonding_tokens
-    : [...tokenList?.tokensBySymbol?.values()].filter((token:any) => !token?.withoutPool)
+  const tokens = useMemo(() => {
+    if (!config) return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
+
+    let res = isBonding ? config.bonding_tokens : [...(tokenList?.tokensBySymbol?.values() || [])];
+
+    if (isIncentives) return res;
+
+    return res.length > 0 ? res : [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
+  }, [config, isBonding, isIncentives, tokenList]);
+
   const [tokenBalance = []] =
     unbondingBalances
       ? [
@@ -81,7 +89,7 @@ const AssetList: FC<AssetListProps> = ({
         },
       }}
     >
-      {filterAssets.map((item, index) => (
+      {filterAssets?.map((item, index) => (
         <HStack
           key={item?.name}
           as={Button}
@@ -99,7 +107,7 @@ const AssetList: FC<AssetListProps> = ({
             tokenSymbol: item?.symbol,
             amount,
           },
-          true)
+            true)
           }
         >
           <HStack>

@@ -16,6 +16,8 @@ type Props = {
   ignoreSlack?: boolean
   showList?: boolean
   mobile?: boolean
+  isBonding?: boolean
+  isIncentives?: boolean
 }
 
 const Input = ({
@@ -28,6 +30,8 @@ const Input = ({
   fetchBalance = true,
   ignoreSlack = false,
   showList = false,
+  isBonding = false,
+  isIncentives = false,
   mobile,
 }: Props) => {
   const { balance: tokenBalance } = useTokenBalance(token?.tokenSymbol)
@@ -46,6 +50,8 @@ const Input = ({
             balance={fetchBalance ? tokenBalance : balance}
             ignoreSlack={ignoreSlack}
             showList={showList}
+            isBonding={isBonding}
+            isIncentives={isIncentives}
             mobile={mobile}
             onChange={(value) => {
               onChange(value)

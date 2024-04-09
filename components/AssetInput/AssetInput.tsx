@@ -30,6 +30,7 @@ interface AssetInputProps {
   unbondingBalances?: TokenBalance[]
   mobile?: boolean
   fee?: any
+  isIncentives?: boolean
 }
 
 const AssetInput = forwardRef((props: AssetInputProps, _) => {
@@ -44,6 +45,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
     hideDollarValue,
     mobile,
     fee = null,
+    isIncentives,
   } = props
   const tokenInfo = useTokenInfo(token?.tokenSymbol)
   const [maxClicked, setMaxClicked] = useState(false)
