@@ -55,13 +55,14 @@ const Create = ({ poolId }: Props) => {
   const { isWalletConnected } = useChain(walletChainName)
   const { txStep } = useRecoilValue(txRecoilState)
   const [isMobile] = useMediaQuery('(max-width: 640px)')
-  const { simulate, submit } = useOpenFlow({ poolId,
-    ...formData })
+  const { simulate, submit } = useOpenFlow({
+    poolId,
+    ...formData
+  })
 
   const startDate = formData.startDate === '' ? dayjs() : dayjs(formData.startDate)
   const endDateMinimum = startDate.add(1, 'day')
   const startDateInvalid = startDate.isBefore(dayjs(), 'day')
-
   return (
     <Stack as="form" gap="5" onSubmit={handleSubmit(() => submit())}>
       <Input
@@ -69,6 +70,7 @@ const Create = ({ poolId }: Props) => {
         control={control}
         token={token}
         showList={true}
+        isIncentives={true}
         mobile={isMobile}
         onChange={(value) => {
           setToken({
@@ -136,7 +138,7 @@ const Create = ({ poolId }: Props) => {
         />
       </HStack>
 
-      <Divider opacity="0.2" paddingY={'2'}/>
+      <Divider opacity="0.2" paddingY={'2'} />
       <HStack justifyContent="space-between">
         <Text color="whiteAlpha.600">Fee</Text>
         <Spacer />

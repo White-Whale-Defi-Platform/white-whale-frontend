@@ -32,6 +32,7 @@ interface AssetInputProps {
   hideToken?: string
   edgeTokenList?: string[]
   isBonding?: boolean
+  isIncentives?: boolean
   unbondingBalances?: TokenBalance[]
 }
 
@@ -84,6 +85,7 @@ const AssetInput: FC<AssetInputProps> = forwardRef(({
   hideToken,
   edgeTokenList,
   isBonding = false,
+  isIncentives = false,
   unbondingBalances = null,
 },
 ref) => {
@@ -149,6 +151,7 @@ ref) => {
             disabled={disabled || !showList}
             amount={token?.amount}
             isBonding={isBonding}
+            isIncentives={isIncentives}
             unbondingBalances={unbondingBalances}
           >
             <AssetSelectTrigger

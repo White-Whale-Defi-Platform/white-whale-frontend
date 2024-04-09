@@ -24,6 +24,7 @@ interface AssetSelectModalProps {
   disabled: boolean
   amount?: number
   isBonding?: boolean
+  isIncentives?: boolean
   unbondingBalances?: TokenBalance[]
 }
 
@@ -35,6 +36,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
   disabled,
   amount,
   isBonding = false,
+  isIncentives = false,
   unbondingBalances = null,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -83,6 +85,7 @@ const AssetSelectModal: FC<AssetSelectModalProps> = ({
               edgeTokenList={edgeTokenList}
               currentToken={currentToken}
               isBonding={isBonding}
+              isIncentives={isIncentives}
               unbondingBalances={unbondingBalances}
             />
           </ModalBody>
