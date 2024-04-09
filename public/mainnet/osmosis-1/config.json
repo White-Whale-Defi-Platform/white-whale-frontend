@@ -24,13 +24,13 @@
       "denom": "ibc/834D0AEF380E2A490E4209DFF2785B8DBB7703118C144AC373699525C65B4223"
     },
     {
-      "id": "",
+      "id": "backbone-labs-staked-whale",
       "chain_id": "osmosis-1",
       "token_address": "ibc/917C4B1E92EE2F959FC11ECFC435C4048F97E8B00F9444592706F4604F24BF25",
       "symbol": "bWHALE",
       "name": "bWHALE",
       "decimals": 6,
-      "logoURI": "/logos/bWhale.png",
+      "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "tags": [
         "native"
       ],

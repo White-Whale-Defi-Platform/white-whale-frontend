@@ -86,16 +86,17 @@
         "WHALE"
       ],
       "displayName": "bWHALE-WHALE",
-      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
           "chain_id": "migaloo-1",
+          "id": "backbone-labs-staked-whale",
           "token_address": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale",
           "symbol": "bWHALE",
           "name": "bWhale",
           "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
           "tags": [
             "native"
           ],
@@ -790,7 +791,7 @@
       ],
       "displayName": "bWHALEt-bWHALE",
       "displayLogo1": "/logos/bwhalet.svg",
-      "displayLogo2": "/logos/bWHALE.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "pool_assets": [
         {
           "chain_id": "migaloo-1",
@@ -807,11 +808,12 @@
         },
         {
           "chain_id": "migaloo-1",
+          "id": "backbone-labs-staked-whale",
           "token_address": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale",
           "symbol": "bWHALE",
           "name": "bWHALE",
           "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
           "tags": [
             "native"
           ],

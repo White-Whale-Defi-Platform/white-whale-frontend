@@ -140,7 +140,7 @@
       "lpOrder": ["WHALE", "bWHALE"],
       "assetOrder": ["bWHALE", "WHALE"],
       "displayName": "bWHALE-WHALE",
-      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
@@ -157,11 +157,12 @@
         },
         {
           "chain_id": "comdex-1",
+          "id": "backbone-labs-staked-whale",
           "token_address": "ibc/BED9212E5BA494E6EA522D82D55972A3C148BB0232FE2B4366FF5356FB3E522C",
           "symbol": "bWHALE",
           "name": "bWHALE",
           "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
           "tags": ["native"],
           "native": true,
           "denom": "ibc/BED9212E5BA494E6EA522D82D55972A3C148BB0232FE2B4366FF5356FB3E522C"

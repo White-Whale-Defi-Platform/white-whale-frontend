@@ -224,16 +224,17 @@
         "HUAHUA"
       ],
       "displayName": "bHUAHUA-HUAHUA",
-      "displayLogo1": "/logos/bHUA.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chihuahua/images/bhuahua.png",
       "displayLogo2": "/logos/huahua.png",
       "pool_assets": [
         {
           "chain_id": "chihuahua-1",
+          "id": "backbone-labs-staked-huahua",
           "token_address": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w",
           "symbol": "bHUAHUA",
           "name": "bHUAHUA",
           "decimals": 6,
-          "logoURI": "/logos/bHUA.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chihuahua/images/bhuahua.png",
           "tags": [],
           "native": false,
           "denom": "chihuahua1jz5n4aynhpxx7clf2m8hrv9dp5nz83k67fgaxhy4p9dfwl6zssrq3ymr6w"
@@ -363,16 +364,17 @@
         "WHALE"
       ],
       "displayName": "bWHALE-WHALE",
-      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
           "chain_id": "chihuahua-1",
+          "id": "backbone-labs-staked-whale",
           "token_address": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
           "symbol": "bWHALE",
           "name": "bWHALE",
           "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
           "tags": [
             "native"
           ],
