@@ -35,7 +35,9 @@ const AssetList: FC<AssetListProps> = ({
   const { network, chainId } = useRecoilValue(chainState)
   const config = useConfig(network, chainId)
   const tokens = useMemo(() => {
-    if (!config) return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
+    if (!config) return []
+
+    if (!isBonding && !isIncentives) return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
 
     let res = isBonding ? config.bonding_tokens : [...(tokenList?.tokensBySymbol?.values() || [])];
 

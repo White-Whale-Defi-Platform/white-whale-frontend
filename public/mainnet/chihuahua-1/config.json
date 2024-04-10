@@ -22,11 +22,12 @@
     },
     {
       "chain_id": "chihuahua-1",
+      "id": "backbone-labs-staked-whale",
       "token_address": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7",
       "symbol": "bWHALE",
       "name": "bWHALE",
       "decimals": 6,
-      "logoURI": "/logos/bWHALE.png",
+      "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "tags": ["native"],
       "native": true,
       "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7"

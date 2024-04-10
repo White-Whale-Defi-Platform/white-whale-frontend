@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
@@ -22,6 +22,7 @@ import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
 import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
+import { useTokenList } from 'hooks/useTokenList'
 
 export interface Flow {
   claimed_amount: string
@@ -144,7 +145,7 @@ const getPoolFlowData = async (
             (flow.start_epoch +
               (flow.end_epoch - flow.start_epoch) -
               Number(currentEpochData.currentEpoch.epoch.id)),
-          poolAsset?.decimals || 6)
+            poolAsset?.decimals || 6)
           const uniqueFlow = uniqueFlowList.find((f) => f.denom === flowDenom)
           uniqueFlow.dailyEmission += emission
         }
@@ -178,6 +179,7 @@ export const useIncentivePoolInfo = (
   client, pools, currentChainPrefix,
 ) => {
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const [tokenList, loading] = useTokenList()
   const config: Config = useConfig(network, chainId)
   const prices = usePrices()
   const { data: currentEpochData } = useCurrentEpoch(client, config)
@@ -211,17 +213,13 @@ export const useIncentivePoolInfo = (
     }
   }, [currentChainPrefix, pools?.length, client])
 
-  let poolAssets = []
+  const poolAssets = useMemo(() => {
+    if (!tokenList || loading) return []
+    return tokenList?.tokens
+  }, [tokenList, loading, pools, chainId, tokenList?.tokens, config, prices])
 
-  if (Array.isArray(pools)) {
-    poolAssets = [].
-      concat(...pools.map((pool) => pool.pool_assets)).
-      filter((
-        v, i, a,
-      ) => a.findIndex((t) => t.denom === v.denom) === i)
-  }
   const { data: flowPoolData, isLoading } = useQuery(
-    ['apr', currentEpochData, pools?.length],
+    ['apr', currentEpochData, pools?.length, poolAssets],
     () => getPoolFlowData(
       client,
       pools,
@@ -234,6 +232,7 @@ export const useIncentivePoolInfo = (
         Boolean(client) &&
         Boolean(currentEpochData) &&
         Boolean(pools) &&
+        Boolean(poolAssets) &&
         Boolean(prices),
     },
   )

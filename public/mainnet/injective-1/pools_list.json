@@ -224,7 +224,7 @@
         "WHALE"
       ],
       "displayName": "bWHALE-WHALE",
-      "displayLogo1": "/logos/bWHALE.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
@@ -243,11 +243,12 @@
         },
         {
           "chain_id": "injective-1",
+          "id": "backbone-labs-staked-whale",
           "token_address": "ibc/ECB0AA28D6001EF985047558C410B65581FC85BD92D4E3CFCCA0D3D964C67CC2",
           "symbol": "bWHALE",
           "name": "bWHALE",
           "decimals": 6,
-          "logoURI": "/logos/bWHALE.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
           "tags": [
             "native"
           ],

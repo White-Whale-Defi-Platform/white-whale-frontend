@@ -24,11 +24,12 @@
     },
     {
       "chain_id": "migaloo-1",
+      "id": "backbone-labs-staked-whale",
       "token_address": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale",
       "symbol": "bWHALE",
       "name": "bWhale",
       "decimals": 6,
-      "logoURI": "/logos/bWHALE.png",
+      "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "tags": [
         "native"
       ],
