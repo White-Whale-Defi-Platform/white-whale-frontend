@@ -39,10 +39,10 @@ export const findPoolForSwap = ({
     tokenB,
   }) => {
     const matchingAB =
-      poolTokenA.symbol === tokenA.symbol && poolTokenB.symbol === tokenB.symbol
+      poolTokenA.symbol === tokenA?.symbol && poolTokenB.symbol === tokenB?.symbol
 
     const matchingBA =
-      poolTokenA.symbol === tokenB.symbol && poolTokenB.symbol === tokenA.symbol
+      poolTokenA.symbol === tokenB?.symbol && poolTokenB.symbol === tokenA?.symbol
 
     return { matchingAB,
       matchingBA }
