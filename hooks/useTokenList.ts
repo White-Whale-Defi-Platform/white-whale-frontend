@@ -19,7 +19,7 @@ export const useTokenList = () => {
 
   /* Generate token list off pool list and store it in cache */
   const { data } = useQuery<TokenList>(
-    ['@token-list', chainId, network],
+    ['@token-list', chainId, network, config],
     () => {
       const tokenMapBySymbol = new Map()
       poolsListResponse.pools.forEach(({ pool_assets }) => {
