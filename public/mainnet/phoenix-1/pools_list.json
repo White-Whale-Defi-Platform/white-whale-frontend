@@ -367,7 +367,7 @@
         "LUNA"
       ],
       "displayName": "bLUNA-LUNA",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/boneluna.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/bLUNA.png",
       "displayLogo2": "/logos/luna.svg",
       "pool_assets": [
         {
@@ -377,7 +377,7 @@
           "symbol": "bLUNA",
           "name": "bLuna",
           "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/boneluna.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/bLUNA.png",
           "tags": [],
           "native": false,
           "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
@@ -602,7 +602,7 @@
         "SOLID"
       ],
       "displayName": "bLUNA-SOLID",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/boneluna.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/bLUNA.png",
       "displayLogo2": "/logos/solid.svg",
       "pool_assets": [
         {
@@ -612,7 +612,7 @@
           "symbol": "bLUNA",
           "name": "bLuna",
           "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/boneluna.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/bLUNA.png",
           "tags": [],
           "native": false,
           "denom": "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml"
