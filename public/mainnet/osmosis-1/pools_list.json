@@ -412,6 +412,55 @@
       "swap_address": "osmo12zk0xmacanpz9huy8huth2wee98smf9kktg4lltu9zrk3x9w58aq7k64cz",
       "staking_address": "osmo1ux4t64n28drgq8xcv42lswfjeqfn3syzutjs80t3c97al7caan4s8h5nsn",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "RSTK-WHALE",
+      "lpOrder": [
+        "RSTK",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "RSTK",
+        "WHALE"
+      ],
+      "displayName": "RSTK-WHALE",
+      "displayLogo1": "/logos/rstk.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "osmo_pool_id": 1699,
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/04FAC73DFF7F1DD59395948F2F043B0BBF978AD4533EE37E811340F501A08FFB",
+          "symbol": "RSTK",
+          "name": "RSTK",
+          "decimals": 6,
+          "logoURI": "/logos/rstk.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/04FAC73DFF7F1DD59395948F2F043B0BBF978AD4533EE37E811340F501A08FFB"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/EDD6F0D66BCD49C1084FB2C35353B4ACD7B9191117CE63671B61320548F7C89D",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/EDD6F0D66BCD49C1084FB2C35353B4ACD7B9191117CE63671B61320548F7C89D"
+        }
+      ],
+      "lp_token": "factory/osmo14kysamffv3fr7mw96wq3nufwwe3x27celdf9frf2h9akxnpw7q0qnau63x/uLP",
+      "swap_address": "osmo14kysamffv3fr7mw96wq3nufwwe3x27celdf9frf2h9akxnpw7q0qnau63x",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ]
 }
