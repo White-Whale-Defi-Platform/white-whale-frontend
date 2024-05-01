@@ -86,12 +86,15 @@ const useEpoch = () => {
   const { cosmWasmClient } = useClients(walletChainName)
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
-    queryFn: async () =>
-      // TODO: API
-      await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
+    queryFn: async () => {
+      if (!contracts?.fee_distributor) {
+        return null
+      }
+      return await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
         config: {},
-      }),
-    enabled: Boolean(contracts) && Boolean(cosmWasmClient),
+      })
+    },
+    enabled: Boolean(contracts?.fee_distributor) && Boolean(cosmWasmClient),
   })
 
   const { data } = useQuery<EpochData>({
@@ -99,7 +102,7 @@ const useEpoch = () => {
     queryFn: async () => await cosmWasmClient?.queryContractSmart(contracts?.fee_distributor, {
       current_epoch: {},
     }),
-    enabled: Boolean(contracts) && Boolean(cosmWasmClient),
+    enabled: Boolean(contracts?.fee_distributor) && Boolean(cosmWasmClient),
   })
   const dateToEpoch = (givenDate) => {
     if (!data?.epoch?.id || !config?.epoch_config?.duration || !givenDate) {
