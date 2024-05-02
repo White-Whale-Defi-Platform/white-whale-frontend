@@ -29,8 +29,8 @@ export const Dashboard: FC = () => {
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
       const mappedDashboardData = dashboardData.dashboardData?.map((data) => {
 
-        const apr = (dashboardData?.bondingInfos?.[data?.chainName]?.bondingAPR) || 0;
-        const buyback = (dashboardData?.bondingInfos?.[data?.chainName]?.buyback) || 0;
+        const apr = (dashboardData?.bondingInfos?.[data.chainName]?.bondingAPR) || 0;
+        const buyback = (dashboardData?.bondingInfos?.[data.chainName]?.buyback) || 0;
 
         return ({
           logoUrl: getChainLogoUrlByName(data.chainName),
