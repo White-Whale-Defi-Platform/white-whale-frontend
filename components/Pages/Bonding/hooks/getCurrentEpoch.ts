@@ -53,7 +53,6 @@ export const getCurrentEpoch = async (client: CosmWasmClient,
   if (!client || !config?.fee_distributor) {
     return null
   }
-  console.log(config, client)
   const currentEpoch = await fetchCurrentEpoch(client, config)
 
   return { currentEpoch }
