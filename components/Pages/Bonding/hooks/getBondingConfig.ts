@@ -19,7 +19,7 @@ export interface BondingContractConfig {
 
 export const getBondingConfig = async (client: CosmWasmClient | null,
   config: Config) => {
-  if (!client && !config) {
+  if (!client || !config?.whale_lair) {
     return null
   }
   const bondingConfig = await fetchConfig(client, config)
@@ -29,7 +29,10 @@ export const getBondingConfig = async (client: CosmWasmClient | null,
 export const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<BondingContractConfig> => {
   // TODO: API
-  const result: JsonObject = await client.queryContractSmart(config.whale_lair,
+  if (!client || !config?.whale_lair) {
+    return null
+  }
+  const result: JsonObject = await client.queryContractSmart(config?.whale_lair,
     {
       config: {},
     })
