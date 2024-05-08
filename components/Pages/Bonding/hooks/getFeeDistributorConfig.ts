@@ -22,7 +22,7 @@ const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<FeeDistributionConfig> => {
   // TODO: API
 
-  const result: JsonObject = await client.queryContractSmart(config.fee_distributor,
+  const result: JsonObject = await client.queryContractSmart(config?.fee_distributor,
     {
       config: {},
     })
@@ -31,7 +31,7 @@ const fetchConfig = async (client: CosmWasmClient,
 }
 export const getFeeDistributorConfig = async (client: CosmWasmClient,
   config: Config) => {
-  if (!client) {
+  if (!client || !config?.fee_distributor) {
     return null
   }
   const feeDistributionConfig = await fetchConfig(client, config)

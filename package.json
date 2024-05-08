@@ -31,6 +31,7 @@
     "@cosmos-kit/react-lite": "^2.6.9",
     "@cosmos-kit/shell": "^2.6.9",
     "@cosmos-kit/station": "^2.5.9",
+    "@cosmos-kit/galaxy-station": "^2.6.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@injectivelabs/sdk-ts": "^1.14.6",

@@ -37,7 +37,10 @@ export interface Epoch {
 
 export const fetchCurrentEpoch = async (client: CosmWasmClient,
   config: Config): Promise<Epoch> => {
-  const result: JsonObject = await client?.queryContractSmart(config.fee_distributor,
+    if (!client || !config?.fee_distributor) {
+      return null
+    }
+  const result: JsonObject = await client?.queryContractSmart(config?.fee_distributor,
     {
       current_epoch: {},
     })
@@ -47,10 +50,9 @@ export const fetchCurrentEpoch = async (client: CosmWasmClient,
 
 export const getCurrentEpoch = async (client: CosmWasmClient,
   config: Config) => {
-  if (!client) {
+  if (!client || !config?.fee_distributor) {
     return null
   }
-
   const currentEpoch = await fetchCurrentEpoch(client, config)
 
   return { currentEpoch }
