@@ -48,7 +48,7 @@ export const getFlowsFromAPI = async (chainNameId: string, address: string) => {
 
 export const getHealthyRPCs = async (chainNameId: string) => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/rpcs/${chainNameId}`, 1000)
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/rpcs/${chainNameId}`, 2000)
     const json = await response.json()
     if (json.data !== 'Chain not found') {
       return json.data
@@ -118,16 +118,15 @@ export const getPricesAPI = async (ids: Array<string>) => {
   }
 }
 
-// Not used yet
-export const createEndpointOptions = (chains: any) => {
+export const createEndpointOptions = async (chains: any) => {
   const endpoints: Record<string, any> = {}
-  CHAIN_NAMES.forEach(async (chain: string) => {
+  CHAIN_NAMES.forEach( async (chain: string) => {
     endpoints[chain] = {}
     endpoints[chain] = {
       rpc: await getHealthyRPCs(chain),
       rest: await getHealthyRestEndpoints(chain),
     }
-    if (!endpoints[chain].rpc || !endpoints[chain].rest) {
+    if (!endpoints[chain] || !endpoints[chain].rpc || !endpoints[chain].rest) {
       const registry = chains.find((chainRes: any) => chainRes.chain_name === chain)
       const rests = registry.apis.rest.map((elem: any) => elem.address)
       const rpcs = registry.apis.rpc.map((elem: any) => elem.address)

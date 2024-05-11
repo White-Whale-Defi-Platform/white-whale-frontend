@@ -10,6 +10,7 @@ import {
   cosmwasmAminoConverters,
   cosmwasmProtoRegistry,
 } from '@nick134-bit/nicks-injectivejs/dist/codegen';
+import { getRandomRPC } from '../services/useAPI';
 
 export const useClients = (walletChainName: string) => {
   const {
@@ -53,8 +54,9 @@ export const useClients = (walletChainName: string) => {
           };
           const registry = new Registry(protoRegistry);
           const aminoTypes = new AminoTypes(aminoConverters);
+          const endpoint = await getRandomRPC('injective')
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
-            'https://sentry.tm.injective.network:443',
+            endpoint,
             offlineSigner, {
               registry,
               aminoTypes,

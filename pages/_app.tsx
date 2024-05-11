@@ -24,7 +24,7 @@ import Head from 'next/head'
 import Script from 'next/script'
 import { RecoilRoot } from 'recoil'
 import { queryClient } from 'services/queryClient'
-import { getFastestAPI } from 'services/useAPI'
+import { createEndpointOptions, getFastestAPI } from 'services/useAPI'
 import theme from 'theme'
 
 const MyApp: FC<AppProps> = ({
@@ -33,6 +33,7 @@ const MyApp: FC<AppProps> = ({
 }: AppProps) => {
   const [mounted, setMounted] = useState<boolean>(false)
   const [api, setApi] = useState<string>('')
+  const [options, setOptions] = useState<any>(endpointOptions)
 
   const walletProviders = [
     {
@@ -88,7 +89,9 @@ const MyApp: FC<AppProps> = ({
       localStorage.setItem('ww-version', version?.version)
     }
     const setAPI = async () => setApi(await getFastestAPI(true))
+    const setEndpointOptions = async () => setOptions({isLazy: true, endpoints: await createEndpointOptions(chains)})
     setAPI()
+    setEndpointOptions()
     setMounted(true)
   }, [reorderWallets, api])
   return (
@@ -105,7 +108,7 @@ const MyApp: FC<AppProps> = ({
               wallets={reorderWallets} // Supported wallets
               walletModal={WalletModal}
               signerOptions={signerOptions}
-              endpointOptions={endpointOptions}
+              endpointOptions={options}
               walletConnectOptions={{
                 signClient: {
                   projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
