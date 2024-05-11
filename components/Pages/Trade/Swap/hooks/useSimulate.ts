@@ -27,11 +27,6 @@ const useSimulate = ({ cosmWasmClient, msg, routerAddress }) => {
     },
     {
       enabled: Boolean(cosmWasmClient) && Boolean(msg) && Boolean(debounseMsg),
-      /*
-       * OnError: (err) => {
-       *     console.log({err : (err as any)?.code})
-       * }
-       */
     },
   )
 

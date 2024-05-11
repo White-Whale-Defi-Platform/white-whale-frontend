@@ -10,6 +10,8 @@ import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 
 import { useGetDashboardDataAPI } from './hooks/getDashboardDataAPI'
+import { useChainInfos } from 'hooks/useChainInfo'
+import { WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/networks'
 
 export type DashboardData = {
   logoUrl: string
@@ -22,17 +24,23 @@ export type DashboardData = {
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
   const { data: dashboardData, isLoading } = useGetDashboardDataAPI()
+  const chains = useChainInfos()
   const prices = usePrices()
   useEffect(() => {
     const fetchDashboardData = async () => {
       const circulatingWhaleSupply = dashboardData.supply?.circulating / (10 ** 6) || 0
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
-      const mappedDashboardData = dashboardData.dashboardData?.map((data) => {
+      const mappedDashboardData = [] 
+      dashboardData.dashboardData?.map((data) => {
 
         const apr = (dashboardData?.bondingInfos?.[data.chainName]?.bondingAPR) || 0;
         const buyback = (dashboardData?.bondingInfos?.[data.chainName]?.buyback) || 0;
 
-        return ({
+        const chain = chains?.find((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId] === data.chainName)
+        if (!chain) {
+          return
+        }
+        mappedDashboardData.push({
           logoUrl: getChainLogoUrlByName(data.chainName),
           chainName: data.chainName,
           tvl: data.tvl,
@@ -46,7 +54,7 @@ export const Dashboard: FC = () => {
         data: mappedDashboardData,
         whalePrice: prices?.WHALE ? prices.WHALE : 0,
         marketCap: marketCap ? marketCap : 0,
-        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && mappedDashboardData?.length > 0,
+        isInitialized: prices?.WHALE !== 0 && circulatingWhaleSupply !== 0 && marketCap !== 0 && mappedDashboardData?.length > 0 && chains?.length > 0,
       })
     }
     if (!dashboardState.isInitialized) {
@@ -65,6 +73,6 @@ export const Dashboard: FC = () => {
       <Loader />
     </HStack>)}
     {dashboardState.isInitialized && <StatsTable dashboardData={dashboardState?.data} />}
-    {dashboardState.isInitialized && <HStack alignSelf={'start'}><Text fontWeight={'bold'}>{`Total Daily Dex Buybacks: ${dashboardState.data?.reduce((acc, data) => acc + data.buyback, 0).toFixed(2)} WHALE`}</Text></HStack>}
+    {dashboardState.isInitialized && <HStack alignSelf={'start'}><Text fontWeight={'bold'}>{`Total Daily Dex Buybacks: ${dashboardState.data?.reduce((acc, data) => acc + data?.buyback, 0).toFixed(2)} WHALE`}</Text></HStack>}
   </VStack>
 }
