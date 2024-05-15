@@ -24,7 +24,6 @@ export type DashboardData = {
 }
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
-  useChain('migaloo') // force wallet connect status
   const { data: dashboardData, isLoading } = useGetDashboardDataAPI()
   const chains = useChainInfos()
   const prices = usePrices()
