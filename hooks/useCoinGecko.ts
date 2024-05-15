@@ -10,7 +10,6 @@ const getCoinGecko = async (ids = []) => {
     const response = isDevMode() ? await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${newApiIds.split(',')}&vs_currencies=usd`) :
       await fetch(`/api/coingecko?ids=${newApiIds}`)
     apiValues = await response.json()
-    console.log('apiValues', apiValues)
   }
   return apiValues
 }

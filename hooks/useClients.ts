@@ -17,7 +17,7 @@ export const useClients = (walletChainName: string) => {
     getSigningCosmWasmClient,
     isWalletConnected,
     setDefaultSignOptions,
-    wallet, getOfflineSigner } = useChain(walletChainName)
+    wallet, getRpcEndpoint, getOfflineSigner } = useChain(walletChainName)
 
   if (isWalletConnected && !wallet?.name.includes('station')) {
     try {
@@ -54,8 +54,9 @@ export const useClients = (walletChainName: string) => {
           };
           const registry = new Registry(protoRegistry);
           const aminoTypes = new AminoTypes(aminoConverters);
+          const endpoint = await getRpcEndpoint()
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
-            'https://sentry.tm.injective.network:443',
+            endpoint,
             offlineSigner, {
             registry,
             aminoTypes,
