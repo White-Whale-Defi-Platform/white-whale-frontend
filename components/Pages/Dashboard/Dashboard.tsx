@@ -12,7 +12,6 @@ import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { useGetDashboardDataAPI } from './hooks/getDashboardDataAPI'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/networks'
-import { useChain } from '@cosmos-kit/react-lite'
 
 export type DashboardData = {
   logoUrl: string
