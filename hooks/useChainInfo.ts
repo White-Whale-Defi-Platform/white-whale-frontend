@@ -18,7 +18,7 @@ export const useChainInfos = () => {
         out.push(chain)
       }
     })
-    return out || []
+    return out
   },
     [network])
 }
