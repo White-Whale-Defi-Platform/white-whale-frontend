@@ -12,7 +12,6 @@ import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 import { useGetDashboardDataAPI } from './hooks/getDashboardDataAPI'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/networks'
-import { useWallet } from '@cosmos-kit/react-lite'
 
 export type DashboardData = {
   logoUrl: string
@@ -25,7 +24,6 @@ export type DashboardData = {
 export const Dashboard: FC = () => {
   const [dashboardState, setDashboardDataState] = useRecoilState(dashboardDataState)
   const { data: dashboardData, isLoading } = useGetDashboardDataAPI()
-  useWallet()
   const chains = useChainInfos()
   const prices = usePrices()
   useEffect(() => {
