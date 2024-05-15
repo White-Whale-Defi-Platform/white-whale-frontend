@@ -24,11 +24,9 @@ import luncMenuLinks from './LUNCNavMenu.json'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
-import { useChain } from '@cosmos-kit/react-lite'
 
 const Navbar = () => {
   const { chainId, chainName } = useRecoilValue(chainState)
-  useChain(chainName)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const currentChainName = chainName
