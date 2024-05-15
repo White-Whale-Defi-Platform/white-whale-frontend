@@ -162,14 +162,10 @@ export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
 }
 
 export const getBondingAPRsAPI = async () => {
-  try {
     const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 50000)
     const json = await response.json()
-    return json?.data || null
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    return json?.data
+
 }
 
 export async function fetchWithTimeout(url: string, timoutMS = 10000) {

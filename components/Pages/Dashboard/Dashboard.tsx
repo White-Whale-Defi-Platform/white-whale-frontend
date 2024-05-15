@@ -35,8 +35,8 @@ export const Dashboard: FC = () => {
       const mappedDashboardData = [] 
       dashboardData.dashboardData?.map((data) => {
 
-        const apr = (dashboardData?.bondingInfos?.[data.chainName]?.bondingAPR) || 0;
-        const buyback = (dashboardData?.bondingInfos?.[data.chainName]?.buyback) || 0;
+        const apr = (dashboardData?.bondingInfos?.[data.chainName]?.bondingAPR);
+        const buyback = (dashboardData?.bondingInfos?.[data.chainName]?.buyback);
 
         const chain = chains?.find((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId] === data.chainName)
         if (!chain) {
