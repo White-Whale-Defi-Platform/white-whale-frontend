@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 
 import { Button, HStack, Text, useToast } from '@chakra-ui/react'
 import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
+import GalaxyStationExtensionIcon from 'components/Icons/GalaxyStationExtensionIcon';
 import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
@@ -54,8 +55,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         }
       }
     }
-    if ((walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension)) {
-      const windowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
+    if ((walletType === WalletType.terraExtension || walletType === WalletType.galaxyStationExtension || walletType === WalletType.keplrExtension)) {
+      const windowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : walletType === WalletType.galaxyStationExtension ? (window.galaxyStation?.keplr) : (window?.keplr)
       try {
         await (windowConnection.getKey(chainId))
       } catch (e) {
@@ -94,6 +95,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return 'Ninji Wallet'
       case WalletType.okxwallet:
         return 'OKX Wallet'
+      case WalletType.galaxyStationExtension:
+        return 'Galaxy Station'
       default:
         return null
     }
@@ -123,6 +126,8 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return <NinjiWalletIcon />
       case WalletType.okxwallet:
         return <OKXWalletIcon />
+      case WalletType.galaxyStationExtension:
+        return <GalaxyStationExtensionIcon />
       default:
         return null
     }

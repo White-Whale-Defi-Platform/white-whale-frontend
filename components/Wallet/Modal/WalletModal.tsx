@@ -27,6 +27,7 @@ export enum WalletType {
   cosmoStationMobile = 'cosmostation-mobile',
   ninjiExtension = 'ninji-extension',
   okxwallet = 'okxwallet-extension',
+  galaxyStationExtension = 'galaxy-station-extension',
 }
 
 export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
@@ -50,6 +51,7 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
       WalletType.leapExtension,
       WalletType.ninjiExtension,
       WalletType.okxwallet,
+      WalletType.galaxyStationExtension,
     ].includes(walletName);
     if (walletName === WalletType.okxwallet && !okxchains.includes(chainId)) {
       return false

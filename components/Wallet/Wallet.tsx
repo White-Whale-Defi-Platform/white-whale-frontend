@@ -92,8 +92,8 @@ const Wallet = () => {
 
       setWalletChains(snapChainIds)
       setCurrentConnectedChainIds(snapChainIds)
-    } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension) {
-      const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : (window?.keplr)
+    } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension || walletType === WalletType.galaxyStationExtension) {
+      const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : walletType === WalletType.galaxyStationExtension ? (window.galaxyStation?.keplr) : (window?.keplr)
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection?.getChainInfosWithoutEndpoints()
         if (!chainInfos) {

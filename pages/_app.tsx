@@ -4,6 +4,7 @@ import { QueryClientProvider } from 'react-query'
 
 import { CSSReset, ChakraProvider } from '@chakra-ui/react'
 import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
+import { wallets as galaxyStationWallets } from '@cosmos-kit/galaxy-station'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
 import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
@@ -63,6 +64,10 @@ const MyApp: FC<AppProps> = ({
     {
       name: 'okxwallet',
       wallet: okxwallet,
+    },
+    {
+      name: 'galaxystation',
+      wallet: galaxyStationWallets,
     },
   ];
 

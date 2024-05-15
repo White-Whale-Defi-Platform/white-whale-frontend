@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useChain } from '@cosmos-kit/react-lite'
 import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
+import GalaxyStationExtensionIcon from 'components/Icons/GalaxyStationExtensionIcon';
 import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
@@ -30,6 +31,8 @@ export const ConnectedWalletIcon = () => {
       return <NinjiWalletIcon />
     case WalletType.okxwallet:
       return <OKXWalletIcon />
+    case WalletType.galaxyStationExtension:
+      return <GalaxyStationExtensionIcon />
     default:
       return <></>
   }

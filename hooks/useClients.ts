@@ -19,7 +19,8 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     wallet, getOfflineSigner } = useChain(walletChainName)
-  if (isWalletConnected && wallet?.name !== 'station-extension') {
+
+  if (isWalletConnected && !wallet?.name.includes('station')) {
     try {
       setDefaultSignOptions({
         preferNoSetFee: true,
@@ -58,9 +59,9 @@ export const useClients = (walletChainName: string) => {
           const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
             endpoint,
             offlineSigner, {
-              registry,
-              aminoTypes,
-            },
+            registry,
+            aminoTypes,
+          },
           )
           return client
         } catch {
