@@ -94,6 +94,10 @@ const Wallet = () => {
       setCurrentConnectedChainIds(snapChainIds)
     } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension || walletType === WalletType.galaxyStationExtension) {
       const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : walletType === WalletType.galaxyStationExtension ? (window.galaxyStation?.keplr) : (window?.keplr)
+      if (!walletWindowConnection) {
+        localStorage.clear()
+        return
+      }
       const getAddedStationChainsIds = async () => {
         const chainInfos = await walletWindowConnection?.getChainInfosWithoutEndpoints()
         if (!chainInfos) {
