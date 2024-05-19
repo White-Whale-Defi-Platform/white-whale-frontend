@@ -90,7 +90,7 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
       case WalletType.leapMobile:
         return 'Leap Wallet'
       case WalletType.leapSnap:
-        return 'Leap Metamask Snap'
+        return 'MetaMask'
       case WalletType.ninjiExtension:
         return 'Ninji Wallet'
       case WalletType.okxwallet:
