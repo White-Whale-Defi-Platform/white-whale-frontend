@@ -11,12 +11,15 @@
   "bonding_tokens": [
     {
       "chain_id": "phoenix-1",
+      "id": "eris-amplified-whale",
       "token_address": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
       "symbol": "ampWHALE",
       "name": "ampWhale",
       "decimals": 6,
       "logoURI": "/logos/ampWhale.svg",
-      "tags": ["native"],
+      "tags": [
+        "native"
+      ],
       "native": true,
       "denom": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36"
     },
@@ -28,10 +31,11 @@
       "name": "bWHALE",
       "decimals": 6,
       "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
-      "tags": ["native"],
+      "tags": [
+        "native"
+      ],
       "native": true,
       "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
     }
   ]
 }
-

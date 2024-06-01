@@ -1,7 +1,9 @@
 {
   "name": "Pools list on Comdex mainnet",
   "logoURI": "/logos/logo.svg",
-  "keywords": ["special tokens"],
+  "keywords": [
+    "special tokens"
+  ],
   "tags": {
     "ProjectName": {
       "name": "White Whale",
@@ -17,7 +19,9 @@
     "name": "Comdex",
     "decimals": 6,
     "logoURI": "/logos/comdex.png",
-    "tags": ["native"],
+    "tags": [
+      "native"
+    ],
     "native": true,
     "denom": "ucmdx"
   },
@@ -25,8 +29,14 @@
   "pools": [
     {
       "pool_id": "CMDX-ATOM",
-      "lpOrder": ["ATOM", "CMDX"],
-      "assetOrder": ["CMDX", "ATOM"],
+      "lpOrder": [
+        "ATOM",
+        "CMDX"
+      ],
+      "assetOrder": [
+        "CMDX",
+        "ATOM"
+      ],
       "displayName": "CMDX-ATOM",
       "displayLogo1": "/logos/comdex.png",
       "displayLogo2": "/logos/atom.png",
@@ -39,7 +49,9 @@
           "name": "Comdex",
           "decimals": 6,
           "logoURI": "/logos/comdex.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ucmdx"
         },
@@ -63,8 +75,14 @@
     },
     {
       "pool_id": "CMDX-CMST",
-      "lpOrder": ["CMDX", "CMST"],
-      "assetOrder": ["CMDX", "CMST"],
+      "lpOrder": [
+        "CMDX",
+        "CMST"
+      ],
+      "assetOrder": [
+        "CMDX",
+        "CMST"
+      ],
       "displayName": "CMDX-CMST",
       "displayLogo1": "/logos/comdex.png",
       "displayLogo2": "/logos/cmst.png",
@@ -77,7 +95,9 @@
           "name": "Comdex",
           "decimals": 6,
           "logoURI": "/logos/comdex.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ucmdx"
         },
@@ -100,8 +120,14 @@
     },
     {
       "pool_id": "ampWHALE-WHALE",
-      "lpOrder": ["WHALE", "ampWHALE"],
-      "assetOrder": ["ampWHALE", "WHALE"],
+      "lpOrder": [
+        "WHALE",
+        "ampWHALE"
+      ],
+      "assetOrder": [
+        "ampWHALE",
+        "WHALE"
+      ],
       "displayName": "ampWHALE-WHALE",
       "displayLogo1": "/logos/ampWhale.svg",
       "displayLogo2": "/logos/whale.svg",
@@ -114,18 +140,23 @@
           "name": "WHALE",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2"
         },
         {
           "chain_id": "comdex-1",
+          "id": "eris-amplified-whale",
           "token_address": "ibc/412DE088BAD7A3AB5BF299E1AEEDDBA88E6F3E1BCFEC5EC0BDDEC2A5A062F278",
           "symbol": "ampWHALE",
           "name": "ampWHALE",
           "decimals": 6,
           "logoURI": "/logos/ampWhale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/412DE088BAD7A3AB5BF299E1AEEDDBA88E6F3E1BCFEC5EC0BDDEC2A5A062F278"
         }
@@ -137,8 +168,14 @@
     },
     {
       "pool_id": "bWHALE-WHALE",
-      "lpOrder": ["WHALE", "bWHALE"],
-      "assetOrder": ["bWHALE", "WHALE"],
+      "lpOrder": [
+        "WHALE",
+        "bWHALE"
+      ],
+      "assetOrder": [
+        "bWHALE",
+        "WHALE"
+      ],
       "displayName": "bWHALE-WHALE",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
       "displayLogo2": "/logos/whale.svg",
@@ -151,7 +188,9 @@
           "name": "WHALE",
           "decimals": 6,
           "logoURI": "/logos/whale.svg",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/1A8D30507F3EAC6A99666EDCB8CD147D1453B35E68F4331B63848B2040E9A5E2"
         },
@@ -163,7 +202,9 @@
           "name": "bWHALE",
           "decimals": 6,
           "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
-          "tags": ["native"],
+          "tags": [
+            "native"
+          ],
           "native": true,
           "denom": "ibc/BED9212E5BA494E6EA522D82D55972A3C148BB0232FE2B4366FF5356FB3E522C"
         }

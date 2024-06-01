@@ -9,6 +9,7 @@ import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
+import { getPoolFromAPI } from '../services/useAPI'
 
 type Params = {
   token: TokenInfo
@@ -25,7 +26,7 @@ type PriceFromPoolParams = {
 }
 
 const getPriceFromPool = async ({ pool, baseToken, baseTokenPrice, cosmWasmClient }: PriceFromPoolParams) => {
-  const poolInfo = await getPoolInfo(pool.swap_address, cosmWasmClient)
+  const poolInfo = await getPoolFromAPI(await cosmWasmClient.getChainId(), pool.swap_address) || await getPoolInfo(pool.swap_address, cosmWasmClient)
   const isBaseTokenLast = pool.pool_assets[1].symbol === baseToken.symbol
   const [asset1, asset2] = poolInfo?.assets || []
   const ratioFromPool = convertMicroDenomToDenom(Number(asset2?.amount), pool.pool_assets[1].decimals) / convertMicroDenomToDenom(Number(asset1?.amount), pool.pool_assets[0].decimals)
@@ -98,6 +99,28 @@ const getPrices = async ({
         baseTokenPrice,
         cosmWasmClient,
       })
+    }
+    if (!prices[token.symbol]) {
+      const poolsContainingToken = poolList.filter((pool) => pool.pool_assets.some((poolAsset) => poolAsset.symbol === token.symbol))
+      for (const pool of poolsContainingToken) {
+        let newBaseToken = null
+        for (const poolAsset of pool.pool_assets) {
+          if (poolAsset.id && coingeckoPrices[poolAsset.id]) {
+            newBaseToken = poolAsset
+            break
+          }
+        }
+        if (newBaseToken) {
+          const newBaseTokenPrice = coingeckoPrices[newBaseToken.id].usd
+          prices[token.symbol] = await getPriceFromPool({
+            pool,
+            baseToken: newBaseToken,
+            baseTokenPrice: newBaseTokenPrice,
+            cosmWasmClient,
+          })
+          break
+        }
+      }
     }
   }
   return prices

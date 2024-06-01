@@ -232,6 +232,7 @@
       "pool_assets": [
         {
           "chain_id": "juno-1",
+          "id": "eris-amplified-whale",
           "token_address": "ibc/2F7C2A3D5D42553ED46F57D8B0DE3733B1B5FF571E2C6A051D34525904B4C0AF",
           "symbol": "ampWHALE",
           "name": "ampWHALE",
