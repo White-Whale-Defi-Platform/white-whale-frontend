@@ -9,8 +9,6 @@ import { useMultipleTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-import { assets } from 'chain-registry'
-import { TokenInfo } from '../Pages/Trade/Pools/hooks/usePoolsListQuery'
 
 type AssetListProps = {
   onChange: (token: any, isTokenChange?: boolean) => void
@@ -34,7 +32,7 @@ const AssetList: FC<AssetListProps> = ({
   unbondingBalances = null,
 }) => {
   const [tokenList] = useTokenList()
-  const { network, chainId, walletChainName } = useRecoilValue(chainState)
+  const { network, chainId } = useRecoilValue(chainState)
   const config = useConfig(network, chainId)
   const tokens = useMemo(() => {
     if (!config) return []

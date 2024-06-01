@@ -12,8 +12,7 @@ import { CW20 } from 'services/cw20'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
-import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
-import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
+import { useIBCAssetInfo } from './useIBCAssetInfo'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
 
@@ -53,16 +52,6 @@ const fetchTokenBalance = async ({
   return 0
 }
 
-const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
-  if (ibcToken?.juno_denom) {
-    return {
-      ...ibcToken,
-      native: true,
-      denom: ibcToken.juno_denom,
-    }
-  }
-  return null
-}
 
 export const useTokenBalance = (tokenSymbol: string) => {
   const { network, walletChainName } = useRecoilValue(chainState)
