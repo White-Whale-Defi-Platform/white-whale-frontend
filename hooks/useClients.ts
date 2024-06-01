@@ -17,6 +17,7 @@ export const useClients = (walletChainName: string) => {
     getSigningCosmWasmClient,
     isWalletConnected,
     setDefaultSignOptions,
+    getStargateClient,
     wallet, getRpcEndpoint, getOfflineSigner } = useChain(walletChainName)
 
   if (isWalletConnected && !wallet?.name.includes('station')) {
@@ -69,6 +70,10 @@ export const useClients = (walletChainName: string) => {
       },
       enabled: isWalletConnected,
     },
+    {
+      queryKey: ['stargateClient', walletChainName],
+      queryFn: async () => await getStargateClient(),
+    },
   ])
 
   // Check if both queries are in loading state
@@ -79,5 +84,6 @@ export const useClients = (walletChainName: string) => {
     cosmWasmClient: queries[0].data,
     signingClient: queries[1].data,
     injectiveSigningClient: queries[2].data,
+    stargateClient: queries[3].data,
   }
 }

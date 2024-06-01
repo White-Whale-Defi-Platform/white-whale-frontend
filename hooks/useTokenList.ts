@@ -37,11 +37,17 @@ export const useTokenList = () => {
         }
       })
       const chainRegistryAssets = assets.find((asset) => asset.chain_name === walletChainName)
+      // TODO: ADD CHAIN REGISTRY TO API AND QUERY INFOS
       if (chainRegistryAssets) {
         for (const asset of chainRegistryAssets.assets) {
           const exponents = asset.denom_units.reduce((max, unit) => (unit.exponent > max.exponent ? unit : max), asset.denom_units[0])
-          const denom = asset.address ? asset.address : asset.base
-          let tmpAssetOBJ: any = { denom: denom, id: asset?.coingecko_id || "", token_address: asset?.address || asset.base, chain_id: chainId, symbol: asset.symbol, decimals: exponents.exponent, name: asset.name, logoURI: asset.logo_URIs?.svg || asset.logo_URIs?.png, tags: asset?.address ? [''] : ['native'], native: asset?.address ? false : true, withoutPool: true}
+          const native = (asset.type_asset === 'sdk.coin' || asset.type_asset === 'ics20'|| asset.base.includes('factory/') || asset.base.charAt(0) == 'u') && asset.type_asset !== 'cw20'
+          const denom = !native ? asset.address : asset.base
+          const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images[0].svg || asset.images[0].png
+          let tmpAssetOBJ: any = { denom: denom, id: asset?.coingecko_id || "", token_address: asset?.address || asset.base, chain_id: chainId, symbol: asset.symbol, decimals: exponents.exponent, name: asset.name, logoURI:logoURI, tags: native ? ['native'] : [''], native: native, withoutPool: true}
+          if(tmpAssetOBJ.symbol=== "FRAX") {
+            console.log(asset)
+          }
           const res = Array.from(tokenMapBySymbol.values())
           if (!res.find((token) => token.denom === denom)) {
             tokenMapBySymbol.set(asset.symbol, tmpAssetOBJ)
