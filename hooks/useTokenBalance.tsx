@@ -12,8 +12,7 @@ import { CW20 } from 'services/cw20'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion'
 
-import { getIBCAssetInfoFromList, useIBCAssetInfo } from './useIBCAssetInfo'
-import { IBCAssetInfo, useIBCAssetList } from './useIbcAssetList'
+import { useIBCAssetInfo } from './useIBCAssetInfo'
 import { getTokenInfoFromTokenList, useTokenInfo } from './useTokenInfo'
 import { useTokenList } from './useTokenList'
 
@@ -53,16 +52,6 @@ const fetchTokenBalance = async ({
   return 0
 }
 
-const mapIbcTokenToNative = (ibcToken?: IBCAssetInfo) => {
-  if (ibcToken?.juno_denom) {
-    return {
-      ...ibcToken,
-      native: true,
-      denom: ibcToken.juno_denom,
-    }
-  }
-  return null
-}
 
 export const useTokenBalance = (tokenSymbol: string) => {
   const { network, walletChainName } = useRecoilValue(chainState)
@@ -102,11 +91,10 @@ export const useTokenBalance = (tokenSymbol: string) => {
 
 export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?: boolean) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const { cosmWasmClient, signingClient } = useClients(walletChainName)
+  const { cosmWasmClient, signingClient, stargateClient } = useClients(walletChainName)
   const { address, isWalletConnected } = useChain(walletChainName)
   const [tokenList] = useTokenList()
   const config = useConfig(network, chainId)
-  const [ibcAssetsList] = useIBCAssetList()
 
   if (isBonding && config?.bonding_tokens) {
     for (const newToken of config.bonding_tokens) {
@@ -123,15 +111,25 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?
   const { data, isLoading } = useQuery(
     [queryKey, address, chainId, network],
 
-    async () => await Promise.all(tokenSymbols.map((tokenSymbol) => fetchTokenBalance({
-      cosmWasmClient,
-      signingClient,
-      address,
-      token:
-        getTokenInfoFromTokenList(tokenSymbol, tokenList.tokens) ||
-        mapIbcTokenToNative(getIBCAssetInfoFromList(tokenSymbol, ibcAssetsList?.tokens)) ||
-        {},
-    }))),
+    async () => {
+      const nativeBalances = await stargateClient.getAllBalances(address)
+      const out = await Promise.all(tokenSymbols.map(async (symbol) => {
+        const token = getTokenInfoFromTokenList(symbol, tokenList.tokens)
+        let balance = 0
+        if (!token?.native) {
+          balance = await fetchTokenBalance({
+            cosmWasmClient,
+            signingClient,
+            token,
+            address,
+          })
+        } else {
+          balance = convertMicroDenomToDenom((nativeBalances.find((b) => b.denom === token.denom)?.amount || 0), token.decimals)
+        }
+        return balance || 0
+      }))
+      return out
+    },
     {
       enabled: Boolean(isWalletConnected &&
         tokenSymbols?.length &&

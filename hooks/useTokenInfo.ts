@@ -5,7 +5,9 @@ import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useTokenList } from './useTokenList'
 
 export const getTokenInfoFromTokenList = (tokenSymbol: string,
-  tokensList: Array<TokenInfo>): TokenInfo | undefined => tokensList?.find((x) => x.symbol === tokenSymbol)
+  tokensList: Array<TokenInfo>): TokenInfo | undefined => {
+    return tokensList?.find((x) => x.symbol === tokenSymbol)
+  }
 /* /token selector functions */
 
 /* Returns a selector for getting multiple tokens info at once */

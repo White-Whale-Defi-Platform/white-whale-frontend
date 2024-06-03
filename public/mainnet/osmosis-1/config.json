@@ -10,7 +10,7 @@
   },
   "bonding_tokens": [
     {
-      "id": "",
+      "id": "eris-amplified-whale",
       "chain_id": "osmosis-1",
       "token_address": "ibc/834D0AEF380E2A490E4209DFF2785B8DBB7703118C144AC373699525C65B4223",
       "symbol": "ampWHALE",
@@ -39,4 +39,3 @@
     }
   ]
 }
-

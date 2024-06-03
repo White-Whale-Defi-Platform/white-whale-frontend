@@ -291,6 +291,7 @@
         },
         {
           "chain_id": "phoenix-1",
+          "id": "eris-amplified-whale",
           "token_address": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
           "symbol": "ampWHALE",
           "name": "ampWhale",

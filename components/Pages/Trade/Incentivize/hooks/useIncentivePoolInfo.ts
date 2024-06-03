@@ -17,7 +17,7 @@ import {
   getPairAprAndDailyVolumeByEnigma,
   getPairAprAndDailyVolumeByCoinhall,
 } from 'services/poolDataProvider'
-import { getFlowsFromAPI, getPairAprAndDailyVolumeAPI } from 'services/useAPI'
+import { getFlowsFromAPI, getPairAprAndDailyVolumeAPI, getPoolFromAPI } from 'services/useAPI'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
@@ -63,7 +63,7 @@ export const fetchTotalPoolSupply = async (swapAddress: string,
   if (!client || !swapAddress) {
     return null
   }
-  const queried = await getPoolInfo(swapAddress, client)
+  const queried = await getPoolFromAPI(await client.getChainId(), swapAddress) || await getPoolInfo(swapAddress, client) 
   return Number(queried.total_share)
 }
 export const fetchFlows = async (client, address): Promise<Flow[]> => await getFlowsFromAPI(await client.getChainId(), address) || await client.queryContractSmart(address, { flows: {} })

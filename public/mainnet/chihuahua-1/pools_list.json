@@ -322,6 +322,7 @@
       "pool_assets": [
         {
           "chain_id": "chihuahua-1",
+          "id": "eris-amplified-whale",
           "token_address": "ibc/1ABC53B2BB5F76F5DE57F6A6640DAC100F5D078075768115FC3B8E83C54FD9FF",
           "symbol": "ampWHALE",
           "name": "ampWHALE",

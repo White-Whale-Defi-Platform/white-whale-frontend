@@ -41,8 +41,6 @@ const AssetList: FC<AssetListProps> = ({
 
     let res = isBonding ? config.bonding_tokens : [...(tokenList?.tokensBySymbol?.values() || [])];
 
-    if (isIncentives) return res;
-
     return res.length > 0 ? res : [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
   }, [config, isBonding, isIncentives, tokenList]);
 

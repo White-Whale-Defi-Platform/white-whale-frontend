@@ -139,6 +139,7 @@
       "pool_assets": [
         {
           "chain_id": "migaloo-1",
+          "id": "eris-amplified-whale",
           "token_address": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE",
           "symbol": "ampWHALE",
           "name": "ampWhale",
@@ -374,6 +375,7 @@
       "pool_assets": [
         {
           "chain_id": "migaloo-1",
+          "id": "eris-amplified-whale",
           "token_address": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE",
           "symbol": "ampWHALE",
           "name": "ampWhale",
@@ -762,6 +764,7 @@
         },
         {
           "chain_id": "migaloo-1",
+          "id": "eris-amplified-whale",
           "token_address": "factory/migaloo1436kxs0w2es6xlqpp9rd35e3d0cjnw4sv8j3a7483sgks29jqwgshqdky4/ampWHALE",
           "symbol": "ampWHALE",
           "name": "ampWHALE",
@@ -985,7 +988,6 @@
       "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
       "pool_assets": [
         {
-          "id": "",
           "chain_id": "migaloo-1",
           "token_address": "ibc/44C29C91F202E20C8E28DFB1FA89B725C54171CD77B8948836C72E7A97E4A018",
           "symbol": "RAKOFF",

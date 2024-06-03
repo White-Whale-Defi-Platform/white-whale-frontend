@@ -196,6 +196,7 @@
         },
         {
           "chain_id": "injective-1",
+          "id": "eris-amplified-whale",
           "token_address": "ibc/168C3904C45C6FE3539AE85A8892DF87371D00EA7942515AFC50AA43C4BB0A32",
           "symbol": "ampWHALE",
           "name": "ampWHALE",
