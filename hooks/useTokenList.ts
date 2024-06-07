@@ -45,9 +45,9 @@ export const useTokenList = () => {
             const native = (asset.type_asset === 'sdk.coin' || asset.type_asset === 'ics20' || asset.base.includes('factory/') || asset.base.charAt(0) == 'u') && asset.type_asset !== 'cw20'
             const denom = !native ? asset.address : asset.base
             const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images[0].svg || asset.images[0].png
-            let tmpAssetOBJ: any = { denom: denom, id: asset.coingecko_id || "", token_address: asset.address || asset.base, chain_id: chainId, symbol: asset.symbol, decimals: exponents.exponent, name: asset.name, logoURI: logoURI, tags: native ? ['native'] : [''], native: native, withoutPool: true }
+            let tmpAssetOBJ: any = { denom: denom, id: asset.coingecko_id || "", token_address: asset.address || asset.base, chain_id: chainId, symbol: asset.symbol, decimals: exponents.exponent, name: asset.name, logoURI: logoURI, tags: native ? ['native'] : [''], native: native, fromRegistry: true }
             const res = Array.from(tokenMapBySymbol.values())
-            if (!res.find((token) => token.denom === denom)) {
+            if (denom && !res.find((token) => token.denom === denom)) {
               tokenMapBySymbol.set(asset.symbol, tmpAssetOBJ)
             }
           } catch (e) {

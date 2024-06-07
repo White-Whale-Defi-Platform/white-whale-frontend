@@ -89,6 +89,9 @@ const getPrices = async ({
   const baseTokenPrice = coingeckoPrices[baseToken.id]?.usd
 
   for (const token of tokens) {
+    if (token?.fromRegistry) {
+      continue
+    }
     if (coingeckoPrices[token.id]) {
       prices[token.symbol] = coingeckoPrices[token.id].usd
     } else {
@@ -131,7 +134,11 @@ export const usePrices = () => {
   const { data: poolsList } = usePoolsListQuery()
   const { cosmWasmClient } = useClients(walletChainName)
   const [tokenList] = useTokenList()
-  const coingeckoIds = useMemo(() => tokenList?.tokens.map((token) => token.id),
+  const coingeckoIds = useMemo(() => tokenList?.tokens.map((token) => {
+    if (token.id && !token.fromRegistry) {
+      return token.id
+    }
+  }),
     [tokenList?.tokens])
   const coingeckoPrices = useCoinGecko(coingeckoIds)
   const { data: prices } = useQuery({
