@@ -37,11 +37,11 @@ const AssetList: FC<AssetListProps> = ({
   const tokens = useMemo(() => {
     if (!config) return []
 
-    if (!isBonding && !isIncentives) return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
+    if (!isBonding && !isIncentives) return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.fromRegistry && !token?.withoutPool);
 
     let res = isBonding ? config.bonding_tokens : [...(tokenList?.tokensBySymbol?.values() || [])];
 
-    return res.length > 0 ? res : [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.withoutPool);
+    return res.length > 0 ? res : [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.fromRegistry && !token?.withoutPool);
   }, [config, isBonding, isIncentives, tokenList]);
 
   const [tokenBalance = []] =

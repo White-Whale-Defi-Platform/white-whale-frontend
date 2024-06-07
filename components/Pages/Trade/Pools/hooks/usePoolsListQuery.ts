@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 export type TokenInfo = {
+  fromRegistry?: boolean
   id: string
   chain_id: string
   token_address: string
