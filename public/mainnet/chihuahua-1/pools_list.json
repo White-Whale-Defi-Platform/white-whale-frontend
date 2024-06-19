@@ -104,6 +104,7 @@
           "chain_id": "chihuahua-1",
           "token_address": "ibc/91532E23037BBEBC1FA05D1D6A79AE3479A4B51A4CABA6C28E15EC24206FD50F",
           "symbol": "SHIB",
+          "id": "shiba-inu",
           "name": "Shiba",
           "decimals": 18,
           "logoURI": "/logos/shiba-inu-shib-logo.png",

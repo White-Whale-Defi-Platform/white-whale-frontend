@@ -1019,6 +1019,54 @@
       "swap_address": "migaloo1jnhrd5elzt6sdp4av4c07tzkt5nhjvvt23t7lmnva34lqh30pdyqt7fld4",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WIND-WHALE",
+      "lpOrder": [
+        "WIND",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "WIND",
+        "WHALE"
+      ],
+      "displayName": "WIND-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/wind.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/721B42229246EEDA7A656DB17E494127F91E84AD63E21852737628321892A928",
+          "symbol": "WIND",
+          "name": "WIND",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/wind.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/721B42229246EEDA7A656DB17E494127F91E84AD63E21852737628321892A928"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "factory/migaloo1sp6jxvrkym8j2zf5uszmmp0huwae43j5hlhagrn38pprazqnzxuqtufyha/uLP",
+      "swap_address": "migaloo1sp6jxvrkym8j2zf5uszmmp0huwae43j5hlhagrn38pprazqnzxuqtufyha",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

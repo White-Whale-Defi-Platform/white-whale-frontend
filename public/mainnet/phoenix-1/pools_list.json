@@ -622,6 +622,7 @@
           "chain_id": "phoenix-1",
           "token_address": "terra10aa3zdkrc7jwuf8ekl3zq7e7m42vmzqehcmu74e4egc7xkm5kr2s0muyst",
           "symbol": "SOLID",
+          "id": "capapult",
           "name": "Solid",
           "decimals": 6,
           "logoURI": "/logos/solid.svg",
