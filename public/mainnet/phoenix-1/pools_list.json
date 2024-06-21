@@ -105,6 +105,7 @@
         },
         {
           "chain_id": "phoenix-1",
+          "id": "axlusdc",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
           "symbol": "axlUSDC",
           "name": "axlUSDC",
@@ -197,6 +198,7 @@
         },
         {
           "chain_id": "phoenix-1",
+          "id": "axlusdc",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
           "symbol": "axlUSDC",
           "name": "axlUSDC",
@@ -244,6 +246,7 @@
         },
         {
           "chain_id": "phoenix-1",
+          "id": "axlusdc",
           "token_address": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
           "symbol": "axlUSDC",
           "name": "axlUSDC",
@@ -419,6 +422,7 @@
       "pool_assets": [
         {
           "chain_id": "phoenix-1",
+          "id": "eris-amplified-luna",
           "token_address": "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
           "symbol": "ampLUNA",
           "name": "ampLuna",

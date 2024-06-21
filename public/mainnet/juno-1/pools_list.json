@@ -105,6 +105,7 @@
         },
         {
           "chain_id": "juno-1",
+          "id": "axlusdc",
           "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
           "symbol": "axlUSDC",
           "name": "axlUSDC",
@@ -152,6 +153,7 @@
         },
         {
           "chain_id": "juno-1",
+          "id": "axlusdc",
           "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
           "symbol": "axlUSDC",
           "name": "axlUSDC",
@@ -199,6 +201,7 @@
         },
         {
           "chain_id": "juno-1",
+          "id": "axlusdc",
           "token_address": "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
           "symbol": "axlUSDC",
           "name": "axlUSDC",
@@ -420,6 +423,7 @@
         {
           "chain_id": "juno-1",
           "token_address": "ibc/D8D6271EC54E3A96C6B9FB6C2BA9E99692B07CEB42754638029657072EA48337",
+          "id": "racoon",
           "symbol": "RAC",
           "name": "RAC",
           "decimals": 6,

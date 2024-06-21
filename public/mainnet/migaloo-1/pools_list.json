@@ -188,6 +188,7 @@
         {
           "chain_id": "migaloo-1",
           "token_address": "factory/migaloo1eqntnl6tzcj9h86psg4y4h6hh05g2h9nj8e09l/urac",
+          "id": "racoon",
           "symbol": "RAC",
           "name": "RAC",
           "decimals": 6,
@@ -1065,6 +1066,150 @@
       ],
       "lp_token": "factory/migaloo1sp6jxvrkym8j2zf5uszmmp0huwae43j5hlhagrn38pprazqnzxuqtufyha/uLP",
       "swap_address": "migaloo1sp6jxvrkym8j2zf5uszmmp0huwae43j5hlhagrn38pprazqnzxuqtufyha",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "SHITMOS-WHALE",
+      "lpOrder": [
+        "SHITMOS",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "SHITMOS",
+        "WHALE"
+      ],
+      "displayName": "SHITMOS-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/shitmos.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/0E1B883A15D5FCA533332CBAB1A672934C3936920399F2A3EB4F438E3EBAD0E9",
+          "symbol": "SHITMOS",
+          "name": "SHITMOS",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/shitmos.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/0E1B883A15D5FCA533332CBAB1A672934C3936920399F2A3EB4F438E3EBAD0E9"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "factory/migaloo1hcjzvt0c5xnwxnmhljg703u9lfm02j4vqrhhgcnz7ur8d4zayl0sdmen6y/uLP",
+      "swap_address": "migaloo1hcjzvt0c5xnwxnmhljg703u9lfm02j4vqrhhgcnz7ur8d4zayl0sdmen6y",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "RAKOFF-WHALE",
+      "lpOrder": [
+        "RAKOFF",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "RAKOFF",
+        "WHALE"
+      ],
+      "displayName": "RAKOFF-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/rakoff.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/44C29C91F202E20C8E28DFB1FA89B725C54171CD77B8948836C72E7A97E4A018",
+          "symbol": "RAKOFF",
+          "name": "RAKOFF",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/rakoff.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/44C29C91F202E20C8E28DFB1FA89B725C54171CD77B8948836C72E7A97E4A018"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "factory/migaloo1x725wx4j9lkmwwlcyr4j4263tm065pqtrl6myrh7jek23hzlx9aqtdz8rv/uLP",
+      "swap_address": "migaloo1x725wx4j9lkmwwlcyr4j4263tm065pqtrl6myrh7jek23hzlx9aqtdz8rv",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "FROG-WHALE",
+      "lpOrder": [
+        "FROG",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "FROG",
+        "WHALE"
+      ],
+      "displayName": "FROG-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/FROG.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/B1BD4EF49A2E051EFC85E8C6A932B559CE62F9519E0E83BE29A8F0BDF89BD1D3",
+          "symbol": "FROG",
+          "name": "FROG",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/FROG.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/B1BD4EF49A2E051EFC85E8C6A932B559CE62F9519E0E83BE29A8F0BDF89BD1D3"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "factory/migaloo1qu9fdl00ager68lyeh8e2vv3lpgylqryug468vuvy0ujk4tyq9zsnw5qdz/uLP",
+      "swap_address": "migaloo1qu9fdl00ager68lyeh8e2vv3lpgylqryug468vuvy0ujk4tyq9zsnw5qdz",
       "staking_address": "",
       "rewards_tokens": []
     }
