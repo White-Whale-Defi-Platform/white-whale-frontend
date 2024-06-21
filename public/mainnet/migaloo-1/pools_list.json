@@ -1080,7 +1080,7 @@
         "WHALE"
       ],
       "displayName": "SHITMOS-WHALE",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/shitmos.svg",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/shitmos.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
         {
@@ -1090,7 +1090,7 @@
           "symbol": "SHITMOS",
           "name": "SHITMOS",
           "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/shitmos.svg",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/shitmos.png",
           "tags": [
             "native"
           ],
