@@ -562,6 +562,7 @@
         {
           "chain_id": "chihuahua-1",
           "token_address": "ibc/E45945EAF3F1587CA3013FFC6CE0B5EEE0F49DAFED2CE51370B5B6A0C3AA258E",
+          "id": "racoon",
           "symbol": "RAC",
           "name": "RAC",
           "decimals": 6,
