@@ -355,6 +355,54 @@
       "lp_token": "factory/inj1tuemzz3xa2gurzv828y795r7uycmcafr0ktzwk/uLP",
       "staking_address": "inj1yxp40zt6fhrfqjz6l7cgl97plw8qfyxyracfj3",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "SYN-INJ",
+      "lpOrder": [
+        "SYN",
+        "INJ"
+      ],
+      "assetOrder": [
+        "SYN",
+        "INJ"
+      ],
+      "displayName": "SYN-INJ",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/syn.png",
+      "displayLogo2": "/logos/injective.png",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "injective-1",
+          "token_address": "factory/inj1a6xdezq7a94qwamec6n6cnup02nvewvjtz6h6e/SYN",
+          "symbol": "SYN",
+          "name": "SYN",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/syn.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/inj1a6xdezq7a94qwamec6n6cnup02nvewvjtz6h6e/SYN"
+        },
+        {
+          "id": "injective-protocol",
+          "chain_id": "injective-1",
+          "token_address": "inj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 18,
+          "logoURI": "/logos/injective.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "inj"
+        }
+      ],
+      "lp_token": "factory/inj1z7mx2tc9ea4y2y0nx230pe7knm8fryk3rv6r2c/uLP",
+      "swap_address": "inj1z7mx2tc9ea4y2y0nx230pe7knm8fryk3rv6r2c",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
