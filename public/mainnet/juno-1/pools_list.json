@@ -467,6 +467,7 @@
       "displayLogo2": "/logos/juno.svg",
       "pool_assets": [
         {
+          "id": "signal",
           "chain_id": "juno-1",
           "token_address": "juno14lycavan8gvpjn97aapzvwmsj8kyrvf644p05r0hu79namyj3ens87650k",
           "symbol": "SGNL",

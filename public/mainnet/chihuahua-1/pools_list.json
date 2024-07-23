@@ -684,6 +684,102 @@
       "swap_address": "chihuahua1e85rxa4r8utk6ee0j93serytcchgeayqteeystkshqsvryk55egs6l9jhu",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "GUPPY-HUAHUA",
+      "lpOrder": [
+        "GUPPY",
+        "HUAHUA"
+      ],
+      "assetOrder": [
+        "GUPPY",
+        "HUAHUA"
+      ],
+      "displayName": "GUPPY-HUAHUA",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/guppy.png",
+      "displayLogo2": "/logos/huahua.png",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/DBBDE1753EFA93F09C468DB5E384861BB741D4AA73E9C7032D139BB2C99FDD65",
+          "symbol": "GUPPY",
+          "name": "GUPPY",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/guppy.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/DBBDE1753EFA93F09C468DB5E384861BB741D4AA73E9C7032D139BB2C99FDD65"
+        },
+        {
+          "id": "chihuahua-token",
+          "chain_id": "chihuahua-1",
+          "token_address": "uhuahua",
+          "symbol": "HUAHUA",
+          "name": "HUAHUA",
+          "decimals": 6,
+          "logoURI": "/logos/huahua.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uhuahua"
+        }
+      ],
+      "lp_token": "chihuahua1kvdqrmkk7jklygt9drlvlggwt2e65gtc2trty70yylp475chgw6q9vpjj6",
+      "swap_address": "chihuahua169redda9rjk77hrljr4ahj9v9utvg5zw2jwtmtywzn07rgw9tkpqlzrvm4",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ampGASH-WHALE",
+      "lpOrder": [
+        "ampGASH",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "ampGASH",
+        "WHALE"
+      ],
+      "displayName": "ampGASH-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/ampgash.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/7D01429FF7542DBC41C261793B480B63FE7A83260C751989CC268BC7E852EB99",
+          "symbol": "ampGASH",
+          "name": "ampGASH",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/ampgash.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/7D01429FF7542DBC41C261793B480B63FE7A83260C751989CC268BC7E852EB99"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "chihuahua-1",
+          "token_address": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/FA7112322CE7656DC84D441E49BAEAB9DC0AB3C7618A178A212CDE8B3F17C70B"
+        }
+      ],
+      "lp_token": "chihuahua1h050q5j6860va77aqnyq6nztv7y5wd4lx2sp5pfg26dajj468fjqyvv428",
+      "swap_address": "chihuahua1y5m6tzqjzgq9qcgg30tw6x0t823672tdlpcj8cey26pgd2te6mkqup8q93",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
