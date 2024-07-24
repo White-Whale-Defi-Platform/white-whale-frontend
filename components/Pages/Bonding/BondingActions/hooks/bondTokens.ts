@@ -33,7 +33,7 @@ export const bondTokens: any = async (
     message: handleMsg,
     funds: [coin(amount, denom)],
   })
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       address, [execMsg], await createGasFee(
         injectiveSigningClient, address, [execMsg],

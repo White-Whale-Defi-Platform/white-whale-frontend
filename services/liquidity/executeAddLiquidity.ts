@@ -19,7 +19,7 @@ export const executeAddLiquidity = async ({
   senderAddress,
   msgs,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       senderAddress, msgs, await createGasFee(
         injectiveSigningClient, senderAddress, msgs,

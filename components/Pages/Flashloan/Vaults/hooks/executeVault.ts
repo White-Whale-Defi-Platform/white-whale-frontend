@@ -17,7 +17,7 @@ export const executeVault = async ({
   injectiveSigningClient,
   senderAddress,
 }: ExecuteAddLiquidityArgs): Promise<any> => {
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       senderAddress, executionMsgs, await createGasFee(
         injectiveSigningClient, senderAddress, executionMsgs,

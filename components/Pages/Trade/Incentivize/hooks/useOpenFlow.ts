@@ -127,7 +127,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
   const { mutate: submit, ...tx } = useMutation({
     mutationFn: async () => {
-      if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+      if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
           address, msgs, await createGasFee(
             injectiveSigningClient, address, msgs,

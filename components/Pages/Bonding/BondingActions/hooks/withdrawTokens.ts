@@ -23,7 +23,7 @@ export const withdrawTokens: any = async (
     contractAddress: config.whale_lair,
     message: handleMsg,
     funds: [] })
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       address, [execMsg], await createGasFee(
         injectiveSigningClient, address, [execMsg],

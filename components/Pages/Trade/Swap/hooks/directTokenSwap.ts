@@ -59,7 +59,7 @@ export const directTokenSwap = async ({
     message: msgs,
     funds: [coin(tokenAmount, tokenA.denom)],
   })
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       senderAddress, [execMsg], await createGasFee(
         injectiveSigningClient, senderAddress, [execMsg],

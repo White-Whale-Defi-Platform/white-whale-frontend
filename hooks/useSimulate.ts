@@ -52,7 +52,7 @@ const useSimulate = ({
         error: null,
         buttonLabel: null,
       })
-      const isInjective = await signingClient.getChainId() === ChainId.injective
+      const isInjective = await signingClient?.getChainId() === ChainId.injective
       return isInjective && injectiveSigningClient ? injectiveSigningClient?.simulate(
         address, msgs, null,
       ) : signingClient?.simulate(

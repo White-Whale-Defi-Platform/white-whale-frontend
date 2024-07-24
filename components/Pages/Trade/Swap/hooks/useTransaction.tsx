@@ -62,7 +62,7 @@ export const useTransaction = ({
         return null
       }
       try {
-        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const isInjective = await signingClient?.getChainId() === ChainId.injective
         const sim = await createGasFee(
           isInjective ? injectiveSigningClient : signingClient, senderAddress, debouncedMsgs,
         )

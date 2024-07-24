@@ -25,7 +25,7 @@ export const executeFlashloan = async ({
     contractAddress,
     message: msgs,
   })
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       contractAddress, [execMsg], await createGasFee(
         injectiveSigningClient, contractAddress, [execMsg],

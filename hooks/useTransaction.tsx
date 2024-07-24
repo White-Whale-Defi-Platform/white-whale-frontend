@@ -62,7 +62,7 @@ export const useTransaction = ({
         return
       }
       try {
-        const isInjective = await signingClient.getChainId() === ChainId.injective
+        const isInjective = await signingClient?.getChainId() === ChainId.injective
         const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
           senderAddress,
           debouncedMsgs,

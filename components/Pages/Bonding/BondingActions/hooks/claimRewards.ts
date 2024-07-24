@@ -20,7 +20,7 @@ export const claimRewards: any = async (
     contractAddress: config.fee_distributor,
     message: handleMsg,
     funds: [] })
-  if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+  if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
     const injectiveTxData = await injectiveSigningClient.sign(
       address, [execMsg], await createGasFee(
         injectiveSigningClient, address, [execMsg],
