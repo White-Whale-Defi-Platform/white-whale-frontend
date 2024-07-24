@@ -183,7 +183,7 @@ export const useTransaction = ({
       toast({
         title: 'Swap Success.',
         description: (
-          <Finder txHash={data.transactionHash} chainId={await signingClient.getChainId()}>
+          <Finder txHash={data.transactionHash} chainId={await signingClient?.getChainId()}>
             {' '}
               From: {tokenA.symbol} To: {tokenB.symbol}{' '}
           </Finder>

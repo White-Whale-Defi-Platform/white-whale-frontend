@@ -189,7 +189,7 @@ export const useTransaction: any = ({
         message = (
           <Finder
             txHash={txInfo?.hash}
-            chainId={await signingClient.getChainId()}
+            chainId={await signingClient?.getChainId()}
           >
             {' '}
           </Finder>
@@ -220,7 +220,7 @@ export const useTransaction: any = ({
         description: (
           <Finder
             txHash={data.transactionHash || data?.txHash}
-            chainId={await signingClient.getChainId()}
+            chainId={await signingClient?.getChainId()}
           >
             {' '}
           </Finder>

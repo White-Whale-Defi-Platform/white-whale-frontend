@@ -64,7 +64,8 @@ export const useClients = (walletChainName: string) => {
           },
           )
           return client
-        } catch {
+        } catch (e:any){
+          console.error(e)
           return null
         }
       },

@@ -39,7 +39,7 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
   }, [txInfo, txState.txHash])
 
   const description = async (hash: string) => (
-    <Finder txHash={hash} chainId={await signingClient.getChainId()}>
+    <Finder txHash={hash} chainId={await signingClient?.getChainId()}>
       {' '}
     </Finder>
   )

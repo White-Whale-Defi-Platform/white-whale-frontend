@@ -109,7 +109,7 @@ export const useWithdrawTransaction: any = ({
   )
 
   const { mutate } = useMutation(async () => {
-    if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
+    if (injectiveSigningClient && await signingClient?.getChainId() === ChainId.injective) {
       const injectiveTxData = await injectiveSigningClient.sign(
         senderAddress, debouncedMsgs, await createGasFee(
           injectiveSigningClient, senderAddress, debouncedMsgs,
@@ -163,7 +163,7 @@ export const useWithdrawTransaction: any = ({
     onSuccess: async (data: any) => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data.transactionHash || data?.txHash)
-      const chainId = await signingClient.getChainId()
+      const chainId = await signingClient?.getChainId()
       await queryClient.invalidateQueries({
         queryKey: [
           '@pool-liquidity',

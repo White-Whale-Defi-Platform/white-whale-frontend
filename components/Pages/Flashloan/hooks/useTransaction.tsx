@@ -168,7 +168,7 @@ export const useTransaction = ({
         description: (
           <Finder
             txHash={data?.transactionHash || data?.txHash}
-            chainId={await signingClient.getChainId()}
+            chainId={await signingClient?.getChainId()}
           >
             {' '}
           </Finder>
