@@ -307,7 +307,7 @@
       ],
       "lp_token": "factory/inj1z7mx2tc9ea4y2y0nx230pe7knm8fryk3rv6r2c/uLP",
       "swap_address": "inj1z7mx2tc9ea4y2y0nx230pe7knm8fryk3rv6r2c",
-      "staking_address": "",
+      "staking_address": "inj174jqfpxa92h5y8dmq46vaw9r0eyq3r290mty0a",
       "rewards_tokens": []
     },
     {
@@ -402,6 +402,102 @@
       "swap_address": "inj1tuemzz3xa2gurzv828y795r7uycmcafr0ktzwk",
       "lp_token": "factory/inj1tuemzz3xa2gurzv828y795r7uycmcafr0ktzwk/uLP",
       "staking_address": "inj1yxp40zt6fhrfqjz6l7cgl97plw8qfyxyracfj3",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "INJ-USDC",
+      "lpOrder": [
+        "INJ",
+        "USDC"
+      ],
+      "assetOrder": [
+        "INJ",
+        "USDC"
+      ],
+      "displayName": "INJ-USDC",
+      "displayLogo1": "/logos/injective.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
+      "pool_assets": [
+        {
+          "id": "injective-protocol",
+          "chain_id": "injective-1",
+          "token_address": "inj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 18,
+          "logoURI": "/logos/injective.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "inj"
+        },
+        {
+          "id": "usd-coin",
+          "chain_id": "injective-1",
+          "token_address": "ibc/2CBC2EA121AE42563B08028466F37B600F2D7D4282342DE938283CC3FB2BC00E",
+          "symbol": "USDC",
+          "name": "USDC",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/2CBC2EA121AE42563B08028466F37B600F2D7D4282342DE938283CC3FB2BC00E"
+        }
+      ],
+      "lp_token": "factory/inj1qqc7ekvm06tch3dtyselt2rl5y4s9daman0ahv/uLP",
+      "swap_address": "inj1qqc7ekvm06tch3dtyselt2rl5y4s9daman0ahv",
+      "staking_address": "inj10yef2ldmhtkhls0exxdwgmd3zw23eryyctvsav",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bINJ-INJ",
+      "lpOrder": [
+        "bINJ",
+        "INJ"
+      ],
+      "assetOrder": [
+        "bINJ",
+        "INJ"
+      ],
+      "displayName": "bINJ-INJ",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
+      "displayLogo2": "/logos/injective.png",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "injective-1",
+          "token_address": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ",
+          "symbol": "bINJ",
+          "name": "bINJ",
+          "decimals": 18,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ"
+        },
+        {
+          "id": "injective-protocol",
+          "chain_id": "injective-1",
+          "token_address": "inj",
+          "symbol": "INJ",
+          "name": "INJ",
+          "decimals": 18,
+          "logoURI": "/logos/injective.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "inj"
+        }
+      ],
+      "lp_token": "factory/inj1gk4thnx4t9y4ltnau60mpst5xyu0u57hqfl0qs/uLP",
+      "swap_address": "inj1gk4thnx4t9y4ltnau60mpst5xyu0u57hqfl0qs",
+      "staking_address": "inj174jqfpxa92h5y8dmq46vaw9r0eyq3r290mty0a",
       "rewards_tokens": []
     }
   ],
