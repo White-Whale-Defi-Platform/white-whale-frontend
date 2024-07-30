@@ -775,6 +775,54 @@
       "swap_address": "terra1k45gtuv5ctphpctjlhg4l02wqehnj92z29ctffnyxnkrdmrd34nqxema3v",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-USDC",
+      "lpOrder": [
+        "LUNA",
+        "USDC"
+      ],
+      "assetOrder": [
+        "LUNA",
+        "USDC"
+      ],
+      "displayName": "LUNA-USDC",
+      "displayLogo1": "/logos/luna.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "LUNA",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "usd-coin",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/2C962DAB9F57FE0921435426AE75196009FAA1981BF86991203C8411F8980FDB",
+          "symbol": "USDC",
+          "name": "USDC",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/2C962DAB9F57FE0921435426AE75196009FAA1981BF86991203C8411F8980FDB"
+        }
+      ],
+      "lp_token": "factory/terra16a45v4k74w3yy30utfxdsekdlnks27sv48sn2suaf4wt7u6meq8scz75mx/uLP",
+      "swap_address": "terra16a45v4k74w3yy30utfxdsekdlnks27sv48sn2suaf4wt7u6meq8scz75mx",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {

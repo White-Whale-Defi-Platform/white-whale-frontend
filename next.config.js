@@ -40,11 +40,6 @@ const config = {
         permanent: false,
       },
       {
-        source: '/bonding',
-        destination: '/migaloo/bonding',
-        permanent: false,
-      },
-      {
         source: '/pools',
         destination: '/migaloo/pools',
         permanent: false,
@@ -66,6 +61,15 @@ const config = {
   async headers() {
     return [
       {
+        source: '/_next/static/chunks/:slug.js',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/javascript',
+          },
+        ],
+      },
+      {
         source: '/(.*)',
         headers: [
           {
@@ -78,12 +82,12 @@ const config = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "frame-ancestors 'none'"
+            value: "frame-ancestors 'none'",
           },
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
-          }
+          },
         ],
       },
     ];
