@@ -7,9 +7,9 @@ import { useClients } from 'hooks/useClients'
 import useCoinGecko from 'hooks/useCoinGecko'
 import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
+import { getPoolFromAPI } from 'services/useAPI'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
-import { getPoolFromAPI } from '../services/useAPI'
 
 type Params = {
   token: TokenInfo
@@ -41,7 +41,7 @@ const getTokenPrice = async ({
   baseToken,
   baseTokenPrice,
   cosmWasmClient,
-}: Params) => {
+}: Params): Promise<number> => {
   const poolContainingTokenAndBaseToken = poolList.find((pool) => pool.pool_assets.some((poolAsset) => poolAsset.symbol === token.symbol) && pool.pool_assets.some((poolAsset) => poolAsset.symbol === baseToken.symbol))
 
   if (!poolContainingTokenAndBaseToken) {
@@ -139,7 +139,7 @@ export const usePrices = () => {
       return token.id
     }
   }),
-    [tokenList?.tokens])
+  [tokenList?.tokens])
   const coingeckoPrices = useCoinGecko(coingeckoIds)
   const { data: prices } = useQuery({
     queryKey: ['newPrices', tokenList?.baseToken, chainId],
