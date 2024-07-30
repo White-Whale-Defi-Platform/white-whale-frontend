@@ -448,5 +448,54 @@
       "ibc-go"
     ],
     "beta": true
+  },
+  {
+    "chainId": "archway-1",
+    "chainName": "Archway Mainnet",
+    "label": "Archway",
+    "icon": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/archway.svg",
+    "rpc": "https://archway.rpc.kjnodes.com",
+    "rest": "https://archway.api.kjnodes.com",
+    "stakeCurrency": {
+      "coinDenom": "ARCH",
+      "coinMinimalDenom": "aarch",
+      "coinDecimals": 18
+    },
+    "bip44": {
+      "coinType": 118
+    },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "arch",
+      "bech32PrefixAccPub": "archpub",
+      "bech32PrefixValAddr": "archvaloper",
+      "bech32PrefixValPub": "archvaloperpub",
+      "bech32PrefixConsAddr": "archvalcons",
+      "bech32PrefixConsPub": "archvalconspub"
+    },
+    "currencies": [
+      {
+        "coinDenom": "ARCH",
+        "coinMinimalDenom": "aarch",
+        "coinDecimals": 18,
+        "coinGeckoId": "archway"
+      }
+    ],
+    "feeCurrencies": [
+      {
+        "coinDenom": "ARCH",
+        "coinMinimalDenom": "aarch",
+        "coinDecimals": 18,
+        "coinGeckoId": "archway"
+      }
+    ],
+    "coinType": 118,
+    "gasPriceStep": {
+      "low": 140000000000,
+      "average": 225400000000,
+      "high": 254800000000
+    },
+    "features": [
+      "cosmwasm"
+    ]
   }
 ]

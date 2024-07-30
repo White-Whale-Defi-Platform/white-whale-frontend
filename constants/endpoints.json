@@ -70,5 +70,13 @@
         "rest": [
             "https://osmosis-rest.publicnode.com"
         ]
+    },
+    "archway": {
+        "rpc": [
+            "https://archway.rpc.kjnodes.com"
+        ],
+        "rest": [
+            "https://archway.api.kjnodes.com"
+        ]
     }
 }

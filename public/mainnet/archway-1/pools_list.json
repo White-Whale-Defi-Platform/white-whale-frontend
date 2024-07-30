@@ -1,0 +1,31 @@
+{
+  "name": "Pools list on mainnet",
+  "logoURI": "/img/logo.svg",
+  "keywords": [
+    "special tokens"
+  ],
+  "tags": {
+    "ProjectName": {
+      "name": "White Whale",
+      "description": "Tokens that are listed on Project"
+    }
+  },
+  "timestamp": "2024-01-23T15:01:19+0000",
+  "base_token": {
+    "id": "archway",
+    "chain_id": "archway-1",
+    "token_address": "",
+    "symbol": "ARCH",
+    "name": "Archway",
+    "decimals": 18,
+    "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/archway.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "aarch"
+  },
+  "routerAddress": "archway1y0eyqu78q8zz93swaplvg90la0qkk0fueht3yxu6huc96yktrmcqntwe67",
+  "pools": [
+  ]
+}

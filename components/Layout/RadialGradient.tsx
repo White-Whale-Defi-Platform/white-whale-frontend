@@ -35,7 +35,10 @@ export const backgrounds = {
     'linear-gradient(90deg, rgba(60, 205, 100, 0.25) 2.83%, rgba(255, 255, 0, 0.25) 50%, rgba(0, 117, 255, 0.25) 97.47%)',
   'osmosis-1':
     'linear-gradient(135deg, rgba(255, 20, 147, 0.8) 0%, rgba(147, 112, 219, 0.8) 50%, rgba(255, 20, 147, 0.8) 100%)',
-}
+// TODO ARCHWAY
+  'archway-1':
+    'linear-gradient(135deg, rgba(255, 20, 147, 0.8) 0%, rgba(147, 112, 219, 0.8) 50%, rgba(255, 20, 147, 0.8) 100%)',
+  }
 
 const RadialGradient: FC = () => {
   const { chainId } = useRecoilValue(chainState)
