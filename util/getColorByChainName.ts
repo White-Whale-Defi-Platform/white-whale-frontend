@@ -20,9 +20,8 @@ export const getColorByChainName = (chainName: string) : string => {
       return '#00FF00'
     case WalletChainName.osmosis:
       return '#800080'
-    // TODO: ARCHWAY
     case WalletChainName.archway:
-      return '#000000'
+      return '#ff8a22'
 
     default:
       return null
