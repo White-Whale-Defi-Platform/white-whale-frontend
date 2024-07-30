@@ -38,6 +38,8 @@ const getUrl = (chainId: string, txHash: string) => {
       return `https://ping.pub/terra-luna/tx/${txHash}`
     case ChainId.osmosis:
       return `https://mintscan.io/osmosis/txs/${txHash}`
+    case ChainId.archway:
+      return `https://mintscan.io/archway/txs/${txHash}`
     default:
       return null
   }

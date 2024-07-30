@@ -89,6 +89,16 @@
         "tokenSymbol": "WHALE",
         "amount": 0
       }
+    ],
+    "archway": [
+      {
+        "tokenSymbol": "ampWHALE",
+        "amount": 0
+      },
+      {
+        "tokenSymbol": "WHALE",
+        "amount": 0
+      }
     ]
   },
   "testnet": {
