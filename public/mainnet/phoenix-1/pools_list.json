@@ -823,6 +823,54 @@
       "swap_address": "terra16a45v4k74w3yy30utfxdsekdlnks27sv48sn2suaf4wt7u6meq8scz75mx",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "wBTC.osmo-LUNA",
+      "lpOrder": [
+        "wBTC.osmo",
+        "LUNA"
+      ],
+      "assetOrder": [
+        "wBTC.osmo",
+        "LUNA"
+      ],
+      "displayName": "wBTC.osmo-LUNA",
+      "displayLogo1": "/logos/wBTC.svg",
+      "displayLogo2": "/logos/luna.svg",
+      "pool_assets": [
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/CF57A83CED6CEC7D706631B5DC53ABC21B7EDA7DF7490732B4361E6D5DD19C73",
+          "symbol": "wBTC.osmo",
+          "name": "wBT.osmo",
+          "decimals": 8,
+          "logoURI": "/logos/wBTC.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/CF57A83CED6CEC7D706631B5DC53ABC21B7EDA7DF7490732B4361E6D5DD19C73"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "LUNA",
+          "decimals": 6,
+          "logoURI": "/logos/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
