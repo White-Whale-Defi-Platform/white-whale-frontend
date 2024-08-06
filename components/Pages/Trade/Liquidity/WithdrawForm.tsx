@@ -36,14 +36,18 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
   const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || []
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
   const [tokenList] = useTokenList()
-  const { tokenABalance, tokenBBalance } = useMemo(() => {
+  const { tokenABalance, tokenBBalance, tokenADecimal,tokenBDecimal } = useMemo(() => {
     const [reserveA, reserveB] = liquidity?.reserves?.myNotLocked || []
+    const tokenADecimal =  getDecimals(tokenSymbolA, tokenList)
+    const tokenBDecimal = getDecimals(tokenSymbolB, tokenList)
 
     return {
-      tokenABalance: fromChainAmount(reserveA, getDecimals(tokenSymbolA, tokenList)),
-      tokenBBalance: fromChainAmount(reserveB, getDecimals(tokenSymbolB, tokenList)),
+      tokenABalance: fromChainAmount(reserveA, tokenADecimal),
+      tokenBBalance: fromChainAmount(reserveB, tokenBDecimal),
+      tokenADecimal,
+      tokenBDecimal,
     }
-  }, [liquidity])
+  }, [liquidity, tokenList?.tokens])
 
   const { control, handleSubmit, setValue, watch } = useForm({
     mode: 'onChange',
@@ -51,12 +55,12 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
       token1: {
         tokenSymbol: tokenSymbolA,
         amount: 0,
-        decimals: getDecimals(tokenSymbolA, tokenList),
+        decimals: tokenADecimal,
       },
       token2: {
         tokenSymbol: tokenSymbolB,
         amount: 0,
-        decimals: getDecimals(tokenSymbolB, tokenList),
+        decimals: tokenBDecimal,
       },
     },
   })
@@ -68,8 +72,8 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
     tokenA: liquidity?.reserves?.myNotLocked?.[0],
     tokenB: liquidity?.reserves?.myNotLocked?.[1],
     amount: reverse
-      ? toChainAmount(tokenB.amount, getDecimals(tokenSymbolB, tokenList))
-      : toChainAmount(tokenA.amount, getDecimals(tokenSymbolA, tokenList)),
+      ? toChainAmount(tokenB.amount, tokenBDecimal)
+      : toChainAmount(tokenA.amount, tokenADecimal),
     reverse,
   })
 
@@ -77,12 +81,12 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
     if (reverse) {
       setValue('token1', {
         ...tokenA,
-        amount: num(fromChainAmount(simulated, tokenA.decimals)).toNumber(),
+        amount: num(fromChainAmount(simulated, tokenADecimal)).toNumber(),
       })
     } else {
       setValue('token2', {
         ...tokenB,
-        amount: num(fromChainAmount(simulated, tokenB.decimals)).toNumber(),
+        amount: num(fromChainAmount(simulated, tokenBDecimal)).toNumber(),
       })
     }
   }, [simulated])
