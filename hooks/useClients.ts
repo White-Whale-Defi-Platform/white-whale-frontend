@@ -18,7 +18,7 @@ export const useClients = (walletChainName: string) => {
     isWalletConnected,
     setDefaultSignOptions,
     getStargateClient,
-    wallet, getRpcEndpoint, getOfflineSigner } = useChain(walletChainName)
+    wallet, getRpcEndpoint, getOfflineSignerDirect } = useChain(walletChainName)
 
   if (isWalletConnected && !wallet?.name.includes('station')) {
     try {
@@ -44,7 +44,7 @@ export const useClients = (walletChainName: string) => {
       queryKey: ['injectiveSigningClient'],
       queryFn: async () => {
         try {
-          const offlineSigner: any = await getOfflineSigner()
+          const offlineSigner: any = await getOfflineSignerDirect()
           const protoRegistry: ReadonlyArray<[string, GeneratedType]> = [
             ...cosmosProtoRegistry,
             ...cosmwasmProtoRegistry,
