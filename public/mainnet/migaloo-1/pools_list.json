@@ -231,7 +231,7 @@
       ],
       "displayName": "WHALE-wBTC",
       "displayLogo1": "/logos/whale.svg",
-      "displayLogo2": "/logos/wbtc.svg",
+      "displayLogo2": "/logos/wbtcosmo.svg",
       "pool_assets": [
         {
           "id": "white-whale",
@@ -254,7 +254,7 @@
           "symbol": "wBTC",
           "name": "wBTC",
           "decimals": 8,
-          "logoURI": "/logos/wbtc.svg",
+          "logoURI": "/logos/wbtcosmo.svg",
           "tags": [
             "native"
           ],
@@ -1211,6 +1211,54 @@
       "lp_token": "factory/migaloo1qu9fdl00ager68lyeh8e2vv3lpgylqryug468vuvy0ujk4tyq9zsnw5qdz/uLP",
       "swap_address": "migaloo1qu9fdl00ager68lyeh8e2vv3lpgylqryug468vuvy0ujk4tyq9zsnw5qdz",
       "staking_address": "migaloo1f9qma3pf75xf7zkran5g4eyv5xpj38l6a7sj6az4thr6gsxl7vkqcjd7d4",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "OPHIR-wBTC",
+      "lpOrder": [
+        "OPHIR",
+        "wBTC"
+      ],
+      "assetOrder": [
+        "OPHIR",
+        "wBTC"
+      ],
+      "displayName": "OPHIR-wBTC",
+      "displayLogo1": "/logos/ophir.png",
+      "displayLogo2": "/logos/wbtcosmo.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1t862qdu9mj5hr3j727247acypym3ej47axu22rrapm4tqlcpuseqltxwq5/ophir",
+          "symbol": "OPHIR",
+          "name": "OPHIR",
+          "decimals": 6,
+          "logoURI": "/logos/ophir.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1t862qdu9mj5hr3j727247acypym3ej47axu22rrapm4tqlcpuseqltxwq5/ophir"
+        },
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/6E5BF71FE1BEBBD648C8A7CB7A790AEF0081120B2E5746E6563FC95764716D61",
+          "symbol": "wBTC",
+          "name": "wBTC",
+          "decimals": 8,
+          "logoURI": "/logos/wbtcosmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/6E5BF71FE1BEBBD648C8A7CB7A790AEF0081120B2E5746E6563FC95764716D61"
+        }
+      ],
+      "lp_token": "factory/migaloo154k8ta3n0eduqrkr657f0kaj8yc89rczjpznxwnrnfvdlnjkxkjq0mv55f/uLP",
+      "swap_address": "migaloo154k8ta3n0eduqrkr657f0kaj8yc89rczjpznxwnrnfvdlnjkxkjq0mv55f",
+      "staking_address": "",
       "rewards_tokens": []
     }
   ],
