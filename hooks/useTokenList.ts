@@ -46,8 +46,12 @@ export const useTokenList = () => {
             if (asset.name === 'Whale Token' && !native && walletChainName === 'terra'){
               continue
             }
-            const denom = !native ? asset.address : asset.base
+            const denom = native ? asset.base : asset.address || asset.base
             const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images[0].svg || asset.images[0].png
+            // HARDCODED FOR NOW
+            if (asset.name == "DRUGS" && walletChainName === 'injective') {
+              exponents.exponent = 18
+            }
             let tmpAssetOBJ: any = { denom: denom, id: asset.coingecko_id || "", token_address: asset.address || asset.base, chain_id: chainId, symbol: asset.symbol, decimals: exponents.exponent, name: asset.name, logoURI: logoURI, tags: native ? ['native'] : [''], native: native, fromRegistry: true }
             const res = Array.from(tokenMapBySymbol.values())
             if (denom && !res.find((token) => token.denom === denom)) {
