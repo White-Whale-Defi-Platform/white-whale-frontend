@@ -124,14 +124,14 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "LUNA-ASTRO",
+      "pool_id": "LUNA-ASTRO.cw20",
       "lpOrder": [
         "LUNA",
-        "ASTRO"
+        "ASTRO.cw20"
       ],
       "assetOrder": [
         "LUNA",
-        "ASTRO"
+        "ASTRO.cw20"
       ],
       "displayName": "ASTRO.cw20-LUNA",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/astro-cw20.svg",
@@ -1333,7 +1333,7 @@
           "denom": "uluna"
         },
         {
-          "id": "injective",
+          "id": "injective-protocol",
           "chain_id": "phoenix-1",
           "token_address": "ibc/25BC59386BB65725F735EFC0C369BB717AA8B5DAD846EAF9CBF5D0F18F207211",
           "symbol": "INJ",

@@ -3,7 +3,7 @@ import { useQueries } from 'react-query'
 import { GeneratedType, Registry } from '@cosmjs/proto-signing';
 import { AminoTypes } from '@cosmjs/stargate';
 import { useChain } from '@cosmos-kit/react-lite'
-import { InjectiveStargate } from '@injectivelabs/sdk-ts'
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import {
   cosmosAminoConverters,
   cosmosProtoRegistry,
@@ -53,10 +53,10 @@ export const useClients = (walletChainName: string) => {
             ...cosmosAminoConverters,
             ...cosmwasmAminoConverters,
           };
-          const registry = new Registry(protoRegistry);
+          const registry: any = new Registry(protoRegistry);
           const aminoTypes = new AminoTypes(aminoConverters);
           const endpoint = await getRpcEndpoint()
-          const client = await InjectiveStargate.InjectiveSigningStargateClient.connectWithSigner(
+          const client = await InjectiveSigningStargateClient.connectWithSigner(
             endpoint,
             offlineSigner, {
             registry,
