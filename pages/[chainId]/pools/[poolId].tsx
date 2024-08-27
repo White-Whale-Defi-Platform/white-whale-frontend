@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
     const pool = poolData.pools.find(pool =>
       pool.pool_id === poolId ||
       pool.swap_address === poolId ||
-      pool?.osmo_pool_id === Number(poolId)
+      pool.osmo_pool_id === Number(poolId)
     );
     if (!pool) {
       // If no pool matches, redirect to a custom 404 page or another page
