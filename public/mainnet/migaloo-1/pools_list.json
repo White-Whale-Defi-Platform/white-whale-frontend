@@ -1260,6 +1260,54 @@
       "swap_address": "migaloo154k8ta3n0eduqrkr657f0kaj8yc89rczjpznxwnrnfvdlnjkxkjq0mv55f",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "RSTK-WHALE",
+      "lpOrder": [
+        "RSTK",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "RSTK",
+        "WHALE"
+      ],
+      "displayName": "RSTK-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/rstk.svg",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1d0uma9qzcts4fzt7ml39xp44aut5k6qyjfzz4asalnecppppr3rsl52vvv/rstk",
+          "symbol": "RSTK",
+          "name": "RSTK",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/rstk.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1d0uma9qzcts4fzt7ml39xp44aut5k6qyjfzz4asalnecppppr3rsl52vvv/rstk"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "migaloo-1",
+          "token_address": "uwhale",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uwhale"
+        }
+      ],
+      "lp_token": "factory/migaloo1flxncfqe7wutc7hhn4rdzewkjd3tx6ur7uz076g09xwvfsacvyjs7hr3yy/uLP",
+      "swap_address": "migaloo1flxncfqe7wutc7hhn4rdzewkjd3tx6ur7uz076g09xwvfsacvyjs7hr3yy",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
