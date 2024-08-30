@@ -28,7 +28,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryPoolsLiquidity,
 } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
-import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/networks'
+import { ACTIVE_INCENTIVE_NETWORKS, ChainId } from 'constants/networks'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
@@ -41,6 +41,8 @@ import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 import { TokenItemState, TxStep } from 'types/common'
 import { getDecimals } from 'util/conversion/index'
+import StakingForm from './StakingForm'
+import { useFetchLiquidityAlliances } from './hooks/useLiquidityAlliancePositions'
 
 interface ManageLiquidityProps {
   poolIdFromUrl?: string
@@ -62,6 +64,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
     reverse,
     bondingDays,
   })
+  const { data: liquidityAlliances, isLoading } = useFetchLiquidityAlliances()
   const { cosmWasmClient } = useClients(walletChainName)
 
   const [pools]: readonly [PoolEntityTypeWithLiquidity[], boolean, boolean] =
@@ -73,18 +76,26 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   const prices = usePrices()
   const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
-  [chains, chainId])
+    [chains, chainId])
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
     cosmWasmClient,
     pools,
     currentChainPrefix,
   )
 
+  const alliancePositions = useMemo(() => {
+    console.log('alliancePositions', liquidityAlliances)
+    if (liquidityAlliances) {
+      return liquidityAlliances
+    }
+    return []
+  }, [liquidityAlliances, isLoading])
+
   const pool = useMemo(() => poolData?.pools.find((pool: any) => pool.pool_id === poolIdFromUrl),
     [poolIdFromUrl, poolData])
 
-  const incentivesEnabled = pool?.staking_address && pool?.staking_address !== '' && ACTIVE_INCENTIVE_NETWORKS.includes(chainId)
-  // TODO pool user share might be falsy
+  const isAllianceLP = alliancePositions.find((alliance) => alliance.token === pool?.lp_token)
+  const incentivesEnabled = pool?.staking_address && pool?.staking_address !== '' && ACTIVE_INCENTIVE_NETWORKS.includes(chainId) && !isAllianceLP
   const poolUserShare = usePoolUserShare(
     cosmWasmClient,
     pool?.staking_address,
@@ -257,6 +268,8 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
             >
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
+              {isAllianceLP && (
+              <Tab>Stake</Tab>)}
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
               {dailyEmissionData.length > 0 ? <Tab>Incentives</Tab> : null}
@@ -287,6 +300,17 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
                   />
                 )}
               </TabPanel>
+              {isAllianceLP && (
+                <TabPanel padding={4}>
+                  <StakingForm
+                    isWalletConnected={isWalletConnected}
+                    clearForm={clearForm}
+                    poolId={poolIdFromUrl}
+                    mobile={isMobile}
+                    openView={openView}
+                  />
+                </TabPanel>
+              )}
               <TabPanel padding={4}>
                 <WithdrawForm
                   isWalletConnected={isWalletConnected}

@@ -10,6 +10,7 @@ import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+import { fetchAllAllianceRewards } from './useLiquidityAlliancePositions'
 
 export type RewardInfo = {
   amount: number
@@ -64,9 +65,9 @@ const useRewards = (poolId: string): RewardsResult => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const [{ staking_address = null } = {}] = useQueryPoolLiquidity({ poolId })
+  const [{ staking_address = null, lp_token = null } = {}] = useQueryPoolLiquidity({ poolId })
 
-  const { walletChainName } = useRecoilValue(chainState)
+  const { walletChainName, chainId } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { cosmWasmClient } = useClients(walletChainName)
 
@@ -78,6 +79,22 @@ const useRewards = (poolId: string): RewardsResult => {
     select: (data) => data?.rewards || [],
     enabled: Boolean(staking_address) && Boolean(address) && Boolean(cosmWasmClient),
   })
+
+  const { data: allianceRewards = [] } = useQuery({
+    queryKey: ['allianceRewards', chainId, address],
+    queryFn: async (): Promise<any[]> => {
+      if (chainId == "phoenix-1") {
+        return await fetchAllAllianceRewards(cosmWasmClient, address, chainId)
+      } else {
+        return []
+      }
+    },
+    refetchInterval: 60000,
+    select: (data) => data || [],
+    enabled: Boolean(lp_token) && Boolean(address) && Boolean(cosmWasmClient) && Boolean(chainId === "phoenix-1"),
+  })
+  const allianceRewardsForLP = useMemo(() => { allianceRewards?.filter((rewards: any) => rewards.staked_asset?.native == lp_token) || [] }, [allianceRewards])
+  console.log('Alliance Rewards: ', allianceRewardsForLP)
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log('Rewards: ', rewards)

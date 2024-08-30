@@ -4,8 +4,8 @@ import { useWithdrawPosition } from 'components/Pages/Trade/Liquidity/hooks/useW
 import { PositionState } from 'constants/state'
 
 export const Action = ({ item, poolId }) => {
-  const close = useClosePosition({ poolId })
-  const withdraw = useWithdrawPosition({ poolId })
+  const close = useClosePosition({ item,poolId })
+  const withdraw = useWithdrawPosition({ item, poolId })
 
   if (item?.state === PositionState.active) {
     return (

@@ -100,6 +100,8 @@ export const useDashboardData = (
       queryKey: ['totalBonded', network, chainId],
       queryFn: () => getTotalBonded(queryClient, config),
       enabled: Boolean(queryClient) && Boolean(config),
+      cacheTime: 5 * 60 * 1000,
+
     },
     {
       queryKey: ['weightInfo', address, network, chainId],
@@ -117,11 +119,14 @@ export const useDashboardData = (
       queryKey: ['currentEpoch', network, chainId],
       queryFn: () => getCurrentEpoch(queryClient, config),
       enabled: Boolean(queryClient) && Boolean(config),
+      cacheTime: 30 * 60 * 1000,
     },
     {
       queryKey: ['claimableEpochs', network, chainId],
       queryFn: () => getClaimableEpochs(queryClient, config),
       enabled: Boolean(queryClient) && Boolean(config),
+      cacheTime: 10 * 60 * 1000,
+
     },
     {
       queryKey: ['claimableRewards', address, network, chainId],
@@ -134,6 +139,8 @@ export const useDashboardData = (
       queryKey: ['bondingConfig', network, chainId],
       queryFn: () => getBondingConfig(queryClient, config),
       enabled: Boolean(queryClient) && Boolean(config),
+      cacheTime: 60 * 60 * 1000,
+
     },
     {
       queryKey: ['globalIndex', network, chainId],

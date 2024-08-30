@@ -20,7 +20,7 @@ export const useClaim = ({ poolId }: Props) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const [pool] = usePoolFromListQueryById({ poolId })
+  const { data: pool, isLoading } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Claim',
     signingClient,
@@ -60,5 +60,5 @@ export const useClaim = ({ poolId }: Props) => {
     ...state,
     ...tx,
   }),
-  [tx, state, submit])
+    [tx, state, submit])
 }

@@ -13,21 +13,22 @@ import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
 
 type OpenPosition = {
+  item: any
   poolId: string
 }
 
-export const useClosePosition = ({ poolId }: OpenPosition) => {
-  const { walletChainName } = useRecoilValue(chainState)
+export const useClosePosition = ({ item, poolId }: OpenPosition) => {
+  const { walletChainName, chainId } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const [pool] = usePoolFromListQueryById({ poolId })
+  const { data: pool, isLoading } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Close Position',
     signingClient,
   })
 
   const createClosePositionMessage = (unbonding_duration: number) => {
-    const msg = createExecuteMessage({
+    let msg = createExecuteMessage({
       message: {
         close_position: {
           unbonding_duration,
@@ -38,6 +39,21 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
       funds: [],
     })
 
+    if (unbonding_duration === -1 && chainId === ChainId.terra && item?.liquidity_alliance) {
+      msg = createExecuteMessage({
+        message: {"unstake": {
+          "asset": {
+            "amount": String(item.amount),
+            "info": {
+              "native": pool.lp_token,
+            }
+          }
+        }},
+        senderAddress: address,
+        contractAddress: item.bribe_market,
+        funds: [],
+      })
+    }
     return [msg]
   }
 
@@ -56,7 +72,6 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
         )
         return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
       }
-      // TODO check if returns promise
       return await validateTransactionSuccess(await signingClient.signAndBroadcast(
         address, msgs, await createGasFee(
           signingClient, address, msgs,

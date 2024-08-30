@@ -20,7 +20,7 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const [pool] = usePoolFromListQueryById({ poolId })
+  const { data: pool, isLoading } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Close Position',
     signingClient,
@@ -85,5 +85,5 @@ export const useClosePosition = ({ poolId }: OpenPosition) => {
     ...state,
     ...tx,
   }),
-  [tx, state, submit])
+    [tx, state, submit])
 }

@@ -70,6 +70,22 @@ export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
 }
 
 export const usePoolFromListQueryById = ({ poolId }: { poolId: string }) => {
-  const { data: poolListResponse, isLoading } = usePoolsListQuery()
-  return [poolListResponse?.poolsById[poolId], isLoading] as const
-}
+  const poolsListQuery = usePoolsListQuery();
+  const { chainId } = useRecoilValue(chainState);
+
+  return useQuery(
+    ['poolById', poolId, chainId],
+    () => {
+      if (!poolsListQuery.data) {
+        return undefined;
+      }
+      console.log(poolsListQuery.data.poolsById[poolId])
+      return poolsListQuery.data.poolsById[poolId];
+    },
+    {
+      enabled: !!poolsListQuery.data && !!poolsListQuery.isLoading,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+    }
+  );
+};

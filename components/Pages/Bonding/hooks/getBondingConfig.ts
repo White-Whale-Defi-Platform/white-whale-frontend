@@ -28,7 +28,6 @@ export const getBondingConfig = async (client: CosmWasmClient | null,
 
 export const fetchConfig = async (client: CosmWasmClient,
   config: Config): Promise<BondingContractConfig> => {
-  // TODO: API
   if (!client || !config?.whale_lair) {
     return null
   }

@@ -12,51 +12,63 @@ import { createGasFee } from 'services/treasuryService';
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
 
-export const useWithdrawPosition = ({ poolId }) => {
-  const { walletChainName } = useRecoilValue(chainState)
-  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const { address } = useChain(walletChainName)
-  const [pool] = usePoolFromListQueryById({ poolId })
+export const useWithdrawPosition = ({ item, poolId }) => {
+  const { walletChainName } = useRecoilValue(chainState);
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName);
+  const { address } = useChain(walletChainName);
+
+  // Use the usePoolFromListQueryById hook
+  const { data: pool, isLoading: isPoolLoading } = usePoolFromListQueryById({ poolId });
+  console.log(pool);
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Unlock Position',
     signingClient,
-  })
+  });
 
-  const executeAddLiquidityMessage = createExecuteMessage({
-    message: {
-      withdraw: {},
-    },
-    senderAddress: address,
-    contractAddress: pool?.staking_address,
-    funds: [],
-  })
+  const executeWithdrawMessage = useMemo(() => {
+    if (!pool) return null;
 
-  const msgs = [executeAddLiquidityMessage]
+    return createExecuteMessage({
+      message: {
+        withdraw: {},
+      },
+      senderAddress: address,
+      contractAddress: pool.staking_address,
+      funds: [],
+    });
+  }, [pool, address]);
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {
+      if (!executeWithdrawMessage) {
+        throw new Error('Pool data not loaded');
+      }
+
+      const msgs = [executeWithdrawMessage];
+
       if (injectiveSigningClient && await signingClient.getChainId() === ChainId.injective) {
         const injectiveTxData = await injectiveSigningClient.sign(
           address, msgs, await createGasFee(
             injectiveSigningClient, address, msgs,
           ), ADV_MEMO,
-        )
-        return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish())
+        );
+        return await signingClient.broadcastTx(TxRaw.encode(injectiveTxData).finish());
       }
+
       return await signingClient.signAndBroadcast(
         address, msgs, await createGasFee(
           signingClient, address, msgs,
         ), ADV_MEMO,
-      )
+      );
     },
     onError,
     onSuccess,
-  })
+  });
 
   return useMemo(() => ({
     submit,
+    isPoolLoading,
     ...state,
     ...tx,
-  }),
-  [tx, state, submit])
-}
+  }), [tx, state, submit, isPoolLoading]);
+};

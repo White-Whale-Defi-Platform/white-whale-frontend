@@ -37,7 +37,7 @@ export const getPoolFromAPI = async (chainNameId: string, address: string) => {
 
 export const getFlowsFromAPI = async (chainNameId: string, address: string) => {
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/query/${chainNameId}/flows/${address}`, 1000);
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/query/${chainNameId}/flows/${address}`, 2000);
     const json = await response.json()
     return json?.data || null
   } catch (error) {
