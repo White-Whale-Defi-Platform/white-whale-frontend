@@ -129,7 +129,6 @@ export const fetchAllAllianceRewards = async (cosmWasmClient: any, address: stri
       return assets
     })
   )
-  console.log('Rewards: ', rewards)
 
   return rewards.flat()
 }

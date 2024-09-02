@@ -193,7 +193,6 @@ const Pools = () => {
 
       const incentiveBaseApr = flows.reduce((total, item) => total + (isNaN(item.apr) ? 0 : Number(item.apr)),
         0)
-      console.log(incentiveBaseApr, flows)
       const pairInfo = pairInfos.find((pairInfo) => pairInfo.pool_id === pool.poolId)
       const poolState = currentAprHelperState?.find((state) => state.poolId === pool.poolId)
       updateAPRHelperState(
