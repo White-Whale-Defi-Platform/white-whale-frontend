@@ -43,6 +43,7 @@ import { TokenItemState, TxStep } from 'types/common'
 import { getDecimals } from 'util/conversion/index'
 import StakingForm from './StakingForm'
 import { useFetchLiquidityAlliances } from './hooks/useLiquidityAlliancePositions'
+import AppLoading from '../../../AppLoading'
 
 interface ManageLiquidityProps {
   poolIdFromUrl?: string
@@ -73,6 +74,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
       pools: poolData?.pools,
       cosmWasmClient,
     }))
+  const pool = useMemo(() => pools?.find((p) => p.pool_id === poolIdFromUrl), [pools, poolIdFromUrl])
   const prices = usePrices()
   const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
@@ -84,15 +86,12 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   )
 
   const alliancePositions = useMemo(() => {
-    console.log('alliancePositions', liquidityAlliances)
     if (liquidityAlliances) {
       return liquidityAlliances
     }
     return []
   }, [liquidityAlliances, isLoading])
 
-  const pool = useMemo(() => poolData?.pools.find((pool: any) => pool.pool_id === poolIdFromUrl),
-    [poolIdFromUrl, poolData])
 
   const isAllianceLP = alliancePositions.find((alliance) => alliance.token === pool?.lp_token)
   const incentivesEnabled = pool?.staking_address && pool?.staking_address !== '' && ACTIVE_INCENTIVE_NETWORKS.includes(chainId) && !isAllianceLP
@@ -103,7 +102,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   )
 
   const dailyEmissionData = useMemo(() => {
-    const incentivePoolInfo = incentivePoolInfos?.find((info) => info.poolId === poolIdFromUrl)
+    const incentivePoolInfo = incentivePoolInfos?.find((info) => info.poolId === pool?.pool_id)
     if (!poolUserShare) {
       return null
     }
@@ -118,20 +117,20 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
         }
       }) ?? []
     )
-  }, [prices, incentivePoolInfos, poolIdFromUrl, poolUserShare])
+  }, [prices, incentivePoolInfos, pool, poolUserShare])
   const chainIdParam = router.query.chainId as string
   const chainName = useMemo(() => window.location.pathname.split('/')[1].split('/')[0], [window.location.pathname])
 
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log(
-      'ManageLiquidity; Chain Name: ', chainName, ' ', poolIdFromUrl,
+      'ManageLiquidity; Chain Name: ', chainName, ' ', pool.pool_id,
     )
   }
 
   useEffect(() => {
-    setPoolIdState(poolIdFromUrl || poolIdState)
-  }, [poolIdFromUrl])
+    setPoolIdState(pool?.pool_id || poolIdState)
+  }, [pool])
 
   useEffect(() => {
     if (chainName) {
@@ -153,8 +152,8 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   }, [chainId, poolIdState, poolData, chainName])
 
   useEffect(() => {
-    if (poolIdFromUrl) {
-      const [tokenASymbol, tokenBSymbol] = poolIdFromUrl?.split('-') || []
+    if (pool?.pool_id) {
+      const [tokenASymbol, tokenBSymbol] = pool?.pool_id?.split('-') || []
 
       setTokenItemState([
         {
@@ -175,7 +174,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
       setIsToken(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolIdFromUrl])
+  }, [pool])
 
   const clearForm = () => {
     setTokenItemState([
@@ -208,13 +207,18 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   }
 
   const myFlows = useMemo(() => {
-    if (!pools || !poolIdFromUrl) {
+    if (!pools || !pool) {
       return []
     }
 
-    const flows = pools.find((p) => p.pool_id === poolIdFromUrl)
+    const flows = pools.find((p) => p.pool_id === pool.pool_id)
     return flows?.liquidity?.myFlows || []
-  }, [pools, poolIdFromUrl])
+  }, [pools, pool, poolIdFromUrl])
+
+
+  if (!pool) {
+    return <AppLoading />
+  }
 
   return (
     <VStack
@@ -269,14 +273,14 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
               <Tab>Overview</Tab>
               <Tab>Deposit</Tab>
               {isAllianceLP && (
-              <Tab>Stake</Tab>)}
+                <Tab>Stake</Tab>)}
               <Tab>Withdraw</Tab>
               <Tab>Claim</Tab>
               {dailyEmissionData.length > 0 ? <Tab>Incentives</Tab> : null}
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <Overview poolId={poolIdFromUrl} dailyEmissions={dailyEmissionData} />
+                <Overview pool={pool} dailyEmissions={dailyEmissionData} />
               </TabPanel>
               <TabPanel padding={4}>
                 {isTokenSet && (
@@ -305,7 +309,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
                   <StakingForm
                     isWalletConnected={isWalletConnected}
                     clearForm={clearForm}
-                    poolId={poolIdFromUrl}
+                    pool={pool}
                     mobile={isMobile}
                     openView={openView}
                   />
@@ -315,17 +319,17 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
                 <WithdrawForm
                   isWalletConnected={isWalletConnected}
                   clearForm={clearForm}
-                  poolId={poolIdFromUrl}
                   mobile={isMobile}
                   openView={openView}
+                  pool={pool}
                 />
               </TabPanel>
               <TabPanel padding={4}>
-                <Claim poolId={poolIdFromUrl} />
+                <Claim {...pool} />
               </TabPanel>
               {dailyEmissionData.length > 0 ? (
                 <TabPanel padding={4}>
-                  <IncentivePositionsOverview flows={myFlows} poolId={poolIdFromUrl} />
+                  <IncentivePositionsOverview flows={myFlows} pool={pool} />
                 </TabPanel>
               ) : null}
             </TabPanels>

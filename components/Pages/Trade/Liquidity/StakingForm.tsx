@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
-import useClaimableLP from 'components/Pages/Trade/Liquidity/hooks/useClaimableLP'
-import useWithdraw, { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
+import { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
@@ -13,16 +12,17 @@ import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { TxStep } from 'types/index'
 import { getDecimals } from 'util/conversion/index'
 import useStake from './hooks/useStakePosition'
+import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
 
 type Props = {
-  poolId: string
+  pool: PoolEntityType
   isWalletConnected: boolean
   mobile?: boolean
   openView: any
   clearForm: () => void
 }
 
-const StakeForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }: Props) => {
+const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -30,15 +30,15 @@ const StakeForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }: P
       liquidity = {},
       staking_address = null,
     } = {},
-  ] = useQueryPoolLiquidity({ poolId })
+  ] = useQueryPoolLiquidity({ poolId: pool.pool_id })
 
   const [reverse, setReverse] = useState(false)
-  const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || []
+  const [tokenSymbolA, tokenSymbolB] = pool.pool_id?.split('-') || []
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
   const [tokenList] = useTokenList()
-  const { tokenABalance, tokenBBalance, tokenADecimal,tokenBDecimal } = useMemo(() => {
+  const { tokenABalance, tokenBBalance, tokenADecimal, tokenBDecimal } = useMemo(() => {
     const [reserveA, reserveB] = liquidity?.reserves?.myNotLocked || []
-    const tokenADecimal =  getDecimals(tokenSymbolA, tokenList)
+    const tokenADecimal = getDecimals(tokenSymbolA, tokenList)
     const tokenBDecimal = getDecimals(tokenSymbolB, tokenList)
 
     return {
@@ -113,10 +113,14 @@ const StakeForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }: P
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
-      setValue('token1', { ...tokenA,
-        amount: 0 })
-      setValue('token2', { ...tokenB,
-        amount: 0 })
+      setValue('token1', {
+        ...tokenA,
+        amount: 0
+      })
+      setValue('token2', {
+        ...tokenB,
+        amount: 0
+      })
       clearForm()
     }
   }, [tx?.txStep])

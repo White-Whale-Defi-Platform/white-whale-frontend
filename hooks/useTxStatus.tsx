@@ -17,7 +17,7 @@ interface UseTxStatusProps {
   transactionType: string
 }
 
-interface TxResult {
+export interface TxResult {
   transactionHash: string
 }
 
@@ -103,6 +103,7 @@ const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
         'tokenBalance',
         'positions',
         'rewards',
+        'signingClient',
       ],
     })
   }, [transactionType, description, toast, queryClient, setTxState])

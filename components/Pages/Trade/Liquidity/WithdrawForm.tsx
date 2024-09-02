@@ -12,16 +12,17 @@ import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { TxStep } from 'types/index'
 import { getDecimals } from 'util/conversion/index'
+import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
 
 type Props = {
-  poolId: string
+  pool: PoolEntityType
   isWalletConnected: boolean
   mobile?: boolean
   openView: any
   clearForm: () => void
 }
 
-const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }: Props) => {
+const WithdrawForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Props) => {
   const [
     {
       swap_address: swapAddress = null,
@@ -29,11 +30,11 @@ const WithdrawForm = ({ poolId, isWalletConnected, clearForm, mobile, openView }
       liquidity = {},
       staking_address = null,
     } = {},
-  ] = useQueryPoolLiquidity({ poolId })
+  ] = useQueryPoolLiquidity({ poolId: pool.pool_id })
 
-  const claimableLP = useClaimableLP({ poolId })
+  const claimableLP = useClaimableLP({ pool })
   const [reverse, setReverse] = useState(false)
-  const [tokenSymbolA, tokenSymbolB] = poolId?.split('-') || []
+  const [tokenSymbolA, tokenSymbolB] = pool.pool_id?.split('-') || []
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
   const [tokenList] = useTokenList()
   const { tokenABalance, tokenBBalance, tokenADecimal,tokenBDecimal } = useMemo(() => {

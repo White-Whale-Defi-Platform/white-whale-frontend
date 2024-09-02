@@ -6,18 +6,19 @@ import useLockedPositions from 'components/Pages/Trade/Liquidity/hooks/useLocked
 import useRewards from 'components/Pages/Trade/Liquidity/hooks/useRewards'
 import { Positions } from 'components/Pages/Trade/Liquidity/Positions'
 import { Rewards } from 'components/Pages/Trade/Liquidity/Rewards'
+import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
 
 type Props = {
-  poolId: string
+  pool: PoolEntityType
   dailyEmissions: any
 }
 
-const Overview = ({ poolId, dailyEmissions }: Props) => {
-  const { rewards, totalValue } = useRewards(poolId)
-  const { data: positionData = [] } = useLockedPositions(poolId)
+const Overview = ({ pool, dailyEmissions }: Props) => {
+  const { rewards, totalValue } = useRewards(pool)
+  const { data: positionData = [] } = useLockedPositions(pool)
   const positions = useMemo(() => positionData?.map((item) => ({
     ...item,
-    action: <Action item={item} poolId={poolId} />,
+    action: <Action item={item} pool={pool} />,
   })),
   [positionData])
 

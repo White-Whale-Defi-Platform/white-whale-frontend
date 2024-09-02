@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolEntityType, usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients'
@@ -12,28 +12,25 @@ import { createGasFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
 
-interface Props {
-  poolId: string
-}
 
-export const useClaim = ({ poolId }: Props) => {
+export const useClaim = (pool: PoolEntityType) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const { data: pool, isLoading } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Claim',
     signingClient,
   })
 
-  const msg = createExecuteMessage({
-    message: {
-      claim: {},
-    },
-    senderAddress: address,
-    contractAddress: pool?.staking_address,
-    funds: [],
-  })
+  const msg =
+    createExecuteMessage({
+      message: {
+        claim: {},
+      },
+      senderAddress: address,
+      contractAddress: pool.staking_address,
+      funds: [],
+    });
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {

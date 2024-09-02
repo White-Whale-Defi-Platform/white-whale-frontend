@@ -364,7 +364,8 @@ export const useQueryPoolsLiquidity = ({
       refetchOnMount: false,
       refetchInterval: refetchInBackground ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL : null,
       refetchIntervalInBackground: refetchInBackground,
-      cacheTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+      staleTime: 5 * 60 * 1000,
       queryFn: () => queryPoolLiquidity(pool),
     }))
   );
@@ -387,7 +388,6 @@ export const useQueryPoolLiquidity = ({ poolId }) => {
     refetchInBackground: true,
     cosmWasmClient,
   })
-  console.log('Pool Response: ', poolResponse?.data)
 
   return [
     poolResponse?.data,

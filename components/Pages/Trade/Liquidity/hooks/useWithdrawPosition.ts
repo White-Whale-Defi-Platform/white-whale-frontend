@@ -12,14 +12,11 @@ import { createGasFee } from 'services/treasuryService';
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
 
-export const useWithdrawPosition = ({ item, poolId }) => {
+export const useWithdrawPosition = ({ pool }) => {
   const { walletChainName } = useRecoilValue(chainState);
   const { signingClient, injectiveSigningClient } = useClients(walletChainName);
   const { address } = useChain(walletChainName);
 
-  // Use the usePoolFromListQueryById hook
-  const { data: pool, isLoading: isPoolLoading } = usePoolFromListQueryById({ poolId });
-  console.log(pool);
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Unlock Position',
     signingClient,
@@ -67,8 +64,7 @@ export const useWithdrawPosition = ({ item, poolId }) => {
 
   return useMemo(() => ({
     submit,
-    isPoolLoading,
     ...state,
     ...tx,
-  }), [tx, state, submit, isPoolLoading]);
+  }), [tx, state, submit]);
 };

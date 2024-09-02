@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import { usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolEntityType, usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients'
@@ -14,20 +14,21 @@ import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/
 
 type OpenPosition = {
   item: any
-  poolId: string
+  pool: PoolEntityType
 }
 
-export const useClosePosition = ({ item, poolId }: OpenPosition) => {
+export const useClosePosition = ({ item, pool }: OpenPosition) => {
   const { walletChainName, chainId } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const { data: pool, isLoading } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Close Position',
     signingClient,
   })
 
+
   const createClosePositionMessage = (unbonding_duration: number) => {
+
     let msg = createExecuteMessage({
       message: {
         close_position: {
@@ -35,20 +36,22 @@ export const useClosePosition = ({ item, poolId }: OpenPosition) => {
         },
       },
       senderAddress: address,
-      contractAddress: pool?.staking_address,
+      contractAddress: pool.staking_address,
       funds: [],
     })
 
     if (unbonding_duration === -1 && chainId === ChainId.terra && item?.liquidity_alliance) {
       msg = createExecuteMessage({
-        message: {"unstake": {
-          "asset": {
-            "amount": String(item.amount),
-            "info": {
-              "native": pool.lp_token,
+        message: {
+          "unstake": {
+            "asset": {
+              "amount": String(item.amount),
+              "info": {
+                "native": pool.lp_token,
+              }
             }
           }
-        }},
+        },
         senderAddress: address,
         contractAddress: item.bribe_market,
         funds: [],
@@ -87,5 +90,5 @@ export const useClosePosition = ({ item, poolId }: OpenPosition) => {
     ...state,
     ...tx,
   }),
-  [tx, state, submit])
+    [tx, state, submit])
 }

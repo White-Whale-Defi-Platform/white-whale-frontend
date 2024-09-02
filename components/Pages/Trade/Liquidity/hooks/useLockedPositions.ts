@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { useChain } from '@cosmos-kit/react-lite'
-import { TokenInfo, usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolEntityType, TokenInfo, usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { PositionState } from 'constants/state'
 import dayjs from 'dayjs'
@@ -59,7 +59,6 @@ export const fetchPositions = async (
       positions: { address },
     })
   }
-  console.log(data, incentiveAddress)
   const allPositions = [...data.positions, ...alliancePositions || []]
   let positions = allPositions.
     map((p) => {
@@ -118,10 +117,10 @@ export const fetchPositions = async (
     flat()
   return positions
 }
-const useLockedPositions = (poolId: string) => {
-  const [{ liquidity = {}, pool_assets = [], staking_address = null, lp_token = null } = {}] =
-    useQueryPoolLiquidity({ poolId })
-  const { data: alliancePositions, isLoading } = useLiquidityAlliancePositions(lp_token)
+const useLockedPositions = (pool: PoolEntityType) => {
+  const [{ liquidity = {}, pool_assets = [] } = {}] =
+    useQueryPoolLiquidity({ poolId: pool?.pool_id })
+  const { data: alliancePositions, isLoading } = useLiquidityAlliancePositions(pool?.lp_token)
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]
   const { walletChainName } = useRecoilValue(chainState)
@@ -134,18 +133,18 @@ const useLockedPositions = (poolId: string) => {
     queryKey: [
       'positions',
       address,
-      staking_address,
-      poolId,
+      pool?.staking_address,
+      pool?.pool_id,
       tokens,
       pool_assets,
       prices,
       alliancePositions,
     ],
     queryFn: (): Promise<Position[]> => fetchPositions(
-      poolId,
+      pool?.pool_id,
       cosmWasmClient,
       prices,
-      staking_address,
+      pool?.staking_address,
       address,
       pool_assets,
       totalReserve,

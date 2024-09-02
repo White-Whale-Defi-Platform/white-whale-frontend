@@ -2,8 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
-import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
+import { PoolEntityType, TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useClients } from 'hooks/useClients'
 import { usePrices } from 'hooks/usePrices'
 import { useTokenList } from 'hooks/useTokenList'
@@ -61,11 +60,11 @@ const aggregateRewards = (rewards: RewardData[]): RewardInfo[] => {
     }
   })
 }
-const useRewards = (poolId: string): RewardsResult => {
+const useRewards = (pool: PoolEntityType): RewardsResult => {
   const [tokenList] = useTokenList()
   const prices = usePrices()
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const [{ staking_address = null, lp_token = null } = {}] = useQueryPoolLiquidity({ poolId })
+  const staking_address = pool?.staking_address
+  const lp_token = pool?.lp_token
 
   const { walletChainName, chainId } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
@@ -94,9 +93,9 @@ const useRewards = (poolId: string): RewardsResult => {
     enabled: Boolean(lp_token) && Boolean(address) && Boolean(cosmWasmClient) && Boolean(chainId === "phoenix-1"),
   })
   const allianceRewardsForLP = useMemo(() => { allianceRewards?.filter((rewards: any) => rewards.staked_asset?.native == lp_token) || [] }, [allianceRewards])
-  console.log('Alliance Rewards: ', allianceRewardsForLP)
   // @ts-ignore
   if (window.debugLogsEnabled) {
+    console.log('Alliance Rewards: ', allianceRewardsForLP)
     console.log('Rewards: ', rewards)
   }
 
@@ -104,7 +103,6 @@ const useRewards = (poolId: string): RewardsResult => {
 
   return useMemo(() => {
     const rewardsWithToken: RewardData[] = []
-
     aggregatedRewards?.forEach((reward) => {
       // Cw20 token
       if (reward.info.token) {

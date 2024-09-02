@@ -170,6 +170,7 @@ export const useWithdrawTransaction: any = ({
           'multipleTokenBalances',
           'tokenBalance',
           'positions',
+          'signingClient',
         ],
       })
       onBroadcasting?.(data.transactionHash || data?.txHash)

@@ -45,6 +45,10 @@ export const useStakeTransaction = ({
     console.error(e?.toString())
     let errorMessage = 'Failed to execute transaction.'
 
+    if (txState.step != TxStep.Posting) {
+      return
+    }
+
     if ((/insufficient funds/u).test(e?.toString()) || (/Overflow: Cannot Sub with/u).test(e?.toString())) {
       errorMessage = 'Insufficient Funds'
     } else if ((/Max spread assertion/u).test(e?.toString())) {
@@ -101,7 +105,7 @@ export const useStakeTransaction = ({
       onSuccess: async (data: any) => {
         setTxState(prev => ({ ...prev, step: TxStep.Broadcasting, hash: data.transactionHash || data?.txHash }))
         const chainId = await signingClient.getChainId()
-        await queryClient.invalidateQueries(['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'alliance-positions'])
+        await queryClient.invalidateQueries(['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'alliance-positions', 'signingClient'])
         onBroadcasting?.(data.transactionHash || data?.txHash)
 
         toast({

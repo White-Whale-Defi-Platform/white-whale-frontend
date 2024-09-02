@@ -45,9 +45,10 @@ export const useLiquidityAlliancePositions = (lp_token?: any) => {
     },
     {
       retry: 5,
-      refetchInterval: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      cacheTime: 10 * 60 * 1000,
+      staleTime: 5 * 60 * 1000,
       enabled: chainId === 'phoenix-1' && lp_token !== null,
-      refetchOnMount: true,
     }
   )
 }
