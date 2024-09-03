@@ -89,9 +89,15 @@ const fetchWhitelistedAllianceTokens = async (
     const assets = await cosmWasmClient?.queryContractSmart(bribeMarket, {
       whitelisted_assets: {},
     })
+    const config = await cosmWasmClient?.queryContractSmart(bribeMarket, {
+      config: {},
+    })
     return assets.map((asset) => ({
+      reward_asset: config.reward_info.native,
+      reward_contract: config.reward_info.native.split('/')[1],
       token: asset?.cw20 || asset?.native,
       bribeMarket,
+      config,
     }))
   }))
 
@@ -110,8 +116,10 @@ export const useFetchLiquidityAlliances = (searchForToken?: string) => {
       cosmWasmClient, chainId, searchForToken,
     ),
     {
-      refetchInterval: 9000,
+      refetchInterval: 1 * 60 * 1000,
       enabled: chainId === 'phoenix-1',
+      cacheTime: 12 * 60 * 60 * 1000,
+      staleTime: 6 * 60 * 1000,
     },
   )
 }
@@ -128,10 +136,13 @@ export const fetchAllAllianceRewards = async (
       all_pending_rewards: { address },
     })
     for (const asset of assets) {
-      if (asset.reward_asset.info.native == 'factory/terra16l43xt2uq09yvz4axg73n8rtm0qte9lremdwm6ph0e35r2jnm43qnl8h53/zluna') {
-        asset.reward_asset.info.denom = 'uluna'
-      }
       asset.reward_asset.bribe_market = bribeMarket
+      if (asset.reward_asset.info.native.endsWith('zluna')) {
+        const claimAddress = asset.reward_asset.info.native.split('/')[1]
+        //ampLuna
+        asset.reward_asset.info.contract_addr = 'terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct'
+        asset.reward_asset.info.claim_addr = claimAddress
+      }
     }
     return assets
   }))
@@ -149,7 +160,7 @@ export const useAllianceRewards = () => {
       cosmWasmClient, address, chainId,
     ),
     {
-      refetchInterval: 9000,
+      refetchInterval: 10000,
       enabled: chainId === 'phoenix-1' && Boolean(address),
     },
   )

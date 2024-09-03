@@ -111,7 +111,6 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
   return useMemo(() => {
     const rewardsWithToken: RewardData[] = []
     aggregatedRewards?.forEach((reward) => {
-      console.log('Reward: ', reward)
       // Cw20 token
       if (reward.info?.token) {
         const t = tokenList?.tokens.find((token) => token.denom === reward.info.token.contract_addr)
@@ -142,12 +141,12 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
           dollarValue,
         })
       }
-      if (reward.info?.native && reward.bribe_market) {
-        const t = tokenList?.tokens.find((token) => token.denom === reward.info.denom)
+      if (reward.info?.contract_addr && reward.bribe_market) {
+        const t = tokenList?.tokens.find((token) => token.denom === reward.info.contract_addr)
         const amount = fromChainAmount(reward.amount, t?.decimals)
         const dollarValue = num(amount).
           times(prices?.[t?.symbol] || 0).
-          dp(4).
+          dp(2).
           toNumber()
         rewardsWithToken.push({
           ...t,
@@ -157,7 +156,6 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
         })
       }
     })
-    console.log('Rewards with token: ', rewardsWithToken)
     return {
       rewards: rewardsWithToken,
       totalValue: rewardsWithToken?.
