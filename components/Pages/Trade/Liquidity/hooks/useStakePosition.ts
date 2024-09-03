@@ -62,8 +62,6 @@ const useStake = ({ amount, contract }: StakeProps) => {
   return useStakeTransaction({
     enabled: Boolean(msgs.length && bribeMarket),
     msgs,
-    encodedMsgs: [],
-    amount,
     senderAddress: address,
     signingClient,
   })
