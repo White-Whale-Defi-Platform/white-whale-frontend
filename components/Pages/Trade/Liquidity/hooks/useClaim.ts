@@ -18,7 +18,7 @@ export const useClaim = (pool: PoolEntityType) => {
   const { data: allianceRewards } = useAllianceRewards()
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
-  const { signingClient, injectiveSigningClient, cosmWasmClient } = useClients(walletChainName)
+  const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const { onError, onSuccess, ...tx } = useTxStatus({
     transactionType: 'Claim',
     signingClient,
@@ -32,7 +32,7 @@ export const useClaim = (pool: PoolEntityType) => {
     const reward_asset = position[0]?.config.reward_info.native
     return {
       reward_asset,
-      reward_address: reward_asset.split('/')[1],
+      reward_address: reward_asset?.split('/')[1],
       config: position[0]?.config,
       bribeMarket: position[0]?.bribeMarket
     }
