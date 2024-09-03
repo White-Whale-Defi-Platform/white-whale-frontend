@@ -9,6 +9,7 @@ import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num } from 'libs/num'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
+
 import { fetchAllAllianceRewards } from './useLiquidityAlliancePositions'
 
 export type RewardInfo = {
@@ -83,18 +84,20 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
   const { data: allianceRewards = [] } = useQuery({
     queryKey: ['allianceRewards', chainId, address],
     queryFn: async (): Promise<any[]> => {
-      if (chainId == "phoenix-1") {
-        return await fetchAllAllianceRewards(cosmWasmClient, address, chainId)
+      if (chainId == 'phoenix-1') {
+        return await fetchAllAllianceRewards(
+          cosmWasmClient, address, chainId,
+        )
       } else {
         return []
       }
     },
     refetchInterval: 60000,
     select: (data) => data || [],
-    enabled: Boolean(lp_token) && Boolean(address) && Boolean(cosmWasmClient) && Boolean(chainId === "phoenix-1"),
+    enabled: Boolean(lp_token) && Boolean(address) && Boolean(cosmWasmClient) && Boolean(chainId === 'phoenix-1'),
   })
   const allianceRewardsForLP = useMemo(() => {
-    let reward = allianceRewards?.find((rewards: any) => rewards.staked_asset_share?.info.native == lp_token)?.reward_asset || []
+    const reward = allianceRewards?.find((rewards: any) => rewards.staked_asset_share?.info.native == lp_token)?.reward_asset || []
     return reward
   }, [allianceRewards, lp_token])
   // @ts-ignore

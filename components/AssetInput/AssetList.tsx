@@ -35,14 +35,18 @@ const AssetList: FC<AssetListProps> = ({
   const { network, chainId } = useRecoilValue(chainState)
   const config = useConfig(network, chainId)
   const tokens = useMemo(() => {
-    if (!config) return []
+    if (!config) {
+      return []
+    }
 
-    if (!isBonding && !isIncentives) return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.fromRegistry && !token?.withoutPool);
+    if (!isBonding && !isIncentives) {
+      return [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.fromRegistry && !token?.withoutPool)
+    }
 
-    let res = isBonding ? config.bonding_tokens : [...(tokenList?.tokensBySymbol?.values() || [])];
+    const res = isBonding ? config.bonding_tokens : [...(tokenList?.tokensBySymbol?.values() || [])]
 
-    return res.length > 0 ? res : [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.fromRegistry && !token?.withoutPool);
-  }, [config, isBonding, isIncentives, tokenList, setup]);
+    return res.length > 0 ? res : [...(tokenList?.tokensBySymbol?.values() || [])].filter((token: any) => !token?.fromRegistry && !token?.withoutPool)
+  }, [config, isBonding, isIncentives, tokenList, setup])
 
   const [tokenBalance = []] =
     unbondingBalances
@@ -107,7 +111,7 @@ const AssetList: FC<AssetListProps> = ({
             tokenSymbol: item?.symbol,
             amount,
           },
-            true)
+          true)
           }
         >
           <HStack>

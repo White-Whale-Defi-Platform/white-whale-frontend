@@ -120,7 +120,7 @@ export const getPricesAPI = async (ids: Array<string>) => {
 
 export const createEndpointOptions = async (chains: any) => {
   const endpoints: Record<string, any> = {}
-  CHAIN_NAMES.forEach( async (chain: string) => {
+  CHAIN_NAMES.forEach(async (chain: string) => {
     endpoints[chain] = {}
     endpoints[chain] = {
       rpc: await getHealthyRPCs(chain),
@@ -162,10 +162,9 @@ export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
 }
 
 export const getBondingAPRsAPI = async () => {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 50000)
-    const json = await response.json()
-    return json?.data
-
+  const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 50000)
+  const json = await response.json()
+  return json?.data
 }
 
 export async function fetchWithTimeout(url: string, timoutMS = 10000) {

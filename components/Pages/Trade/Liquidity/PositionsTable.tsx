@@ -45,7 +45,7 @@ const columns = (totalValue, totalDollarValue) => [
     ),
     cell: (info) => {
       const value = info.getValue();
-      return <Text>{`${value !== 'Alliance' ? value + (Number(value) <= 1 ? ' day' : ' days') : "Alliance"} `}</Text>;
+      return <Text>{`${value !== 'Alliance' ? value + (Number(value) <= 1 ? ' day' : ' days') : 'Alliance'} `}</Text>;
     },
     enableSorting: true,
   }),

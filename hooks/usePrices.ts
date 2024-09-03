@@ -9,6 +9,7 @@ import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
+
 import { getPoolFromAPI } from '../services/useAPI'
 
 type Params = {
@@ -143,7 +144,7 @@ export const usePrices = () => {
       return token.id
     }
   }),
-    [tokenList?.tokens])
+  [tokenList?.tokens])
   const coingeckoPrices = useCoinGecko(coingeckoIds)
   const { data: prices } = useQuery({
     queryKey: ['newPrices', tokenList?.baseToken, chainId],

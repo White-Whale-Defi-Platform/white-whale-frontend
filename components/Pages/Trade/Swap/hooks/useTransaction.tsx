@@ -3,12 +3,12 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
+import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import Finder from 'components/Finder'
 import { directTokenSwap } from 'components/Pages/Trade/Swap/hooks/directTokenSwap'
 import { ChainId } from 'constants/index'
 import useDebounceValue from 'hooks/useDebounceValue'
-import { createGasFee } from 'services/treasuryService';
+import { createGasFee } from 'services/treasuryService'
 import { TxStep } from 'types/index'
 
 type Params = {

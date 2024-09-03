@@ -11,6 +11,7 @@ import {
   ChainId,
 } from 'constants/index'
 import { usePrices } from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import {
   PoolData,
@@ -22,7 +23,6 @@ import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
 import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
-import { useTokenList } from 'hooks/useTokenList'
 
 export interface Flow {
   claimed_amount: string
@@ -157,7 +157,7 @@ const getPoolFlowData = async (
             (flow.start_epoch +
               (flow.end_epoch - flow.start_epoch) -
               Number(currentEpochData.currentEpoch.epoch.id)),
-            poolAsset?.decimals || 6)
+          poolAsset?.decimals || 6)
           const uniqueFlow = uniqueFlowList.find((f) => f.denom === flowDenom)
           uniqueFlow.dailyEmission += emission
         }
@@ -229,7 +229,9 @@ export const useIncentivePoolInfo = (
   }, [currentChainPrefix, pools?.length, client])
 
   const poolAssets = useMemo(() => {
-    if (!tokenList || loading) return []
+    if (!tokenList || loading) {
+      return []
+    }
     return tokenList?.tokens
   }, [tokenList, loading, pools, chainId, tokenList?.tokens, config, prices])
 

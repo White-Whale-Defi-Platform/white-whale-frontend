@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
+
 import { useLiquidityAlliancePositions } from './useLiquidityAlliancePositions';
 
 export type Position = {
@@ -35,9 +36,9 @@ export const lpPositionToAssets = ({
   totalLpSupply,
   myLockedLp,
 }) => [
-    protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
-    protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
-  ]
+  protectAgainstNaN(totalAssets[0] * (myLockedLp / totalLpSupply)),
+  protectAgainstNaN(totalAssets[1] * (myLockedLp / totalLpSupply)),
+]
 export const fetchPositions = async (
   poolId: string,
   cosmWasmClient: CosmWasmClient,
@@ -47,7 +48,7 @@ export const fetchPositions = async (
   pool_assets: any[],
   totalAssets: any,
   totalLpSupply: any,
-  alliancePositions?: any
+  alliancePositions?: any,
 ) => {
   // Address can be undefined
   if (!address) {
@@ -60,7 +61,7 @@ export const fetchPositions = async (
     })
   }
   const allPositions = [...data.positions, ...alliancePositions || []]
-  let positions = allPositions.
+  const positions = allPositions.
     map((p) => {
       const positions = []
 
@@ -100,7 +101,7 @@ export const fetchPositions = async (
         const isWithdraw = poolId === 'ampLUNA-LUNA' || poolId === 'bLUNA-LUNA' || poolId === 'WHALE-axlUSDC'
         return {
           ...position,
-          duration: position.isOpen ? (open.unbonding_duration == -1 ? "Alliance" : position.formatedTime) : position.formatedTime,
+          duration: position.isOpen ? (open.unbonding_duration == -1 ? 'Alliance' : position.formatedTime) : position.formatedTime,
           weight: position.weight,
           assets,
           value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
@@ -149,7 +150,7 @@ const useLockedPositions = (pool: PoolEntityType) => {
       pool_assets,
       totalReserve,
       totalLpSupply,
-      alliancePositions
+      alliancePositions,
     ),
     enabled: Boolean(address) && Boolean(cosmWasmClient) && !isLoading,
   })

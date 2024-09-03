@@ -15,19 +15,19 @@ export const useGetDashboardDataAPI = () => {
       queryKey: ['WHALEsupply'],
       queryFn: () => fetchSupply(),
       refetchOnMount: 'always',
-      refetchInterval: 180000
+      refetchInterval: 180000,
     },
     {
       queryKey: ['dashBoardData'],
       queryFn: () => getDashboardData(),
       refetchOnMount: 'always',
-      refetchInterval: 180000
+      refetchInterval: 180000,
     },
     {
       queryKey: ['bondingInfos'],
       queryFn: () => getBondingAPRsAPI(),
       refetchOnMount: 'always',
-      refetchInterval: 180000
+      refetchInterval: 180000,
     },
   ])
 

@@ -94,7 +94,8 @@ const MyApp: FC<AppProps> = ({
       localStorage.setItem('ww-version', version?.version)
     }
     const setAPI = async () => setApi(await getFastestAPI(true))
-    const setEndpointOptions = async () => setOptions({isLazy: true, endpoints: await createEndpointOptions(chains)})
+    const setEndpointOptions = async () => setOptions({ isLazy: true,
+      endpoints: await createEndpointOptions(chains) })
     setAPI()
     setEndpointOptions()
     setMounted(true)

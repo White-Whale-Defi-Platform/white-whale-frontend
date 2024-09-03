@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
@@ -57,7 +58,10 @@ export const useStakeTransaction = ({
       errorMessage = 'User Denied'
     }
 
-    setTxState(prev => ({ ...prev, step: TxStep.Failed, error: errorMessage, buttonLabel: errorMessage }))
+    setTxState((prev) => ({ ...prev,
+      step: TxStep.Failed,
+      error: errorMessage,
+      buttonLabel: errorMessage }))
 
     toast({
       title: 'Transaction Failed',
@@ -74,12 +78,20 @@ export const useStakeTransaction = ({
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', debouncedMsgs, txState.error, signingClient],
     async () => {
-      setTxState(prev => ({ ...prev, error: null, step: TxStep.Estimating }))
-      if (!signingClient || !debouncedMsgs || debouncedMsgs.length === 0) return null
+      setTxState((prev) => ({ ...prev,
+        error: null,
+        step: TxStep.Estimating }))
+      if (!signingClient || !debouncedMsgs || debouncedMsgs.length === 0) {
+        return null
+      }
 
       try {
-        const response = await signingClient.simulate(senderAddress, debouncedMsgs, '')
-        setTxState(prev => ({ ...prev, step: TxStep.Ready, buttonLabel: null }))
+        const response = await signingClient.simulate(
+          senderAddress, debouncedMsgs, '',
+        )
+        setTxState((prev) => ({ ...prev,
+          step: TxStep.Ready,
+          buttonLabel: null }))
         return response
       } catch (e) {
         handleError(e)
@@ -91,34 +103,39 @@ export const useStakeTransaction = ({
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
-    }
-  )
-
-  const { mutate } = useMutation(
-    async () => {
-      const gasFee = await createGasFee(signingClient, senderAddress, debouncedMsgs)
-      return signingClient.signAndBroadcast(senderAddress, debouncedMsgs, gasFee, ADV_MEMO)
     },
-    {
-      onMutate: () => setTxState(prev => ({ ...prev, step: TxStep.Posting })),
-      onError: (e: unknown) => handleError(e),
-      onSuccess: async (data: any) => {
-        setTxState(prev => ({ ...prev, step: TxStep.Broadcasting, hash: data.transactionHash || data?.txHash }))
-        const chainId = await signingClient.getChainId()
-        await queryClient.invalidateQueries(['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'alliance-positions', 'signingClient'])
-        onBroadcasting?.(data.transactionHash || data?.txHash)
-
-        toast({
-          title: 'Staking Success',
-          description: <Finder txHash={data.transactionHash || data?.txHash} chainId={chainId.toString()} />,
-          status: 'success',
-          duration: 9000,
-          position: 'top-right',
-          isClosable: true,
-        })
-      },
-    }
   )
+
+  const { mutate } = useMutation(async () => {
+    const gasFee = await createGasFee(
+      signingClient, senderAddress, debouncedMsgs,
+    )
+    return signingClient.signAndBroadcast(
+      senderAddress, debouncedMsgs, gasFee, ADV_MEMO,
+    )
+  },
+  {
+    onMutate: () => setTxState((prev) => ({ ...prev,
+      step: TxStep.Posting })),
+    onError: (e: unknown) => handleError(e),
+    onSuccess: async (data: any) => {
+      setTxState((prev) => ({ ...prev,
+        step: TxStep.Broadcasting,
+        hash: data.transactionHash || data?.txHash }))
+      const chainId = await signingClient.getChainId()
+      await queryClient.invalidateQueries(['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'alliance-positions', 'signingClient'])
+      onBroadcasting?.(data.transactionHash || data?.txHash)
+
+      toast({
+        title: 'Staking Success',
+        description: <Finder txHash={data.transactionHash || data?.txHash} chainId={chainId.toString()} />,
+        status: 'success',
+        duration: 9000,
+        position: 'top-right',
+        isClosable: true,
+      })
+    },
+  })
 
   const { data: txInfo } = useQuery(
     ['txInfo', txState.hash],
@@ -126,16 +143,18 @@ export const useStakeTransaction = ({
     {
       enabled: Boolean(txState.hash) && Boolean(signingClient),
       retry: true,
-    }
+    },
   )
 
   useEffect(() => {
     if (txInfo && txState.hash) {
       if (txInfo?.code) {
-        setTxState(prev => ({ ...prev, step: TxStep.Failed }))
+        setTxState((prev) => ({ ...prev,
+          step: TxStep.Failed }))
         onError?.(txState.hash, txInfo)
       } else {
-        setTxState(prev => ({ ...prev, step: TxStep.Success }))
+        setTxState((prev) => ({ ...prev,
+          step: TxStep.Success }))
         onSuccess?.(txState.hash, txInfo)
       }
     }
@@ -143,7 +162,9 @@ export const useStakeTransaction = ({
 
   useEffect(() => {
     if (txState.error || txState.step !== TxStep.Idle) {
-      setTxState(prev => ({ ...prev, error: null, step: TxStep.Idle }))
+      setTxState((prev) => ({ ...prev,
+        error: null,
+        step: TxStep.Idle }))
     }
   }, [debouncedMsgs])
 

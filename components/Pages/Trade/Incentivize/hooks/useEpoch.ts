@@ -118,7 +118,7 @@ const useEpoch = () => {
     // Convert the given date to a dayjs instance in local time
     const givenDateTime = dayjs(givenDate).utc()
 
-    // Const timestampDiffNew = givenDateTime.valueOf() - now.valueOf();
+    // Const timestampDiffNew = givenDateTime.valueOf() - now.valueOf()
     const timestampDiffNew = givenDateTime.diff(now, 'millisecond')
 
     const diff = Math.floor(timestampDiffNew / epochDurationInMillis)

@@ -26,7 +26,8 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           minW="1.6rem"
           maxW="1.6rem"
           maxH="1.6rem"
-          style={{ margin: 'unset', borderRadius: '50%' }}
+          style={{ margin: 'unset',
+            borderRadius: '50%' }}
           alt="logo-small"
           fallback={
             <FallbackImage
@@ -50,7 +51,8 @@ const PoolName = ({ poolId, token1Img, token2Img }: Props) => (
           minW="1.6rem"
           maxW="1.6rem"
           maxH="1.6rem"
-          style={{ margin: 'unset', borderRadius: '50%' }}
+          style={{ margin: 'unset',
+            borderRadius: '50%' }}
           src={token2Img}
           alt="logo-small"
           fallback={

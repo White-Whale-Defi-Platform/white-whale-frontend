@@ -34,46 +34,48 @@ export interface Config {
 }
 
 export const useConfig = (network: NetworkType, chainId: string) => {
-  const [config, setConfig] = useState<Config | null>(null);
-  const cacheRef = useRef<{ [key: string]: Config | null }>({});
+  const [config, setConfig] = useState<Config | null>(null)
+  const cacheRef = useRef<{ [key: string]: Config | null }>({})
 
   useEffect(() => {
     if (network && chainId) {
-      const cacheKey = `${network}_${chainId}`;
+      const cacheKey = `${network}_${chainId}`
 
       if (cacheRef.current[cacheKey]) {
-        setConfig(cacheRef.current[cacheKey]);
-        return;
+        setConfig(cacheRef.current[cacheKey])
+        return
       }
 
       const fetchConfig = async () => {
         try {
-          const response = await fetch(`/${network}/${chainId}/config.json`);
-          const json: Config = await response.json();
-          setConfig(json);
-          cacheRef.current[cacheKey] = json;
+          const response = await fetch(`/${network}/${chainId}/config.json`)
+          const json: Config = await response.json()
+          setConfig(json)
+          cacheRef.current[cacheKey] = json
         } catch (error) {
-          console.error('Failed to load config:', error);
+          console.error('Failed to load config:', error)
         }
-      };
+      }
 
-      fetchConfig();
+      fetchConfig()
     }
-  }, [network, chainId]);
-  return config;
-};
+  }, [network, chainId])
+  return config
+}
 
 export const useDashboardData = (
   address: string, network: NetworkType, chainId: string, walletChainName: string,
 ) => {
   const queryClient = useQueryClient()
   const config = useConfig(network, chainId)
-  const { cosmWasmClient: cosmWasmClient } = useClients(walletChainName)
+  const { cosmWasmClient } = useClients(walletChainName)
 
   const queries = useQueries([
     {
       queryKey: ['bonded', address, network, chainId],
-      queryFn: () => getBonded(cosmWasmClient, address, config),
+      queryFn: () => getBonded(
+        cosmWasmClient, address, config,
+      ),
       enabled: Boolean(cosmWasmClient) && Boolean(address) && Boolean(config),
       staleTime: 30000, // 30 seconds
       cacheTime: 5 * 60 * 1000, // 5 minutes
@@ -192,6 +194,6 @@ export const useDashboardData = (
     ...data,
     isLoading,
     refetch: refetchAll,
-    invalidateQueries: () => queryClient.invalidateQueries()
+    invalidateQueries: () => queryClient.invalidateQueries(),
   }
 }

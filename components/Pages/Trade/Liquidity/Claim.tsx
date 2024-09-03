@@ -14,8 +14,9 @@ import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
-import { Pool } from '../Pools/types'
+
 import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
+import { Pool } from '../Pools/types'
 
 const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   <HStack
@@ -41,8 +42,6 @@ const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   </HStack>
 )
 
-
-
 const Claim = (pool: PoolEntityType) => {
   const { submit, ...claim } = useClaim(pool)
 
@@ -59,7 +58,7 @@ const Claim = (pool: PoolEntityType) => {
     config,
   })
   const { rewards = [], totalValue } = useRewards(pool)
-  
+
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
     const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.amount), 0)

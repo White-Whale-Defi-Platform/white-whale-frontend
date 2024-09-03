@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react'
 import { useQueryClient } from 'react-query'
+
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
@@ -28,12 +29,12 @@ const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
 
   const txInfo = useTxInfo({
     txHash: txState.txHash,
-    signingClient
+    signingClient,
   })
 
   useEffect(() => {
     if (txInfo && txState.txHash) {
-      setTxState(prevState => ({
+      setTxState((prevState) => ({
         ...prevState,
         txStep: txInfo.code ? TxStep.Failed : TxStep.Success,
       }))
@@ -58,14 +59,14 @@ const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
       isClosable: true,
     })
 
-    setTxState(prevState => ({
+    setTxState((prevState) => ({
       ...prevState,
       txStep: TxStep.Failed,
     }))
   }, [transactionType, toast, setTxState])
 
   const onMutate = useCallback(() => {
-    setTxState(prevState => ({
+    setTxState((prevState) => ({
       ...prevState,
       txStep: TxStep.Posting,
     }))
@@ -81,7 +82,7 @@ const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
   }, [setTxState])
 
   const onSuccess = useCallback(async (data: TxResult) => {
-    setTxState(prevState => ({
+    setTxState((prevState) => ({
       ...prevState,
       txStep: TxStep.Broadcasting,
       txHash: data.transactionHash,
@@ -104,7 +105,7 @@ const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
         'positions',
         'rewards',
         'signingClient',
-        'allianceRewards'
+        'allianceRewards',
       ],
     })
   }, [transactionType, description, toast, queryClient, setTxState])

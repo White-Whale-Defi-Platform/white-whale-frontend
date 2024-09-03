@@ -5,8 +5,8 @@ import { useMediaQuery, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import AssetInput from 'components/AssetInput/index'
 import { BondingTokenState, TokenBalance } from 'components/Pages/Bonding/BondingActions/Bond'
-import { BondedData } from 'components/Pages/Bonding/hooks/getBonded';
-import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData';
+import { BondedData } from 'components/Pages/Bonding/hooks/getBonded'
+import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'

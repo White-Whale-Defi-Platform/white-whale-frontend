@@ -151,5 +151,5 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
     simulate,
     tx,
   }),
-    [tx, submit, simulate])
+  [tx, submit, simulate])
 }

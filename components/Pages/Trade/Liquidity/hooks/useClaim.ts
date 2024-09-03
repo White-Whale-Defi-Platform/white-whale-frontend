@@ -11,8 +11,8 @@ import { useRecoilValue } from 'recoil'
 import { createGasFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
-import { useFetchLiquidityAlliances } from './useLiquidityAlliancePositions'
 
+import { useFetchLiquidityAlliances } from './useLiquidityAlliancePositions'
 
 export const useClaim = (pool: PoolEntityType) => {
   console.log('Pool: ', pool)
@@ -26,7 +26,9 @@ export const useClaim = (pool: PoolEntityType) => {
   const { data: position, isLoading } = useFetchLiquidityAlliances(pool.lp_token)
 
   const bribeMarket = useMemo(() => {
-    if (isLoading || !position?.length) return null
+    if (isLoading || !position?.length) {
+      return null
+    }
     return position[0]?.bribeMarket
   }, [position, isLoading])
 
@@ -44,9 +46,9 @@ export const useClaim = (pool: PoolEntityType) => {
   } else {
     msg = createExecuteMessage({
       message: {
-        "claim_reward": {
-          "native": pool.lp_token
-        }
+        claim_reward: {
+          native: pool.lp_token,
+        },
       },
       senderAddress: address,
       contractAddress: bribeMarket,
@@ -79,5 +81,5 @@ export const useClaim = (pool: PoolEntityType) => {
     ...state,
     ...tx,
   }),
-    [tx, state, submit])
+  [tx, state, submit])
 }

@@ -26,9 +26,7 @@ export const useClosePosition = ({ item, pool }: OpenPosition) => {
     signingClient,
   })
 
-
   const createClosePositionMessage = (unbonding_duration: number) => {
-
     let msg = createExecuteMessage({
       message: {
         close_position: {
@@ -43,14 +41,14 @@ export const useClosePosition = ({ item, pool }: OpenPosition) => {
     if (unbonding_duration === -1 && chainId === ChainId.terra && item?.liquidity_alliance) {
       msg = createExecuteMessage({
         message: {
-          "unstake": {
-            "asset": {
-              "amount": String(item.amount),
-              "info": {
-                "native": pool.lp_token,
-              }
-            }
-          }
+          unstake: {
+            asset: {
+              amount: String(item.amount),
+              info: {
+                native: pool.lp_token,
+              },
+            },
+          },
         },
         senderAddress: address,
         contractAddress: item.bribe_market,
@@ -90,5 +88,5 @@ export const useClosePosition = ({ item, pool }: OpenPosition) => {
     ...state,
     ...tx,
   }),
-    [tx, state, submit])
+  [tx, state, submit])
 }

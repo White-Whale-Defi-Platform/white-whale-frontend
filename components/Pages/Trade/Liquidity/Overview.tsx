@@ -6,6 +6,7 @@ import useLockedPositions from 'components/Pages/Trade/Liquidity/hooks/useLocked
 import useRewards from 'components/Pages/Trade/Liquidity/hooks/useRewards'
 import { Positions } from 'components/Pages/Trade/Liquidity/Positions'
 import { Rewards } from 'components/Pages/Trade/Liquidity/Rewards'
+
 import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
 
 type Props = {

@@ -85,5 +85,5 @@ export const useClosePosition = ({ pool }: OpenPosition) => {
     ...state,
     ...tx,
   }),
-    [tx, state, submit])
+  [tx, state, submit])
 }

@@ -41,9 +41,10 @@ import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 import { TokenItemState, TxStep } from 'types/common'
 import { getDecimals } from 'util/conversion/index'
-import StakingForm from './StakingForm'
-import { useFetchLiquidityAlliances } from './hooks/useLiquidityAlliancePositions'
+
 import AppLoading from '../../../AppLoading'
+import { useFetchLiquidityAlliances } from './hooks/useLiquidityAlliancePositions'
+import StakingForm from './StakingForm'
 
 interface ManageLiquidityProps {
   poolIdFromUrl?: string
@@ -78,7 +79,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   const prices = usePrices()
   const currentChainPrefix = useMemo(() => chains.find((row) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
-    [chains, chainId])
+  [chains, chainId])
   const { flowPoolData: incentivePoolInfos } = useIncentivePoolInfo(
     cosmWasmClient,
     pools,
@@ -91,7 +92,6 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
     }
     return []
   }, [liquidityAlliances, isLoading])
-
 
   const isAllianceLP = alliancePositions.find((alliance) => alliance.token === pool?.lp_token)
   const incentivesEnabled = pool?.staking_address && pool?.staking_address !== '' && ACTIVE_INCENTIVE_NETWORKS.includes(chainId) && !isAllianceLP
@@ -214,7 +214,6 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
     const flows = pools.find((p) => p.pool_id === pool.pool_id)
     return flows?.liquidity?.myFlows || []
   }, [pools, pool, poolIdFromUrl])
-
 
   if (!pool) {
     return <AppLoading />

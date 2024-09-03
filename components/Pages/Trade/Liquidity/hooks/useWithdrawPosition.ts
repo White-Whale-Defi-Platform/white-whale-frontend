@@ -23,7 +23,9 @@ export const useWithdrawPosition = ({ pool }) => {
   });
 
   const executeWithdrawMessage = useMemo(() => {
-    if (!pool) return null;
+    if (!pool) {
+      return null;
+    }
 
     return createExecuteMessage({
       message: {

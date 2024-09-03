@@ -11,8 +11,9 @@ import { useTokenList } from 'hooks/useTokenList'
 import { fromChainAmount, num, toChainAmount } from 'libs/num'
 import { TxStep } from 'types/index'
 import { getDecimals } from 'util/conversion/index'
-import useStake from './hooks/useStakePosition'
+
 import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
+import useStake from './hooks/useStakePosition'
 
 type Props = {
   pool: PoolEntityType
@@ -97,7 +98,6 @@ const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Pro
     swapAddress,
   })
 
-
   const isInputDisabled = tx?.txStep === TxStep.Posting
 
   const buttonLabel = useMemo(() => {
@@ -115,11 +115,11 @@ const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Pro
     if (tx?.txStep === TxStep.Success) {
       setValue('token1', {
         ...tokenA,
-        amount: 0
+        amount: 0,
       })
       setValue('token2', {
         ...tokenB,
-        amount: 0
+        amount: 0,
       })
       clearForm()
     }

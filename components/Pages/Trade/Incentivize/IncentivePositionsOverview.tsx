@@ -20,6 +20,7 @@ import { useClosePosition } from 'components/Pages/Trade/Incentivize/hooks/useCl
 import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
 import { IncentiveState } from 'constants/state'
 import { num } from 'libs/num'
+
 import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
 
 type Props = {
