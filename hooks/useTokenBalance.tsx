@@ -52,7 +52,6 @@ const fetchTokenBalance = async ({
   return 0
 }
 
-
 export const useTokenBalance = (tokenSymbol: string) => {
   const { network, walletChainName } = useRecoilValue(chainState)
   const { cosmWasmClient, signingClient } = useClients(walletChainName)

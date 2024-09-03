@@ -59,9 +59,9 @@ export const useClients = (walletChainName: string) => {
           const client = await InjectiveSigningStargateClient.connectWithSigner(
             endpoint,
             offlineSigner, {
-            registry,
-            aminoTypes,
-          },
+              registry,
+              aminoTypes,
+            },
           )
           return client
         } catch {

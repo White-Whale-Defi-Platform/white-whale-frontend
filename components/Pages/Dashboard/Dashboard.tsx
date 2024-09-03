@@ -4,14 +4,14 @@ import { HStack, Text, VStack } from '@chakra-ui/react'
 import Loader from 'components/Loader'
 import { Header } from 'components/Pages/Dashboard/Header'
 import { StatsTable } from 'components/Pages/Dashboard/StatsTable'
+import { WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/networks'
+import { useChainInfos } from 'hooks/useChainInfo'
 import { usePrices } from 'hooks/usePrices'
 import { useRecoilState } from 'recoil'
 import { dashboardDataState } from 'state/dashboardDataState'
 import { getChainLogoUrlByName } from 'util/getChainLogoUrlByName'
 
 import { useGetDashboardDataAPI } from './hooks/getDashboardDataAPI'
-import { useChainInfos } from 'hooks/useChainInfo'
-import { WALLET_CHAIN_NAMES_BY_CHAIN_ID } from 'constants/networks'
 
 export type DashboardData = {
   logoUrl: string
@@ -30,9 +30,8 @@ export const Dashboard: FC = () => {
     const fetchDashboardData = async () => {
       const circulatingWhaleSupply = dashboardData.supply?.circulating / (10 ** 6) || 0
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
-      const mappedDashboardData = [] 
+      const mappedDashboardData = []
       dashboardData.dashboardData?.map((data) => {
-
         const apr = (dashboardData?.bondingInfos?.[data.chainName]?.bondingAPR);
         const buyback = (dashboardData?.bondingInfos?.[data.chainName]?.buyback);
 

@@ -161,6 +161,7 @@ export const useTransaction = ({
         '@pool-liquidity',
         'multipleTokenBalances',
         'tokenBalance',
+        'signingClient',
       ])
       onBroadcasting?.(data.transactionHash || data?.txHash)
       toast({

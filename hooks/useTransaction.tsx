@@ -179,7 +179,7 @@ export const useTransaction = ({
       const queryPath = `multipleTokenBalances/${swapAssets.
         map(({ symbol }) => symbol)?.
         join('+')}`
-      await queryClient.invalidateQueries([queryPath])
+      await queryClient.invalidateQueries([queryPath, 'signingClient'])
       toast({
         title: 'Swap Success.',
         description: (

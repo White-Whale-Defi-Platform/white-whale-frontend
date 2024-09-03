@@ -44,6 +44,8 @@ export const useCheckIncentiveSnapshots = (cosmWasmClient: CosmWasmClient,
         Boolean(cosmWasmClient) &&
         Boolean(incentiveAddresses) &&
         Boolean(epochId),
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
     },
   )
   return data ?? []

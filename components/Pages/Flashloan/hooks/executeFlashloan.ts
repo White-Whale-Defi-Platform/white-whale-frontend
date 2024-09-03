@@ -1,8 +1,8 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
-import { ADV_MEMO, ChainId } from 'constants/index';
+import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
-import { createGasFee } from 'services/treasuryService';
+import { createGasFee } from 'services/treasuryService'
 import { createExecuteMessage } from 'util/messages'
 
 type ExecuteFlashloanArgs = {

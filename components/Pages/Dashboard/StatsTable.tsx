@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import { Box, HStack, Text, VStack, Image } from '@chakra-ui/react'
 import {
   ColumnDef,
@@ -131,7 +131,7 @@ export const StatsTable = ({ dashboardData }) => {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  });
+  })
 
   return (
     <VStack width="full" borderRadius={'30px'} pb={5}>

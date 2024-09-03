@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { useChain } from '@cosmos-kit/react-lite'
-import { TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolEntityType, TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { PositionState } from 'constants/state'
 import dayjs from 'dayjs'
@@ -14,6 +14,8 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 import { formatSeconds } from 'util/formatSeconds'
+
+import { useLiquidityAlliancePositions } from './useLiquidityAlliancePositions';
 
 export type Position = {
   poolId: string
@@ -46,15 +48,20 @@ export const fetchPositions = async (
   pool_assets: any[],
   totalAssets: any,
   totalLpSupply: any,
+  alliancePositions?: any,
 ) => {
   // Address can be undefined
   if (!address) {
-    return { data: [] }
+    return []
   }
-  const data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
-    positions: { address },
-  })
-  return data.positions.
+  let data = { positions: [] }
+  if (incentiveAddress) {
+    data = await cosmWasmClient?.queryContractSmart(incentiveAddress, {
+      positions: { address },
+    })
+  }
+  const allPositions = [...data.positions, ...alliancePositions || []]
+  const positions = allPositions.
     map((p) => {
       const positions = []
 
@@ -76,7 +83,6 @@ export const fetchPositions = async (
       if (p?.closed_position) {
         positions.push(close)
       }
-
       return positions.map((position) => {
         const lpAssets = lpPositionToAssets({
           totalAssets,
@@ -95,7 +101,7 @@ export const fetchPositions = async (
         const isWithdraw = poolId === 'ampLUNA-LUNA' || poolId === 'bLUNA-LUNA' || poolId === 'WHALE-axlUSDC'
         return {
           ...position,
-          duration: position.formatedTime,
+          duration: position.isOpen ? (open.unbonding_duration == -1 ? 'Alliance' : position.formatedTime) : position.formatedTime,
           weight: position.weight,
           assets,
           value: assets.reduce((acc, asset) => acc + Number(asset.dollarValue),
@@ -110,10 +116,12 @@ export const fetchPositions = async (
       })
     }).
     flat()
+  return positions
 }
-const useLockedPositions = (poolId: string) => {
-  const [{ liquidity = {}, pool_assets = [], staking_address = null } = {}] =
-    useQueryPoolLiquidity({ poolId })
+const useLockedPositions = (pool: PoolEntityType) => {
+  const [{ liquidity = {}, pool_assets = [] } = {}] =
+    useQueryPoolLiquidity({ poolId: pool?.pool_id })
+  const { data: alliancePositions, isLoading } = useLiquidityAlliancePositions(pool?.lp_token)
   const totalLpSupply = liquidity?.available?.totalLpAmount || 0
   const totalReserve = liquidity?.reserves?.total || [0, 0]
   const { walletChainName } = useRecoilValue(chainState)
@@ -126,23 +134,25 @@ const useLockedPositions = (poolId: string) => {
     queryKey: [
       'positions',
       address,
-      staking_address,
-      poolId,
+      pool?.staking_address,
+      pool?.pool_id,
       tokens,
       pool_assets,
       prices,
+      alliancePositions,
     ],
     queryFn: (): Promise<Position[]> => fetchPositions(
-      poolId,
+      pool?.pool_id,
       cosmWasmClient,
       prices,
-      staking_address,
+      pool?.staking_address,
       address,
       pool_assets,
       totalReserve,
       totalLpSupply,
+      alliancePositions,
     ),
-    enabled: Boolean(address) && Boolean(cosmWasmClient) && Boolean(staking_address),
+    enabled: Boolean(address) && Boolean(cosmWasmClient) && !isLoading,
   })
 }
 

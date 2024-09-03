@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form'
 
 import { VStack } from '@chakra-ui/react'
 import Input from 'components/AssetInput/Input'
-import useClaimableLP from 'components/Pages/Trade/Liquidity/hooks/useClaimableLP'
-import useWithdraw, { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
+import { useSimulateWithdraw } from 'components/Pages/Trade/Liquidity/hooks/useWithdraw'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import ShowError from 'components/ShowError'
 import SubmitButton from 'components/SubmitButton'
@@ -14,6 +13,7 @@ import { TxStep } from 'types/index'
 import { getDecimals } from 'util/conversion/index'
 
 import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
+import useStake from './hooks/useStakePosition'
 
 type Props = {
   pool: PoolEntityType
@@ -23,17 +23,14 @@ type Props = {
   clearForm: () => void
 }
 
-const WithdrawForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Props) => {
+const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Props) => {
   const [
     {
-      swap_address: swapAddress = null,
       lp_token: contract = null,
       liquidity = {},
-      staking_address = null,
     } = {},
   ] = useQueryPoolLiquidity({ poolId: pool.pool_id })
 
-  const claimableLP = useClaimableLP({ pool })
   const [reverse, setReverse] = useState(false)
   const [tokenSymbolA, tokenSymbolB] = pool.pool_id?.split('-') || []
   const lpBalance = liquidity?.available?.provided?.tokenAmount || 0
@@ -93,12 +90,9 @@ const WithdrawForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: 
     }
   }, [simulated])
 
-  const tx = useWithdraw({
+  const tx = useStake({
     amount: lp || '0',
     contract,
-    swapAddress,
-    claimIncentive: claimableLP > 0,
-    stakingAddress: staking_address,
   })
 
   const isInputDisabled = tx?.txStep === TxStep.Posting
@@ -111,15 +105,19 @@ const WithdrawForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: 
     } else if (tx?.buttonLabel) {
       return tx?.buttonLabel
     }
-    return 'Withdraw'
+    return 'Stake'
   }, [tx?.buttonLabel, isWalletConnected, tokenA, tokenB, lp, lpBalance])
 
   useEffect(() => {
     if (tx?.txStep === TxStep.Success) {
-      setValue('token1', { ...tokenA,
-        amount: 0 })
-      setValue('token2', { ...tokenB,
-        amount: 0 })
+      setValue('token1', {
+        ...tokenA,
+        amount: 0,
+      })
+      setValue('token2', {
+        ...tokenB,
+        amount: 0,
+      })
       clearForm()
     }
   }, [tx?.txStep])
@@ -207,4 +205,4 @@ const WithdrawForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: 
   )
 }
 
-export default WithdrawForm
+export default StakeForm

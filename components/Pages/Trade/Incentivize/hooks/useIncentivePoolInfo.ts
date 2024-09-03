@@ -11,6 +11,7 @@ import {
   ChainId,
 } from 'constants/index'
 import { usePrices } from 'hooks/usePrices'
+import { useTokenList } from 'hooks/useTokenList'
 import { useRecoilValue } from 'recoil'
 import {
   PoolData,
@@ -22,7 +23,6 @@ import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
 import { getPoolInfo } from '../../Pools/hooks/queryPoolInfo'
-import { useTokenList } from 'hooks/useTokenList'
 
 export interface Flow {
   claimed_amount: string
@@ -63,10 +63,22 @@ export const fetchTotalPoolSupply = async (swapAddress: string,
   if (!client || !swapAddress) {
     return null
   }
-  const queried = await getPoolFromAPI(await client.getChainId(), swapAddress) || await getPoolInfo(swapAddress, client) 
-  return Number(queried.total_share)
+  const chainId = await client.getChainId()
+  const queriedFromAPI = await getPoolFromAPI(chainId, swapAddress)
+  if (queriedFromAPI) {
+    return Number(queriedFromAPI.total_share)
+  }
+  const queriedFromContract = await getPoolInfo(swapAddress, client)
+  return Number(queriedFromContract.total_share)
 }
-export const fetchFlows = async (client, address): Promise<Flow[]> => await getFlowsFromAPI(await client.getChainId(), address) || await client.queryContractSmart(address, { flows: {} })
+export const fetchFlows = async (client, address): Promise<Flow[]> => {
+  const chainId = await client.getChainId()
+  const apiFlows = await getFlowsFromAPI(chainId, address)
+  if (apiFlows) {
+    return apiFlows
+  }
+  return await client.queryContractSmart(address, { flows: {} })
+}
 
 const getPoolFlowData = async (
   client,
@@ -145,7 +157,7 @@ const getPoolFlowData = async (
             (flow.start_epoch +
               (flow.end_epoch - flow.start_epoch) -
               Number(currentEpochData.currentEpoch.epoch.id)),
-            poolAsset?.decimals || 6)
+          poolAsset?.decimals || 6)
           const uniqueFlow = uniqueFlowList.find((f) => f.denom === flowDenom)
           uniqueFlow.dailyEmission += emission
         }
@@ -199,7 +211,10 @@ export const useIncentivePoolInfo = (
           break
       }
 
-      const poolData = await getPairAprAndDailyVolumeAPI(walletChainName) || await getPairAprAndDailyVolumeByCoinhall(pools)
+      let poolData = await getPairAprAndDailyVolumeAPI(walletChainName)
+      if (!poolData) {
+        poolData = await getPairAprAndDailyVolumeByCoinhall(pools)
+      }
       if (poolData[0]?.ratio === 0) {
         console.log('No pair infos found, trying Enigma')
         const poolDataFromCoinhall = await getPairAprAndDailyVolumeByEnigma(pools, currentChainPrefix)
@@ -214,12 +229,14 @@ export const useIncentivePoolInfo = (
   }, [currentChainPrefix, pools?.length, client])
 
   const poolAssets = useMemo(() => {
-    if (!tokenList || loading) return []
+    if (!tokenList || loading) {
+      return []
+    }
     return tokenList?.tokens
   }, [tokenList, loading, pools, chainId, tokenList?.tokens, config, prices])
 
   const { data: flowPoolData, isLoading } = useQuery(
-    ['apr', currentEpochData, pools?.length, poolAssets],
+    ['apr', currentEpochData, pools, poolAssets],
     () => getPoolFlowData(
       client,
       pools,

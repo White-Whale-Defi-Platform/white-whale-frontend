@@ -20,7 +20,7 @@ export const useChainInfos = () => {
     })
     return out
   },
-    [network])
+  [network])
 }
 
 export const useChainInfo = (id = null) => {

@@ -62,8 +62,7 @@ const ClaimTable = ({ tokens = [] }: Props) => {
       {tokens?.map((item, index) => (
         <TokenRow
           key={
-            (item?.info?.native_token?.denom ??
-                item.info.token.contract_addr) + index
+            (item?.info?.native_token?.denom || item?.info?.native?.denom || item.info.token?.contract_addr) + index
           }
           item={item}
           isLast={index === tokens.length - 1}

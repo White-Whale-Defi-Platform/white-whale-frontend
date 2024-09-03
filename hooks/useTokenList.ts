@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query'
 
+import { assets } from 'chain-registry'
 import { TokenInfo, usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import { useConfig } from '../components/Pages/Bonding/hooks/useDashboardData'
-import { assets } from 'chain-registry'
 
 export type TokenList = {
   baseToken: TokenInfo
@@ -43,16 +43,26 @@ export const useTokenList = () => {
           try {
             const exponents = asset.denom_units.reduce((max, unit) => (unit.exponent > max.exponent ? unit : max), asset.denom_units[0])
             const native = (asset.type_asset === 'sdk.coin' || asset.type_asset === 'ics20' || asset.base.includes('factory/') || asset.base.charAt(0) == 'u') && asset.type_asset !== 'cw20'
-            if (asset.name === 'Whale Token' && !native && walletChainName === 'terra'){
+            if (asset.name === 'Whale Token' && !native && walletChainName === 'terra') {
               continue
             }
             const denom = native ? asset.base : asset.address || asset.base
             const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images[0].svg || asset.images[0].png
             // HARDCODED FOR NOW
-            if (asset.name == "DRUGS" && walletChainName === 'injective') {
+            if (asset.name == 'DRUGS' && walletChainName === 'injective') {
               exponents.exponent = 18
             }
-            let tmpAssetOBJ: any = { denom: denom, id: asset.coingecko_id || "", token_address: asset.address || asset.base, chain_id: chainId, symbol: asset.symbol, decimals: exponents.exponent, name: asset.name, logoURI: logoURI, tags: native ? ['native'] : [''], native: native, fromRegistry: true }
+            const tmpAssetOBJ: any = { denom,
+              id: asset.coingecko_id || '',
+              token_address: asset.address || asset.base,
+              chain_id: chainId,
+              symbol: asset.symbol,
+              decimals: exponents.exponent,
+              name: asset.name,
+              logoURI,
+              tags: native ? ['native'] : [''],
+              native,
+              fromRegistry: true }
             const res = Array.from(tokenMapBySymbol.values())
             if (denom && !res.find((token) => token.denom === denom)) {
               tokenMapBySymbol.set(asset.symbol, tmpAssetOBJ)

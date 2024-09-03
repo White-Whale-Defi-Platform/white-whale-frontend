@@ -8,7 +8,7 @@ import { getColorByChainName } from 'util/getColorByChainName'
 export enum ChainStat { tvl= 'TVL', volume24h='Volume', apr='APR' }
 
 export const DashboardPieChart = ({ dashboardData, chainStat }: {dashboardData: DashboardData[], chainStat: ChainStat}) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([])
 
   useEffect(() => {
     const totalValue = dashboardData.reduce((acc, data) => acc + (chainStat === ChainStat.tvl ? data.tvl : chainStat === ChainStat.volume24h ? data.volume24h : data.apr), 0)

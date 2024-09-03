@@ -213,7 +213,7 @@ export const useTransaction: any = ({
       setTxHash(data.transactionHash || data?.txHash)
       onBroadcasting?.(data.transactionHash || data?.txHash)
 
-      await queryClient.invalidateQueries({ queryKey: ['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions'] })
+      await queryClient.invalidateQueries({ queryKey: ['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'signingClient'] })
 
       toast({
         title: 'Add Liquidity Success.',
