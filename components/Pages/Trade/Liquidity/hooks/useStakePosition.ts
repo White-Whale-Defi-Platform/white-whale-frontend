@@ -8,15 +8,13 @@ import { isNativeToken } from 'services/asset'
 import { chainState } from 'state/chainState'
 import { protectAgainstNaN } from 'util/conversion/index'
 
-import { TERRA2_BRIBE_MARKETS } from '../../../../../constants'
-import { createExecuteMessage } from '../../../../../util/messages'
+import { createExecuteMessage } from 'util/messages'
 import { useFetchLiquidityAlliances } from './useLiquidityAlliancePositions'
 import { useStakeTransaction } from './useStakeTransaction'
 
 interface StakeProps {
   amount: string
   contract: string
-  swapAddress: string
 }
 
 interface SimulateProps {
@@ -32,7 +30,7 @@ interface SimulationResult {
   simulated: string
 }
 
-const useStake = ({ amount, contract, swapAddress }: StakeProps) => {
+const useStake = ({ amount, contract }: StakeProps) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient } = useClients(walletChainName)

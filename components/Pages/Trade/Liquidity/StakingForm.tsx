@@ -29,7 +29,6 @@ const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Pro
       swap_address: swapAddress = null,
       lp_token: contract = null,
       liquidity = {},
-      staking_address = null,
     } = {},
   ] = useQueryPoolLiquidity({ poolId: pool.pool_id })
 
@@ -95,7 +94,6 @@ const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Pro
   const tx = useStake({
     amount: lp || '0',
     contract,
-    swapAddress,
   })
 
   const isInputDisabled = tx?.txStep === TxStep.Posting

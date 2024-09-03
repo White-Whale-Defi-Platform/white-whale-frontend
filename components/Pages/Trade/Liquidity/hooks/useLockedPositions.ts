@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { useChain } from '@cosmos-kit/react-lite'
-import { PoolEntityType, TokenInfo, usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolEntityType, TokenInfo } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { PositionState } from 'constants/state'
 import dayjs from 'dayjs'

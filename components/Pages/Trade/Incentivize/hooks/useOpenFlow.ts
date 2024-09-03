@@ -40,7 +40,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const { address } = useChain(walletChainName)
   const config: Config = useConfig(network, chainId)
-  const { data: pool, isLoading } = usePoolFromListQueryById({ poolId })
+  const { data: pool } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
     signingClient,

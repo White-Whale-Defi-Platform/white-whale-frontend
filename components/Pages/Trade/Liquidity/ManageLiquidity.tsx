@@ -28,7 +28,7 @@ import {
   PoolEntityTypeWithLiquidity,
   useQueryPoolsLiquidity,
 } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
-import { ACTIVE_INCENTIVE_NETWORKS, ChainId } from 'constants/networks'
+import { ACTIVE_INCENTIVE_NETWORKS } from 'constants/networks'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useMutation } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
-import { PoolEntityType, usePoolFromListQueryById } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
+import { PoolEntityType } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import { ADV_MEMO, ChainId } from 'constants/index'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients'

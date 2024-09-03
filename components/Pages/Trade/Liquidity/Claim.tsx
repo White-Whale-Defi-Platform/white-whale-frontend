@@ -16,7 +16,6 @@ import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
 
 import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
-import { Pool } from '../Pools/types'
 
 const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   <HStack

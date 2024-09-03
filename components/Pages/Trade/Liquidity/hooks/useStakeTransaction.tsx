@@ -121,14 +121,14 @@ export const useStakeTransaction = ({
     onSuccess: async (data: any) => {
       setTxState((prev) => ({ ...prev,
         step: TxStep.Broadcasting,
-        hash: data.transactionHash || data?.txHash }))
+        hash: data?.transactionHash || data?.txHash }))
       const chainId = await signingClient.getChainId()
       await queryClient.invalidateQueries(['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'alliance-positions', 'signingClient'])
       onBroadcasting?.(data.transactionHash || data?.txHash)
 
       toast({
         title: 'Staking Success',
-        description: <Finder txHash={data.transactionHash || data?.txHash} chainId={chainId.toString()} />,
+        description: <Finder txHash={data?.transactionHash || data?.txHash} chainId={chainId.toString()} />,
         status: 'success',
         duration: 9000,
         position: 'top-right',

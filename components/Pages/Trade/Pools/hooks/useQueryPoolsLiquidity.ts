@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useQueries, useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
@@ -170,10 +170,7 @@ const fetchLockedLp = async ({ pools, cosmWasmClient, address, chain_id }: Fetch
     }
 
     // Fetch alliance positions
-    let filteredAlliancePositions: any[] = [];
-    if (chain_id === 'phoenix-1') {
-      filteredAlliancePositions = (await queryAllStakedBalances(cosmWasmClient, address))?.filter((position: any) => position.open_position?.lp === pool.lp_token) || [];
-    }
+    let filteredAlliancePositions: any[] = (await queryAllStakedBalances(cosmWasmClient, address))?.filter((position: any) => position.open_position?.lp === pool.lp_token) || []
 
     // Combine and sum up all positions
     const totalLocked = sumPositions(stakingPositions) + sumPositions(filteredAlliancePositions);
@@ -185,10 +182,12 @@ const fetchLockedLp = async ({ pools, cosmWasmClient, address, chain_id }: Fetch
 
 export const useFetchMyLockedLps = ({ pools, cosmWasmClient, address, chain_id }: FetchParams) => useQuery<Map<string, number>, Error>(
   ['lockedLps', pools, address, chain_id],
-  () => fetchLockedLp({ pools,
+  () => fetchLockedLp({
+    pools,
     cosmWasmClient,
     address,
-    chain_id }),
+    chain_id
+  }),
   {
     enabled: Boolean(pools) && Boolean(cosmWasmClient) && Boolean(address),
     staleTime: 60000, // 1 minute
@@ -237,10 +236,12 @@ export const useQueryPoolsLiquidity = ({
   const prices = usePrices();
   const { walletChainName, chainId } = useRecoilValue(chainState);
   const { address } = useChain(walletChainName);
-  const { data: lps, isLoading } = useFetchMyLockedLps({ pools,
+  const { data: lps, isLoading } = useFetchMyLockedLps({
+    pools,
     cosmWasmClient,
     address,
-    chain_id: chainId });
+    chain_id: chainId
+  });
   const [tokenList] = useTokenList();
   const { epochToDate, currentEpoch } = useEpoch();
 
@@ -324,8 +325,10 @@ export const useQueryPoolsLiquidity = ({
       myNotLockedLp,
     } = await queryMyLiquidity({
       cosmWasmClient,
-      swap: { ...poolInfo,
-        ...pool },
+      swap: {
+        ...poolInfo,
+        ...pool
+      },
       address,
       totalLockedLp,
       myLockedLp,
@@ -367,16 +370,18 @@ export const useQueryPoolsLiquidity = ({
       },
     };
 
-    return { ...pool,
+    return {
+      ...pool,
       flows,
-      liquidity };
+      liquidity
+    };
   };
 
   return useQueries((pools ?? []).map((pool) => ({
     queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
     enabled:
-        Boolean(cosmWasmClient && pool.pool_id && tokenList?.tokens.length > 0) &&
-        Boolean(prices) && !isLoading,
+      Boolean(cosmWasmClient && pool.pool_id && tokenList?.tokens.length > 0) &&
+      Boolean(prices) && !isLoading,
     refetchOnMount: false,
     refetchInterval: refetchInBackground ? DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL : null,
     refetchIntervalInBackground: refetchInBackground,
