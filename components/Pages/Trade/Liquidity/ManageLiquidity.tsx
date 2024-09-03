@@ -129,7 +129,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   }
 
   useEffect(() => {
-    setPoolIdState(pool?.pool_id || poolIdState)
+    setPoolIdState(pool?.pool_id || poolIdState || poolIdFromUrl)
   }, [pool])
 
   useEffect(() => {

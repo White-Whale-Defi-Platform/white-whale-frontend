@@ -26,7 +26,6 @@ type Props = {
 const StakeForm = ({ pool, isWalletConnected, clearForm, mobile, openView }: Props) => {
   const [
     {
-      swap_address: swapAddress = null,
       lp_token: contract = null,
       liquidity = {},
     } = {},

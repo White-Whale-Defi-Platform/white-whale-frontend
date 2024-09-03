@@ -124,7 +124,7 @@ export const useStakeTransaction = ({
         hash: data?.transactionHash || data?.txHash }))
       const chainId = await signingClient.getChainId()
       await queryClient.invalidateQueries(['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'alliance-positions', 'signingClient'])
-      onBroadcasting?.(data.transactionHash || data?.txHash)
+      onBroadcasting?.(data?.transactionHash || data?.txHash)
 
       toast({
         title: 'Staking Success',
