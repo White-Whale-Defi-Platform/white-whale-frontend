@@ -126,10 +126,15 @@ export const fetchAllAllianceRewards = async (cosmWasmClient: any, address: stri
       const assets = await cosmWasmClient?.queryContractSmart(bribeMarket, {
         all_pending_rewards: { address },
       })
+      for (const asset of assets) {
+        if (asset.reward_asset.info.native == "factory/terra16l43xt2uq09yvz4axg73n8rtm0qte9lremdwm6ph0e35r2jnm43qnl8h53/zluna") {
+          asset.reward_asset.info.denom = "uluna"
+        }
+        asset.reward_asset.bribe_market = bribeMarket
+      }
       return assets
     })
   )
-
   return rewards.flat()
 }
 

@@ -15,6 +15,7 @@ export type RewardInfo = {
   amount: number
   dollarValue: number
   info: {
+    native: any
     token?: {
       contract_addr: string
     }
@@ -92,20 +93,24 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
     select: (data) => data || [],
     enabled: Boolean(lp_token) && Boolean(address) && Boolean(cosmWasmClient) && Boolean(chainId === "phoenix-1"),
   })
-  const allianceRewardsForLP = useMemo(() => { allianceRewards?.filter((rewards: any) => rewards.staked_asset?.native == lp_token) || [] }, [allianceRewards])
+  const allianceRewardsForLP = useMemo(() => {
+    let reward = allianceRewards?.find((rewards: any) => rewards.staked_asset_share?.info.native == lp_token)?.reward_asset || []
+    return reward
+  }, [allianceRewards, lp_token])
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log('Alliance Rewards: ', allianceRewardsForLP)
     console.log('Rewards: ', rewards)
   }
 
-  const aggregatedRewards = useMemo(() => aggregateRewards(rewards), [rewards])
+  const aggregatedRewards = useMemo(() => [...aggregateRewards(rewards), allianceRewardsForLP], [rewards, allianceRewardsForLP])
 
   return useMemo(() => {
     const rewardsWithToken: RewardData[] = []
     aggregatedRewards?.forEach((reward) => {
+      console.log('Reward: ', reward)
       // Cw20 token
-      if (reward.info.token) {
+      if (reward.info?.token) {
         const t = tokenList?.tokens.find((token) => token.denom === reward.info.token.contract_addr)
         const amount = fromChainAmount(reward.amount, t?.decimals)
         const dollarValue = num(amount).
@@ -120,7 +125,7 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
         })
       }
       // Native token
-      if (reward.info.native_token) {
+      if (reward.info?.native_token) {
         const t = tokenList?.tokens.find((token) => token.denom === reward.info.native_token.denom)
         const amount = fromChainAmount(reward.amount, t?.decimals)
         const dollarValue = num(amount).
@@ -134,8 +139,22 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
           dollarValue,
         })
       }
+      if (reward.info?.native && reward.bribe_market) {
+        const t = tokenList?.tokens.find((token) => token.denom === reward.info.denom)
+        const amount = fromChainAmount(reward.amount, t?.decimals)
+        const dollarValue = num(amount).
+          times(prices?.[t?.symbol] || 0).
+          dp(4).
+          toNumber()
+        rewardsWithToken.push({
+          ...t,
+          ...reward,
+          amount: parseFloat(amount),
+          dollarValue,
+        })
+      }
     })
-
+    console.log('Rewards with token: ', rewardsWithToken)
     return {
       rewards: rewardsWithToken,
       totalValue: rewardsWithToken?.

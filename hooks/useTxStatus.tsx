@@ -104,6 +104,7 @@ const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
         'positions',
         'rewards',
         'signingClient',
+        'allianceRewards'
       ],
     })
   }, [transactionType, description, toast, queryClient, setTxState])

@@ -11,9 +11,11 @@ import { useRecoilValue } from 'recoil'
 import { createGasFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage } from 'util/messages/index'
+import { useFetchLiquidityAlliances } from './useLiquidityAlliancePositions'
 
 
 export const useClaim = (pool: PoolEntityType) => {
+  console.log('Pool: ', pool)
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
@@ -21,8 +23,16 @@ export const useClaim = (pool: PoolEntityType) => {
     transactionType: 'Claim',
     signingClient,
   })
+  const { data: position, isLoading } = useFetchLiquidityAlliances(pool.lp_token)
 
-  const msg =
+  const bribeMarket = useMemo(() => {
+    if (isLoading || !position?.length) return null
+    return position[0]?.bribeMarket
+  }, [position, isLoading])
+
+  let msg = null
+  if (!bribeMarket) {
+    msg =
     createExecuteMessage({
       message: {
         claim: {},
@@ -30,7 +40,19 @@ export const useClaim = (pool: PoolEntityType) => {
       senderAddress: address,
       contractAddress: pool.staking_address,
       funds: [],
-    });
+    })
+  } else {
+    msg = createExecuteMessage({
+      message: {
+        "claim_reward": {
+          "native": pool.lp_token
+        }
+      },
+      senderAddress: address,
+      contractAddress: bribeMarket,
+      funds: [],
+    })
+  }
 
   const { mutate: submit, ...state } = useMutation({
     mutationFn: async () => {

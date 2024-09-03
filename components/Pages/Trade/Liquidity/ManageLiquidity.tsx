@@ -124,7 +124,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
   // @ts-ignore
   if (window.debugLogsEnabled) {
     console.log(
-      'ManageLiquidity; Chain Name: ', chainName, ' ', pool.pool_id,
+      'ManageLiquidity; Chain Name: ', chainName, ' ', pool?.pool_id,
     )
   }
 
