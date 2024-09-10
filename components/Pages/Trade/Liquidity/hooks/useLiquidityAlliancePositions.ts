@@ -47,7 +47,7 @@ export const useLiquidityAlliancePositions = (lp_token?: any) => {
       refetchOnWindowFocus: false,
       cacheTime: 10 * 60 * 1000,
       staleTime: 5 * 60 * 1000,
-      enabled: chainId === 'phoenix-1' && lp_token !== null,
+      enabled: chainId === 'phoenix-1' && lp_token !== null && Boolean(cosmWasmClient),
     },
   )
 }
@@ -117,7 +117,7 @@ export const useFetchLiquidityAlliances = (searchForToken?: string) => {
     ),
     {
       refetchInterval: 1 * 60 * 1000,
-      enabled: chainId === 'phoenix-1',
+      enabled: chainId === 'phoenix-1' && Boolean(cosmWasmClient),
       cacheTime: 12 * 60 * 60 * 1000,
       staleTime: 6 * 60 * 1000,
     },
