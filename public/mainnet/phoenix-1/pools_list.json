@@ -1852,7 +1852,7 @@
           "token_address": "terra15hhqg8gyz04zapynqtk7uvlsp7lzay7etrt9ann0276v94yae63sxygeat",
           "symbol": "wETH",
           "name": "wETH",
-          "decimals": 18,
+          "decimals": 8,
           "logoURI": "https://raw.githubusercontent.com/terra-money/station-assets/main/img/coins/WrappedEther(Portal).png",
           "tags": [
             ""
