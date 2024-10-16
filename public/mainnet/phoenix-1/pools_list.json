@@ -1629,9 +1629,9 @@
           "decimals": 6,
           "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
           "tags": [
-            "native"
+            ""
           ],
-          "native": true,
+          "native": false,
           "denom": "terra1se7rvuerys4kd2snt6vqswh9wugu49vhyzls8ymc02wl37g2p2ms5yz490"
         }
       ],
@@ -1739,31 +1739,17 @@
     {
       "pool_id": "LUNA-CAPA",
       "lpOrder": [
-        "LUNA",
-        "CAPA"
+        "CAPA",
+        "LUNA"
       ],
       "assetOrder": [
-        "LUNA",
-        "CAPA"
+        "CAPA",
+        "LUNA"
       ],
-      "displayName": "LUNA-CAPA",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
-      "displayLogo2": "/logos/",
+      "displayName": "CAPA-LUNA",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+      "displayLogo1": "/logos/",
       "pool_assets": [
-        {
-          "id": "terra-luna-2",
-          "chain_id": "phoenix-1",
-          "token_address": "uluna",
-          "symbol": "LUNA",
-          "name": "LUNA",
-          "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "uluna"
-        },
         {
           "id": "",
           "chain_id": "phoenix-1",
@@ -1777,6 +1763,20 @@
           ],
           "native": false,
           "denom": "terra1t4p3u8khpd7f8qzurwyafxt648dya6mp6vur3vaapswt6m24gkuqrfdhar"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "LUNA",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
         }
       ],
      "lp_token": "factory/terra15rzp38yq2cqy2jnewc9vgzqguf3t2q0gqpv9evg8tckrtqp8x44qezhthc/uLP",
