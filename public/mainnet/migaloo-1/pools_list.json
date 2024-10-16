@@ -1632,7 +1632,7 @@
           "symbol": "arbLUNA",
           "name": "arbLUNA",
           "decimals": 6,
-          "logoURI": "/logos/",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
           "tags": [
             "native"
           ],
@@ -1657,7 +1657,7 @@
       ],
       "displayName": "LUNA-EURe",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
-      "displayLogo2": "/logos/",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/eure.svg",
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -1680,7 +1680,7 @@
           "symbol": "EURe",
           "name": "EURe",
           "decimals": 6,
-          "logoURI": "/logos/",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/eure.svg",
           "tags": [
             "native"
           ],
@@ -1705,7 +1705,7 @@
       ],
       "displayName": "USDC-EURe",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
-      "displayLogo2": "/logos/",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/eure.svg",
       "pool_assets": [
         {
           "id": "usd-coin",
@@ -1728,7 +1728,7 @@
           "symbol": "EURe",
           "name": "EURe",
           "decimals": 6,
-          "logoURI": "/logos/",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/eure.svg",
           "tags": [
             "native"
           ],
