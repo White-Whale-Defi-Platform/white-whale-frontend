@@ -1737,7 +1737,7 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "LUNA-CAPA",
+      "pool_id": "CAPA-LUNA",
       "lpOrder": [
         "CAPA",
         "LUNA"
