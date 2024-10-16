@@ -1497,54 +1497,6 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "ROAR-ampROAR",
-      "lpOrder": [
-        "ROAR",
-        "ampROAR"
-      ],
-      "assetOrder": [
-        "ROAR",
-        "ampROAR"
-      ],
-      "displayName": "ROAR-ampROAR",
-      "displayLogo1": "/logos/lion.png",
-      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/amproar.png",
-      "pool_assets": [
-        {
-          "id": "lion-dao",
-          "chain_id": "phoenix-1",
-          "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
-          "symbol": "ROAR",
-          "name": "ROAR",
-          "decimals": 6,
-          "logoURI": "/logos/lion.png",
-          "tags": [
-            ""
-          ],
-          "native": false,
-          "denom": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv"
-        },
-        {
-          "id": "",
-          "chain_id": "phoenix-1",
-          "token_address": "factory/terra1vklefn7n6cchn0u962w3gaszr4vf52wjvd4y95t2sydwpmpdtszsqvk9wy/ampROAR",
-          "symbol": "ampROAR",
-          "name": "ampROAR",
-          "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/amproar.png",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "factory/terra1vklefn7n6cchn0u962w3gaszr4vf52wjvd4y95t2sydwpmpdtszsqvk9wy/ampROAR"
-        }
-      ],
-     "lp_token": "factory/terra1d8ap3zyd6tfnruuuwvs0t927lr4zwptruhulfwnxjpqzudvyn8usfgl8ze/uLP",
-      "swap_address": "terra1d8ap3zyd6tfnruuuwvs0t927lr4zwptruhulfwnxjpqzudvyn8usfgl8ze",
-      "staking_address": "",
-      "rewards_tokens": []
-    },
-    {
       "pool_id": "SWTH-rSWTH",
       "lpOrder": [
         "SWTH",
