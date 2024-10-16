@@ -1460,7 +1460,7 @@
       ],
       "displayName": "ATOM-dATOM",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
-      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/dATOM.svg",
       "pool_assets": [
         {
           "id": "cosmos",
@@ -1483,7 +1483,7 @@
           "symbol": "dATOM",
           "name": "dATOM",
           "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/dATOM.svg",
           "tags": [
             "native"
           ],
@@ -1508,7 +1508,7 @@
       ],
       "displayName": "SWTH-rSWTH",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
-      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stafihub/images/rswth.svg",
       "pool_assets": [
         {
           "id": "switcheo",
@@ -1531,7 +1531,7 @@
           "symbol": "rSWTH",
           "name": "rSWTH",
           "decimals": 8,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stafihub/images/rswth.svg",
           "tags": [
             "native"
           ],
@@ -1604,7 +1604,7 @@
       ],
       "displayName": "LUNA-arbLUNA",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
-      "displayLogo2": "/logos/",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -1748,7 +1748,7 @@
       ],
       "displayName": "CAPA-LUNA",
       "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
-      "displayLogo1": "/logos/",
+      "displayLogo1": "https://raw.githubusercontent.com/terra-money/station-assets/main/img/coins/Capapult.svg",
       "pool_assets": [
         {
           "id": "",
@@ -1757,7 +1757,7 @@
           "symbol": "CAPA",
           "name": "CAPA",
           "decimals": 6,
-          "logoURI": "/logos/",
+          "logoURI": "https://raw.githubusercontent.com/terra-money/station-assets/main/img/coins/Capapult.svg",
           "tags": [
             ""
           ],
