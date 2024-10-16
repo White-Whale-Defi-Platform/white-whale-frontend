@@ -1308,6 +1308,486 @@
       "swap_address": "migaloo1flxncfqe7wutc7hhn4rdzewkjd3tx6ur7uz076g09xwvfsacvyjs7hr3yy",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "ATOM-dATOM",
+      "lpOrder": [
+        "ATOM",
+        "dATOM"
+      ],
+      "assetOrder": [
+        "ATOM",
+        "dATOM"
+      ],
+      "displayName": "ATOM-dATOM",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+      "pool_assets": [
+        {
+          "id": "cosmos",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
+          "symbol": "ATOM",
+          "name": "ATOM",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/223FF539430381ADAB3A66AC4822E253C3F845E9841F17FEEC207B3AA9F8D915",
+          "symbol": "dATOM",
+          "name": "dATOM",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/223FF539430381ADAB3A66AC4822E253C3F845E9841F17FEEC207B3AA9F8D915"
+        }
+      ],
+     "lp_token": "factory/terra1aa8nurhuk7rwedhjyzptggypuxd3y66qp4nsx6ph240g37esdm7qyheqkd/uLP",
+      "swap_address": "terra1aa8nurhuk7rwedhjyzptggypuxd3y66qp4nsx6ph240g37esdm7qyheqkd",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ATOM-stATOM",
+      "lpOrder": [
+        "ATOM",
+        "stATOM"
+      ],
+      "assetOrder": [
+        "ATOM",
+        "stATOM"
+      ],
+      "displayName": "ATOM-stATOM",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+      "pool_assets": [
+        {
+          "id": "cosmos",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
+          "symbol": "ATOM",
+          "name": "ATOM",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/FD9DBF0DB4D301313195159303811FD2FD72185C4B11A51659EFCD49D7FF1228",
+          "symbol": "stATOM",
+          "name": "stATOM",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/FD9DBF0DB4D301313195159303811FD2FD72185C4B11A51659EFCD49D7FF1228"
+        }
+      ],
+     "lp_token": "factory//uLP",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "wETH-wstETH",
+      "lpOrder": [
+        "wETH",
+        "wstETH"
+      ],
+      "assetOrder": [
+        "wETH",
+        "wstETH"
+      ],
+      "displayName": "wETH-wstETH",
+      "displayLogo1": "/logos/",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/wsteth.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "terra15hhqg8gyz04zapynqtk7uvlsp7lzay7etrt9ann0276v94yae63sxygeat",
+          "symbol": "wETH",
+          "name": "wETH",
+          "decimals": 18,
+          "logoURI": "/logos/",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra15hhqg8gyz04zapynqtk7uvlsp7lzay7etrt9ann0276v94yae63sxygeat"
+        },
+        {
+          "id": "wrapped-steth",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/A356EC90DC3AE43D485514DA7260EDC7ABB5CFAA0654CE2524C739392975AD3C",
+          "symbol": "wstETH",
+          "name": "wstETH",
+          "decimals": 18,
+          "logoURI": "/logos/https://raw.githubusercontent.com/cosmos/chain-registry/master/_non-cosmos/ethereum/images/wsteth.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/A356EC90DC3AE43D485514DA7260EDC7ABB5CFAA0654CE2524C739392975AD3C"
+        }
+      ],
+     "lp_token": "factory//uLP",
+      "swap_address": "",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "ROAR-ampROAR",
+      "lpOrder": [
+        "ROAR",
+        "ampROAR"
+      ],
+      "assetOrder": [
+        "ROAR",
+        "ampROAR"
+      ],
+      "displayName": "ROAR-ampROAR",
+      "displayLogo1": "/logos/lion.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/amproar.png",
+      "pool_assets": [
+        {
+          "id": "lion-dao",
+          "chain_id": "phoenix-1",
+          "token_address": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv",
+          "symbol": "ROAR",
+          "name": "ROAR",
+          "decimals": 6,
+          "logoURI": "/logos/lion.png",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra1lxx40s29qvkrcj8fsa3yzyehy7w50umdvvnls2r830rys6lu2zns63eelv"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "factory/terra1vklefn7n6cchn0u962w3gaszr4vf52wjvd4y95t2sydwpmpdtszsqvk9wy/ampROAR",
+          "symbol": "ampROAR",
+          "name": "ampROAR",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/amproar.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/terra1vklefn7n6cchn0u962w3gaszr4vf52wjvd4y95t2sydwpmpdtszsqvk9wy/ampROAR"
+        }
+      ],
+     "lp_token": "factory/terra1d8ap3zyd6tfnruuuwvs0t927lr4zwptruhulfwnxjpqzudvyn8usfgl8ze/uLP",
+      "swap_address": "terra1d8ap3zyd6tfnruuuwvs0t927lr4zwptruhulfwnxjpqzudvyn8usfgl8ze",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "SWTH-rSWTH",
+      "lpOrder": [
+        "SWTH",
+        "rSWTH"
+      ],
+      "assetOrder": [
+        "SWTH",
+        "rSWTH"
+      ],
+      "displayName": "SWTH-rSWTH",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
+      "pool_assets": [
+        {
+          "id": "switcheo",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/792AAE6279F4709F66068E29A79E6F16BBC0A9B93561A91FC040606793E62D6B",
+          "symbol": "SWTH",
+          "name": "SWTH",
+          "decimals": 8,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/792AAE6279F4709F66068E29A79E6F16BBC0A9B93561A91FC040606793E62D6B"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/0E90026619DD296AD4EF9546396F292B465BAB6B5BE00ABD6162AA1CE8E68098",
+          "symbol": "rSWTH",
+          "name": "rSWTH",
+          "decimals": 8,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/0E90026619DD296AD4EF9546396F292B465BAB6B5BE00ABD6162AA1CE8E68098"
+        }
+      ],
+     "lp_token": "factory/terra1nezkc3lxdxv26hqwy44jr7j9typtk39pns254ev52s9guqc2zsyqx7hvc9/uLP",
+      "swap_address": "terra1nezkc3lxdxv26hqwy44jr7j9typtk39pns254ev52s9guqc2zsyqx7hvc9",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "wBTC.osmo-wBTC.axl",
+      "lpOrder": [
+        "wBTC.osmo",
+        "wBTC.axl"
+      ],
+      "assetOrder": [
+        "wBTC.osmo",
+        "wBTC.axl"
+      ],
+      "displayName": "wBTC.osmo-wBTC.axl",
+      "displayLogo1": "/logos/wbtcosmo.svg",
+      "displayLogo2": "/logos/wBTC.axl.svg",
+      "pool_assets": [
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/CF57A83CED6CEC7D706631B5DC53ABC21B7EDA7DF7490732B4361E6D5DD19C73",
+          "symbol": "wBTC.osmo",
+          "name": "wBTC.osmo",
+          "decimals": 8,
+          "logoURI": "/logos/wbtcosmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/CF57A83CED6CEC7D706631B5DC53ABC21B7EDA7DF7490732B4361E6D5DD19C73"
+        },
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD",
+          "symbol": "wBTC.axl",
+          "name": "wBTC.axl",
+          "decimals": 8,
+          "logoURI": "/logos/wBTC.axl.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/05D299885B07905B6886F554B39346EA6761246076A1120B1950049B92B922DD"
+        }
+      ],
+     "lp_token": "factory/terra13ywdferm4jtcperal9png3cvhtmar5se9nu4r49k7vujrakwy9zqa3rhwe/uLP",
+      "swap_address": "terra13ywdferm4jtcperal9png3cvhtmar5se9nu4r49k7vujrakwy9zqa3rhwe",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-arbLUNA",
+      "lpOrder": [
+        "LUNA",
+        "arbLUNA"
+      ],
+      "assetOrder": [
+        "LUNA",
+        "arbLUNA"
+      ],
+      "displayName": "LUNA-arbLUNA",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+      "displayLogo2": "/logos/",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "LUNA",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "terra1se7rvuerys4kd2snt6vqswh9wugu49vhyzls8ymc02wl37g2p2ms5yz490",
+          "symbol": "arbLUNA",
+          "name": "arbLUNA",
+          "decimals": 6,
+          "logoURI": "/logos/",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "terra1se7rvuerys4kd2snt6vqswh9wugu49vhyzls8ymc02wl37g2p2ms5yz490"
+        }
+      ],
+     "lp_token": "factory/terra1wttdzwa6pdegtrdjdw49y0pd3dd8qd3cqn89j6t9v978lx05rr8sew5jyq/uLP",
+      "swap_address": "terra1wttdzwa6pdegtrdjdw49y0pd3dd8qd3cqn89j6t9v978lx05rr8sew5jyq",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-EURe",
+      "lpOrder": [
+        "LUNA",
+        "EURe"
+      ],
+      "assetOrder": [
+        "LUNA",
+        "EURe"
+      ],
+      "displayName": "LUNA-EURe",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+      "displayLogo2": "/logos/",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "LUNA",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/8D52B251B447B7160421ACFBD50F6B0ABE5F98D2C404B03701130F12044439A1",
+          "symbol": "EURe",
+          "name": "EURe",
+          "decimals": 6,
+          "logoURI": "/logos/",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/8D52B251B447B7160421ACFBD50F6B0ABE5F98D2C404B03701130F12044439A1"
+        }
+      ],
+     "lp_token": "factory/terra1gny66hmejvrkra39cn7r8f7y7yg06hy3cv2xehpxraqfgjtdtpnqjtmu53/uLP",
+      "swap_address": "terra1gny66hmejvrkra39cn7r8f7y7yg06hy3cv2xehpxraqfgjtdtpnqjtmu53",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "USDC-EURe",
+      "lpOrder": [
+        "USDC",
+        "EURe"
+      ],
+      "assetOrder": [
+        "USDC",
+        "EURe"
+      ],
+      "displayName": "USDC-EURe",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
+      "displayLogo2": "/logos/",
+      "pool_assets": [
+        {
+          "id": "usd-coin",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/2C962DAB9F57FE0921435426AE75196009FAA1981BF86991203C8411F8980FDB",
+          "symbol": "USDC",
+          "name": "USDC",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/2C962DAB9F57FE0921435426AE75196009FAA1981BF86991203C8411F8980FDB"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/8D52B251B447B7160421ACFBD50F6B0ABE5F98D2C404B03701130F12044439A1",
+          "symbol": "EURe",
+          "name": "EURe",
+          "decimals": 6,
+          "logoURI": "/logos/",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/8D52B251B447B7160421ACFBD50F6B0ABE5F98D2C404B03701130F12044439A1"
+        }
+      ],
+     "lp_token": "factory/terra1t9uvn05g0hdlx2nnqug3lt3pkla4sfdj0n0xnd66kmwvyt25y65sk37cej/uLP",
+      "swap_address": "terra1t9uvn05g0hdlx2nnqug3lt3pkla4sfdj0n0xnd66kmwvyt25y65sk37cej",
+      "staking_address": "",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "LUNA-CAPA",
+      "lpOrder": [
+        "LUNA",
+        "CAPA"
+      ],
+      "assetOrder": [
+        "LUNA",
+        "CAPA"
+      ],
+      "displayName": "LUNA-CAPA",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+      "displayLogo2": "/logos/",
+      "pool_assets": [
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "LUNA",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        },
+        {
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "terra1t4p3u8khpd7f8qzurwyafxt648dya6mp6vur3vaapswt6m24gkuqrfdhar",
+          "symbol": "CAPA",
+          "name": "CAPA",
+          "decimals": 6,
+          "logoURI": "/logos/",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra1t4p3u8khpd7f8qzurwyafxt648dya6mp6vur3vaapswt6m24gkuqrfdhar"
+        }
+      ],
+     "lp_token": "factory/terra15rzp38yq2cqy2jnewc9vgzqguf3t2q0gqpv9evg8tckrtqp8x44qezhthc/uLP",
+      "swap_address": "terra15rzp38yq2cqy2jnewc9vgzqguf3t2q0gqpv9evg8tckrtqp8x44qezhthc",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
