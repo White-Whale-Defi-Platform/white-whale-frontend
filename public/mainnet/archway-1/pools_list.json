@@ -27,5 +27,53 @@
   },
   "routerAddress": "archway1y0eyqu78q8zz93swaplvg90la0qkk0fueht3yxu6huc96yktrmcqntwe67",
   "pools": [
+    {
+      "pool_id": "bARCH-ARCH",
+      "lpOrder": [
+        "bARCH",
+        "ARCH"
+      ],
+      "assetOrder": [
+        "bARCH",
+        "ARCH"
+      ],
+      "displayName": "bARCH-ARCH",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/barch.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/arch.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "archway-1",
+          "token_address": "archway17e3z7cr6d29uj54k4ucs6dtqvlxsxhwnwzetqgnp6zeu40cvq7dsd8q60x",
+          "symbol": "bARCH",
+          "name": "bARCH",
+          "decimals": 18,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/barch.png",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "archway17e3z7cr6d29uj54k4ucs6dtqvlxsxhwnwzetqgnp6zeu40cvq7dsd8q60x"
+        },
+        {
+          "id": "archway",
+          "chain_id": "archway-1",
+          "token_address": "aarch",
+          "symbol": "ARCH",
+          "name": "ARCH",
+          "decimals": 18,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/arch.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "aarch"
+        }
+      ],
+      "lp_token": "archway1a2xz3c9cfjnf6u3ave0q76mkcm50pdcjqt68hasxkw0ys23h9vfq8wsv6x",
+      "swap_address": "archway19lcq9nsssqplxly8uxnjnlmkz8sy42cpd2d0wnjhcp64r795qdqq0re2x3",
+      "staking_address": "",
+      "rewards_tokens": []
+    }
   ]
 }

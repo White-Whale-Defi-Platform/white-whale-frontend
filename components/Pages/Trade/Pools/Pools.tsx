@@ -69,7 +69,7 @@ const Pools = () => {
   const chains: any = useChainInfos()
   const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
-  [chains, chainId])
+    [chains, chainId])
 
   const {
     flowPoolData: incentivePoolInfos,
@@ -107,8 +107,8 @@ const Pools = () => {
 
       const _allPools = await Promise.all(pools.map((pool) => {
         const isUSDPool =
-            STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
-            STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
+          STABLE_COIN_LIST.includes(pool?.pool_assets[0].symbol) ||
+          STABLE_COIN_LIST.includes(pool?.pool_assets[1].symbol)
 
         if (externalStatsLoading) {
           setExternalStatsLoading((pool?.liquidity?.reserves?.totalAssetsInDollar || 0) === 0)
@@ -150,10 +150,10 @@ const Pools = () => {
 
   useEffect(() => {
     if (pairInfos.length === 0) {
-      return
+      return;
     }
     let updatedPools = allPools.map((pool) => {
-      const pairInfo = pairInfos.find((pairInfo) => pairInfo.pool_id === pool.poolId)
+      const pairInfo = pairInfos?.find((pairInfo) => pairInfo.pool_id === pool.poolId)
       return {
         ...pool,
         volume24hr: pairInfo?.usdVolume24h,
@@ -183,7 +183,7 @@ const Pools = () => {
   const flowLength = useMemo(() => incentivePoolInfos?.
     map((info) => info.flowData?.length ?? 0).
     reduce((a, b) => a + b, 0) ?? 0,
-  [incentivePoolInfos])
+    [incentivePoolInfos])
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
@@ -261,7 +261,7 @@ const Pools = () => {
       {myPools?.length > 0 && (
         <Box width={'100%'} px={{ base: 5 }}>
           <Text as="h2" fontSize="24" fontWeight="700" paddingTop={10} paddingBottom={5}>
-          Supplied
+            Supplied
           </Text>
           <MyPoolsTable
             show={true}
@@ -276,8 +276,10 @@ const Pools = () => {
       )}
 
       <Box width={'100%'} px={{ base: 5 }}>
-        <HStack justifyContent="space-between" width={{ base: 'full',
-          xl: 'container.xl' }} paddingTop={10} paddingBottom={5}>
+        <HStack justifyContent="space-between" width={{
+          base: 'full',
+          xl: 'container.xl'
+        }} paddingTop={10} paddingBottom={5}>
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools
           </Text>
