@@ -40,7 +40,7 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const { address } = useChain(walletChainName)
   const config: Config = useConfig(network, chainId)
-  const [pool] = usePoolFromListQueryById({ poolId })
+  const { data: pool } = usePoolFromListQueryById({ poolId })
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
     signingClient,
@@ -79,9 +79,9 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
 
     const funds = [
       factoryConfig &&
-        tokenInfo?.denom !== flowFeeDenom &&
-        coin(factoryConfig?.createFlowFee?.amount,
-          factoryConfig?.createFlowFee?.denom),
+      tokenInfo?.denom !== flowFeeDenom &&
+      coin(factoryConfig?.createFlowFee?.amount,
+        factoryConfig?.createFlowFee?.denom),
       tokenInfo?.native && coin(nativeAmount, tokenInfo?.denom),
     ].
       filter(Boolean).

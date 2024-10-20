@@ -15,6 +15,8 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/common'
 
+import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
+
 const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   <HStack
     justifyContent="space-between"
@@ -39,12 +41,8 @@ const AvailableRewards = ({ totalValue }: { totalValue: string }) => (
   </HStack>
 )
 
-type Props = {
-  poolId: string
-}
-
-const Claim = ({ poolId }: Props) => {
-  const claim = useClaim({ poolId })
+const Claim = (pool: PoolEntityType) => {
+  const { submit, ...claim } = useClaim(pool)
 
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, openView } = useChain(walletChainName)
@@ -52,31 +50,29 @@ const Claim = ({ poolId }: Props) => {
 
   const config = useConfig(network, chainId)
   // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
-  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(cosmWasmClient,
-    config)
-  const allSnapshotsTaken = useMemo(() => noSnapshotTakenAddresses.length === 0,
-    [noSnapshotTakenAddresses.length])
+  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(cosmWasmClient, config)
+  const allSnapshotsTaken = useMemo(() => noSnapshotTakenAddresses.length === 0, [noSnapshotTakenAddresses.length])
   const forceSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses,
     config,
   })
-  const { rewards = [], totalValue } = useRewards(poolId)
+  const { rewards = [], totalValue } = useRewards(pool)
+
   // Check if there are rewards to claim
   const isClaimable = useMemo(() => {
-    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.amount),
-      0)
+    const rewardsSum = rewards.reduce((acc, reward) => acc + Number(reward.amount), 0)
     return rewardsSum > 0
   }, [rewards])
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) {
       return 'Connect Wallet'
-    } else if (Number(totalValue) === 0) {
+    } else if (rewards.length === 0) {
       return 'No Rewards'
     } else if (!allSnapshotsTaken) {
       return 'Take Snapshots'
     }
     return 'Claim'
-  }, [isWalletConnected, totalValue, allSnapshotsTaken])
+  }, [isWalletConnected, rewards, allSnapshotsTaken])
   return (
     <VStack gap={10} py={5}>
       <AvailableRewards totalValue={totalValue} />
@@ -86,19 +82,17 @@ const Claim = ({ poolId }: Props) => {
         label={buttonLabel}
         isConnected={true}
         txStep={TxStep.Ready}
-        isDisabled={(!isClaimable && allSnapshotsTaken) && isWalletConnected}
+        isDisabled={(!isClaimable && allSnapshotsTaken && isWalletConnected)}
         isLoading={ [TxStep.Estimating, TxStep.Posting, TxStep.Broadcasting].includes(claim.txStep)}
         onClick={() => {
           if (isWalletConnected && allSnapshotsTaken && rewards.length !== 0) {
-            claim.submit()
+            submit()
           } else if (!isWalletConnected) {
             openView()
           } else {
             forceSnapshots.submit()
           }
-        }
-        }
-
+        }}
       />
     </VStack>
   )

@@ -8,8 +8,8 @@ import { useRecoilValue } from 'recoil'
 import { dashboardDataState } from 'state/dashboardDataState'
 
 export type Token = {
-  denom: string;
-  amount: number;
+  denom: string
+  amount: number
 }
 export const Header = ({ dashboardData }) => {
   const dashboardState = useRecoilValue(dashboardDataState)

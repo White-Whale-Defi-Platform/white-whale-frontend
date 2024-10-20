@@ -43,7 +43,10 @@ const columns = (totalValue, totalDollarValue) => [
         Duration
       </Text>
     ),
-    cell: (info) => <Text>{`${info.getValue()} days`}</Text>,
+    cell: (info) => {
+      const value = info.getValue();
+      return <Text>{`${value !== 'Alliance' ? value + (Number(value) <= 1 ? ' day' : ' days') : 'Alliance'} `}</Text>;
+    },
     enableSorting: true,
   }),
   columnHelper.accessor('value', {

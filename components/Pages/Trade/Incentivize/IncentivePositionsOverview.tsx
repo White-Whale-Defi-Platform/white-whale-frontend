@@ -21,9 +21,11 @@ import PositionsTable from 'components/Pages/Trade/Incentivize/PositionsTable'
 import { IncentiveState } from 'constants/state'
 import { num } from 'libs/num'
 
+import { PoolEntityType } from '../Pools/hooks/usePoolsListQuery'
+
 type Props = {
   flows: any[]
-  poolId: string
+  pool: PoolEntityType
 }
 
 const STATES = [IncentiveState.all, IncentiveState.active, IncentiveState.upcoming, IncentiveState.over]
@@ -89,8 +91,8 @@ const menuOrTab = (
   }
 }
 
-const CloseAction = ({ poolId, flowId, isCreator }) => {
-  const close = useClosePosition({ poolId })
+const CloseAction = ({ pool, flowId, isCreator }) => {
+  const close = useClosePosition({ pool })
 
   return isCreator ? (
     <Button
@@ -123,7 +125,7 @@ const Token = ({ imgUrl, symbol }) => (
   </HStack>
 )
 
-export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
+export const IncentivePositionsOverview = ({ flows, pool }: Props) => {
   const [isMobile] = useMediaQuery('(max-width: 755px)')
   const [activeButton, setActiveButton] = useState(IncentiveState.active)
   const [columnFilters, setColumnFilters] = useState([
@@ -149,7 +151,7 @@ export const IncentivePositionsOverview = ({ flows, poolId }: Props) => {
       toNumber()),
     action: (
       <CloseAction
-        poolId={poolId}
+        pool={pool}
         flowId={flow.flowId}
         isCreator={flow.isCreator}
       />

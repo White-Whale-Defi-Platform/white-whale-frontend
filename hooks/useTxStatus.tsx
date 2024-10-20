@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useQueryClient } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
@@ -11,44 +11,47 @@ import { txRecoilState } from 'state/txRecoilState'
 import { TxStep } from 'types/common'
 import { parseError } from 'util/parseError'
 
-type Props = {
-  signingClient: SigningCosmWasmClient | InjectiveSigningStargateClient
+type SigningClient = SigningCosmWasmClient | InjectiveSigningStargateClient
+
+interface UseTxStatusProps {
+  signingClient: SigningClient
   transactionType: string
 }
-const useTxStatus = ({ signingClient, transactionType }: Props) => {
+
+export interface TxResult {
+  transactionHash: string
+}
+
+const useTxStatus = ({ signingClient, transactionType }: UseTxStatusProps) => {
   const [txState, setTxState] = useRecoilState(txRecoilState)
   const toast = useToast()
-  const txInfo = useTxInfo({ txHash: txState.txHash,
-    signingClient })
   const queryClient = useQueryClient()
+
+  const txInfo = useTxInfo({
+    txHash: txState.txHash,
+    signingClient,
+  })
 
   useEffect(() => {
     if (txInfo && txState.txHash) {
-      if (txInfo?.code) {
-        setTxState({
-          ...txState,
-          txStep: TxStep.Failed,
-        })
-      } else {
-        setTxState({
-          ...txState,
-          txStep: TxStep.Success,
-        })
-      }
+      setTxState((prevState) => ({
+        ...prevState,
+        txStep: txInfo.code ? TxStep.Failed : TxStep.Success,
+      }))
     }
-  }, [txInfo, txState.txHash])
+  }, [txInfo, txState.txHash, setTxState])
 
-  const description = async (hash: string) => (
+  const description = useCallback(async (hash: string) => (
     <Finder txHash={hash} chainId={await signingClient.getChainId()}>
       {' '}
     </Finder>
-  )
+  ), [signingClient])
 
-  const onError = (error: Error) => {
+  const onError = useCallback((error: Error) => {
     const message = parseError(error)
 
     toast({
-      title: `${transactionType} Failed.`,
+      title: `${transactionType} Failed`,
       description: message,
       status: 'error',
       duration: 9000,
@@ -56,37 +59,37 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
       isClosable: true,
     })
 
-    setTxState({
-      ...txState,
+    setTxState((prevState) => ({
+      ...prevState,
       txStep: TxStep.Failed,
-    })
-  }
+    }))
+  }, [transactionType, toast, setTxState])
 
-  const onMutate = () => {
-    setTxState({
-      ...txState,
+  const onMutate = useCallback(() => {
+    setTxState((prevState) => ({
+      ...prevState,
       txStep: TxStep.Posting,
-    })
-  }
+    }))
+  }, [setTxState])
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setTxState({
       txStep: TxStep.Idle,
       txHash: null,
       error: null,
       buttonLabel: null,
     })
-  }
+  }, [setTxState])
 
-  const onSuccess = async (data: any) => {
-    setTxState({
-      ...txState,
+  const onSuccess = useCallback(async (data: TxResult) => {
+    setTxState((prevState) => ({
+      ...prevState,
       txStep: TxStep.Broadcasting,
       txHash: data.transactionHash,
-    })
+    }))
 
     toast({
-      title: `${transactionType} Success.`,
+      title: `${transactionType} Success`,
       description: await description(data.transactionHash),
       status: 'success',
       duration: 9000,
@@ -101,11 +104,11 @@ const useTxStatus = ({ signingClient, transactionType }: Props) => {
         'tokenBalance',
         'positions',
         'rewards',
+        'signingClient',
+        'allianceRewards',
       ],
     })
-
-    await queryClient.refetchQueries()
-  }
+  }, [transactionType, description, toast, queryClient, setTxState])
 
   return {
     ...txState,

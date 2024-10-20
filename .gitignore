@@ -64,4 +64,3 @@ tags
 #vscode settings
 .vscode/launch.json
 .vscode/settings.json
-package-lock.json

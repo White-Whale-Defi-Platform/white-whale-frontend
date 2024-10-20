@@ -57,7 +57,7 @@ const Create = ({ poolId }: Props) => {
   const [isMobile] = useMediaQuery('(max-width: 640px)')
   const { simulate, submit } = useOpenFlow({
     poolId,
-    ...formData
+    ...formData,
   })
 
   const startDate = formData.startDate === '' ? dayjs() : dayjs(formData.startDate)

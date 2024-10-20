@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useMediaQuery, VStack } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import AssetInput from 'components/AssetInput/index'
-import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData';
+import { useConfig } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { bondingState } from 'state/bondingState'
 import { chainState } from 'state/chainState'
