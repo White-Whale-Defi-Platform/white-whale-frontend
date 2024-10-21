@@ -154,7 +154,8 @@ export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
   try {
     const response = await fetchWithTimeout(`${await getFastestAPI()}/api/pools/${chain_name}`, 50000)
     const json = await response.json()
-    return json?.data || null
+
+    return Array.isArray(json?.data) ? json?.data : null
   } catch (error) {
     console.error(error)
     return null

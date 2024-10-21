@@ -20,6 +20,8 @@ export const getChainLogoUrlByName = (chainName: string) : string => {
       return '/logos/terra.png'
     case WalletChainName.osmosis:
       return '/logos/osmo.svg'
+    case WalletChainName.archway:
+      return 'https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/archway.svg'
     default:
       return null
   }

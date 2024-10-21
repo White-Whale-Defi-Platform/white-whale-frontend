@@ -9,6 +9,7 @@ export const ACTIVE_NETWORKS = {
     sei: 'pacific-1',
     'terra-classic': 'columbus-5',
     osmosis: 'osmosis-1',
+    archway: 'archway-1',
   },
   testnet: {
     comdex: 'comdex-test2',
@@ -32,6 +33,7 @@ export const ACTIVE_NETWORKS_WALLET_NAMES = {
     'sei',
     'terra',
     'osmosis',
+    'archway',
   ],
   testnet: [
     'injectivetestnet',
@@ -59,6 +61,7 @@ export const WALLET_CHAIN_NAMES_BY_CHAIN_ID = {
   'atlantic-1': 'seitestnet',
   'rebel-2': 'terra',
   'osmosis-1': 'osmosis',
+  'archway-1': 'archway',
 }
 
 export const ACTIVE_BONDING_NETWORKS = [
@@ -71,6 +74,7 @@ export const ACTIVE_BONDING_NETWORKS = [
   'columbus-5',
   'injective-1',
   'osmosis-1',
+  'archway-1',
 ]
 export const ACTIVE_INCENTIVE_NETWORKS = [
   'chihuahua-1',
@@ -113,6 +117,6 @@ export const NETWORK_MAP = {
 }
 
 // Chain names by cosmos kit
-export enum WalletChainName { terrac = 'terra', terra = 'terra2', migaloo= 'migaloo', juno= 'juno', sei= 'sei', comdex= 'comdex', injective= 'injective', chihuahua= 'chihuahua', osmosis= 'osmosis' }
+export enum WalletChainName { terrac = 'terra', terra = 'terra2', migaloo= 'migaloo', juno= 'juno', sei= 'sei', comdex= 'comdex', injective= 'injective', chihuahua= 'chihuahua', osmosis= 'osmosis', archway= 'archway' }
 export const CHAIN_NAMES = [...ACTIVE_NETWORKS_WALLET_NAMES.mainnet, ...ACTIVE_NETWORKS_WALLET_NAMES.testnet]
-export enum ChainId { terrac = 'columbus-5', terra = 'phoenix-1', migaloo = 'migaloo-1', juno = 'juno-1', sei = 'pacific-1', comdex = 'comdex-1', injective = 'injective-1', chihuahua = 'chihuahua-1', narwhal = 'narwhal-1', pisco = 'pisco-1', osmosis = 'osmosis-1' }
+export enum ChainId { terrac = 'columbus-5', terra = 'phoenix-1', migaloo = 'migaloo-1', juno = 'juno-1', sei = 'pacific-1', comdex = 'comdex-1', injective = 'injective-1', chihuahua = 'chihuahua-1', narwhal = 'narwhal-1', pisco = 'pisco-1', osmosis = 'osmosis-1', archway = "archway-1" }

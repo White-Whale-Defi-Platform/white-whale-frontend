@@ -1,0 +1,41 @@
+{
+  "whale_lair": "archway1a2hawz66n3nuh8964t0kw6yvcvqww2rnucsvacga2g4360nxs2tsyzftg8",
+  "incentive_factory": "archway1wc6wu89rl42fhyru4gff7jwy5cf3m0qz22yn7szvt8ac3m8al3rsp68vug",
+  "fee_distributor": "archway19sd5pzm9davt53735nc020ewemtw8dq5znp4sdtynlwmveqy3jfqltvnws",
+  "frontend_helper": "archway1yuxk5envmnvn8c36gakhzd650jsfjpj5pf5vm3wa0uf4ltj3r6hqzdp8dg",
+  "whale_base_token": {
+    "name": "WHALE",
+    "denom": "ibc/3FED3F9CE7B16BDCB7920FECEC085F8FA58E21C0EAB99703E4B816E5F666E3B9",
+    "decimals": 6
+  },
+  "bonding_tokens": [
+    {
+      "id": "eris-amplified-whale",
+      "chain_id": "archway-1",
+      "token_address": "ibc/6F78565CB5D0A8E854A4AD895B0881D0067F9147E5A56DC015EAC3476D9E17E4",
+      "symbol": "ampWHALE",
+      "name": "ampWHALE",
+      "decimals": 6,
+      "logoURI": "/logos/ampWhale.svg",
+      "tags": [
+        "native"
+      ],
+      "native": true,
+      "denom": "ibc/6F78565CB5D0A8E854A4AD895B0881D0067F9147E5A56DC015EAC3476D9E17E4"
+    },
+    {
+      "id": "backbone-labs-staked-whale",
+      "chain_id": "archway-1",
+      "token_address": "ibc/DD9FFDD2E0B4EE93EBFD1C433501A008C8B7593DAB158944AE6C990500788D05",
+      "symbol": "bWHALE",
+      "name": "bWHALE",
+      "decimals": 6,
+      "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
+      "tags": [
+        "native"
+      ],
+      "native": true,
+      "denom": "ibc/DD9FFDD2E0B4EE93EBFD1C433501A008C8B7593DAB158944AE6C990500788D05"
+    }
+  ]
+}
