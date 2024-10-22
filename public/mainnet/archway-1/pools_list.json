@@ -44,7 +44,7 @@
         {
           "id": "",
           "chain_id": "archway-1",
-          "token_address": "archway17e3z7cr6d29uj54k4ucs6dtqvlxsxhwnwzetqgnp6zeu40cvq7dsd8q60x",
+          "token_address": "archway12yurzx8zynv3ck7uh4tucre48tqsm4fac4hfk9p3l24qs2cn08dqr684cg",
           "symbol": "bARCH",
           "name": "bARCH",
           "decimals": 18,
@@ -53,7 +53,7 @@
             ""
           ],
           "native": false,
-          "denom": "archway17e3z7cr6d29uj54k4ucs6dtqvlxsxhwnwzetqgnp6zeu40cvq7dsd8q60x"
+          "denom": "archway12yurzx8zynv3ck7uh4tucre48tqsm4fac4hfk9p3l24qs2cn08dqr684cg"
         },
         {
           "id": "archway",
@@ -70,8 +70,8 @@
           "denom": "aarch"
         }
       ],
-      "lp_token": "archway1a2xz3c9cfjnf6u3ave0q76mkcm50pdcjqt68hasxkw0ys23h9vfq8wsv6x",
-      "swap_address": "archway19lcq9nsssqplxly8uxnjnlmkz8sy42cpd2d0wnjhcp64r795qdqq0re2x3",
+      "lp_token": "archway18zjxz24skc48vs3vya9rtky8qt2rgzmv85cz24t5trj4jngyk84qx3rk8s",
+      "swap_address": "archway1jq9y6ty3cckpp8nsq7xwu54ttudvmdsmj87y0f3zmlzm5qll75ssr7pgkj",
       "staking_address": "",
       "rewards_tokens": []
     }
