@@ -37,7 +37,7 @@
         "ATOM",
         "LUNA"
       ],
-      "displayName": "LUNA-ATOM",
+      "displayName": "ATOM-LUNA",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
       "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
       "pool_assets": [
@@ -133,7 +133,7 @@
         "LUNA",
         "ASTRO.cw20"
       ],
-      "displayName": "ASTRO.cw20-LUNA",
+      "displayName": "LUNA-ASTRO.cw20",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/astro-cw20.svg",
       "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
       "pool_assets": [
@@ -171,8 +171,8 @@
     {
       "pool_id": "LUNA-axlUSDC",
       "lpOrder": [
-        "axlUSDC",
-        "LUNA"
+        "LUNA",
+        "axlUSDC"
       ],
       "assetOrder": [
         "LUNA",
@@ -267,8 +267,8 @@
     {
       "pool_id": "ampWHALE-WHALE",
       "lpOrder": [
-        "WHALE",
-        "ampWHALE"
+        "ampWHALE",
+        "WHALE"
       ],
       "assetOrder": [
         "ampWHALE",
@@ -278,20 +278,6 @@
       "displayLogo1": "/logos/ampWhale.svg",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [
-        {
-          "id": "white-whale",
-          "chain_id": "phoenix-1",
-          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
-          "symbol": "WHALE",
-          "name": "Whale",
-          "decimals": 6,
-          "logoURI": "/logos/whale.svg",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
-        },
         {
           "chain_id": "phoenix-1",
           "id": "eris-amplified-whale",
@@ -305,27 +291,7 @@
           ],
           "native": true,
           "denom": "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36"
-        }
-      ],
-      "lp_token": "terra16z3ksy6aqjkug8l3u48q0kvdaqk3dgaytl7ykt6vg2he9d6z9rgslr4k7l",
-      "swap_address": "terra1ntx595elf3ukxcd0wy76h24rzztcv2p6n3wmfd358ks95prv42fs9mn63n",
-      "staking_address": "terra19a63jwphxh2f8j8r5cn74kyrrjlu35gk4h4y7uj9zam8lquqrnzsjtxlhl",
-      "rewards_tokens": []
-    },
-    {
-      "pool_id": "bWHALE-WHALE",
-      "lpOrder": [
-        "WHALE",
-        "bWHALE"
-      ],
-      "assetOrder": [
-        "bWHALE",
-        "WHALE"
-      ],
-      "displayName": "bWHALE-WHALE",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
-      "displayLogo2": "/logos/whale.svg",
-      "pool_assets": [
+        },
         {
           "id": "white-whale",
           "chain_id": "phoenix-1",
@@ -339,7 +305,27 @@
           ],
           "native": true,
           "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
-        },
+        }
+      ],
+      "lp_token": "terra16z3ksy6aqjkug8l3u48q0kvdaqk3dgaytl7ykt6vg2he9d6z9rgslr4k7l",
+      "swap_address": "terra1ntx595elf3ukxcd0wy76h24rzztcv2p6n3wmfd358ks95prv42fs9mn63n",
+      "staking_address": "terra19a63jwphxh2f8j8r5cn74kyrrjlu35gk4h4y7uj9zam8lquqrnzsjtxlhl",
+      "rewards_tokens": []
+    },
+    {
+      "pool_id": "bWHALE-WHALE",
+      "lpOrder": [
+        "bWHALE",
+        "WHALE"
+      ],
+      "assetOrder": [
+        "bWHALE",
+        "WHALE"
+      ],
+      "displayName": "bWHALE-WHALE",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/bWHALE.png",
+      "displayLogo2": "/logos/whale.svg",
+      "pool_assets": [
         {
           "chain_id": "phoenix-1",
           "id": "backbone-labs-staked-whale",
@@ -353,6 +339,20 @@
           ],
           "native": true,
           "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
+        },
+        {
+          "id": "white-whale",
+          "chain_id": "phoenix-1",
+          "token_address": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+          "symbol": "WHALE",
+          "name": "Whale",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB"
         }
       ],
       "lp_token": "terra1le46uu9qjk53aktjs8dev96sl9sd2ujvcpspk75pdeg0txfvhyuswm6653",
@@ -510,7 +510,7 @@
         "WHALE",
         "ROAR"
       ],
-      "displayName": "ROAR-WHALE",
+      "displayName": "WHALE-ROAR",
       "displayLogo1": "/logos/lion.png",
       "displayLogo2": "/logos/whale.svg",
       "pool_assets": [

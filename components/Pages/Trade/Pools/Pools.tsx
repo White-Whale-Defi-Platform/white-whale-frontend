@@ -69,7 +69,7 @@ const Pools = () => {
   const chains: any = useChainInfos()
   const currentChainPrefix = useMemo(() => chains.find((row: { chainId: string }) => row.chainId === chainId)?.bech32Config?.
     bech32PrefixAccAddr,
-    [chains, chainId])
+  [chains, chainId])
 
   const {
     flowPoolData: incentivePoolInfos,
@@ -183,7 +183,7 @@ const Pools = () => {
   const flowLength = useMemo(() => incentivePoolInfos?.
     map((info) => info.flowData?.length ?? 0).
     reduce((a, b) => a + b, 0) ?? 0,
-    [incentivePoolInfos])
+  [incentivePoolInfos])
 
   useEffect(() => {
     const updatedPools = allPools.map((pool) => {
@@ -278,7 +278,7 @@ const Pools = () => {
       <Box width={'100%'} px={{ base: 5 }}>
         <HStack justifyContent="space-between" width={{
           base: 'full',
-          xl: 'container.xl'
+          xl: 'container.xl',
         }} paddingTop={10} paddingBottom={5}>
           <Text as="h2" fontSize="24" fontWeight="700">
             All Pools

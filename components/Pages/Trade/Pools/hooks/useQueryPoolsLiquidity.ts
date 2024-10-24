@@ -139,25 +139,25 @@ interface Pool {
 
 interface Position {
   open_position?: {
-    amount: string;
-  };
+    amount: string
+  }
   closed_position?: {
-    amount: string;
-  };
+    amount: string
+  }
 }
 
 interface FetchParams {
-  pools: Pool[];
-  cosmWasmClient: CosmWasmClient;
-  address: string;
-  chain_id: string;
+  pools: Pool[]
+  cosmWasmClient: CosmWasmClient
+  address: string
+  chain_id: string
 }
 
 const fetchLockedLp = async ({ pools, cosmWasmClient, address, chain_id }: FetchParams): Promise<Map<string, number>> => {
-  const newMap = new Map<string, number>();
+  const newMap = new Map<string, number>()
 
   if (!pools || !cosmWasmClient || !address || chain_id !== 'phoenix-1') {
-    return newMap;
+    return newMap
   }
 
   for (const pool of pools) {
@@ -166,18 +166,18 @@ const fetchLockedLp = async ({ pools, cosmWasmClient, address, chain_id }: Fetch
     if (pool.staking_address) {
       stakingPositions = await fetchStakingPositions(
         pool.staking_address, cosmWasmClient, address,
-      );
+      )
     }
 
     // Fetch alliance positions
-    let filteredAlliancePositions: any[] = (await queryAllStakedBalances(cosmWasmClient, address))?.filter((position: any) => position.open_position?.lp === pool.lp_token) || []
+    const filteredAlliancePositions: any[] = (await queryAllStakedBalances(cosmWasmClient, address))?.filter((position: any) => position.open_position?.lp === pool.lp_token) || []
 
     // Combine and sum up all positions
     const totalLocked = sumPositions(stakingPositions) + sumPositions(filteredAlliancePositions);
     newMap.set(pool.lp_token as string, totalLocked);
   }
 
-  return newMap;
+  return newMap
 };
 
 export const useFetchMyLockedLps = ({ pools, cosmWasmClient, address, chain_id }: FetchParams) => useQuery<Map<string, number>, Error>(
@@ -186,30 +186,30 @@ export const useFetchMyLockedLps = ({ pools, cosmWasmClient, address, chain_id }
     pools,
     cosmWasmClient,
     address,
-    chain_id
+    chain_id,
   }),
   {
     enabled: Boolean(pools) && Boolean(cosmWasmClient) && Boolean(address),
-    staleTime: 60000, // 1 minute
-    refetchInterval: 60000, // 1 minute
+    staleTime: 60_000, // 1 minute
+    refetchInterval: 60_000, // 1 minute
   },
-);
+)
 
 const fetchStakingPositions = async (
   stakingAddress: string, cosmWasmClient: CosmWasmClient, address: string,
 ): Promise<Position[]> => {
   const { positions = [] } = await cosmWasmClient.queryContractSmart(stakingAddress, {
     positions: { address },
-  }) || {};
+  }) || {}
 
-  return positions;
+  return positions
 };
 
 const sumPositions = (positions: Position[]): number => positions.reduce((acc, p) => {
-  const openAmount = Number(p.open_position?.amount || 0);
-  const closedAmount = Number(p.closed_position?.amount || 0);
-  return acc + openAmount + closedAmount;
-}, 0);
+  const openAmount = Number(p.open_position?.amount || 0)
+  const closedAmount = Number(p.closed_position?.amount || 0)
+  return acc + openAmount + closedAmount
+}, 0)
 
 export const fetchTotalLockedLp = async (
   incentiveAddress: string,
@@ -228,53 +228,54 @@ export const fetchTotalLockedLp = async (
 
   return Number(balance || amount)
 }
+
 export const useQueryPoolsLiquidity = ({
   pools,
   refetchInBackground = false,
   cosmWasmClient,
 }: QueryMultiplePoolsArgs) => {
-  const prices = usePrices();
-  const { walletChainName, chainId } = useRecoilValue(chainState);
-  const { address } = useChain(walletChainName);
+  const prices = usePrices()
+  const { walletChainName, chainId } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
   const { data: lps, isLoading } = useFetchMyLockedLps({
     pools,
     cosmWasmClient,
     address,
-    chain_id: chainId
-  });
-  const [tokenList] = useTokenList();
-  const { epochToDate, currentEpoch } = useEpoch();
+    chain_id: chainId,
+  })
+  const [tokenList] = useTokenList()
+  const { epochToDate, currentEpoch } = useEpoch()
 
   const queryPoolLiquidity = async (pool: PoolEntityType): Promise<PoolEntityTypeWithLiquidity | any> => {
     if (!cosmWasmClient) {
-      return pool;
+      return pool
     }
 
     const poolInfo = await queryPoolInfo({
       cosmWasmClient,
       swap_address: pool.swap_address,
-    });
+    })
 
-    const getTokenDenom = (assetInfo) => assetInfo?.info?.native_token?.denom ?? assetInfo?.info?.token?.contract_addr;
+    const getTokenDenom = (assetInfo: { info: { native_token: { denom: any }; token: { contract_addr: any } } }) => assetInfo?.info?.native_token?.denom ?? assetInfo?.info?.token?.contract_addr;
 
-    const tokenA = pool.pool_assets.find((asset) => asset.denom === getTokenDenom(poolInfo?.assets[0]));
-    const tokenB = pool.pool_assets.find((asset) => asset.denom === getTokenDenom(poolInfo?.assets[1]));
+    const tokenA = pool.pool_assets.find((asset) => asset.denom === getTokenDenom(poolInfo?.assets[0]))
+    const tokenB = pool.pool_assets.find((asset) => asset.denom === getTokenDenom(poolInfo?.assets[1]))
 
     const fetchFlowsForPool = async (): Promise<any[]> => {
       if (!cosmWasmClient || !pool?.staking_address || tokenList.tokens.length === 0) {
-        return [];
+        return []
       }
 
       const flows = await fetchFlows(cosmWasmClient, pool.staking_address);
       return flows?.map((flow) => {
         const denom = flow?.flow_asset?.info?.token?.contract_addr || flow?.flow_asset?.info.native_token?.denom;
         return tokenList.tokens.find((t) => t?.denom === denom);
-      });
-    };
+      })
+    }
 
     const fetchMyFlowsForPool = async (): Promise<any[]> => {
       if (!cosmWasmClient || !pool?.staking_address || tokenList.tokens.length === 0) {
-        return [];
+        return []
       }
 
       const flows = await fetchFlows(cosmWasmClient, pool.staking_address);
@@ -294,8 +295,8 @@ export const useQueryPoolsLiquidity = ({
           if (currentEpoch >= endEpoch) {
             return IncentiveState.over;
           }
-          return '';
-        };
+          return ''
+        }
 
         return {
           token,
@@ -306,14 +307,14 @@ export const useQueryPoolsLiquidity = ({
           amount: flow.flow_asset.amount,
           state: getState(),
         };
-      }).filter(Boolean);
-    };
+      }).filter(Boolean)
+    }
 
     const [flows, myFlows] = await Promise.all([fetchFlowsForPool(), fetchMyFlowsForPool()]);
     const myLockedLp = lps?.get(pool.lp_token) || 0;
     const totalLockedLp = await fetchTotalLockedLp(
       pool.staking_address, pool.lp_token, cosmWasmClient,
-    );
+    )
 
     const {
       myNotLockedAssets,
@@ -327,24 +328,24 @@ export const useQueryPoolsLiquidity = ({
       cosmWasmClient,
       swap: {
         ...poolInfo,
-        ...pool
+        ...pool,
       },
       address,
       totalLockedLp,
       myLockedLp,
       prices,
-    });
+    })
 
     const calculateLiquidityValues = (assets: any, lpTokenAmount = null) => ({
       tokenAmount: lpTokenAmount ?? (assets[1] + assets[0]),
       dollarValue:
         (Number(fromChainAmount(assets[0], tokenA?.decimals)) * (prices?.[tokenA?.symbol] || 0)) +
         (Number(fromChainAmount(assets[1], tokenB?.decimals)) * (prices?.[tokenB?.symbol] || 0)),
-    });
+    })
 
-    const myNotLockedLiquidity = calculateLiquidityValues(myNotLockedAssets, myNotLockedLp);
-    const totalLockedLiquidity = calculateLiquidityValues(totalLockedAssets);
-    const myLockedLiquidity = calculateLiquidityValues(myLockedAssets);
+    const myNotLockedLiquidity = calculateLiquidityValues(myNotLockedAssets, myNotLockedLp)
+    const totalLockedLiquidity = calculateLiquidityValues(totalLockedAssets)
+    const myLockedLiquidity = calculateLiquidityValues(myLockedAssets)
 
     const liquidity = {
       available: {
@@ -368,14 +369,14 @@ export const useQueryPoolsLiquidity = ({
         totalAssetsInDollar,
         ratioFromPool,
       },
-    };
+    }
 
     return {
       ...pool,
       flows,
-      liquidity
-    };
-  };
+      liquidity,
+    }
+  }
 
   return useQueries((pools ?? []).map((pool) => ({
     queryKey: `@pool-liquidity/${pool.pool_id}/${address}`,
@@ -388,8 +389,8 @@ export const useQueryPoolsLiquidity = ({
     cacheTime: 10 * 60 * 1000,
     staleTime: 5 * 60 * 1000,
     queryFn: () => queryPoolLiquidity(pool),
-  })));
-};
+  })))
+}
 
 export const useQueryPoolLiquidity = ({ poolId }) => {
   const { data: poolsListResponse, isLoading: loadingPoolsList } =
