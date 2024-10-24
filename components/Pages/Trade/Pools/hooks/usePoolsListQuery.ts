@@ -77,14 +77,14 @@ export const usePoolFromListQueryById = ({ poolId }: { poolId: string }) => {
     ['poolById', poolId, chainId],
     () => {
       if (!poolsListQuery.data) {
-        return undefined;
+        return undefined
       }
-      return poolsListQuery.data.poolsById[poolId];
+      return poolsListQuery.data.poolsById[poolId]
     },
     {
       enabled: Boolean(poolsListQuery.data) && Boolean(poolsListQuery.isLoading),
       staleTime: 2 * 60 * 1000,
       cacheTime: 5 * 60 * 1000,
     },
-  );
-};
+  )
+}
