@@ -23,7 +23,7 @@ const getUrl = (chainId: string, txHash: string) => {
     case ChainId.juno:
       return `https://mintscan.io/juno/txs/${txHash}`
     case ChainId.terra:
-      return `https://finder.terra.money/mainnet/tx/${txHash}`
+      return `https://chainsco.pe/terra2/tx/${txHash}`
     case ChainId.chihuahua:
       return `https://www.mintscan.io/chihuahua/txs/${txHash}`
     case 'injective-888':
