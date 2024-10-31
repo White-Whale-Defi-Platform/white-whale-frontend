@@ -97,7 +97,7 @@ const useRewards = (pool: PoolEntityType): RewardsResult => {
     enabled: Boolean(lp_token) && Boolean(address) && Boolean(cosmWasmClient) && Boolean(chainId === 'phoenix-1'),
   })
   const allianceRewardsForLP = useMemo(() => {
-    const reward = allianceRewards?.find((rewards: any) => rewards.staked_asset_share?.info.native == lp_token)?.reward_asset || []
+    const reward = allianceRewards?.find((rewards: any) => rewards.staked_asset_share?.info.native == lp_token || rewards.staked_asset_share?.info.cw20 == lp_token)?.reward_asset || []
     return reward
   }, [allianceRewards, lp_token])
   // @ts-ignore
