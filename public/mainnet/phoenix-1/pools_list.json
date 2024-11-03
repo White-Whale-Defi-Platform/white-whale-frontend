@@ -463,7 +463,7 @@
         "LUNA"
       ],
       "displayName": "wBTC.axl-LUNA",
-      "displayLogo1": "/logos/wBTC.axl.svg",
+      "displayLogo1": "/logos/wbtc.axl.svg",
       "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
       "pool_assets": [
         {
@@ -473,7 +473,7 @@
           "symbol": "wBTC.axl",
           "name": "wBTC.axl",
           "decimals": 8,
-          "logoURI": "/logos/wBTC.axl.svg",
+          "logoURI": "/logos/wbtc.axl.svg",
           "tags": [
             "native"
           ],
@@ -1556,7 +1556,7 @@
       ],
       "displayName": "wBTC.osmo-wBTC.axl",
       "displayLogo1": "/logos/wbtcosmo.svg",
-      "displayLogo2": "/logos/wBTC.axl.svg",
+      "displayLogo2": "/logos/wbtc.axl.svg",
       "pool_assets": [
         {
           "id": "wrapped-bitcoin",
@@ -1579,7 +1579,7 @@
           "symbol": "wBTC.axl",
           "name": "wBTC.axl",
           "decimals": 8,
-          "logoURI": "/logos/wBTC.axl.svg",
+          "logoURI": "/logos/wbtc.axl.svg",
           "tags": [
             "native"
           ],

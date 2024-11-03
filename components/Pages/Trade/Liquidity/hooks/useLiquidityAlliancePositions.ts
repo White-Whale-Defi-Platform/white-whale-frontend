@@ -29,7 +29,7 @@ export const useLiquidityAlliancePositions = (lp_token?: any) => {
 
       return result.
         flat().
-        filter((position) => (!lp_token || position.asset.info.native === lp_token) &&
+        filter((position) => (!lp_token || position.asset.info.native === lp_token || position.asset.info.cw20 === lp_token) &&
           position.shares !== '1').
         map((position) => ({
           open_position: {
@@ -37,7 +37,7 @@ export const useLiquidityAlliancePositions = (lp_token?: any) => {
             unbonding_duration: -1,
             weight: position.shares,
             liquidity_alliance: true,
-            lp: position.asset.info.native,
+            lp: position.asset.info.native || position.asset.info.cw20,
             bribe_market: position.bribe_market,
           },
         }))
@@ -64,7 +64,7 @@ export const queryAllStakedBalances = async (
   }))
   return result.
     flat().
-    filter((position) => (!pool || position.asset.info.native === pool.lp_token) &&
+    filter((position) => (!pool || position.asset.info.native === pool.lp_token ||  position.asset.info.cw20 === pool.lp_token) &&
       position.shares !== '1').
     map((position) => ({
       open_position: {
@@ -72,7 +72,7 @@ export const queryAllStakedBalances = async (
         unbonding_duration: -1,
         weight: position.shares,
         liquidity_alliance: true,
-        lp: position.asset.info.native,
+        lp: position.asset.info.native || position.asset.info.cw20,
         bribe_market: position.bribe_market,
       },
     }))

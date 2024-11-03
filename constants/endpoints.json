@@ -9,26 +9,26 @@
     },
     "terra2": {
         "rpc": [
-            "https://ww-terra-rpc.polkachu.com"
+            "https://terra-rpc.publicnode.com:443"
         ],
         "rest": [
-            "https://ww-terra-rest.polkachu.com"
+            "https://terra-rest.publicnode.com"
         ]
     },
     "juno": {
         "rpc": [
-            "https://ww-juno-rpc.polkachu.com"
+            "https://juno-rpc.publicnode.com:443"
         ],
         "rest": [
-            "https://ww-juno-rest.polkachu.com"
+            "https://juno-rest.publicnode.com"
         ]
     },
     "chihuahua": {
         "rpc": [
-            "https://ww-chihuahua-rpc.polkachu.com"
+            "https://chihuahua-rpc.publicnode.com:443"
         ],
         "rest": [
-            "https://ww-chihuahua-rest.polkachu.com"
+            "https://chihuahua-rest.publicnode.com"
         ]
     },
     "comdex": {
@@ -41,10 +41,10 @@
     },
     "injective": {
         "rpc": [
-            "https://ww-injective-rpc.polkachu.com"
+            "https://injective-rpc.publicnode.com:443"
         ],
         "rest": [
-            "https://ww-injective-rest.polkachu.com"
+            "https://injective-rest.publicnode.com"
         ]
     },
     "terra": {
@@ -57,10 +57,10 @@
     },
     "sei": {
         "rpc": [
-            "https://sei-rpc.polkachu.com"
+            "https://sei-rpc.publicnode.com:443"
         ],
         "rest": [
-            "https://sei-api.polkachu.com"
+            "https://sei-rest.publicnode.com"
         ]
     },
     "osmosis": {

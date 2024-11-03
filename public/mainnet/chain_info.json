@@ -54,8 +54,8 @@
     "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
     "label": "Osmosis",
     "icon": "/logos/osmo.svg",
-    "rpc": "https://osmosis-rpc.polkachu.com",
-    "rest": "https://osmosis-api.polkachu.com",
+    "rpc": "https://osmosis-rpc.publicnode.com:443",
+    "rest": "https://osmosis-rest.publicnode.com",
     "bech32Config": {
       "bech32PrefixAccAddr": "osmo",
       "bech32PrefixAccPub": "osmopub",
@@ -90,8 +90,8 @@
     "chainName": "Terra Mainnet",
     "label": "Terra",
     "icon": "/logos/terra.png",
-    "rpc": "https://ww-terra-rpc.polkachu.com",
-    "rest": "https://ww-terra-rest.polkachu.com",
+    "rpc": "https://terra-rpc.publicnode.com:443",
+    "rest": "https://terra-lcd.publicnode.com",
     "stakeCurrency": {
       "coinDenom": "LUNA",
       "coinMinimalDenom": "uluna",
@@ -137,8 +137,8 @@
   {
     "chainId": "injective-1",
     "chainName": "Injective",
-    "rpc": "https://ww-injective-rpc.polkachu.com",
-    "rest": "https://ww-injective-rest.polkachu.com",
+    "rpc": "https://injective-rpc.publicnode.com:443",
+    "rest": "https://injective-rest.publicnode.com",
     "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-injective-subql1",
     "label": "Injective",
     "icon": "/logos/injective.png",
@@ -200,8 +200,8 @@
     "chainName": "Chihuahua mainnet",
     "label": "Chihuahua",
     "icon": "/logos/huahua.png",
-    "rpc": "https://ww-chihuahua-rpc.polkachu.com",
-    "rest": "https://ww-chihuahua-rest.polkachu.com",
+    "rpc": "https://chihuahua-rpc.publicnode.com:443",
+    "rest": "https://chihuahua-rest.publicnode.com",
     "stakeCurrency": {
       "coinDenom": "huahua",
       "coinMinimalDenom": "uhuahua",
@@ -346,8 +346,8 @@
     "chainName": "Juno Mainnet",
     "label": "Juno",
     "icon": "/logos/juno.svg",
-    "rpc": "https://ww-juno-rpc.polkachu.com",
-    "rest": "https://juno-rpc.polkachu.com",
+    "rpc": "https://juno-rpc.publicnode.com:443",
+    "rest": "https://juno-rest.publicnode.com",
     "indexerUrl": "https://api.subquery.network/sq/White-Whale-Defi-Platform/whale-juno-subql",
     "stakeCurrency": {
       "coinDenom": "JUNO",
@@ -394,7 +394,7 @@
   {
     "deactivated": true,
     "rpc": "https://rpc.comdex.one",
-    "rest": "https://ww-comdex-rest.polkachu.com",
+    "rest": "https://comdex-api.polkachu.com",
     "chainId": "comdex-1",
     "chainName": "Comdex",
     "label": "Comdex",

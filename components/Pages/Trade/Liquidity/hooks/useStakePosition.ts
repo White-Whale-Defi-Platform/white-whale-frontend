@@ -48,15 +48,28 @@ const useStake = ({ amount, contract }: StakeProps) => {
       return []
     }
 
-    return [
-      createExecuteMessage({
-        contractAddress: bribeMarket,
-        senderAddress: address,
-        message: { stake: {} },
-        funds: isNativeToken(contract) ? [{ denom: contract,
-          amount }] : [],
-      }),
-    ]
+    if (isNativeToken(contract)) {
+      return [
+        createExecuteMessage({
+          contractAddress: bribeMarket,
+          senderAddress: address,
+          message: { stake: {} },
+          funds: isNativeToken(contract) ? [{
+            denom: contract,
+            amount
+          }] : [],
+        }),
+      ]
+    } else {
+      return [
+        createExecuteMessage({
+          contractAddress: contract,
+          senderAddress: address,
+          message: {"send":{"contract": bribeMarket,"amount": amount,"msg":"eyJzdGFrZSI6e319"}},
+          funds: [],
+        }),
+      ]
+    }
   }, [amount, contract, address, bribeMarket, signingClient])
 
   return useStakeTransaction({
