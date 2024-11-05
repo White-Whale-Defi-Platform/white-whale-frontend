@@ -74,6 +74,54 @@
       "swap_address": "archway1jq9y6ty3cckpp8nsq7xwu54ttudvmdsmj87y0f3zmlzm5qll75ssr7pgkj",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALE-ARCH",
+      "lpOrder": [
+        "WHALE",
+        "ARCH"
+      ],
+      "assetOrder": [
+        "WHALE",
+        "ARCH"
+      ],
+      "displayName": "WHALE-ARCH",
+      "displayLogo1": "/logos/whale.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/arch.svg",
+      "pool_assets": [
+        {
+          "id": "white-whale",
+          "chain_id": "archway-1",
+          "token_address": "ibc/3F882513A0CCD1C4110ACB7C6C761AC7B48974C9D2D439CD6F652F9B44362518",
+          "symbol": "WHALE",
+          "name": "WHALE",
+          "decimals": 6,
+          "logoURI": "/logos/whale.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/3F882513A0CCD1C4110ACB7C6C761AC7B48974C9D2D439CD6F652F9B44362518"
+        },
+        {
+          "id": "archway",
+          "chain_id": "archway-1",
+          "token_address": "aarch",
+          "symbol": "ARCH",
+          "name": "ARCH",
+          "decimals": 18,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/arch.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "aarch"
+        }
+      ],
+      "lp_token": "archway17dgwtpfg5n6fytmc5m3qkpp3caxms4crvvz6sam0exa0wllqnyjq4t8w39",
+      "swap_address": "archway1vkqtkdflv5ueyen92c4v9q0e2vgkvyz4wgpdjns3yjuez0pmcnxqp76zpu",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ]
 }
