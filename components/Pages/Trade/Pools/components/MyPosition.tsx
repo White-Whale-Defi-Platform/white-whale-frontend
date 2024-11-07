@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react'
 
 import { Box, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { calculateMyPosition } from 'components/Pages/Trade/Pools/util'
 import { useTokenList } from 'hooks/useTokenList'
 import { getDecimals } from 'util/conversion/index'
-import { calculateMyPosition } from 'components/Pages/Trade/Pools/util'
 
 type Props = {
   myPoolPosition: any

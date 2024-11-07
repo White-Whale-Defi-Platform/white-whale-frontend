@@ -245,10 +245,10 @@ const Pools = () => {
       ? pools
       : pools.filter((item) => item.totalLiq > 1000)
   }, [allPoolsForShown, showAllPools])
-  const aggregatedSupply = myPools.reduce((acc, pool) => acc + Number(pool.myPosition), 0)
+  const aggregatedSupply = myPools.reduce((acc, pool) => acc + Number(calculateMyPosition(pool)), 0)
   const aggregatedAdjustedTotalPoolApr = myPools.map((pool) => {
     const aprState = currentAprHelperState.find((aprState) => pool.poolId === aprState.poolId)
-    return (Number(pool.myPosition) / aggregatedSupply) * (aprState.incentives + aprState.fees)
+    return (Number(calculateMyPosition(pool)) / aggregatedSupply) * (aprState.incentives + aprState.fees)
   }).reduce((acc, adjustedApr) => acc + adjustedApr, 0)
 
   return (

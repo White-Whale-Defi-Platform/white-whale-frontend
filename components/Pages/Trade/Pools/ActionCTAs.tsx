@@ -24,7 +24,7 @@ export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {
   }
 
   return (
-    <HStack spacing={2}>
+    <HStack spacing={2} ml={-2}>
       <Button
         variant="outline"
         borderColor="whiteAlpha.700"

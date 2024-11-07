@@ -89,7 +89,7 @@ const columns = [
         My Position
       </Text>
     ),
-    cell: (info) => <MyPosition myPoolPosition={info.getValue()}/>, // <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
+    cell: (info) => <MyPosition myPoolPosition={info.getValue()}/>,
   }),
   columnHelper.accessor('incentives', {
     header: () => (
