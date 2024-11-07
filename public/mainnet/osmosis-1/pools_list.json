@@ -462,6 +462,55 @@
       "swap_address": "osmo14kysamffv3fr7mw96wq3nufwwe3x27celdf9frf2h9akxnpw7q0qnau63x",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "DGN-ATOM",
+      "osmo_pool_id": 2299,
+      "lpOrder": [
+        "DGN",
+        "ATOM"
+      ],
+      "assetOrder": [
+        "DGN",
+        "ATOM"
+      ],
+      "displayName": "DGN-ATOM",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dungeon/images/DGN.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/3B95D63B520C283BCA86F8CD426D57584039463FD684A5CBA31D2780B86A1995",
+          "symbol": "DGN",
+          "name": "DGN",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dungeon/images/DGN.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/3B95D63B520C283BCA86F8CD426D57584039463FD684A5CBA31D2780B86A1995"
+        },
+        {
+          "id": "cosmos",
+          "chain_id": "osmosis-1",
+          "token_address": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
+          "symbol": "ATOM",
+          "name": "ATOM",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
+        }
+      ],
+      "lp_token": "factory/osmo168uaa4my9e9d29cp4hmqvztf0f5v50w5crfsnawr2t25ehz6un4qaeyg8v/uLP",
+      "swap_address": "osmo168uaa4my9e9d29cp4hmqvztf0f5v50w5crfsnawr2t25ehz6un4qaeyg8v",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ]
 }
