@@ -11,7 +11,6 @@ type Props = {
 
 export const MyPosition = ({ myPoolPosition } : Props) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
-  console.log({ myPoolPosition })
   const { liquidity, pool_id } = myPoolPosition
   const tooltipDisabled = myPoolPosition === 'n/a'
   const [tokenSymbolA, tokenSymbolB] = pool_id?.split('-') || []
