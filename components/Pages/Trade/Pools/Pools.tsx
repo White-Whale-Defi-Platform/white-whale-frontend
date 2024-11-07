@@ -22,6 +22,7 @@ import {
 import { Incentives } from 'components/Pages/Trade/Pools/Incentives'
 import MobilePools from 'components/Pages/Trade/Pools/MobilePools'
 import MyPoolsTable from 'components/Pages/Trade/Pools/MyPoolsTable'
+import { calculateMyPosition } from 'components/Pages/Trade/Pools/util'
 import { STABLE_COIN_LIST } from 'constants/index'
 import { useChainInfos } from 'hooks/useChainInfo'
 import { useClients } from 'hooks/useClients'
@@ -32,7 +33,7 @@ import { PoolData } from 'services/poolDataProvider'
 import { aprHelperState, updateAPRHelperState } from 'state/aprHelperState'
 import { chainState } from 'state/chainState'
 
-type AllPoolData = PoolEntityTypeWithLiquidity &
+export type AllPoolData = PoolEntityTypeWithLiquidity &
   PoolData & {
     displayName: string
     displayLogo1: string
@@ -77,7 +78,8 @@ const Pools = () => {
   } = useIncentivePoolInfo(
     cosmWasmClient, pools, currentChainPrefix,
   )
-  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   if (window.debugLogsEnabled) {
     console.log('Pools-Liquidity: ', pools)
     console.log('Incentive-Pool-Infos: ', incentivePoolInfos)
@@ -87,10 +89,6 @@ const Pools = () => {
     console.log('External Loading: ', externalStatsLoading)
   }
 
-  const calculateMyPosition = (pool: AllPoolData) => {
-    const { dollarValue } = pool.liquidity?.providedTotal || {}
-    return dollarValue.toFixed(2)
-  }
   useEffect(() => {
     if (
       !pools ||
@@ -228,7 +226,7 @@ const Pools = () => {
         const myPool = myLiquidityPools.find((myPool) => myPool.pool_id === pool.poolId)
         return {
           ...pool,
-          myPosition: calculateMyPosition(myPool),
+          myPosition: myPool,
         }
       })
       setMyPools(updatedPools)
