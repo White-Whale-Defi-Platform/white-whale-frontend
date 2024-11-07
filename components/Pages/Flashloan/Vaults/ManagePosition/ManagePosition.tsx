@@ -136,7 +136,6 @@ const ManagePosition = () => {
                     isWalletConnected={isWalletConnected}
                     isLoading={lpTokenBalanceLoading}
                     balance={lpTokenBalance?.lpBalance}
-                    assetBalance={lpTokenBalance?.underlyingAssetAmount}
                     defaultToken={vault?.vault_assets?.symbol}
                     refetch={refetch}
                   />
