@@ -16,7 +16,6 @@ type Props = {
   defaultToken: string
   vaultAddress: string
   lpToken: string
-  assetBalance: string
   refetch: () => void
 }
 

@@ -27,6 +27,7 @@ import { IncentiveTooltip } from 'components/InfoTooltip'
 import Loader from 'components/Loader'
 import Apr from 'components/Pages/Trade/Pools/components/Apr'
 import { Liquidity } from 'components/Pages/Trade/Pools/components/Liquidity'
+import { MyPosition } from 'components/Pages/Trade/Pools/components/MyPosition'
 import PoolName from 'components/Pages/Trade/Pools/components/PoolName'
 import { Pool } from 'components/Pages/Trade/Pools/types/index'
 import { kBg, kBorderRadius } from 'constants/visualComponentConstants'
@@ -88,7 +89,7 @@ const columns = [
         My Position
       </Text>
     ),
-    cell: (info) => <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
+    cell: (info) => <MyPosition myPoolPosition={info.getValue()}/>, // <Text align="right">{`$${formatPrice(info.getValue())}`}</Text>,
   }),
   columnHelper.accessor('incentives', {
     header: () => (
@@ -235,9 +236,7 @@ const MyPoolsTable = ({
           </Thead>
           <Tbody>
             {table.getRowModel().rows.map((row) => (
-              <Tr
-                key={row.id}
-              >
+              <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <Td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
