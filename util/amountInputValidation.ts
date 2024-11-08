@@ -12,7 +12,8 @@ export const amountInputValidation = (input: string): string => {
     replace(/^(?:\.|0{2,}\.)/u, '0.').
     // Eliminating multiple leading zeros before the numbers between 1-9
     replace(/^0+(?=[0-9])/u, '').
-    replace(/\.?0+$/u, '')
+    // Remove excess zeros after decimal point
+    replace(/\.(\d+?)0{2,}$/u, '.$10')
   // Ensuring multiple decimal points can't be used
   return input.indexOf('.') !== amount.lastIndexOf('.') ?
     amount.slice(0, amount.indexOf('.') + 1) + amount.slice(amount.indexOf('.')).replaceAll('.', '')
