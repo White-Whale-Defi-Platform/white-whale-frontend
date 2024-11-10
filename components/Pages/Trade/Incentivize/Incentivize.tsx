@@ -113,7 +113,7 @@ const Incentivize: FC = () => {
             </TabList>
             <TabPanels p={4}>
               <TabPanel padding={4}>
-                <IncentivePositionsOverview flows={myFlows} poolId={poolId} />
+                <IncentivePositionsOverview flows={myFlows} pool={pools?.find((p) => p.pool_id === poolId)} />
               </TabPanel>
               <TabPanel padding={4}>
                 <Create poolId={poolId} />
