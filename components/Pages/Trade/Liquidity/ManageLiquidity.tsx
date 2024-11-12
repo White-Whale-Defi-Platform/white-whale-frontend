@@ -199,7 +199,7 @@ const ManageLiquidity = ({ poolIdFromUrl }: ManageLiquidityProps) => {
 
     const newState: [TokenItemState?, TokenItemState?] = [tokenA, tokenB]
     newState[index] = {
-      ...newState.find((item) => item.tokenSymbol === tokenSymbol),
+      ...newState.find((item) => item?.tokenSymbol === tokenSymbol),
       tokenSymbol,
       amount: Number(amount),
     }
