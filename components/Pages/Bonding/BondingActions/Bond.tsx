@@ -26,6 +26,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
     useRecoilState<BondingTokenState>(bondingState)
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
 
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>(null)
 
@@ -49,7 +50,6 @@ export const Bond = ({ balances, tokenSymbols }) => {
         amount: Number(amount) })
     }
   }
-  const config = useConfig(network, chainId)
 
   useEffect(() => {
     if (config) {
@@ -60,7 +60,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
         denom: config.bonding_tokens[0].denom,
       })
     }
-  }, [isWalletConnected, config])
+  }, [isWalletConnected, config, isConfigLoading])
 
   const { control } = useForm({
     mode: 'onChange',

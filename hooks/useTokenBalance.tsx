@@ -93,9 +93,9 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?
   const { cosmWasmClient, signingClient, stargateClient } = useClients(walletChainName)
   const { address, isWalletConnected } = useChain(walletChainName)
   const [tokenList] = useTokenList()
-  const config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
 
-  if (isBonding && config?.bonding_tokens) {
+  if (!isConfigLoading && isBonding && config?.bonding_tokens) {
     for (const newToken of config.bonding_tokens) {
       const isTokenAdded = tokenList?.tokens.find((existingToken) => existingToken.denom === newToken.denom);
       if (!isTokenAdded) {
@@ -133,7 +133,8 @@ export const useMultipleTokenBalance = (tokenSymbols?: Array<string>, isBonding?
       enabled: Boolean(isWalletConnected &&
         tokenSymbols?.length &&
         tokenList?.tokens &&
-        cosmWasmClient),
+        cosmWasmClient) &&
+        !isConfigLoading,
       refetchOnMount: 'always',
       refetchInterval: DEFAULT_TOKEN_BALANCE_REFETCH_INTERVAL,
       refetchIntervalInBackground: true,

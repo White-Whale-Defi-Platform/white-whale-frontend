@@ -18,7 +18,7 @@ const fetchIncentiveContracts = async (client: CosmWasmClient,
 
 export const useQueryIncentiveContracts = (cosmWasmClient: CosmWasmClient): Array<string> => {
   const { chainId, network } = useRecoilValue(chainState)
-  const config: Config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const { data } = useQuery(
     ['useQueryIncentiveContracts', config],
     async () => await fetchIncentiveContracts(cosmWasmClient, config),
@@ -26,7 +26,8 @@ export const useQueryIncentiveContracts = (cosmWasmClient: CosmWasmClient): Arra
       enabled:
         Boolean(cosmWasmClient) &&
         Boolean(config) &&
-        Boolean(config?.incentive_factory),
+        Boolean(config?.incentive_factory) &&
+        !isConfigLoading,
     },
   )
   return data

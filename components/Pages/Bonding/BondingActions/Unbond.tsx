@@ -17,7 +17,8 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)
-  const config = useConfig(network, chainId)
+
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const [bondedBalances, setBondedBalances] = useState<TokenBalance[]>(null)
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
   [currentBondState])
 
   useEffect(() => {
-    if (config) {
+    if (!isConfigLoading && config) {
       // eslint-disable-next-line prefer-destructuring
       const firstToken = config.bonding_tokens[0]
       setCurrentBondState({
@@ -51,7 +52,7 @@ const Unbond = ({ bondedAssets }: { bondedAssets: BondedData[] }) => {
         denom: firstToken.denom,
       })
     }
-  }, [isWalletConnected, config])
+  }, [isWalletConnected, config, isConfigLoading])
 
   const { control } = useForm({
     mode: 'onChange',

@@ -192,8 +192,8 @@ export const useIncentivePoolInfo = (
 ) => {
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const [tokenList, loading] = useTokenList()
-  const config: Config = useConfig(network, chainId)
   const prices = usePrices()
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const { data: currentEpochData } = useCurrentEpoch(client, config)
   const [poolsWithAprAnd24HrVolume, setPoolsWithAprAnd24HrVolume] = useState<
     PoolData[]
@@ -250,7 +250,8 @@ export const useIncentivePoolInfo = (
         Boolean(currentEpochData) &&
         Boolean(pools) &&
         Boolean(poolAssets) &&
-        Boolean(prices),
+        Boolean(prices) &&
+        !isConfigLoading,
     },
   )
   return {

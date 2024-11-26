@@ -33,9 +33,9 @@ const AssetList: FC<AssetListProps> = ({
 }) => {
   const [tokenList, setup] = useTokenList()
   const { network, chainId } = useRecoilValue(chainState)
-  const config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const tokens = useMemo(() => {
-    if (!config) {
+    if (!config || isConfigLoading) {
       return []
     }
 

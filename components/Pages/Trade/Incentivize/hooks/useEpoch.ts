@@ -81,8 +81,8 @@ interface EpochConfigData {
 
 const useEpoch = () => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
-  const contracts: Config = useConfig(network, chainId)
 
+  const { data: contracts, isLoading: isConfigLoading } = useConfig(network, chainId)
   const { cosmWasmClient } = useClients(walletChainName)
   const { data: config } = useQuery<EpochConfigData>({
     queryKey: ['incentive', 'config', contracts?.fee_distributor],
@@ -94,7 +94,7 @@ const useEpoch = () => {
         config: {},
       })
     },
-    enabled: Boolean(contracts?.fee_distributor) && Boolean(cosmWasmClient),
+    enabled: Boolean(contracts?.fee_distributor) && Boolean(cosmWasmClient) && !isConfigLoading,
   })
 
   const { data } = useQuery<EpochData>({

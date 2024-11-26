@@ -30,7 +30,7 @@ const fetchCheckIncentiveSnapshots = async (
   return noSnapshotTakenAddresses
 }
 export const useCheckIncentiveSnapshots = (cosmWasmClient: CosmWasmClient,
-  config: Config) => {
+  { data: config, isLoading: isConfigLoading }) => {
   const { data: currentEpochData } = useCurrentEpoch(cosmWasmClient, config)
   const epochId = currentEpochData?.currentEpoch?.epoch.id
   const incentiveAddresses = useQueryIncentiveContracts(cosmWasmClient)
@@ -43,7 +43,8 @@ export const useCheckIncentiveSnapshots = (cosmWasmClient: CosmWasmClient,
       enabled:
         Boolean(cosmWasmClient) &&
         Boolean(incentiveAddresses) &&
-        Boolean(epochId),
+        Boolean(epochId) &&
+        !isConfigLoading,
       staleTime: 5 * 60 * 1000,
       cacheTime: 10 * 60 * 1000,
     },
