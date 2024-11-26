@@ -3,7 +3,6 @@ import { useQuery } from 'react-query'
 
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useCurrentEpoch } from 'components/Pages/Trade/Incentivize/hooks/useCurrentEpoch'

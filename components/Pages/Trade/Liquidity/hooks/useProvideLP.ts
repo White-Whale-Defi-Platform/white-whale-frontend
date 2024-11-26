@@ -23,7 +23,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
-  const config: Config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const tokenInfoA = useTokenInfo(lpTokenA?.tokenSymbol)
   const tokenInfoB = useTokenInfo(lpTokenB?.tokenSymbol)
   const [matchingPools] = useQueryMatchingPoolForSwap({
@@ -208,7 +208,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     onError: () => { },
   })
   const noMatchingPool =
-    !swapAddress && !isLoading
+    !swapAddress && (!isLoading || !isConfigLoading)
       ? {
         buttonLabel: 'No Matching Pool',
       }

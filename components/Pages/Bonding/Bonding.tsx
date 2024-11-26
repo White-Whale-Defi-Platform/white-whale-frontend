@@ -24,7 +24,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
-import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
+import { useConfig, useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 

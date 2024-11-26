@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import dayjs from 'dayjs'

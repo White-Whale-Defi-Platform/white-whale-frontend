@@ -5,7 +5,6 @@ import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { useChain } from '@cosmos-kit/react-lite'
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'

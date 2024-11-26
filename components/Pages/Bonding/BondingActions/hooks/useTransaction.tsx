@@ -11,7 +11,6 @@ import { unbondTokens } from 'components/Pages/Bonding/BondingActions/hooks/unbo
 import { withdrawTokens } from 'components/Pages/Bonding/BondingActions/hooks/withdrawTokens'
 import { ActionType } from 'components/Pages/Bonding/BondingOverview'
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useClients } from 'hooks/useClients'

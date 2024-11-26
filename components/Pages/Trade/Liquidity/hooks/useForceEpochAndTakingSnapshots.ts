@@ -57,7 +57,7 @@ const useForceEpochAndTakingSnapshots = ({
               new_epoch: {},
             },
             senderAddress: address,
-            contractAddress: configState?.config?.fee_distributor,
+            contractAddress: configState.config?.fee_distributor,
             funds: [],
           }),
         ]

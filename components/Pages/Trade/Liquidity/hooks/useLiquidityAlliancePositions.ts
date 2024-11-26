@@ -160,7 +160,7 @@ export const useAllianceRewards = () => {
       cosmWasmClient, address, chainId,
     ),
     {
-      refetchInterval: 10000,
+      refetchInterval: 30 * 60 * 1000,
       enabled: chainId === 'phoenix-1' && Boolean(address),
     },
   )
