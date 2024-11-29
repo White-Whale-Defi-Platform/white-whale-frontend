@@ -32,5 +32,10 @@
         "link": "/vaults"
       }
     ]
+  }, 
+  {
+    "targetBlank": true,
+    "label": "Analytics",
+    "link": "https://info.whitewhale.money/pools"      
   }
 ]
