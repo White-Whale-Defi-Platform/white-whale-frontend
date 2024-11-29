@@ -11,7 +11,6 @@ import { unbondTokens } from 'components/Pages/Bonding/BondingActions/hooks/unbo
 import { withdrawTokens } from 'components/Pages/Bonding/BondingActions/hooks/withdrawTokens'
 import { ActionType } from 'components/Pages/Bonding/BondingOverview'
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { useClients } from 'hooks/useClients'
@@ -30,8 +29,8 @@ export const useTransaction = () => {
   const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
-  const config: Config = useConfig(network, chainId)
 
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const { data: fee } = useQuery<unknown, unknown, any | null>(
     ['fee', error],
     () => {
@@ -72,7 +71,7 @@ export const useTransaction = () => {
       }
     },
     {
-      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient),
+      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient) && !isConfigLoading,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,

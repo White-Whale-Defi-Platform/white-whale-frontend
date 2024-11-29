@@ -14,7 +14,6 @@ import { useChain } from '@cosmos-kit/react-lite'
 import { BondingActionTooltip } from 'components/Pages/Bonding/BondingActions/BondingActionTooltip'
 import useTransaction from 'components/Pages/Bonding/BondingActions/hooks/useTransaction'
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import { RewardsTooltip } from 'components/Pages/Bonding/RewardsTooltip'
@@ -140,11 +139,10 @@ const RewardsComponent = ({
 
   const { txStep, submit } = useTransaction()
 
-  const config: Config = useConfig(network, chainId)
-
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const forceEpochAndTakeSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses: null,
-    config,
+    configState: { config, isLoading: isConfigLoading },
   })
   const currentEpochStartDateTimeInMilli = new Date(nanoToMilli(Number(currentEpoch?.epoch?.start_time))).getTime()
 

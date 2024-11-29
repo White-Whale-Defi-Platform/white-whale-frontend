@@ -16,11 +16,10 @@ export type TokenList = {
 export const useTokenList = () => {
   const { data: poolsListResponse } = usePoolsListQuery()
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
-  const config = useConfig(network, chainId)
-
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   /* Generate token list off pool list and store it in cache */
   const { data } = useQuery<TokenList>(
-    ['@token-list', chainId, network, config],
+    ['@token-list', chainId, network, 'config'],
     () => {
       const tokenMapBySymbol = new Map()
       poolsListResponse.pools.forEach(({ pool_assets }) => {
@@ -79,7 +78,8 @@ export const useTokenList = () => {
       }
     },
     {
-      enabled: Boolean(poolsListResponse?.pools && config),
+      enabled: Boolean(poolsListResponse?.pools) &&
+        !isConfigLoading,
       refetchOnMount: false,
       onError(e) {
         console.error('Error generating token list:', e)

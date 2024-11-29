@@ -24,13 +24,15 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
 import BondingOverview, { ActionType, TokenType } from './BondingOverview'
-import { Config, useConfig, useDashboardData } from './hooks/useDashboardData'
+import { useConfig, useDashboardData } from './hooks/useDashboardData'
 import RewardsComponent from './RewardsComponent'
 import { BondingData } from './types/BondingData'
 
 const Bonding: FC = () => {
   const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address } = useChain(walletChainName)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
+
 
   const data: BondingData[] = [
     {
@@ -128,8 +130,6 @@ const Bonding: FC = () => {
 
   const whalePrice = useWhalePrice()
 
-  const config: Config = useConfig(network, chainId)
-
   const symbols = useMemo(() => {
     const tokenSymbols = config?.bonding_tokens?.map((token) => token.symbol) || []
     return Array.from(new Set([...tokenSymbols, WHALE_TOKEN_SYMBOL]))
@@ -171,7 +171,7 @@ const Bonding: FC = () => {
     symbols,
   ])
   const { isOpen, onOpen, onClose } = useDisclosure()
-  return <>{isLoading && isWalletConnected ?
+  return <>{(isLoading || isConfigLoading) && isWalletConnected ?
     <HStack
       width="full"
       alignContent="center"

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState, useRef } from 'react'
-import { useQueries, useQueryClient } from 'react-query'
+import { useMemo } from 'react'
+import { useQueries, useQueryClient, useQuery } from 'react-query'
 
 import { getBonded } from 'components/Pages/Bonding/hooks/getBonded'
 import { getBondingConfig } from 'components/Pages/Bonding/hooks/getBondingConfig'
@@ -33,41 +33,32 @@ export interface Config {
   bonding_tokens: TokenInfo[]
 }
 
+const fetchConfig = async (network: NetworkType, chainId: string): Promise<Config> => {
+  const response = await fetch(`/${network}/${chainId}/config.json`)
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+  return response.json()
+}
+
 export const useConfig = (network: NetworkType, chainId: string) => {
-  const [config, setConfig] = useState<Config | null>(null)
-  const cacheRef = useRef<{ [key: string]: Config | null }>({})
-
-  useEffect(() => {
-    if (network && chainId) {
-      const cacheKey = `${network}_${chainId}`
-
-      if (cacheRef.current[cacheKey]) {
-        setConfig(cacheRef.current[cacheKey])
-        return
-      }
-
-      const fetchConfig = async () => {
-        try {
-          const response = await fetch(`/${network}/${chainId}/config.json`)
-          const json: Config = await response.json()
-          setConfig(json)
-          cacheRef.current[cacheKey] = json
-        } catch (error) {
-          console.error('Failed to load config:', error)
-        }
-      }
-
-      fetchConfig()
+  return useQuery<Config, Error>(
+    ['config', network, chainId],
+    () => fetchConfig(network, chainId),
+    {
+      enabled: Boolean(network) && Boolean(chainId),
+      staleTime: Infinity,
+      cacheTime: Infinity,
+      retry: 2,
     }
-  }, [network, chainId])
-  return config
+  )
 }
 
 export const useDashboardData = (
   address: string, network: NetworkType, chainId: string, walletChainName: string,
 ) => {
   const queryClient = useQueryClient()
-  const config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const { cosmWasmClient } = useClients(walletChainName)
 
   const queries = useQueries([
@@ -154,10 +145,11 @@ export const useDashboardData = (
     },
   ])
 
-  const isLoading = useMemo(() => queries.some((query) => (
-    query.isLoading || (!query.data && query.data !== 0)
-  )),
-  [queries])
+  const isLoading = useMemo(() =>
+    isConfigLoading || queries.some((query) => (
+      query.isLoading || (!query.data && query.data !== 0)
+    )),
+  [queries, isConfigLoading])
 
   const refetchAll = () => {
     queries.forEach((query) => query.refetch())

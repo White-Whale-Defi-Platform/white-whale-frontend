@@ -5,7 +5,6 @@ import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate'
 import { coin } from '@cosmjs/proto-signing'
 import { useChain } from '@cosmos-kit/react-lite'
 import {
-  Config,
   useConfig,
 } from 'components/Pages/Bonding/hooks/useDashboardData'
 import useEpoch from 'components/Pages/Trade/Incentivize/hooks/useEpoch'
@@ -39,8 +38,8 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
   const { network, chainId, walletChainName } = useRecoilValue(chainState)
   const { signingClient, injectiveSigningClient } = useClients(walletChainName)
   const { address } = useChain(walletChainName)
-  const config: Config = useConfig(network, chainId)
   const { data: pool } = usePoolFromListQueryById({ poolId })
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   const { onError, onSuccess, onMutate } = useTxStatus({
     transactionType: 'Open Flow',
     signingClient,
@@ -57,7 +56,8 @@ export const useOpenFlow = ({ poolId, token, startDate, endDate }: Props) => {
       !tokenInfo?.denom ||
       !startDate ||
       !endDate ||
-      Number(token?.amount || 0) <= 0
+      Number(token?.amount || 0) <= 0 ||
+      isConfigLoading
     ) {
       return null
     }

@@ -32,6 +32,7 @@ const Withdraw = ({
 }: Props) => {
   const { walletChainName, network, chainId } = useRecoilValue(chainState)
   const { isWalletConnected } = useChain(walletChainName)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
 
   const prices = usePrices()
 
@@ -57,10 +58,9 @@ const Withdraw = ({
   const [_, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingState)
 
-  const config = useConfig(network, chainId)
 
   useEffect(() => {
-    if (config) {
+    if (!isConfigLoading && config) {
       // eslint-disable-next-line prefer-destructuring
       const firstToken = config.bonding_tokens[0]
       setCurrentBondState({
@@ -70,7 +70,7 @@ const Withdraw = ({
         denom: firstToken.denom,
       })
     }
-  }, [isWalletConnected, config])
+  }, [isWalletConnected, config, isConfigLoading])
 
   const withdrawableTokens = withdrawableInfos?.map((row) => ({
     ...row,

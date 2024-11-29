@@ -48,13 +48,13 @@ const Claim = (pool: PoolEntityType) => {
   const { isWalletConnected, openView } = useChain(walletChainName)
   const { cosmWasmClient } = useClients(walletChainName)
 
-  const config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
   // Check if there are all snapshots for incentives for current taken, if not return those on which no ss was performed
-  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(cosmWasmClient, config)
+  const noSnapshotTakenAddresses = useCheckIncentiveSnapshots(cosmWasmClient, { data: config, isLoading: isConfigLoading })
   const allSnapshotsTaken = useMemo(() => noSnapshotTakenAddresses.length === 0, [noSnapshotTakenAddresses.length])
   const forceSnapshots = useForceEpochAndTakingSnapshots({
     noSnapshotTakenAddresses,
-    config,
+    configState: { config, isLoading: isConfigLoading },
   })
   const { rewards = [], totalValue } = useRewards(pool)
 

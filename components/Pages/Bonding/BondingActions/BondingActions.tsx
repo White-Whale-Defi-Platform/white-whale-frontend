@@ -30,10 +30,10 @@ const BondingActions = ({ globalAction }) => {
 
   const router = useRouter()
 
-  const config: Config = useConfig(network, chainId)
+  const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
 
   const symbols = useMemo(() => config?.bonding_tokens.map((token) => token.symbol),
-    [config])
+    [config, isConfigLoading])
 
   const { txStep, submit } = useTransaction()
 
@@ -152,8 +152,7 @@ const BondingActions = ({ globalAction }) => {
           </Text>
         </HStack>
       </HStack>
-      (
-      {isLoading && isWalletConnected ? (
+      {(isLoading || isConfigLoading) && isWalletConnected ? (
         <VStack
           width="full"
           background={kBg}

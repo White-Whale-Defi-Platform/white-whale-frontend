@@ -18,14 +18,10 @@ export enum Force {
   snapshotsOnly,
 }
 
-type Params = {
-  noSnapshotTakenAddresses?: Array<string>
-  config: Config
-}
 const useForceEpochAndTakingSnapshots = ({
   noSnapshotTakenAddresses,
-  config,
-}: Params) => {
+  configState,
+}: { noSnapshotTakenAddresses?: Array<string>, configState: { config: Config, isLoading: boolean } }) => {
   const { walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient, injectiveSigningClient, cosmWasmClient } = useClients(walletChainName)
@@ -48,7 +44,7 @@ const useForceEpochAndTakingSnapshots = ({
   })
 
   const msgs = useMemo(() => {
-    if (addresses.length === 0) {
+    if (addresses.length === 0 || configState.isLoading) {
       return null
     }
 
@@ -61,7 +57,7 @@ const useForceEpochAndTakingSnapshots = ({
               new_epoch: {},
             },
             senderAddress: address,
-            contractAddress: config?.fee_distributor,
+            contractAddress: configState.config?.fee_distributor,
             funds: [],
           }),
         ]
