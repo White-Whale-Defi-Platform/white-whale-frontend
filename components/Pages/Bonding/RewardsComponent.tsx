@@ -166,6 +166,8 @@ const RewardsComponent = ({
 
   const bondingHasStarted: boolean = useMemo(() => genesisStartTimeInNano / 1_000_000 < Date.now(),
     [genesisStartTimeInNano])
+  const epochsToForce = Math.floor((Date.now() - (Number(currentEpoch?.epoch?.start_time ?? 0) / 1_000_000)) /
+    (1_000 * 3_600 * 24))
   return (
     <VStack
       px={8}
@@ -307,7 +309,7 @@ const RewardsComponent = ({
               bg="transparent"
               borderRadius="full"
               border="1px solid white"
-              width="50%"
+              width="55%"
               variant="primary"
               _hover={{
                 border: '1px solid #6ACA70',
@@ -315,7 +317,7 @@ const RewardsComponent = ({
               }}
               onClick={() => forceEpochAndTakeSnapshots.submit()}
             >
-              {'Force Epoch'}
+              {`Force Epoch (${epochsToForce})`}
             </Button>
           </Tooltip>
         )}

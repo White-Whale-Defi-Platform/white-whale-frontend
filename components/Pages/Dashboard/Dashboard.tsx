@@ -27,8 +27,8 @@ export const Dashboard: FC = () => {
   const chains = useChainInfos()
   const prices = usePrices()
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      const circulatingWhaleSupply = dashboardData.supply?.circulating / (10 ** 6) || 0
+    const fetchDashboardData = () => {
+      const circulatingWhaleSupply = (dashboardData.supply?.circulating ?? 0) / (10 ** 6)
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
       const mappedDashboardData = []
       dashboardData.dashboardData?.map((data) => {
