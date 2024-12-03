@@ -8,10 +8,10 @@ import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { useClients } from 'hooks/useClients'
 import useTxStatus from 'hooks/useTxStatus'
 import { useRecoilValue } from 'recoil'
+import { isNativeToken } from 'services/asset'
 import { createGasFee } from 'services/treasuryService'
 import { chainState } from 'state/chainState'
 import { createExecuteMessage, validateTransactionSuccess } from 'util/messages/index'
-import { isNativeToken } from '../../../../../services/asset'
 
 type OpenPosition = {
   item: any
@@ -41,8 +41,8 @@ export const useClosePosition = ({ item, pool }: OpenPosition) => {
 
     if (unbonding_duration === -1 && chainId === ChainId.terra && item?.liquidity_alliance) {
       const tokenInfo = isNativeToken(pool.lp_token)
-    ? { native: pool.lp_token }
-    : { cw20: pool.lp_token};
+        ? { native: pool.lp_token }
+        : { cw20: pool.lp_token }
 
       msg = createExecuteMessage({
         message: {
@@ -88,8 +88,10 @@ export const useClosePosition = ({ item, pool }: OpenPosition) => {
 
   return useMemo(() => ({
     submit,
+    onSuccess,
     ...state,
     ...tx,
+
   }),
-  [tx, state, submit])
+  [tx, state, submit, onSuccess])
 }

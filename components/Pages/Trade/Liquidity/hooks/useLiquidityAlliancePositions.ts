@@ -1,11 +1,10 @@
 import { useQuery } from 'react-query'
 
 import { useChain } from '@cosmos-kit/react-lite'
+import { ChainId, TERRA2_BRIBE_MARKETS } from 'constants/index'
 import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
-
-import { TERRA2_BRIBE_MARKETS } from '../../../../../constants'
 
 export const useLiquidityAlliancePositions = (lp_token?: any) => {
   const { chainId, walletChainName } = useRecoilValue(chainState)
@@ -20,10 +19,10 @@ export const useLiquidityAlliancePositions = (lp_token?: any) => {
       }
 
       const result = await Promise.all(Object.values(TERRA2_BRIBE_MARKETS).map(async (bribeMarket) => {
-        const staked_balances = await cosmWasmClient?.queryContractSmart(bribeMarket, {
+        const stakedBalances = await cosmWasmClient?.queryContractSmart(bribeMarket, {
           all_staked_balances: { address },
         })
-        return staked_balances?.map((position) => ({ ...position,
+        return stakedBalances?.map((position) => ({ ...position,
           bribe_market: bribeMarket })) || []
       }))
 
@@ -56,15 +55,15 @@ export const queryAllStakedBalances = async (
   cosmWasmClient: any, address: string, pool?: any,
 ) => {
   const result = await Promise.all(Object.values(TERRA2_BRIBE_MARKETS).map(async (bribeMarket) => {
-    const staked_balances = await cosmWasmClient?.queryContractSmart(bribeMarket, {
+    const stakedBalances = await cosmWasmClient?.queryContractSmart(bribeMarket, {
       all_staked_balances: { address },
     })
-    return staked_balances?.map((position) => ({ ...position,
+    return stakedBalances?.map((position) => ({ ...position,
       bribe_market: bribeMarket })) || []
   }))
   return result.
     flat().
-    filter((position) => (!pool || position.asset.info.native === pool.lp_token ||  position.asset.info.cw20 === pool.lp_token) &&
+    filter((position) => (!pool || position.asset.info.native === pool.lp_token || position.asset.info.cw20 === pool.lp_token) &&
       position.shares !== '1').
     map((position) => ({
       open_position: {
@@ -139,7 +138,7 @@ export const fetchAllAllianceRewards = async (
       asset.reward_asset.bribe_market = bribeMarket
       if (asset.reward_asset.info.native.endsWith('zluna')) {
         const claimAddress = asset.reward_asset.info.native.split('/')[1]
-        //ampLuna
+        // AmpLuna
         asset.reward_asset.info.contract_addr = 'terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct'
         asset.reward_asset.info.claim_addr = claimAddress
       }
@@ -160,8 +159,8 @@ export const useAllianceRewards = () => {
       cosmWasmClient, address, chainId,
     ),
     {
-      refetchInterval: 30 * 60 * 1000,
-      enabled: chainId === 'phoenix-1' && Boolean(address),
+      refetchInterval: 30 * 60 * 1_000,
+      enabled: chainId === ChainId.terra && Boolean(address),
     },
   )
 }
