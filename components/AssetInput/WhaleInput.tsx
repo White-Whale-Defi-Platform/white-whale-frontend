@@ -126,11 +126,9 @@ ref) => {
               onChange={({ target }) => {
                 onChange({
                   ...token,
-                  amount: amountInputValidation(
-                    target.value,
-                    tokenInfo?.decimals
-                  ),
-                });
+                  amount: amountInputValidation(target.value,
+                    tokenInfo?.decimals),
+                })
               }}
             />
           </NumberInput>
