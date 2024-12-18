@@ -10,6 +10,7 @@ import {
   IconButton,
   VStack,
   useDisclosure,
+  Text,
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/Icons/BurgerIcon'
 import { ACTIVE_BONDING_NETWORKS, ChainId } from 'constants/index'
@@ -24,12 +25,15 @@ import luncMenuLinks from './LUNCNavMenu.json'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
+import { InfoIcon } from '@chakra-ui/icons'
+import { useRouter } from 'next/router'
 
 const Navbar = () => {
   const { chainId, chainName } = useRecoilValue(chainState)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const currentChainName = chainName
+  const router = useRouter()
 
   const links = [
     {
@@ -132,6 +136,27 @@ const Navbar = () => {
           Open
         </IconButton>
       </Flex>
+      {/* Announcement Banner */}
+      {chainId === 'phoenix-1' && <Flex
+        mx="auto"
+        maxWidth="container.xl"
+        display={{ base: 'none',
+          md: 'flex' }}
+        alignItems='center'
+        justifyContent='center'
+        bgGradient='linear(to-r, blue.500, orange.500)'
+        p={3}
+        cursor='pointer'
+        onClick={() => router.push('/terra/pools/migrate')}
+        borderRadius='md'
+        marginTop={5}
+      >
+        <InfoIcon boxSize={5} color='white' mr={3} />
+        <Text fontWeight='bold' color='white'>
+          Attention: We’re migrating pools. Click here to learn more and proceed.
+        </Text>
+      </Flex>
+      }
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
