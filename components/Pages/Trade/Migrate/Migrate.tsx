@@ -1,17 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import {
-  VStack,
-  Text,
-  useMediaQuery,
-  Heading,
-  Box,
-  Divider,
-} from '@chakra-ui/react'
-import { Button } from '@chakra-ui/react' // Ensure you import Button if not already
+import { Box, Button, Divider, Heading, Text, useMediaQuery, VStack } from '@chakra-ui/react' // Ensure you import Button if not already
 import { useChain } from '@cosmos-kit/react-lite'
 import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
+import { useFetchStaked } from 'components/Pages/Trade/Migrate/hooks/useFetchStaked'
+import useMigrateTx, { MigrateAction } from 'components/Pages/Trade/Migrate/hooks/useMigrateTx'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
@@ -28,20 +22,17 @@ import { getDecimals } from 'util/conversion/index'
 
 const Migrate = () => {
   const { walletChainName } = useRecoilValue(chainState)
-  const { isWalletConnected, address } = useChain(walletChainName)
+  const { isWalletConnected, address, openView } = useChain(walletChainName)
   const [isMobile] = useMediaQuery('(max-width: 720px)')
-
-  // Mock states and values for demonstration
-  const [oldPoolLiquidity, setOldPoolLiquidity] = useState<number | null>(500) // Hardcoded for demonstration
-  const [hasWithdrawn, setHasWithdrawn] = useState(false)
-  const [hasDeposited, setHasDeposited] = useState(false)
+  const data = useFetchStaked(address)
+  const { submit } = useMigrateTx()
+  const isAmpLp = useMemo(() => data?.denom.includes('amplp'), [data])
+  const amount = useMemo(() => Number(data?.amount ?? 0) * (10 ** -6), [data])
 
   // States required for DepositForm:
   const [reverse, setReverse] = useState(false)
   const clearForm = () => {}
   const chainId = 'phoenix-1'
-  const openView = () => {}
-  const incentivesEnabled = true
 
   const { data: poolData } = usePoolsListQuery()
   const { cosmWasmClient } = useClients(walletChainName)
@@ -144,9 +135,13 @@ const Migrate = () => {
           {/* Step 1 */}
           <VStack align="flex-start" width="full">
             <Heading fontSize="lg" color="white">Step 1: Check Old Pool Liquidity</Heading>
-            {oldPoolLiquidity !== null && oldPoolLiquidity > 0 ? (
-              <Text color="gray.200">You have {oldPoolLiquidity} LP tokens in the old USDC/USDT XYK pool.</Text>
-            ) : (
+            { isAmpLp && amount > 0 && (
+              <Text color="gray.200">You have {amount.toFixed(6)} ampLP tokens in the old USDC/USDT XYK pool.</Text>
+            )}
+            {!isAmpLp && amount > 0 && (
+              <Text color="gray.200">You have {amount.toFixed(6)} LP tokens in the old USDC/USDT XYK pool.</Text>
+            )}
+            {Number(data?.amount ?? 0) === 0 && (
               <Text color="gray.200">You have no liquidity in the old pool.</Text>
             )}
           </VStack>
@@ -158,8 +153,11 @@ const Migrate = () => {
             <Heading fontSize="lg" color="white">Step 2: Withdraw Liquidity</Heading>
             <Text color="gray.200">Withdraw all liquidity from the old XYK pool before migrating.</Text>
             <PrimaryButton
-              label="Withdraw"
-              onClick={() => setHasWithdrawn(true)}
+              isDisabled={!(isWalletConnected && (amount > 0)) }
+              label={isWalletConnected && (amount > 0) ? 'Withdraw' : 'Nothing to withdraw'}
+              onClick={() => submit(
+                MigrateAction.Withdraw, amount, data.denom,
+              )}
             />
           </VStack>
 
