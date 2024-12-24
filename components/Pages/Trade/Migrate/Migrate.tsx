@@ -5,7 +5,7 @@ import { useChain } from '@cosmos-kit/react-lite'
 import DepositForm from 'components/Pages/Trade/Liquidity/DepositForm'
 import useProvideLP from 'components/Pages/Trade/Liquidity/hooks/useProvideLP'
 import { useFetchStaked } from 'components/Pages/Trade/Migrate/hooks/useFetchStaked'
-import useMigrateTx, { MigrateAction } from 'components/Pages/Trade/Migrate/hooks/useMigrateTx'
+import useMigrateTx from 'components/Pages/Trade/Migrate/hooks/useMigrateTx'
 import { usePoolsListQuery } from 'components/Pages/Trade/Pools/hooks/usePoolsListQuery'
 import {
   PoolEntityTypeWithLiquidity,
@@ -165,7 +165,7 @@ const Migrate = () => {
             <PrimaryButton
               isDisabled={!(isWalletConnected && (lpSum > 0)) }
               label={isWalletConnected && (lpSum > 0) ? 'Withdraw' : 'Nothing to withdraw'}
-              onClick={() => submit(MigrateAction.Withdraw, lpTokens)}
+              onClick={() => submit(lpTokens)}
             />
           </VStack>
 
