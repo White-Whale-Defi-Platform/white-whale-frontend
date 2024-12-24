@@ -26,9 +26,12 @@ const Migrate = () => {
   const [isMobile] = useMediaQuery('(max-width: 720px)')
   const data = useFetchStaked(address)
   const { submit } = useMigrateTx()
-  const isAmpLp = useMemo(() => data?.denom.includes('amplp'), [data])
-  const amount = useMemo(() => Number(data?.amount ?? 0) * (10 ** -6), [data])
+  const ampLp = useMemo(() => data?.ampLpToken, [data])
+  const erisLp = useMemo(() => data?.erisLpToken, [data])
+  const wwLp = useMemo(() => data?.wwLpToken, [data])
 
+  const lpTokens = [wwLp, erisLp, ampLp]
+  const lpSum = lpTokens.reduce((acc, token) => acc + (token?.amount ?? 0), 0)
   // States required for DepositForm:
   const [reverse, setReverse] = useState(false)
   const clearForm = () => {}
@@ -74,6 +77,7 @@ const Migrate = () => {
   const { simulated, tx } = useProvideLP({
     reverse,
     bondingDays,
+    isEris: true,
   })
 
   const onInputChange = ({ tokenSymbol, amount }: any, index: number) => {
@@ -135,13 +139,19 @@ const Migrate = () => {
           {/* Step 1 */}
           <VStack align="flex-start" width="full">
             <Heading fontSize="lg" color="white">Step 1: Check Old Pool Liquidity</Heading>
-            { isAmpLp && amount > 0 && (
-              <Text color="gray.200">You have {amount.toFixed(6)} ampLP tokens in the old USDC/USDT XYK pool.</Text>
-            )}
-            {!isAmpLp && amount > 0 && (
-              <Text color="gray.200">You have {amount.toFixed(6)} LP tokens in the old USDC/USDT XYK pool.</Text>
-            )}
-            {Number(data?.amount ?? 0) === 0 && (
+            {lpTokens.map((token, index) => {
+              const tokenAmount = token?.amount ?? 0
+              if (index === 0 && tokenAmount > 0) {
+                return <Text key={`liq-${index}`} color="gray.200">You have {tokenAmount.toFixed(6)} WhiteWhale LP tokens in the old USDC/USDT XYK pool.</Text>
+              } else if (index === 1 && tokenAmount > 0) {
+                return <Text key={`liq-${index}`} color="gray.200">You have {tokenAmount.toFixed(6)} Eris LP tokens in the old USDC/USDT XYK pool.</Text>
+              } else if (index === 2 && tokenAmount > 0) {
+                return <Text key={`liq-${index}`} color="gray.200">You have {tokenAmount.toFixed(6)} Eris ampLP tokens in the old USDC/USDT XYK pool.</Text>
+              } else {
+                return <></>
+              }
+            })}
+            {lpSum === 0 && (
               <Text color="gray.200">You have no liquidity in the old pool.</Text>
             )}
           </VStack>
@@ -153,11 +163,9 @@ const Migrate = () => {
             <Heading fontSize="lg" color="white">Step 2: Withdraw Liquidity</Heading>
             <Text color="gray.200">Withdraw all liquidity from the old XYK pool before migrating.</Text>
             <PrimaryButton
-              isDisabled={!(isWalletConnected && (amount > 0)) }
-              label={isWalletConnected && (amount > 0) ? 'Withdraw' : 'Nothing to withdraw'}
-              onClick={() => submit(
-                MigrateAction.Withdraw, amount, data.denom,
-              )}
+              isDisabled={!(isWalletConnected && (lpSum > 0)) }
+              label={isWalletConnected && (lpSum > 0) ? 'Withdraw' : 'Nothing to withdraw'}
+              onClick={() => submit(MigrateAction.Withdraw, lpTokens)}
             />
           </VStack>
 

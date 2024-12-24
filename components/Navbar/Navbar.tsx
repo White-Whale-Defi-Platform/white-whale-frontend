@@ -1,3 +1,4 @@
+import { InfoIcon } from '@chakra-ui/icons'
 import {
   Box,
   Drawer,
@@ -14,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/Icons/BurgerIcon'
 import { ACTIVE_BONDING_NETWORKS, ChainId } from 'constants/index'
+import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -25,8 +27,6 @@ import luncMenuLinks from './LUNCNavMenu.json'
 import NavbarPopper from './NavbarPopper'
 import bondingDisabledMenuLinks from './NavBondingDisabledMenu.json'
 import menuLinks from './NavMenu.json'
-import { InfoIcon } from '@chakra-ui/icons'
-import { useRouter } from 'next/router'
 
 const Navbar = () => {
   const { chainId, chainName } = useRecoilValue(chainState)
@@ -142,17 +142,17 @@ const Navbar = () => {
         maxWidth="container.xl"
         display={{ base: 'none',
           md: 'flex' }}
-        alignItems='center'
-        justifyContent='center'
-        bgGradient='linear(to-r, blue.500, orange.500)'
+        alignItems="center"
+        justifyContent="center"
+        bgGradient="linear(to-r, blue.500, orange.500)"
         p={3}
-        cursor='pointer'
+        cursor="pointer"
         onClick={() => router.push('/terra/pools/migrate')}
-        borderRadius='md'
+        borderRadius="md"
         marginTop={5}
       >
-        <InfoIcon boxSize={5} color='white' mr={3} />
-        <Text fontWeight='bold' color='white'>
+        <InfoIcon boxSize={5} color="white" mr={3} />
+        <Text fontWeight="bold" color="white">
           Attention: We’re migrating pools. Click here to learn more and proceed.
         </Text>
       </Flex>

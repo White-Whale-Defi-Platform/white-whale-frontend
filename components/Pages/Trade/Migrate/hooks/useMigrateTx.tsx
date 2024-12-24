@@ -5,21 +5,18 @@ import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
 import { useChain } from '@cosmos-kit/react-lite'
 import Finder from 'components/Finder'
-import { deposit } from 'components/Pages/Trade/Migrate/hooks/deposit'
 import { withdraw } from 'components/Pages/Trade/Migrate/hooks/withdraw'
 import { useClients } from 'hooks/useClients'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { TxStep } from 'types/index'
 
-export enum MigrateAction { Withdraw, Deposit }
 export const useMigrateTx = () => {
   const toast = useToast()
   const { chainId, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
   const { signingClient } = useClients(walletChainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
-  const [migrateAction, setMigrateAction] = useState<MigrateAction>(null)
   const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
@@ -76,19 +73,22 @@ export const useMigrateTx = () => {
       },
     },
   )
-
-  const { mutate } = useMutation(async (data: { signingClient: SigningCosmWasmClient, migrateAction: MigrateAction, address: string, denom: string, amount: number }) => {
-    console.log({ data })
-    if (data.migrateAction === MigrateAction.Withdraw) {
-      return withdraw(
-        signingClient, address, data.denom, (data.amount * (10 ** 6)),
-      )
-    } else {
-      return deposit(
-        signingClient, address, data.denom, (data.amount * (10 ** 6)),
-      )
-    }
-  },
+  const { data: txInfo } = useQuery(
+    ['txInfo', txHash],
+    () => {
+      if (!txHash) {
+        return null
+      }
+      return signingClient?.getTx(txHash)
+    },
+    {
+      enabled: Boolean(txHash),
+      retry: true,
+    },
+  )
+  const { mutate } = useMutation((data: { signingClient: SigningCosmWasmClient, address: string, lpTokens: {denom: string, amount: number}[] }) => withdraw(
+    signingClient, address, data.lpTokens,
+  ),
   {
     onMutate: () => {
       setTxStep(TxStep.Posting)
@@ -136,16 +136,7 @@ export const useMigrateTx = () => {
       }
 
       toast({
-        title: (() => {
-          switch (migrateAction) {
-            case MigrateAction.Withdraw:
-              return 'Bonding Failed.'
-            case MigrateAction.Deposit:
-              return 'Unbonding Failed'
-            default:
-              return ''
-          }
-        })(),
+        title: (() => 'Withdrawal Failed.')(),
         description: message,
         status: 'error',
         duration: 9000,
@@ -157,16 +148,7 @@ export const useMigrateTx = () => {
       setTxStep(TxStep.Broadcasting)
       setTxHash(data?.transactionHash)
       toast({
-        title: (() => {
-          switch (migrateAction) {
-            case MigrateAction.Deposit:
-              return 'Deposit Successful.'
-            case MigrateAction.Withdraw:
-              return 'Withdrawal Successful.'
-            default:
-              return ''
-          }
-        })(),
+        title: (() => 'Withdrawal Successful.')(),
         description: (
           <Finder txHash={data.transactionHash} chainId={chainId}>
             {' '}
@@ -179,40 +161,17 @@ export const useMigrateTx = () => {
       })
     },
   })
-
-  const { data: txInfo } = useQuery(
-    ['txInfo', txHash],
-    () => {
-      if (!txHash) {
-        return null
-      }
-      return signingClient?.getTx(txHash)
-    },
-    {
-      enabled: Boolean(txHash),
-      retry: true,
-    },
-  )
-
   const reset = () => {
     setError(null)
     setTxHash(null)
     setTxStep(TxStep.Idle)
   }
 
-  const submit = useCallback((
-    migrateAction: MigrateAction,
-    amount: number | null,
-    denom: string | null,
-  ) => {
-    setMigrateAction(migrateAction)
-    console.log(amount, denom)
+  const submit = useCallback((lpTokens: {denom: string, amount: number}[]) => {
     mutate({
-      fee,
+      signingClient,
       address,
-      migrateAction,
-      denom,
-      amount,
+      lpTokens,
     })
   },
   [address, fee, mutate])
