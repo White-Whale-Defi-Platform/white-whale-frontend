@@ -68,6 +68,7 @@ export const withdraw: any = async (
 
   if (lpTokens[2].amount > 0) {
     messages.push(execMsgUnstakeAmpLp)
+    messages.push(execMsgWithdrawErisLp)
   }
   if (lpTokens[1].amount > 0) {
     messages.push(execMsgUnstakeErisLp)
