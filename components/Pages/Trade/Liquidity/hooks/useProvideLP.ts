@@ -44,7 +44,7 @@ const useProvideLP = ({ reverse = false, bondingDays, isEris = false }) => {
   })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
-  let minUnbondingDuration = 86400
+  let minUnbondingDuration = 86_400
   if (factoryConfig) {
     minUnbondingDuration = factoryConfig?.minUnbondingDuration
   }

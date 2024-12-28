@@ -201,10 +201,10 @@ const Migrate = () => {
           <VStack align="flex-start" width="full">
             <Heading fontSize="lg" color="white">Step 4: Vote with Your Liquidity</Heading>
             <Text color="gray.200">Your new liquidity is now deposited in the StableSwap pool.</Text>
-            <Text color="gray.200">Proceed to Eris Protocol to use your liquidity for voting and other governance actions.</Text>
+            <Text color="gray.200">Proceed to Eris Protocol to deposit your USDC/USDT Stable LP and adjust your VP to the new stable pool.</Text>
             <Button
               as="a"
-              href="https://www.erisprotocol.com"
+              href="https://www.erisprotocol.com/terra/liquidity-hub?tab=vote"
               target="_blank"
               rel="noopener noreferrer"
               variant="primary"
