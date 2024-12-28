@@ -31,6 +31,7 @@ type Props = {
   poolId: string
   openView: any
   incentivesEnabled?:boolean
+  depositEris?: any
 }
 
 const DepositForm = ({
@@ -49,6 +50,7 @@ const DepositForm = ({
   mobile,
   poolId,
   openView,
+  depositEris,
   incentivesEnabled = false,
 }: Props) => {
   const { walletChainName } = useRecoilValue(chainState)

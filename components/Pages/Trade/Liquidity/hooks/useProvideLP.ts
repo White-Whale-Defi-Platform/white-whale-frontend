@@ -8,6 +8,7 @@ import useFactoryConfig from 'components/Pages/Trade/Incentivize/hooks/useFactor
 import createLpMsg, { createLPExecuteMsgs } from 'components/Pages/Trade/Liquidity/hooks/createLPMsg'
 import useTransaction from 'components/Pages/Trade/Liquidity/hooks/useDepositTransaction'
 import useIsNewPosition from 'components/Pages/Trade/Liquidity/hooks/useIsNewPosition'
+import { createDepositErisMsgs } from 'components/Pages/Trade/Migrate/hooks/createDepositErisMsgs'
 import { useQueryMatchingPoolForSwap } from 'components/Pages/Trade/Pools/hooks/useQueryMatchingPoolForSwap'
 import { useQueryPoolLiquidity } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useClients } from 'hooks/useClients'
@@ -17,7 +18,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { tokenItemState } from 'state/tokenItemState'
 
-const useProvideLP = ({ reverse = false, bondingDays }) => {
+const useProvideLP = ({ reverse = false, bondingDays, isEris = false }) => {
   const [lpTokenA, lpTokenB] = useRecoilValue(tokenItemState)
   const { chainId, network, walletChainName } = useRecoilValue(chainState)
   const { address } = useChain(walletChainName)
@@ -43,7 +44,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
   })
 
   const factoryConfig = useFactoryConfig(config?.incentive_factory)
-  let minUnbondingDuration = 86400
+  let minUnbondingDuration = 86_400
   if (factoryConfig) {
     minUnbondingDuration = factoryConfig?.minUnbondingDuration
   }
@@ -52,7 +53,7 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
     useQueryPoolLiquidity({ poolId })
   // Const lpBalance = liquidity?.providedTotal?.tokenAmount || 0
   let provideInitialLiquidity = false
-  if (liquidity?.reserves?.total[0] == 0 && window.debugLogsEnabled) {
+  if (liquidity?.reserves?.total[0] === 0 && window.debugLogsEnabled) {
     provideInitialLiquidity = true
   }
   const [tokenA, tokenB, flipped] = useMemo(() => {
@@ -145,7 +146,25 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
             ? tokenBAmount
             : toChainAmount(simulated, tokenInfoB?.decimals),
       }),
-      encodedMsgs: createLPExecuteMsgs({
+      encodedMsgs: isEris ? createDepositErisMsgs(
+        address, reverse
+          ? flipped
+            ? tokenAAmount
+            : toChainAmount(simulated, tokenInfoA?.decimals)
+          : flipped
+            ? tokenAAmount
+            : tokenAAmount, [{ denom: tokenA.denom,
+          amount: reverse
+            ? flipped
+              ? tokenAAmount
+              : toChainAmount(simulated, tokenInfoA?.decimals)
+            : tokenAAmount }, { denom: tokenB.denom,
+          amount: reverse
+            ? tokenBAmount
+            : flipped
+              ? tokenBAmount
+              : toChainAmount(simulated, tokenInfoB?.decimals) }],
+      ) : createLPExecuteMsgs({
         minUnbondingDuration,
         tokenA,
         bondingDays,
@@ -156,14 +175,10 @@ const useProvideLP = ({ reverse = false, bondingDays }) => {
           ? flipped
             ? tokenAAmount
             : toChainAmount(simulated, tokenInfoA?.decimals)
-          : flipped
-            ? tokenAAmount
-            : tokenAAmount,
+          : tokenAAmount,
         tokenB,
         amountB: reverse
-          ? flipped
-            ? tokenBAmount
-            : tokenBAmount
+          ? tokenBAmount
           : flipped
             ? tokenBAmount
             : toChainAmount(simulated, tokenInfoB?.decimals),

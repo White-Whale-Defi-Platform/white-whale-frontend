@@ -1,76 +1,33 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 
 import { useToast } from '@chakra-ui/react'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient'
-import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate';
+import { useChain } from '@cosmos-kit/react-lite'
 import Finder from 'components/Finder'
-import { ChainId } from 'constants/index'
-import useDebounceValue from 'hooks/useDebounceValue'
-import { executeAddLiquidity } from 'services/liquidity/index'
-import { TxStep } from 'types/common'
+import { withdraw } from 'components/Pages/Trade/Migrate/hooks/withdraw'
+import { useClients } from 'hooks/useClients'
+import { useRecoilValue } from 'recoil'
+import { chainState } from 'state/chainState'
+import { TxStep } from 'types/index'
 
-type Params = {
-  enabled: boolean
-  swapAddress: string
-  swapAssets?: any[]
-  price?: number
-  signingClient: SigningCosmWasmClient
-  senderAddress: string
-  msgs: any | null
-  encodedMsgs: any | null
-  gasAdjustment?: number
-  estimateEnabled?: boolean
-  tokenAAmount?: string
-  tokenBAmount?: string
-  injectiveSigningClient?: InjectiveSigningStargateClient
-  onBroadcasting?: (txHash: string) => void
-  onSuccess?: (txHash: string, txInfo?: any) => void
-  onError?: (txHash?: string, txInfo?: any) => void
-}
-
-export const useTransaction: any = ({
-  enabled,
-  swapAddress,
-  signingClient,
-  injectiveSigningClient,
-  senderAddress,
-  msgs,
-  encodedMsgs,
-  tokenAAmount,
-  tokenBAmount,
-  onBroadcasting,
-  onSuccess,
-  onError,
-}: Params) => {
-  const debouncedMsgs = useDebounceValue(encodedMsgs, 200)
+export const useMigrateTx = () => {
   const toast = useToast()
+  const { chainId, walletChainName } = useRecoilValue(chainState)
+  const { address } = useChain(walletChainName)
+  const { signingClient } = useClients(walletChainName)
   const [txStep, setTxStep] = useState<TxStep>(TxStep.Idle)
   const [txHash, setTxHash] = useState<string>(null)
   const [error, setError] = useState<unknown | null>(null)
   const [buttonLabel, setButtonLabel] = useState<unknown | null>(null)
-  const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', tokenAAmount, tokenBAmount, debouncedMsgs, error],
-    async () => {
+    ['fee', error],
+    () => {
       setError(null)
       setTxStep(TxStep.Estimating)
-      if (!signingClient || !debouncedMsgs || debouncedMsgs?.length === 0) {
-        return
-      }
       try {
-        const isInjective = await signingClient.getChainId() === ChainId.injective
-
-        const response = isInjective && injectiveSigningClient ? await injectiveSigningClient?.simulate(
-          senderAddress,
-          debouncedMsgs,
-          '',
-        ) : await signingClient?.simulate(
-          senderAddress,
-          debouncedMsgs,
-          '',
-        )
+        const response = 0 // Await client.simulate(senderAddress, debouncedMsgs, '')
         if (buttonLabel) {
           setButtonLabel(null)
         }
@@ -81,7 +38,7 @@ export const useTransaction: any = ({
           (/insufficient funds/u).test(error.toString()) ||
           (/Overflow: Cannot Sub with/u).test(error.toString())
         ) {
-          console.error(error)
+          console.error(error.toString())
           setTxStep(TxStep.Idle)
           setError('Insufficient Funds')
           setButtonLabel('Insufficient Funds')
@@ -90,17 +47,8 @@ export const useTransaction: any = ({
           setError('You have pending transaction')
           setButtonLabel('You have pending transaction')
           throw new Error('You have pending transaction')
-        } else if ((/Max spread assertion/u).test(error.toString())) {
-          console.error(error)
-          setTxStep(TxStep.Idle)
-          setError('Try increasing slippage')
-          throw new Error('Try increasing slippage')
-        } else if ((/Slippage tolerance exceeded/u).test(error.toString())) {
-          console.error(error)
-          setTxStep(TxStep.Idle)
-          setError('Slippage too high')
-          throw new Error('Retry again later')
         } else {
+          console.error(error.toString())
           setTxStep(TxStep.Idle)
           setError(error?.message)
           throw Error(error?.message)
@@ -113,17 +61,7 @@ export const useTransaction: any = ({
       }
     },
     {
-      enabled:
-      Boolean(debouncedMsgs) &&
-        txStep === TxStep.Idle &&
-        !error &&
-        Boolean(signingClient) &&
-        Boolean(senderAddress) &&
-        enabled &&
-        Boolean(swapAddress) &&
-        Number(tokenAAmount) > 0 &&
-        Number(tokenBAmount) > 0,
-
+      enabled: txStep === TxStep.Idle && !error && Boolean(signingClient),
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 0,
@@ -148,31 +86,23 @@ export const useTransaction: any = ({
       retry: true,
     },
   )
-  const { mutate } = useMutation(() => executeAddLiquidity({
-    signingClient,
-    injectiveSigningClient,
-    swapAddress,
-    senderAddress,
-    msgs: debouncedMsgs,
-  }),
+  const { mutate } = useMutation((data: { signingClient: SigningCosmWasmClient, address: string, lpTokens: {denom: string, amount: number}[] }) => withdraw(
+    signingClient, address, data.lpTokens,
+  ),
   {
     onMutate: () => {
       setTxStep(TxStep.Posting)
     },
-    onError: async (e) => {
+    onError: (e) => {
       let message: any = ''
       console.error(e?.toString())
       setTxStep(TxStep.Failed)
-
       if (
         (/insufficient funds/u).test(e?.toString()) ||
           (/Overflow: Cannot Sub with/u).test(e?.toString())
       ) {
         setError('Insufficient Funds')
         message = 'Insufficient Funds'
-      } else if ((/Max spread assertion/u).test(e?.toString())) {
-        setError('Try increasing slippage')
-        message = 'Try increasing slippage'
       } else if ((/Request rejected/u).test(e?.toString())) {
         setError('User Denied')
         message = 'User Denied'
@@ -182,15 +112,21 @@ export const useTransaction: any = ({
       } else if ((/out of gas/u).test(e?.toString())) {
         setError('Out of gas, try increasing gas limit on wallet.')
         message = 'Out of gas, try increasing gas limit on wallet.'
+      } else if ((/before the new\/latest epoch/u).test(e?.toString())) {
+        setError('Epoch not yet created.')
+        message = 'Please force the pending epoch on the bonding page.'
+      } else if (
+        (/There are unclaimed rewards available./u).test(e?.toString())
+      ) {
+        setError('There are unclaimed rewards available.')
+        message =
+            'There are unclaimed rewards available. Claim them before attempting to bond/unbond.'
       } else if (
         (/was submitted but was not yet found on the chain/u).test(e?.toString())
       ) {
         setError(e?.toString())
         message = (
-          <Finder
-            txHash={txInfo?.hash}
-            chainId={await signingClient.getChainId()}
-          >
+          <Finder txHash={txInfo?.hash} chainId={chainId}>
             {' '}
           </Finder>
         )
@@ -198,30 +134,23 @@ export const useTransaction: any = ({
         setError('Failed to execute transaction.')
         message = 'Failed to execute transaction.'
       }
+
       toast({
-        title: 'Add Liquidity Failed.',
+        title: (() => 'Withdrawal Failed.')(),
         description: message,
         status: 'error',
         duration: 9000,
         position: 'top-right',
         isClosable: true,
       })
-      onError?.()
     },
-    onSuccess: async (data: any) => {
+    onSuccess: (data: any) => {
       setTxStep(TxStep.Broadcasting)
-      setTxHash(data.transactionHash || data?.txHash)
-      onBroadcasting?.(data.transactionHash || data?.txHash)
-
-      await queryClient.invalidateQueries({ queryKey: ['@pool-liquidity', 'multipleTokenBalances', 'tokenBalance', 'positions', 'signingClient'] })
-
+      setTxHash(data?.transactionHash)
       toast({
-        title: 'Add Liquidity Success.',
+        title: (() => 'Withdrawal Successful.')(),
         description: (
-          <Finder
-            txHash={data.transactionHash || data?.txHash}
-            chainId={await signingClient.getChainId()}
-          >
+          <Finder txHash={data.transactionHash} chainId={chainId}>
             {' '}
           </Finder>
         ),
@@ -232,30 +161,30 @@ export const useTransaction: any = ({
       })
     },
   })
-
   const reset = () => {
     setError(null)
     setTxHash(null)
     setTxStep(TxStep.Idle)
   }
 
-  const submit = useCallback(() => {
-    if (!(!fee || !msgs || msgs.length < 1)) {
-      mutate()
-    }
-  }, [msgs, fee, mutate])
+  const submit = useCallback((lpTokens: {denom: string, amount: number}[]) => {
+    mutate({
+      signingClient,
+      address,
+      lpTokens,
+    })
+  },
+  [address, fee, mutate])
 
   useEffect(() => {
     if (txInfo && txHash) {
       if (txInfo?.code) {
         setTxStep(TxStep.Failed)
-        onError?.(txHash, txInfo)
       } else {
         setTxStep(TxStep.Success)
-        onSuccess?.(txHash, txInfo)
       }
     }
-  }, [txInfo, onError, onSuccess, txHash])
+  }, [txInfo, txHash, error])
 
   useEffect(() => {
     if (error) {
@@ -266,7 +195,7 @@ export const useTransaction: any = ({
       setTxStep(TxStep.Idle)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedMsgs])
+  }, []) // DebouncedMsgs
 
   return useMemo(() => ({
     fee,
@@ -278,7 +207,7 @@ export const useTransaction: any = ({
     error,
     reset,
   }),
-  [fee, buttonLabel, submit, txStep, txInfo, txHash, error])
+  [txStep, txInfo, txHash, error, fee])
 }
 
-export default useTransaction
+export default useMigrateTx
