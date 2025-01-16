@@ -499,6 +499,54 @@
       "swap_address": "inj1gk4thnx4t9y4ltnau60mpst5xyu0u57hqfl0qs",
       "staking_address": "inj174jqfpxa92h5y8dmq46vaw9r0eyq3r290mty0a",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "bINJ-SYN",
+      "lpOrder": [
+        "bINJ",
+        "SYN"
+      ],
+      "assetOrder": [
+        "bINJ",
+        "SYN"
+      ],
+      "displayName": "bINJ-SYN",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/syn.png",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "injective-1",
+          "token_address": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ",
+          "symbol": "bINJ",
+          "name": "bINJ",
+          "decimals": 18,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ"
+        },
+        {
+          "id": "",
+          "chain_id": "injective-1",
+          "token_address": "factory/inj1a6xdezq7a94qwamec6n6cnup02nvewvjtz6h6e/SYN",
+          "symbol": "SYN",
+          "name": "SYN",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/syn.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/inj1a6xdezq7a94qwamec6n6cnup02nvewvjtz6h6e/SYN"
+        }
+      ],
+      "lp_token": "factory/inj1u0gpveexg2uns3qhehyppnealkhycntvj93hpf/uLP",
+      "swap_address": "inj1u0gpveexg2uns3qhehyppnealkhycntvj93hpf",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
