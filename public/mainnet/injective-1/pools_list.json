@@ -501,33 +501,19 @@
       "rewards_tokens": []
     },
     {
-      "pool_id": "bINJ-SYN",
+      "pool_id": "SYN-bINJ",
       "lpOrder": [
-        "bINJ",
-        "SYN"
+        "SYN",
+        "bINJ"
       ],
       "assetOrder": [
-        "bINJ",
-        "SYN"
+        "SYN",
+        "bINJ"
       ],
-      "displayName": "bINJ-SYN",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
-      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/syn.png",
+      "displayName": "SYN-bINJ",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/syn.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
       "pool_assets": [
-        {
-          "id": "",
-          "chain_id": "injective-1",
-          "token_address": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ",
-          "symbol": "bINJ",
-          "name": "bINJ",
-          "decimals": 18,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
-          "tags": [
-            "native"
-          ],
-          "native": true,
-          "denom": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ"
-        },
         {
           "id": "",
           "chain_id": "injective-1",
@@ -541,6 +527,20 @@
           ],
           "native": true,
           "denom": "factory/inj1a6xdezq7a94qwamec6n6cnup02nvewvjtz6h6e/SYN"
+        },
+        {
+          "id": "",
+          "chain_id": "injective-1",
+          "token_address": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ",
+          "symbol": "bINJ",
+          "name": "bINJ",
+          "decimals": 18,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/binj.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/inj1dxp690rd86xltejgfq2fa7f2nxtgmm5cer3hvu/bINJ"
         }
       ],
       "lp_token": "factory/inj1u0gpveexg2uns3qhehyppnealkhycntvj93hpf/uLP",
