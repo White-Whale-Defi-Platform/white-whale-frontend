@@ -38,7 +38,7 @@ export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {
         borderColor="whiteAlpha.700"
         size="sm"
         onClick={onIncentivizeClick}
-        isDisabled={!isIncentivized}
+        isDisabled={!pool?.staking_address}
       >
         {' '}
         Incentivize
