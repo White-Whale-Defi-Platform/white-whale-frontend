@@ -53,7 +53,7 @@ export const useClaim = (pool: PoolEntityType) => {
     msg.push(createExecuteMessage({
       message: {
         claim_reward: {
-          native: pool.lp_token,
+          asset: { native: pool.lp_token},
         },
       },
       senderAddress: address,
