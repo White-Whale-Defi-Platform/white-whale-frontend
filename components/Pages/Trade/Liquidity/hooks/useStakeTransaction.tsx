@@ -76,7 +76,7 @@ export const useStakeTransaction = ({
   }, [toast, onError])
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', debouncedMsgs, txState.error, signingClient],
+    ['fee', debouncedMsgs, txState.error],
     async () => {
       setTxState((prev) => ({ ...prev,
         error: null,
