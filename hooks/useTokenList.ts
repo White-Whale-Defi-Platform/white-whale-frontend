@@ -59,7 +59,6 @@ export const useTokenList = () => {
               native,
               fromRegistry: true }
             const res = Array.from(tokenMapBySymbol.values())
-            console.log('res', res)
             if (denom && !res.find((token) => token.denom === denom)) {
               tokenMapBySymbol.set(asset.symbol, tmpAssetOBJ)
             }

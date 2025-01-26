@@ -6,8 +6,6 @@ import { useRouter } from 'next/router'
 
 export const ActionCTAs = ({ chainIdParam, chainId, pool }) => {
   const router = useRouter()
-  const isIncentivized = useMemo(() => ACTIVE_INCENTIVE_NETWORKS.includes(chainId),
-    [chainId])
 
   const onIncentivizeClick = () => {
     router.push({
