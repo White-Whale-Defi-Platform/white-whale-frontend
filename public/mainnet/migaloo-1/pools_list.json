@@ -1308,6 +1308,54 @@
       "swap_address": "migaloo1flxncfqe7wutc7hhn4rdzewkjd3tx6ur7uz076g09xwvfsacvyjs7hr3yy",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WHALEX-wBTC",
+      "lpOrder": [
+        "WHALEX",
+        "wBTC"
+      ],
+      "assetOrder": [
+        "WHALEX",
+        "wBTC"
+      ],
+      "displayName": "WHALEX-wBTC",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/whalex.png",
+      "displayLogo2": "/logos/wbtcosmo.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "migaloo-1",
+          "token_address": "factory/migaloo1zsptvkg5aeg4tjksgv7vp4x5s9p5euqrh9jl3sfdv48wtnrhftlszsvmu5/uwhalex",
+          "symbol": "WHALEX",
+          "name": "WHALEX",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/whalex.png",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "factory/migaloo1zsptvkg5aeg4tjksgv7vp4x5s9p5euqrh9jl3sfdv48wtnrhftlszsvmu5/uwhalex"
+        },
+        {
+          "id": "wrapped-bitcoin",
+          "chain_id": "migaloo-1",
+          "token_address": "ibc/6E5BF71FE1BEBBD648C8A7CB7A790AEF0081120B2E5746E6563FC95764716D61",
+          "symbol": "wBTC",
+          "name": "wBTC",
+          "decimals": 8,
+          "logoURI": "/logos/wbtcosmo.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "ibc/6E5BF71FE1BEBBD648C8A7CB7A790AEF0081120B2E5746E6563FC95764716D61"
+        }
+      ],
+      "lp_token": "factory/migaloo10j2zv9ckmjfqgqcrn3g95agrkqewrrrgpdaewrj640mrcwk27upsf4kga2/uLP",
+      "swap_address": "migaloo10j2zv9ckmjfqgqcrn3g95agrkqewrrrgpdaewrj640mrcwk27upsf4kga2",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
