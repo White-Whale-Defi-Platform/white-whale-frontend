@@ -1320,7 +1320,7 @@
         "wBTC"
       ],
       "displayName": "WHALEX-wBTC",
-      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/whalex.png",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/whaleX.png",
       "displayLogo2": "/logos/wbtcosmo.svg",
       "pool_assets": [
         {
@@ -1330,7 +1330,7 @@
           "symbol": "WHALEX",
           "name": "WHALEX",
           "decimals": 6,
-          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/whalex.png",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/whaleX.png",
           "tags": [
             "native"
           ],
