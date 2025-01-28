@@ -47,7 +47,7 @@ export const useWithdrawTransaction: any = ({
   const queryClient = useQueryClient()
 
   const { data: fee } = useQuery<unknown, unknown, any | null>(
-    ['fee', amount, debouncedMsgs, error, signingClient],
+    ['fee', amount, debouncedMsgs, error],
     async () => {
       setError(null)
       setTxStep(TxStep.Estimating)

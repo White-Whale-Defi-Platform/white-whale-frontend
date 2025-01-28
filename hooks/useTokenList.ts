@@ -46,11 +46,7 @@ export const useTokenList = () => {
               continue
             }
             const denom = native ? asset.base : asset.address || asset.base
-            const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images[0].svg || asset.images[0].png
-            // HARDCODED FOR NOW
-            if (asset.name == 'DRUGS' && walletChainName === 'injective') {
-              exponents.exponent = 18
-            }
+            const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images?.[0]?.svg || asset.images?.[0]?.png || ''
             const tmpAssetOBJ: any = { denom,
               id: asset.coingecko_id || '',
               token_address: asset.address || asset.base,
