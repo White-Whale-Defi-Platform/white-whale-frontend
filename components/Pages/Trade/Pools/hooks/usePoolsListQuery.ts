@@ -2,7 +2,9 @@ import { useQuery } from 'react-query'
 
 import { PoolLiquidityState } from 'components/Pages/Trade/Pools/hooks/useQueryPoolsLiquidity'
 import { useRecoilValue } from 'recoil'
-import { chainState } from 'state/chainState'
+import { chainState, NetworkType } from 'state/chainState'
+import { useConfig } from '../../../Bonding/hooks/useDashboardData'
+import { useClients } from '../../../../../hooks/useClients'
 
 export type TokenInfo = {
   fromRegistry?: boolean
@@ -45,25 +47,48 @@ export type PoolsListQueryResponse = {
 }
 
 export const usePoolsListQuery = (options?: Parameters<typeof useQuery>[1]) => {
-  const { chainId, network } = useRecoilValue(chainState)
-
+  const { chainId, network, walletChainName } = useRecoilValue(chainState)
+  const { cosmWasmClient } = useClients(walletChainName)
+  const config = useConfig(NetworkType.mainnet, chainId)
   return useQuery<PoolsListQueryResponse>(
     ['@pools-list', chainId, network],
     async () => {
       const url = `/${network}/${chainId}${process.env.NEXT_PUBLIC_POOLS_LIST_URL}`
       const response = await fetch(url)
       const tokenList = await response.json()
+      const incentivesFactoryAddress = config?.data?.incentive_factory
+      let incentivesContracts = {}
+      if (incentivesFactoryAddress) {
+        const responseIncentives = await cosmWasmClient.queryContractSmart(incentivesFactoryAddress, {
+          incentives: {
+            limit: 100
+          }
+        })
+        for (const pool of tokenList.pools) {
+          const poolIncentives = responseIncentives.find(incentive => String.fromCharCode(...incentive.lp_reference).trim() == pool.lp_token.trim())
+          if (poolIncentives) {
+            incentivesContracts[pool.swap_address] = poolIncentives.incentive_address
+          }
+        }
+      }
+
+      const pools = tokenList.pools.map(pool => ({
+        ...pool,
+        staking_address: incentivesContracts[pool.swap_address] || pool.staking_address || "",
+      }))
+      tokenList.pools = pools
       return {
         ...tokenList,
-        poolsById: tokenList.pools.reduce((poolsById, pool) => ((poolsById[pool.pool_id] = pool), poolsById),
+        poolsById: pools.reduce((poolsById, pool) => ((poolsById[pool.pool_id] = pool), poolsById),
           {}),
         baseToken: tokenList.base_token,
       }
     },
     {
       retry: 5,
-      enabled: Boolean(chainId),
+      enabled: Boolean(chainId) && Boolean(cosmWasmClient),
       refetchOnMount: false,
+      cacheTime: 4 * 60 * 60 * 1000,
       ...(options || {}),
     },
   )
