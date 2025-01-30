@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/Icons/BurgerIcon'
 import { ACTIVE_BONDING_NETWORKS, ChainId } from 'constants/index'
+import * as motion from 'motion/react-client'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -143,7 +144,7 @@ const Navbar = () => {
         }}
         alignItems="center"
         justifyContent="center"
-        bgGradient="linear(to-r, blue.500, orange.500)"
+        bgGradient="linear-gradient(to right, #F7931B 0%, #F7931B 5%, #000000 35%,#000000 65%, #3CCD64 95%, #3CCD64 100%)"
         p={2}
         cursor="pointer"
         borderRadius="md"
