@@ -1879,6 +1879,53 @@
       "swap_address": "terra12252e02w0k5yv9mryctth4j3y2sdas0xremw0jznzwal5v3xeqjst7q537",
       "staking_address": "",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "wKWEEN-LUNA",
+      "lpOrder": [
+        "wKWEEN",
+        "LUNA"
+      ],
+      "assetOrder": [
+        "wKWEEN",
+        "LUNA"
+      ],
+      "displayName": "wKWEEN-LUNA",
+      "displayLogo1": "/logos/kween.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+      "pool_assets": [{
+          "id": "",
+          "chain_id": "phoenix-1",
+          "token_address": "terra13c7t0xtfpafcr6gae9f404x5am7euf87c9qwmsphsecamqjjujqs7yfm4m",
+          "symbol": "wKWEEN",
+          "name": "wKWEEN",
+          "decimals": 6,
+          "logoURI": "/logos/kween.png",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra13c7t0xtfpafcr6gae9f404x5am7euf87c9qwmsphsecamqjjujqs7yfm4m"
+        },
+        {
+          "id": "terra-luna-2",
+          "chain_id": "phoenix-1",
+          "token_address": "uluna",
+          "symbol": "LUNA",
+          "name": "Luna",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "factory/terra12zxl99upqdyee3u7gungesaswuv3mt2e340ll5wa4kyqnj9a6ugsl7fy8c/uLP",
+      "swap_address": "terra12zxl99upqdyee3u7gungesaswuv3mt2e340ll5wa4kyqnj9a6ugsl7fy8c",
+      "staking_address": "",
+      "rewards_tokens": []
     }
   ],
   "version": {
