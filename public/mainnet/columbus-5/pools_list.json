@@ -261,6 +261,54 @@
       "swap_address": "terra1znxah0scl3xq747wtuzjg3k0tlml3fvvmxgt0m3jywcmqwn5867s7x29tx",
       "staking_address": "terra1tcuq2hr2dz4cazvely6capqtcjrc3gkz0k44lgt2pnuy76wl9tms23cmz4",
       "rewards_tokens": []
+    },
+    {
+      "pool_id": "WESO-LUNC",
+      "lpOrder": [
+        "WESO",
+        "LUNC"
+      ],
+      "assetOrder": [
+        "WESO",
+        "LUNC"
+      ],
+      "displayName": "WESO-LUNC",
+      "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/weso.png",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/luna.svg",
+      "pool_assets": [
+        {
+          "id": "",
+          "chain_id": "columbus-5",
+          "token_address": "terra13ryrrlcskwa05cd94h54c8rnztff9l82pp0zqnfvlwt77za8wjjsld36ms",
+          "symbol": "WESO",
+          "name": "WESO",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/weso.png",
+          "tags": [
+            ""
+          ],
+          "native": false,
+          "denom": "terra13ryrrlcskwa05cd94h54c8rnztff9l82pp0zqnfvlwt77za8wjjsld36ms"
+        },
+        {
+          "id": "terra-luna",
+          "chain_id": "columbus-5",
+          "token_address": "uluna",
+          "symbol": "LUNC",
+          "name": "LUNC",
+          "decimals": 6,
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/luna.svg",
+          "tags": [
+            "native"
+          ],
+          "native": true,
+          "denom": "uluna"
+        }
+      ],
+      "lp_token": "terra1eq9ynpq3phtyyr7lgl6wydnqvlew667gvalk4f928sa5nl7jg5esut7ch3",
+      "swap_address": "terra1n5c4ev697v6te90xn0g4n33r0zdps68vnuhk4p89aduw5upf4cwsrwe6kk",
+      "staking_address": "terra15n5durxruyrtu0gatdwl4h53adhj006rnph6rgkwd47rl8kd8lcq6v2sql",
+      "rewards_tokens": []
     }
   ]
 }
