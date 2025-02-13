@@ -28,6 +28,8 @@ export const useQueryIncentiveContracts = (cosmWasmClient: CosmWasmClient): Arra
         Boolean(config) &&
         Boolean(config?.incentive_factory) &&
         !isConfigLoading,
+      cacheTime: 1 * 60* 60 * 1000,
+      staleTime: 10 * 60 * 1000,
     },
   )
   return data

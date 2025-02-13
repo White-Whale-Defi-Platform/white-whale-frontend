@@ -117,6 +117,34 @@ export const getPricesAPI = async (ids: Array<string>) => {
     return null
   }
 }
+export const getPricesFromPoolsAPI = async (tokenlist: Array<any>, chainName: string) => {
+  try {
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices/pools/${chainName}`, 20000)
+    const json = JSON.parse(await response.text())
+    let out = []
+    for (const token of tokenlist) {
+      const poolData = json?.data[token?.name] || json?.data[token?.denom] || json?.data[token?.symbol]
+      if (poolData) {
+        out.push(poolData)
+      }
+    }
+    return out
+  } catch (e) {
+    console.log('Unable to fetch -', e)
+    return null
+  }
+}
+
+export const getPricesFromPoolsAPIbyDenom = async (denom: string, chainName: string) => {
+  try {
+    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices/pools/${chainName}`, 20000)
+    const json = JSON.parse(await response.text())
+    return json.data.byToken[denom] || null
+  } catch (e) {
+    console.log('Unable to fetch -', e)
+    return null
+  }
+}
 
 export const createEndpointOptions = async (chains: any) => {
   const endpoints: Record<string, any> = {}

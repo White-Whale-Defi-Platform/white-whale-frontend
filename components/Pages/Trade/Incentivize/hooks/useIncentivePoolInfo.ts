@@ -167,7 +167,7 @@ const getPoolFlowData = async (
       const poolAsset = poolAssets.find((asset) => asset.denom === flow.denom)
       const tokenSymbol = poolAsset?.symbol
       const logoURI = poolAsset?.logoURI
-      const price = prices[tokenSymbol]
+      const price = prices[tokenSymbol] || prices[poolAsset.denom]
       return {
         ...flow,
         tokenSymbol,
@@ -235,7 +235,7 @@ export const useIncentivePoolInfo = (
   }, [tokenList, loading, pools, chainId, tokenList?.tokens, config, prices])
 
   const { data: flowPoolData, isLoading } = useQuery(
-    ['apr', currentEpochData, pools, poolAssets],
+    ['apr', currentChainPrefix],
     () => getPoolFlowData(
       client,
       pools,
@@ -251,6 +251,8 @@ export const useIncentivePoolInfo = (
         Boolean(poolAssets) &&
         Boolean(prices) &&
         !isConfigLoading,
+      cacheTime: 1 * 60 * 60 * 1000,
+      staleTime: 10 * 60 * 1000,
     },
   )
   return {

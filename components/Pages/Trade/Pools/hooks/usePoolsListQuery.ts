@@ -18,6 +18,7 @@ export type TokenInfo = {
   tags: string[]
   denom: string
   native: boolean
+  traces?: any[]
 }
 
 export type TokenInfoWithReward = TokenInfo & {

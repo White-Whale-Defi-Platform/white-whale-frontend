@@ -10,7 +10,8 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
-import { getPoolFromAPI } from '../services/useAPI'
+import { getPoolFromAPI, getPricesFromPoolsAPIbyDenom } from '../services/useAPI'
+import { CHAIN_NAMES } from '../constants'
 
 type Params = {
   token: TokenInfo
@@ -93,6 +94,33 @@ const getPrices = async ({
   const prices = {}
   const baseTokenPrice = coingeckoPrices[baseToken.id]?.usd
 
+  const chainTokenMap = new Map<string, Array<{base_denom: string, denom: string}>>()
+
+  for (const token of tokens) {
+    if (!token?.fromRegistry || !token.traces?.length) {
+      continue
+    }
+
+    const ibcTrace = token.traces.find(
+      trace => trace.type === 'ibc' &&
+      CHAIN_NAMES.includes(trace.counterparty.chain_name)
+    )
+
+    if (!ibcTrace) {
+      continue
+    }
+
+    const chainName = ibcTrace.counterparty.chain_name
+    if (!chainTokenMap.has(chainName)) {
+      chainTokenMap.set(chainName, [])
+    }
+
+    chainTokenMap.get(chainName)?.push({
+      base_denom: ibcTrace.counterparty.base_denom,
+      denom: token.denom
+    })
+  }
+
   for (const token of tokens) {
     if (token?.fromRegistry) {
       continue
@@ -131,6 +159,16 @@ const getPrices = async ({
       }
     }
   }
+  for (const chainName of chainTokenMap.keys()) {
+    const tokenPairs = chainTokenMap.get(chainName)
+    for (const { base_denom, denom } of tokenPairs) {
+      const apiPrice = await getPricesFromPoolsAPIbyDenom(base_denom, chainName)
+      if (apiPrice) {
+        prices[denom] = apiPrice.price
+      }
+    }
+  }
+  console.log('prices', prices)
   return prices
 }
 

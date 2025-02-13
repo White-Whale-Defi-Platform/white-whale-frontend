@@ -56,9 +56,13 @@ const aggregateRewards = (rewards: RewardData[]): RewardInfo[] => {
     return {
       amount,
       dollarValue: 0,
-      info: isContract
-        ? { token: { contract_addr: id } }
-        : { native_token: { denom: id } },
+      info: {
+        native: null,
+        ...(isContract
+          ? { token: { contract_addr: id } }
+          : { native_token: { denom: id } }
+        )
+      },
     }
   })
 }
