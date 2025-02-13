@@ -34,7 +34,7 @@ export const useCheckIncentiveSnapshots = (cosmWasmClient: CosmWasmClient,
   const epochId = currentEpochData?.currentEpoch?.epoch.id
   const incentiveAddresses = useQueryIncentiveContracts(cosmWasmClient)
   const { data } = useQuery(
-    ['useCheckIncentiveSnapshots', incentiveAddresses, epochId],
+    ['useCheckIncentiveSnapshots', incentiveAddresses],
     async () => await fetchCheckIncentiveSnapshots(
       cosmWasmClient, epochId, incentiveAddresses,
     ),

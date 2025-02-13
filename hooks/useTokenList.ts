@@ -46,7 +46,8 @@ export const useTokenList = () => {
               continue
             }
             const denom = native ? asset.base : asset.address || asset.base
-            const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images?.[0]?.svg || asset.images?.[0]?.png || ''
+            const logoURI = asset.logo_URIs?.svg || asset.logo_URIs?.png || asset.images?.[0]?.svg || asset.images?.[0]?.png || asset.name.includes("LP") ? "/logos/whale-placeholder.svg" : ""
+            const traces = asset.traces || []
             const tmpAssetOBJ: any = { denom,
               id: asset.coingecko_id || '',
               token_address: asset.address || asset.base,
@@ -57,7 +58,9 @@ export const useTokenList = () => {
               logoURI,
               tags: native ? ['native'] : [''],
               native,
-              fromRegistry: true }
+              fromRegistry: true,
+              traces
+            }
             const res = Array.from(tokenMapBySymbol.values())
             if (denom && !res.find((token) => token.denom === denom)) {
               tokenMapBySymbol.set(asset.symbol, tmpAssetOBJ)
