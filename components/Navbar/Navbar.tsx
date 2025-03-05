@@ -134,32 +134,6 @@ const Navbar = () => {
           Open
         </IconButton>
       </Flex>
-      {/* Announcement Banner */}
-      <Flex
-        mx="auto"
-        maxWidth="container.xl"
-        display={{
-          base: 'none',
-          md: 'flex',
-        }}
-        alignItems="center"
-        justifyContent="center"
-        bgGradient="linear-gradient(to right, #F7931B 0%, #F7931B 5%, #000000 35%,#000000 65%, #3CCD64 95%, #3CCD64 100%)"
-        p={2}
-        cursor="pointer"
-        borderRadius="md"
-        marginTop={3}
-        as="a"
-        href="https://app.migaloo.zone/staking/liquid-staking"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img src={'/logos/whaleX.png'} width={32} height={32} />
-        <Text fontWeight="bold" color="white">
-          WhaleX has arrived! Click here and start earning.
-        </Text>
-        <img src={'/logos/whaleX.png'} width={32} height={32} />
-      </Flex>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>

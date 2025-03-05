@@ -205,7 +205,6 @@ const BondingActions = ({ globalAction }) => {
             mt={'50px'}
           >
             <HStack spacing={0} justify="center">
-              <BondingActionButton action={ActionType.bond} />
               <BondingActionButton action={ActionType.unbond} />
               <BondingActionButton action={ActionType.withdraw} />
             </HStack>
@@ -240,8 +239,7 @@ const BondingActions = ({ globalAction }) => {
               txStep === TxStep.Estimating ||
               txStep === TxStep.Posting ||
               txStep === TxStep.Broadcasting ||
-              (globalAction === ActionType.bond && currentBondState.amount <= 0 &&
-                isWalletConnected) ||
+              globalAction === ActionType.bond ||
               (currentBondState.amount === 0 &&
                 globalAction === ActionType.unbond &&
                 isWalletConnected) ||

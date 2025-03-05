@@ -158,7 +158,7 @@ const BondingOverview = ({
           <Text mb={-2} color="whiteAlpha.600">
               Actions
           </Text>
-          {data?.map((e: { actionType: ActionType }, index) => (e.actionType !== ActionType.buy ? (
+          {data?.map((e: { actionType: ActionType }, index) => (e.actionType !== ActionType.buy && e.actionType !== ActionType.bond ? (
             <Button
               key={`button-${index}`}
               alignSelf="flex-start"
