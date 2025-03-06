@@ -76,7 +76,7 @@ export const getUnbonding = async (
     sort((a, b) => new Date(nanoToMilli(Number(a.timestamp))).getTime() -
       new Date(nanoToMilli(Number(b.timestamp))).getTime()).
     map((req) => {
-      const tokenSymbol = config.bonding_tokens.find((token) => token.denom === req.asset.info.native_token.denom)?.symbol
+      const tokenSymbol = [...config.bonding_tokens, config.native_token].find((token) => token.denom === req.asset.info.native_token.denom)?.symbol
 
       return {
         denom: req.asset.info.native_token.denom,

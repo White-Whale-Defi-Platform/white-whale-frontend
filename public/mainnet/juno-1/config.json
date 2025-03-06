@@ -37,5 +37,19 @@
       "native": true,
       "denom": "ibc/01BAE2E69D02670B22758FBA74E4114B6E88FC1878936C919DA345E6C6C92ABF"
     }
-  ]
+  ],
+  "native_token": {
+    "id": "juno-network",
+    "chain_id": "juno-1",
+    "token_address": "",
+    "symbol": "JUNO",
+    "name": "Juno",
+    "decimals": 6,
+    "logoURI": "/logos/juno.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "ujuno"
+  }
 }
