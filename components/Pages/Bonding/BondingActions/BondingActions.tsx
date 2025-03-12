@@ -32,15 +32,13 @@ const BondingActions = ({ globalAction }) => {
 
   const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
 
-  const symbols = useMemo(() => config?.bonding_tokens.map((token) => token.symbol),
-    [config, isConfigLoading])
 
   const { txStep, submit } = useTransaction()
 
   const [currentBondState, setCurrentBondState] =
     useRecoilState<BondingTokenState>(bondingAtom)
 
-  const [liquidBalances] = useMultipleTokenBalance(symbols)
+  const [liquidBalances] = useMultipleTokenBalance([config?.native_token.symbol])
 
   const {
     myBondedAssets,
@@ -213,7 +211,7 @@ const BondingActions = ({ globalAction }) => {
               switch (globalAction) {
                 case ActionType.bond:
                   return (
-                    <Bond balances={liquidBalances} tokenSymbols={symbols} />
+                    <Bond balances={liquidBalances} tokenSymbols={[config?.native_token.symbol]} />
                   )
                 case ActionType.unbond:
                   return <Unbond bondedAssets={myBondedAssets} />

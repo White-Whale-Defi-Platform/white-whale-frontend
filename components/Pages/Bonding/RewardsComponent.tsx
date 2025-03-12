@@ -8,8 +8,8 @@ import {
   Text,
   Tooltip,
   VStack,
-  keyframes,
 } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import { BondingActionTooltip } from 'components/Pages/Bonding/BondingActions/BondingActionTooltip'
 import useTransaction from 'components/Pages/Bonding/BondingActions/hooks/useTransaction'

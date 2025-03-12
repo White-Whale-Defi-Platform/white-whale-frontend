@@ -31,6 +31,7 @@ export interface Config {
   frontend_helper: string
   whale_base_token: TokenDetails
   bonding_tokens: TokenInfo[]
+  native_token: TokenInfo
 }
 
 const fetchConfig = async (network: NetworkType, chainId: string): Promise<Config> => {

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useMemo } from 'react'
+import { useMemo } from 'react'
 import { isMobile } from 'react-device-detect'
 
 import { useMediaQuery, Flex } from '@chakra-ui/react'
@@ -10,7 +10,7 @@ import Status from '../Status'
 import MobileNotSupportedModal from '../Wallet/Modal/MobileNotSupportedModal'
 import RadialGradient, { backgrounds } from './RadialGradient'
 
-const AppLayout: FC<ReactNode> = ({ children }) => {
+const AppLayout = ({ children }) => {
   const { chainId } = useRecoilValue(chainState)
   const [isMobileView] = useMediaQuery('(max-width: 480px)')
   const mobileBrowserLeap = window.leap && window.leap.mode === 'mobile-web'

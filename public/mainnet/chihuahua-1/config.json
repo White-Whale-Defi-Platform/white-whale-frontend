@@ -37,5 +37,19 @@
       "native": true,
       "denom": "ibc/E452FABA9C51E85726BAB567EB582FEA1541B9D26543C6876996B61112DE72F7"
     }
-  ]
+  ],
+  "native_token": {
+      "chain_id": "chihuahua-1",
+      "id": "chihuahua-token",
+      "token_address": "uhuahua",
+      "symbol": "HUAHUA",
+      "name": "Huahua",
+      "decimals": 6,
+      "logoURI": "/logos/huahua.png",
+      "tags": [
+        "native"
+      ],
+      "native": true,
+      "denom": "uhuahua"
+    }
 }

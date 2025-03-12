@@ -23,6 +23,20 @@
       "native": true,
       "denom": "ibc/6ACE79F5ABD607D2075FAD4ABE284CBC5BB6A96C16555FFB901644E9D17411AC"
     }
-  ]
+  ],
+  "native_token": {
+    "id": "sei-network",
+    "chain_id": "pacific-1",
+    "token_address": "",
+    "symbol": "SEI",
+    "name": "Sei",
+    "decimals": 6,
+    "logoURI": "/logos/sei.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "usei"
+  }
 }
 
