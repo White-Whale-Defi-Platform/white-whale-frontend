@@ -23,6 +23,20 @@
       "native": true,
       "denom": "ibc/077EE5F87CE5CD419436D26533329BDC7BEE6850AD64BC316486B0DCCB13C0EB"
     }
-  ]
+  ],
+  "native_token": {
+      "chain_id": "columbus-5",
+      "id": "terra-luna",
+      "token_address": "uluna",
+      "symbol": "LUNC",
+      "name": "Lunc",
+      "decimals": 6,
+      "logoURI": "/logos/lunc.svg",
+      "tags": [
+        "native"
+      ],
+      "native": true,
+      "denom": "uluna"
+    }
 }
 

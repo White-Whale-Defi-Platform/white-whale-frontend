@@ -37,5 +37,19 @@
       "native": true,
       "denom": "ibc/917C4B1E92EE2F959FC11ECFC435C4048F97E8B00F9444592706F4604F24BF25"
     }
-  ]
+  ],
+  "native_token": {
+    "id": "osmosis",
+    "chain_id": "osmosis-1",
+    "token_address": "",
+    "symbol": "OSMO",
+    "name": "Osmosis",
+    "decimals": 6,
+    "logoURI": "/logos/osmo.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "uosmo"
+  }
 }

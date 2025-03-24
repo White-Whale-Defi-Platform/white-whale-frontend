@@ -37,5 +37,19 @@
       "native": true,
       "denom": "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E"
     }
-  ]
+  ],
+  "native_token": {
+    "id": "terra-luna-2",
+    "chain_id": "phoenix-1",
+    "token_address": "",
+    "symbol": "LUNA",
+    "name": "Luna",
+    "decimals": 6,
+    "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "uluna"
+  }
 }

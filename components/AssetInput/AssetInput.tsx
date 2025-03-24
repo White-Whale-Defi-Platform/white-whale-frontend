@@ -71,7 +71,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
       return 0
     }
     const parts = num?.toString()?.split('.')
-    parts[0] = parts?.[0]?.replace(/\B(?=(?<temp1>\d{3})+(?!\d))/gu, ',')
+    parts[0] = parts?.[0]?.replace(/\B(?=(\d{3})+(?!\d))/gu, ',')
     parts[1] = parts?.[1]?.substring(0, decimalPlaces)?.replace(/0+$/u, '')
     return parts?.[1] ? parts.join('.') : parts?.[0]
   }

@@ -98,7 +98,6 @@ export const fetchPositions = async (
           dollarValue,
         }
       })
-      const isWithdraw = walletChainName === WalletChainName.terra
       return {
         ...position,
         duration: position.isOpen ? (open.unbonding_duration === -1 ? 'Alliance' : position.formatedTime) : position.formatedTime,
@@ -110,7 +109,7 @@ export const fetchPositions = async (
           ? PositionState.active
           : diff <= 0
             ? PositionState.unbonded
-            : isWithdraw ? PositionState.withdraw : PositionState.unbonding,
+            : PositionState.withdraw,
         action: null,
       }
     })

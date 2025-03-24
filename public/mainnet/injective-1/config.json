@@ -37,5 +37,19 @@
       "native": true,
       "denom": "ibc/ECB0AA28D6001EF985047558C410B65581FC85BD92D4E3CFCCA0D3D964C67CC2"
     }
-  ]
+  ],
+  "native_token": {
+    "id": "injective-protocol",
+    "chain_id": "injective-1",
+    "token_address": "inj",
+    "symbol": "INJ",
+    "name": "INJ",
+    "decimals": 18,
+    "logoURI": "/logos/injective.png",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "inj"
+  }
 }

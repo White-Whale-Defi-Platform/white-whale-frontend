@@ -37,5 +37,19 @@
       "native": true,
       "denom": "factory/migaloo1mf6ptkssddfmxvhdx0ech0k03ktp6kf9yk59renau2gvht3nq2gqdhts4u/boneWhale"
     }
-  ]
+  ],
+  "native_token": {
+    "id": "white-whale",
+    "chain_id": "migaloo-1",
+    "token_address": "uwhale",
+    "symbol": "WHALE",
+    "name": "Whale",
+    "decimals": 6,
+    "logoURI": "/logos/migaloo.png",
+    "tags": [
+      "native"
+    ],
+    "native": true,
+    "denom": "uwhale"
+  }
 }

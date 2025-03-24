@@ -54,7 +54,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
   useEffect(() => {
     if (config) {
       setCurrentBondState({
-        tokenSymbol: config.bonding_tokens[0].symbol,
+        tokenSymbol: config.native_token.symbol,
         amount: 0,
         decimals: 6,
         denom: config.bonding_tokens[0].denom,
@@ -80,6 +80,7 @@ export const Bond = ({ balances, tokenSymbols }) => {
           <AssetInput
             mobile={isMobile}
             isBonding={true}
+            showList={false}
             hideToken={currentBondState.tokenSymbol}
             {...field}
             token={currentBondState}
