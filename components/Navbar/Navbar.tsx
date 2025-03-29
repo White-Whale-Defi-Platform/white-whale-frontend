@@ -62,6 +62,10 @@ const Navbar = () => {
       label: 'Bridge',
       link: 'https://tfm.com/bridge',
     },
+    {
+      label: 'Analytics',
+      link: 'https://info.whitewhale.money/pools',
+    },
   ]
 
   return (
