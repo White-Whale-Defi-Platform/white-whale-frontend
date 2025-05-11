@@ -10,6 +10,8 @@ import {
   ModalBody,
   ModalCloseButton,
   Stack,
+  Box,
+  Link,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import Loader from 'components/Loader'
@@ -32,7 +34,8 @@ const Bonding: FC = () => {
   const { chainId, chainName, network, walletChainName } = useRecoilValue(chainState)
   const { isWalletConnected, address } = useChain(walletChainName)
   const { data: config, isLoading: isConfigLoading } = useConfig(network, chainId)
-
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isMigrationOpen, onOpen: onMigrationOpen, onClose: onMigrationClose } = useDisclosure()
 
   const data: BondingData[] = [
     {
@@ -170,7 +173,7 @@ const Bonding: FC = () => {
     liquidBalances,
     symbols,
   ])
-  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return <>{(isLoading || isConfigLoading) && isWalletConnected ?
     <HStack
       width="full"
@@ -180,6 +183,51 @@ const Bonding: FC = () => {
       <Loader />
     </HStack> : (
       <VStack width={'full'} alignSelf="center" maxWidth={'container.xl'}>
+        <Box
+          width="85vw"
+          position="relative"
+          bg="rgba(255, 193, 7, 0.1)"
+          border="1px solid"
+          borderColor="yellow.400"
+          borderRadius="md"
+          p={3}
+          mb={4}
+          mt={5}
+        >
+          <Text color="yellow.400" fontSize="sm" textAlign="center">
+            ⚠️ Notice: WHALE LST token bonding is being discontinued. Please claim your rewards, unbond and transfer your tokens to the Migaloo chain.{' '}
+            <Link color="yellow.500" textDecoration="underline" onClick={onMigrationOpen} cursor="pointer">
+              Click here for more information.
+            </Link>
+          </Text>
+        </Box>
+
+        <Modal isOpen={isMigrationOpen} onClose={onMigrationClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Migration Information</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack spacing={4} align="stretch">
+                <Text fontWeight="bold">Important Migration Steps:</Text>
+                <Text>1. Claim any pending rewards from your bonded tokens</Text>
+                <Text>2. Unbond your WHALE LST tokens (this will start the unbonding period)</Text>
+                <Text>3. After the unbonding period ends, withdraw your tokens</Text>
+                <Text>4. Transfer your tokens to the Migaloo chain</Text>
+                <Text fontWeight="bold" mt={4}>Why are we migrating?</Text>
+                <Text>The WHALE LST token bonding program is being discontinued as the current chain is being wound down. This is part of our transition to the new Chapter, and users need to migrate their tokens to ensure they don't lose access to their assets.</Text>
+                <Text fontWeight="bold" mt={4}>Need Help?</Text>
+                <Text>If you need assistance with the migration process, please visit our Discord. <Link color="blue.500" textDecoration="underline" href="https://discord.gg/Kdwx7pWR3s" target="_blank">https://discord.gg/Kdwx7pWR3s</Link></Text>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button width="full" variant="outline" size="sm" mr={3} onClick={onMigrationClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
         <Flex
           direction={{
             base: 'column',
@@ -203,17 +251,8 @@ const Bonding: FC = () => {
             }} px={{ base: 3 }} justifyItems={'flex-start'}>
               <Stack direction={['column', 'row']}>
                 <Text as="h2" fontSize="24" fontWeight="900">
-                  Bonding - Earn swap fees with ampWhale or bWhale.
+                  Bonding
                 </Text>
-                <Button
-                  variant="link"
-                  color="white"
-                  fontSize={20}
-                  textDecoration={'underline'}
-                  onClick={onOpen}>
-                  How it works
-                  <ChevronDownIcon pl={2} mt={1} ml={-1} fontSize={24} color="white" />
-                </Button>
               </Stack>
             </HStack>
             <Modal isOpen={isOpen} onClose={onClose}>

@@ -47,6 +47,7 @@ const columns = [
         poolId={info.getValue()}
         token1Img={info.row.original?.token1Img}
         token2Img={info.row.original?.token2Img}
+        poolAssets={info.row.original?.poolAssets}
       />
     ),
   }),

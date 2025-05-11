@@ -1,7 +1,7 @@
 import { useQueries } from 'react-query'
 
 import { GeneratedType, Registry } from '@cosmjs/proto-signing'
-import { AminoTypes } from '@cosmjs/stargate'
+import { AminoTypes, SigningStargateClient } from '@cosmjs/stargate'
 import { useChain } from '@cosmos-kit/react-lite'
 import { InjectiveSigningStargateClient } from '@injectivelabs/sdk-ts/dist/cjs/core/stargate'
 import {
@@ -10,6 +10,8 @@ import {
   cosmwasmAminoConverters,
   cosmwasmProtoRegistry,
 } from '@nick134-bit/nicks-injectivejs'
+import { allianceAminoConverters, allianceProtoRegistry } from 'migaloojs'
+
 
 export const useClients = (walletChainName: string) => {
   const {
@@ -38,7 +40,31 @@ export const useClients = (walletChainName: string) => {
     },
     {
       queryKey: ['signingClient', walletChainName],
-      queryFn: async () => await getSigningCosmWasmClient(),
+      queryFn: async () => { if (walletChainName !== 'migaloo') {
+        return await getSigningCosmWasmClient()
+      } else {
+        const offlineSigner: any = await getOfflineSigner()
+        const protoRegistry: ReadonlyArray<[string, GeneratedType]> = [
+          ...cosmosProtoRegistry,
+          ...cosmwasmProtoRegistry,
+          ...allianceProtoRegistry,
+        ];
+        const aminoConverters = {
+          ...cosmosAminoConverters,
+          ...cosmwasmAminoConverters,
+          ...allianceAminoConverters,
+        };
+        const registry: any = new Registry(protoRegistry);
+        const aminoTypes = new AminoTypes(aminoConverters);
+          const endpoint = await getRpcEndpoint()
+          return await SigningStargateClient.connectWithSigner(
+            endpoint,
+            offlineSigner, {
+              registry,
+              aminoTypes,
+            },
+          )
+      }},
       enabled: isWalletConnected,
     }, {
       queryKey: ['injectiveSigningClient'],

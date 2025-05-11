@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react'
 import BurgerIcon from 'components/Icons/BurgerIcon'
 import { ACTIVE_BONDING_NETWORKS, ChainId } from 'constants/index'
-import * as motion from 'motion/react-client'
 import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 
@@ -64,6 +63,21 @@ const Navbar = () => {
     },
   ]
 
+  // Add migration link for Migaloo chain
+  if (chainId === 'migaloo-1') {
+    links.push({
+      label: 'Migration',
+      link: `/${currentChainName}/migration`,
+    })
+  }
+
+  const filteredMenuLinks = menuLinks.filter(menu => {
+    if (menu.showOnlyForChain) {
+      return menu.showOnlyForChain === chainId
+    }
+    return true
+  })
+
   return (
     <Box
       width={'full'}
@@ -87,7 +101,7 @@ const Navbar = () => {
         </Box>
         <Card paddingX={10} gap={6}>
           {(chainId === ChainId.terrac ? luncMenuLinks : ACTIVE_BONDING_NETWORKS.includes(chainId)
-            ? menuLinks
+            ? filteredMenuLinks
             : bondingDisabledMenuLinks
           ).map((menu) => (
             <NavbarPopper
@@ -154,4 +168,5 @@ const Navbar = () => {
     </Box>
   )
 }
+
 export default Navbar

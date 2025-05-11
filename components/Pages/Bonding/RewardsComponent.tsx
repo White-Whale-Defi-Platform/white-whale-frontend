@@ -181,91 +181,54 @@ const RewardsComponent = ({
       overflow="hidden"
       position="relative"
       display="flex"
-      justifyContent="flex-start"
+      justifyContent="space-between"
+      py={6}
     >
-      <HStack spacing={['100', '150']} align="stretch" mt={5}>
-        <HStack flex="1">
-          <a>
-            <Image
-              src="/logos/logo.svg"
-              alt="WhiteWhale Logo"
-              boxSize={[5, 7]}
-            />
-          </a>
-          <Text fontSize={20}>WHALE</Text>
-        </HStack>
-        <Text color="#7CFB7D" fontSize={18}>
-              ${whalePrice?.toFixed(6)}
-        </Text>
-      </HStack>
-      <HStack justify={'space-between'} width={340}>
-        <VStack border="0.5px solid"
-          borderColor="whiteAlpha.400"
-          borderRadius="10px"
-          px={4}
-          pt={1}
-          alignItems={'start'}
-          h={68}
-          w={163}>
-          <Text color="whiteAlpha.600">
-            APR
-          </Text>
-          <Text fontWeight={'bold'}>{`${apr.toFixed(2)}%`}</Text>
-        </VStack>
-        <VStack border="0.5px solid"
-          borderColor="whiteAlpha.400"
-          borderRadius="10px"
-          px={4}
-          pt={1}
-          alignItems={'start'} h={68} w={163}
-          justifyContent="space-between">
-          <HStack>
-            <Text color="whiteAlpha.600">Rewards</Text>
-            <BondingActionTooltip action={ActionType.claim} />
+      <VStack spacing={6} width="full" flex={1}>
+        <HStack spacing={['100', '150']} align="stretch">
+          <HStack flex="1">
+            <a>
+              <Image
+                src="/logos/logo.svg"
+                alt="WhiteWhale Logo"
+                boxSize={[5, 7]}
+              />
+            </a>
+            <Text fontSize={20}>WHALE</Text>
           </HStack>
-          <RewardsTooltip
-            dollarValue={
-              isWalletConnected
-                ? `$${(claimableRewards * whalePrice).toFixed(2)}`
-                : 'n/a'
-            }
-            isWalletConnected={isWalletConnected}
-            amount={claimableRewards.toFixed(6)}
-            daysSinceLastClaim={daysSinceLastClaim}
-          />
-        </VStack>
-
-      </HStack>
-
-      <HStack
-        border="0.5px solid"
-        borderColor="whiteAlpha.400"
-        borderRadius="10px"
-        py={3}
-        px={4}
-        minWidth={340}
-        spacing={['100', '215']} align="stretch"
-        justifyContent="space-between">
-        <Text color="whiteAlpha.600" fontSize={13}>
-            Multiplier
-        </Text>
-        <Text fontSize={13}>
-          {isWalletConnected
-            ? `${((multiplierRatio - 1) * 100).toFixed(2)}%`
-            : 'n/a'}
-        </Text>
-      </HStack>
-      <VStack mt={-1}>
-        <HStack justifyContent="space-between" minWidth={['280', '340']}>
-          <Text color="whiteAlpha.600" fontSize={14}>Next rewards in</Text>
-          <Text fontSize={14}>{durationString}</Text>
+          <Text color="#7CFB7D" fontSize={18}>
+                ${whalePrice?.toFixed(6)}
+          </Text>
         </HStack>
-        <ProgressBar
-          progress={progress}
-          currentEpochStartTimeInNano={Number(currentEpoch?.epoch?.start_time)}
-        />
+        <VStack flex={1} justify="center">
+          <HStack justify={'space-between'} width={340}>
+            <VStack border="0.5px solid"
+              borderColor="whiteAlpha.400"
+              borderRadius="10px"
+              px={4}
+              pt={1}
+              alignItems={'center'} h={68} w={"full"}
+              justifyContent="space-between">
+              <HStack>
+                <Text color="whiteAlpha.600">Rewards</Text>
+                <BondingActionTooltip action={ActionType.claim} />
+              </HStack>
+              <RewardsTooltip
+                dollarValue={
+                  isWalletConnected
+                    ? `$${(claimableRewards * whalePrice).toFixed(2)}`
+                    : 'n/a'
+                }
+                isWalletConnected={isWalletConnected}
+                amount={claimableRewards.toFixed(6)}
+                daysSinceLastClaim={daysSinceLastClaim}
+              />
+            </VStack>
+          </HStack>
+        </VStack>
       </VStack>
-      <HStack w={[290, 345]}>
+
+      <HStack w={[290, 345]} mb={4}>
         <Button
           alignSelf="center"
           bg="#6ACA70"
@@ -322,7 +285,8 @@ const RewardsComponent = ({
           </Tooltip>
         )}
       </HStack>
-    </VStack>)
+    </VStack>
+  )
 }
 
 export default RewardsComponent

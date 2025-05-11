@@ -8,6 +8,7 @@ import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
 
 import { getGasPricesAPI } from './useAPI'
+import { SigningStargateClient } from '@cosmjs/stargate'
 
 export const getGasFees = async (
   gas: number, price: number, denom: string,
@@ -22,7 +23,7 @@ export const getGasFees = async (
 })
 
 export async function createGasFee(
-  client: SigningCosmWasmClient | InjectiveSigningStargateClient, address: string, msgs: Array<any>,
+  client: SigningCosmWasmClient | InjectiveSigningStargateClient | SigningStargateClient, address: string, msgs: Array<any>,
 ) {
   const chainId = await client.getChainId()
   const prices = await getGasPricesAPI()
