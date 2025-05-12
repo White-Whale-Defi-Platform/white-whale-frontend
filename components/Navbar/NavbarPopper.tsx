@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { ChevronDownIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, ExternalLinkIcon, WarningIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -67,6 +67,9 @@ const NavbarPopper = ({ menu, currentChainName, chainId }) => {
               <ExternalLinkIcon paddingLeft={''} paddingBottom={'1'} />
             ) : null}
           </Text>
+          {menu.label === 'Bonding' && (
+              <WarningIcon color="yellow.400" />
+          )}
         </HStack>
       </PopoverTrigger>
 
