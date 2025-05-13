@@ -12,6 +12,14 @@ import {
   Button,
   HStack,
   useToast,
+  Container,
+  Flex,
+  Icon,
+  Divider,
+  Badge,
+  Card,
+  CardBody,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useRecoilValue } from 'recoil'
@@ -20,6 +28,7 @@ import { useClients } from '../../hooks/useClients'
 import { createGasFee } from '../../services/treasuryService'
 import { createExecuteMessage } from '../../util/messages'
 import { MsgUndelegate } from 'migaloojs/dist/codegen/alliance/alliance/tx'
+import { FiAlertTriangle, FiArrowRight, FiExternalLink, FiHelpCircle } from 'react-icons/fi'
 
 interface Delegation {
   validator: string
@@ -65,6 +74,9 @@ const Migration = () => {
   const [isRestakeLoading, setIsRestakeLoading] = useState(false)
   const [isAllianceLoading, setIsAllianceLoading] = useState(false)
   const toast = useToast()
+  const bgColor = useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')
+  const cardBg = useColorModeValue('whiteAlpha.100', 'whiteAlpha.100')
+  const borderColor = useColorModeValue('whiteAlpha.300', 'whiteAlpha.300')
 
   const tmpaddress = address
   useEffect(() => {
@@ -76,56 +88,37 @@ const Migration = () => {
     }
   }, [chainId, router, address, tmpaddress])
 
-  useEffect(() => {
-    const fetchDelegations = async () => {
-      if (!address) return
+  const requeryData = async () => {
+    if (!address) return
 
-      try {
-        const response = await fetch(
-          `https://migaloo-api.polkachu.com/cosmos/staking/v1beta1/delegations/${address}`
-        )
-        const data: DelegationResponse = await response.json()
+    try {
+      // Fetch regular delegations
+      const response = await fetch(
+        `https://migaloo-api.polkachu.com/cosmos/staking/v1beta1/delegations/${address}`
+      )
+      const data: DelegationResponse = await response.json()
 
-        if (data.delegation_responses) {
-          const delegationAmount = data.delegation_responses
-            .filter(delegation => delegation.balance.denom === 'uwhale')
-            .map(delegation => ({
-              validator: delegation.delegation.validator_address,
-              amount: delegation.balance.amount
-            }))
+      if (data.delegation_responses) {
+        const delegationAmount = data.delegation_responses
+          .filter(delegation => delegation.balance.denom === 'uwhale')
+          .map(delegation => ({
+            validator: delegation.delegation.validator_address,
+            amount: delegation.balance.amount
+          }))
 
-          setDelegations(delegationAmount)
-        }
-      } catch (error) {
-        console.error('Error fetching delegations:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to fetch delegations',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
+        setDelegations(delegationAmount)
       }
-    }
 
-    if (isWalletConnected && address) {
-      fetchDelegations()
-    }
-  }, [address, isWalletConnected, toast])
-
-  useEffect(() => {
-    const fetchRestakeDelegations = async () => {
-      if (!address || !cosmWasmClient) return
-
-      try {
-        const response = await cosmWasmClient.queryContractSmart(RESTAKE_CONTRACT, {
+      // Fetch Restake delegations
+      if (cosmWasmClient) {
+        const restakeResponse = await cosmWasmClient.queryContractSmart(RESTAKE_CONTRACT, {
           all_staked_balances: {
             address: address
           }
         })
 
-        if (response) {
-          const restakeDelegationAmount = response
+        if (restakeResponse) {
+          const restakeDelegationAmount = restakeResponse
             .filter(delegation => parseInt(delegation.balance) > 0)
             .map(delegation => ({
               asset: delegation.asset.native,
@@ -133,61 +126,35 @@ const Migration = () => {
             }))
           setRestakeDelegations(restakeDelegationAmount)
         }
-      } catch (error) {
-        console.error('Error fetching Restake delegations:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to fetch Restake delegations',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
       }
-    }
 
-    if (isWalletConnected && address) {
-      fetchRestakeDelegations()
-    }
-  }, [address, isWalletConnected, cosmWasmClient, toast])
-
-  useEffect(() => {
-    const fetchAllianceDelegations = async () => {
-      if (!address) return
-
-      try {
-        const response = await fetch(
-          `https://migaloo-api.polkachu.com/terra/alliances/delegations/${address}`
-        )
-        const data = await response.json()
-        if (data.delegations) {
-          let delegationAmount = data.delegations.map(delegation => {
-            if (delegation.balance.amount > 10) {
-              return {
-                validator: delegation.delegation.validator_address,
-                amount: delegation.balance.amount,
-                denom: delegation.balance.denom
-              }
+      // Fetch Alliance delegations
+      const allianceResponse = await fetch(
+        `https://migaloo-api.polkachu.com/terra/alliances/delegations/${address}`
+      )
+      const allianceData = await allianceResponse.json()
+      if (allianceData.delegations) {
+        let delegationAmount = allianceData.delegations.map(delegation => {
+            return {
+              validator: delegation.delegation.validator_address,
+              amount: delegation.balance.amount,
+              denom: delegation.balance.denom
             }
-          })
-          delegationAmount = delegationAmount.filter(delegation => delegation !== undefined)
-          setAllianceDelegations(delegationAmount)
-        }
-      } catch (error) {
-        console.error('Error fetching alliance delegations:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to fetch alliance delegations',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
         })
+        delegationAmount = delegationAmount.filter(delegation => delegation !== undefined)
+        setAllianceDelegations(delegationAmount)
       }
+    } catch (error) {
+      console.error('Error requerying data:', error)
     }
+  }
 
+  // Initial data fetching when component loads or wallet address changes
+  useEffect(() => {
     if (isWalletConnected && address) {
-      fetchAllianceDelegations()
+      requeryData()
     }
-  }, [address, isWalletConnected, toast])
+  }, [address, isWalletConnected, cosmWasmClient])
 
   const handleUnstake = async () => {
     if (!address || !signingClient) return
@@ -217,6 +184,9 @@ const Migration = () => {
         duration: 5000,
         isClosable: true,
       })
+
+      // Wait 5 seconds before requerying
+      setTimeout(requeryData, 2000)
     } catch (error) {
       console.error('Error unstaking:', error)
       toast({
@@ -265,6 +235,9 @@ const Migration = () => {
         duration: 5000,
         isClosable: true,
       })
+
+      // Wait 5 seconds before requerying
+      setTimeout(requeryData, 2000)
     } catch (error) {
       console.error('Error unstaking from Restake:', error)
       toast({
@@ -284,7 +257,6 @@ const Migration = () => {
 
     setIsAllianceLoading(true)
     try {
-
       const allMessages = allianceDelegations.map(delegation => (
         {
           typeUrl: '/alliance.alliance.MsgUndelegate',
@@ -299,7 +271,6 @@ const Migration = () => {
         }
       ))
 
-
       const gas = await createGasFee(signingClient, address, allMessages)
 
       const result = await signingClient.signAndBroadcast(address, allMessages, gas)
@@ -311,6 +282,9 @@ const Migration = () => {
         duration: 5000,
         isClosable: true,
       })
+
+      // Wait 5 seconds before requerying
+      setTimeout(requeryData, 2000)
     } catch (error) {
       console.error('Error unstaking from alliance:', error)
       toast({
@@ -330,191 +304,234 @@ const Migration = () => {
   }
 
   return (
-    <Box width="full" py={8}>
-      <VStack spacing={8} align="stretch">
-        <Box textAlign="center">
-          <Heading size="xl" mb={4} color="white">Migaloo Migration Guide</Heading>
-          <Text fontSize="lg" color="white">
+    <Container maxW="container.xl" py={12}>
+      <VStack spacing={12} align="stretch">
+        <Box textAlign="center" position="relative">
+          <Heading
+            size="2xl"
+            mb={6}
+            color="white"
+            fontWeight="extrabold"
+          >
+            Migaloo Migration Guide
+          </Heading>
+          <Text fontSize="xl" color="whiteAlpha.900" maxW="2xl" mx="auto">
             Important information about migrating your assets from Migaloo chain
           </Text>
         </Box>
 
-        <Alert status="warning" borderRadius="md" bg="whiteAlpha.200" color="white">
-          <AlertIcon color="yellow.400" />
-          <Box>
-            <AlertTitle>Important Notice</AlertTitle>
-            <AlertDescription>
+        <Alert
+          status="warning"
+          borderRadius="xl"
+          bg={bgColor}
+          color="white"
+          p={6}
+          border="1px solid"
+          borderColor={borderColor}
+          boxShadow="lg"
+        >
+          <AlertIcon as={FiAlertTriangle} boxSize="24px" color="yellow.400" />
+          <Box ml={4}>
+            <AlertTitle fontSize="lg" mb={2}>Important Notice</AlertTitle>
+            <AlertDescription fontSize="md">
               The Migaloo chain will be discontinued. Please follow these steps to migrate your assets.
             </AlertDescription>
           </Box>
         </Alert>
 
-        <Box bg="whiteAlpha.200" p={6} borderRadius="lg" boxShadow="sm">
-          <VStack spacing={6} align="stretch">
-            <Heading size="md" color="white">Migration Steps</Heading>
+        <Card bg={bgColor} borderRadius="xl" border="1px solid" borderColor={borderColor} boxShadow="lg">
+          <CardBody p={8}>
+            <VStack spacing={8} align="stretch">
+              <Heading size="md" color="white" mb={4}>Migration Steps</Heading>
 
-            <Box>
-              <Heading size="sm" mb={2} color="white">1. Withdraw from Pools</Heading>
-              <Text color="white">Withdraw your assets from all liquidity pools on Migaloo chain. And WHALE paired Assets on other chains and send these to Migaloo.</Text>
+              {[
+                {
+                  title: "1. Withdraw from Pools",
+                  description: "Withdraw your assets from all liquidity pools on Migaloo chain. And WHALE paired Assets on other chains and send these to Migaloo.",
+                  action: {
+                    text: "Go to Pools",
+                    onClick: () => router.push('/migaloo/pools')
+                  }
+                },
+                {
+                  title: "2. Unbond bWHALE and ampWHALE",
+                  description: "Unstake your bWHALE and ampWHALE tokens from the bonding contracts on all chains and send them to your wallet on the migaloo chain.",
+                  action: {
+                    text: "Go to Bonding",
+                    onClick: () => router.push('/migaloo/bonding')
+                  }
+                },
+                {
+                  title: "3. Unstake LST Assets",
+                  description: "Use Backbonelabs for bWHALE-LST and Eris for ampWHALE-LST unstaking. This will take 21 days to complete.",
+                  externalLinks: [
+                    {
+                      text: "Go to Backbonelabs",
+                      href: "https://app.backbonelabs.io/liquid-staking/gravedigger/migaloo-1"
+                    },
+                    {
+                      text: "Go to Eris",
+                      href: "https://www.erisprotocol.com/migaloo/amplifier/WHALE"
+                    }
+                  ]
+                },
+                {
+                  title: "4. Unstake WHALE from the Chain",
+                  description: "Unstake your WHALE tokens from the chain.",
+                  customContent: delegations.length > 0 ? (
+                    <VStack align="stretch" mt={2}>
+                      <Badge colorScheme="green" p={2} borderRadius="md" width="fit-content">
+                        {delegations.length} active delegations found
+                      </Badge>
+                      <Button
+                        colorScheme="green"
+                        onClick={handleUnstake}
+                        isLoading={isLoading}
+                        loadingText="Processing..."
+                        rightIcon={<FiArrowRight />}
+                        width="fit-content"
+                        minWidth="200px"
+                      >
+                        Unstake All WHALE
+                      </Button>
+                    </VStack>
+                  ) : (
+                    <Text color="whiteAlpha.800" mt={2}>
+                      {!isWalletConnected ? "Please connect your wallet first" : "No active delegations found"}
+                    </Text>
+                  )
+                },
+                {
+                  title: "5. Unstake Assets from Restake",
+                  description: "Unstake your Assets from Restake.",
+                  customContent: restakeDelegations.length > 0 ? (
+                    <Button
+                      colorScheme="green"
+                      onClick={handleRestakeUnstake}
+                      isLoading={isRestakeLoading}
+                      loadingText="Processing..."
+                      rightIcon={<FiArrowRight />}
+                      width="fit-content"
+                      minWidth="200px"
+                    >
+                      Unstake All from Restake
+                    </Button>
+                  ) : (
+                    <Text color="whiteAlpha.800" mt={2}>
+                      {!isWalletConnected ? "Please connect your wallet first" : "No active Restake delegations found"}
+                    </Text>
+                  )
+                },
+                {
+                  title: "6. Unstake from Alliance",
+                  description: "Unstake your assets from alliance delegations.",
+                  customContent: allianceDelegations.length > 0 ? (
+                    <Button
+                      colorScheme="green"
+                      onClick={handleAllianceUnstake}
+                      isLoading={isAllianceLoading}
+                      loadingText="Processing..."
+                      rightIcon={<FiArrowRight />}
+                      width="fit-content"
+                      minWidth="200px"
+                    >
+                      Unstake All from Alliance
+                    </Button>
+                  ) : (
+                    <Text color="whiteAlpha.800" mt={2}>
+                      {!isWalletConnected ? "Please connect your wallet first" : "No active alliance delegations found"}
+                    </Text>
+                  )
+                },
+                {
+                  title: "7. Move IBC Assets to Native Chain",
+                  description: "Transfer any remaining IBC assets (tokens from other chains) back to their native chains. This includes any tokens you've bridged to Migaloo from other chains. You can use TFM.com, go.skip.build or the internal wallet options.",
+                  action: {
+                    text: "Go to TFM.com Transfer",
+                    onClick: () => window.open('https://tfm.com/bridge?chainFrom=migaloo-1&chainTo=', '_blank'),
+                    icon: <FiExternalLink />
+                  }
+                }
+              ].map((step, index) => (
+                <Box key={index}>
+                  <Flex
+                    bg={cardBg}
+                    p={6}
+                    borderRadius="lg"
+                    border="1px solid"
+                    borderColor={borderColor}
+                    direction="column"
+                    gap={4}
+                  >
+                    <Heading size="md" color="white" display="flex" alignItems="center" gap={2}>
+                      {step.title}
+                    </Heading>
+                    <Text color="whiteAlpha.900" fontSize="sm">{step.description}</Text>
+                    {step.action && (
+                      <Button
+                        colorScheme="green"
+                        onClick={step.action.onClick}
+                        rightIcon={step.action.icon || <FiArrowRight />}
+                        width="fit-content"
+                        minWidth="200px"
+                      >
+                        {step.action.text}
+                      </Button>
+                    )}
+                    {step.externalLinks && (
+                      <HStack spacing={4}>
+                        {step.externalLinks.map((link, idx) => (
+                          <Button
+                            key={idx}
+                            colorScheme="green"
+                            onClick={() => window.open(link.href, '_blank')}
+                            rightIcon={<FiExternalLink />}
+                            as="a"
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            width="fit-content"
+                            minWidth="180px"
+                          >
+                            {link.text}
+                          </Button>
+                        ))}
+                      </HStack>
+                    )}
+                    {step.customContent}
+                  </Flex>
+                  {index < 6 && <Divider my={6} borderColor={borderColor} />}
+                </Box>
+              ))}
+            </VStack>
+          </CardBody>
+        </Card>
+
+        <Card bg={bgColor} borderRadius="xl" border="1px solid" borderColor={borderColor} boxShadow="lg">
+          <CardBody p={8}>
+            <VStack spacing={6} align="stretch">
+              <Heading size="lg" color="white" display="flex" alignItems="center" gap={2}>
+                <Icon as={FiHelpCircle} />
+                Need Help?
+              </Heading>
+              <Text color="whiteAlpha.900" fontSize="lg">
+                If you need assistance with the migration process, please join our Discord community.
+              </Text>
               <Button
-                mt={2}
                 colorScheme="green"
-                onClick={() => router.push('/migaloo/pools')}
+                onClick={() => window.open('https://discord.gg/Kdwx7pWR3s', '_blank')}
+                rightIcon={<FiExternalLink />}
                 width="fit-content"
                 minWidth="200px"
+                size="lg"
               >
-                Go to Pools
+                Join Discord
               </Button>
-            </Box>
-
-            <Box>
-              <Heading size="sm" mb={2} color="white">2. Unstake bWHALE and ampWHALE</Heading>
-              <Text color="white">Unstake your bWHALE and ampWHALE tokens from the bonding contracts on all chains and send them to your wallet on the migaloo chain.</Text>
-              <Button
-                mt={2}
-                colorScheme="green"
-                onClick={() => router.push('/migaloo/bonding')}
-                width="fit-content"
-                minWidth="200px"
-              >
-                Go to Bonding
-              </Button>
-            </Box>
-
-            <Box>
-              <Heading size="sm" mb={2} color="white">3. Unstake LST Assets</Heading>
-              <Text color="white">Use Backbonelabs for bWHALE-LST and Eris for ampWHALE-LST unstaking.</Text>
-              <Text color="white">This will take 21 days to complete.</Text>
-              <HStack mt={2} spacing={4}>
-                <Button
-                  colorScheme="green"
-                  onClick={() => window.open('https://app.backbonelabs.io/liquid-staking/gravedigger/migaloo-1', '_blank')}
-                  as="a"
-                  href="https://app.backbonelabs.io/liquid-staking/gravedigger/migaloo-1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  width="fit-content"
-                  minWidth="180px"
-                >
-                  Go to Backbonelabs
-                </Button>
-                <Button
-                  colorScheme="green"
-                  onClick={() => window.open('https://www.erisprotocol.com/migaloo/amplifier/WHALE', '_blank')}
-                  as="a"
-                  href="https://www.erisprotocol.com/migaloo/amplifier/WHALE"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  width="fit-content"
-                  minWidth="180px"
-                >
-                  Go to Eris
-                </Button>
-              </HStack>
-            </Box>
-
-            <Box>
-              <Heading size="sm" mb={2} color="white">4. Unstake WHALE from the Chain</Heading>
-              <Text color="white">Unstake your WHALE tokens from the chain.</Text>
-              {delegations.length > 0 ? (
-                <VStack align="stretch" mt={2}>
-                  <Text color="white">Found {delegations.length} active delegations:</Text>
-                  <Button
-                    colorScheme="green"
-                    onClick={handleUnstake}
-                    isLoading={isLoading}
-                    loadingText="Processing..."
-                    width="fit-content"
-                    minWidth="200px"
-                  >
-                    Unstake All WHALE
-                  </Button>
-                </VStack>
-              ) : (
-                <Text color="white" mt={2}>No active delegations found.</Text>
-              )}
-            </Box>
-
-            <Box>
-              <Heading size="sm" mb={2} color="white">5. Unstake Assets from Restake</Heading>
-              <Text color="white">Unstake your Assets from Restake.</Text>
-              {restakeDelegations.length > 0 ? (
-                <VStack align="stretch" mt={2}>
-                  <Button
-                    colorScheme="green"
-                    onClick={handleRestakeUnstake}
-                    isLoading={isRestakeLoading}
-                    loadingText="Processing..."
-                    width="fit-content"
-                    minWidth="200px"
-                  >
-                    Unstake All from Restake
-                  </Button>
-                </VStack>
-              ) : (
-                <Text color="white" mt={2}>No active Restake delegations found.</Text>
-              )}
-            </Box>
-
-            <Box>
-              <Heading size="sm" mb={2} color="white">6. Unstake from Alliance</Heading>
-              <Text color="white">Unstake your assets from alliance delegations.</Text>
-              {allianceDelegations.length > 0 ? (
-                <VStack align="stretch" mt={2}>
-                  <Button
-                    colorScheme="green"
-                    onClick={handleAllianceUnstake}
-                    isLoading={isAllianceLoading}
-                    loadingText="Processing..."
-                    width="fit-content"
-                    minWidth="200px"
-                  >
-                    Unstake All from Alliance
-                  </Button>
-                </VStack>
-              ) : (
-                <Text color="white" mt={2}>No active alliance delegations found.</Text>
-              )}
-            </Box>
-
-            <Box>
-              <Heading size="sm" mb={2} color="white">7. Move IBC Assets to Native Chain</Heading>
-              <Text color="white">Transfer any remaining IBC assets (tokens from other chains) back to their native chains. This includes any tokens you've bridged to Migaloo from other chains. You can use TFM.com, go.skip.build or the internal wallet options.</Text>
-              <Button
-                mt={2}
-                colorScheme="green"
-                onClick={() => window.open('https://tfm.com/bridge?chainFrom=migaloo-1&chainTo=', '_blank')}
-                as="a"
-                href="https://tfm.com/bridge?chainFrom=migaloo-1&chainTo="
-                target="_blank"
-                rel="noopener noreferrer"
-                width="fit-content"
-                minWidth="200px"
-              >
-                Go to TFM.com Transfer
-              </Button>
-            </Box>
-          </VStack>
-        </Box>
-
-        <Box bg="whiteAlpha.200" p={6} borderRadius="lg" boxShadow="sm">
-          <VStack spacing={4} align="stretch">
-            <Heading size="md" color="white">Need Help?</Heading>
-            <Text color="white">
-              If you need assistance with the migration process, please join our Discord community.
-            </Text>
-            <Button
-              colorScheme="green"
-              onClick={() => window.open('https://discord.gg/Kdwx7pWR3s', '_blank')}
-              width="fit-content"
-              minWidth="200px"
-            >
-              Join Discord
-            </Button>
-          </VStack>
-        </Box>
+            </VStack>
+          </CardBody>
+        </Card>
       </VStack>
-    </Box>
+    </Container>
   )
 }
 
