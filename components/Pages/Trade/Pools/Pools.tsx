@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { InfoOutlineIcon, WarningIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
@@ -9,6 +9,11 @@ import {
   Text,
   Tooltip,
   VStack,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Link,
 } from '@chakra-ui/react'
 import { useChain } from '@cosmos-kit/react-lite'
 import { useIncentivePoolInfo } from 'components/Pages/Trade/Incentivize/hooks/useIncentivePoolInfo'
@@ -251,11 +256,67 @@ const Pools = () => {
     return (Number(calculateMyPosition(pool)) / aggregatedSupply) * (aprState.incentives + aprState.fees)
   }).reduce((acc, adjustedApr) => acc + adjustedApr, 0)
 
+  const hasWhalePositions = useMemo(() => {
+    return myPools?.some(pool =>
+      pool.poolAssets?.some(asset =>
+        asset.symbol?.toUpperCase().includes('WHALE')
+      )
+    )
+  }, [myPools])
+
   return (
     <VStack
       alignItems="center"
       margin="auto"
+      spacing={4}
     >
+      {hasWhalePositions && chainId !== 'migaloo-1' && (
+        <Box
+          width="80vw"
+          position="relative"
+          bg="rgba(255, 193, 7, 0.1)"
+          border="1px solid"
+          borderColor="yellow.400"
+          borderRadius="md"
+          p={3}
+          mt={6}
+        >
+          <Text color="yellow.400" fontSize="sm" textAlign="center">
+            ⚠️ Warning: You have active positions in pools containing WHALE tokens. Please withdraw your WHALE/WHALE-LST assets and move them to the Migaloo chain. Other pools are not affected.{' '}
+            <Link color="yellow.500" textDecoration="underline" href="https://discord.gg/Kdwx7pWR3s" target="_blank">
+              Need help? Join our Discord.
+            </Link>
+          </Text>
+        </Box>
+      )}
+
+      {myPools?.length > 0 && chainId === 'migaloo-1' && (
+        <Box
+          width="85vw"
+          position="relative"
+          bg="rgba(255, 193, 7, 0.1)"
+          border="1px solid"
+          borderColor="yellow.400"
+          borderRadius="md"
+          p={3}
+          mb={4}
+          mt={5}
+        >
+          <Text color="yellow.400" fontSize="sm" textAlign="center">
+            ⚠️ Important Notice: You have {myPools.length} active position{myPools.length > 1 ? 's' : ''} in liquidity pools. To protect your assets, please withdraw all your assets from these pools and check out our migration guide.
+            The Migaloo chain will be discontinued soon.{' '}
+            <Link color="yellow.500" textDecoration="underline" href="/migaloo/migration" target="_blank">
+              Visit our migration guide
+            </Link>
+            {' '}or{' '}
+            <Link color="yellow.500" textDecoration="underline" href="https://discord.gg/Kdwx7pWR3s" target="_blank">
+              join our Discord community
+            </Link>
+            {' '}for assistance.
+          </Text>
+        </Box>
+      )}
+
       {myPools?.length > 0 && (
         <Box width={'100%'} px={{ base: 5 }}>
           <Text as="h2" fontSize="24" fontWeight="700" paddingTop={10} paddingBottom={5}>

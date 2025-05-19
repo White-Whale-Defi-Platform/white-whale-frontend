@@ -62,6 +62,7 @@ const MobilePools = ({ pools, ctaLabel, aggregatedAdjustedTotalPoolApr,
                 poolId={pool?.pool}
                 token1Img={pool.token1Img}
                 token2Img={pool?.token2Img}
+                poolAssets={pool?.poolAssets}
               />
               {pool?.apr === 'n/a' ? <Text>n/a</Text> : <Apr apr={Number(pool?.apr).toFixed(2)}
                 flows={pool?.flows} />}

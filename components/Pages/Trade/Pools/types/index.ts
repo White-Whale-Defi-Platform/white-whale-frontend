@@ -18,4 +18,5 @@ export type Pool = {
   flows: FlowData[]
   myIncentiveApr: string
   action: React.ReactNode
+  poolAssets?: any[]
 }

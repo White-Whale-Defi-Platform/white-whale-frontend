@@ -32,7 +32,7 @@ export const Dashboard: FC = () => {
       const marketCap = circulatingWhaleSupply * (prices?.WHALE || 0) || 0
       const mappedDashboardData = []
       dashboardData.dashboardData?.map((data) => {
-        const apr = (dashboardData?.bondingInfos?.[data.chainName]?.bondingAPR);
+        const apr = 0;
         const buyback = (dashboardData?.bondingInfos?.[data.chainName]?.buyback);
 
         const chain = chains?.find((chain) => WALLET_CHAIN_NAMES_BY_CHAIN_ID[chain.chainId] === data.chainName)

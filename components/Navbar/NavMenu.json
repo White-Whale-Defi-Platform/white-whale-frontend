@@ -32,5 +32,10 @@
         "link": "/vaults"
       }
     ]
+  },
+  {
+    "label": "Migration",
+    "link": "/migration",
+    "showOnlyForChain": "migaloo-1"
   }
 ]
