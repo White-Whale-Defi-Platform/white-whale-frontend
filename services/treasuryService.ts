@@ -29,7 +29,7 @@ export async function createGasFee(
   const prices = await getGasPricesAPI()
   let sim = await client.simulate(
     address, msgs, '',
-  ) * 1.3
+  ) * 1.5
   sim = Math.ceil(sim)
 
   let chainFee = prices[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId]]
