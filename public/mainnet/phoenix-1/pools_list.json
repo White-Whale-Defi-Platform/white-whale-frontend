@@ -608,7 +608,7 @@
       ],
       "displayName": "bLUNA-SOLID",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/bLUNA.png",
-      "displayLogo2": "/logos/solid.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/solid.svg",
       "pool_assets": [
         {
           "chain_id": "phoenix-1",
@@ -629,7 +629,7 @@
           "id": "capapult",
           "name": "Solid",
           "decimals": 6,
-          "logoURI": "/logos/solid.svg",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/solid.svg",
           "tags": [],
           "native": false,
           "denom": "terra10aa3zdkrc7jwuf8ekl3zq7e7m42vmzqehcmu74e4egc7xkm5kr2s0muyst"
@@ -932,7 +932,7 @@
       ],
       "displayName": "LUNA-SOLID",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg",
-      "displayLogo2": "/logos/solid.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/solid.svg",
       "pool_assets": [
         {
           "id": "terra-luna-2",
@@ -955,7 +955,7 @@
           "symbol": "SOLID",
           "name": "SOLID",
           "decimals": 6,
-          "logoURI": "/logos/solid.svg",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/solid.svg",
           "tags": [
             ""
           ],
@@ -1172,7 +1172,7 @@
       ],
       "displayName": "USDC-SOLID",
       "displayLogo1": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/USDCoin.svg",
-      "displayLogo2": "/logos/solid.svg",
+      "displayLogo2": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/solid.svg",
       "pool_assets": [
         {
           "id": "",
@@ -1195,7 +1195,7 @@
           "symbol": "SOLID",
           "name": "SOLID",
           "decimals": 6,
-          "logoURI": "/logos/solid.svg",
+          "logoURI": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/solid.svg",
           "tags": [
             ""
           ],
