@@ -1,4 +1,3 @@
-import { POOL_INFO_BASE_URL } from 'constants/index'
 import fetch from 'isomorphic-unfetch'
 
 export interface PoolResponse {
@@ -23,39 +22,10 @@ export interface PoolData {
   ratio?: number | string
 }
 
+// Note: This function previously relied on ENIGMA_URL which has been removed.
+// It will return empty data unless an alternative implementation is provided.
 export const getPairInfos = async (chain: string): Promise<PoolResponse[]> => {
-  if (!chain) {
-    return []
-  }
-  const adjustedChain = chain === 'inj' ? 'injective' : chain
-  const url = `/api/cors?url=${POOL_INFO_BASE_URL}/${adjustedChain}/all/current`
-
-  const fetchWithRetry = async (
-    url, retries = 2, interval = 3000,
-  ) => {
-    while (retries) {
-      const response = await fetch(url)
-
-      if (response.status !== 400) {
-        return response
-      }
-
-      console.log('Retrying...')
-      await new Promise((resolve) => {
-        setTimeout(resolve, interval)
-      })
-      retries--
-    }
-
-    return null
-  }
-
-  const chainDataResponse = await fetchWithRetry(url)
-
-  const data = await chainDataResponse?.text()
-  if (chainDataResponse?.status === 200 && data !== 'chain unknown' && data) {
-    return JSON.parse(data)
-  }
+  // API endpoint not configured
   return []
 }
 export const getCoinhallPairInfos = async (swapAddresses: any[]): Promise<any> => {

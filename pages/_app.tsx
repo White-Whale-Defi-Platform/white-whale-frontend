@@ -93,13 +93,18 @@ const MyApp: FC<AppProps> = ({
       localStorage.clear()
       localStorage.setItem('ww-version', version?.version)
     }
-    const setAPI = async () => setApi(await getFastestAPI(true))
+    const setAPI = async () => {
+      const fastestApi = await getFastestAPI(true)
+      if (fastestApi) {
+        setApi(fastestApi)
+      }
+    }
     const setEndpointOptions = async () => setOptions({ isLazy: true,
       endpoints: await createEndpointOptions(chains) })
     setAPI()
     setEndpointOptions()
     setMounted(true)
-  }, [reorderWallets, api])
+  }, [reorderWallets])
   return (
     <><>
       <Head>

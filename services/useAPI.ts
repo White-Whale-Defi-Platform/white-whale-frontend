@@ -2,6 +2,10 @@ import { API_URLS, CHAIN_NAMES } from 'constants/';
 import { endpointOptions } from 'constants/endpointOptions';
 
 export const getFastestAPI = async (recheck = false) => {
+  if (!API_URLS || API_URLS.length === 0) {
+    return null
+  }
+
   let storageAPI = localStorage.getItem('ww-api')
   if (!storageAPI || recheck) {
     storageAPI = API_URLS[0]
@@ -25,8 +29,11 @@ export const getFastestAPI = async (recheck = false) => {
 }
 
 export const getPoolFromAPI = async (chainNameId: string, address: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/query/${chainNameId}/pool/${address}`, 1000);
+    const response = await fetchWithTimeout(`${api}/query/${chainNameId}/pool/${address}`, 1000);
     const json = await response.json()
     return json?.data || null;
   } catch (error) {
@@ -36,8 +43,11 @@ export const getPoolFromAPI = async (chainNameId: string, address: string) => {
 }
 
 export const getFlowsFromAPI = async (chainNameId: string, address: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/query/${chainNameId}/flows/${address}`, 2000);
+    const response = await fetchWithTimeout(`${api}/query/${chainNameId}/flows/${address}`, 2000);
     const json = await response.json()
     return json?.data || null
   } catch (error) {
@@ -47,8 +57,11 @@ export const getFlowsFromAPI = async (chainNameId: string, address: string) => {
 }
 
 export const getHealthyRPCs = async (chainNameId: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/rpcs/${chainNameId}`, 2000)
+    const response = await fetchWithTimeout(`${api}/api/rpcs/${chainNameId}`, 2000)
     const json = await response.json()
     if (json.data !== 'Chain not found') {
       return json.data
@@ -73,8 +86,11 @@ export const getRandomRPC = async (chainNameId: string) => {
 }
 
 export const getHealthyRestEndpoints = async (chainNameId: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/rests/${chainNameId}`);
+    const response = await fetchWithTimeout(`${api}/api/rests/${chainNameId}`);
     const json = await response.json();
     if (json?.data !== 'Chain not found') {
       return json?.data
@@ -86,6 +102,7 @@ export const getHealthyRestEndpoints = async (chainNameId: string) => {
     return null;
   }
 }
+
 // Not used yet.
 export const getRandomREST = async (chainNameId: string) => {
   let localRestEndpoints = await getHealthyRestEndpoints(chainNameId)
@@ -98,11 +115,14 @@ export const getRandomREST = async (chainNameId: string) => {
 }
 
 export const getPricesAPI = async (ids: Array<string>) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    let response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices`)
+    let response = await fetchWithTimeout(`${api}/api/prices`)
     let res = await response.text()
     while (!response.ok) {
-      response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices`)
+      response = await fetchWithTimeout(`${api}/api/prices`)
       res = await response.text()
     }
     const json = JSON.parse(res)
@@ -117,9 +137,13 @@ export const getPricesAPI = async (ids: Array<string>) => {
     return null
   }
 }
+
 export const getPricesFromPoolsAPI = async (tokenlist: Array<any>, chainName: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices/pools/${chainName}`, 20000)
+    const response = await fetchWithTimeout(`${api}/api/prices/pools/${chainName}`, 20000)
     const json = JSON.parse(await response.text())
     let out = []
     for (const token of tokenlist) {
@@ -136,8 +160,11 @@ export const getPricesFromPoolsAPI = async (tokenlist: Array<any>, chainName: st
 }
 
 export const getPricesFromPoolsAPIbyDenom = async (denom: string, chainName: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/prices/pools/${chainName}`, 20000)
+    const response = await fetchWithTimeout(`${api}/api/prices/pools/${chainName}`, 20000)
     const json = JSON.parse(await response.text())
     return json.data.byToken[denom] || null
   } catch (e) {
@@ -148,7 +175,7 @@ export const getPricesFromPoolsAPIbyDenom = async (denom: string, chainName: str
 
 export const createEndpointOptions = async (chains: any) => {
   const endpoints: Record<string, any> = {}
-  CHAIN_NAMES.forEach(async (chain: string) => {
+  for (const chain of CHAIN_NAMES) {
     endpoints[chain] = {}
     endpoints[chain] = {
       rpc: await getHealthyRPCs(chain),
@@ -156,20 +183,25 @@ export const createEndpointOptions = async (chains: any) => {
     }
     if (!endpoints[chain] || !endpoints[chain].rpc || !endpoints[chain].rest) {
       const registry = chains.find((chainRes: any) => chainRes.chain_name === chain)
-      const rests = registry.apis.rest.map((elem: any) => elem.address)
-      const rpcs = registry.apis.rpc.map((elem: any) => elem.address)
-      endpoints[chain] = {
-        rpc: rpcs,
-        rest: rests,
+      if (registry) {
+        const rests = registry.apis.rest.map((elem: any) => elem.address)
+        const rpcs = registry.apis.rpc.map((elem: any) => elem.address)
+        endpoints[chain] = {
+          rpc: rpcs,
+          rest: rests,
+        }
       }
     }
-  })
+  }
   return endpoints
 }
 
 export const getGasPricesAPI = async () => {
+  const api = await getFastestAPI()
+  if (!api) return {}
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/gasprices`)
+    const response = await fetchWithTimeout(`${api}/api/gasprices`)
     const json = await response.json()
     return json?.data || {}
   } catch (error) {
@@ -179,8 +211,11 @@ export const getGasPricesAPI = async () => {
 }
 
 export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
+  const api = await getFastestAPI()
+  if (!api) return null
+
   try {
-    const response = await fetchWithTimeout(`${await getFastestAPI()}/api/pools/${chain_name}`, 50000)
+    const response = await fetchWithTimeout(`${api}/api/pools/${chain_name}`, 50000)
     const json = await response.json()
 
     return Array.isArray(json?.data) ? json?.data : null
@@ -191,9 +226,17 @@ export const getPairAprAndDailyVolumeAPI = async (chain_name: string) => {
 }
 
 export const getBondingAPRsAPI = async () => {
-  const response = await fetchWithTimeout(`${await getFastestAPI()}/apex/bonding/aprs`, 50000)
-  const json = await response.json()
-  return json?.data
+  const api = await getFastestAPI()
+  if (!api) return null
+
+  try {
+    const response = await fetchWithTimeout(`${api}/apex/bonding/aprs`, 50000)
+    const json = await response.json()
+    return json?.data
+  } catch (error) {
+    console.error(error)
+    return null
+  }
 }
 
 export async function fetchWithTimeout(url: string, timoutMS = 10000) {

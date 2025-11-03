@@ -5,13 +5,9 @@ export const POOL_REWARDS_ENABLED = JSON.parse(process.env.NEXT_PUBLIC_ENABLE_FE
 
 export const STABLE_COIN_LIST = ['CMST', 'USDT', 'axlUSDC']
 
-export const ENIGMA_URL = 'https://www.api-white-whale.enigma-validator.com'
-
-export const POOL_INFO_BASE_URL =
-  `${ENIGMA_URL}/summary`
+// Optional external API URLs - set to empty array to disable external API features
+export const API_URLS: string[] = ['https://ww-api.backbonelabs.io']
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
-
-export const API_URLS = ['https://ww-api.backbonelabs.io']
 
 export const ADV_MEMO = 'app.whitewhale.money'
