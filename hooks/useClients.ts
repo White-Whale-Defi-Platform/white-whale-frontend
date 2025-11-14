@@ -9,7 +9,7 @@ import {
   cosmosProtoRegistry,
   cosmwasmAminoConverters,
   cosmwasmProtoRegistry,
-} from '@nick134-bit/nicks-injectivejs'
+} from 'interchain'
 import { allianceAminoConverters, allianceProtoRegistry } from 'migaloojs'
 
 
