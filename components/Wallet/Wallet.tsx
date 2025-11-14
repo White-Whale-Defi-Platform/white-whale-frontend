@@ -69,14 +69,6 @@ const Wallet = () => {
 
     const walletType = window.localStorage.getItem(COSMOS_KIT_WALLET_KEY)
 
-    if (walletType === WalletType.ninjiExtension) {
-      setWalletChains(['injective'])
-      setCurrentConnectedChainIds(['injective-1'])
-    }
-    if (walletType === WalletType.okxwallet) {
-      setWalletChains(['osmosis', 'juno', 'sei', 'injective'])
-      setCurrentConnectedChainIds(['osmosis-1', 'juno-1', 'pacific-1', 'injective-1'])
-    }
     if (walletType === WalletType.leapExtension || walletType === WalletType.leapMobile) {
       // Window.leap.defaultOptions
       window.leap.defaultOptions = {
@@ -92,8 +84,8 @@ const Wallet = () => {
 
       setWalletChains(snapChainIds)
       setCurrentConnectedChainIds(snapChainIds)
-    } else if (walletType === WalletType.terraExtension || walletType === WalletType.keplrExtension || walletType === WalletType.galaxyStationExtension) {
-      const walletWindowConnection = walletType === WalletType.terraExtension ? (window.station?.keplr) : walletType === WalletType.galaxyStationExtension ? (window.galaxyStation?.keplr) : (window?.keplr)
+    } else if ( walletType === WalletType.keplrExtension ) {
+      const walletWindowConnection = window?.keplr
       if (!walletWindowConnection) {
         localStorage.clear()
         return
@@ -113,6 +105,8 @@ const Wallet = () => {
         return [chainNames, filteredChains.map((chain) => chain.chainId)]
       };
       filterChains().then(async ([chainNames, ids]) => {
+        console.log(`filterChains`)
+        console.log(ids)
         if (chainNames.includes('injective')) {
           try {
             await walletWindowConnection.getKey(ChainId.injective)
@@ -131,12 +125,6 @@ const Wallet = () => {
     } else if (walletChains.length === 0) {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
       setWalletChains(ACTIVE_NETWORKS_WALLET_NAMES[currentChainState.network])
-    } else if (walletType === WalletType.ninjiExtension) {
-      setCurrentConnectedChainIds(['injective-1'])
-      setWalletChains(['injective'])
-    } else if (walletType === WalletType.okxwallet) {
-      setWalletChains(['osmosis', 'juno', 'sei', 'injective'])
-      setCurrentConnectedChainIds(['osmosis-1', 'juno-1', 'pacific-1', 'injective-1'])
     } else {
       setCurrentConnectedChainIds(Object.values(ACTIVE_NETWORKS[currentChainState.network]))
     }

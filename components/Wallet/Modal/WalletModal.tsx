@@ -18,16 +18,9 @@ import { chainState } from 'state/chainState';
 export enum WalletType {
   keplrExtension = 'keplr-extension',
   keplrMobile = 'keplr-mobile',
-  terraExtension = 'station-extension',
-  shellExtension = 'shell-extension',
   leapExtension = 'leap-extension',
   leapMobile = 'leap-cosmos-mobile',
-  leapSnap = 'leap-metamask-cosmos-snap',
-  cosmoStationExtension = 'cosmostation-extension',
-  cosmoStationMobile = 'cosmostation-mobile',
-  ninjiExtension = 'ninji-extension',
-  okxwallet = 'okxwallet-extension',
-  galaxyStationExtension = 'galaxy-station-extension',
+  leapSnap = 'leap-metamask-cosmos-snap'
 }
 
 export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
@@ -42,25 +35,15 @@ export const WalletModal = ({ isOpen, setOpen, walletRepo }) => {
 
   const shouldRenderButton = (wallet: { walletName: WalletType, isModeExtension: boolean }) => {
     const { walletName } = wallet
-    const okxchains = ['osmosis-1', 'juno-1', 'pacific-1', 'injective-1']
     const inAppLeap = isMobile && window.leap && window.leap.mode === 'mobile-web'
     const inAppKeplr = isMobile && window.keplr && window.keplr.mode === 'mobile-web' && !inAppLeap
     const inj = chainId.includes('injective') && [
-      WalletType.terraExtension,
       WalletType.keplrExtension,
       WalletType.leapExtension,
-      WalletType.ninjiExtension,
-      WalletType.okxwallet,
-      WalletType.galaxyStationExtension,
     ].includes(walletName);
-    if (walletName === WalletType.okxwallet && !okxchains.includes(chainId)) {
-      return false
-    }
     if (inj) {
       return true
     } else if (chainId.includes('injective') && !inAppLeap) {
-      return false
-    } else if (walletName === WalletType.ninjiExtension && !chainId.includes('injective')) {
       return false
     }
     if (inj && inAppLeap && walletName === WalletType.leapExtension) {

@@ -10,12 +10,6 @@ function NetworkForm() {
       alignItems="center"
       justifyContent="space-between"
     >
-      <FormLabel htmlFor="network" mb="0">
-        <Text color="brand.50" fontSize="16px" fontWeight="400">
-          Testnet
-        </Text>
-      </FormLabel>
-      <NetworkSwitch />
     </FormControl>
   )
 }

@@ -159,17 +159,12 @@ export const createEndpointOptions = async (chains: any) => {
 
 // Map chain name to chain ID for new API format
 const CHAIN_NAME_TO_ID = {
-  'chihuahua': 'chihuahua-1',
-  'comdex': 'comdex-1',
   'injective': 'injective-1',
-  'juno': 'juno-1',
   'migaloo': 'migaloo-1',
   'terra2': 'phoenix-1',
   'terra': 'phoenix-1',
-  'sei': 'pacific-1',
   'terrac': 'columbus-5',
   'osmosis': 'osmosis-1',
-  'archway': 'archway-1',
   'inj': 'injective-1',
 }
 

@@ -3,15 +3,9 @@ import { Toaster } from 'react-hot-toast'
 import { QueryClientProvider } from 'react-query'
 
 import { CSSReset, ChakraProvider } from '@chakra-ui/react'
-import { wallets as cosmoStationWallets } from '@cosmos-kit/cosmostation'
-import { wallets as galaxyStationWallets } from '@cosmos-kit/galaxy-station'
 import { wallets as keplrWallets } from '@cosmos-kit/keplr'
 import { wallets as leapWallets } from '@cosmos-kit/leap'
-import { wallets as ninjiWallets } from '@cosmos-kit/ninji'
-import { wallets as okxwallet } from '@cosmos-kit/okxwallet'
 import { ChainProvider } from '@cosmos-kit/react-lite'
-import { wallets as shellWallets } from '@cosmos-kit/shell'
-import { wallets as stationWallets } from '@cosmos-kit/station'
 import version from 'app_version.json'
 import { chains, assets } from 'chain-registry'
 import 'theme/global.css'
@@ -42,33 +36,9 @@ const MyApp: FC<AppProps> = ({
       wallet: keplrWallets,
     },
     {
-      name: 'station',
-      wallet: stationWallets,
-    },
-    {
       name: 'leap',
       wallet: leapWallets,
-    },
-    {
-      name: 'ninji',
-      wallet: ninjiWallets,
-    },
-    {
-      name: 'shellwallet',
-      wallet: shellWallets,
-    },
-    {
-      name: 'cosmostationWallet',
-      wallet: cosmoStationWallets,
-    },
-    {
-      name: 'okxwallet',
-      wallet: okxwallet,
-    },
-    {
-      name: 'galaxystation',
-      wallet: galaxyStationWallets,
-    },
+    }
   ];
 
   const reorderWallets = useMemo(() => {

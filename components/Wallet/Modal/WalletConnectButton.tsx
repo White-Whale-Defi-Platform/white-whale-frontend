@@ -1,15 +1,9 @@
 import { useCallback } from 'react'
 
 import { Button, HStack, Text, useToast } from '@chakra-ui/react'
-import CosmostationWalletIcon from 'components/Icons/CosmostationWalletIcon'
-import GalaxyStationExtensionIcon from 'components/Icons/GalaxyStationExtensionIcon';
 import KeplrWalletIcon from 'components/Icons/KeplrWalletIcon'
 import LeapSnapIcon from 'components/Icons/LeapSnapIcon'
 import LeapWalletIcon from 'components/Icons/LeapWalletIcon'
-import NinjiWalletIcon from 'components/Icons/NinjiWalletIcon'
-import OKXWalletIcon from 'components/Icons/OKXWalletIcon'
-import { ShellWalletIcon } from 'components/Icons/ShellWalletIcon'
-import { TerraStationWalletIcon } from 'components/Icons/TerraStationWalletIcon'
 import { WalletConnectIcon } from 'components/Icons/WalletConnectIcon'
 import { WalletType } from 'components/Wallet/Modal/WalletModal'
 import { ACTIVE_NETWORKS } from 'constants/networks'
@@ -77,26 +71,12 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return 'Keplr Wallet'
       case WalletType.keplrMobile:
         return 'Keplr Wallet'
-      case WalletType.terraExtension:
-        return 'Station'
-      case WalletType.cosmoStationExtension:
-        return 'Cosmostation'
-      case WalletType.cosmoStationMobile:
-        return 'Cosmostation'
-      case WalletType.shellExtension:
-        return 'Shell Wallet'
       case WalletType.leapExtension:
         return 'Leap Wallet'
       case WalletType.leapMobile:
         return 'Leap Wallet'
       case WalletType.leapSnap:
         return 'MetaMask'
-      case WalletType.ninjiExtension:
-        return 'Ninji Wallet'
-      case WalletType.okxwallet:
-        return 'OKX Wallet'
-      case WalletType.galaxyStationExtension:
-        return 'Galaxy Station'
       default:
         return null
     }
@@ -108,26 +88,12 @@ export const WalletConnectButton = ({ onCloseModal, connect, walletType }: Props
         return <KeplrWalletIcon />
       case WalletType.keplrMobile:
         return <WalletConnectIcon />
-      case WalletType.terraExtension:
-        return <TerraStationWalletIcon />
-      case WalletType.cosmoStationExtension:
-        return <CosmostationWalletIcon />
-      case WalletType.cosmoStationMobile:
-        return <WalletConnectIcon />
-      case WalletType.shellExtension:
-        return <ShellWalletIcon />
       case WalletType.leapExtension:
         return <LeapWalletIcon />
       case WalletType.leapMobile:
         return <WalletConnectIcon />
       case WalletType.leapSnap:
         return <LeapSnapIcon />
-      case WalletType.ninjiExtension:
-        return <NinjiWalletIcon />
-      case WalletType.okxwallet:
-        return <OKXWalletIcon />
-      case WalletType.galaxyStationExtension:
-        return <GalaxyStationExtensionIcon />
       default:
         return null
     }

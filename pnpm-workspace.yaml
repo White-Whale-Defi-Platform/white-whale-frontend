@@ -1,0 +1,10 @@
+onlyBuiltDependencies:
+  - '@injectivelabs/sdk-ts'
+  - bufferutil
+  - keccak
+  - protobufjs
+  - secp256k1
+  - sharp
+  - tiny-secp256k1
+  - unrs-resolver
+  - utf-8-validate
