@@ -7,7 +7,6 @@ import { getGasPrices } from 'constants/signerOptions'
 import chains from 'public/mainnet/chain_info.json'
 import { aggregateAndSortTaxAmounts } from 'util/conversion/numberUtil'
 
-import { getGasPricesAPI } from './useAPI'
 import { SigningStargateClient } from '@cosmjs/stargate'
 
 export const getGasFees = async (
@@ -26,17 +25,14 @@ export async function createGasFee(
   client: SigningCosmWasmClient | InjectiveSigningStargateClient | SigningStargateClient, address: string, msgs: Array<any>,
 ) {
   const chainId = await client.getChainId()
-  const prices = await getGasPricesAPI()
   let sim = await client.simulate(
     address, msgs, '',
   ) * 1.5
   sim = Math.ceil(sim)
 
-  let chainFee = prices[WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId]]
-  if (!chainFee) {
-    const chainEntry = chainRegistry.find((chain: any) => chain.chain_name === WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId])
-    chainFee = (await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId], chainEntry)).gasPrice
-  }
+  // Get gas prices from chain-registry directly (faster and more reliable than API)
+  const chainEntry = chainRegistry.find((chain: any) => chain.chain_name === WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId])
+  const chainFee = (await getGasPrices(WALLET_CHAIN_NAMES_BY_CHAIN_ID[chainId], chainEntry)).gasPrice
   if (chainId === ChainId.terrac) {
     const funds = msgs.flatMap((elem) => elem.value.funds)
     return await TerraTreasuryService.getInstance().getTerraClassicFee(funds, sim)

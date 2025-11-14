@@ -10,7 +10,7 @@ import { useRecoilValue } from 'recoil'
 import { chainState } from 'state/chainState'
 import { convertMicroDenomToDenom } from 'util/conversion/index'
 
-import { getPoolFromAPI, getPricesFromPoolsAPIbyDenom } from '../services/useAPI'
+import { getPoolFromAPI, getPricesFromAPI } from '../services/useAPI'
 import { CHAIN_NAMES } from '../constants'
 
 type Params = {
@@ -159,13 +159,21 @@ const getPrices = async ({
       }
     }
   }
+  // Get prices from API for IBC tokens
   for (const chainName of chainTokenMap.keys()) {
-    const tokenPairs = chainTokenMap.get(chainName)
-    for (const { base_denom, denom } of tokenPairs) {
-      const apiPrice = await getPricesFromPoolsAPIbyDenom(base_denom, chainName)
-      if (apiPrice) {
-        prices[denom] = apiPrice.price
+    const apiPrices = await getPricesFromAPI(chainName)
+    if (apiPrices) {
+      const tokenPairs = chainTokenMap.get(chainName)
+      for (const { base_denom, denom } of tokenPairs) {
+        // Try to find price by base_denom in the API price map
+        if (apiPrices[base_denom]) {
+          prices[denom] = apiPrices[base_denom]
+        } else {
+          console.log(`Price unavailable for ${denom} (base: ${base_denom}) from chain ${chainName}`)
+        }
       }
+    } else {
+      console.log(`Failed to fetch prices from API for chain ${chainName}`)
     }
   }
   console.log('prices', prices)

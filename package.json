@@ -23,6 +23,7 @@
     "@cosmjs/encoding": "0.32.2",
     "@cosmjs/launchpad": "0.27.1",
     "@cosmjs/proto-signing": "0.32.2",
+    "@cosmjs/stargate": "^0.37.0",
     "@cosmos-kit/cosmostation": "^2.14.6",
     "@cosmos-kit/galaxy-station": "^2.13.7",
     "@cosmos-kit/keplr": "^2.14.7",
@@ -65,6 +66,8 @@
   },
   "devDependencies": {
     "@keplr-wallet/types": "^0.12.88",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
@@ -80,5 +83,5 @@
   "peerDependencies": {
     "prop-types": "15.8.1"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
 }

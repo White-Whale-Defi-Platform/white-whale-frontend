@@ -12,6 +12,14 @@ export const POOL_INFO_BASE_URL =
 
 export const COSMOS_KIT_WALLET_KEY = 'cosmos-kit@2:core//current-wallet'
 
-export const API_URLS = ['https://ww-api.backbonelabs.io']
+// API Configuration
+// New DEX API - provides pool data, prices, swap history across multiple Cosmos chains
+export const API_URLS = ['https://dex.warlock.backbonelabs.io']
+
+// Old API (kept for reference/rollback):
+// export const API_URLS = ['https://ww-api.backbonelabs.io']
+
+// Set NEXT_PUBLIC_USE_EXTERNAL_API=true in .env to enable external API
+// Set NEXT_PUBLIC_USE_EXTERNAL_API=false to use direct blockchain queries only
 
 export const ADV_MEMO = 'app.whitewhale.money'

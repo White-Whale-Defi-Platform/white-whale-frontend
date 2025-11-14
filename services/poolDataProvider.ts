@@ -21,6 +21,12 @@ export interface PoolData {
   apr7d?: number | string
   tvl?: number | string
   ratio?: number | string
+  // Support new API format field names
+  volume_24h_usd?: number | string
+  volume_7d_usd?: number | string
+  apr_7d?: number | string
+  tvl_usd?: number | string
+  price_0_to_1?: number | string
 }
 
 export const getPairInfos = async (chain: string): Promise<PoolResponse[]> => {
@@ -167,4 +173,50 @@ export const getPairAprAndDailyVolumeByCoinhall = async (pools: any[]): Promise<
       ratio: 0,
     }
   })
+}
+
+// New API integration - fetches pool data from new DEX API
+export const getPairAprAndDailyVolumeByAPI = async (pools: any[], chainPrefix: string): Promise<PoolData[] | null> => {
+  try {
+    // Dynamically import to avoid circular dependency
+    const { getPairAprAndDailyVolumeAPI } = await import('./useAPI')
+
+    const apiData = await getPairAprAndDailyVolumeAPI(chainPrefix)
+
+    if (!apiData || apiData.length === 0) {
+      console.log(`No API data available for chain ${chainPrefix}`)
+      return null
+    }
+
+    const poolIds = pools?.map((pool: any) => pool.pool_id)
+
+    // Map API data to pool IDs
+    return poolIds?.map((poolId: string) => {
+      const apiPool = apiData.find((row: any) => row.pool_id === poolId)
+
+      if (apiPool) {
+        return {
+          pool_id: poolId,
+          usdVolume24h: apiPool.usdVolume24h,
+          usdVolume7d: apiPool.usdVolume7d,
+          tvl: apiPool.tvl,
+          apr7d: apiPool.apr7d,
+          ratio: apiPool.ratio,
+        } as PoolData
+      }
+
+      // Pool not found in API data
+      return {
+        pool_id: poolId,
+        tvl: 'n/a',
+        usdVolume24h: 'n/a',
+        usdVolume7d: 'n/a',
+        apr7d: 'n/a',
+        ratio: 0,
+      } as PoolData
+    })
+  } catch (error) {
+    console.error('getPairAprAndDailyVolumeByAPI failed:', error)
+    return null
+  }
 }
