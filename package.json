@@ -13,8 +13,7 @@
     "prettier": "prettier \"**/*.{ts,md}\" --list-different",
     "format:yaml": "prettier --check \"**/*.{yml}\" --write",
     "format:code": "prettier \"**/*.{ts,md}\" --write",
-    "typecheck": "tsc",
-    "prepare": "husky install"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
