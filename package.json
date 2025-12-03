@@ -45,7 +45,7 @@
     "junoblocks": "^0.2.93",
     "lodash": "^4.17.21",
     "migaloojs": "^0.0.10",
-    "next": "15.4.7",
+    "next": "15.4.8",
     "numeral": "^2.0.6",
     "react": "^18.3.1",
     "react-device-detect": "^2.2.3",
