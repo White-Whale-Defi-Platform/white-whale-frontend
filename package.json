@@ -43,7 +43,7 @@
     "isomorphic-unfetch": "^4.0.2",
     "jsoneditor": "^10.1.2",
     "junoblocks": "^0.2.93",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "migaloojs": "^0.0.10",
     "next": "15.4.8",
     "numeral": "^2.0.6",
